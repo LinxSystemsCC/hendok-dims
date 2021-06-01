@@ -332,9 +332,9 @@ class DimsCommon extends Controller
                 ['intOrderID' => $orderID, 'intUserId' => $userId]
             );
         }
-        DB::connection('sqlsrv3')->table('tblOrderLocks')->insert(
+       /* DB::connection('sqlsrv3')->table('tblOrderLocks')->insert(
             ['OrderId' => $orderID, 'UserId' => $userId]
-        );
+        );*/
     }
     public function deleteuserOrderLocks()
     {
@@ -575,8 +575,8 @@ class DimsCommon extends Controller
     public function masscustomerdatatable(Request $request){
         $userid =Auth::user()->UserID;
         $massCustomer = DB::connection('sqlsrv3')
-            ->select("SELECT * FROM viewtblCustomers inner join tblAccessOnCustomers on 
-                        tblAccessOnCustomers.intGroupId = viewtblCustomers.GroupId 
+            ->select("SELECT * FROM viewtblCustomers inner join tblAccessOnCustomers on
+                        tblAccessOnCustomers.intGroupId = viewtblCustomers.GroupId
                         left outer join tblCustomerCategories on CCCode = CustomerCategory
                          where intUserId = $userid and StatusId = 1 Order by StoreName");
         $output['recordsTotal'] = count($massCustomer);
@@ -1347,7 +1347,7 @@ class DimsCommon extends Controller
             ->where('CustomerSpecial',$specialIdUpdate )
             ->update(['Date' => $specialFrom,'DateTo' => $specialTo,'Price' => $specialPrice,'GP'=>$specialGp,'CostPrice'=>$specialCost,
                 'ProductId'=>$productId[0]->ProductId]);
-        
+
 
         return  response()->json(1);
     }

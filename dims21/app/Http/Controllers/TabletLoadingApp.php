@@ -119,6 +119,114 @@ class TabletLoadingApp extends controller
         //dd($routeId);
         $routeId = implode(", ", $routeId);
         $deliveryDate = $request->get('deliveryDate');
+        $deliveryDateTo = $request->get('deliveryDateTo');
+        $orderIDs = DB::connection('sqlsrv4')->table('tblOrderTypes')->select('OrderTypeId')->get();
+
+        $OrderType = $request->get('OrderType');
+        $status = $request->get('status');
+        $productId = $request->get('productId');
+
+        /*foreach ($orderIDs as $values )
+        {
+                $arryhOLDid
+        }*/
+
+     /*   $getInvoicesOnRoute = DB::connection('sqlsrv4')
+            ->select("EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . ",'" . $routeId . "','" . $status . "'");*/
+        // echo "EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . "," . $routeId.",'".$status."'";
+        $priority = DB::connection('sqlsrv3')
+            ->select('exec spGetPriotityCustomerOrders ?,?,?,?,?,?',
+                array($deliveryDate,$deliveryDateTo,$OrderType,$routeId,$status,$productId)
+            );
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetAllProductsOnOrderToPlan ?,?,?,?,?,?',
+                array($deliveryDate,$deliveryDateTo,$OrderType,$routeId,$status,$productId)
+            );
+
+        $coordinates = DB::connection('sqlsrv3')
+            ->select('exec [spGetOnPlanningCustomerCoordinates] ?,?,?',
+                array($deliveryDate,$deliveryDateTo,$routeId));
+
+        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $t=time();
+        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+        $ID = $t.$randomString;
+
+        $outPut['priority'] = $priority;
+        $outPut['products'] = $allproducts;
+        $outPut['referenceNo'] = $ID;
+        $outPut['coord'] = $coordinates;
+      //  $outPut['currentPrices'] = $GetCurrentPrices;
+        return response()->json($outPut);
+    }
+    public function getmycustroutemap()
+    {
+        return view('dims/mycustomerroutemap');
+    }
+    public function plannedmaproute()
+    {
+        return view('dims/plannedroutemap');
+    }
+    public function getProductToSelect()
+    {
+        $categories = DB::connection('sqlsrv3')
+            ->select('select * from tblCategories');
+        return view('dims/productsdilaogtrigger')->with('cats',$categories);
+    }
+    public function getcustomergeneralplanmap(Request $request)
+    {
+        $From = (new \DateTime($request->get('From')))->format('Y-m-d') ;
+        $To = (new \DateTime($request->get('To')))->format('Y-m-d');
+        $routeId = $request->get('routeId');
+        //dd($routeId);
+        $routeId = implode(", ", $routeId);
+
+        $coordinates = DB::connection('sqlsrv3')
+            ->select('exec [spGetOnPlanningCustomerCoordinates] ?,?,?',
+                array($From,$To,$routeId));
+        $outPut['coord'] = $coordinates;
+        return response()->json($outPut);
+    }
+    public function jsongetproductbycat (Request $request)
+    {
+        $categories = $request->get('categories');
+        $categories = implode(", ", $categories);
+        $coordinates = DB::connection('sqlsrv3')
+            ->select('exec [spGetProductsByCat] ?',
+                array($categories));
+      //  dd($coordinates);
+       // $outPut['products'] = $coordinates;
+        return response()->json($coordinates);
+    }
+    public function productsonamarker(Request $request)
+    {
+        $orderid = $request->get('orderid');
+
+        $coordinates = DB::connection('sqlsrv3')
+            ->select('exec [spGetProductsOnAMarker] ?',
+                array($orderid));
+      //  dd($coordinates);
+       // $outPut['products'] = $coordinates;
+        return response()->json($coordinates);
+    }
+
+    public function  PutMarkerOnTheMapDynamically(Request $request)
+    {
+        $ref = $request->get('ref');
+        $coordinates = DB::connection('sqlsrv3')
+            ->select('exec [spPutMarkerOnTheMapDynamically] ?',
+                array($ref));
+        $outPut['coord'] = $coordinates;
+        return response()->json($outPut);
+    }
+    public function getCustomerPlannedForPicking(Request $request)
+    {
+        $routeId = $request->get('routeId');
+        //dd($routeId);
+        $routeId = implode(", ", $routeId);
+
+        $deliveryDate = (new \DateTime($request->get('deliveryDate')))->format('Y-m-d');
+        $deliveryDateTo = (new \DateTime($request->get('deliveryDateTo')))->format('Y-m-d') ;
         $orderIDs = DB::connection('sqlsrv4')->table('tblOrderTypes')->select('OrderTypeId')->get();
 
         $OrderType = $request->get('OrderType');
@@ -129,11 +237,78 @@ class TabletLoadingApp extends controller
                 $arryhOLDid
         }*/
 
-        $getInvoicesOnRoute = DB::connection('sqlsrv4')
-            ->select("EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . ",'" . $routeId . "','" . $status . "'");
+        /*   $getInvoicesOnRoute = DB::connection('sqlsrv4')
+               ->select("EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . ",'" . $routeId . "','" . $status . "'");*/
         // echo "EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . "," . $routeId.",'".$status."'";
+        $priority = DB::connection('sqlsrv3')
+            ->select('exec spGetOrdersToPick ?,?,?,?,?',
+                array($deliveryDate,$deliveryDateTo,$OrderType,$routeId,$status)
+            );
 
-        return response()->json($getInvoicesOnRoute);
+        $outPut['priority'] = $priority;
+
+        //  $outPut['currentPrices'] = $GetCurrentPrices;
+        return response()->json($outPut);
+    }
+
+    public function saveplan(Request $request)
+    {
+        $referenceno = $request->get('referenceno');
+        $priority = $request->get('priority');
+        $orderheaderxml = $this->toxml($priority, "xml", array("result"));
+
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spSavePickingPlanLines ?,?',
+                array($orderheaderxml,$referenceno)
+            );//[spGetInProgressPlanningProducts]
+
+        return response()->json($allproducts);
+    }
+    public function updateplan(Request $request)
+    {
+        $referenceno = $request->get('referenceno');
+        $updates = $request->get('updates');
+        $updatesxml = $this->toxml($updates, "xml", array("result"));
+
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spUpdatePickingPlanLines ?,?',
+                array($updatesxml,$referenceno)
+            );//[spGetInProgressPlanningProducts]
+
+        return response()->json($allproducts);
+    }
+    public function doneplanning(Request $request)
+    {
+        $dispatchdate = $request->get('dispatchdate');
+        $eRouteNamedispatch = $request->get('eRouteNamedispatch');
+        $orderTypesTabletLoadingonPlanningdispatch = $request->get('orderTypesTabletLoadingonPlanningdispatch');
+        $referenceno = $request->get('referenceno');
+
+        $allproducts = DB::connection('sqlsrv3')
+            ->statement('exec spSavePickingHeaders ?,?,?,?',
+                array($dispatchdate,$eRouteNamedispatch,$orderTypesTabletLoadingonPlanningdispatch,$referenceno)
+            );//[spGetInProgressPlanningProducts]
+
+        return response()->json($allproducts);
+    }
+    public function getProgressPlan(Request $request)
+    {
+        $referenceno = $request->get('referenceno');
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetInProgressPlanningProducts ? ',
+                array($referenceno)
+            );
+        return response()->json($allproducts);
+    }
+    public function getProgressPlanCustByProducts(Request $request)
+    {
+        $referenceno = $request->get('referenceno');
+        $prodId = $request->get('prodId');
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingPlanCustomersByProduct ?,? ',
+                array($referenceno,$prodId)
+            );
+        return response()->json($allproducts);
     }
 
     public function spTabletLoading($orderId)
@@ -252,8 +427,11 @@ class TabletLoadingApp extends controller
         //$truckControlIds = DB::connection('sqlsrv3')->table('viewRecentTruckControlIds')->select('TruckControlId','Route')->orderBy('TruckControlId', 'desc')->get();
         $getRoutes = DB::connection('sqlsrv4')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse', '0')->orderBy('Route', 'asc')->get();
 
+        $datetopass = (new \DateTime())->format('Y-m-d');
+
+
         return view('dims/route_planner')->with('routes', $getRoutes)->with('trucks', $trucks)->with('drivers', $tblDrivers)
-            ->with('orderTypes', $deliverTypes)->with('delivDates', $getDeliveryDates)->with('things', $things);
+            ->with('orderTypes', $deliverTypes)->with('delivDates', $getDeliveryDates)->with('things', $things)->with('dates',$datetopass);
     }
 
     public function routePlannerExt()
@@ -280,11 +458,41 @@ class TabletLoadingApp extends controller
         $tblDrivers = DB::connection('sqlsrv4')->table('tblDrivers')->select('DriverName', 'DriverId')->orderBy('DriverName', 'ASC')->get();
         $getDeliveryDates = DB::connection('sqlsrv4')->table('vwDistinctDelvDates')->select('DeliveryDate')->orderBy('DeliveryDate', 'desc')->get();
 
+       // $getRoutes = DB::connection('sqlsrv4')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse', '0')->orderBy('Route', 'asc')->get();
+        $getRoutes = DB::connection('sqlsrv3')
+            ->select("EXEC [spGetRouteTonnageOnPlanning] ");
+        $getSelectedRoute = DB::connection('sqlsrv4')->table('tblRoutes')->select('Routeid', 'Route')->where('Routeid', $route)->get();
+        $tblTrucks = DB::connection('sqlsrv4')->table('tblTrucks')->select('TruckId', 'TruckName','Capacity')->get();
+
+
+        return view('dims/route_planner_paramsteel')
+            ->with('routes', $getRoutes)
+            ->with('routeSelected', $getSelectedRoute)
+            ->with('trucks', $trucks)->with('drivers', $tblDrivers)
+            ->with('orderTypes', $deliverTypes)
+            ->with('orderTypeSelected', $deliverTypeSelected)
+            ->with('selectedDelivDate', $delvDate)
+            ->with('status', $status)
+            ->with('trucks', $tblTrucks)
+            ->with('delivDates', $getDeliveryDates)->with('things', $things);
+    }
+
+    public function planroute($delvDate, $orderType, $route, $status)
+    {
+        $GroupId = Auth::user()->GroupId;
+        $things = (new SalesForm())->getThings($GroupId, 'Allow Call Logger');
+        $deliverTypes = DB::connection('sqlsrv4')->table('tblOrderTypes')->select('OrderTypeId', 'OrderType')->get();
+
+        $deliverTypeSelected = DB::connection('sqlsrv4')->table('tblOrderTypes')->select('OrderTypeId', 'OrderType')->where('OrderTypeId', $orderType)->get();
+        $trucks = DB::connection('sqlsrv4')->table('tblTrucks')->select('TruckName', 'TruckId', 'RegNo')->orderBy('TruckName', 'ASC')->get();
+        $tblDrivers = DB::connection('sqlsrv4')->table('tblDrivers')->select('DriverName', 'DriverId')->orderBy('DriverName', 'ASC')->get();
+        $getDeliveryDates = DB::connection('sqlsrv4')->table('vwDistinctDelvDates')->select('DeliveryDate')->orderBy('DeliveryDate', 'desc')->get();
+
         $getRoutes = DB::connection('sqlsrv4')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse', '0')->orderBy('Route', 'asc')->get();
         $getSelectedRoute = DB::connection('sqlsrv4')->table('tblRoutes')->select('Routeid', 'Route')->where('Routeid', $route)->get();
 
 
-        return view('dims/route_planner_params')
+        return view('dims/planroutes')
             ->with('routes', $getRoutes)
             ->with('routeSelected', $getSelectedRoute)
             ->with('trucks', $trucks)->with('drivers', $tblDrivers)
@@ -411,6 +619,7 @@ class TabletLoadingApp extends controller
             ->select("EXEC spGetTruckControlSheetDetails " . $truckControlID);
         return response()->json($getTruckControlSheetDetails);
     }
+
 
     public function routeplannermap()
     {
@@ -1023,13 +1232,13 @@ function myFunction() {
 	<tr >
 	<td>'.$orderDate.'</td>
 	<td>Routing ID : '.$DeliveryDateRoutingID.'</td>
-	
+
 	</tr>
 	</table>';
 
         $html .=<<<EOD
 		<table width="100%" cellspacing="0"  border="1" style="font-size: 12pt;">
-		
+
 		<tr ><th width="5%">NO</th><th width="10%">Del Sequ</th><th width="30%">Customer</th><th>Invoice</th><th>Amount</th><th>Terms</th><th>Previous Balance</th><th>NOTES</th></tr>
 EOD;
 
@@ -1073,7 +1282,7 @@ EOD;
         $html .='<div>PLEASE SIGN FOR RECEIPT OF ENVOLOPES-STATEMENT</div>';
         $html .=<<<EOD
 <table border="1">
-  
+
   <tr style="1px solid black;">
     <td height="20">LOADER..........................</td>
     <td>DRIVER:..........................</td>
@@ -1089,13 +1298,13 @@ EOD;
     <td></td>
     <td>Oil:..........................</td>
   </tr>
- 
+
 </table>
 EOD;
 
         $html .='
 <table border="1";>
-  
+
   <tr>
     <td height="20">Truck Clean.................................................</td>
     <td height="20">Truck Lights.............................................</td>
@@ -1106,7 +1315,7 @@ EOD;
 	<td>Spanner Jack..........................................</td>
 	<td>Spare Tire..................................</td>
   </tr>
- 
+
 </table>';
 
         $reprint = $users[0]->Closed;

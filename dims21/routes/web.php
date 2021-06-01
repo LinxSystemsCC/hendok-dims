@@ -311,6 +311,9 @@ Route::post('sequenceOrdersByMode', [TabletLoadingApp::class,'sequenceOrdersByMo
 Route::post('sequenceOrdersByMode',[TabletLoadingApp::class,'sequenceOrdersByMode'] );
 Route::post('resequenceOrders', [TabletLoadingApp::class,'resequenceOrders']);
 Route::get('truckControlId',[TabletLoadingApp::class,'truckControlId']);
+Route::get('getmycustroutemap',[TabletLoadingApp::class,'getmycustroutemap']);
+Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
+Route::get('plannedmaproute',[TabletLoadingApp::class,'plannedmaproute']);
 Route::get('routePlannerPrintPreview/{date}/{dateTo}/{ordertype}/{route}/{status}',[TabletLoadingApp::class,'routePlannerPrintPreview']);
 Route::post('moveTheOrder',[TabletLoadingApp::class,'moveTheOrder']);
 Route::post('moveTheOrderArray', [TabletLoadingApp::class,'moveTheOrderArray']);
@@ -324,8 +327,18 @@ Route::get('designPickingInformationPerTeam/{del}/{route}/{ordertype}', [TabletL
 Route::get('truckControlSheetDetails', [TabletLoadingApp::class,'truckControlSheetDetails']);
 Route::post('stopsUnmapped', [TabletLoadingApp::class,'stopsUnmapped']);
 Route::post('getRouteDataMultiSelected', [TabletLoadingApp::class,'getRouteDataMultiSelected']);
+Route::post('getCustomerPlannedForPicking', [TabletLoadingApp::class,'getCustomerPlannedForPicking']);
+Route::post('getcustomergeneralplanmap', [TabletLoadingApp::class,'getcustomergeneralplanmap']);
+Route::post('PutMarkerOnTheMapDynamically', [TabletLoadingApp::class,'PutMarkerOnTheMapDynamically']);
+Route::post('saveplan', [TabletLoadingApp::class,'saveplan']);
+Route::post('jsongetproductbycat', [TabletLoadingApp::class,'jsongetproductbycat']);
+Route::post('productsonamarker', [TabletLoadingApp::class,'productsonamarker']);
+Route::post('updateplan', [TabletLoadingApp::class,'updateplan']);
+Route::post('doneplanning', [TabletLoadingApp::class,'doneplanning']);
 Route::get('routeplanner',[TabletLoadingApp::class,'routeplanner']);
 Route::get('routePlannerExt', [TabletLoadingApp::class,'routePlannerExt']);
+Route::get('getProgressPlan', [TabletLoadingApp::class,'getProgressPlan']);
+Route::get('getProgressPlanCustByProducts', [TabletLoadingApp::class,'getProgressPlanCustByProducts']);
 Route::get('invoicesnotprinting', [TabletLoadingApp::class,'invoicesnotprinting']);
 Route::post('notifypickers',[TabletLoadingApp::class,'notifypickers']);
 Route::get('liveBulkPicking', [TabletLoadingApp::class,'liveBulkPicking']);
@@ -345,6 +358,7 @@ Route::get('createtripsheetnotes', [TabletLoadingApp::class,'createtripsheetnote
 Route::post('getRoutingIdNotes',[TabletLoadingApp::class,'getRoutingIdNotes']);
 Route::post('saveRoutingIdNotes', [TabletLoadingApp::class,'saveRoutingIdNotes']);
 Route::get('routePlannerExtParam/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'routePlannerExtParam']);
+Route::get('planroute/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'planroute']);
 Route::get('routeplannermap',[TabletLoadingApp::class,'routeplannermap']);
 Route::get('geoJson',[TabletLoadingApp::class,'geoJson']);
 Route::get('drone',[TabletLoadingApp::class,'drone']);
@@ -784,6 +798,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('saveinfocardwalking', [LayaltyProgramController::class,'saveinfocardWalking']);
     Route::get('verifyemail', [LayaltyProgramController::class,'verifyemail']);
     Route::get('checkifIdexists',[LayaltyProgramController::class,'checkifIdexists'] );
+
+
+    Route::get('routePlannerExtParam/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'routePlannerExtParam']);
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!
