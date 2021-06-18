@@ -501,5 +501,9 @@ $salesMonthToDate = DB::connection('sqlsrv3')
             ->select("EXEC spGetOutstandingDriversCashoff");
         return view('dims/outstandingdriverscashoff')->with('outstandingtripsheets',$tripsheets);
     }
+    public function printDocs()
+    {
+        return view('dims/printwithout');
+    }
 
 }

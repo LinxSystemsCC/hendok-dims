@@ -1,6 +1,14 @@
 <?php
 
 use App\Http\Controllers\SalesForm;
+use App\Http\Controllers\TabletLoadingApp;
+use App\Http\Controllers\ArtificialCrud;
+use App\Http\Controllers\RecentRegistered;
+use App\Http\Controllers\DimsCommon;
+use App\Http\Controllers\SalesFormFunctions;
+use App\Http\Controllers\ApisContoller;
+use App\Http\Controllers\OnlineOrders;
+use App\Http\Controllers\ConsoleManagement;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,12 +25,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::post('getLiveDriversInfo', 'ExternalFunctions@getLiveDriversInfo');
+Route::post('getLiveDriversInfo', [ExternalFunctions::class, 'getLiveDriversInfo'] );
 Auth::routes();
 
 //Route::get('/home', 'SalesForm@index')->name('home');
 Route::get('home',[SalesForm::class, 'index'])->name('home');
-Route::get('/sales',[SalesForm::class, 'index']);
+Route::get('/sales',[SalesForm::class, 'sales']);
 Route::get('pl', [SalesForm::class,'pl']);
 Route::get('returns',[SalesForm::class,'returns']);
 Route::get('getProductsStopedBuyingJSon',[SalesForm::class,'getProductsStopedBuyingJSon']);
@@ -794,3 +802,9 @@ Route::get('/xero/getInvoiceAsPdf', [\App\Http\Controllers\XeroController::class
 Route::get('/xero/createCreditNotes', [\App\Http\Controllers\XeroController::class, 'createCreditNotes'])->name('xero.createCreditNotes');
 Route::get('/xero/getCreditNotes', [\App\Http\Controllers\XeroController::class, 'getCreditNotes'])->name('xero.getCreditNotes');
 Route::get('/xero/getItems', [\App\Http\Controllers\XeroController::class, 'getItems'])->name('xero.getItems');
+
+
+/**********HANDCRAFTED APIs*************************************************************************************************************/
+
+Route::get('getOrderTypes',[ApisContoller::class,'getOrderTypes'] );
+Route::get('getRoutes',[ApisContoller::class,'getRoutes'] );
