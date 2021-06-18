@@ -22,700 +22,763 @@ Auth::routes();
 
 //Route::get('/home', 'SalesForm@index')->name('home');
 Route::get('home',[SalesForm::class, 'index'])->name('home');
-Route::get('/sales', 'SalesForm@index');
-Route::get('pl', 'SalesForm@pl');
-Route::get('returns', 'SalesForm@returns');
-Route::get('getProductsStopedBuyingJSon', 'SalesForm@getProductsStopedBuyingJSon');
-Route::get('getProductsStopedBuying', 'SalesForm@getProductsStopedBuying');
-Route::get('getCustomerStoppedBuyingJSon', 'SalesForm@getCustomerStoppedBuyingJSon');
-Route::get('getCustomerStoppedBuying', 'SalesForm@getCustomerStoppedBuying');
-Route::get('/getCustomers', 'SalesForm@getCustomers');
-Route::get('/prod', 'SalesForm@getProducts');
-Route::get('ordersreport', 'SalesForm@ordersreport');
-Route::get('getOrdersreportinfo/{date1}/{date2}', 'SalesForm@getOrdersreportinfo');
-Route::get('/registered', 'RecentRegistered@index')->name('registered');
-Route::post('/updatecart', 'ArtificialCrud@updateCart');
-Route::post('/updatereordering', 'ArtificialCrud@updatereordering');
-Route::post('/emptyCart', 'ArtificialCrud@deleteCartItems');
-Route::post('/cartreorderingremoveitem', 'ArtificialCrud@deleteReorderingItems');
-Route::get('/invoiceXXX/{invoiceno}/{type}', 'ArtificialCrud@invoiceDetails');
-Route::post('/reordering/', 'ArtificialCrud@reorderBasedOnSelectedInvoice');
-Route::get('/incompletOrders', 'IncompletOrders@incompletOrders');
-Route::get('testPhpgrid', 'RecentRegistered@testPhpgrid');
-Route::get('instocksheet', 'RecentRegistered@instocksheet');
+Route::get('/sales',[SalesForm::class, 'index']);
+Route::get('pl', [SalesForm::class,'pl']);
+Route::get('returns',[SalesForm::class,'returns']);
+Route::get('getProductsStopedBuyingJSon',[SalesForm::class,'getProductsStopedBuyingJSon']);
+Route::get('getProductsStopedBuying',[SalesForm::class,'getProductsStopedBuying'] );
+Route::get('getCustomerStoppedBuyingJSon',[SalesForm::class,'getCustomerStoppedBuyingJSon'] );
+Route::get('getCustomerStoppedBuying',[SalesForm::class,'getCustomerStoppedBuying']);
+Route::get('/getCustomers', [SalesForm::class,'getCustomers']);
+Route::get('/prod', [SalesForm::class,'getProducts']);
+Route::get('ordersreport', [SalesForm::class,'ordersreport']);
+Route::get('getOrdersreportinfo/{date1}/{date2}',[SalesForm::class,'getOrdersreportinfo']);
+Route::get('/registered', [RecentRegistered::class,'index'])->name('registered');
+Route::post('/updatecart', [ArtificialCrud::class,'updateCart']);
+Route::post('/updatereordering',[ArtificialCrud::class,'updatereordering'] );
+Route::post('/emptyCart', [ArtificialCrud::class,'deleteCartItems']);
+Route::post('/cartreorderingremoveitem', [ArtificialCrud::class,'deleteReorderingItems']);
+Route::get('/invoiceXXX/{invoiceno}/{type}',[ArtificialCrud::class,'invoiceDetails']);
+Route::post('/reordering/', [ArtificialCrud::class,'reorderBasedOnSelectedInvoice']);
+Route::get('/incompletOrders', [IncompletOrders::class,'incompletOrders']);
+Route::get('testPhpgrid', [RecentRegistered::class,'testPhpgrid']);
+Route::get('instocksheet',[RecentRegistered::class,'instocksheet']);
 
 
 //Route::post('ItemSearchCreate', 'ItemSearchController@create');
 Route::resource('shop', 'HomeController', ['only' => ['show']]);
 Route::resource('cart', 'CartController');
 
-Route::get('custCode', 'SalesFormFunctions@CustomerCode');
-Route::get('getExportForm', 'DimsExportController@getExportForm');
-Route::get('getDimsUsers', 'UserFeature@getDimsUsers');
-Route::get('getCommonRoutes', 'DimsCommon@getCommonRoutes');
-Route::get('PointGrid', 'DimsCommon@PointGrid');
-Route::get('customerPointsTrends', 'DimsCommon@customerPointsTrends');
-Route::get('cardsList', 'DimsCommon@cardsList');
-Route::get('getCartsGrid', 'DimsCommon@getCartsGrid');
-Route::get('getPointGrid', 'DimsCommon@getPointGrid');
-Route::post('increasePoints', 'DimsCommon@increasePoints');
-Route::post('updatecustomerwebstoreinfo', 'DimsCommon@updatecustomerwebstoreinfo');
+Route::get('custCode',[SalesFormFunctions::class, 'CustomerCode']);
+Route::get('getExportForm', [DimsExportController::class,'getExportForm']);
+Route::get('getDimsUsers', [UserFeature::class,'getDimsUsers']);
+
+//DIMS COMMON STARTS HERE!!!!
+Route::get('getCommonRoutes', [DimsCommon::class,'getCommonRoutes']);
+Route::get('PointGrid', [DimsCommon::class,'PointGrid']);
+Route::get('customerPointsTrends', [DimsCommon::class,'customerPointsTrends']);
+Route::get('cardsList', [DimsCommon::class,'cardsList']);
+Route::get('getCartsGrid', [DimsCommon::class,'getCartsGrid']);
+Route::get('getPointGrid', [DimsCommon::class,'getPointGrid']);
+Route::post('increasePoints',[DimsCommon::class,'increasePoints'] );
+Route::post('updatecustomerwebstoreinfo',[DimsCommon::class,'updatecustomerwebstoreinfo'] );
 Route::get('viewStatusReport', 'DimsCommon@viewStatusRepoRoute::post(\'deletecard\', \'DimsCommon@deletecard\');
 rt');
-Route::get('getConsolidatedStatsReport', 'DimsCommon@getConsolidatedStatsReport');
-Route::get('massCustomer', 'DimsCommon@massCustomer');
-Route::get('massProducts', 'DimsCommon@massProducts');
-Route::get('getCostsPerdate', 'DimsCommon@getCostsPerdate');
-Route::get('viewdailycash', 'DimsCommon@viewdailycash');
-Route::get('viewDeletedOrders', 'DimsCommon@viewDeletedOrders');
-Route::get('deleteordersJson/{datefrom}/{dateto}', 'DimsCommon@deleteordersJson');
-Route::get('customersalesperiod/{datefrom}/{dateto}', 'DimsCommon@customersalesperiod');
-Route::get('getdailycash/{datefrom}/{dateTo}', 'DimsCommon@getdailycash');
-Route::get('customersalesperiodwebpage', 'DimsCommon@customersalesperiodwebpage');
-Route::get('advancedcustomerspecials', 'DimsCommon@advancedcustomerspecials');
-Route::get('advancedcustomerspecialsJson', 'DimsCommon@advancedcustomerspecialsJson');
-Route::get('routePlannerSuggestions/{date}/{ordertype}/{route}/{status}', 'TabletLoadingApp@routePlannerSuggestions');
-Route::post('masscustomerdatatable', 'DimsCommon@masscustomerdatatable');
-Route::post('massproductdatatable', 'DimsCommon@massproductdatatable');
-Route::post('customerOrderListingHeader', 'DimsCommon@customerOrderListingHeader');
-Route::post('credentialsmatch', 'DimsCommon@credentialsmatch');
-Route::post('getAvailable', 'DimsCommon@getAvailable');
-Route::post('clearorderlocksperorder', 'DimsCommon@clearorderlocksperorder');
-Route::get('massCustomerUpdate/{custId}', 'DimsCommon@massCustomerUpdate');
-Route::get('customerorderpattern/{custId}', 'DimsCommon@customerorderpattern');
-Route::get('spGetCostsPerDate/{date1}/{date2}', 'DimsCommon@spGetCostsPerDate');
-Route::post('deletepatternline', 'DimsCommon@deletepatternline');
-Route::post('custID', 'SalesFormFunctions@getCustomerID');
-Route::get('getAllProductsAndCosts', 'SalesFormFunctions@getAllProductsAndCosts');
-Route::get('getProductCodes', 'SalesFormFunctions@getProductCodes');
-Route::get('custDescription', 'SalesFormFunctions@CustomerDescription');
-Route::get('prodCode', 'SalesFormFunctions@ProductCode');
-Route::get('prodDesciption', 'SalesFormFunctions@ProductDescription');
-Route::get('deliveryTypes', 'SalesFormFunctions@getDeliverTypes');
-Route::get('getDeliveryDate', 'DimsCommon@getDeliveryDate');
-Route::get('dimsAdminUsers', 'DimsCommon@dimsAdminUsers');
-Route::post('restFullOrderLock', 'DimsCommon@restFullOrderLock');
-Route::post('restFullUnLockOrder', 'DimsCommon@restFullUnLockOrder');
-Route::post('deleteuserOrderLocks', 'DimsCommon@deleteuserOrderLocks');
-Route::post('updatebasicinfo', 'DimsCommon@updatebasicinfo');
-Route::post('updateContactInfo', 'DimsCommon@updateContactInfo');
-Route::post('updatePayments', 'DimsCommon@updatePayments');
-Route::post('insertIntoPushProducts', 'DimsCommon@insertIntoPushProducts');
-Route::post('insertIntoProhibitProducts', 'DimsCommon@insertIntoProhibitProducts');
-Route::post('removePushProducts', 'DimsCommon@removePushProducts');
-Route::post('removeProhibitProducts', 'DimsCommon@removeProhibitProducts');
-Route::get('productOnPush/{customerId}', 'DimsCommon@productOnPush');
-//Route::get('removeProhibitProducts/{customerId}', 'DimsCommon@removeProhibitProducts');massCustomer
-Route::get('productOnprohibit/{customerId}', 'DimsCommon@productOnprohibit');
-Route::get('specials', 'DimsCommon@specials');
-Route::get('customerspecialsbulkediting/{customercode}/{datefrom}/{dateto}', 'DimsCommon@customerspecialsbulkediting');
-Route::get('groupspecialsbulkediting/{customercode}/{datefrom}/{dateto}', 'DimsCommon@groupspecialsbulkediting');
-Route::get('getbulkeditingLandingage/{customercode}/{datefrom}/{dateto}', 'DimsCommon@getbulkeditingLandingage');
-Route::get('getgroupspecialbulkeditingLandingage/{groupId}/{datefrom}/{dateto}', 'DimsCommon@getgroupspecialbulkeditingLandingage');
-Route::get('groupspecials', 'DimsCommon@groupspecials');
-Route::get('overallspecials', 'DimsCommon@overallspecials');
-Route::get('andNewSpecial', 'DimsCommon@andNewSpecial');
-Route::get('customerspecialTemplate', 'DimsCommon@customerspecialTemplate');
-Route::get('checkifcustomerspecial/{date1}/{date2}', 'DimsCommon@checkifcustomerspecials');
-Route::get('getcheckifcustomerspecials', 'DimsCommon@getcheckifcustomerspecials');
-Route::get('addNewGroupSpecial', 'DimsCommon@addNewGroupSpecial');
-Route::get('managementSearch', 'DimsCommon@managementSearch');
-Route::post('updateDelvAdress', 'DimsCommon@updateDelvAdress');
-Route::post('XmlBulkEditingCustomerSpecials', 'DimsCommon@XmlBulkEditingCustomerSpecials');
-Route::post('XmlBulkEditingGroupSpecials', 'DimsCommon@XmlBulkEditingGroupSpecials');
-Route::get('managementcosoleresult/{consoletype}/{OrderId}/{InvoiceNo}/{ProductCode}', 'ConsoleManagement@managementcosoleresult');
-Route::post('createCustomerSpecials', 'DimsCommon@createCustomerSpecials');
-Route::post('XmlCreateCustomerSpecials', 'DimsCommon@XmlCreateCustomerSpecials');
-Route::post('overallSpecialHeader', 'DimsCommon@overallSpecialHeader');
-Route::post('createGroupSpecials', 'DimsCommon@createGroupSpecials');
-Route::post('createOverallSpecials', 'DimsCommon@createOverallSpecials');
-Route::post('customerByDateOrContract', 'DimsCommon@customerByDateOrContract');
-Route::post('customerGroupByDateOrContract', 'DimsCommon@customerGroupByDateOrContract');
-Route::get('viewgroupinexcel/{from}/{to}/{groupid}', 'DimsCommon@viewgroupinexcel');
-Route::get('jsonViewgroupspecialExcel/{from}/{to}/{groupid}', 'DimsCommon@jsonViewgroupspecialExcel');
-Route::post('overallSpecailByDateOrContract', 'DimsCommon@overallSpecailByDateOrContract');
-Route::post('updatespeciialLine', 'DimsCommon@updatespeciialLine');
-Route::post('updategGroupSpecialLine', 'DimsCommon@updategGroupSpecialLine');
-Route::post('updateOverallSpecialLine', 'DimsCommon@updateOverallSpecialLine');
-Route::post('insertIntoTblPicking', 'DimsCommon@insertIntoTblPicking');
-Route::post('insertIntoTblPickingPerRoute', 'DimsCommon@insertIntoTblPickingPerRoute');
-Route::post('startcopyingorderpatternhistorytoaccount', 'DimsCommon@startcopyingorderpatternhistorytoaccount');
-Route::post('deleteaddressonthecustomerdeliveryaddresstbl', 'DimsCommon@deleteaddressonthecustomerdeliveryaddresstbl');
-Route::post('updateCContactsOnOrder', 'SalesFormFunctions@updateCContactsOnOrder');
-Route::post('orderheaderAndOrderLines', 'SalesFormFunctions@orderheaderAndOrderLines');
-Route::get('getDataFromManagementConsole', 'DimsCommon@getDataFromManagementConsole');
-Route::get('getDataFromManagementConsoleForAuditors', 'DimsCommon@getDataFromManagementConsoleForAuditors');
-Route::get('customerAddressLandingPage', 'DimsCommon@customerAddressLandingPage');
-Route::get('customerDeliveryAddress/{custcode}', 'DimsCommon@customerDeliveryAddress');
-Route::get('selectCustomerAddressToUpdate/{addressid}/{address1}/{address2}/{address3}/{address4}/{address5}/{customercode}', 'DimsCommon@selectCustomerAddressToUpdate');
-Route::post('getCutomerPriceOnOrderForm', 'SalesFormFunctions@returnProductPrice');
-Route::post('getCutomerPastInvoices', 'SalesFormFunctions@getCustomerPast10Invoices');
-Route::post('customerSpecials', 'SalesFormFunctions@getCustomerSpecials');
-Route::post('groupSpecials', 'SalesFormFunctions@getGroupSpecials');
-Route::post('combinedSpecials', 'SalesFormFunctions@combinedSpecials');
-Route::post('priceSearch', 'SalesFormFunctions@priceLookUpOntab');
-Route::post('insertOrderHeader', 'SalesFormFunctions@insertOrderHearder');
-Route::post('insertHeaderForOtherTrans', 'SalesFormFunctions@insertHeaderForOtherTrans');
-Route::post('insertOrderDetails', 'SalesFormFunctions@insertOrderDetails');
-Route::post('insertNewAddress', 'SalesFormFunctions@insertNewAddress');
-Route::post('jsonOrderDetails', 'SalesFormFunctions@postOrderDetailsAsJsonArray');
-Route::post('jsonOtherTransactionsLinesDetails', 'SalesFormFunctions@postOrderDetailsAsJsonArrayForOtherTransactions');
-Route::post('jsonOrderDetailsPos', 'SalesFormFunctions@postOrderDetailsAsJsonArrayPOS');
-Route::post('createbackorderonsplit', 'SalesFormFunctions@createbackorderonsplit');
-Route::post('printPickingSlipPerOrder', 'SalesFormFunctions@printPickingSlipPerOrder');
-Route::post('productsOnOrder', 'SalesFormFunctions@productsOnOrder');
-Route::post('countOnSalesOrder', 'SalesFormFunctions@countOnSalesOrder');
-Route::post('productsOnInvoiced', 'SalesFormFunctions@productsOnInvoiced');
-Route::post('getOrderPattern', 'SalesFormFunctions@getCustomerOderpattern');
-Route::post('getCustomerRoutes', 'SalesFormFunctions@getCustomerRouteWithOtherRoutesByPriority');
-Route::post('getOrderListing', 'SalesFormFunctions@getOrderListing');
-Route::post('getOrderListingOtherTrans', 'SalesFormFunctions@getOrderListingOtherTrans');
-Route::post('onCheckOrderHeader', 'SalesFormFunctions@onCheckOrderHeader');
-Route::post('checkIfOrderExistsWithOrderType', 'SalesFormFunctions@checkIfOrderExists');
-Route::post('onCheckOrderHeaderDetails', 'SalesFormFunctions@onCheckOrderHeaderDetails');
-Route::post('isClosedRoute', 'SalesFormFunctions@isClosedRoute');
-//FOR OTHER TRANSACTIONS
-Route::post('onCheckOrderHeaderForOtherTrans', 'SalesFormFunctions@onCheckOrderHeaderForOtherTrans');
-Route::post('checkIfOrderExistsWithOrderTypeForOtherTrans', 'SalesFormFunctions@checkIfTransactionsExists');
-Route::post('onCheckOrderHeaderDetailsForOtherTrans', 'SalesFormFunctions@onCheckOrderHeaderDetailsForOtherTrans');
-Route::post('convertToSalesOrder', 'SalesFormFunctions@convertToSalesOrder');
-Route::post('treatAsQuote', 'SalesFormFunctions@treatAsQuote');
-//END OF OTHER TRANS
+Route::get('getConsolidatedStatsReport', [DimsCommon::class,'getConsolidatedStatsReport']);
+Route::get('massCustomer', [DimsCommon::class,'massCustomer']);
+Route::get('massProducts', [DimsCommon::class,'massProducts']);
+Route::get('getCostsPerdate',[DimsCommon::class,'getCostsPerdate']);
+Route::get('viewdailycash',[DimsCommon::class,'viewdailycash']);
+Route::get('viewDeletedOrders',[DimsCommon::class,'viewDeletedOrders'] );
+Route::get('deleteordersJson/{datefrom}/{dateto}', [DimsCommon::class,'deleteordersJson']);
+Route::get('customersalesperiod/{datefrom}/{dateto}', [DimsCommon::class,'customersalesperiod']);
+Route::get('getdailycash/{datefrom}/{dateTo}',[DimsCommon::class,'getdailycash'] );
+Route::get('customersalesperiodwebpage', [DimsCommon::class,'customersalesperiodwebpage']);
+Route::get('advancedcustomerspecials',[DimsCommon::class,'advancedcustomerspecials'] );
+Route::get('advancedcustomerspecialsJson',[DimsCommon::class,'advancedcustomerspecialsJson'] );
+Route::post('masscustomerdatatable', [DimsCommon::class,'masscustomerdatatable'] );
+Route::post('massproductdatatable',[DimsCommon::class,'massproductdatatable']);
+Route::post('customerOrderListingHeader',[DimsCommon::class,'customerOrderListingHeader']);
+Route::post('credentialsmatch', [DimsCommon::class,'credentialsmatch']);
+Route::post('getAvailable', [DimsCommon::class,'getAvailable']);
+Route::post('clearorderlocksperorder', [DimsCommon::class,'clearorderlocksperorder'] );
+Route::get('massCustomerUpdate/{custId}', [DimsCommon::class,'massCustomerUpdate'] );
+Route::get('customerorderpattern/{custId}',[DimsCommon::class,'customerorderpattern'] );
+Route::get('spGetCostsPerDate/{date1}/{date2}', [DimsCommon::class,'spGetCostsPerDate'] );
+Route::post('deletepatternline', [DimsCommon::class,'deletepatternline'] );
+Route::get('getDeliveryDate', [DimsCommon::class,'getDeliveryDate']);
+Route::get('dimsAdminUsers',[DimsCommon::class,'dimsAdminUsers']);
+Route::post('restFullOrderLock',[DimsCommon::class,'restFullOrderLock']);
+Route::post('restFullUnLockOrder', [DimsCommon::class,'restFullUnLockOrder']);
+Route::post('deleteuserOrderLocks',[DimsCommon::class,'deleteuserOrderLocks']);
+Route::post('updatebasicinfo', [DimsCommon::class,'updatebasicinfo']);
+Route::post('updateContactInfo', [DimsCommon::class,'updateContactInfo']);
+Route::post('updatePayments',[DimsCommon::class,'updatePayments']);
+Route::post('insertIntoPushProducts', [DimsCommon::class,'insertIntoPushProducts']);
+Route::post('insertIntoProhibitProducts',[DimsCommon::class,'insertIntoProhibitProducts']);
+Route::post('removePushProducts', [DimsCommon::class,'removePushProducts']);
+Route::post('removeProhibitProducts',[DimsCommon::class,'removeProhibitProducts']);
+Route::get('productOnPush/{customerId}',[DimsCommon::class,'productOnPush']);
+Route::get('productOnprohibit/{customerId}', [DimsCommon::class,'productOnprohibit']);
+Route::get('specials',[DimsCommon::class,'specials']);
+Route::get('customerspecialsbulkediting/{customercode}/{datefrom}/{dateto}', [DimsCommon::class,'customerspecialsbulkediting']);
+Route::get('groupspecialsbulkediting/{customercode}/{datefrom}/{dateto}', [DimsCommon::class,'groupspecialsbulkediting']);
+Route::get('getbulkeditingLandingage/{customercode}/{datefrom}/{dateto}', [DimsCommon::class,'getbulkeditingLandingage']);
+Route::get('getgroupspecialbulkeditingLandingage/{groupId}/{datefrom}/{dateto}',[DimsCommon::class,'getgroupspecialbulkeditingLandingage']);
+Route::get('groupspecials', [DimsCommon::class,'groupspecials']);
+Route::get('overallspecials',[DimsCommon::class,'overallspecials']);
+Route::get('andNewSpecial', [DimsCommon::class,'andNewSpecial']);
+Route::get('customerspecialTemplate', [DimsCommon::class,'customerspecialTemplate']);
+Route::get('checkifcustomerspecial/{date1}/{date2}', [DimsCommon::class,'checkifcustomerspecials']);
+Route::get('getcheckifcustomerspecials', [DimsCommon::class,'getcheckifcustomerspecials']);
+Route::get('addNewGroupSpecial', [DimsCommon::class,'addNewGroupSpecial']);
+Route::get('managementSearch', [DimsCommon::class,'managementSearch']);
+Route::post('updateDelvAdress', [DimsCommon::class,'updateDelvAdress']);
+Route::post('XmlBulkEditingCustomerSpecials',[DimsCommon::class,'XmlBulkEditingCustomerSpecials']);
+Route::post('XmlBulkEditingGroupSpecials', [DimsCommon::class,'XmlBulkEditingGroupSpecials']);
+Route::get('managementcosoleresult/{consoletype}/{OrderId}/{InvoiceNo}/{ProductCode}', [ConsoleManagement::class,'managementcosoleresult']);
+Route::post('createCustomerSpecials', [DimsCommon::class,'createCustomerSpecials']);
+Route::post('XmlCreateCustomerSpecials',  [DimsCommon::class,'XmlCreateCustomerSpecials']);
+Route::post('overallSpecialHeader', [DimsCommon::class,'overallSpecialHeader']);
+Route::post('createGroupSpecials',  [DimsCommon::class,'createGroupSpecials']);
+Route::post('createOverallSpecials',  [DimsCommon::class,'createOverallSpecials']);
+Route::post('customerByDateOrContract',  [DimsCommon::class,'customerByDateOrContract']);
+Route::post('customerGroupByDateOrContract',  [DimsCommon::class,'customerGroupByDateOrContract']);
+Route::get('viewgroupinexcel/{from}/{to}/{groupid}', [DimsCommon::class,'viewgroupinexcel'] );
+Route::get('jsonViewgroupspecialExcel/{from}/{to}/{groupid}', [DimsCommon::class,'jsonViewgroupspecialExcel']);
+Route::post('overallSpecailByDateOrContract', [DimsCommon::class,'overallSpecailByDateOrContract']);
+Route::post('updatespeciialLine', [DimsCommon::class,'updatespeciialLine']);
+Route::post('updategGroupSpecialLine', [DimsCommon::class,'updategGroupSpecialLine']);
+Route::post('updateOverallSpecialLine', [DimsCommon::class,'updateOverallSpecialLine']);
+Route::post('insertIntoTblPicking', [DimsCommon::class,'insertIntoTblPicking']);
+Route::post('insertIntoTblPickingPerRoute',  [DimsCommon::class,'insertIntoTblPickingPerRoute']);
+Route::post('startcopyingorderpatternhistorytoaccount', [DimsCommon::class,'startcopyingorderpatternhistorytoaccount']);
+Route::post('deleteaddressonthecustomerdeliveryaddresstbl',  [DimsCommon::class,'deleteaddressonthecustomerdeliveryaddresstbl']);
+Route::get('getDataFromManagementConsole', [DimsCommon::class,'getDataFromManagementConsole']);
+Route::get('getDataFromManagementConsoleForAuditors', [DimsCommon::class,'getDataFromManagementConsoleForAuditors']);
+Route::get('customerAddressLandingPage', [DimsCommon::class,'customerAddressLandingPage']);
+Route::get('customerDeliveryAddress/{custcode}',[DimsCommon::class,'customerDeliveryAddress']);
+Route::get('selectCustomerAddressToUpdate/{addressid}/{address1}/{address2}/{address3}/{address4}/{address5}/{customercode}', [DimsCommon::class,'deleteaddressonthecustomerdeliveryaddresstbl']);
+Route::post('intoTblPrintedDoc', [DimsCommon::class,'intoTblPrintedDoc']);
+Route::post('invoicedoc', [DimsCommon::class,'invoicedoc']);
+Route::post('uploader',[DimsCommon::class,'uploader']);
+Route::post('warehouseProductStockLookUp',[DimsCommon::class,'warehouseProductStockLookUp']);
+Route::post('intoTblPrintedDocPickingSlips',[DimsCommon::class,'intoTblPrintedDocPickingSlips']);
+Route::post('emailOrder',[DimsCommon::class,'InsertToEmail']);
+Route::post('printInvoiceNow',[DimsCommon::class,'printInvoiceNow']);
+Route::post('printTruckControlID', [DimsCommon::class,'printTruckControlID']);
+Route::post('removeCustomerSpecial',[DimsCommon::class,'removeCustomerSpecial']);
+Route::post('increasePriceUsingMargin',[DimsCommon::class,'increasePriceUsingMargin']);
+Route::get('masscusterspecialdatefilter/{datefrom}/{dateto}/{marginless}/{margingreater}/{rep}',[DimsCommon::class,'masscusterspecialdatefilter']);
+Route::get('changefiltereddatamassspecials/{dateFromFilter}/{dateToFilter}/{marginfilterless}/{marginfiltergreater}/{rep}', [DimsCommon::class,'changefiltereddatamassspecials']);
+Route::get('getJsonCustomerGrid',[DimsCommon::class,'getJsonCustomerGrid']);
+Route::post('removeGroupSpecial',[DimsCommon::class,'removeGroupSpecial']);
+Route::post('deleteselectedgroupspeciallines', [DimsCommon::class,'deleteselectedgroupspeciallines']);
+Route::post('deleteselectedcustomerspeciallines',[DimsCommon::class,'deleteselectedcumassCustomerstomerspeciallines']);
+Route::post('removeOverallSpecial',[DimsCommon::class,'removeOverallSpecial']);
+Route::post('verifyAuth', [DimsCommon::class,'verifyAuth']);
+Route::post('changesalesman', [DimsCommon::class,'changesalesman']);
+Route::post('changerouteonorder',[DimsCommon::class,'changerouteonorder']);
+Route::post('masscustomerspecialupgrade',[DimsCommon::class,'masscustomerspecialupgrade']);
+Route::post('verifyAuthOnAdmin', [DimsCommon::class,'verifyAuthOnAdmin']);
+Route::post('verifyAuthCreditors',[DimsCommon::class,'verifyAuthCreditors']);
+Route::post('AuthExternaOrders', [DimsCommon::class,'AuthExternaOrders']);
+Route::post('verifyAuthOnAdminMargin', [DimsCommon::class,'verifyAuthOnAdminMargin']);
+Route::post('verifyAuthGroupLeaders', [DimsCommon::class,'verifyAuthGroupLeaders']);
+Route::post('communications', [DimsCommon::class,'communications']);
+Route::post('clearAllLocksRestFull', [DimsCommon::class,'clearAllUserLocks']);
+Route::post('doneextending',[DimsCommon::class,'doneextending']);
+Route::post('doneextendinggroupspecials',[DimsCommon::class,'doneextendinggroupspecials']);
+Route::post('updatecustomergridpricing',[DimsCommon::class,'updatecustomergridpricing']);
+Route::get('invoiceLookUp', [DimsCommon::class,'invoiceLookUp']);
+Route::get('customerLookUp',[DimsCommon::class,'customerLookUp']);
+Route::get('marginControl',[DimsCommon::class,'marginControl']);
+Route::get('viewCreditLimit', [DimsCommon::class,'viewCreditLimit']);
+Route::get('customernoteshistory/{customerid}',[DimsCommon::class,'customernoteshistory']);
+Route::get('getCreditLimitJson',[DimsCommon::class,'getCreditLimitJson']);
+Route::get('getAgeAnalysis/{customerid}', [DimsCommon::class,'getAgeAnalysis']);
+Route::POST('customernoteshistoryupdate',[DimsCommon::class,'customernoteshistoryupdate']);
+Route::POST('customernoteshistoryinsert',[DimsCommon::class,'customernoteshistoryinsert']);
+Route::POST('assignRouteToTheCustomer',[DimsCommon::class,'assignRouteToTheCustomer']);
+Route::get('blnCompanyReports', [DimsCommon::class,'blnCompanyReports']);
+Route::get('massgridspecialscustomer', [DimsCommon::class,'massgridspecialscustomer']);
+Route::get('userpickingloadingperformancereport',[DimsCommon::class,'userpickingloadingperformancereport']);
+Route::get('userpickingloadingperformancereportJson/{datefrom}/{dateto}', [DimsCommon::class,'userpickingloadingperformancereportJson']);
+Route::get('pickingLiveGrid', [DimsCommon::class,'pickingLiveGrid']);
+Route::get('driverLiveGrid', [DimsCommon::class,'driverLiveGrid']);
+Route::get('custometPricingPage/{customerid}',[DimsCommon::class,'custometPricingPage']);
+Route::get('custometPricingJson/{customerid}', [DimsCommon::class,'custometPricingJson']);
+Route::get('customersalespage',[DimsCommon::class,'viewCreditLimit']);
+Route::get('getDeliveryAddressOrderPattern/{account}/{addressid}',[DimsCommon::class,'getDeliveryAddressOrderPattern']);
+Route::get('customersalesJson/{datefrom1}/{dateto1}/{datefrom2}/{dateto3}',[DimsCommon::class,'customersalesJson']);
+Route::get('customerupdatepricingfromcustomerssalespage/{custcode}/{datefrom}/{dateto}/{datefrom2}/{dateto2}',[DimsCommon::class,'customerupdatepricingfromcustomerssalespage']);
+Route::get('bulpickingbyBatch/{timestamp}',[DimsCommon::class,'bulpickingbyBatch']);
+Route::get('UpdateDocument',[DimsCommon::class,'UpdateDocument']);
+Route::post('updateDocumentupdate',[DimsCommon::class,'UpdateDocumentupdate']);
+Route::get('/WebstoreMessages',[DimsCommon::class,'WebstoreMessages']);
+Route::get('/getMessageGrid',[DimsCommon::class,'getMessageGrid'] );
+Route::post('updateMessage',[DimsCommon::class,'updateMessage'] );
 
-Route::post('generalPriceChecking', 'SalesFormFunctions@generalPriceChecking');
-Route::post('advancedorderno', 'SalesFormFunctions@advancedOrderNo');
-Route::post('generalPriceCheckAndLastCost', 'SalesFormFunctions@generalPriceCheckAndLastCost');
-Route::post('getCallList', 'SalesFormFunctions@getCallList');
-Route::post('getCallListNew', 'SalesFormFunctions@getCallListNew');
-Route::post('insertCallistFilters', 'SalesFormFunctions@insertCallistFilters');
-Route::post('isCalled', 'SalesFormFunctions@insertCallID');
-Route::post('selectCustomerMultiAddress', 'SalesFormFunctions@selectCustomerMultiAddress');
-Route::post('copyOrdersToCustomers', 'SalesFormFunctions@copyOrdersToCustomers');
-Route::post('generatePDFForOrders', 'SalesFormFunctions@generatePDFForOrders');
-Route::post('countAddress', 'SalesFormFunctions@countAddress');
-Route::post('countomerSingleAddress', 'SalesFormFunctions@countomerSingleAddress');
-Route::post('createNewCustomDelvDate', 'SalesFormFunctions@spCreateNewtblCustomerDeliveryAddress');
-Route::post('getLastInsertedDate', 'SalesFormFunctions@getLastInsertedDate');
-Route::post('getProductStockOnHand', 'SalesFormFunctions@getProductStockOnHand');
-Route::post('deleteOrderDetails', 'SalesFormFunctions@DeleteOrderDetails');
-Route::post('DeleteOrderDetailsOrtherTrans', 'SalesFormFunctions@DeleteOrderDetailsOrtherTrans');
-Route::post('updateAuthHeader', 'SalesFormFunctions@updateAuthHeader');
-Route::post('selectAddressFromMultiAddressDeliveruyAddressId', 'SalesFormFunctions@selectAddressFromMultiAddressDeliveruyAddressId');
-Route::post('logMessageAjax', 'ConsoleManagement@logMessageAjax');
-Route::post('logMessageAuth', 'ConsoleManagement@logMessageAuth');
-Route::post('deleteallLinesOnOrder', 'ConsoleManagement@deleteallLinesOnOrder');
-Route::post('logMessageAuthMargin', 'ConsoleManagement@logMessageAuthMargin');
-Route::post('getRouteData', 'TabletLoadingApp@getRouteData');
-Route::post('sequenceOrdersByMode', 'TabletLoadingApp@sequenceOrdersByMode');
-Route::post('sequenceOrdersByMode', 'TabletLoadingApp@sequenceOrdersByMode');
-Route::post('resequenceOrders', 'TabletLoadingApp@resequenceOrders');
-Route::get('truckControlId', 'TabletLoadingApp@truckControlId');
-Route::get('routePlannerPrintPreview/{date}/{dateTo}/{ordertype}/{route}/{status}', 'TabletLoadingApp@routePlannerPrintPreview');
-Route::post('moveTheOrder', 'TabletLoadingApp@moveTheOrder');
-Route::post('moveTheOrderArray', 'TabletLoadingApp@moveTheOrderArray');
-Route::get('truckControlFromDate', 'TabletLoadingApp@truckControlFromDate');
-Route::get('amalgamation', 'TabletLoadingApp@amalgamation');
-Route::get('retrieve/{del}/{route}/{ordertype}', 'TabletLoadingApp@retrieve');
-Route::get('driverFleetInfo/{del}/{route}/{ordertype}', 'TabletLoadingApp@driverFleetInfo');
-Route::get('bulkPickingPerUserJSON/{from}/{to}', 'TabletLoadingApp@bulkPickingPerUserJSON');
-Route::get('bulkPickingPerUserView', 'TabletLoadingApp@bulkPickingPerUserView');
-Route::get('designPickingInformationPerTeam/{del}/{route}/{ordertype}', 'TabletLoadingApp@designPickingInformationPerTeam');
-Route::get('truckControlSheetDetails', 'TabletLoadingApp@truckControlSheetDetails');
-Route::post('stopsUnmapped', 'TabletLoadingApp@stopsUnmapped');
-Route::post('getRouteDataMultiSelected', 'TabletLoadingApp@getRouteDataMultiSelected');
-Route::get('routeplanner', 'TabletLoadingApp@routeplanner');
-Route::get('routePlannerExt', 'TabletLoadingApp@routePlannerExt');
-Route::get('invoicesnotprinting', 'TabletLoadingApp@invoicesnotprinting');
-Route::post('notifypickers', 'TabletLoadingApp@notifypickers');
-Route::get('liveBulkPicking', 'TabletLoadingApp@liveBulkPicking');
-Route::get('printLoadingSheet/{routingId}', 'TabletLoadingApp@printLoadingSheet');
-Route::get('getDrivers', 'TabletLoadingApp@getDrivers');
-Route::get('getTrucks', 'TabletLoadingApp@getTrucks');
-Route::get('getData/{orderdate}/{ordertype}/{routename}/{driver}/{assistant}/{truckname}/{assistanttwo}/{userid}', 'TabletLoadingApp@getData');
-Route::get('liveFleetDeliveries', 'TabletLoadingApp@liveFleetDeliveries');
-Route::get('driverreq_report', 'TabletLoadingApp@driverreq_report');
-Route::get('driverreq_reportJson/{date1}/{date2}', 'TabletLoadingApp@driverreq_reportJson');
-Route::get('driverreq_perrouteJson/{routeid}', 'TabletLoadingApp@driverreq_perrouteJson');
-Route::get('updatelogisticsinformation', 'TabletLoadingApp@updatelogisticsinformation');
-Route::get('ligisticsplan/{dates}', 'TabletLoadingApp@ligisticsplan');
-Route::get('LogisticsInsertMapRoute/{routingId}/{ot}/{route}', 'TabletLoadingApp@LogisticsInsertMapRoute');
-Route::get('createtripsheet', 'TabletLoadingApp@createtripsheet');
-Route::get('createtripsheetnotes', 'TabletLoadingApp@createtripsheetnotes');
-Route::post('getRoutingIdNotes', 'TabletLoadingApp@getRoutingIdNotes');
-Route::post('saveRoutingIdNotes', 'TabletLoadingApp@saveRoutingIdNotes');
-Route::get('routePlannerExtParam/{date}/{ordertype}/{route}/{status}', 'TabletLoadingApp@routePlannerExtParam');
-Route::get('routeplannermap', 'TabletLoadingApp@routeplannermap');
-Route::get('geoJson', 'TabletLoadingApp@geoJson');
-Route::get('drone', 'TabletLoadingApp@drone');
-Route::get('getRouteDifference', 'TabletLoadingApp@getRouteDifference');
-Route::get('ordersNotONDefaultRoutes', 'TabletLoadingApp@ordersNotONDefaultRoutes');
-Route::get('productontheminiorderform/{orderId}', 'TabletLoadingApp@spTabletLoading');
-Route::get('updateTableLoadingAppProducts', 'TabletLoadingApp@updateTableLoadingAppProducts');
-Route::post('sequencingTheStops', 'TabletLoadingApp@sequencingTheStops');
-Route::post('orderDetailsWithDeliveryAddress', 'TabletLoadingApp@orderDetailsWithDeliveryAddress');
-Route::post('orderDetailsWithDeliveryAddressOnOrder', 'TabletLoadingApp@orderDetailsWithDeliveryAddressOnOrder');
-Route::post('forceinvoicetoprint', 'TabletLoadingApp@forceinvoicetoprint');
-Route::post('updateIQInvoices', 'TabletLoadingApp@updateIQInvoices');
-Route::post('forcecredits', 'TabletLoadingApp@forcecredits');
-Route::post('combineroutes', 'TabletLoadingApp@combineroutes');
-Route::post('updateOrderHeader', 'SalesFormFunctions@UpdateOrderHearder');
-Route::post('deleteByHiddenToken', 'SalesFormFunctions@deleteByHiddenToken');
-Route::post('updateOrderHeaderForOtherTransactions', 'SalesFormFunctions@updateOrderHeaderForOtherTransactions');
-Route::post('tempDeliverAddress', 'SalesFormFunctions@tempDeliverAddress');
-Route::get('pointofsale', 'SalesFormFunctions@pointOfSale');
-Route::post('posCashFloat', 'SalesFormFunctions@posCashFloat');
-Route::post('postPOSfloat', 'SalesFormFunctions@postPOSfloat');
-Route::post('deletePOSfloat', 'SalesFormFunctions@deletePOSfloat');
-Route::post('updateDiscount', 'SalesFormFunctions@updateDiscount');
-Route::post('intoTblPrintedDoc', 'DimsCommon@intoTblPrintedDoc');
-Route::post('invoicedoc', 'DimsCommon@invoicedoc');
-Route::post('uploader', 'DimsCommon@uploader');
-Route::post('warehouseProductStockLookUp', 'DimsCommon@warehouseProductStockLookUp');
-Route::post('intoTblPrintedDocPickingSlips', 'DimsCommon@intoTblPrintedDocPickingSlips');
-Route::post('emailOrder', 'DimsCommon@InsertToEmail');
-Route::post('printInvoiceNow', 'DimsCommon@printInvoiceNow');
-Route::post('printTruckControlID', 'DimsCommon@printTruckControlID');
-Route::post('removeCustomerSpecial', 'DimsCommon@removeCustomerSpecial');
-Route::post('increasePriceUsingMargin', 'DimsCommon@increasePriceUsingMargin');
-Route::get('masscusterspecialdatefilter/{datefrom}/{dateto}/{marginless}/{margingreater}/{rep}', 'DimsCommon@masscusterspecialdatefilter');
-Route::get('changefiltereddatamassspecials/{dateFromFilter}/{dateToFilter}/{marginfilterless}/{marginfiltergreater}/{rep}', 'DimsCommon@changefiltereddatamassspecials');
-Route::get('getJsonCustomerGrid', 'DimsCommon@getJsonCustomerGrid');
-//Route::get('masscusterspecialdatefilter/{datefrom}/{dateto}', 'DimsCommon@masscusterspecialdatefilter');
-Route::post('removeGroupSpecial', 'DimsCommon@removeGroupSpecial');
-Route::post('deleteselectedgroupspeciallines', 'DimsCommon@deleteselectedgroupspeciallines');
-Route::post('deleteselectedcustomerspeciallines', 'DimsCommon@deleteselectedcumassCustomerstomerspeciallines');
-Route::post('removeOverallSpecial', 'DimsCommon@removeOverallSpecial');
-Route::post('verifyAuth', 'DimsCommon@verifyAuth');
-Route::post('changesalesman', 'DimsCommon@changesalesman');
-Route::post('changerouteonorder', 'DimsCommon@changerouteonorder');
-Route::post('masscustomerspecialupgrade', 'DimsCommon@masscustomerspecialupgrade');
-Route::post('verifyAuthOnAdmin', 'DimsCommon@verifyAuthOnAdmin');
-Route::post('verifyAuthCreditors', 'DimsCommon@verifyAuthCreditors');
-Route::post('AuthExternaOrders', 'DimsCommon@AuthExternaOrders');
-Route::post('verifyAuthOnAdminMargin', 'DimsCommon@verifyAuthOnAdminMargin');
-Route::post('verifyAuthGroupLeaders', 'DimsCommon@verifyAuthGroupLeaders');
-Route::post('communications', 'DimsCommon@communications');
-Route::post('clearAllLocksRestFull', 'DimsCommon@clearAllUserLocks');
-Route::post('doneextending', 'DimsCommon@doneextending');
-Route::post('doneextendinggroupspecials', 'DimsCommon@doneextendinggroupspecials');
-Route::post('updatecustomergridpricing', 'DimsCommon@updatecustomergridpricing');
-Route::get('invoiceLookUp', 'DimsCommon@invoiceLookUp');
-Route::get('customerLookUp', 'DimsCommon@customerLookUp');
-Route::get('marginControl', 'DimsCommon@marginControl');
-Route::get('viewCreditLimit', 'DimsCommon@viewCreditLimit');
-Route::get('viewproductbydate', 'ProductsController@viewproductbydate');
-Route::get('devexpressproducts', 'ProductsController@devExpressProductsgrid');
-Route::get('listProdutsToBePrinted', 'ProductsController@listProdutsToBePrinted');
-Route::get('listProdutsToBePrintedJson', 'ProductsController@listProdutsToBePrintedJson');
-Route::get('productbydatejson/{date1}/{date2}/{productId}', 'ProductsController@productbydatejson');
-Route::get('customernoteshistory/{customerid}', 'DimsCommon@customernoteshistory');
-Route::get('getCreditLimitJson', 'DimsCommon@getCreditLimitJson');
-Route::get('getAgeAnalysis/{customerid}', 'DimsCommon@getAgeAnalysis');
-Route::POST('customernoteshistoryupdate', 'DimsCommon@customernoteshistoryupdate');
-Route::POST('customernoteshistoryinsert', 'DimsCommon@customernoteshistoryinsert');
-Route::POST('assignRouteToTheCustomer', 'DimsCommon@assignRouteToTheCustomer');
-Route::get('blnCompanyReports', 'DimsCommon@blnCompanyReports');
-Route::get('massgridspecialscustomer', 'DimsCommon@massgridspecialscustomer');
-Route::get('userpickingloadingperformancereport', 'DimsCommon@userpickingloadingperformancereport');
-Route::get('userpickingloadingperformancereportJson/{datefrom}/{dateto}', 'DimsCommon@userpickingloadingperformancereportJson');
-Route::get('pickingLiveGrid', 'DimsCommon@pickingLiveGrid');
-Route::get('driverLiveGrid', 'DimsCommon@driverLiveGrid');
-Route::get('custometPricingPage/{customerid}', 'DimsCommon@custometPricingPage');
-Route::get('custometPricingJson/{customerid}', 'DimsCommon@custometPricingJson');
-Route::get('customersalespage', 'DimsCommon@customersalespage');
-Route::get('getDeliveryAddressOrderPattern/{account}/{addressid}', 'DimsCommon@getDeliveryAddressOrderPattern');
-Route::get('customersalesJson/{datefrom1}/{dateto1}/{datefrom2}/{dateto3}', 'DimsCommon@customersalesJson');
-Route::get('customerupdatepricingfromcustomerssalespage/{custcode}/{datefrom}/{dateto}/{datefrom2}/{dateto2}', 'DimsCommon@customerupdatepricingfromcustomerssalespage');
-//Route::get('massgridspecialscustomer', 'RecentRegistered@testPhpgrid');
-Route::post('copyInvoice', 'SalesFormFunctions@copyOrderToNewOrder');
-Route::post('adjustDispatch', 'SalesFormFunctions@adjustTheDispatchQtyOnPickingOrder');
-Route::post('printAdjustmentDispatch', 'SalesFormFunctions@printInvoiceFromPickingFormAdjustment');
-Route::post('createAbackOrder', 'SalesFormFunctions@createAbackOrder');
-Route::post('waitingForInvoiceNo', 'SalesFormFunctions@waitingForInvoiceNo');
-Route::post('checkifInvoiced', 'SalesFormFunctions@checkifInvoiced');
-Route::post('AssignInvoiceNumber', 'SalesFormFunctions@AssignInvoiceNumber');
-Route::post('toProcessPosTenderLines', 'SalesFormFunctions@toProcessPosTenderLines');
-Route::get('updatePosRoute', 'SalesFormFunctions@updatePosRoute');
-Route::get('salesquote', 'SalesQuotes@salesquote');
-Route::post('generateSalesQuote', 'SalesQuotes@generateSalesQuote');
-Route::post('createQuotesHeader', 'SalesQuotes@createQuotesHeader');
-Route::post('previewSaleQuotes', 'SalesQuotes@previewSaleQuotes');
-Route::post('viewSalesQuotes', 'SalesQuotes@viewSalesQuotes');
-Route::post('viewSalesQuotesConverted', 'SalesQuotes@viewSalesQuotesConverted');
-Route::post('startConvertingQuoteToOrder', 'SalesQuotes@startConvertingQuoteToOrder');
-Route::get('printTheQuote/{quoteId}', 'SalesQuotes@printTheQuote');
-Route::post('email', 'EmailController@email');
-Route::post('emailSalesOrder', 'EmailController@emailSalesOrder');
-Route::get('getAllOrderIDs', 'SalesFormFunctions@getAllOrderIDs');
-Route::get('reports', 'DimsReports@reports');
+//DIMS COMMON ENDS HERE HERE!!!!
 
-Route::get('outstandingDriversCashoff', 'DimsReports@outstandingDriversCashoff');
-Route::get('getreportLayout', 'DimsReports@getreportLayout');
-Route::get('getreportAuthBelowMargin', 'DimsReports@getreportAuthBelowMargin');
-Route::get('getJsonAuthBelowMargin/{dateFrom}/{dateTo}', 'DimsReports@getJsonAuthBelowMargin');
-Route::get('getOrderPlacedAfterCutOff', 'DimsReports@getOrderPlacedAfterCutOff');
-Route::get('getJsonCutOffTime/{dateFrom}', 'DimsReports@getJsonCutOffTime');
-Route::get('dshb', 'DimsReports@dashboardSalesPerformance');
-Route::post('getPickingTeamsByDept', 'DimsReports@getPickingTeamsByDept');
-Route::post('getPickingTeamsByDeptPalladium', 'DimsReports@getPickingTeamsByDeptPalladium');
-Route::get('getPickingDept', 'DimsReports@getPickingDept');
-Route::get('getPickingDeptPalladium', 'DimsReports@getPickingDeptPalladium');
-Route::get('printQuatation', 'DimsReports@quotationLayout');
-Route::get('showTripSheets', 'DimsReports@showTripSheets');
-Route::get('getTripSheetDetails/{routingId}', 'DimsReports@getTripSheetDetails');
-Route::get('reprintTripSheet/{routingId}', 'DimsReports@reprintTripSheet');
-Route::post('authorisationActions', 'DimsReports@Authorised');
-Route::post('getDayTripSheetList', 'DimsReports@getDayTripSheetList');
-Route::get('bulpickingPerRoutePreview/{pickingid}', 'DimsReports@bulpickingPerRoutePreview');
-Route::get('bulpickingbyBatch/{timestamp}', 'DimsCommon@bulpickingbyBatch');
+//SALES FORM FUNCTIONS STARTS HERE!!!
+Route::post('custID', [SalesFormFunctions::class,'getCustomerID']);
+Route::get('getAllProductsAndCosts', [SalesFormFunctions::class,'getAllProductsAndCosts']);
+Route::get('getProductCodes',[SalesFormFunctions::class,'getProductCodes']);
+Route::get('custDescription',[SalesFormFunctions::class,'CustomerDescription']);
+Route::get('prodCode', [SalesFormFunctions::class,'ProductCode']);
+Route::get('prodDesciption',[SalesFormFunctions::class,'ProductDescription']);
+Route::get('deliveryTypes',[SalesFormFunctions::class,'getDeliverTypes']);
+Route::post('updateCContactsOnOrder', [SalesFormFunctions::class,'updateCContactsOnOrder']);
+Route::post('orderheaderAndOrderLines', [SalesFormFunctions::class,'orderheaderAndOrderLines']);
+Route::post('getCutomerPriceOnOrderForm', [SalesFormFunctions::class,'returnProductPrice']);
+Route::post('getCutomerPastInvoices', [SalesFormFunctions::class,'getCustomerPast10Invoices']);
+Route::post('customerSpecials', [SalesFormFunctions::class,'getCustomerSpecials']);
+Route::post('groupSpecials', [SalesFormFunctions::class,'getGroupSpecials']);
+Route::post('combinedSpecials',[SalesFormFunctions::class,'combinedSpecials']);
+Route::post('priceSearch', [SalesFormFunctions::class,'priceLookUpOntab']);
+Route::post('insertOrderHeader',[SalesFormFunctions::class,'insertOrderHearder']);
+Route::post('insertHeaderForOtherTrans', [SalesFormFunctions::class,'insertHeaderForOtherTrans']);
+Route::post('insertOrderDetails',[SalesFormFunctions::class,'insertOrderDetails']);
+Route::post('insertNewAddress',[SalesFormFunctions::class,'insertNewAddress']);
+Route::post('jsonOrderDetails',[SalesFormFunctions::class,'postOrderDetailsAsJsonArray']);
+Route::post('jsonOtherTransactionsLinesDetails', [SalesFormFunctions::class,'postOrderDetailsAsJsonArrayForOtherTransactions']);
+Route::post('jsonOrderDetailsPos',[SalesFormFunctions::class,'postOrderDetailsAsJsonArrayPOS']);
+Route::post('createbackorderonsplit',[SalesFormFunctions::class,'createbackorderonsplit']);
+Route::post('printPickingSlipPerOrder', [SalesFormFunctions::class,'printPickingSlipPerOrder']);
+Route::post('productsOnOrder', [SalesFormFunctions::class,'productsOnOrder']);
+Route::post('countOnSalesOrder', [SalesFormFunctions::class,'countOnSalesOrder']);
+Route::post('productsOnInvoiced',[SalesFormFunctions::class,'productsOnInvoiced']);
+Route::post('getOrderPattern', [SalesFormFunctions::class,'getCustomerOderpattern']);
+Route::post('getCustomerRoutes', [SalesFormFunctions::class,'getCustomerRouteWithOtherRoutesByPriority']);
+Route::post('getOrderListing',[SalesFormFunctions::class,'getOrderListing']);
+Route::post('getOrderListingOtherTrans',[SalesFormFunctions::class,'getOrderListingOtherTrans']);
+Route::post('onCheckOrderHeader', [SalesFormFunctions::class,'onCheckOrderHeader']);
+Route::post('checkIfOrderExistsWithOrderType', [SalesFormFunctions::class,'checkIfOrderExists']);
+Route::post('onCheckOrderHeaderDetails', [SalesFormFunctions::class,'onCheckOrderHeaderDetails']);
+Route::post('isClosedRoute',[SalesFormFunctions::class,'isClosedRoute']);
+Route::post('onCheckOrderHeaderForOtherTrans', [SalesFormFunctions::class,'onCheckOrderHeaderForOtherTrans']);
+Route::post('checkIfOrderExistsWithOrderTypeForOtherTrans', [SalesFormFunctions::class,'checkIfTransactionsExists']);
+Route::post('onCheckOrderHeaderDetailsForOtherTrans', [SalesFormFunctions::class,'onCheckOrderHeaderDetailsForOtherTrans']);
+Route::post('convertToSalesOrder', [SalesFormFunctions::class,'convertToSalesOrder']);
+Route::post('treatAsQuote', [SalesFormFunctions::class,'treatAsQuote']);
+Route::post('generalPriceChecking',[SalesFormFunctions::class,'generalPriceChecking']);
+Route::post('advancedorderno', [SalesFormFunctions::class,'advancedOrderNo']);
+Route::post('generalPriceCheckAndLastCost', [SalesFormFunctions::class,'generalPriceCheckAndLastCost']);
+Route::post('getCallList',[SalesFormFunctions::class,'getCallList'] );
+Route::post('getCallListNew',[SalesFormFunctions::class,'getCallListNew'] );
+Route::post('insertCallistFilters', [SalesFormFunctions::class,'insertCallistFilters']);
+Route::post('isCalled',[SalesFormFunctions::class,'insertCallID']);
+Route::post('selectCustomerMultiAddress',[SalesFormFunctions::class,'selectCustomerMultiAddress']);
+Route::post('copyOrdersToCustomers', [SalesFormFunctions::class,'copyOrdersToCustomers']);
+Route::post('generatePDFForOrders',[SalesFormFunctions::class,'generatePDFForOrders']);
+Route::post('countAddress', [SalesFormFunctions::class,'countAddress']);
+Route::post('countomerSingleAddress', [SalesFormFunctions::class,'countomerSingleAddress']);
+Route::post('createNewCustomDelvDate',[SalesFormFunctions::class,'spCreateNewtblCustomerDeliveryAddress']);
+Route::post('getLastInsertedDate',[SalesFormFunctions::class,'getLastInsertedDate']);
+Route::post('getProductStockOnHand', [SalesFormFunctions::class,'getProductStockOnHand']);
+Route::post('deleteOrderDetails', [SalesFormFunctions::class,'DeleteOrderDetails']);
+Route::post('DeleteOrderDetailsOrtherTrans',[SalesFormFunctions::class,'DeleteOrderDetailsOrtherTrans']);
+Route::post('updateAuthHeader', [SalesFormFunctions::class,'updateAuthHeader']);
+Route::post('selectAddressFromMultiAddressDeliveruyAddressId', [SalesFormFunctions::class,'selectAddressFromMultiAddressDeliveruyAddressId']);
+Route::post('updateOrderHeader', [SalesFormFunctions::class,'UpdateOrderHearder']);
+Route::post('deleteByHiddenToken', [SalesFormFunctions::class,'deleteByHiddenToken']);
+Route::post('updateOrderHeaderForOtherTransactions', [SalesFormFunctions::class,'updateOrderHeaderForOtherTransactions']);
+Route::post('tempDeliverAddress', [SalesFormFunctions::class,'tempDeliverAddress']);
+Route::get('pointofsale',[SalesFormFunctions::class,'pointOfSale'] );
+Route::post('posCashFloat',[SalesFormFunctions::class,'posCashFloat']);
+Route::post('postPOSfloat',[SalesFormFunctions::class,'postPOSfloat']);
+Route::post('deletePOSfloat',[SalesFormFunctions::class,'deletePOSfloat']);
+Route::post('updateDiscount', [SalesFormFunctions::class,'updateDiscount']);
+Route::post('copyInvoice', [SalesFormFunctions::class,'copyOrderToNewOrder']);
+Route::post('adjustDispatch', [SalesFormFunctions::class,'adjustTheDispatchQtyOnPickingOrder']);
+Route::post('printAdjustmentDispatch',[SalesFormFunctions::class,'printInvoiceFromPickingFormAdjustment']);
+Route::post('createAbackOrder',[SalesFormFunctions::class,'createAbackOrder']);
+Route::post('waitingForInvoiceNo', [SalesFormFunctions::class,'waitingForInvoiceNo']);
+Route::post('checkifInvoiced',[SalesFormFunctions::class,'checkifInvoiced']);
+Route::post('AssignInvoiceNumber', [SalesFormFunctions::class,'AssignInvoiceNumber']);
+Route::post('toProcessPosTenderLines', [SalesFormFunctions::class,'toProcessPosTenderLines']);
+Route::get('updatePosRoute', [SalesFormFunctions::class,'updatePosRoute']);
+Route::get('getAllOrderIDs', [SalesFormFunctions::class,'getAllOrderIDs']);
+Route::post('getCustomerOrderId', [SalesFormFunctions::class,'getCustomerOrderId']);
+Route::post('productPriceLookUp', [SalesFormFunctions::class,'productPriceLookUp']);
+Route::post('associatedItem',[SalesFormFunctions::class,'associatedItem']);
+Route::post('changeDeliveryAddressOnNoInvoiceNo', [SalesFormFunctions::class,'changeDeliveryAddressOnNoInvoiceNo']);
 
-Route::get('UpdateDocument','DimsCommon@UpdateDocument');
-Route::post('updateDocumentupdate','DimsCommon@UpdateDocumentupdate');
-Route::get('pickingbyteam/{array}/{deldate}/{ordertype}/{routeId}', 'DimsReports@pickingbyteam');
-Route::post('fetchData', 'DimsReports@fetchData');
-Route::post('selectBulkPickingHeader', 'DimsReports@selectBulkPickingHeader');
-Route::post('selectBulkBatchPickingHeader', 'DimsReports@selectBulkBatchPickingHeader');
-Route::post('createBulkpicking', 'DimsReports@createBulkpicking');
-Route::get('slackUser/{oType}/{route}/{Ddate}', 'DimsReports@slackUser');
-Route::post('getBinLocationByPickingTimes', 'DimsReports@getBinLocationByPickingTimes');
-Route::post('gridResult', 'DimsReports@gridResult');
-Route::post('gridResultPalladium', 'DimsReports@gridResultPalladium');
-Route::get('top30Orders', 'DimsReports@top30Orders');
-Route::get('creditNoteReasonsJSon/{date1}/{date2}', 'DimsReports@creditNoteReasonsJSon');
-Route::get('creditNoteReasonsView', 'DimsReports@creditNoteReasonsView');
-Route::get('creditNoteReasonsJSonWithBook', 'TabletLoadingApp@creditNoteReasonsJSonWithBook');
-Route::get('pickingmain', 'DimsReports@pickingSlipManue');
-Route::get('rptToSeeInTockVsOrders', 'DimsReports@rptToSeeInTockVsOrders');
-Route::get('getJsonSrockVsOrdered/{date1}/{date2}/{percentage}', 'DimsReports@getJsonSrockVsOrdered');
-Route::post('topOrdersOfACustomer', 'DimsReports@topOrdersOfACustomer');
-Route::post('contactDetailsOnOrder', 'DimsReports@contactDetailsOnOrder');
-Route::post('getCustomerOrderId', 'SalesFormFunctions@getCustomerOrderId');
-Route::post('productPriceLookUp', 'SalesFormFunctions@productPriceLookUp');
-Route::post('associatedItem', 'SalesFormFunctions@associatedItem');
-Route::post('changeDeliveryAddressOnNoInvoiceNo', 'SalesFormFunctions@changeDeliveryAddressOnNoInvoiceNo');
-Route::get('sendMessages', 'LoadingAppAPIs@sendMessages');
-Route::get('sendMessageJson', 'LoadingAppAPIs@sendMessageJson');
-Route::get('sendMessagePicking', 'LoadingAppAPIs@sendMessagePicking');
-Route::get('batchPrinting', 'LoadingAppAPIs@batchPrinting');
-Route::post('stockApi', 'LoadingAppAPIs@stockApi');
-//Route::get('sendMessages/{pp}/{pp2}/{pp3}', 'LoadingAppAPIs@sendMessages');
-Route::get('slack', 'LoadingAppAPIs@slack');
-Route::get('salesHeaderExported', 'PalladiumDimsStatus@salesHeaderExported');
-Route::get('callist', 'CallList@index');
-Route::get('getViewCallLogger', 'CallList@getViewCallLoger');
-Route::get('callLogger', 'CallList@callLogger');
-Route::get('getphonebook', 'CallList@getPhoneBook');
-Route::get('savephonebook', 'CallList@savephonebook');
-Route::get('removePhoneBookContact', 'CallList@removePhoneBookContact');
-Route::get('customerphonebookcontacts', 'CallList@customerphonebookcontacts');
-Route::get('luck/{date}/{ext}/{file}', 'CallList@luck');
-Route::post('updateSalesHeaderExportedStatus', 'PalladiumDimsStatus@updateSalesHeaderExportedStatus');
-Route::get('..config', 'ConfigurationManger@index');
-Route::post('editconfig', 'ConfigurationManger@editconfig'); //
-Route::get('gridPickingSlipCollectios', 'PickingManagementCotroller@gridPickingSlipCollectios');
-Route::post('updateiscollected', 'PickingManagementCotroller@updateiscollected');
-Route::post('reprintPickingSlip', 'PickingManagementCotroller@reprintPickingSlip');
+//SALES FORM FUNCTIONS ENDS HERE!!!
+
+
+//CONSOLE MANAGEMENT STARTS HERE !!!
+Route::post('logMessageAjax',[ConsoleManagement::class,'logMessageAjax']);
+Route::post('logMessageAuth', [ConsoleManagement::class,'logMessageAuth']);
+Route::post('deleteallLinesOnOrder', [ConsoleManagement::class,'deleteallLinesOnOrder']);
+Route::post('logMessageAuthMargin',[ConsoleManagement::class,'logMessageAuthMargin'] );
+
+//CONSOLE MANAGEMENT ENDS HERE!!!
+
+//TABLET LOADING APP STARTS HERE !!!
+Route::get('routePlannerSuggestions/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'TabletLoadingApp@routePlannerSuggestions']);
+Route::post('getRouteData',[TabletLoadingApp::class,'getRouteData']);
+Route::post('sequenceOrdersByMode', [TabletLoadingApp::class,'sequenceOrdersByMode']);
+Route::post('sequenceOrdersByMode',[TabletLoadingApp::class,'sequenceOrdersByMode'] );
+Route::post('resequenceOrders', [TabletLoadingApp::class,'resequenceOrders']);
+Route::get('truckControlId',[TabletLoadingApp::class,'truckControlId']);
+Route::get('routePlannerPrintPreview/{date}/{dateTo}/{ordertype}/{route}/{status}',[TabletLoadingApp::class,'routePlannerPrintPreview']);
+Route::post('moveTheOrder',[TabletLoadingApp::class,'moveTheOrder']);
+Route::post('moveTheOrderArray', [TabletLoadingApp::class,'moveTheOrderArray']);
+Route::get('truckControlFromDate',[TabletLoadingApp::class,'truckControlFromDate']);
+Route::get('amalgamation',[TabletLoadingApp::class,'amalgamation']);
+Route::get('retrieve/{del}/{route}/{ordertype}',[TabletLoadingApp::class,'retrieve']);
+Route::get('driverFleetInfo/{del}/{route}/{ordertype}', [TabletLoadingApp::class,'driverFleetInfo']);
+Route::get('bulkPickingPerUserJSON/{from}/{to}',[TabletLoadingApp::class,'bulkPickingPerUserJSON']);
+Route::get('bulkPickingPerUserView', [TabletLoadingApp::class,'bulkPickingPerUserView']);
+Route::get('designPickingInformationPerTeam/{del}/{route}/{ordertype}', [TabletLoadingApp::class,'designPickingInformationPerTeam']);
+Route::get('truckControlSheetDetails', [TabletLoadingApp::class,'truckControlSheetDetails']);
+Route::post('stopsUnmapped', [TabletLoadingApp::class,'stopsUnmapped']);
+Route::post('getRouteDataMultiSelected', [TabletLoadingApp::class,'getRouteDataMultiSelected']);
+Route::get('routeplanner',[TabletLoadingApp::class,'routeplanner']);
+Route::get('routePlannerExt', [TabletLoadingApp::class,'routePlannerExt']);
+Route::get('invoicesnotprinting', [TabletLoadingApp::class,'invoicesnotprinting']);
+Route::post('notifypickers',[TabletLoadingApp::class,'notifypickers']);
+Route::get('liveBulkPicking', [TabletLoadingApp::class,'liveBulkPicking']);
+Route::get('printLoadingSheet/{routingId}', [TabletLoadingApp::class,'printLoadingSheet']);
+Route::get('getDrivers', [TabletLoadingApp::class,'getDrivers']);
+Route::get('getTrucks', [TabletLoadingApp::class,'getTrucks']);
+Route::get('getData/{orderdate}/{ordertype}/{routename}/{driver}/{assistant}/{truckname}/{assistanttwo}/{userid}',[TabletLoadingApp::class,'getData']);
+Route::get('liveFleetDeliveries',[TabletLoadingApp::class,'liveFleetDeliveries']);
+Route::get('driverreq_report',[TabletLoadingApp::class,'driverreq_report']);
+Route::get('driverreq_reportJson/{date1}/{date2}', [TabletLoadingApp::class,'driverreq_reportJson']);
+Route::get('driverreq_perrouteJson/{routeid}',[TabletLoadingApp::class,'driverreq_perrouteJson']);
+Route::get('updatelogisticsinformation', [TabletLoadingApp::class,'updatelogisticsinformation']);
+Route::get('ligisticsplan/{dates}', [TabletLoadingApp::class,'ligisticsplan']);
+Route::get('LogisticsInsertMapRoute/{routingId}/{ot}/{route}',[TabletLoadingApp::class,'LogisticsInsertMapRoute']);
+Route::get('createtripsheet', [TabletLoadingApp::class,'createtripsheet']);
+Route::get('createtripsheetnotes', [TabletLoadingApp::class,'createtripsheetnotes']);
+Route::post('getRoutingIdNotes',[TabletLoadingApp::class,'getRoutingIdNotes']);
+Route::post('saveRoutingIdNotes', [TabletLoadingApp::class,'saveRoutingIdNotes']);
+Route::get('routePlannerExtParam/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'routePlannerExtParam']);
+Route::get('routeplannermap',[TabletLoadingApp::class,'routeplannermap']);
+Route::get('geoJson',[TabletLoadingApp::class,'geoJson']);
+Route::get('drone',[TabletLoadingApp::class,'drone']);
+Route::get('getRouteDifference',[TabletLoadingApp::class,'getRouteDifference']);
+Route::get('ordersNotONDefaultRoutes', [TabletLoadingApp::class,'ordersNotONDefaultRoutes']);
+Route::get('productontheminiorderform/{orderId}',[TabletLoadingApp::class,'spTabletLoading']);
+Route::get('updateTableLoadingAppProducts', [TabletLoadingApp::class,'updateTableLoadingAppProducts']);
+Route::post('sequencingTheStops', [TabletLoadingApp::class,'sequencingTheStops']);
+Route::post('orderDetailsWithDeliveryAddress', [TabletLoadingApp::class,'orderDetailsWithDeliveryAddress']);
+Route::post('orderDetailsWithDeliveryAddressOnOrder',[TabletLoadingApp::class,'orderDetailsWithDeliveryAddressOnOrder'] );
+Route::post('forceinvoicetoprint', [TabletLoadingApp::class,'forceinvoicetoprint']);
+Route::post('updateIQInvoices',[TabletLoadingApp::class,'updateIQInvoices']);
+Route::post('forcecredits',[TabletLoadingApp::class,'forcecredits']);
+Route::post('combineroutes',[TabletLoadingApp::class,'combineroutes']);
+Route::get('creditNoteReasonsJSonWithBook',[TabletLoadingApp::class,'creditNoteReasonsJSonWithBook']);
+
+//TABLET LOADING APP ENDS HERE !!!
+
+//PRODUCT CONTROLLER STARTS HERE!!!
+Route::get('viewproductbydate', [ProductsController::class,'viewproductbydate']);
+Route::get('devexpressproducts', [ProductsController::class,'devExpressProductsgrid']);
+Route::get('listProdutsToBePrinted', [ProductsController::class,'listProdutsToBePrinted']);
+Route::get('listProdutsToBePrintedJson', [ProductsController::class,'listProdutsToBePrintedJson']);
+Route::get('productbydatejson/{date1}/{date2}/{productId}', [ProductsController::class,'productbydatejson']);
+
+Route::get('gridEditViewProducts', [ProductsController::class,'gridEditViewProducts']);
+Route::get('selectPricelists', [ProductsController::class,'selectPricelists']);
+Route::post('getPriceListUsed', [ProductsController::class,'getPriceListUsed']);
+Route::get('getListPriceListPrices/{id}/{pricelistusedid}',[ProductsController::class,'getListPriceListPrices']);
+Route::get('createnewpricelist/{newname}/{pricelistcopyfrom}/{groups}/{gp}/{effectivedate}',[ProductsController::class,'createnewpricelist']);
+Route::post('postupdatepricelistinfo', [ProductsController::class,'postupdatepricelistinfo']);
+Route::get('createpricelist',[ProductsController::class,'createpricelist']);
+Route::get('getPriceListTemplate', [ProductsController::class,'getPriceListTemplate']);
+Route::get('importexcelpricelist',[ProductsController::class,'importexcelpricelist']);
+Route::get('getPricelistNamesAndViewInBulk', [ProductsController::class,'getPricelistNamesAndViewInBulk']);
+Route::get('getBulkPriceLists',[ProductsController::class,'getBulkPriceLists']);
+Route::get('extraProdInfoView/{prodid}/{code}',[ProductsController::class,'extraProdInfoView']);
+Route::get('crowdpromotion',[ProductsController::class,'crowdpromotion']);
+Route::get('updateproductsummary',[ProductsController::class,'updateproductsummary']);
+Route::get('productdevexpress',[ProductsController::class,'productdevexpress']);
+Route::get('getPickingTeams',[ProductsController::class,'getPickingTeams']);
+Route::post('printbarcode', [ProductsController::class,'printbarcode']);
+Route::post('sendstickerstoprinter', [ProductsController::class,'sendstickerstoprinter']);
+Route::get('printPriceList',[ProductsController::class,'printPriceList']);
+Route::get('printstickers',[ProductsController::class,'PrintProductBarcodeStickers']);
+Route::get('viewlabelstickerstoprint', [ProductsController::class,'viewlabelstickerstoprint']);
+Route::get('listChangedProducts/{dateFrom}/{dateTo}/{PriceList}',[ProductsController::class,'listChangedProducts']);
+Route::post('printbulklabels',[ProductsController::class,'printbulklabels'] );
+Route::post('printbulklabelsbyPricelist',[ProductsController::class,'printbulklabelsbyPricelist']);
+Route::get('bulkgridforlabels', [ProductsController::class,'bulkgridforlabels']);
+Route::get('getproductextrainformation/{prductId}',[ProductsController::class,'getproductextrainformation']);
+Route::post('updategridproductsAndTeams',[ProductsController::class,'updategridproductsAndTeams']);
+Route::post('savedatafromimport', [ProductsController::class,'savedatafromimport']);
+Route::get('itemsOutOfStockBeforePicking',[ProductsController::class,'itemsOutOfStockBeforePicking']);
+Route::get('getViewItemsOutOfStock', [ProductsController::class,'getViewItemsOutOfStock']);
+Route::post('printAllBarcode', [ProductsController::class,'printAllBarcode']);
+//PRODUCT CONTROLLER ENDS HERE!!!
+
+//SALES QUOTE CONTROLLER STARTS HERE !!!
+Route::get('salesquote',[SalesQuotes::class,'salesquote']);
+Route::post('generateSalesQuote', [SalesQuotes::class,'generateSalesQuote']);
+Route::post('createQuotesHeader',[SalesQuotes::class,'createQuotesHeader']);
+Route::post('previewSaleQuotes',[SalesQuotes::class,'previewSaleQuotes']);
+Route::post('viewSalesQuotes',[SalesQuotes::class,'viewSalesQuotes']);
+Route::post('viewSalesQuotesConverted', [SalesQuotes::class,'viewSalesQuotesConverted']);
+Route::post('startConvertingQuoteToOrder',[SalesQuotes::class,'startConvertingQuoteToOrder']);
+Route::get('printTheQuote/{quoteId}', [SalesQuotes::class,'printTheQuote']);
+
+//SALES QUOTE CONTROLLER ENDS HERE !!!
+
+//EMAIL CONTROLLER STARTS HERE !!!
+Route::post('email', [EmailController::class,'email']);
+Route::post('emailSalesOrder', [EmailController::class,'emailSalesOrder']);
+
+//EMAIL CONTROLLER ENDS HERE !!!
+
+
+//DIMS REPORTS CONTROLLER STARTS HERE !!!
+Route::get('reports', [DimsReports::class,'reports']);
+Route::get('outstandingDriversCashoff', [DimsReports::class,'outstandingDriversCashoff']);
+Route::get('getreportLayout',[DimsReports::class,'getreportLayout']);
+Route::get('getreportAuthBelowMargin',[DimsReports::class,'getreportAuthBelowMargin']);
+Route::get('getJsonAuthBelowMargin/{dateFrom}/{dateTo}', [DimsReports::class,'getJsonAuthBelowMargin']);
+Route::get('getOrderPlacedAfterCutOff',[DimsReports::class,'getOrderPlacedAfterCutOff']);
+Route::get('getJsonCutOffTime/{dateFrom}',[DimsReports::class,'getJsonCutOffTime']);
+Route::get('dshb', [DimsReports::class,'dashboardSalesPerformance']);
+Route::post('getPickingTeamsByDept', [DimsReports::class,'getPickingTeamsByDept']);
+Route::post('getPickingTeamsByDeptPalladium',[DimsReports::class,'getPickingTeamsByDeptPalladium'] );
+Route::get('getPickingDept', [DimsReports::class,'getPickingDept']);
+Route::get('getPickingDeptPalladium',[DimsReports::class,'getPickingDeptPalladium']);
+Route::get('printQuatation', [DimsReports::class,'quotationLayout']);
+Route::get('showTripSheets', [DimsReports::class,'showTripSheets']);
+Route::get('getTripSheetDetails/{routingId}',[DimsReports::class,'getTripSheetDetails']);
+Route::get('reprintTripSheet/{routingId}',[DimsReports::class,'reprintTripSheet']);
+Route::post('authorisationActions',[DimsReports::class,'Authorised']);
+Route::post('getDayTripSheetList',[DimsReports::class,'getDayTripSheetList']);
+Route::get('bulpickingPerRoutePreview/{pickingid}',[DimsReports::class,'bulpickingPerRoutePreview']);
+Route::get('pickingbyteam/{array}/{deldate}/{ordertype}/{routeId}',[DimsReports::class,'pickingbyteam']);
+Route::post('fetchData', [DimsReports::class,'fetchData']);
+Route::post('selectBulkPickingHeader',[DimsReports::class,'selectBulkPickingHeader']);
+Route::post('selectBulkBatchPickingHeader', [DimsReports::class,'selectBulkBatchPickingHeader']);
+Route::post('createBulkpicking', [DimsReports::class,'createBulkpicking']);
+Route::get('slackUser/{oType}/{route}/{Ddate}', [DimsReports::class,'slackUser']);
+Route::post('getBinLocationByPickingTimes',[DimsReports::class,'getBinLocationByPickingTimes'] );
+Route::post('gridResult',[DimsReports::class,'gridResult']);
+Route::post('gridResultPalladium',[DimsReports::class,'gridResultPalladium']);
+Route::get('top30Orders', [DimsReports::class,'top30Orders']);
+Route::get('creditNoteReasonsView',[DimsReports::class,'creditNoteReasonsView'] );
+Route::get('pickingmain', [DimsReports::class,'pickingSlipManue']);
+Route::get('rptToSeeInTockVsOrders', [DimsReports::class,'rptToSeeInTockVsOrders']);
+Route::get('getJsonSrockVsOrdered/{date1}/{date2}/{percentage}',[DimsReports::class,'getJsonSrockVsOrdered']);
+Route::post('topOrdersOfACustomer',[DimsReports::class,'topOrdersOfACustomer']);
+Route::post('contactDetailsOnOrder', [DimsReports::class,'contactDetailsOnOrder']);
+
+//DIMS REPORTS CONTROLLER ENDS HERE !!!
+
+//LOADING APP API CONTROLLER STARTS HERE !!!
+Route::get('sendMessages', [LoadingAppAPIs::class,'sendMessages']);
+Route::get('sendMessageJson',[LoadingAppAPIs::class,'sendMessageJson']);
+Route::get('sendMessagePicking',[LoadingAppAPIs::class,'sendMessagePicking']);
+Route::get('batchPrinting',[LoadingAppAPIs::class,'batchPrinting']);
+Route::post('stockApi', [LoadingAppAPIs::class,'stockApi']);
+Route::get('slack', [LoadingAppAPIs::class,'slack']);
+
+//LOADING APP API CONTROLLER ENDS  HERE !!!
+
+//PALLADIUMDIMSSTATUS CONTROLLER STARTS HERE !!!
+
+Route::get('salesHeaderExported', [PalladiumDimsStatus::class,'salesHeaderExported']);
+Route::post('updateSalesHeaderExportedStatus',[PalladiumDimsStatus::class,'updateSalesHeaderExportedStatus']);
+
+//PALLADIUMDIMSSTATUS CONTROLLER ENDS HERE !!!
+
+//CALL LIST CONTROLLER STARTS HERE !!!
+Route::get('callist', [CallList::class,'index']);
+Route::get('getViewCallLogger',[CallList::class,'getViewCallLoger']);
+Route::get('callLogger',[CallList::class,'callLogger']);
+Route::get('getphonebook', [CallList::class,'getPhoneBook']);
+Route::get('savephonebook',[CallList::class,'savephonebook']);
+Route::get('removePhoneBookContact',[CallList::class,'removePhoneBookContact']);
+Route::get('customerphonebookcontacts',[CallList::class,'customerphonebookcontacts']);
+Route::get('luck/{date}/{ext}/{file}',[CallList::class,'luck']);
+
+//CALL LIST CONTROLLER ENDS HERE !!!
+
+
+//CONFIGURATIONMANGER CONTROLLER STARTS HERE !!!
+
+Route::get('..config',[ConfigurationManger::class,'index']);
+Route::post('editconfig', [ConfigurationManger::class,'editconfig']);
+
+//CONFIGURATIONMANGER CONTROLLER ENDS HERE !!!
+
+// PICKING MANAGEMENT COTROLLER CONTROLLER STARTS HERE !!!
+Route::get('gridPickingSlipCollectios', [PickingManagementCotroller::class,'gridPickingSlipCollectios']);
+Route::post('updateiscollected', [PickingManagementCotroller::class,'updateiscollected']);
+Route::post('reprintPickingSlip',[PickingManagementCotroller::class,'reprintPickingSlip']);
+
+// PICKING MANAGEMENT COTROLLER CONTROLLER ENDS HERE !!!
 
 /**********************************************************CRUD****************************************************************/
-Route::get('drivers', 'DriversController@readItems');
-Route::get('getRoutingIds', 'DriversController@getRoutingIds');
-Route::get('printDriversCashOff/{ref}', 'DriversController@printDriversCashOff');
-Route::get('creditRequisitionByRoutingId/{routingId}', 'DriversController@creditRequisitionByRoutingId');
-Route::get('getdriverscashoff', 'DriversController@getdriverscashoff');
-Route::get('CreditDeptComment/{orderdetailid}', 'DriversController@CreditDeptComment');
-Route::post('CreditDeptCommentUpdate', 'DriversController@CreditDeptCommentUpdate');
-Route::post('getDriversCashOffJson', 'DriversController@getDriversCashOffJson');
-Route::post('exportCashOff', 'DriversController@exportCashOff');
-Route::post('postDriversCashOff', 'DriversController@postDriversCashOff');
-Route::post('invoicessignedaroundpremises', 'DriversController@invoicessignedaroundpremises');
-Route::post('createnewsheet', 'DriversController@createnewsheet');
-Route::get('LiveDriverStops', 'DriversController@LiveDriverStops');
 
-Route::post('/addItem', 'DriversController@addItem');
-Route::post('/editItem', 'DriversController@editItem');
-Route::post('/deleteItem', 'DriversController@deleteItem');
+//DRIVERSCONTROLLER CONTROLLER BEGINS HERE !!!
+Route::get('drivers', [DriversController::class,'readItems']);
+Route::get('getRoutingIds', [DriversController::class,'getRoutingIds']);
+Route::get('printDriversCashOff/{ref}', [DriversController::class,'printDriversCashOff']);
+Route::get('creditRequisitionByRoutingId/{routingId}',[DriversController::class,'creditRequisitionByRoutingId']);
+Route::get('getdriverscashoff',[DriversController::class,'getdriverscashoff']);
+Route::get('CreditDeptComment/{orderdetailid}',[DriversController::class,'CreditDeptComment']);
+Route::post('CreditDeptCommentUpdate',[DriversController::class,'CreditDeptCommentUpdate']);
+Route::post('getDriversCashOffJson',[DriversController::class,'getDriversCashOffJson']);
+Route::post('exportCashOff', [DriversController::class,'exportCashOff']);
+Route::post('postDriversCashOff',[DriversController::class,'postDriversCashOff']);
+Route::post('invoicessignedaroundpremises',[DriversController::class,'invoicessignedaroundpremises']);
+Route::post('createnewsheet',[DriversController::class,'createnewsheet']);
+Route::get('LiveDriverStops',[DriversController::class,'LiveDriverStops']);
+Route::post('/addItem', [DriversController::class,'addItem']);
+Route::post('/editItem', [DriversController::class,'editItem']);
+Route::post('/deleteItem', [DriversController::class,'deleteItem']);
+Route::get('trucks', [DriversController::class,'readTrucksItems']);
+Route::post('/addTrucksItem',[DriversController::class,'addTrucksItem']);
+Route::post('/editTrucksItem', [DriversController::class,'editTrucksItem']);
+Route::post('/deleteTrucksItem',[DriversController::class,'deleteTrucksItem']);
+Route::get('routes1',[DriversController::class,'readRoutesItems']);
+Route::post('/addRoutesItem', [DriversController::class,'addRoutesItem']);
+Route::post('/editRoutesItem',[DriversController::class,'editRoutesItem']);
+Route::post('/deleteRoutesItem',[DriversController::class,'deleteRoutesItem']);
+Route::get('glcodes', [DriversController::class,'readGLCode']);
+Route::get('driversperformancereport', [DriversController::class,'driversperformancereport']);
+Route::get('getdriversandinfo/{date1}/{date2}', [DriversController::class,'getdriversandinfo']);
+Route::get('getNoOfDelPerCustomer/{date1}/{date2}',[DriversController::class,'getNoOfDelPerCustomer']);
+Route::get('driverspdfdocs',[DriversController::class,'driverspdfdocs']);
+Route::get('cashupscheckinvoice/{invoice}', [DriversController::class,'cashupscheckinvoice']);
+Route::post('postcashupscheckinvoice', [DriversController::class,'postcashupscheckinvoice']);
+Route::get('noOfStops', [DriversController::class,'noOfStops']);
+Route::get('getCashCollected',[DriversController::class,'getCashCollected']);
+Route::get('cashCollectedReport/{dateFrom}/{dateTo}',[DriversController::class,'cashCollectedReport']);
+Route::post('driverspdfdocsByInv', [DriversController::class,'driverspdfdocsByInv']);
+Route::post('postPODSToTheAccounting',[DriversController::class,'postPODSToTheAccounting']);
+Route::post('driverspdfdocsByInvsubinfo',[DriversController::class,'driverspdfdocsByInvsubinfo']);
+Route::post('driverspdfdocsBytripsheet',[DriversController::class,'driverspdfdocsBytripsheet']);
+Route::post('driverpdfdocrequisition',[DriversController::class,'driverpdfdocrequisition'] );
+Route::post('isCheckedCashUp',[DriversController::class,'isCheckedCashUp']);
+Route::post('/addGLCode', [DriversController::class,'addGLCode']);
+Route::post('/editGLCode', [DriversController::class,'editGLCode']);
+Route::post('/deleteGLCode',[DriversController::class,'deleteGLCode']);
+Route::get('checkingDriversStockAndComment/{orderdetailId}', [DriversController::class,'checkingDriversStockAndComment']);
+Route::post('updatereturndispatchmessage',[DriversController::class,'updatereturndispatchmessage']);
+Route::post('getResendEmailJson',[DriversController::class,'getResendEmailJson']);
+Route::get('getResendEmail', [DriversController::class,'getResendEmail']);
+Route::post('postResendEmailJson',[DriversController::class,'postResendEmailJson']);
 
-Route::get('trucks', 'DriversController@readTrucksItems');
-Route::post('/addTrucksItem', 'DriversController@addTrucksItem');
-Route::post('/editTrucksItem', 'DriversController@editTrucksItem');
-Route::post('/deleteTrucksItem', 'DriversController@deleteTrucksItem');
+//DRIVERSCONTROLLER CONTROLLER ENDS HERE !!!
 
-Route::get('routes1', 'DriversController@readRoutesItems');
-Route::post('/addRoutesItem', 'DriversController@addRoutesItem');
-Route::post('/editRoutesItem', 'DriversController@editRoutesItem');
-Route::post('/deleteRoutesItem', 'DriversController@deleteRoutesItem');
+//USERS CONTROLLER CONTROLLER STARTS HERE !!!
+Route::get('usersCrud', [UsersController::class,'readUser']);
+Route::get('viewUserRole',[UsersController::class,'viewUserRole'] );
+Route::post('systemrolesandgrouproles',[UsersController::class,'systemrolesandgrouproles'] );
+Route::post('updateremoverole',[UsersController::class,'updateremoverole'] );
+Route::get('salesPerformanceview', [UsersController::class,'salesPerformanceview']);
+Route::get('userorders/{from}/{to}/{userid}/{username}', [UsersController::class,'userorders']);
+Route::get('userorderslines/{orderid}', [UsersController::class,'userorderslines']);
+Route::get('getUserOrders/{from}/{to}/{user}', [UsersController::class,'getUserOrders']);
+Route::get('gridCustomermanagement/{users}/{routes}', [UsersController::class,'gridCustomermanagement']);
+Route::get('salesPerformance/{datefrom}/{dateTo}', [UsersController::class,'salesPerformance']);
+Route::post('/addUser', [UsersController::class,'addUser']);
+Route::post('updategridroutes', [UsersController::class,'updategridroutes']);
+Route::post('/editUser',[UsersController::class,'editUser'] );
+Route::post('/deleteUser', [UsersController::class,'deleteUser']);
+Route::get('grid_Users',[UsersController::class,'gridUsers']);
+Route::get('jsonGetUsers',[UsersController::class,'jsonGetUsers']);
+Route::post('updateUsers',[UsersController::class,'updateUsers']);
+Route::post('updateuserpassword',[UsersController::class,'updateuserpassword']);
+Route::post('updateuserinfo',[UsersController::class,'updateuserinfo']);
+Route::get('PathEditor', [UsersController::class,'PathsAndEmails']);
+Route::post('editUsers',[UsersController::class,'editUsers'] );
 
-Route::get('glcodes', 'DriversController@readGLCode');
-Route::get('driversperformancereport', 'DriversController@driversperformancereport');
-Route::get('getdriversandinfo/{date1}/{date2}', 'DriversController@getdriversandinfo');
-Route::get('getNoOfDelPerCustomer/{date1}/{date2}', 'DriversController@getNoOfDelPerCustomer');
-Route::get('driverspdfdocs', 'DriversController@driverspdfdocs');
-Route::get('cashupscheckinvoice/{invoice}', 'DriversController@cashupscheckinvoice');
-Route::post('postcashupscheckinvoice', 'DriversController@postcashupscheckinvoice');
-Route::get('noOfStops', 'DriversController@noOfStops');
-Route::get('getCashCollected', 'DriversController@getCashCollected');
-Route::get('cashCollectedReport/{dateFrom}/{dateTo}', 'DriversController@cashCollectedReport');
-Route::post('driverspdfdocsByInv', 'DriversController@driverspdfdocsByInv');
-Route::post('postPODSToTheAccounting', 'DriversController@postPODSToTheAccounting');
-Route::post('driverspdfdocsByInvsubinfo', 'DriversController@driverspdfdocsByInvsubinfo');
-Route::post('driverspdfdocsBytripsheet', 'DriversController@driverspdfdocsBytripsheet');
-Route::post('driverpdfdocrequisition', 'DriversController@driverpdfdocrequisition');
-Route::post('isCheckedCashUp', 'DriversController@isCheckedCashUp');
-Route::post('/addGLCode', 'DriversController@addGLCode');
-Route::post('/editGLCode', 'DriversController@editGLCode');
-Route::post('/deleteGLCode', 'DriversController@deleteGLCode');
-Route::get('checkingDriversStockAndComment/{orderdetailId}', 'DriversController@checkingDriversStockAndComment');
-Route::post('updatereturndispatchmessage', 'DriversController@updatereturndispatchmessage');
-Route::post('getResendEmailJson', 'DriversController@getResendEmailJson');
-Route::get('getResendEmail', 'DriversController@getResendEmail');
-Route::post('postResendEmailJson', 'DriversController@postResendEmailJson');
+//USERS CONTROLLER CONTROLLER ENDS HERE !!!
 
-Route::get('usersCrud', 'UsersController@readUser');
-Route::get('viewUserRole', 'UsersController@viewUserRole');
-Route::post('systemrolesandgrouproles', 'UsersController@systemrolesandgrouproles');
-Route::post('updateremoverole', 'UsersController@updateremoverole');
-Route::get('salesPerformanceview', 'UsersController@salesPerformanceview');
-Route::get('userorders/{from}/{to}/{userid}/{username}', 'UsersController@userorders');
-Route::get('userorderslines/{orderid}', 'UsersController@userorderslines');
-Route::get('getUserOrders/{from}/{to}/{user}', 'UsersController@getUserOrders');
-Route::get('gridCustomermanagement/{users}/{routes}', 'UsersController@gridCustomermanagement');
-Route::get('salesPerformance/{datefrom}/{dateTo}', 'UsersController@salesPerformance');
-Route::get('gridEditViewProducts', 'ProductsController@gridEditViewProducts');
-Route::get('selectPricelists', 'ProductsController@selectPricelists');
-Route::post('getPriceListUsed', 'ProductsController@getPriceListUsed');
-Route::get('getListPriceListPrices/{id}/{pricelistusedid}', 'ProductsController@getListPriceListPrices');
-Route::get('createnewpricelist/{newname}/{pricelistcopyfrom}/{groups}/{gp}/{effectivedate}', 'ProductsController@createnewpricelist');
-Route::post('postupdatepricelistinfo', 'ProductsController@postupdatepricelistinfo');
-Route::get('createpricelist', 'ProductsController@createpricelist');
-Route::get('getPriceListTemplate', 'ProductsController@getPriceListTemplate');
-Route::get('importexcelpricelist', 'ProductsController@importexcelpricelist');
-Route::get('getPricelistNamesAndViewInBulk', 'ProductsController@getPricelistNamesAndViewInBulk');
-Route::get('getBulkPriceLists', 'ProductsController@getBulkPriceLists');
-Route::get('extraProdInfoView/{prodid}/{code}', 'ProductsController@extraProdInfoView');
-Route::get('crowdpromotion', 'ProductsController@crowdpromotion');
-Route::get('updateproductsummary', 'ProductsController@updateproductsummary');
-Route::get('productdevexpress', 'ProductsController@productdevexpress');
-Route::get('getPickingTeams', 'ProductsController@getPickingTeams');
-Route::post('printbarcode', 'ProductsController@printbarcode');
-Route::post('sendstickerstoprinter', 'ProductsController@sendstickerstoprinter');
-Route::get('printPriceList', 'ProductsController@printPriceList');
-Route::get('printstickers', 'ProductsController@PrintProductBarcodeStickers');
-Route::get('viewlabelstickerstoprint', 'ProductsController@viewlabelstickerstoprint');
-Route::get('listChangedProducts/{dateFrom}/{dateTo}/{PriceList}', 'ProductsController@listChangedProducts');
-Route::post('printbulklabels', 'ProductsController@printbulklabels');
-Route::post('printbulklabelsbyPricelist', 'ProductsController@printbulklabelsbyPricelist');
+//CONTROLPANEL CONTROLLER STARTS HERE !!!
+Route::get('ordertypes',[ControlPanelController::class,'readOrderType'] );
+Route::post('/addOrderType',[ControlPanelController::class,'addOrderType'] );
+Route::post('/editOrderType', [ControlPanelController::class,'editOrderType']);
+Route::post('/deleteOrderType',[ControlPanelController::class,'deleteOrderType'] );
+Route::get('brands', [ControlPanelController::class,'readBrand']);
+Route::post('/addBrand', [ControlPanelController::class,'addBrand']);
+Route::post('/editBrand', [ControlPanelController::class,'editBrand']);
+Route::post('/deleteBrand', [ControlPanelController::class,'deleteBrand']);
+Route::get('groups',[ControlPanelController::class,'readGroup'] );
+Route::post('/addGroup', [ControlPanelController::class,'addGroup']);
+Route::post('/editGroup',[ControlPanelController::class,'editGroup'] );
+Route::post('/deleteGroup',[ControlPanelController::class,'deleteGroup'] );
+Route::get('taxes',[ControlPanelController::class,'readTax']);
+Route::post('/addTax', [ControlPanelController::class,'addTax']);
+Route::post('/editTax', [ControlPanelController::class,'editTax']);
+Route::post('/deleteTax', [ControlPanelController::class,'deleteTax']);
+Route::get('pickingteam',[ControlPanelController::class,'readPickingTeam'] );
+Route::post('/addPickingTeam', [ControlPanelController::class,'addPickingTeam']);
+Route::post('/editPickingTeam',[ControlPanelController::class,'editPickingTeam'] );
+Route::post('/deletePickingTeam', [ControlPanelController::class,'deletePickingTeam']);
+Route::get('groupbrands',[ControlPanelController::class,'readGroupBrand'] );
+Route::post('/addGroupBrand', [ControlPanelController::class,'addGroupBrand']);
+Route::post('/editGroupBrand', [ControlPanelController::class,'editGroupBrand']);
+Route::post('/deleteGroupBrand',[ControlPanelController::class,'deleteGroupBrand'] );
 
-Route::get('bulkgridforlabels', 'ProductsController@bulkgridforlabels');
-Route::get('getproductextrainformation/{prductId}', 'ProductsController@getproductextrainformation');
-Route::post('updategridproductsAndTeams', 'ProductsController@updategridproductsAndTeams');
-Route::post('savedatafromimport', 'ProductsController@savedatafromimport');
-Route::get('itemsOutOfStockBeforePicking', 'ProductsController@itemsOutOfStockBeforePicking');
-Route::get('getViewItemsOutOfStock', 'ProductsController@getViewItemsOutOfStock');
-Route::post('printAllBarcode', 'ProductsController@printAllBarcode');
-Route::post('/addUser', 'UsersController@addUser');
-Route::post('updategridroutes', 'UsersController@updategridroutes');
-Route::post('/editUser', 'UsersController@editUser');
-Route::post('/deleteUser', 'UsersController@deleteUser');
+//CONTROLPANEL CONTROLLER ENDS  HERE !!!
 
-Route::get('grid_Users','UsersController@gridUsers');
-Route::get('jsonGetUsers','UsersController@jsonGetUsers');
-Route::post('updateUsers','UsersController@updateUsers');
-Route::post('updateuserpassword','UsersController@updateuserpassword');
-Route::post('updateuserinfo','UsersController@updateuserinfo');
-Route::get('ordertypes', 'ControlPanelController@readOrderType');
-Route::post('/addOrderType', 'ControlPanelController@addOrderType');
-Route::post('/editOrderType', 'ControlPanelController@editOrderType');
-Route::post('/deleteOrderType', 'ControlPanelController@deleteOrderType');
-
-Route::get('brands', 'ControlPanelController@readBrand');
-Route::post('/addBrand', 'ControlPanelController@addBrand');
-Route::post('/editBrand', 'ControlPanelController@editBrand');
-Route::post('/deleteBrand', 'ControlPanelController@deleteBrand');
-
-Route::get('groups', 'ControlPanelController@readGroup');
-Route::post('/addGroup', 'ControlPanelController@addGroup');
-Route::post('/editGroup', 'ControlPanelController@editGroup');
-Route::post('/deleteGroup', 'ControlPanelController@deleteGroup');
-
-Route::get('taxes', 'ControlPanelController@readTax');
-Route::post('/addTax', 'ControlPanelController@addTax');
-Route::post('/editTax', 'ControlPanelController@editTax');
-Route::post('/deleteTax', 'ControlPanelController@deleteTax');
-
-Route::get('pickingteam', 'ControlPanelController@readPickingTeam');
-Route::post('/addPickingTeam', 'ControlPanelController@addPickingTeam');
-Route::post('/editPickingTeam', 'ControlPanelController@editPickingTeam');
-Route::post('/deletePickingTeam', 'ControlPanelController@deletePickingTeam');
-
-Route::get('groupbrands', 'ControlPanelController@readGroupBrand');
-Route::post('/addGroupBrand', 'ControlPanelController@addGroupBrand');
-Route::post('/editGroupBrand', 'ControlPanelController@editGroupBrand');
-Route::post('/deleteGroupBrand', 'ControlPanelController@deleteGroupBrand');
-
-Route::get('PathEditor', 'UsersController@PathsAndEmails');
-Route::post('editUsers', 'UsersController@editUsers');
 /**********************************************************APPS**************************************************************************************/
-Route::get('getDeals', 'DealsFromTheApp@getDealsNotYetApproved');
-Route::get('testJaspr/{id}', 'JasperReports@testJaspr');
-Route::get('CashOffPDF/{ref}/{type}', 'JasperReports@CashOffPDF');
-Route::get('specialnsJasper/{id}/{dateFrom}/{dateTo}', 'JasperReports@specialnsJasper');
-Route::get('pdforder/{id}', 'JasperReports@PDFOrders');
-Route::get('PDFDelDate/{id}', 'JasperReports@PDFDelDate');
-Route::get('overallSpecailJasper/{datefrom}/{dateto}', 'JasperReports@overallSpecailJasper');
-Route::get('excelorder/{id}', 'JasperReports@EXCELOrders');
-Route::get('groupSpecailJasper/{datefrom}/{dateto}/{groupid}', 'JasperReports@groupSpecailJasper');
-Route::get('compilereports', 'JasperReports@compileExample');
-Route::get('FreshOrders', 'JasperReports@FreshOrders');
-Route::get('approveadeal/{token}', 'DealsFromTheApp@approveADeal');
-Route::get('rejectadeal/{token}', 'DealsFromTheApp@rejectADeal');
-Route::get('approveddeal', 'DealsFromTheApp@approvedDeals');
-Route::get('rejecteddeal', 'DealsFromTheApp@rejectedDeals');
-Route::get('briefcaseDamages', 'ExternalFunctions@briefcaseDamages');
-Route::get('getTransfers', 'ExternalFunctions@getTransfers');
-Route::get('getInvoices/{customercode}/{from}/{to}', 'ExternalFunctions@getInvoices');
-Route::get('transferblade', 'ExternalFunctions@transferblade');
-Route::get('getTransfersJson/{date}/{dateTo}', 'ExternalFunctions@getTransfersJson');
-Route::post('openorderdetailsformergedtransfers', 'ExternalFunctions@openorderdetailsformergedtransfers');
-Route::get('getTransfersJsonbydate/{date}', 'ExternalFunctions@getTransfersJsonbydate');
-Route::post('updateCheckedOrNotTrasfers', 'ExternalFunctions@updateCheckedOrNotTrasfers');
-Route::post('checkUnCheckTransfers', 'ExternalFunctions@checkUnCheckTransfers');
 
-Route::get('getWebstoreCustomers', 'ExternalFunctions@getWebstoreCustomers');
-Route::get('officemap', 'ExternalFunctions@officemap');
-Route::get('getWebstoreFile', 'ExternalFunctions@getWebstoreFile');
-Route::get('brifcaseCustomerEdits', 'ExternalFunctions@brifcaseCustomerEdits');
-Route::get('synchProducts', 'ExternalFunctions@synchProducts');
-Route::get('testWebstoreSpeed', 'ExternalFunctions@testWebstoreSpeed');
-Route::get('damageshistory', 'ExternalFunctions@damageshistory');
-Route::get('transfersstatus', 'ExternalFunctions@transfersstatus');
-Route::get('print_damages/{id}', 'ExternalFunctions@printDamages');
-Route::get('process_damage/{id}', 'ExternalFunctions@processDamage');
-Route::post('getDamgedLines', 'ExternalFunctions@getDamgedLines');
-Route::post('updatevisits', 'ExternalFunctions@updatevisits');
-Route::post('getDamagesHistoryHeader', 'ExternalFunctions@getDamagesHistoryHeader');
-Route::post('updateWebstoremasterFileInfo', 'ExternalFunctions@updateWebstoremasterFileInfo');
-Route::post('deleteDamagedLine', 'ExternalFunctions@deleteDamagedLine');
-Route::post('saveupdateasset', 'ExternalFunctions@saveupdateasset');
-Route::get('viewVisits', 'ExternalFunctions@viewVisits');
-Route::get('viewDeals', 'ExternalFunctions@viewDeals');
-Route::get('assets', 'ExternalFunctions@assets');
-Route::get('crudasset/{id}', 'ExternalFunctions@crudasset');
-Route::get('missedvisit', 'ExternalFunctions@viewMissedVisit');
-Route::get('notVisitedView', 'ExternalFunctions@notVisitedView');
-Route::get('visitsdates/{datefrom}/{dateto}', 'ExternalFunctions@visitsdates');
-Route::get('dealsdates/{datefrom}/{dateto}', 'ExternalFunctions@dealsdates');
-Route::get('webstore', 'ExternalFunctions@webstore');
+//JASPERREPORTS CONTROLLER STARTS HERE !!!
+Route::get('testJaspr/{id}', [JasperReports::class,'testJaspr'] );
+Route::get('CashOffPDF/{ref}/{type}',[JasperReports::class,'CashOffPDF']  );
+Route::get('specialnsJasper/{id}/{dateFrom}/{dateTo}', [JasperReports::class,'specialnsJasper'] );
+Route::get('pdforder/{id}',[JasperReports::class,'PDFOrders']  );
+Route::get('PDFDelDate/{id}',[JasperReports::class,'PDFDelDate'] );
+Route::get('overallSpecailJasper/{datefrom}/{dateto}',[JasperReports::class,'overallSpecailJasper']  );
+Route::get('excelorder/{id}',[JasperReports::class,'EXCELOrders']  );
+Route::get('groupSpecailJasper/{datefrom}/{dateto}/{groupid}',[JasperReports::class,'groupSpecailJasper']  );
+Route::get('compilereports',[JasperReports::class,'compileExample']  );
+Route::get('FreshOrders',[JasperReports::class,'FreshOrders']  );
 
-Route::get('/WebstoreMessages','DimsCommon@WebstoreMessages');
-Route::get('/getMessageGrid', 'DimsCommon@getMessageGrid');
-Route::post('updateMessage', 'DimsCommon@updateMessage');
+//JASPERREPORTS CONTROLLER ENDS HERE !!!
+
+//DEALSFROMTHEAPP CONTROLLER STARTS HERE !!!
+Route::get('getDeals', [DealsFromTheApp::class,'getDealsNotYetApproved'] );
+Route::get('approveadeal/{token}',[DealsFromTheApp::class,'approveADeal']  );
+Route::get('rejectadeal/{token}', [DealsFromTheApp::class,'rejectADeal'] );
+Route::get('approveddeal',[DealsFromTheApp::class,'approvedDeals']  );
+Route::get('rejecteddeal',[DealsFromTheApp::class,'rejectedDeals']  );
+
+//DEALSFROMTHEAPP CONTROLLER ENDS HERE !!!
+
+//EXTERNAL FUNCTIONS  STARTS HERE !!!
+Route::get('briefcaseDamages',[ExternalFunctions::class,'briefcaseDamages'] );
+Route::get('getTransfers',[ExternalFunctions::class,'getTransfers'] );
+Route::get('getInvoices/{customercode}/{from}/{to}',[ExternalFunctions::class,'getInvoices'] );
+Route::get('transferblade',[ExternalFunctions::class,'transferblade'] );
+Route::get('getTransfersJson/{date}/{dateTo}',[ExternalFunctions::class,'getTransfersJson'] );
+Route::post('openorderdetailsformergedtransfers',[ExternalFunctions::class,'openorderdetailsformergedtransfers']);
+Route::get('getTransfersJsonbydate/{date}', [ExternalFunctions::class,'getTransfersJsonbydate']);
+Route::post('updateCheckedOrNotTrasfers',[ExternalFunctions::class,'updateCheckedOrNotTrasfers'] );
+Route::post('checkUnCheckTransfers',[ExternalFunctions::class,'checkUnCheckTransfers'] );
+Route::get('getWebstoreCustomers', [ExternalFunctions::class,'getWebstoreCustomers']);
+Route::get('officemap', [ExternalFunctions::class,'officemap']);
+Route::get('getWebstoreFile',[ExternalFunctions::class,'getWebstoreFile'] );
+Route::get('brifcaseCustomerEdits',[ExternalFunctions::class,'brifcaseCustomerEdits'] );
+Route::get('synchProducts', [ExternalFunctions::class,'synchProducts']);
+Route::get('testWebstoreSpeed',[ExternalFunctions::class,'testWebstoreSpeed'] );
+Route::get('damageshistory',[ExternalFunctions::class,'damageshistory'] );
+Route::get('transfersstatus', [ExternalFunctions::class,'transfersstatus']);
+Route::get('print_damages/{id}',[ExternalFunctions::class,'printDamages'] );
+Route::get('process_damage/{id}',[ExternalFunctions::class,'processDamage'] );
+Route::post('getDamgedLines', [ExternalFunctions::class,'getDamgedLines']);
+Route::post('updatevisits', [ExternalFunctions::class,'updatevisits']);
+Route::post('getDamagesHistoryHeader',[ExternalFunctions::class,'getDamagesHistoryHeader'] );
+Route::post('updateWebstoremasterFileInfo',[ExternalFunctions::class,'updateWebstoremasterFileInfo'] );
+Route::post('deleteDamagedLine',[ExternalFunctions::class,'deleteDamagedLine'] );
+Route::post('saveupdateasset',[ExternalFunctions::class,'saveupdateasset'] );
+Route::get('viewVisits',[ExternalFunctions::class,'viewVisits'] );
+Route::get('viewDeals',[ExternalFunctions::class,'viewDeals'] );
+Route::get('assets',[ExternalFunctions::class,'assets'] );
+Route::get('crudasset/{id}',[ExternalFunctions::class,'crudasset'] );
+Route::get('missedvisit', [ExternalFunctions::class,'viewMissedVisit']);
+Route::get('notVisitedView',[ExternalFunctions::class,'notVisitedView'] );
+Route::get('visitsdates/{datefrom}/{dateto}',[ExternalFunctions::class,'visitsdates'] );
+Route::get('dealsdates/{datefrom}/{dateto}',[ExternalFunctions::class,'dealsdates'] );
+Route::get('webstore', [ExternalFunctions::class,'webstore']);
+Route::post('synchwebstore', [ExternalFunctions::class,'synchwebstore']);
+Route::post('syncproducts', [ExternalFunctions::class,'syncproducts']);
+Route::post('syncpricelistPrices',[ExternalFunctions::class,'syncpricelistPrices'] );
+Route::post('syncpricelistStock',[ExternalFunctions::class,'syncpricelistStock'] );
+Route::post('syncoverallspecials',[ExternalFunctions::class,'syncoverallspecials'] );
+Route::post('synccustomers',[ExternalFunctions::class,'synccustomers'] );
+Route::post('syncorderpattern',[ExternalFunctions::class,'syncorderpattern'] );
+Route::post('syncpricelist', [ExternalFunctions::class,'syncpricelist']);
+Route::post('syncgroupspecials',[ExternalFunctions::class,'syncgroupspecials'] );
+Route::post('synccustomerspecials',[ExternalFunctions::class,'synccustomerspecials'] );
+Route::get('restFullInvoices/{month}/{year}/{custcode}', [ExternalFunctions::class,'restFullInvoices']);
+Route::get('returnPDF/{invoicenumber}',[ExternalFunctions::class,'returnPDF'] );
+Route::get('visitsLog/{date1}/{date2}',[ExternalFunctions::class,'visitsLog'] );
+Route::get('notVisitedLog/{date1}/{date2}',[ExternalFunctions::class,'notVisitedLog'] );
+// EXTERNAL FUNCTIONS ENDS HERE !!!
 
 
-Route::get('remoteorders', 'OnlineOrders@remoteorders');
-Route::get('mymarketGetSales', 'OnlineOrders@mymarketGetSales');
-Route::post('getMymarketOrdersToDealWith', 'OnlineOrders@getMymarketOrdersToDealWith');
-Route::get('viewMyMarketOrders', 'OnlineOrders@viewMyMarketOrders');
-Route::get('orderScreening', 'OnlineOrders@orderScreening');
-Route::post('testAPI', 'OnlineOrders@testAPI');
-Route::post('deleteRemoteOrder', 'OnlineOrders@deleteRemoteOrder');
-Route::post('updateOnlineLinesAndHeaders', 'OnlineOrders@updateOnlineLinesAndHeaders');
-Route::get('outstandingorders', 'OnlineOrders@outstandingorders');
-Route::get('onlineOrderHistory/{date1}/{date2}', 'OnlineOrders@onlineOrderHistory');
-Route::get('getFreshOrderHeadersOutstanding', 'OnlineOrders@getFreshOrderHeadersOutstanding');
-Route::post('Xmlcommitremoteorder', 'OnlineOrders@Xmlcommitremoteorder');
-Route::get('getFreshOrderHeaders ', 'OnlineOrders@getFreshOrderHeaders');
-Route::get('getOrderLines/{id}', 'OnlineOrders@getOrderLines');
-Route::get('getNewDealToAuth/{id}', 'OnlineOrders@getNewDealToAuth');
-Route::post('postauthdeal', 'OnlineOrders@postauthdeal');
+//ONLINE ORDERS STARTS HERE!!!
+Route::get('remoteorders',[OnlineOrders::class,'remoteorders'] );
+Route::get('mymarketGetSales',[OnlineOrders::class,'mymarketGetSales'] );
+Route::post('getMymarketOrdersToDealWith',[OnlineOrders::class,'getMymarketOrdersToDealWith'] );
+Route::get('viewMyMarketOrders',[OnlineOrders::class,'viewMyMarketOrders'] );
+Route::get('orderScreening', [OnlineOrders::class,'orderScreening']);
+Route::post('testAPI',[OnlineOrders::class,'testAPI'] );
+Route::post('deleteRemoteOrder', [OnlineOrders::class,'deleteRemoteOrder']);
+Route::post('updateOnlineLinesAndHeaders',[OnlineOrders::class,'updateOnlineLinesAndHeaders'] );
+Route::get('outstandingorders', [OnlineOrders::class,'outstandingorders']);
+Route::get('onlineOrderHistory/{date1}/{date2}', [OnlineOrders::class,'onlineOrderHistory']);
+Route::get('getFreshOrderHeadersOutstanding', [OnlineOrders::class,'getFreshOrderHeadersOutstanding']);
+Route::post('Xmlcommitremoteorder',[OnlineOrders::class,'Xmlcommitremoteorder']);
+Route::get('getFreshOrderHeaders ',[OnlineOrders::class,'getFreshOrderHeaders']);
+Route::get('getOrderLines/{id}',[OnlineOrders::class,'getOrderLines']);
+Route::get('getNewDealToAuth/{id}',[OnlineOrders::class,'getNewDealToAuth']);
+Route::post('postauthdeal',[OnlineOrders::class,'postauthdeal']);
 
-Route::get('returnRefunds', 'OnlineOrdersReconController@returnRefunds');
-Route::get('viewRefunds', 'OnlineOrdersReconController@viewRefunds');
+//ONLINE ORDERS ENDS HERE!!!
+
+//ONLINE ORDERS RECON CONTROLLER STARTS HERE !!!
+
+Route::get('returnRefunds', [OnlineOrdersReconController::class,'returnRefunds']);
+Route::get('viewRefunds', [OnlineOrdersReconController::class,'viewRefunds']);
+
+//ONLINE ORDERS RECON CONTROLLER ENDS HERE !!!
 
 /******************************************BACK ORDERS**********************************************************************************/
-Route::get('remoteordersbackorders', 'BackOrderController@remoteordersbackorders');
-Route::post('testAPIbackorders', 'BackOrderController@testAPIbackorders');
-Route::post('deleteRemoteOrderbackorders', 'BackOrderController@deleteRemoteOrderbackorders');
-Route::post('updateOnlineLinesAndHeadersbackorder', 'BackOrderController@updateOnlineLinesAndHeadersbackorder');
-Route::get('outstandingordersbackorder', 'BackOrderController@outstandingordersbackorder');
-Route::get('onlineOrderHistorybackorder/{date1}/{date2}', 'BackOrderController@onlineOrderHistorybackorder');
-Route::get('getFreshOrderHeadersOutstandingbackorder', 'BackOrderController@getFreshOrderHeadersOutstandingbackorder');
-Route::post('Xmlcommitremoteorderbackorder', 'BackOrderController@Xmlcommitremoteorderbackorder');
-Route::get('getFreshOrderHeadersbackorder', 'BackOrderController@getFreshOrderHeadersbackorder');
-Route::get('getNoStockItem', 'BackOrderController@getNoStockItem');
-Route::get('getItemWithNoStock', 'BackOrderController@getItemWithNoStock');
-Route::get('getOrderLinesbackorder/{id}', 'BackOrderController@getOrderLinesbackorder');
-Route::get('getNewDealToAuthbackorder/{id}', 'BackOrderController@getNewDealToAuthbackorder');
-Route::post('postauthdealbackorder', 'BackOrderController@postauthdealbackorder');
-Route::get('productsonbackorderjson', 'BackOrderController@productsonbackorderjson');
-Route::get('productsOnBackOrders', 'BackOrderController@productsOnBackOrders');
+//BACK ORDERCONTROLLER CONTROLLER STARTS HERE
+Route::get('remoteordersbackorders', [OnlineOrdersReconController::class,'remoteordersbackorders']);
+Route::post('testAPIbackorders',[OnlineOrdersReconController::class,'testAPIbackorders'] );
+Route::post('deleteRemoteOrderbackorders',[OnlineOrdersReconController::class,'deleteRemoteOrderbackorders'] );
+Route::post('updateOnlineLinesAndHeadersbackorder', [OnlineOrdersReconController::class,'updateOnlineLinesAndHeadersbackorder']);
+Route::get('outstandingordersbackorder', [OnlineOrdersReconController::class,'outstandingordersbackorder']);
+Route::get('onlineOrderHistorybackorder/{date1}/{date2}',[OnlineOrdersReconController::class,'onlineOrderHistorybackorder'] );
+Route::get('getFreshOrderHeadersOutstandingbackorder',[OnlineOrdersReconController::class,'getFreshOrderHeadersOutstandingbackorder'] );
+Route::post('Xmlcommitremoteorderbackorder',[OnlineOrdersReconController::class,'Xmlcommitremoteorderbackorder'] );
+Route::get('getFreshOrderHeadersbackorder',[OnlineOrdersReconController::class,'getFreshOrderHeadersbackorder'] );
+Route::get('getNoStockItem',[OnlineOrdersReconController::class,'getNoStockItem']);
+Route::get('getItemWithNoStock',[OnlineOrdersReconController::class,'getItemWithNoStock'] );
+Route::get('getOrderLinesbackorder/{id}',[OnlineOrdersReconController::class,'getOrderLinesbackorder'] );
+Route::get('getNewDealToAuthbackorder/{id}',[OnlineOrdersReconController::class,'getNewDealToAuthbackorder'] );
+Route::post('postauthdealbackorder', [OnlineOrdersReconController::class,'postauthdealbackorder']);
+Route::get('productsonbackorderjson',[OnlineOrdersReconController::class,'productsonbackorderjson'] );
+Route::get('productsOnBackOrders',[OnlineOrdersReconController::class,'productsOnBackOrders'] );
+//BACK ORDERCONTROLLER CONTROLLER ENDS HERE
 /********************************************************END **************************************************************************/
 
-Route::post('synchwebstore', 'ExternalFunctions@synchwebstore');
-Route::post('syncproducts', 'ExternalFunctions@syncproducts');
-Route::post('syncpricelistPrices', 'ExternalFunctions@syncpricelistPrices');
-Route::post('syncpricelistStock', 'ExternalFunctions@syncpricelistStock');
-Route::post('syncoverallspecials', 'ExternalFunctions@syncoverallspecials');
-Route::post('synccustomers', 'ExternalFunctions@synccustomers');
-Route::post('syncorderpattern', 'ExternalFunctions@syncorderpattern');
-Route::post('syncpricelist', 'ExternalFunctions@syncpricelist');
-Route::post('syncgroupspecials', 'ExternalFunctions@syncgroupspecials');
-Route::post('synccustomerspecials', 'ExternalFunctions@synccustomerspecials');
-Route::get('restFullInvoices/{month}/{year}/{custcode}', 'ExternalFunctions@restFullInvoices');
-Route::get('returnPDF/{invoicenumber}', 'ExternalFunctions@returnPDF');
-Route::get('visitsLog/{date1}/{date2}', 'ExternalFunctions@visitsLog');
-Route::get('notVisitedLog/{date1}/{date2}', 'ExternalFunctions@notVisitedLog');
 
 
-/*Route::get('/addProduct/{productId}', 'CartController@addItem');
-Route::get('/removeItem/{productId}', 'CartController@removeItem');
-Route::get('/cart', 'CartController@showCart');*/
-//Route::delete('emptyCart', 'CartController@emptyCart');
+//WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
+Route::get('warehouseitems', [WareHouseController::class,'warehouseInvetoryItems']);
+Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
 
-/***
- * WAREHOUSE ROUTES
- */
+//WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 
+//COMPANYAUTHCONTROLLER CONTROLLER STARTS HERE !!!
+Route::get('getBlockedAccountToAuth', [CompanyAuthController::class,'getBlockedAccountToAuth']);
+Route::get('viewBlockedAccount',[CompanyAuthController::class,'viewBlockedAccount'] );
+Route::get('getSpecificOrdersBlocked/{customerId}', [CompanyAuthController::class,'getSpecificOrdersBlocked']);
+Route::get('getSpecificBlockedOrdersJson/{orderid}',[CompanyAuthController::class,'getSpecificBlockedOrdersJson'] );
+Route::get('getoutstandingorderstoauthjson/{orderid}', [CompanyAuthController::class,'getoutstandingorderstoauthjson']);
 
-Route::get('warehouseitems', 'WareHouseController@warehouseInvetoryItems');
-Route::get('onOrderAdvanced', 'WareHouseController@onOrderAdvanced');
+//COMPANYAUTHCONTROLLER CONTROLLER ENDS HERE !!!
 
-/***
- * AUTH ORDERS
- */
-Route::get('getBlockedAccountToAuth', 'CompanyAuthController@getBlockedAccountToAuth');
-Route::get('viewBlockedAccount', 'CompanyAuthController@viewBlockedAccount');
-Route::get('getSpecificOrdersBlocked/{customerId}', 'CompanyAuthController@getSpecificOrdersBlocked');
-Route::get('getSpecificBlockedOrdersJson/{orderid}', 'CompanyAuthController@getSpecificBlockedOrdersJson');
-Route::get('getoutstandingorderstoauthjson/{orderid}', 'CompanyAuthController@getoutstandingorderstoauthjson');
+//POS CONTROLLER STARTS HERE !!!
+Route::get('viewassignuserstotill',[POS::class,'viewassignuserstotill']);
+Route::post('submittillusers',[POS::class,'submittillusers'] );
+Route::post('closedrawer',[POS::class,'closedrawer'] );
 
-/******************************************POS*************************************************************************************************
- ************************************************************************************************************************************************/
-Route::get('viewassignuserstotill', 'POS@viewassignuserstotill');
-Route::post('submittillusers', 'POS@submittillusers');
-Route::post('closedrawer', 'POS@closedrawer');
+//POS CONTROLLER ENDS HERE !!!
 
-/****************************************************MAPS
-/*******************************************************************************************/
-Route::get('mappage/{date}/{routeid}/{ordertype}', 'GoogleMapsController@mappage');
+//GOOGLE MAPS CONTROLLER STARTS HERE !!!
 
-Route::get('/import_excel', 'ImportExcelController@index');
-Route::post('/import_excel/import', 'ImportExcelController@import');
+Route::get('mappage/{date}/{routeid}/{ordertype}', [GoogleMapsController::class,'mappage']);
 
-/*************************************************LOYALTY*/
-/********************************************************PROGRAM*********************************************************************************************************/
+//GOOGLE MAPS CONTROLLER STARTS HERE !!!
+
+//IMPORT EXCEL CONTROLLER STARTS HERE !!!
+Route::get('/import_excel', [ImportExcelController::class,'mappage']);
+Route::post('/import_excel/import', [ImportExcelController::class,'mappage']);
+
+//IMPORT EXCEL CONTROLLER ENDS HERE !!!
+
+//LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('registercards', 'LayaltyProgramController@MapACardToTheUsers');
-    Route::get('cardnumberlookup', 'LayaltyProgramController@CardNumberLookUp');
-    Route::get('saveinfocard', 'LayaltyProgramController@saveinfocard');
 
-
-    Route::get('registercardswalking', 'LayaltyProgramController@MapACardToTheUsersWalking');
-    Route::get('cardnumberlookupWalking', 'LayaltyProgramController@CardNumberLookUpWalking');
-    Route::get('saveinfocardwalking', 'LayaltyProgramController@saveinfocardWalking');
-    Route::get('verifyemail', 'LayaltyProgramController@verifyemail');
-    Route::get('checkifIdexists', 'LayaltyProgramController@checkifIdexists');
+    Route::get('registercards', [LayaltyProgramController::class,'MapACardToTheUsers']);
+    Route::get('cardnumberlookup',[LayaltyProgramController::class,'CardNumberLookUp'] );
+    Route::get('saveinfocard',[LayaltyProgramController::class,'saveinfocard'] );
+    Route::get('registercardswalking', [LayaltyProgramController::class,'MapACardToTheUsersWalking']);
+    Route::get('cardnumberlookupWalking',[LayaltyProgramController::class,'CardNumberLookUpWalking'] );
+    Route::get('saveinfocardwalking', [LayaltyProgramController::class,'saveinfocardWalking']);
+    Route::get('verifyemail', [LayaltyProgramController::class,'verifyemail']);
+    Route::get('checkifIdexists',[LayaltyProgramController::class,'checkifIdexists'] );
 });
 
+//LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!
 /*************************XERO********************************/
 Route::get('/manage/xero', [\App\Http\Controllers\XeroController::class, 'index'])->name('xero.auth.success');
 
