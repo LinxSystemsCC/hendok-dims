@@ -30,7 +30,7 @@ Auth::routes();
 
 //Route::get('/home', 'SalesForm@index')->name('home');
 Route::get('home',[SalesForm::class, 'index'])->name('home');
-Route::get('/sales',[SalesForm::class, 'sales']);
+Route::get('/sales',[SalesForm::class, 'index']);
 Route::get('pl', [SalesForm::class,'pl']);
 Route::get('returns',[SalesForm::class,'returns']);
 Route::get('getProductsStopedBuyingJSon',[SalesForm::class,'getProductsStopedBuyingJSon']);
