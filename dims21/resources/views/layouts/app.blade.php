@@ -169,6 +169,10 @@
             padding: 1px;
             line-height: 1.1;
         }
+        .dataTables_scrollBody{
+            min-height: 59px;
+        }
+
 
         .inputs{
 
