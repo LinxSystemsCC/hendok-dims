@@ -170,7 +170,7 @@
             line-height: 1.1;
         }
         .dataTables_scrollBody{
-            min-height: 59px;
+            min-height: 300px;
         }
 
 
