@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use \Cache;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\SalesForm;
+
 class DimsCommon extends Controller
 {
     public function __construct()
