@@ -30,7 +30,7 @@
 
         </fieldset>
     </form>
-    <table class="table  search-table" id="tblOnsalesOrder" style=" color: black;overflow-y: scroll; width: 100%;font-family: sans-serif;font-weight: 700;font-size: 36px;" tabindex=0>
+    <table class="table  search-table" id="tblOnsalesOrder" style=" color: black;overflow-y: scroll; width: 100%;font-family: sans-serif; font-weight: 700;font-size: 36px;" tabindex=0>
         <thead>
 
             <tr style="font-size: 17px;">

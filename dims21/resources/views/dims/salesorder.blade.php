@@ -318,7 +318,7 @@
 
                                     <div class="tab" style="overflow-y: scroll;height:56%">
                                         <div style="display: block !important;">
-                                            <table class="table search-table" id="orderPatternIdTable" style="overflow-y: scroll; width: 100%;font-family: sans-serif;!important;">
+                                            <table class="table search-table" id="orderPatternIdTable" style="overflow-y: scroll; width: 100%;font-family: sans-serif;!important; ">
                                                 <thead>
 
                                                 <tr >

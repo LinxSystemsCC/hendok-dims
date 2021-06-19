@@ -14,7 +14,7 @@
     </div>
     <div class="col-lg-12"   style="height:100%;">
         <button class="btn-md btn-primary" id="refreshProducts">Refresh</button>
-        <table class="table table-bordered stripe search-table" tabindex=0 id="tblMassProducts" style="font-size:11px;  color: black;overflow-y: scroll; width: 100%;font-family: monospace;" >
+        <table class="table table-bordered stripe search-table" tabindex=0 id="tblMassProducts" style="font-size:11px;   color: black;overflow-y: scroll; width: 100%;font-family: monospace;" >
             <thead style="font-size: 17px;">
             <tr>
 

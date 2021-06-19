@@ -16,7 +16,7 @@
                 <th class="col-sm-1">Code</th>
                 <th class="col-sm-3">StoreName</th>
                 <th class="col-sm-3">strRoute</th>
-                <th class="col-sm-1">StatusId</th>
+                <th class="col-sm-1">StatusId</th> 
                 <th class="col-sm-1">ContactTel</th>
                 <th class="col-sm-1">CellPhone</th>
                 <th class="col-sm-1">ContactFax</th>
