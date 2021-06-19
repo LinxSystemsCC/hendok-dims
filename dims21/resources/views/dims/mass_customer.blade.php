@@ -9,7 +9,7 @@
 'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;" style="color:black;font-size: 15px;font-weight:900; background: darkgrey;padding: 0px;border: 1px solid grey;">Other Delivery Address</a>
     </div>
     <div class="col-lg-12"  style="height:100%;">
-        <table class="table table-bordered stripe search-table" tabindex=0 id="tblMassCustomer" style="height:75%;font-size:11px;  color: black;overflow-y: scroll; width: 100%;font-family: sans-serif;" >
+        <table class="table table-bordered stripe search-table" tabindex=0 id="tblMassCustomer" style="font-size:11px;  color: black;overflow-y: scroll; width: 100%;font-family: sans-serif;" >
             <thead style="font-size: 17px;">
             <tr>
                 <th class="col-sm-1">Id</th>
