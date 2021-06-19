@@ -254,7 +254,7 @@
                             <button class="btn-md btn-warning" id="changeDeliveryAddressOnNotInvoiced">Change Delivery Address</button>
                         </div>
                         <button class="btn-xs btn-success " id="addTheSalesMan" type="button" >Salesman</button><br>
-                        On Hold : <input type="checkbox"  id="authoriseblockedorder"><br>
+                        On Hold : <input type="checkbox"  id="authoriseblockedorder"> <input type="hidden"  id="marginandpriceauthbycustomer"><br>
                     </div>
 
                 </div>
@@ -1494,6 +1494,33 @@
             </table>
 
         </div>
+        <div title="ITEMS WITH ZERO COST" id="authItemsWithzerocosts">
+            <h2>PLEASE AUTHORIZE ITEMS WITH ZERO COST</h2>
+            <form>
+                <div class="form-group  col-md-4" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <label class="control-label" for="zerocostmanagername"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Name</label><br>
+                    <input class="" id="zerocostmanagername" name="zerocostmanagername"  style="height:30px;font-size: 10px;"  autocomplete="off" value="-"></input>
+                </div>
+                <div class="form-group  col-md-4"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <label class="control-label" for="zerocostmanagerpassword"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">PassWord</label><br>
+                    <input type="password" name="zerocostmanagerpassword" class="" id="zerocostmanagerpassword" style="height:30px;font-size: 10px;"   autocomplete="off" value="-">
+                </div><br>
+                <div  >
+                    <button type="button" id="doAuthZerocost" class="btn-success btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Authorise</button>
+                </div>
+                <div class="form-group  col-md-12" >
+                    <table>
+                        <tbody id="productwithzerocost">
+
+                        </tbody>
+                    </table>
+
+                    <button type="button" id="cancelzerocostdialod" class="btn-danger btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Cancel</button>
+
+                </div>
+            </form>
+
+        </div>
 
 
 
@@ -1866,6 +1893,8 @@
                 $('#ZeroPrice').hide();
                 $('#authonholdaccount').hide();
                 $('#addcostdialog').hide();
+                $('#authItemsWithzerocosts').hide();
+
 
                 if(isBlockDeliveryTypeChanges.length > 4) {
                     $("#orderType").prop('disabled', 'disabled');
@@ -2475,7 +2504,7 @@
                     calculator();
 
                     // if (parseFloat((parseFloat($('#totalmargin').val()).toFixed(2)) < parseFloat(parseFloat($('#hiddencustomerGp').val()).toFixed(2) )) && ($('#margin_auth').val() != 1) )
-                    if ( Math.round($('#totalmargin').val()  ) <  Math.round($('#hiddencustomerGp').val()  )  && ($('#margin_auth').val() != 1) && ($('#invoiceNo').val()).length < 3 )
+                    if ( Math.round($('#totalmargin').val()  ) <  Math.round($('#hiddencustomerGp').val()  )  && ($('#margin_auth').val() != 1) && ($('#invoiceNo').val()).length < 3 && $('#marginandpriceauthbycustomer').val().lenght > 1 )
                     {
                         $('#MarginProblems').show();
                         showDialogWithoutClose('#MarginProblems',400,400);
@@ -4852,59 +4881,101 @@
             }
             function finishThis()
             {
-                $('<div></div>').appendTo('body')
-                    .html('<div><h6>Yes or No?</h6></div>')
-                    .dialog({
-                        modal: true,
-                        title: 'Click Yes to Print the Sales Order Or No to exit.',
-                        zIndex: 10000,
-                        autoOpen: true,
-                        width: '65%',
-                        resizable: false,
-                        buttons: {
-                            DelUser: {
-                                class: 'leftButton',
-                                text: 'Point Of Sale ',
-                                click: function () {
-                                    allInoneDocumentsave("POS");
+                var orderlinesValidations = [];
 
-                                }
-                            },
-                            Yes: function () {
-                                allInoneDocumentsave("YES");
-                            },
-                            No: function () {
+                    $('#table > tbody  > tr').each(function() {
+                        var data = $(this);
 
-                                allInoneDocumentsave("NO");
-                            },
-                            PDF:function(){
-                                var dialog = $('<p><strong style="color:black"> Please wait...</strong></p>').dialog({
-                                    height: 200, width: 700, modal: true, containment: false,
-                                    buttons: {
-                                        "Okay": function () {
-                                            dialog.dialog('close');
-                                        }
-                                    }
-                                });
-                                if (($('#invoiceNo').val()).length > 3) {
-                                    window.open('{!!url("/pdforder")!!}/'+$('#orderId').val(), "PDF", "location=1,status=1,scrollbars=1, width=1200,height=850");
-//View PDF
-                                    disableOnFinish();
-                                    $(this).dialog("close");
-                                    $('#finishOrder').hide();
-                                } else {
-                                    //finishArray2 -- use to be
-                                    allInoneDocumentsave("PDF");
-                                }
+                        var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
+                        var comment = $(this).closest('tr').find('.prodComment_').val();
+                        //comment = comment.replace("'","");
 
-                                $(this).dialog("close");
-                            }
-
-                        },
-                        close: function (event, ui) {
-                            $(this).remove();
+                        console.debug($(this).closest('tr').find('.col2').val());
+                        if (($(this).closest('tr').find('.theProductCode_').val()).length > 0) {
+                            orderlinesValidations.push({
+                                'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
+                                'qty': $(this).closest('tr').find('.prodQty_').val(),
+                                'price': $(this).closest('tr').find('.prodPrice_').val()
+                            });
                         }
                     });
+
+                $.ajax({
+                    url: '{!!url("/checkZeroCostOnOrder")!!}',
+                    type: "POST",
+                    data: {
+                        OrderId: $('#orderId').val(),
+                        orderlines: orderlinesValidations
+                    },
+                    success: function (data) {
+                            if(data.result != "Nothing")
+                            {
+
+                                authorZeroCostOnSaving(data.data);
+                            }else
+                            {
+
+
+                                $('<div></div>').appendTo('body')
+                                    .html('<div><h6>Yes or No?</h6></div>')
+                                    .dialog({
+                                        modal: true,
+                                        title: 'Click Yes to Print the Sales Order Or No to exit.',
+                                        zIndex: 10000,
+                                        autoOpen: true,
+                                        width: '65%',
+                                        resizable: false,
+                                        buttons: {
+                                            DelUser: {
+                                                class: 'leftButton',
+                                                text: 'Point Of Sale ',
+                                                click: function () {
+                                                    allInoneDocumentsave("POS");
+
+                                                }
+                                            },
+                                            Yes: function () {
+                                                allInoneDocumentsave("YES");
+                                            },
+                                            No: function () {
+
+                                                allInoneDocumentsave("NO");
+                                            },
+                                            PDF:function(){
+                                                var dialog = $('<p><strong style="color:black"> Please wait...</strong></p>').dialog({
+                                                    height: 200, width: 700, modal: true, containment: false,
+                                                    buttons: {
+                                                        "Okay": function () {
+                                                            dialog.dialog('close');
+                                                        }
+                                                    }
+                                                });
+                                                if (($('#invoiceNo').val()).length > 3) {
+                                                    window.open('{!!url("/pdforder")!!}/'+$('#orderId').val(), "PDF", "location=1,status=1,scrollbars=1, width=1200,height=850");
+//View PDF
+                                                    disableOnFinish();
+                                                    $(this).dialog("close");
+                                                    $('#finishOrder').hide();
+                                                } else {
+                                                    //finishArray2 -- use to be
+                                                    allInoneDocumentsave("PDF");
+                                                }
+
+                                                $(this).dialog("close");
+                                            }
+
+                                        },
+                                        close: function (event, ui) {
+                                            $(this).remove();
+                                        }
+                                    });
+                            }
+
+
+                    }
+                });
+
+
             }
 
             function PosDialog()
@@ -6292,6 +6363,7 @@
                                         //isCorrectCredentials
                                     }
                                     $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                                    $('#marginandpriceauthbycustomer').val(data[0].authPrices);
                                     $('#prohibited_' + token_number).val(parseFloat(data[0].Prohibited).toFixed(2));
                                     $('#instockReadOnly_' + token_number).val(parseFloat(data[0].AvailableToSell).toFixed(2));
                                     $('#prodDisc_' + token_number).val(parseFloat(data[0].LineDisc).toFixed(2));
@@ -6318,21 +6390,24 @@
                             else
                             {
                                 //theOrdersDetailsId
-                                $('#prodPrice_'+token_number).val('0');
-                                $('#ZeroPrice').show();
-                                showDialogWithoutClose('#ZeroPrice','40%',250);
-                                $('#ZeroPrice').keydown(function(event) {
-                                    if (event.keyCode == 27){
-                                        return false;
-                                    }
-                                });
-                                //   $( "#authorisations" ).dialog('close');
-                                // $( "#MarginProblems" ).dialog('close');
-                                authZeroPricing(token_number,$('#theOrdersDetailsId' + token_number).val(), $('#prodCode_' + token_number).val());
+                                if($('#marginandpriceauthbycustomer').val().length >1) {
+                                    $('#prodPrice_' + token_number).val('0');
+                                    $('#ZeroPrice').show();
+                                    showDialogWithoutClose('#ZeroPrice', '40%', 250);
+                                    $('#ZeroPrice').keydown(function (event) {
+                                        if (event.keyCode == 27) {
+                                            return false;
+                                        }
+                                    });
+                                    //   $( "#authorisations" ).dialog('close');
+                                    // $( "#MarginProblems" ).dialog('close');
+                                    authZeroPricing(token_number, $('#theOrdersDetailsId' + token_number).val(), $('#prodCode_' + token_number).val());
+                                }
                             }
                         }else
                         {
 
+                            if($('#marginandpriceauthbycustomer').val().length > 1 ){
                             $('#prodPrice_'+token_number).val('0');
                             $('#ZeroPrice').show();
                             showDialogWithoutClose('#ZeroPrice','40%',250);
@@ -6345,6 +6420,7 @@
                             // $( "#MarginProblems" ).dialog('close');
                             authZeroPricing(token_number,$('#theOrdersDetailsId' + token_number).val(), $('#prodCode_' + token_number).val());
                             $( "#authorisations" ).dialog('close');
+                            }
                         }
 
 
@@ -9334,6 +9410,39 @@
                                     disableOnFinish();
                                 }
                             }
+                            if (type == "AUTHED")
+                            {
+                                console.debug(data.result);
+                                if(data.result !="SUCCESS" && data.result !="Success")
+                                {
+                                    var dialog = $('<p><strong style="color:black">'+data.result+'</strong></p>').dialog({
+                                        height: 200, width: 700, modal: true, containment: false,
+                                        buttons: {
+                                            "Okay": function () {
+                                                dialog.dialog('close');
+                                            },
+
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    $.ajax({
+                                        url: '{!!url("/updateallOrderlinestocostauth")!!}',
+                                        type: "POST",
+                                        data: {
+                                            orderId: $('#orderId').val(),
+
+                                        },
+                                        success: function (data) {
+                                            disableOnFinish();
+
+                                        }
+                                    });
+
+
+                                }
+                            }
                             if (type == "INVOICEIT")
                             {
 
@@ -9440,6 +9549,94 @@
                                     0, $('#orderId').val(), 0, $('#inputCustAcc').val(), 0, 0, 0, $('#onholdaccountmanagername').val(), $('#orderId').val(), 0, computerName, $('#orderId').val(), 0, data.result[0].UserID, data.result[0].UserName);
                                 $("#authonholdaccount").dialog('close');
                                 allInoneDocumentsave("NO");
+
+
+                            }else
+                            {
+                                alert("SOMETHING WENT WRONG,PLEASE TRY AGAIN ");
+                            }
+                        }
+                    });
+
+                });
+
+            }
+            function authorZeroCostOnSaving(data)
+            {
+                var trHTML = '';
+
+                $('#productwithzerocost').empty();
+                $('#productwithzerocost').show();
+                $.each(data, function (key, value) {
+                    trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey;font-family: Roboto;font-weight: normal" >'+
+                        '<td style="">'+value.PastelCode+'</td>'+
+                        '<td style="">'+value.PastelDescription+'</td>'+
+
+                        '</tr>';
+
+                });
+
+                $('#productwithzerocost').append(trHTML);
+                $('#authItemsWithzerocosts').show();
+
+                $( "#authItemsWithzerocosts" ).dialog({height: 800, modal: true, closeOnEscape: false,
+                    width: 800,containment: false}).dialogExtend({
+                    "closable" : false, // enable/disable close button
+                    "maximizable" : false, // enable/disable maximize button
+                    "minimizable" : true, // enable/disable minimize button
+                    "collapsable" : true, // enable/disable collapse button
+                    "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                    "titlebar" : false, // false, 'none', 'transparent'
+                    "minimizeLocation" : "right", // sets alignment of minimized dialogues
+                    "icons" : { // jQuery UI icon class
+                        "close" : "ui-icon-circle-close",
+                        "maximize" : "ui-icon-circle-plus",
+                        "minimize" : "ui-icon-circle-minus",
+                        "collapse" : "ui-icon-triangle-1-s",
+                        "restore" : "ui-icon-bullet"
+                    },
+                    "load" : function(evt, dlg){ }, // event
+                    "beforeCollapse" : function(evt, dlg){ }, // event
+                    "beforeMaximize" : function(evt, dlg){ }, // event
+                    "beforeMinimize" : function(evt, dlg){ }, // event
+                    "beforeRestore" : function(evt, dlg){ }, // event
+                    "collapse" : function(evt, dlg){  }, // event
+                    "maximize" : function(evt, dlg){ }, // event
+                    "minimize" : function(evt, dlg){  }, // event
+                    "restore" : function(evt, dlg){  } // event
+                });
+
+                $('#authItemsWithzerocosts').keydown(function(event) {
+                    if (event.keyCode == 27){
+                        return false;
+                    }
+                });
+                $('#cancelzerocostdialod').off().click(function(){
+
+                    $('#authItemsWithzerocosts').dialog('close');
+
+                });
+                $('#doAuthZerocost').off().click(function(){
+
+                    $('#zerocostmanagerpassword').val();
+                    $.ajax({
+                        url: '{!!url("/AuthBulkZeroCost")!!}' ,
+                        type: "POST",
+                        data:{
+                            userName:$('#zerocostmanagername').val(),
+                            userPassword:$('#zerocostmanagerpassword').val(),
+                            OrderId:$('#orderId').val()},
+                        success: function(data){
+
+                            if (data.done=="DONE") {
+
+                                $('#zerocostmanagername').val('');
+                                $('#zerocostmanagerpassword').val('');
+
+                                consoleManagementAuths('{!!url("/logMessageAjax")!!}', 12, 1, 'Zero Cost On Bulk Authorization authorized by ' + data.result[0].UserName,
+                                    0, $('#orderId').val(), 0, $('#inputCustAcc').val(), 0, 0, 0, $('#zerocostmanagername').val(), $('#orderId').val(), 0, computerName, $('#orderId').val(), 0, data.result[0].UserID, data.result[0].UserName);
+                                $("#authItemsWithzerocosts").dialog('close');
+                                allInoneDocumentsave("AUTHED");
 
 
                             }else

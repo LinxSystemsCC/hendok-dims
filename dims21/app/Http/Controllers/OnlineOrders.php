@@ -124,7 +124,7 @@ class OnlineOrders extends Controller
         $returnmet = DB::connection('linxbriefcase')->table('OrderHeaders')->where('ID', $ID)->update(['DimsOrderID' =>  -9999 ,'ExportedToDims'=>1]);
 
         $getHeader = DB::connection('linxbriefcase')
-            ->select("Select RepEmail,DIMSUser,DeliveryDate,CustomerCode from OrderHeaders 
+            ->select("Select RepEmail,DIMSUser,DeliveryDate,CustomerCode from OrderHeaders
                         left outer join Users on Users.UserName = OrderHeaders.UserName
                         where ID='".$ID."'");
 
@@ -217,8 +217,8 @@ class OnlineOrders extends Controller
                   intUserID,DeliveryAddress,CustomerContactCellphone,
                   CustomerContactEmail,bitCompleted,
                   iif(bitCompleted=0,'yellow','') as bColor
-        
-                from OrderHeaders 
+
+                from OrderHeaders
                 inner join tblDIMSUSERS on tblDIMSUSERS.UserID = OrderHeaders.intUserId
                 where OrderHeaders.CustomerCode='CAS004' ORDER BY OrderDate desc");
         //dd($ordSreening);
@@ -461,11 +461,24 @@ class OnlineOrders extends Controller
         $returnprinteddoc= DB::connection('sqlsrv3')
             ->select("Exec spInsertIntoFlatMyMarketTable ?",
                 array( $orderDetailsxml));
+        return response()->json($returnprinteddoc);
 
-        dd($returnprinteddoc);
 
     }
+    public function postMyMarketOrders(Request $request)
+    {
+        $checkedLines = $request->get('checkedLines');
+        $notCheckedLines = $request->get('notCheckedLines');
+        $notCheckedLinesxml = $this->toxml($notCheckedLines, "xml", array("result"));
+        $checkedLinesxml = $this->toxml($checkedLines, "xml", array("result"));
 
+        //I need auth done it eventually
+        $returnCustProdPrice = DB::connection('sqlsrv3')
+            ->select('exec spCustomerPriceLookUpAssociatedItems ?,?',
+                array($checkedLines,$notCheckedLines)
+            );
+
+    }
     private static function getTabs($tabcount)
     {
         $tabs = '';
