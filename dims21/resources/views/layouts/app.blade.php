@@ -610,7 +610,7 @@
                         <li><button type="button" id="salesInvoiced" class="btn-warning btn-xs" style="width: 90px;">On Invoice</button></li>
                         <li><button type="button" id="posCashUp" class="btn-primary btn-xs" style="width: 90px;">Cash Up</button></li>
                         <li><button type="button" id="pricelist" class="btn-success btn-xs" style="width: 90px;display:none;">Price List</button></li>
-                        <li><button type="button" id="returns" class="btn-success btn-xs" style="width: 90px;">Returns</button></li>
+                        <li><button type="button" id="returns" class="btn-success btn-xs" style="width: 90px;display: none;">Returns</button></li>
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Extras <span class="caret"></span></a>
