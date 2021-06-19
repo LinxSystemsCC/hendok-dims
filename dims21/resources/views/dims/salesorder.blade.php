@@ -451,7 +451,7 @@
 
                 </form>
             </div>
-            <div class="col-lg-12" style="">
+            <div class="col-lg-12" style="min-height: 59px;">
                 <table class="table2 table-bordered " id="createdOrders" style="overflow-y: auto;width:100%;color: black;    font-weight: 700;" tabindex=0>
                     <thead>
                     <tr>
