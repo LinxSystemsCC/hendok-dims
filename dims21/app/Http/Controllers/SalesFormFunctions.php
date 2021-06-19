@@ -372,6 +372,36 @@ class SalesFormFunctions extends Controller
         }
 
     }
+    public function checkZeroCostOnOrder(Request $request)
+    {
+        $orderlines = $request->get('orderlines');
+        $OrderId = $request->get('OrderId');
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        ///var_dump($orderlines);
+        ///
+        if (is_array($orderlines)) {
+
+            $orderlinesrxml = $this->toxml($orderlines, "xml", array("result"));
+            $getResult = DB::connection('sqlsrv4')
+                ->select("EXEC spXmlProductHavingZeroCost " . $OrderId . ",'" . $orderlinesrxml . "'");
+
+            if(count($getResult) > 0)
+            {
+                $outPut['result'] = "SUCCESS";
+                $outPut['data'] = $getResult;
+            }else{
+                $outPut['result'] = "Nothing";
+            }
+
+            return $outPut;
+        }else{
+            $outPut['result'] = "Nothing";
+
+            return $outPut;
+        }
+
+    }
     public function insertHeaderForOtherTrans(Request $request)
     {
         $customerCode = $request->get('customerCode');
@@ -627,7 +657,7 @@ class SalesFormFunctions extends Controller
             //$insertOrderDetailDelete = false;
             if(!$insertOrderDetailDelete)
             {
-                DB::connection('sqlsrv3')->table('tblOrderDetails')->where('OrderDetailId',$OrderDetailId)->delete();
+                DB::connection('sqlsrv3')->table('tblOrderDetails')->where('OrderDetailId',$OrderDetailId)->where('Loaded',0)->delete();
                 $checkIfThereIsOrderDetailID = DB::connection('sqlsrv3')->table('tblOrderDetails')->select('OrderDetailId')->where('OrderDetailId',$OrderDetailId)->get();
                 if(count($checkIfThereIsOrderDetailID) < 1)
                 {
@@ -810,11 +840,11 @@ class SalesFormFunctions extends Controller
         $dir = $request->input('order.0.dir');
         $search = $request->input('search.value');
 
-        $customersLookUp = DB::connection('sqlsrv3')->select("SELECT [CustomerPastelCode],[StoreName],[ContactTel],[ContactPerson] FROM tblCustomers 
+        $customersLookUp = DB::connection('sqlsrv3')->select("SELECT [CustomerPastelCode],[StoreName],[ContactTel],[ContactPerson] FROM tblCustomers
                                 WHERE CustomerPastelCode like '%{$search}%' or StoreName like '%{$search}%' or ContactTel like '%{$search}%' or
                                 ContactPerson like '%{$search}%' ORDER BY $order $dir OFFSET $start ROWS FETCH NEXT $limit ROWS ONLY");
 
-        $countFiltered= DB::connection('sqlsrv3')->select("SELECT [CustomerPastelCode]FROM tblCustomers 
+        $countFiltered= DB::connection('sqlsrv3')->select("SELECT [CustomerPastelCode]FROM tblCustomers
                                 WHERE  CustomerPastelCode like '%{$search}%' or StoreName like '%{$search}%' or ContactTel like '%{$search}%' or
                                 ContactPerson like '%{$search}%'");
         $output['recordsTotal'] = count($customersLookUp);
@@ -827,42 +857,48 @@ class SalesFormFunctions extends Controller
     }
     public function onCheckOrderHeader(Request $request)
     {
-        $OrderId= $request->get('orderId');
+        $OrderId = $request->get('orderId');
         $InvoiceNumber = $request->get('invoiceNo');
         $orderby = $request->input('order.0.column');
         $sort['col'] = $request->input('columns.' . $orderby . '.data');
         $sort['dir'] = $request->input('order.0.dir');
 
         $edit = (new SalesForm())->hasAccessToEdit($OrderId);
-
+        $isQoutation = DB::connection('sqlsrv3')
+            ->select("select * from tblOrders where OrderId = " . $OrderId);
         $responseFromOrdeLock = (new DimsCommon())->checkUserLock($OrderId);
-        if ($responseFromOrdeLock[0]->orderID == "inserted")
-        {
-            if($edit =="Yes"){
+        if (count($isQoutation) > 0) {
+            $GetOrderHeader = DB::connection('sqlsrv3')
+                ->select("EXEC spReturnInvoiceOrderIdData '" . $OrderId . "','" . $InvoiceNumber . "'");
+            $outPut['data'] = $GetOrderHeader;
+            $outPut['returns'] = "inserted";
+
+            return response()->json($outPut);
+        } else {
+
+        if ($responseFromOrdeLock[0]->orderID == "inserted") {
+            if ($edit == "Yes") {
                 $GetOrderHeader = DB::connection('sqlsrv3')
-                    ->select("EXEC spReturnInvoiceOrderIdData '".$OrderId."','".$InvoiceNumber."'");
+                    ->select("EXEC spReturnInvoiceOrderIdData '" . $OrderId . "','" . $InvoiceNumber . "'");
                 $outPut['data'] = $GetOrderHeader;
                 $outPut['returns'] = "inserted";
-            }
-            else
-            {
-                $mes = $OrderId.' has been planned already, please view this order as PDF';
+            } else {
+                $mes = $OrderId . ' has been planned already, please view this order as PDF';
                 $GetOrdermess = DB::connection('sqlsrv3')
                     ->select("Select '$mes' as orderID ");
-               // dd($GetOrdermess);
+                // dd($GetOrdermess);
                 $outPut['data'] = $GetOrdermess;
                 $outPut['returns'] = "Not inserted";
             }
 
             return response()->json($outPut);
-        }
-        else
-        {
+        } else {
 
             $outPut['data'] = $responseFromOrdeLock;
             $outPut['returns'] = "Not inserted";
             return response()->json($outPut);
         }
+    }
 
     }
     //For Other Transactions

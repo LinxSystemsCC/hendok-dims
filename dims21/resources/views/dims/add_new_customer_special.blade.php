@@ -307,13 +307,7 @@
                     {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
                     ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
                 $(""+jID+"").mcautocomplete({
-                    source: function(req, response) {
-                        var re = $.ui.autocomplete.escapeRegex(req.term);
-                        var matcher = new RegExp("^" + re, "i");
-                        response($.grep(finalDataProductDescription, function(item) {
-                            return matcher.test(item.value);
-                        }));
-                    },
+                    source: finalDataProductDescription,
                     columns:columnsD,
                     autoFocus: true,
                     minlength: 2,

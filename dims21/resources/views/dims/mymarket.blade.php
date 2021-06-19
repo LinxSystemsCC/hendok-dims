@@ -29,12 +29,15 @@
         .hidden_row {
             display: none;
         }
+        .nostock{
+            background: orange;
+        }
     </style>
 </head>
 <body>
 
 <h3>My Market Orders </h3>
-<div style="overflow: scroll;height: 500px;width: 100%;">
+<div style="overflow: scroll;height: 300px;width: 100%;">
 <table id="pastInvoices" class="table" style="width: 100%">
     <tr style="font-size: 16px;" >
         <th>ID</th>
@@ -49,6 +52,28 @@
 </table>
 </div>
 <button id="pullorders">Pull Orders To Deal With</button>
+<div style="overflow: scroll;height: 300px;width: 100%;">
+
+    <table id="progress" class="table" style="width: 70%">
+        <tr style="font-size: 16px;" >
+            <th></th>
+            <th>My Market Cust Code</th>
+            <th>DIMS Cust Code</th>
+            <th>Item Code</th>
+            <th>Item Name</th>
+            <th>Available</th>
+            <th>Qty Requesting</th>
+            <th>Line Delivery Date</th>
+            <th>Purchase Date</th>
+
+        </tr>
+        <tbody>
+
+        </tbody>
+    </table>
+
+</div>
+<button style="background: #0bc90b;color: black;height: 35px;" id="commit">Commit Orders</button>
 <script src="{{ asset('public/js/jquery-2.2.3.min.js') }}"></script>
 <script>
     var coll = document.getElementsByClassName("collapsible");
@@ -67,6 +92,7 @@
         });
     }
 
+    $('#commit').hide();
     $.ajax({
         url: '{!!url("/mymarketGetSales")!!}',
         type: "GET",
@@ -128,6 +154,7 @@
             }
         });
         console.debug(a);
+        $('#pullorders').hide();
        //getMymarketOrdersToDealWith
         $.ajax({
             url: '{!!url("/getMymarketOrdersToDealWith")!!}',
@@ -137,12 +164,87 @@
                 salesorderids: a
             },
             success: function (data) {
+                var trHTML = '';
+                var classAnonymouscols="stock";
+                 var ischeckornot="checked";
+                $('#removethis').empty();
 
+                if(data[0].Result !="FAILED"){
+
+                    $.each(data, function (key, value) {
+                        if (value.enoughstock == 0)
+                        {
+                            classAnonymouscols="nostock";
+                            ischeckornot="";
+                        }
+                        if (value.enoughstock == 1 )
+                        {
+                            classAnonymouscols="stock";
+                            ischeckornot="checked";
+                        }//intAutoId
+                        trHTML += '<tr style="font-size: 13px;color:black" class="removethis '+classAnonymouscols+'"><td><input type="checkbox" name="checkAutos" '+ ischeckornot+' value="'+value.intAutoId+'" ></dt><td>' +
+                            value.strCustomerCode + '</td><td>' +
+                            value.strDimsCustomerCode + '</td><td>' +
+                            value.strPartNumber+ '</td><td>' +
+                            value.strDesc + '</td><td>' +
+                            value.Available+'</td><td> <input type="number" class="qty" value="'+value.mnyQty+'" ><input type="hidden" class="strSalesOrderId" value="'+value.strSalesOrderId+'" ></td><td>' +
+                            value.dteLinedeliveryDate+ '</td><td>' +
+                            value.dtepurchaseOrderDate+ '</td><td>' +
+                            '</td></tr>';
+                    });
+                    $('#progress').append(trHTML);
+                    $('#commit').show();
+
+
+                }
 
             }
         });
     });
 
+    $('#commit').click(function(){
+
+
+        var selected = [];
+        var checkedLines = new Array();
+        var notCheckedLines = new Array();
+        $('[name="checkAutos"]:checked').each(function(checkbox) {
+           // selected.push(checkbox);
+            var id = $(this).val();
+            checkedLines.push({
+                'autoId': id,
+                'qty': $(this).closest('tr').find('.qty').val(),
+                'strSalesOrderId': $(this).closest('tr').find('.strSalesOrderId').val()
+            });
+
+        });
+        $('[name="checkAutos"]:not(:checked)').each(function(checkbox) {
+           // selected.push(checkbox);
+            var id = $(this).val();
+            notCheckedLines.push({
+                'autoId': id,
+                'qty': $(this).closest('tr').find('.qty').val(),
+                'strSalesOrderId': $(this).closest('tr').find('.strSalesOrderId').val()
+            });
+        });
+  console.debug(checkedLines);
+  console.debug(notCheckedLines);
+
+        $.ajax({
+            url: '{!!url("/postMyMarketOrders")!!}',
+            type: "POST",
+            data: {
+
+                checkedLines: checkedLines,
+                notCheckedLines: notCheckedLines
+            },
+            success: function (data) {
+                console.debug(data);
+                // upDateOrderHeaderAndPOS();
+            }
+        });
+
+    });
     function show_hide_row(row)
     {
         $("."+row).toggle();

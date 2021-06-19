@@ -6,7 +6,7 @@ use App\Http\Controllers\ArtificialCrud;
 use App\Http\Controllers\RecentRegistered;
 use App\Http\Controllers\DimsCommon;
 use App\Http\Controllers\SalesFormFunctions;
-use App\Http\Controllers\ApisContoller;
+use App\Http\Controllers\ApisController;
 use App\Http\Controllers\OnlineOrders;
 use App\Http\Controllers\ConsoleManagement;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +58,7 @@ Route::resource('shop', 'HomeController', ['only' => ['show']]);
 Route::resource('cart', 'CartController');
 
 Route::get('custCode',[SalesFormFunctions::class, 'CustomerCode']);
+Route::post('checkZeroCostOnOrder',[SalesFormFunctions::class, 'checkZeroCostOnOrder']);
 Route::get('getExportForm', [DimsExportController::class,'getExportForm']);
 Route::get('getDimsUsers', [UserFeature::class,'getDimsUsers']);
 
@@ -170,6 +171,8 @@ Route::post('changerouteonorder',[DimsCommon::class,'changerouteonorder']);
 Route::post('masscustomerspecialupgrade',[DimsCommon::class,'masscustomerspecialupgrade']);
 Route::post('verifyAuthOnAdmin', [DimsCommon::class,'verifyAuthOnAdmin']);
 Route::post('verifyAuthCreditors',[DimsCommon::class,'verifyAuthCreditors']);
+Route::post('AuthBulkZeroCost',[DimsCommon::class,'AuthBulkZeroCost']);
+Route::post('updateallOrderlinestocostauth',[DimsCommon::class,'updateallOrderlinestocostauth']);
 Route::post('AuthExternaOrders', [DimsCommon::class,'AuthExternaOrders']);
 Route::post('verifyAuthOnAdminMargin', [DimsCommon::class,'verifyAuthOnAdminMargin']);
 Route::post('verifyAuthGroupLeaders', [DimsCommon::class,'verifyAuthGroupLeaders']);
@@ -784,6 +787,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('saveinfocardwalking', [LayaltyProgramController::class,'saveinfocardWalking']);
     Route::get('verifyemail', [LayaltyProgramController::class,'verifyemail']);
     Route::get('checkifIdexists',[LayaltyProgramController::class,'checkifIdexists'] );
+
+
+
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!
@@ -806,5 +812,6 @@ Route::get('/xero/getItems', [\App\Http\Controllers\XeroController::class, 'getI
 
 /**********HANDCRAFTED APIs*************************************************************************************************************/
 
-Route::get('getOrderTypes',[ApisContoller::class,'getOrderTypes'] );
-Route::get('getRoutes',[ApisContoller::class,'getRoutes'] );
+Route::get('getOrderTypes',[ApisController::class,'getOrderTypes'] );
+Route::get('getRoutes',[ApisController::class,'getRoutes'] );
+Route::get('sendfcm',[ApisController::class,'sendFCMMessage'] );

@@ -7,6 +7,7 @@
  */
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\SalesForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use \Cache;
@@ -251,6 +252,33 @@ class DimsCommon extends Controller
         $output['result'] = $activeUser;
         return response()->json($output);
     }
+    public function AuthBulkZeroCost(Request $request)
+    {
+        $userNameId = $request->get('userName');
+        $userPassword = $request->get('userPassword');
+        $OrderId= $request->get('OrderId');
+
+        $v  =  new \App\Http\Controllers\SalesForm();
+
+        $activeUser= DB::connection('sqlsrv3')->table('tblDIMSUSERS')->select('GroupId','UserID', 'UserName','Password')
+            ->where('UserName',$userNameId)->where('Password',$userPassword)->get();
+        $hasAccess = "Sorry ,you don't have access to authorize accounts";
+    //    dd($activeUser);
+        if(count($activeUser) > 0)
+        {
+            $things = $v->getThings($activeUser[0]->GroupId,'Auth Zero Cost');
+            if($things != "0")
+            {
+                DB::connection('sqlsrv3')->table('tblOrderDetails')
+                    ->where('OrderId', $OrderId)
+                    ->update(['blnCostAuth' =>1]);
+                $hasAccess = "DONE";
+            }
+        }
+        $output['done'] = $hasAccess;
+        $output['result'] = $activeUser;
+        return response()->json($output);
+    }
     public function AuthExternaOrders(Request $request)
     {
         $userName = $request->get('userName');
@@ -332,9 +360,7 @@ class DimsCommon extends Controller
                 ['intOrderID' => $orderID, 'intUserId' => $userId]
             );
         }
-        DB::connection('sqlsrv3')->table('tblOrderLocks')->insert(
-            ['OrderId' => $orderID, 'UserId' => $userId]
-        );
+
     }
     public function deleteuserOrderLocks()
     {
@@ -346,6 +372,14 @@ class DimsCommon extends Controller
         }
         DB::connection('sqlsrv3')->table('tblOrderLocks')->where('UserId', $userId)->delete();
     }
+    public function updateallOrderlinestocostauth(Request $request)
+    {
+        $OrderId = $request->get('orderId');
+        DB::connection('sqlsrv3')->table('tblOrderDetails')
+            ->where('OrderId', $OrderId)
+            ->update(['blnCostAuth' =>1]);
+    }
+
     public function restFullOrderLock(Request $request)
     {
         $orderID = $request->get('orderID');
@@ -575,8 +609,8 @@ class DimsCommon extends Controller
     public function masscustomerdatatable(Request $request){
         $userid =Auth::user()->UserID;
         $massCustomer = DB::connection('sqlsrv3')
-            ->select("SELECT * FROM viewtblCustomers inner join tblAccessOnCustomers on 
-                        tblAccessOnCustomers.intGroupId = viewtblCustomers.GroupId 
+            ->select("SELECT * FROM viewtblCustomers inner join tblAccessOnCustomers on
+                        tblAccessOnCustomers.intGroupId = viewtblCustomers.GroupId
                         left outer join tblCustomerCategories on CCCode = CustomerCategory
                          where intUserId = $userid and StatusId = 1 Order by StoreName");
         $output['recordsTotal'] = count($massCustomer);
@@ -1347,7 +1381,7 @@ class DimsCommon extends Controller
             ->where('CustomerSpecial',$specialIdUpdate )
             ->update(['Date' => $specialFrom,'DateTo' => $specialTo,'Price' => $specialPrice,'GP'=>$specialGp,'CostPrice'=>$specialCost,
                 'ProductId'=>$productId[0]->ProductId]);
-        
+
 
         return  response()->json(1);
     }
@@ -1470,6 +1504,9 @@ class DimsCommon extends Controller
         $RouteID= $request->get('routeId');
         $userAuth = Auth::user()->UserName;
         $userAuthID = Auth::user()->UserID;
+
+        $GroupId = Auth::user()->GroupId;
+       // $things = (new SalesForm())->getThings($GroupId,'Allow Call Logger');
 
         $OurderRoute = DB::connection('sqlsrv3')->table('tblOrders')->select('RouteId')->where('OrderId',$OrderID)->get();
         $currentRoute = $this->returnRouteName($OurderRoute[0]->RouteId);
