@@ -10,6 +10,7 @@ use App\Http\Controllers\ApisContoller;
 use App\Http\Controllers\OnlineOrders;
 use App\Http\Controllers\ConsoleManagement;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\UserFeature;
 
 /*
 |--------------------------------------------------------------------------
