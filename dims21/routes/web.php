@@ -11,6 +11,7 @@ use App\Http\Controllers\OnlineOrders;
 use App\Http\Controllers\ConsoleManagement;
 use App\Http\Controllers\LoadingAppAPIs;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\UserFeature;
 
 /*
 |--------------------------------------------------------------------------
