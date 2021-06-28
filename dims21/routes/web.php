@@ -18,6 +18,7 @@ use App\Http\Controllers\DimsReports;
 use App\Http\Controllers\BackOrderController;
 use App\Http\Controllers\OnlineOrdersReconController;
 use App\Http\Controllers\ControlPanelController;
+use App\Http\Controllers\ExternalFunctions;
 use Illuminate\Support\Facades\Route;
 
 
