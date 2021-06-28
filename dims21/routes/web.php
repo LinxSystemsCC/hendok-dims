@@ -12,6 +12,7 @@ use App\Http\Controllers\ConsoleManagement;
 use App\Http\Controllers\LoadingAppAPIs;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserFeature;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DimsReports;
 use Illuminate\Support\Facades\Route;
 
