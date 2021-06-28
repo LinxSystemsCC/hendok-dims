@@ -587,6 +587,8 @@
                     $drivers = $v->getThings(Auth::user()->GroupId,'Cpanel Drivers');
                     $trucks = $v->getThings(Auth::user()->GroupId,'Cpanel Trucks');
                     $ordertypes = $v->getThings(Auth::user()->GroupId,'Cpanel OrderTypes');
+                    $loyalty = $v->getThings(Auth::user()->GroupId,'Loyalty Cards');
+                    $pospanel = $v->getThings(Auth::user()->GroupId,'POS Panel');
                    // $console = $v->getThings(Auth::user()->GroupId,'Extras DIMS Management Console');
 
                     }
@@ -849,7 +851,7 @@
                                     <a href='{!!url("/missedvisit")!!}'  onclick="window.open(this.href, 'briefcase',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Salesman Briefcase</a>
                                 </li>
-
+                                    @if($loyalty !=0)
                                 <li>
                                     <a href='{!!url("/registercards")!!}'  onclick="window.open(this.href, 'registercards',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Business Loyalty Cards</a>
@@ -858,11 +860,13 @@
                                     <a href='{!!url("/registercardswalking")!!}'  onclick="window.open(this.href, 'registercardswalking',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Personal Loyalty Cards</a>
                                 </li>
-
+                                    @endif
+@if($pospanel !=0)
                                 <li>
                                     <a href='{!!url("/viewassignuserstotill")!!}/{{(new \DateTime())->format('Y-m-d')}}'  onclick="window.open(this.href, 'viewassignuserstotill',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;"> POS Panel</a>
                                 </li>
+                                    @endif
 
                                 @if($messaging !=0)
                                 <li>
