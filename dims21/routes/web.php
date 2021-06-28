@@ -731,22 +731,22 @@ Route::get('viewRefunds', [OnlineOrdersReconController::class,'viewRefunds']);
 
 /******************************************BACK ORDERS**********************************************************************************/
 //BACK ORDERCONTROLLER CONTROLLER STARTS HERE
-Route::get('remoteordersbackorders', [OnlineOrdersReconController::class,'remoteordersbackorders']);
-Route::post('testAPIbackorders',[OnlineOrdersReconController::class,'testAPIbackorders'] );
-Route::post('deleteRemoteOrderbackorders',[OnlineOrdersReconController::class,'deleteRemoteOrderbackorders'] );
-Route::post('updateOnlineLinesAndHeadersbackorder', [OnlineOrdersReconController::class,'updateOnlineLinesAndHeadersbackorder']);
-Route::get('outstandingordersbackorder', [OnlineOrdersReconController::class,'outstandingordersbackorder']);
-Route::get('onlineOrderHistorybackorder/{date1}/{date2}',[OnlineOrdersReconController::class,'onlineOrderHistorybackorder'] );
-Route::get('getFreshOrderHeadersOutstandingbackorder',[OnlineOrdersReconController::class,'getFreshOrderHeadersOutstandingbackorder'] );
-Route::post('Xmlcommitremoteorderbackorder',[OnlineOrdersReconController::class,'Xmlcommitremoteorderbackorder'] );
-Route::get('getFreshOrderHeadersbackorder',[OnlineOrdersReconController::class,'getFreshOrderHeadersbackorder'] );
-Route::get('getNoStockItem',[OnlineOrdersReconController::class,'getNoStockItem']);
+Route::get('remoteordersbackorders', [BackOrderController::class,'remoteordersbackorders']);
+Route::post('testAPIbackorders',[BackOrderController::class,'testAPIbackorders'] );
+Route::post('deleteRemoteOrderbackorders',[BackOrderController::class,'deleteRemoteOrderbackorders'] );
+Route::post('updateOnlineLinesAndHeadersbackorder', [BackOrderController::class,'updateOnlineLinesAndHeadersbackorder']);
+Route::get('outstandingordersbackorder', [BackOrderController::class,'outstandingordersbackorder']);
+Route::get('onlineOrderHistorybackorder/{date1}/{date2}',[BackOrderController::class,'onlineOrderHistorybackorder'] );
+Route::get('getFreshOrderHeadersOutstandingbackorder',[BackOrderController::class,'getFreshOrderHeadersOutstandingbackorder'] );
+Route::post('Xmlcommitremoteorderbackorder',[BackOrderController::class,'Xmlcommitremoteorderbackorder'] );
+Route::get('getFreshOrderHeadersbackorder',[BackOrderController::class,'getFreshOrderHeadersbackorder'] );
+Route::get('getNoStockItem',[BackOrderController::class,'getNoStockItem']);
 Route::get('getItemWithNoStock',[BackOrderController::class,'getItemWithNoStock'] );
-Route::get('getOrderLinesbackorder/{id}',[OnlineOrdersReconController::class,'getOrderLinesbackorder'] );
-Route::get('getNewDealToAuthbackorder/{id}',[OnlineOrdersReconController::class,'getNewDealToAuthbackorder'] );
-Route::post('postauthdealbackorder', [OnlineOrdersReconController::class,'postauthdealbackorder']);
-Route::get('productsonbackorderjson',[OnlineOrdersReconController::class,'productsonbackorderjson'] );
-Route::get('productsOnBackOrders',[OnlineOrdersReconController::class,'productsOnBackOrders'] );
+Route::get('getOrderLinesbackorder/{id}',[BackOrderController::class,'getOrderLinesbackorder'] );
+Route::get('getNewDealToAuthbackorder/{id}',[BackOrderController::class,'getNewDealToAuthbackorder'] );
+Route::post('postauthdealbackorder', [BackOrderController::class,'postauthdealbackorder']);
+Route::get('productsonbackorderjson',[BackOrderController::class,'productsonbackorderjson'] );
+Route::get('productsOnBackOrders',[BackOrderController::class,'productsOnBackOrders'] );
 //BACK ORDERCONTROLLER CONTROLLER ENDS HERE
 /********************************************************END **************************************************************************/
 
