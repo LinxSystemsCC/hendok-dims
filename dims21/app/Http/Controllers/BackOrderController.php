@@ -10,7 +10,9 @@ class BackOrderController extends Controller
 {
     public function remoteordersbackorders()
     {
-        return view('dims/remote_orders_backorders');
+        $usernames = DB::connection('sqlsrv3')
+            ->select("Select UserName from tblDimsusers");
+        return view('dims/remote_orders_backorders')->with('users',$usernames);
     }
     public function getFreshOrderHeadersbackorder(Request $request)
     {
@@ -130,7 +132,7 @@ class BackOrderController extends Controller
         $returnmet = DB::connection('linxbriefcaseBackOrders')->table('OrderHeaders')->where('ID', $ID)->update(['DimsOrderID' =>  -9999 ,'ExportedToDims'=>1]);
 
         $getHeader = DB::connection('linxbriefcaseBackOrders')
-            ->select("Select RepEmail,DIMSUser,DeliveryDate,CustomerCode from OrderHeaders 
+            ->select("Select RepEmail,DIMSUser,DeliveryDate,CustomerCode from OrderHeaders
                         left outer join Users on Users.UserName = OrderHeaders.UserName
                         where ID='".$ID."'");
 

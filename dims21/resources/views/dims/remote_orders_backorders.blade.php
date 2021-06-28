@@ -75,6 +75,9 @@ if ((Auth::guest()))
 <select id="userviewingbackorders">
     <option value="{{Auth::user()->UserName}}">{{Auth::user()->UserName}}</option>
     <option value="-99">ALL</option>
+    @foreach($users as $values)
+        <option value="{{$values->UserName}}">{{$values->UserName}}</option>
+        @endforeach
 </select>
 <?php
 }
