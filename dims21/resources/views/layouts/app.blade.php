@@ -589,6 +589,9 @@
                     $ordertypes = $v->getThings(Auth::user()->GroupId,'Cpanel OrderTypes');
                     $loyalty = $v->getThings(Auth::user()->GroupId,'Loyalty Cards');
                     $pospanel = $v->getThings(Auth::user()->GroupId,'POS Panel');
+                    $remoteorders = $v->getThings(Auth::user()->GroupId,'Remote Orders');
+                     $briefcase = $v->getThings(Auth::user()->GroupId,'Briefcase');
+                     $webstoremassage= $v->getThings(Auth::user()->GroupId,'Webstore Messages');
                    // $console = $v->getThings(Auth::user()->GroupId,'Extras DIMS Management Console');
 
                     }
@@ -843,14 +846,18 @@
                                     <a href='{!!url("/webstore")!!}'  onclick="window.open(this.href, 'webstore',
 'left=20,top=20,width=900,height=900,toolbar=1,resizable=0'); return false;">Web Store</a>
                                 </li>
+                                    @if($remoteorders !=0)
                                 <li>
                                     <a href='{!!url("/remoteorders")!!}'  onclick="window.open(this.href, 'webstore',
 'left=20,top=20,width=900,height=900,toolbar=1,resizable=0'); return false;">Remote Orders</a>
                                 </li>
+                                    @endif
+                                    @if($briefcase !=0)
                                 <li>
                                     <a href='{!!url("/missedvisit")!!}'  onclick="window.open(this.href, 'briefcase',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Salesman Briefcase</a>
                                 </li>
+                                    @endif
                                     @if($loyalty !=0)
                                 <li>
                                     <a href='{!!url("/registercards")!!}'  onclick="window.open(this.href, 'registercards',
@@ -874,10 +881,12 @@
 'left=20,top=20,width=500,height=400,toolbar=1,resizable=0'); return false;">Download Messaging App</a>
                                 </li>
                                 @endif
+                                    @if($webstoremassage !=0)
                                     <li>
                                         <a href='{!!url("/WebstoreMessages")!!}' onclick="window.open(this.href, 'WebstoreMessages',
 'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Webstore Messages</a>
                                     </li>
+                                    @endif
                                     <li>
                                         <a href='{!!url("/PathEditor")!!}' onclick="window.open(this.href, 'PathEditor',
 'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Edit Printer Paths</a>
