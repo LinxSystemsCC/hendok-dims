@@ -12,6 +12,7 @@ use App\Http\Controllers\ConsoleManagement;
 use App\Http\Controllers\LoadingAppAPIs;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
+use Illuminate\Support\Facades\ProductsController;
 
 /*
 |--------------------------------------------------------------------------
