@@ -796,8 +796,8 @@
                                 </li>
                                     @endif
                                 <li>
-                                    <a href='{!!url("/pickingLiveGrid")!!}'  onclick="window.open(this.href, 'pickingLiveGrid',
-'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Picking/Loading Performance</a>
+                                    <a href='{!!url("/liveBulkPicking")!!}'  onclick="window.open(this.href, 'liveBulkPicking',
+'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Picking Screen</a>
                                 </li>
                                 @if($salesperformance !="0")
                                 <li>
