@@ -5,6 +5,7 @@ use App\Http\Controllers\TabletLoadingApp;
 use App\Http\Controllers\ArtificialCrud;
 use App\Http\Controllers\RecentRegistered;
 use App\Http\Controllers\DimsCommon;
+use App\Http\Controllers\DriversController;
 use App\Http\Controllers\SalesFormFunctions;
 use App\Http\Controllers\ApisController;
 use App\Http\Controllers\OnlineOrders;
