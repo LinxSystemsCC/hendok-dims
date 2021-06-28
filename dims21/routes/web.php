@@ -741,7 +741,7 @@ Route::get('getFreshOrderHeadersOutstandingbackorder',[OnlineOrdersReconControll
 Route::post('Xmlcommitremoteorderbackorder',[OnlineOrdersReconController::class,'Xmlcommitremoteorderbackorder'] );
 Route::get('getFreshOrderHeadersbackorder',[OnlineOrdersReconController::class,'getFreshOrderHeadersbackorder'] );
 Route::get('getNoStockItem',[OnlineOrdersReconController::class,'getNoStockItem']);
-Route::get('getItemWithNoStock',[OnlineOrdersReconController::class,'getItemWithNoStock'] );
+Route::get('getItemWithNoStock',[BackOrderController::class,'getItemWithNoStock'] );
 Route::get('getOrderLinesbackorder/{id}',[OnlineOrdersReconController::class,'getOrderLinesbackorder'] );
 Route::get('getNewDealToAuthbackorder/{id}',[OnlineOrdersReconController::class,'getNewDealToAuthbackorder'] );
 Route::post('postauthdealbackorder', [OnlineOrdersReconController::class,'postauthdealbackorder']);
