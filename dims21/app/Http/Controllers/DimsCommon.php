@@ -208,6 +208,40 @@ class DimsCommon extends Controller
             ->where('UserName','LIKE',"%{$userNameId}%")->where('Password',$userPassword)->get();
 
         return response()->json($activeUser);
+    }public function customerflexgrid(){
+        $queryCustomers =DB::connection('LOCAL')->table("viewCustomerGrid" )->select('*')->distinct()->get();
+        $queryRoutes=DB::connection('LOCAL')->table("tblRoutes")->select('Route','RouteId')->distinct()->get();
+        $queryGroups=DB::connection('LOCAL')->table("tblGroups")->select('GroupId','GroupName')->distinct()->get();
+        $querySalesMen=DB::connection('LOCAL')->table("tblDIMSUSERS")->select('UserName', 'strSalesmanCode')->distinct()->get();
+                return view('dims/customergridwithflex')->with('routes',$queryCustomers)->with('routesonly', $queryRoutes)
+                ->with('groups',$queryGroups)->with('salesmen',$querySalesMen);
+    }
+    
+    public function updateCustomerGrid(Request $request){
+
+        $Userid = Auth::user()->UserID;
+        $User= Auth::user()->UserName;
+        $customerid = $request->get('customerid');
+        $route = $request->get('route');
+        $email= $request->get('email');
+        $contactperson = $request->get('contactperson');
+        $contactno  = $request->get('contactno');
+        $groupname = $request->get('groupname');
+        $salesrep = $request->get('salesrep');
+        $deliveryseq = $request->get('deliveryseq');
+        $receivesemail = $request->get('receivesemail');
+        $uniquedel = $request->get('uniquedel');
+        $priocust = $request->get('priocust');
+        $onhold = $request->get('onhold');
+        $markupperc = $request->get('markupperc');
+
+
+
+        DB::connection('LOCAL')
+        ->statement('exec spUpdateCustomerGrid ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+        array($Userid,$User,$customerid,$route,$email,$contactperson,$contactno
+    ,$groupname,$salesrep,$deliveryseq,$receivesemail,$uniquedel,$priocust,$onhold,$markupperc));
+
     }
     public function verifyAuthOnAdmin(Request $request)
     {
