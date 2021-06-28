@@ -621,7 +621,7 @@
                                 </li>
 
                                 <li>
-                                    <a href='{!!url("/massCustomer")!!}' onclick="window.open(this.href, 'massc',
+                                    <a href='{!!url("/customerflexgrid")!!}' onclick="window.open(this.href, 'customerflexgrid',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Customers</a>
                                 </li>
                                 <li>
