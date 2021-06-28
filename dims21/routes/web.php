@@ -10,9 +10,11 @@ use App\Http\Controllers\ApisController;
 use App\Http\Controllers\OnlineOrders;
 use App\Http\Controllers\ConsoleManagement;
 use App\Http\Controllers\LoadingAppAPIs;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\UserFeature;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\UserFeature;
-use Illuminate\Support\Facades\ProductsController;
+
+
 
 /*
 |--------------------------------------------------------------------------
