@@ -209,10 +209,10 @@ class DimsCommon extends Controller
 
         return response()->json($activeUser);
     }public function customerflexgrid(){
-        $queryCustomers =DB::connection('LOCAL')->table("viewCustomerGrid" )->select('*')->distinct()->get();
-        $queryRoutes=DB::connection('LOCAL')->table("tblRoutes")->select('Route','RouteId')->distinct()->get();
-        $queryGroups=DB::connection('LOCAL')->table("tblGroups")->select('GroupId','GroupName')->distinct()->get();
-        $querySalesMen=DB::connection('LOCAL')->table("tblDIMSUSERS")->select('UserName', 'strSalesmanCode')->distinct()->get();
+        $queryCustomers =DB::connection('sqlsrv3')->table("viewCustomerGrid" )->select('*')->distinct()->get();
+        $queryRoutes=DB::connection('sqlsrv3')->table("tblRoutes")->select('Route','RouteId')->distinct()->get();
+        $queryGroups=DB::connection('sqlsrv3')->table("tblGroups")->select('GroupId','GroupName')->distinct()->get();
+        $querySalesMen=DB::connection('sqlsrv3')->table("tblDIMSUSERS")->select('UserName', 'strSalesmanCode')->distinct()->get();
                 return view('dims/customergridwithflex')->with('routes',$queryCustomers)->with('routesonly', $queryRoutes)
                 ->with('groups',$queryGroups)->with('salesmen',$querySalesMen);
     }
@@ -237,7 +237,7 @@ class DimsCommon extends Controller
 
 
 
-        DB::connection('LOCAL')
+        DB::connection('sqlsrv3')
         ->statement('exec spUpdateCustomerGrid ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
         array($Userid,$User,$customerid,$route,$email,$contactperson,$contactno
     ,$groupname,$salesrep,$deliveryseq,$receivesemail,$uniquedel,$priocust,$onhold,$markupperc));
