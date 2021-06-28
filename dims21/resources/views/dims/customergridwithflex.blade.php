@@ -220,7 +220,17 @@
                     markupperc:$('#MarkupPercentage').val()
                     },
                     success: function(data){
-                      
+                        var dialog = $('<p>Data Saved.</p>').dialog({
+                                    height: 200, width: 700, modal: true, containment: false,
+                                    buttons: {
+                                        "OKAY": function () {
+
+                                            dialog.dialog('close');
+                                            location.reload(true);
+
+                                        }
+                                    }
+                                });
                     }
                 });
            
