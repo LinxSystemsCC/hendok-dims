@@ -825,7 +825,7 @@
                                     <a href='{!!url("/groups")!!}'  onclick="window.open(this.href, 'groups',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Groups</a>
                                 </li>
-                                <li>
+                                <li style="display: none;">
                                     <a href='{!!url("/taxes")!!}'  onclick="window.open(this.href, 'taxes',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Taxes</a>
                                 </li>
