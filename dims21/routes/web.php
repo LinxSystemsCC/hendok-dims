@@ -78,7 +78,7 @@ Route::get('getCartsGrid', [DimsCommon::class,'getCartsGrid']);
 Route::get('getPointGrid', [DimsCommon::class,'getPointGrid']);
 Route::post('increasePoints',[DimsCommon::class,'increasePoints'] );
 Route::post('updatecustomerwebstoreinfo',[DimsCommon::class,'updatecustomerwebstoreinfo'] );
-Route::get('viewStatusReport', [DimsCommon::class,'viewStatusRepoRoute'] );
+Route::get('viewStatusReport', [DimsCommon::class,'viewStatusReport'] );
 Route::get('getConsolidatedStatsReport', [DimsCommon::class,'getConsolidatedStatsReport']);
 Route::get('massCustomer', [DimsCommon::class,'massCustomer']);
 Route::get('massProducts', [DimsCommon::class,'massProducts']);
