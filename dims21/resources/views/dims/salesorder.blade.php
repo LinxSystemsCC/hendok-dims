@@ -6392,6 +6392,7 @@
                             else
                             {
                                 //theOrdersDetailsId
+                                $('#prodPrice_' + token_number).val('0');
                                 if($('#marginandpriceauthbycustomer').val().length >1) {
                                     $('#prodPrice_' + token_number).val('0');
                                     $('#ZeroPrice').show();
