@@ -6301,8 +6301,10 @@
                     },
                     success: function (data) {
 
+
                         if(data.length > 0)
                         {
+                            console.debug("Price Here"+data[0].Price);
                             if (parseFloat(data[0].Price).toFixed(2) > 0 ) {
 
                                 if ($('#prodQty_' + token_number).val() == '0') {
