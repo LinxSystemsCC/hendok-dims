@@ -49,6 +49,8 @@ class SalesFormFunctions extends Controller
         $customerRouteCheck =DB::connection('sqlsrv3')->table("viewtblCustomers")->select('Routeid')
             ->where('CustomerPastelCode',$inputCustAcc)
             ->take(1)->get();
+
+        dd($customerRouteCheck);
         $count = array();
         if (count($islosed) < 1){
 
