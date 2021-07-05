@@ -19,6 +19,7 @@ use App\Http\Controllers\BackOrderController;
 use App\Http\Controllers\OnlineOrdersReconController;
 use App\Http\Controllers\ControlPanelController;
 use App\Http\Controllers\ExternalFunctions;
+use App\Http\Controllers\JasperReports;
 use Illuminate\Support\Facades\Route;
 
 
