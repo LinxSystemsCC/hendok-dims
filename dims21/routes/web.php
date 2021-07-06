@@ -342,7 +342,7 @@ Route::get('designPickingInformationPerTeam/{del}/{route}/{ordertype}', [TabletL
 Route::get('truckControlSheetDetails', [TabletLoadingApp::class,'truckControlSheetDetails']);
 Route::post('stopsUnmapped', [TabletLoadingApp::class,'stopsUnmapped']);
 Route::post('getRouteDataMultiSelected', [TabletLoadingApp::class,'getRouteDataMultiSelected']);
-Route::get('routeplanner',[TabletLoadingApp::class,'routeplanner']);
+
 Route::get('routePlannerExt', [TabletLoadingApp::class,'routePlannerExt']);
 Route::get('invoicesnotprinting', [TabletLoadingApp::class,'invoicesnotprinting']);
 Route::post('notifypickers',[TabletLoadingApp::class,'notifypickers']);
@@ -802,6 +802,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('saveinfocardwalking', [LayaltyProgramController::class,'saveinfocardWalking']);
     Route::get('verifyemail', [LayaltyProgramController::class,'verifyemail']);
     Route::get('checkifIdexists',[LayaltyProgramController::class,'checkifIdexists'] );
+    Route::get('routeplanner',[TabletLoadingApp::class,'routeplanner']);
 
 
 

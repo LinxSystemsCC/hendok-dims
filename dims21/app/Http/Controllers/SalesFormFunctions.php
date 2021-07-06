@@ -50,7 +50,7 @@ class SalesFormFunctions extends Controller
             ->where('CustomerPastelCode',$inputCustAcc)
             ->take(1)->get();
 
-        dd($customerRouteCheck);
+        //dd($customerRouteCheck);
         $count = array();
         if (count($islosed) < 1){
 
