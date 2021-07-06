@@ -720,16 +720,15 @@ class TabletLoadingApp extends controller
     public function routePlannerSuggestions($deliveryDate,$OrderType,$routeId,$status)
     {
 
-
         $array = array();
         $getInvoicesOnRoute = DB::connection('sqlsrv3')
-            ->select("EXEC spGetStopsToSort '" . $deliveryDate . "','".$OrderType."'," . $routeId . ",'" . $status."'" );
+            ->select("EXEC spGetStopsToOptimize '" . $deliveryDate . "','".$OrderType."'," . $routeId . ",'" . $status."'" );
 
         foreach ($getInvoicesOnRoute as $val)
         {
-           // if(!in_array($val->, $array)){
+            // if(!in_array($val->, $array)){
             $array[]=$val->StoreName;
-           // }
+            // }
         }
 
 
@@ -1023,13 +1022,13 @@ function myFunction() {
 	<tr >
 	<td>'.$orderDate.'</td>
 	<td>Routing ID : '.$DeliveryDateRoutingID.'</td>
-	
+
 	</tr>
 	</table>';
 
         $html .=<<<EOD
 		<table width="100%" cellspacing="0"  border="1" style="font-size: 12pt;">
-		
+
 		<tr ><th width="5%">NO</th><th width="10%">Del Sequ</th><th width="30%">Customer</th><th>Invoice</th><th>Amount</th><th>Terms</th><th>Previous Balance</th><th>NOTES</th></tr>
 EOD;
 
@@ -1073,7 +1072,7 @@ EOD;
         $html .='<div>PLEASE SIGN FOR RECEIPT OF ENVOLOPES-STATEMENT</div>';
         $html .=<<<EOD
 <table border="1">
-  
+
   <tr style="1px solid black;">
     <td height="20">LOADER..........................</td>
     <td>DRIVER:..........................</td>
@@ -1089,13 +1088,13 @@ EOD;
     <td></td>
     <td>Oil:..........................</td>
   </tr>
- 
+
 </table>
 EOD;
 
         $html .='
 <table border="1";>
-  
+
   <tr>
     <td height="20">Truck Clean.................................................</td>
     <td height="20">Truck Lights.............................................</td>
@@ -1106,7 +1105,7 @@ EOD;
 	<td>Spanner Jack..........................................</td>
 	<td>Spare Tire..................................</td>
   </tr>
- 
+
 </table>';
 
         $reprint = $users[0]->Closed;
