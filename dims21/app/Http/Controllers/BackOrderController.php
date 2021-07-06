@@ -21,12 +21,12 @@ class BackOrderController extends Controller
        // echo  "---".$UserName;
         if($UserName !="-99")
         {
-            $orderheaders= DB::connection('linxbriefcaseBackOrders')
+            $orderheaders= DB::connection('sqlsrv3')
                 ->select("Select * from  viewFreshOrderHeaders where UserName='$UserName'  order by OrderDate,CustomerStoreName");
         }else{
 
 
-            $orderheaders= DB::connection('linxbriefcaseBackOrders')
+            $orderheaders= DB::connection('sqlsrv3')
                 ->select("Select * from  viewFreshOrderHeaders   order by OrderDate,CustomerStoreName");
         }
 
@@ -34,8 +34,8 @@ class BackOrderController extends Controller
     }
     public function getOrderLinesbackorder($ID)
     {
-        $orderlines= DB::connection('linxbriefcaseBackOrders')
-            ->select("Select * from  viewOrderLines where ID='$ID'  order by strDesc");
+        $orderlines= DB::connection('sqlsrv3')
+            ->select("Select * from  viewOrderLinesBackOrders where ID='$ID'  order by strDesc");
         return response()->json($orderlines);
     }
     public function Xmlcommitremoteorderbackorder(Request $request)
