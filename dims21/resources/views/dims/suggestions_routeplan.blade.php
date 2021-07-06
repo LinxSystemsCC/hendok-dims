@@ -4,6 +4,21 @@
     <title>Waypoints in Directions</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <style type="text/css">
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 4px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
         #right-panel {
             font-family: "Roboto", "sans-serif";
             line-height: 30px;
@@ -33,14 +48,14 @@
         #map {
             height: 100%;
             float: left;
-            width: 70%;
+            width: 50%;
             height: 100%;
         }
 
         #right-panel {
             margin: 20px;
             border-width: 2px;
-            width: 20%;
+            width: 40%;
             height: 400px;
             float: left;
             text-align: left;
@@ -57,8 +72,9 @@
     </style>
     <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
     <script>
+        var alphas = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
         var storenames= JSON.stringify({!! json_encode($storenames) !!});
-        console.debug();
+        console.debug(storenames);
         function initMap() {
             const directionsService = new google.maps.DirectionsService();
             const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -73,49 +89,34 @@
         }
 
         function calculateAndDisplayRoute(directionsService, directionsRenderer) {
-var finalDataProductTest = '';
-                <?php
-                $url = "http://102.37.0.48/myshop/dims2/TestStopSequence";
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 50);
-                curl_setopt($ch, CURLOPT_POST, 0);
+            var finalDataProductTest = '';
 
-                // converting
-                $response = curl_exec($ch);
-                $results = json_decode($response);
-
-                curl_close($ch);
-
-                ?>
             const waypts = [];
             const checkboxArray = document.getElementById("waypoints");
-            var jArray = JSON.stringify({!! json_encode($results) !!});
+            var jArray = JSON.stringify({!! json_encode($all) !!});
 
-           /* waypts.push({
-                location: new google.maps.LatLng(-34.0264,23.3812),
-                stopover: true,
-            });
-            waypts.push({
-                location: new google.maps.LatLng(-34.0505,23.358),
-                stopover: true,
-            });
-            waypts.push({
-                location: new google.maps.LatLng(-34.0102,23.3729),
-                stopover: true,
-            });
-            waypts.push({
-                location: new google.maps.LatLng(-34.0552,23.372),
-                stopover: true,
-            });
-  waypts.push({
-                location: new google.maps.LatLng(-34.0549,23.3719),
-                stopover: true,
-            });
-*/
+
+            /* waypts.push({
+                 location: new google.maps.LatLng(-34.0264,23.3812),
+                 stopover: true,
+             });
+             waypts.push({
+                 location: new google.maps.LatLng(-34.0505,23.358),
+                 stopover: true,
+             });
+             waypts.push({
+                 location: new google.maps.LatLng(-34.0102,23.3729),
+                 stopover: true,
+             });
+             waypts.push({
+                 location: new google.maps.LatLng(-34.0552,23.372),
+                 stopover: true,
+             });
+   waypts.push({
+                 location: new google.maps.LatLng(-34.0549,23.3719),
+                 stopover: true,
+             });
+ */
             finalDataProductTest = $.map(JSON.parse(jArray), function (item) {
                 return {
                     fltLatitude: item.fltLatitude,
@@ -125,30 +126,30 @@ var finalDataProductTest = '';
             });
             console.debug(finalDataProductTest);
             //console.debug(waypts);
-           for (let i = 0; i < finalDataProductTest.length; i++) {
+            for (let i = 0; i < finalDataProductTest.length; i++) {
                 console.debug( finalDataProductTest[i].fltLatitude);
                 console.debug( finalDataProductTest[i].fltLongitude);
-               // if (checkboxArray.options[i].selected) {
-                    waypts.push({
-                        location: new google.maps.LatLng(parseFloat(finalDataProductTest[i].fltLatitude),  parseFloat(finalDataProductTest[i].fltLongitude) ),
-                        stopover: true,
-                    });
-               // }
+                // if (checkboxArray.options[i].selected) {
+                waypts.push({
+                    location: new google.maps.LatLng(parseFloat(finalDataProductTest[i].fltLatitude),  parseFloat(finalDataProductTest[i].fltLongitude) ),
+                    stopover: true,
+                });
+                // }
             }
-         /*  for (let i = 0; i < checkboxArray.length; i++) {
-                console.debug( checkboxArray[i].value);
-                if (checkboxArray.options[i].selected) {
-                    waypts.push({
-                        location: new google.maps.LatLng(parseFloat(checkboxArray[i].value) ),
-                        stopover: true,
-                    });
-                }
-            }*/
-         var f = (finalDataProductTest.length)-1;
-           console.debug("Lat Point"+f);
+            /*  for (let i = 0; i < checkboxArray.length; i++) {
+                   console.debug( checkboxArray[i].value);
+                   if (checkboxArray.options[i].selected) {
+                       waypts.push({
+                           location: new google.maps.LatLng(parseFloat(checkboxArray[i].value) ),
+                           stopover: true,
+                       });
+                   }
+               }*/
+            var f = (finalDataProductTest.length)-1;
+            console.debug("Lat Point"+f);
             const selectedOpt =$('#routeoptimize').val();
             var blnisopt = false;
-           // alert(selectedOpt);
+            // alert(selectedOpt);
             if(selectedOpt =="yes")
             {
                 //alert(selectedOpt);
@@ -156,12 +157,12 @@ var finalDataProductTest = '';
             }
             directionsService.route(
                 {
-                    origin: new google.maps.LatLng(parseFloat(finalDataProductTest[0].fltLatitude),  parseFloat(finalDataProductTest[0].fltLongitude) ),
+                    origin: new google.maps.LatLng( -33.97171674170202, 22.473354613266814 ),
                     //origin: new google.maps.LatLng(document.getElementById("start").value),
                     destination: new google.maps.LatLng(parseFloat(finalDataProductTest[f].fltLatitude),  parseFloat(finalDataProductTest[f].fltLongitude) ),
                     //destination: new google.maps.LatLng(document.getElementById("end").value),
                     waypoints: waypts,
-                   optimizeWaypoints: blnisopt,
+                    optimizeWaypoints: blnisopt,
                     travelMode: google.maps.TravelMode.DRIVING,
                 },
                 (response, status) => {
@@ -183,6 +184,19 @@ var finalDataProductTest = '';
                             summaryPanel.innerHTML +=
                                 route.legs[i].distance.text + "<br><br>";
                         }
+
+                        //Restructuring  //alphas
+                        var trHTML ='';
+                        $('#optimized tbody').empty();
+                        for (k = 0; k<response.routes[0].waypoint_order.length;k++)
+                        {
+                            trHTML += '<tr role="row" style="height: 26px !important;"  ><td>' +
+                                alphas[k+1] + '</td><td>' +
+                                JSON.parse(storenames)[response.routes[0].waypoint_order[k]] + '</td></tr>';
+                            //console.debug(JSON.parse(storenames)[response.routes[0].waypoint_order[k]]);
+                        }
+                        $('#optimized tbody').append(trHTML);
+
                     } else {
                         window.alert("Directions request failed due to " + status);
                     }
@@ -197,56 +211,77 @@ var finalDataProductTest = '';
 
 <div id="map"></div>
 <div id="right-panel">
-    <div>
-        <table  id = "tableRoutePlan">
-            <thead>
-            <tr>
-                <th style="font-size: 10px;">Delv date</th>
-                <th style="font-size: 10px;">Route</th>
-                <th class="col-md-4" id="facility_header"  style="font-size: 10px;">Customer</th>
-                <th style="font-size: 10px;">InvNO</th>
-                <th style="font-size: 10px;">OrderID</th>
-                <th style="font-size: 10px;">Delivery Type</th>
+    <div style="display:flex;">
+        <div>
+            <select id="routeoptimize">
+                <option value="no">Use My Route Planner Sequence</option>
+                <option value="yes">Auto Optimize</option>
+            </select>
+            <input type="submit" id="submit" />
+            <table  id = "tableRoutePlan">
+                <thead>
+                <tr>
 
-                <th style="font-size: 10px;">Seq</th>
-                <th style="font-size: 10px;color:blue;">Mass</th>
-                <th style="font-size: 10px;color:red;">OrderValue</th>
-                <th style="font-size: 10px;color:blue;">Address</th>
+                    <th class="col-md-4" id="facility_header"  style="font-size: 10px;">Customer</th>
 
-            </tr>
-            </thead>
+                    <th style="font-size: 10px;">OrderIDs</th>
 
-            <tbody>
-            @foreach($all as $value)
-                <tr style = "font-size:11px;">
-                    <td>{{$value->DeliveryDate}}</td>
-                    <td>{{$value->Route}}</td>
-                    <td>{{$value->StoreName}}</td>
-                    <td>{{$value->InvoiceNo}}</td>
-                    <td>{{$value->OrderId}}</td>
-                    <td>{{$value->OrderType}}</td>
-                    <td>{{$value->DeliverySequence}}</td>
-                    <td>{{round($value->Mass,3)}}</td>
-                    <td>{{round($value->OrderValue,2)}}</td>
-                    <td>{{$value->deliveryAddress1}}</td>
+
+                    <th style="font-size: 10px;">Seq</th>
+                    <th style="font-size: 10px;color:blue;">Mass</th>
+                    <th style="font-size: 10px;color:red;">OrderValue</th>
+                    <th style="font-size: 10px;color:blue;">Address</th>
+
                 </tr>
-            @endforeach
+                </thead>
 
-            </tbody>
-        </table>
-        <select id="routeoptimize">
-            <option value="no">Use My Route Planner Sequence</option>
-            <option value="yes">Auto Optimize</option>
-        </select>
-        <input type="submit" id="submit" />
+                <tbody>
+                @foreach($all as $value)
+                    <tr style = "font-size:11px;">
+
+                        <td>{{$value->StoreName}}</td>
+
+                        <td>{{$value->OrderId}}</td>
+
+                        <td>{{$value->DeliverySequence}}</td>
+                        <td>{{round($value->Mass,3)}}</td>
+                        <td>{{round($value->OrderValue,2)}}</td>
+                        <td>{{$value->deliveryAddress1}}</td>
+                    </tr>
+                @endforeach
+
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h4>Route Optimization Suggestions</h4>
+            <hr style="border:2px solid black;">
+            <table  id = "optimized">
+                <thead>
+                <tr>
+
+                    <th>Letter</th>
+                    <th class="col-md-4"  style="font-size: 10px;">Customer</th>
+
+                </tr>
+                </thead>
+
+                <tbody>
+
+
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div id="directions-panel"></div>
+    <div id="directions-panel">
+
+    </div>
 </div>
 
 <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5vAgb-nawregIa5gRRG34wnabasN3blk&callback=initMap&libraries=&v=weekly"
-        async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5vAgb-nawregIa5gRRG34wnabasN3blk&callback=initMap&libraries=&v=weekly"
+    async
 ></script>
 </body>
 </html>
