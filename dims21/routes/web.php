@@ -323,7 +323,7 @@ Route::post('logMessageAuthMargin',[ConsoleManagement::class,'logMessageAuthMarg
 //CONSOLE MANAGEMENT ENDS HERE!!!
 
 //TABLET LOADING APP STARTS HERE !!!
-Route::get('routePlannerSuggestions/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'TabletLoadingApp@routePlannerSuggestions']);
+Route::get('routePlannerSuggestions/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'routePlannerSuggestions']);
 Route::post('getRouteData',[TabletLoadingApp::class,'getRouteData']);
 Route::post('sequenceOrdersByMode', [TabletLoadingApp::class,'sequenceOrdersByMode']);
 Route::post('sequenceOrdersByMode',[TabletLoadingApp::class,'sequenceOrdersByMode'] );
