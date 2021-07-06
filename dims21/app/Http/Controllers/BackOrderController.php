@@ -90,11 +90,11 @@ class BackOrderController extends Controller
             DB::connection('sqlsrv3')->table('OrderLines')->where('ID', $ID)->where('strPartNumber',$val->PastelCode)->update(['DIMSOrderDetailID' => $val->OrderDetailId]);
         }
         DB::connection('sqlsrv3')->table('OrderHeaders')->where('ID', $ID)->update(['DimsOrderID' =>  $Orderid ,'ExportedToDims'=>1]);
-        $returnedOrderlines= DB::connection('linxbriefcaseBackOrders')
+        $returnedOrderlines= DB::connection('sqlsrv3')
             ->select("Select DIMSOrderDetailID,strPartNumber,Price,Quantity  from  OrderLines where ID = '$ID'");
 
         $token = $request->get('token');
-        $returnExternalOrderLines = DB::connection('linxbriefcaseBackOrders')
+        $returnExternalOrderLines = DB::connection('sqlsrv3')
             ->select("EXEC spGetExternalOrders '$ID'" );
 
         $cat = array();
