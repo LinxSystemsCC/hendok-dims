@@ -87,9 +87,9 @@ class BackOrderController extends Controller
 
         foreach ($orderlines as $val)
         {
-            DB::connection('linxbriefcaseBackOrders')->table('OrderLines')->where('ID', $ID)->where('strPartNumber',$val->PastelCode)->update(['DIMSOrderDetailID' => $val->OrderDetailId]);
+            DB::connection('sqlsrv3')->table('OrderLines')->where('ID', $ID)->where('strPartNumber',$val->PastelCode)->update(['DIMSOrderDetailID' => $val->OrderDetailId]);
         }
-        DB::connection('linxbriefcaseBackOrders')->table('OrderHeaders')->where('ID', $ID)->update(['DimsOrderID' =>  $Orderid ,'ExportedToDims'=>1]);
+        DB::connection('sqlsrv3')->table('OrderHeaders')->where('ID', $ID)->update(['DimsOrderID' =>  $Orderid ,'ExportedToDims'=>1]);
         $returnedOrderlines= DB::connection('linxbriefcaseBackOrders')
             ->select("Select DIMSOrderDetailID,strPartNumber,Price,Quantity  from  OrderLines where ID = '$ID'");
 
