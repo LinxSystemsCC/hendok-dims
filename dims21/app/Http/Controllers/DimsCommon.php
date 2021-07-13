@@ -216,7 +216,7 @@ class DimsCommon extends Controller
                 return view('dims/customergridwithflex')->with('routes',$queryCustomers)->with('routesonly', $queryRoutes)
                 ->with('groups',$queryGroups)->with('salesmen',$querySalesMen);
     }
-    
+
     public function updateCustomerGrid(Request $request){
 
         $Userid = Auth::user()->UserID;
@@ -391,7 +391,7 @@ class DimsCommon extends Controller
         );
         }else{
             DB::connection('sqlsrv3')->table('tblOrderLocksByDepartment')->insert(
-                ['intOrderID' => $orderID, 'intUserId' => $userId]
+                ['intOrderID' => $orderID, 'intUserId' => $userId,'strDepartment'=>'SALES']
             );
         }
 
