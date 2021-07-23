@@ -5980,6 +5980,7 @@
                                 // console.debug("product code on the order pattern**********",row['PastelCode']);
                                 try {
                                     var jsn = JSON.parse(data);
+                                    console.debug("jsn"+jsn);
                                     if (jsn === "undefined")
                                     {
                                         jsn = 0;
@@ -5990,7 +5991,7 @@
                                     }
                                 } catch (e) {
 
-                                    return jsn.data;
+                                    return jsn;
                                 }
                                 return jsn;
                             }
