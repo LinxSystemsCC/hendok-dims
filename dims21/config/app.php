@@ -229,7 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
-    'Accounting'=>'Pastel',
+    'Accounting'=>'Other',
     'Margin' =>'10',
     'RouteChangeAuth' =>'1',
     'PriceChangeAuth' =>'1',
