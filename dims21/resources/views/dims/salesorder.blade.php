@@ -6367,7 +6367,7 @@
                                     $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
                                     $('#marginandpriceauthbycustomer').val(data[0].authPrices);
                                     $('#prohibited_' + token_number).val(parseFloat(data[0].Prohibited).toFixed(2));
-                                    $('#instockReadOnly_' + token_number).val(parseFloat(data[0].AvailableToSell).toFixed(2));
+                                    $('#instockReadOnly_' + token_number).val(data[0].AvailableToSell);
                                     $('#prodDisc_' + token_number).val(parseFloat(data[0].LineDisc).toFixed(2));
                                     $('#stockmanagement' + token_number).val(data[0].StockManagement);
 
