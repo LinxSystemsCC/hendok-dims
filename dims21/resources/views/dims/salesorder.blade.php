@@ -6315,9 +6315,9 @@
                                     $('#cost_' + token_number).val('');
 
                                 } else {
+//AvailOnly
 
-
-                                    if (data[0].AvailableToSell <= 0 && data[0].mustAuthLine != 0) {
+                                    if (data[0].AvailOnly <= 0 && data[0].mustAuthLine != 0) {
                                         $('#title_' + token_number).val('preauthorised');
                                         $('#appendErrormsg').empty();
                                         $('#appendErrormsg').append("It appears that you don't have enough in stock");
