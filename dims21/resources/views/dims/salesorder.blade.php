@@ -5992,7 +5992,7 @@
 
                                     return jsn.data;
                                 }
-                                return parseFloat(jsn).toFixed(2);
+                                return jsn;
                             }
                         },
                         { "data": "Cost","class":"small",
