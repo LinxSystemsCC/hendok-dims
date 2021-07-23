@@ -5974,28 +5974,7 @@
                                 return parseFloat(jsn).toFixed(2);
 
                             }  },
-                        { "data": "Remaining","class":"small" ,
-                            render:function(data, type, row, meta) {
-                                // check to see if this is JSON
-                                // console.debug("product code on the order pattern**********",row['PastelCode']);
-                                try {
-                                    var jsn = JSON.parse(data);
-                                    console.debug("jsn"+jsn);
-                                    if (jsn === "undefined")
-                                    {
-                                        jsn = 0;
-                                    }
-                                    if (jsn === ".000")
-                                    {
-                                        jsn = 0;
-                                    }
-                                } catch (e) {
-
-                                    return jsn;
-                                }
-                                return jsn;
-                            }
-                        },
+                        { "data": "Remaining","class":"small" },
                         { "data": "Cost","class":"small",
                             render:function(data, type, row, meta) {
                                 // check to see if this is JSON
