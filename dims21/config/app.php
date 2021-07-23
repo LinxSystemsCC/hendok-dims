@@ -229,5 +229,14 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
-
+    'Accounting'=>'Pastel',
+    'Margin' =>'10',
+    'RouteChangeAuth' =>'1',
+    'PriceChangeAuth' =>'1',
+    'CreditLimitAuth' =>'1',
+    'HasPOS' =>'0',
+    'HasWebStore' =>'0',
+    'HasDealApp' =>'0',
+    'HasAssetsApp' =>'0',
+    'donotshowAvailable' =>'True'
 ];
