@@ -788,12 +788,24 @@ class TabletLoadingApp extends controller
         $trucks =  DB::connection('sqlsrv3')
             ->select("select * from tblTrucks (nolock) order by RegNo");
         $routinginfo =  DB::connection('sqlsrv3')
-            ->select("select cast(DeliveryDate as date ) as DeliveryDate,r.Route,ot.OrderType from tblDeliveryDateRouting (nolock) tdd
+            ->select("select cast(DeliveryDate as date ) as DeliveryDate,r.Route,ot.OrderType,strdrivername,mnykmdone,mnykmoutt,strSealNumber
+,dtm,ass.DriverName AssitName,driv.DriverName,driv.DriverId,ass.DriverId as assId,tblTrucks.TruckId,TruckName,RegNo
+ from tblDeliveryDateRouting (nolock) tdd
 inner join tblRoutes(nolock) r
 on r.Routeid = tdd.RouteId
 inner join tblOrderTypes (nolock) ot
 on ot.OrderTypeId = tdd.OrderTypeId
- where DeliveryDateRoutingID = $deldateRoutingid");
+inner join tblDrivers driv
+on driv.DriverId = tdd.DriverId
+inner join tblDrivers ass
+on ass.DriverId = tdd.AssistantId
+inner join tblTrucks
+on tblTrucks.TruckId = tdd.TruckId
+left outer join tblDriversAppTripHeader
+on tblDriversAppTripHeader.strroutename = r.Route
+and  tblDriversAppTripHeader.strordertypes = ot.OrderType
+and  cast(dteDeliveryDate as date) = cast(tdd.DeliveryDate as date)
+ where DeliveryDateRoutingID = $deldateRoutingid ");
 
         return view('dims/individual_plan_routes')
             ->with('otypes', $oTypes)
