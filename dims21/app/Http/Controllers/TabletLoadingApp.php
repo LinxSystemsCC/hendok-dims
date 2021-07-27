@@ -795,11 +795,11 @@ inner join tblRoutes(nolock) r
 on r.Routeid = tdd.RouteId
 inner join tblOrderTypes (nolock) ot
 on ot.OrderTypeId = tdd.OrderTypeId
-inner join tblDrivers driv
+left outer join tblDrivers driv
 on driv.DriverId = tdd.DriverId
-inner join tblDrivers ass
+left outer join tblDrivers ass
 on ass.DriverId = tdd.AssistantId
-inner join tblTrucks
+left outer join tblTrucks
 on tblTrucks.TruckId = tdd.TruckId
 left outer join tblDriversAppTripHeader
 on tblDriversAppTripHeader.strroutename = r.Route
