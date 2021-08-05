@@ -247,6 +247,20 @@ class DimsReports extends controller
 
         return response()->json($tripsheets);
     }
+    public function LoadLogs($routingId){
+        $ConsoleLogs= DB::connection('sqlsrv3')
+        ->select("Exec spGetManagementDetailsViaRouteId ".$routingId);
+        return view('dims/tripsheetconsole')->with ('consolelogs',$ConsoleLogs);
+    }
+    public function updateReviewedStatus(Request $request)
+    {
+    $userAuthID = Auth::user()->UserID;
+    $ID =$request->get('ID');
+    $Reviewed = $request->get('Reviewed'); 
+     DB::connection('sqlsrv3')
+        ->statement('exec spUpdateReviewed ?,?,?',
+        array($userAuthID,$ID,$Reviewed));
+    }
     public function getTripSheetDetails($routingId)
     {
         $tripsheetDetail = DB::connection('sqlsrv3')

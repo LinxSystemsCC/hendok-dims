@@ -2,6 +2,10 @@
 
 @section('content')
     <div class="col-lg-12"  style="background: white;">
+    @if (Auth::user()->Administrator == "1")
+        <a href='{!!url("/LoadLogs")!!}/{{$routingId}}' style="color:white;font-weight: 900;font-size: 17px;padding:5px;background: green">Load Logs</a>
+                @endif
+        
         <a href='{!!url("/reprintTripSheet")!!}/{{$routingId}}' style="color:white;font-weight: 900;font-size: 17px;padding:5px;background: green">PrintThis</a>
         <table class="table"  id="tripSheetList" style="width:100%">
             <thead>

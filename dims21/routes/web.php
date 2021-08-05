@@ -442,6 +442,8 @@ Route::post('emailSalesOrder', [EmailController::class,'emailSalesOrder']);
 
 //DIMS REPORTS CONTROLLER STARTS HERE !!!
 Route::get('reports', [DimsReports::class,'reports']);
+Route::get('LoadLogs/{routingId}',[DimsReports::class,'LoadLogs']);
+Route::post('updateReviewedStatus',[DimsReports::class,'updateReviewedStatus']);
 Route::get('outstandingDriversCashoff', [DimsReports::class,'outstandingDriversCashoff']);
 Route::get('getreportLayout',[DimsReports::class,'getreportLayout']);
 Route::get('getreportAuthBelowMargin',[DimsReports::class,'getreportAuthBelowMargin']);
