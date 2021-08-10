@@ -193,7 +193,7 @@
                         for (k = 0; k<response.routes[0].waypoint_order.length;k++)
                         {
                             trHTML += '<tr role="row" style="height: 26px !important;"  ><td>' +
-                                alphas[k+1] + '</td><td>' +
+                                alphas[k] + '</td><td>' +
                                 JSON.parse(storenames)[response.routes[0].waypoint_order[k]] + '</td></tr>';
                             //console.debug(JSON.parse(storenames)[response.routes[0].waypoint_order[k]]);
                         }
