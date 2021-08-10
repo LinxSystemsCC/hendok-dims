@@ -157,7 +157,7 @@
             }
             directionsService.route(
                 {
-                    origin: new google.maps.LatLng( -33.97171674170202, 22.473354613266814 ),
+                    origin: new google.maps.LatLng("<?php  echo env('LATLON'); ?>" ),
                     //origin: new google.maps.LatLng(document.getElementById("start").value),
                     destination: new google.maps.LatLng(parseFloat(finalDataProductTest[f].fltLatitude),  parseFloat(finalDataProductTest[f].fltLongitude) ),
                     //destination: new google.maps.LatLng(document.getElementById("end").value),
