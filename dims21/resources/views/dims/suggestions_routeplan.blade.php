@@ -75,8 +75,8 @@
         var alphas = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
         var storenames= JSON.stringify({!! json_encode($storenames) !!});
         console.debug(storenames);
-        var zoomlat = "<?php  echo env('ZOOMLAT'); ?>";
-        var zoomlon = "<?php  echo env('ZOOMLON'); ?>";
+        var zoomlat = -15.406667319980695;
+        var zoomlon = 28.276175907525925;
         function initMap() {
             const directionsService = new google.maps.DirectionsService();
             const directionsRenderer = new google.maps.DirectionsRenderer();
