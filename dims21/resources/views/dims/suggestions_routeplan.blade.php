@@ -75,12 +75,14 @@
         var alphas = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
         var storenames= JSON.stringify({!! json_encode($storenames) !!});
         console.debug(storenames);
+        var zoomlat = "<?php  echo env('ZOOMLAT'); ?>";
+        var zoomlon = "<?php  echo env('ZOOMLON'); ?>";
         function initMap() {
             const directionsService = new google.maps.DirectionsService();
             const directionsRenderer = new google.maps.DirectionsRenderer();
             const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 6,
-                center: { lat:-34.061083, lng: 23.3262525 },
+                center: { lat:zoomlat, lng: zoomlon },
             });
             directionsRenderer.setMap(map);
             document.getElementById("submit").addEventListener("click", () => {
@@ -157,7 +159,7 @@
             }
             directionsService.route(
                 {
-                    origin: new google.maps.LatLng("<?php  echo env('LATLON'); ?>" ),
+                    origin: new google.maps.LatLng(<?php  echo env('LATLON'); ?>),
                     //origin: new google.maps.LatLng(document.getElementById("start").value),
                     destination: new google.maps.LatLng(parseFloat(finalDataProductTest[f].fltLatitude),  parseFloat(finalDataProductTest[f].fltLongitude) ),
                     //destination: new google.maps.LatLng(document.getElementById("end").value),
