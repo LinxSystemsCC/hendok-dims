@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col-lg-12"  style="background: white;">
-    @if (Auth::user()->Administrator == "1")
+    @if (Auth::user()->bitAllowedToSeeTruckLogs == "1")
         <a href='{!!url("/LoadLogs")!!}/{{$routingId}}' style="color:white;font-weight: 900;font-size: 17px;padding:5px;background: green">Load Logs</a>
                 @endif
         
