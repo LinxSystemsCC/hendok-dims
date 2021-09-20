@@ -25,19 +25,19 @@ class SalesForm extends Controller
 
        $sessionUserId = Auth::user()->UserID;
 
-       if(env('CustomerAccess') == 1){
-           $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )
-               ->join('tblAccessOnCustomers', 'viewtblCustomers.GroupId', '=', 'tblAccessOnCustomers.intGroupId')
+
+           $queryCustomershendocpty =DB::connection('sqlsrv3')->table("viewtblCustomers" )
                ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName')
                ->where('StatusId',1)
-               ->where('intUserId',$sessionUserId)
+               ->where('OwnerID',2)
                ->orderBy('CustomerPastelCode','ASC')->get();
-       }else{
-           $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )
+
+           $queryCustomershendocdist =DB::connection('sqlsrv3')->table("viewtblCustomers" )
                ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName')
                ->where('StatusId',1)
+               ->where('OwnerID',1)
                ->orderBy('CustomerPastelCode','ASC')->get();
-       }
+
 
 
         $queryCustomersDontCareStatus =DB::connection('sqlsrv3')->table("viewtblCustomers" )
@@ -46,6 +46,7 @@ class SalesForm extends Controller
             ->orderBy('CustomerPastelCode','ASC')->get();
         $deliverTypes= DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->get();
         $users = DB::connection('sqlsrv3')->table('tblDIMSUSERS')->select('UserID','UserName','strSalesmanCode')->get();
+        $company= DB::connection('sqlsrv3')->table('tblOwners')->select('OwnerID','CompanyName')->get();
         $getDeliveryDates = DB::connection('sqlsrv3')->table('vwDistinctDelvDates')->select('DeliveryDate')->orderBy('DeliveryDate', 'desc')->get();
         $getRoutes =  DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse','0')->orderBy('Route', 'asc')->get();
         $callListUserInfo = DB::connection('sqlsrv3')
@@ -57,30 +58,9 @@ class SalesForm extends Controller
             ->where('Function','1')
             ->get();
 
-            switch ($marginType[0]->ReportType)
-            {
-                case 'marginType1':
-                    $queryProducts= DB::connection('sqlsrv3')
-                        ->select("Exec spActiveProductsWithVAT ".$sessionUserId);
-                    break;
-                case 'marginType2':
-                    $queryProducts= DB::connection('sqlsrv3')
-                        ->select("Exec spActiveProductsWithVAT ".$sessionUserId);
-                    break;
-                case 'marginType3':
-                    $queryProducts= DB::connection('sqlsrv3')
-                        ->select("Exec spActiveProductsWithVAT ".$sessionUserId);
-                break;
-                case 'marginType4':
-                    $queryProducts= DB::connection('sqlsrv3')
-                        ->select("Exec spActiveProductsWithVAT ".$sessionUserId);
-                    break;
-                case 'marginType5':
-                    $queryProducts= DB::connection('sqlsrv3')
-                        ->select("Exec spActiveProductsWithVAT ".$sessionUserId);
-                    break;
 
-            }
+                    $queryProducts= DB::connection('sqlsrv3')
+                        ->select("Exec spActiveProductsWithVAT ".$sessionUserId);
 
         $trueFalse =  DB::connection('sqlsrv3')->table('tblCOMPANYREPORTS')->select('ReportType', 'ReportName')->where('ReportName','True')
             ->orwhere('ReportName','False')
@@ -90,6 +70,9 @@ class SalesForm extends Controller
 
         $getviewWareHouseLocations= DB::connection('sqlsrv3')
             ->select("Select * from viewWareHouseLocations");
+
+        $taxes= DB::connection('sqlsrv3')
+            ->select("Select * from tblTaxes");
  $saleman= DB::connection('sqlsrv3')
             ->select("Select 0 as UserID,SalesmanDescription as UserName,SalesmanCode as strSalesmanCode from tblSalesCodes");
 
@@ -100,12 +83,16 @@ class SalesForm extends Controller
             ->select("Exec spUserPerformance ".$sessionUserId);
         $printinvoices = $this->getThings($GroupId,'Allow Invoice Printing');
 
+
         return view('dims/salesorder')->with('products',$queryProducts)
             ->with('trueOrFalse',$trueFalse)
             ->with('LastInserted',$getLastInserted)
-            ->with('customers',$queryCustomers)
+            ->with('customers',$queryCustomershendocpty)
+            ->with('customersdist',$queryCustomershendocdist)
+
+            ->with('customersdistrib',$queryCustomershendocpty)
             ->with('customersDontcareStatus',$queryCustomersDontCareStatus)
-            ->with('margin',$marginType[0]->ReportType)
+            ->with('margin',0)
             ->with('orderTypes',$deliverTypes)
             ->with('delivDates',$getDeliveryDates)
             ->with('callistCurrentRoute',$callListUserInfo)
@@ -113,10 +100,89 @@ class SalesForm extends Controller
             ->with('routesNames',$getRoutes)
             ->with('salesmen',$saleman)
             ->with('warehouses',$getviewWareHouseLocations)
-            ->with('warehouses',$getviewWareHouseLocations)
+            ->with('taxes',$taxes)
+            ->with('company',$company)
             ->with('userperformance',$userPerfomance)->with('printinvoices',$printinvoices)
             ;
 
+    }
+    public function selectedCompany($companyName){
+        $sessionUserId = Auth::user()->UserID;
+
+
+
+
+        $queryCustomershendocdist =DB::connection('sqlsrv3')->table("viewtblCustomers" )
+            ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName')
+            ->where('StatusId',1)
+            ->where('OwnerID',$companyName)
+            ->orderBy('CustomerPastelCode','ASC')->get();
+
+
+
+        $queryCustomersDontCareStatus =DB::connection('sqlsrv3')->table("viewtblCustomers" )
+            ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName')
+
+            ->orderBy('CustomerPastelCode','ASC')->get();
+        $deliverTypes= DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->get();
+        $users = DB::connection('sqlsrv3')->table('tblDIMSUSERS')->select('UserID','UserName','strSalesmanCode')->get();
+        $company= DB::connection('sqlsrv3')
+            ->select("select 0 p,OwnerID,CompanyName from tblOwners where OwnerID = '$companyName' union all select 1 p,OwnerID,CompanyName from tblOwners"  );
+
+        $getDeliveryDates = DB::connection('sqlsrv3')->table('vwDistinctDelvDates')->select('DeliveryDate')->orderBy('DeliveryDate', 'desc')->get();
+        $getRoutes =  DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse','0')->orderBy('Route', 'asc')->get();
+        $callListUserInfo = DB::connection('sqlsrv3')
+            ->select("Select * from  [dbo].[fnGetLastUserInfoForCallList]($sessionUserId) Order By od Desc");
+        $callListDeliveryDate = DB::connection('sqlsrv3')
+            ->select("Select Top 1 dteSessionDate from  [dbo].[fnGetLastUserInfoForCallList]($sessionUserId) Order By od Desc");
+
+        $marginType =  DB::connection('sqlsrv3')->table('tblCOMPANYREPORTS')->select('ReportType', 'Comment')->where('ReportName','marginCalculator')
+            ->where('Function','1')
+            ->get();
+
+
+        $queryProducts= DB::connection('sqlsrv3')
+            ->select("Exec spActiveProductsWithVAT ".$sessionUserId);
+
+        $trueFalse =  DB::connection('sqlsrv3')->table('tblCOMPANYREPORTS')->select('ReportType', 'ReportName')->where('ReportName','True')
+            ->orwhere('ReportName','False')
+            ->get();
+        $getLastInserted= DB::connection('sqlsrv3')
+            ->select("Select * from viewGetLastInsertedOrderIdAndDeliveryDate");
+
+        $getviewWareHouseLocations= DB::connection('sqlsrv3')
+            ->select("Select * from viewWareHouseLocations");
+
+        $taxes= DB::connection('sqlsrv3')
+            ->select("Select * from tblTaxes");
+        $saleman= DB::connection('sqlsrv3')
+            ->select("Select 0 as UserID,SalesmanDescription as UserName,SalesmanCode as strSalesmanCode from tblSalesCodes");
+
+        $GroupId = Auth::user()->GroupId;
+        $things = $this->getThings($GroupId,'Allow Call Logger');
+
+        $userPerfomance= DB::connection('sqlsrv3')
+            ->select("Exec spUserPerformance ".$sessionUserId);
+        $printinvoices = $this->getThings($GroupId,'Allow Invoice Printing');
+
+
+        return view('dims/salesorder')->with('products',$queryProducts)
+            ->with('trueOrFalse',$trueFalse)
+            ->with('LastInserted',$getLastInserted)
+            ->with('customers',$queryCustomershendocdist)
+            ->with('customersDontcareStatus',$queryCustomersDontCareStatus)
+            ->with('margin',0)
+            ->with('orderTypes',$deliverTypes)
+            ->with('delivDates',$getDeliveryDates)
+            ->with('callistCurrentRoute',$callListUserInfo)
+            ->with('callistDelvDate',$callListDeliveryDate)
+            ->with('routesNames',$getRoutes)
+            ->with('salesmen',$saleman)
+            ->with('warehouses',$getviewWareHouseLocations)
+            ->with('taxes',$taxes)
+            ->with('company',$company)
+            ->with('userperformance',$userPerfomance)->with('printinvoices',$printinvoices)
+            ;
     }
     public function getThings($GroupId,$thing)
     {

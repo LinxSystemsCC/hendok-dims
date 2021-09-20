@@ -80,9 +80,9 @@ return [
 
             'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
-            'database' => 'linxdbDIMSTESTING',
+            'host' => '102.37.0.48',
+            'port' =>  '62019',
+            'database' => 'linxdbDIMS',
             'username' => 'sa',
             'password' =>  'Linx_123',
             'prefix' => ''
@@ -90,9 +90,9 @@ return [
         ],
         'sqlsrv2' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
-            'database' => 'linxdbDIMSTESTING',
+            'host' => '102.37.0.48',
+            'port' =>  '62019',
+            'database' => 'linxdbDIMS',
             'username' => 'sa',
             'password' =>  'Linx_123',
             'prefix' => '',
@@ -100,9 +100,9 @@ return [
         ],
         'sqlsrv3' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
-            'database' => 'linxdbDIMSTESTING',
+            'host' => '102.37.0.48',
+            'port' =>  '62019',
+            'database' => 'linxdbDIMS',
             'username' => 'sa',
             'password' =>  'Linx_123',
             'prefix' => '',
@@ -111,7 +111,7 @@ return [
         'webstore' => [
             'driver' => 'sqlsrv',
             'host' => '102.133.239.108',
-            'port' =>  '1433',
+            'port' =>  '1444',
             'database' => 'LinxBriefcaseSEAF',
             'username' => 'sa',
             'password' =>  'Convid19',
@@ -121,8 +121,8 @@ return [
         ],
           'linxbriefcase' => [
             'driver' => 'sqlsrv',
-            'host' => '102.37.14.76',
-            'port' =>  '61994',
+              'host' => '102.37.0.48',
+              'port' =>  '62019',
             'database' => 'LinxBriefcase',
             'username' => 'sa',
             'password' =>  'Express62019SQL',
@@ -141,8 +141,8 @@ return [
           ],
         'linxbriefcaseBackOrders' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
+            'host' => '102.37.0.48',
+            'port' =>  '62019',
             'database' => 'LinxBriefcase',
             'username' => 'sa',
             'password' =>  'Linx_123',
@@ -162,9 +162,9 @@ return [
 
         'sqlsrv4' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
-            'database' => 'linxdbDIMSTESTING',
+            'host' => '102.37.0.48',
+            'port' =>  '62019',
+            'database' => 'linxdbDIMS',
             'username' => 'sa',
             'password' =>  'Linx_123',
             'prefix' => '',
@@ -174,7 +174,7 @@ return [
   'googlemaps' => [
             'driver' => 'sqlsrv',
             'host' => '192.168.0.11',
-            'port' =>  '1433',
+            'port' =>  '1444',
             'database' => 'linxdbDIMS',
             'username' => 'sa',
             'password' =>  'System2008#',
@@ -190,7 +190,7 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => '.',
-            'port' =>  '1433',
+            'port' =>  '1444',
             'database' => 'linxdbDIMSMag',
             'username' => 'sa',
             'password' =>  'Linx_123',
@@ -200,7 +200,7 @@ return [
         'sqlsrv2' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', '.'),
-            'port' => env('DB_PORT', '1433'),
+            'port' => env('DB_PORT', '1444'),
             'database' => env('DB_DATABASE', 'linxdbDIMS'),
             'username' => env('DB_USERNAME', 'sa'),
             'password' => env('DB_PASSWORD', 'Linx_123'),
@@ -211,7 +211,7 @@ return [
         'sqlsrv3' => [
             'driver' => 'sqlsrv',
             'host' => '192.168.1.129',
-            'port' =>  '1433',
+            'port' =>  '1444',
             'database' => 'linxdbDIMS',
             'username' => 'sa',
             'password' =>  'gR0!1248$',
@@ -222,7 +222,7 @@ return [
         'sqlsrv4' => [
             'driver' => 'sqlsrv',
             'host' => '.',
-            'port' =>  '1433',
+            'port' =>  '1444',
             'database' => 'linxdbDIMSMag',
             'username' => 'sa',
             'password' =>  'Linx_123',
@@ -234,7 +234,7 @@ return [
         'deals' => [
             'driver' => 'sqlsrv',
             'host' => '154.0.172.185',
-            'port' =>  '1433',
+            'port' =>  '1444',
             'database' => 'Deals',
             'username' => 'sa',
             'password' =>  'System2008',
@@ -258,7 +258,7 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', '.'),
-            'port' => env('DB_PORT', '1433'),
+            'port' => env('DB_PORT', '1444'),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),

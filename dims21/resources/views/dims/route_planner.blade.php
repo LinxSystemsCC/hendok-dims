@@ -332,7 +332,7 @@
 
         });
         $('#startPlanning').click(function(){
-            var todayDate = '2018-01-01';
+            var todayDate = '<?php echo $dates ?>';
             var orderType = 1;
             var route = -99;
             window.open ('{!!url("/routePlannerExtParam")!!}/'+todayDate+'/'+orderType+'/'+route+'/'+3);

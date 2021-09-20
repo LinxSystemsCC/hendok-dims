@@ -1,4 +1,4 @@
-<div class="col-lg-12" id="prodonInvoice" title="Products on Invoices" style="background: #97249eba">
+<div class="col-lg-12" id="prodonInvoice" title="Products on Invoices" style="background: #97249eba;width: 100%">
     <form>
         <fieldset class="well" style="    background: #e8e8e8;">
 
@@ -19,7 +19,7 @@
 
         </fieldset>
     </form>
-    <table class="table  search-table" id="tblOnInvoiced" style=" color: black;overflow-y: scroll; width: 100%;font-family: sans-serif;height: 70%;font-weight: 700;font-size: 36px;" tabindex=0>
+    <table class="table  search-table" id="tblOnInvoiced" style=" color: black;overflow-y: scroll; width: 100%;font-family: sans-serif;font-weight: 700;font-size: 36px;" tabindex=0>
         <thead>
 
         <tr style="font-size: 17px;">
@@ -32,7 +32,8 @@
             <th class="col-md-4">Prod Description</th>
             <th>Comment</th>
             <th>Nett</th>
-            <th>Back Order</th>
+            <th>Company</th>
+            <th>ID</th>
 
         </tr>
         </thead>
