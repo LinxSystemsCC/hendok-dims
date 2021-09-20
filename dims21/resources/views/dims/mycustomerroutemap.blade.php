@@ -15,7 +15,9 @@
             <label class="control-label" for="deliveryDatesonPlanning2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">To</label>
             <input name="deliveryDatesonPlanning2" class="form-control input-sm col-xs-1" id="deliveryDatesonPlanning2"  >
         </div>
-        <button id="refresh" class="btn-success btn-lg btn">GET</button><br>
+        <button id="refresh" class="btn-success btn-lg btn">GET</button>
+        <input id="referenceno" readonly>
+        <br>
     </div>
     <div class="col-lg-12">
 
@@ -116,6 +118,12 @@
     var locations =[['Lolest',-25.322148485607237, 28.365571847526194]];
     var routes ='';
 
+    $( document ).on( 'focus', ':input', function(){
+        $( this ).attr( 'autocomplete', 'off' );
+    });
+    $(document).keydown(function(e) {
+        if (e.keyCode == 27) return false;
+    });
     window.onstorage = event => { // same as window.addEventListener('storage', event => {
 
         if (event.key == 'routeplanner'){
@@ -124,6 +132,7 @@
 
             $("#deliveryDatesonPlanning").val(dates.deliveryDate);
             $("#deliveryDatesonPlanning2").val(dates.deliveryDateTo);
+            $("#referenceno").val(dates.reference);
             routes = dates.routeId;
             getMultiRoutSelected();
         }
@@ -181,7 +190,45 @@
         $('#planorder').click(function(){
             //    initMap();
 
-           var storages = [];
+            var checkedLines = new Array();
+
+            $('[name="uniqueallproducts"]:checked').each(function(checkbox) {
+                // selected.push(checkbox);
+                var id = $(this).val();
+                checkedLines.push({
+                    'orderdetail': id,
+                    'qty': $(this).closest('tr').find('.Qty').val(),
+                    'pickingtype':'priority',
+                    'ownerId':$(this).closest('tr').find('.ownerId').val(),
+                    'referenceNo':$('#referenceno').val()
+                });
+
+            });
+            console.debug(checkedLines);
+            $.ajax({
+                url: '{!!url("/saveplan")!!}',
+                type: "POST",
+                data: {
+
+                    referenceno: $('#referenceno').val(),
+                    priority: checkedLines
+                },
+                success: function (data) {
+
+                    var dialog = $('<p><strong style="color:red">Data Saved</strong></p>').dialog({
+                        height: 200, width: 700,modal: true,containment: false,
+                        buttons: {
+                            "Okay": function () {
+                                $('#onamarker').empty();
+                                dialog.dialog('close');
+                            }
+                        }
+                    });
+
+
+                }
+            });
+         /*  var storages = [];
                 var returnVal = 0;var vol = 0 ;var i = 0;    //locations[0] =[['here',-25.322148485607237, 28.365571847526194]];
                 $('[name="uniqueallproducts"]:checked').each(function(checkbox) {
                     storages[i] = ['testing',$(this).closest('tr').find('.lat').val() , $(this).closest('tr').find('.lon').val(),$(this).closest('tr').find('.PastelDescription').val(),$(this).val(),
@@ -189,7 +236,7 @@
                     i++;
                 });
                 localStorage.removeItem('updateplanmap');
-                localStorage.setItem('updateplanmap', JSON.stringify({storages}));
+                localStorage.setItem('updateplanmap', JSON.stringify({storages}));*/
 
 
         });
@@ -235,6 +282,7 @@
                     infowindow.open(map, marker);
                     $('#customername').val(locations[i][4]);
                     console.debug(this);
+                    console.debug(locations);
                     this.setIcon(pinSymbol('blue'));
                     getProductsOnAMarker(locations[i][5],locations[i][1], locations[i][2]);
                     //onamarker
@@ -384,7 +432,7 @@
                         '<td style="">'+value.PastelDescription+'</td>'+
                         '<td>'+
                         '<input type="number" min="0" style="height: 25px !important;font-weight: 900" class="Qty" value="' + parseFloat(value.mnyQtyRemaining).toFixed(2) + '" style="" >' +
-                        '<input type="hidden" id ="orderdetailId" class="orderdetailId" value="' +value.OrderDetailId + '" /><input type="hidden" id ="lat" class="lat" value="' +lat + '" /><input type="hidden" id ="lon" class="lon" value="' +lon + '" /></td>' +
+                        '<input type="hidden" id ="orderdetailId" class="orderdetailId" value="' +value.OrderDetailId + '" /><input type="hidden" id ="lat" class="lat" value="' +lat + '" /><input type="hidden" id ="ownerId" class="ownerId" value="' +value.ownerId + '" /><input type="hidden" id ="lon" class="lon" value="' +lon + '" /></td>' +
                         '<input type="hidden" id ="PastelDescription" class="PastelDescription" value="' +value.PastelDescription + '" /><td style="">'+ parseFloat(value.weights).toFixed(2)+'</td>'+
                         '</tr>';
 

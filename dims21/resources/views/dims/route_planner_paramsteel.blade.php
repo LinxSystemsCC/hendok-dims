@@ -140,69 +140,36 @@
                     <div class="flex-container2">
                         <div class="flex-child2 " style="text-align: center">
 
-                            <a href='{!!url("/getmycustroutemap")!!}' style="color:black;font-weight:900;text-decoration: underline; padding: 3px;float: left;" onclick="window.open(this.href, 'getmycustroutemap',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Customers Map</a>
-                            <br>
+
                             <button id="planpriority" class="btn-success btn-lg btn">Save & Plan</button><br><br>
-                            Total Weight: <input id="totalweightcust" ><br>
-                            Total Vol: <input id="totalvolcust" ><br><br><br>
-
-
+                            Total Weight: <input id="totalweightcust" >
+                            Total Vol: <input id="totalvolcust" >
                         </div>
 
                         <div class="flex-child2 " style="text-align: center">
                             <button id="planallproducts" class="btn-success btn-lg btn">Save & Plan</button><br><br>
 
-                            Total Weight: <input id="totalweight" ><br>
-                            Total Vol: <input id="totalvol" ><br><br><br>
+                            Total Weight: <input id="totalweight" >
+                            Total Vol: <input id="totalvol" >
                         </div>
-                        <div class="flex-child2 " style="text-align: center">
 
-                            <div class="form-group  col-md-3" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                                <label class="control-label" for="truckNameSheetMaster"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Dispatch Date</label>
-                                <input class="form-control input-sm col-xs-1" id="dispatchdate" type="text">
-                            </div>
-                            <div class="form-group  col-md-3" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                                <label class="control-label" for="eRouteNamedispatch"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Route</label>
-                                <select name="eRouteNamedispatch" class="form-control input-sm col-sm-1"  id="eRouteNamedispatch" style="font-size: 14px;" >
-                                    @foreach($routes as $value)
-                                        <option value="{{$value->Routeid}}">{{$value->Route}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group  col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                                <label class="control-label" for="orderTypesTabletLoadingonPlanningdispatch"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Delivery Type</label>
-                                <select name="orderTypesTabletLoadingonPlanningdispatch" class="form-control input-sm col-xs-1" id="orderTypesTabletLoadingonPlanningdispatch" style="height:30px;font-size: 10px;">
-
-                                    @foreach($orderTypes  as $values)
-                                        <option value="{{$values->OrderTypeId}}">{{$values->OrderType}}</option>
-                                    @endforeach
-
-
-                                </select>
-                            </div>
-                            <div class="form-group  col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                                <label class="control-label" for="orderTypesTabletLoadingonPlanningdispatch"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Vehicle</label>
-                                <select name="truck" class="form-control input-sm col-xs-1" id="truck" style="height:30px;font-size: 16px;">
-
-                                    @foreach($trucks  as $values)
-                                        <option value="{{$values->TruckId}}">{{$values->TruckName}}({{$values->Capacity}})</option>
-                                    @endforeach
-
-
-                                </select>
-                            </div>
-                            <div class="form-group  col-md-4" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-
-                                <button id="doneplanning" class="btn-success btn-lg btn" style="margin-top: 42px;">Done Planning</button>
-                            </div>
-                            <div class="form-group  col-md-4" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-
-                                <button id="plantheroute" class="btn-danger btn-lg btn" style="margin-top: 42px;">Plan Route</button>
-                            </div>
-                        </div>
                     </div>
+                </div>
+
+                <div class="col-lg-12" style="background: orange; height:100px;">
+
+                    <div class="col-lg-6">
+                        <a href='{!!url("/getmycustroutemap")!!}' style="color:black;font-weight:900;text-decoration: underline; padding: 3px;float: left;" onclick="window.open(this.href, 'getmycustroutemap',
+'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Customers Map</a>
+                        <br>
+                    </div>
+                    <div class="col-lg-6">
+                        <button id="previewplan" class="btn-sm btn-danger">Preview Plan</button>
+                        <br><br>
+                        <button id="viewpickingticket" class="btn-lg btn-primary" >View Planning Ref Tickets</button>
+
+                    </div>
+
                 </div>
 
 
@@ -385,6 +352,15 @@
         $("#customerPlanned").hide();
         //
 
+        $('#viewpickingticket').click(function(){
+
+            window.open('{!!url("/pickingtickets")!!}', 'picktickets', "location=1,status=1,scrollbars=1, width=1500,height=850");
+        });
+        $('#previewplan').click(function(){
+            var ref = $('#referenceno').val();
+            window.open('{!!url("/previewplan")!!}/'+ref, 'previewplan', "location=1,status=1,scrollbars=1, width=1500,height=850");
+        });
+
         var Odate = new Date();
         var newODate = $.datepicker.formatDate('dd-mm-yy', new Date(Odate));
         $('#lplan').click(function(){
@@ -545,15 +521,25 @@
 
         $('#tabletLoadingGoonPlanning').click(function(){
 
-            $('#afterFiltering').hide();
-            $('#doneSorting').show();
-            $('#updateSorting').hide();
-            $('#messageNB').show();
-            $('#instantPrint').hide();
+            var dialog = $('<p><strong style="color:red">NOT SAVED DATA WILL BE DELETED</strong></p>').dialog({
+                height: 200, width: 700,modal: true,containment: false,
+                buttons: {
+                    "CANCEL": function () {
+                        dialog.dialog('close');
+                    },
+                    "OKAY": function () {
+                        $('#afterFiltering').hide();
+                        $('#doneSorting').show();
+                        $('#updateSorting').hide();
+                        $('#messageNB').show();
+                        $('#instantPrint').hide();
+                        getMultiRoutSelected();
+                        dialog.dialog('close');
+                    }
+                }
+            });
 
 
-            //console.debug($('#rouTabletLoadingtesonPlanning').val());
-            getMultiRoutSelected();
 
             //routesToSequence();
         });
@@ -725,11 +711,12 @@
                     'orderdetail': id,
                     'qty': $(this).closest('tr').find('.remaining').val(),
                     'pickingtype':'priority',
+                    'ownerId':$(this).closest('tr').find('.OwnerID').val(),
                     'referenceNo':$('#referenceno').val()
                 });
 
             });
-
+console.debug(checkedLines);
             $.ajax({
                 url: '{!!url("/saveplan")!!}',
                 type: "POST",
@@ -739,8 +726,80 @@
                     priority: checkedLines
                 },
                 success: function (data) {
+                    var dialog = $('<p><strong>Would you like to refresh your priority list?</strong></p>').dialog({
+                        height: 200, width: 700,modal: true,containment: false,
+                        buttons: {
+                            "YES": function () {
+
+                                $.ajax({
+                                url: '{!!url("/getPriotyCustOnly")!!}',
+                                type: "POST",
+                                data: {
+                                    routeId: $('#rouTabletLoadingtesonPlanning').val(),
+                                    deliveryDate: $('#deliveryDatesonPlanning').val(),
+                                    OrderType: $('#orderTypesTabletLoadingonPlanning').val(),
+                                    deliveryDateTo: $('#deliveryDatesonPlanning2').val(),
+                                    dateTo: $('#deliveryDatesonPlanning2').val(),
+                                    status: $('#statusRoutePlanner').val(),
+                                    productId: $('#prodexclude').val(),
+                                },
+                                success: function (data) {
+                                    var trHTML = '';
+                                    var style = '';
+                                    var classes = 'onDrag';
+                                    $('#priority').empty();
+
+                                    var inv = 'id';
+                                    var counter = 0;
+                                    console.debug("**************  referenceNo "+data.referenceNo);
+
+                                    $.each(data.priority, function (key, value) {
+
+                                        if (inv != value.CustomerId)
+                                        {
+                                            var k = parseInt(counter)+parseInt(1);
+                                            trHTML +='<tr ondblclick="this.style.display = none" class="fast_remove" style="font-size: 14px;font-weight: 600;" onclick="show_hide_row(\'hidden_row1'+ k +'\') ;"><td>'+
+                                                value.StoreName +'</td><td>'+
+                                                value.orderid +'</td><td>'+
+                                                value.OrderDate +'</td><td>'+
+                                                value.DeliveryDate +'</td><td>'+
+                                                value.OrderNo +'<input type="hidden" class="dontTakeme" value="thisIsIt"></td></tr>';
+                                            counter++;
+
+                                        }
+                                        trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" class="hidden_row1'+counter+' hidden_row"><td style="padding: 0px;width: 10%;">'+
+                                            '<input type="checkbox" name="unique" id ="unique" style="height: 20px !important;width: 50px !important;"  class="unique" value="' +value.OrderDetailId + '" /></td>' +
+                                            '<td style="padding: 0px;width: 30%;">'+value.PastelDescription+'</td>'+
+                                            '<td>'+
+                                            '<input type="number" min="0" style="height: 26px !important; width: 76px;" class="remaining" value="' + parseFloat(value.mnyQtyRemaining).toFixed(2) + '" style="" ><input type="hidden" class="volume" value="' +value.volumes + '" />' +
+                                            '<input type="hidden" id ="OrderDetailId" class="OrderDetailId" value="' +value.OrderDetailId + '" /> <input type="hidden" class="prodmass" value="' +value.weights + '" /><input type="hidden" class="fltLatitude" value="' +value.fltLatitude + '" /><input type="hidden" class="fltLongitude" value="' +value.fltLongitude + '" /><input type="hidden" class="OwnerID" value="' +value.OwnerID + '" /></td>' +
+
+                                            '<td style="padding: 0px;width: 100px;color:red;"> Avl '+ parseFloat(value.Available).toFixed(0)+'</td>'+
+                                            '<td style="padding: 0px;width: 100px;">'+value.pallaetQty+'</td><input type="hidden" class="infowindow" value="' +value.infowindow + '" /><input type="hidden" class="PastelDescription" value="' +value.PastelDescription + '" />'+
+                                            '<td style="padding: 0px;width: 100px;"> Wgt '+parseFloat(value.weights).toFixed(1)+'</td>'+
+                                            '<td style="padding: 0px;width: 100px;"> Vol '+value.volume+'</td>'+
+                                            '</tr>';
+//
+                                        inv = value.CustomerId
+
+
+                                    });
+                                    $('#priority').append(trHTML);
+                                }
+                            });
+                                dialog.dialog('close');
+                            },
+                            "NO": function () {
+                                dialog.dialog('close');
+                            }
+                        }
+                    });
+
+
+                    //getPriotyCustOnly
                     console.debug(data);
                     // upDateOrderHeaderAndPOS();
+
 
                     $.ajax({
                         url: '{!!url("/getProgressPlan")!!}',
@@ -787,6 +846,7 @@
                 checkedLinesPriority.push({
                     'orderdetail': id,
                     'qty': $(this).closest('tr').find('.remaining').val(),
+                    'ownerId': $(this).closest('tr').find('.ownerId').val(),
                     'pickingtype':'productsonorders',
                     'referenceNo':$('#referenceno').val()
                 });
@@ -1106,9 +1166,7 @@
                 localStorage.removeItem('routeplanner');
                 //localStorage.routeplanner = JSON.stringify({name: "John",routeId: $('#rouTabletLoadingtesonPlanning').val(),deliveryDate: $('#deliveryDatesonPlanning').val()});
                 localStorage.setItem('routeplanner', JSON.stringify({deliveryDate: $('#deliveryDatesonPlanning').val(),
-                    deliveryDateTo: $('#deliveryDatesonPlanning2').val(),routeId: $('#rouTabletLoadingtesonPlanning').val() }));
-
-
+                    deliveryDateTo: $('#deliveryDatesonPlanning2').val(),routeId: $('#rouTabletLoadingtesonPlanning').val() ,'reference':$('#referenceno').val() }));
 
                 var trHTML = '';
                 var style = '';
@@ -1121,12 +1179,12 @@
                 $('#referenceno').val(data.referenceNo);
                 $.each(data.priority, function (key, value) {
 
-                    if (inv != value.OrderId)
+                    if (inv != value.CustomerId)
                     {
                         var k = parseInt(counter)+parseInt(1);
                         trHTML +='<tr ondblclick="this.style.display = none" class="fast_remove" style="font-size: 14px;font-weight: 600;" onclick="show_hide_row(\'hidden_row1'+ k +'\') ;"><td>'+
                             value.StoreName +'</td><td>'+
-                            value.OrderId +'</td><td>'+
+                            value.orderid +'</td><td>'+
                             value.OrderDate +'</td><td>'+
                             value.DeliveryDate +'</td><td>'+
                             value.OrderNo +'<input type="hidden" class="dontTakeme" value="thisIsIt"></td></tr>';
@@ -1135,18 +1193,18 @@
                     }
                     trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" class="hidden_row1'+counter+' hidden_row"><td style="padding: 0px;width: 10%;">'+
                         '<input type="checkbox" name="unique" id ="unique" style="height: 20px !important;width: 50px !important;"  class="unique" value="' +value.OrderDetailId + '" /></td>' +
-                        '<td style="padding: 0px;width: 50%;">'+value.PastelDescription+'</td>'+
+                        '<td style="padding: 0px;width: 30%;">'+value.PastelDescription+'</td>'+
                         '<td>'+
                         '<input type="number" min="0" style="height: 26px !important; width: 76px;" class="remaining" value="' + parseFloat(value.mnyQtyRemaining).toFixed(2) + '" style="" ><input type="hidden" class="volume" value="' +value.volumes + '" />' +
-                        '<input type="hidden" id ="OrderDetailId" class="OrderDetailId" value="' +value.OrderDetailId + '" /> <input type="hidden" class="prodmass" value="' +value.Mass + '" /><input type="hidden" class="fltLatitude" value="' +value.fltLatitude + '" /><input type="hidden" class="fltLongitude" value="' +value.fltLongitude + '" /></td>' +
+                        '<input type="hidden" id ="OrderDetailId" class="OrderDetailId" value="' +value.OrderDetailId + '" /> <input type="hidden" class="prodmass" value="' +value.weights + '" /><input type="hidden" class="fltLatitude" value="' +value.fltLatitude + '" /><input type="hidden" class="fltLongitude" value="' +value.fltLongitude + '" /><input type="hidden" class="OwnerID" value="' +value.OwnerID + '" /></td>' +
 
-                        '<td style="padding: 0px;width: 100px;"> Avl '+ parseFloat(value.Available).toFixed(0)+'</td>'+
+                        '<td style="padding: 0px;width: 100px;color:red;"> Avl '+ parseFloat(value.Available).toFixed(0)+'</td>'+
                         '<td style="padding: 0px;width: 100px;">'+value.pallaetQty+'</td><input type="hidden" class="infowindow" value="' +value.infowindow + '" /><input type="hidden" class="PastelDescription" value="' +value.PastelDescription + '" />'+
-                        '<td style="padding: 0px;width: 100px;"> Wgt '+value.weights+'</td>'+
+                        '<td style="padding: 0px;width: 100px;"> Wgt '+parseFloat(value.weights).toFixed(1)+'</td>'+
                         '<td style="padding: 0px;width: 100px;"> Vol '+value.volume+'</td>'+
                         '</tr>';
 //
-                    inv = value.OrderId
+                    inv = value.CustomerId
 
 
                 });
@@ -1157,14 +1215,17 @@
 
                 var inv = 'id';
                 var counter = 0;
+                var qtytotal = 0;
                 $.each(data.products, function (key, value) {
 
                     if (inv != value.ProductId)
                     {
                         var k = parseInt(counter)+parseInt(1);
                         trHTML +='<tr ondblclick="this.style.display = none" class="fast_remove" style="font-size: 14px;" onclick="show_hide_row(\'hidden_row2'+ k +'\') ;"><td style="font-weight: 600;background: '+value.fine+'">'+
-                            value.PastelDescription +' </td><td> '+ parseFloat(value.Available).toFixed(0)+
-                            '<input type="hidden" class="dontTakeme" value="thisIsIt"></td></tr>';
+                            value.PastelDescription +' </td><td style="color:red"> '+ parseFloat(value.Available).toFixed(0)+
+                            '<input type="hidden" class="dontTakeme" value="thisIsIt"></td>'+
+
+                            +'</tr>';
                         counter++;
 
                     }
@@ -1172,13 +1233,14 @@
                         '<td style="padding: 0px;width:50%;">'+value.StoreName+'</td>'+
                         '<td>'+
                         '<input type="number" min="0" style="height: 50px !important;width: 50px;" class="remaining" value="' + parseFloat(value.mnyQtyRemaining).toFixed(2) + '" style="" ></td><td>' +
-                        '<input type="hidden" id ="OrderDetailId" class="OrderDetailId" value="' +value.OrderDetailId + '" /> <input type="hidden" class="prodmass" value="' +value.Mass + '" /><input type="hidden" class="fltLatitude" value="' +value.fltLatitude + '" /><input type="hidden" class="fltLongitude" value="' +value.fltLongitude + '" /></td><td>' +
+                        '<input type="hidden" id ="OrderDetailId" class="OrderDetailId" value="' +value.OrderDetailId + '" /> <input type="hidden" id ="ownerId" class="ownerId" value="' +value.OwnerID + '" /><input type="hidden" class="prodmass" value="' +value.weights + '" /><input type="hidden" class="fltLatitude" value="' +value.fltLatitude + '" /><input type="hidden" class="fltLongitude" value="' +value.fltLongitude + '" /></td><td>' +
                         '<input type="checkbox" name ="uniqueallproducts" style="height: 20px !important;width: 50px !important;"  class="unique" value="' +value.OrderDetailId + '" /><input type="hidden" class="volume" value="' +value.volumes + '" /></td>' +
-                        '<td style="padding: 0px;width: 100px;">'+value.pallaetQty+'</td><input type="hidden" class="infowindow" value="' +value.infowindow + '" /> <input type="hidden" class="PastelDescription" value="' +value.PastelDescription + '" />'+
-                        '<td style="padding: 0px;width: 100px;"> Wgt '+value.weights+'</td>'+
+                        '<td style="padding: 0px;width: 100px;">Pallet Qty'+value.pallaetQty+'</td><input type="hidden" class="infowindow" value="' +value.infowindow + '" /> <input type="hidden" class="PastelDescription" value="' +value.PastelDescription + '" />'+
+                        '<td style="padding: 0px;width: 100px;"> Wgt '+parseFloat(value.weights).toFixed(1)+'</td>'+
                         '<td style="padding: 0px;width: 100px;"> Vol '+value.volume+'</td>'+
                         '</tr>';
 
+                    qtytotal= qtytotal + parseFloat(value.mnyQtyRemaining).toFixed(2);
                     inv = value.ProductId
 
 
@@ -1223,7 +1285,7 @@
                         vol = vol + parseFloat($(this).closest('tr').find('.volume').val()) ;
                         console.debug(returnVal);
                         console.debug(vol);
-                        $('#totalweightcust').val(returnVal);
+                        $('#totalweightcust').val(parseFloat(returnVal*1000).toFixed(2));
                         $('#totalvolcust').val(vol);
 
                         locations[i] = ['testing',$(this).closest('tr').find('.fltLatitude').val() , $(this).closest('tr').find('.fltLongitude').val(),$(this).closest('tr').find('.infowindow').val(),$(this).val(),

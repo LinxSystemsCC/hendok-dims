@@ -29,8 +29,9 @@ Route::post('getLiveDriversInfo', [ExternalFunctions::class, 'getLiveDriversInfo
 Auth::routes();
 
 //Route::get('/home', 'SalesForm@index')->name('home');
-Route::get('home',[SalesForm::class, 'index'])->name('home');
+Route::get('home/',[SalesForm::class, 'index'])->name('home');
 Route::get('/sales',[SalesForm::class, 'sales']);
+Route::get('selectedCompany/{companyid}',[SalesForm::class, 'selectedCompany']);//STEEL
 Route::get('pl', [SalesForm::class,'pl']);
 Route::get('returns',[SalesForm::class,'returns']);
 Route::get('getProductsStopedBuyingJSon',[SalesForm::class,'getProductsStopedBuyingJSon']);
@@ -130,6 +131,7 @@ Route::post('XmlCreateCustomerSpecials',  [DimsCommon::class,'XmlCreateCustomerS
 Route::post('overallSpecialHeader', [DimsCommon::class,'overallSpecialHeader']);
 Route::post('createGroupSpecials',  [DimsCommon::class,'createGroupSpecials']);
 Route::post('createOverallSpecials',  [DimsCommon::class,'createOverallSpecials']);
+Route::get('getTaxForSelectedProduct',  [DimsCommon::class,'getTaxForSelectedProduct']);
 Route::post('customerByDateOrContract',  [DimsCommon::class,'customerByDateOrContract']);
 Route::post('customerGroupByDateOrContract',  [DimsCommon::class,'customerGroupByDateOrContract']);
 Route::get('viewgroupinexcel/{from}/{to}/{groupid}', [DimsCommon::class,'viewgroupinexcel'] );
@@ -311,8 +313,14 @@ Route::post('sequenceOrdersByMode', [TabletLoadingApp::class,'sequenceOrdersByMo
 Route::post('sequenceOrdersByMode',[TabletLoadingApp::class,'sequenceOrdersByMode'] );
 Route::post('resequenceOrders', [TabletLoadingApp::class,'resequenceOrders']);
 Route::get('truckControlId',[TabletLoadingApp::class,'truckControlId']);
+Route::get('pastels',[TabletLoadingApp::class,'pastels']);
 Route::get('getmycustroutemap',[TabletLoadingApp::class,'getmycustroutemap']);
+Route::get('pickingtickets',[TabletLoadingApp::class,'pickingtickets']);
+Route::get('GetPickingReferenceProducts',[TabletLoadingApp::class,'GetPickingReferenceProducts']);
+Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
+Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);
+Route::post('updateplanlines',[TabletLoadingApp::class,'updateplanlines']);
 Route::get('plannedmaproute',[TabletLoadingApp::class,'plannedmaproute']);
 Route::get('routePlannerPrintPreview/{date}/{dateTo}/{ordertype}/{route}/{status}',[TabletLoadingApp::class,'routePlannerPrintPreview']);
 Route::post('moveTheOrder',[TabletLoadingApp::class,'moveTheOrder']);
@@ -327,6 +335,7 @@ Route::get('designPickingInformationPerTeam/{del}/{route}/{ordertype}', [TabletL
 Route::get('truckControlSheetDetails', [TabletLoadingApp::class,'truckControlSheetDetails']);
 Route::post('stopsUnmapped', [TabletLoadingApp::class,'stopsUnmapped']);
 Route::post('getRouteDataMultiSelected', [TabletLoadingApp::class,'getRouteDataMultiSelected']);
+Route::post('getPriotyCustOnly', [TabletLoadingApp::class,'getPriotyCustOnly']);
 Route::post('getCustomerPlannedForPicking', [TabletLoadingApp::class,'getCustomerPlannedForPicking']);
 Route::post('getcustomergeneralplanmap', [TabletLoadingApp::class,'getcustomergeneralplanmap']);
 Route::post('PutMarkerOnTheMapDynamically', [TabletLoadingApp::class,'PutMarkerOnTheMapDynamically']);
@@ -373,6 +382,8 @@ Route::post('forceinvoicetoprint', [TabletLoadingApp::class,'forceinvoicetoprint
 Route::post('updateIQInvoices',[TabletLoadingApp::class,'updateIQInvoices']);
 Route::post('forcecredits',[TabletLoadingApp::class,'forcecredits']);
 Route::post('combineroutes',[TabletLoadingApp::class,'combineroutes']);
+Route::post('updatepickingheader',[TabletLoadingApp::class,'updatepickingheader']);
+Route::post('markreftobeapproved',[TabletLoadingApp::class,'markreftobeapproved']);
 Route::get('creditNoteReasonsJSonWithBook',[TabletLoadingApp::class,'creditNoteReasonsJSonWithBook']);
 
 //TABLET LOADING APP ENDS HERE !!!

@@ -156,6 +156,9 @@
         #orderPatternIdTable_filter input{
             display: block !important;
         }
+        #backorders_filter input{
+            display: block !important;
+        }
         thead th {
             font-size: 10px;
             padding: 1px !important;

@@ -135,11 +135,12 @@ class SalesFormFunctions extends Controller
         $customerCode = $request->get('customerID');
         $productCode = $request->get('productCode');
         $warehouse = $request->get('warehouseid');
+        $companyId = $request->get('companyId');
         $userid = Auth::user()->UserID;
         $deliveryDate = (new \DateTime($request->get('deliveryDate')))->format('Y-m-d');
         $returnPrice = DB::connection('sqlsrv3')
-            ->select('exec spCustomerPriceLookUp ?,?,?,?,?',
-                array($deliveryDate,$productCode,$customerCode,$warehouse,$userid)
+            ->select('exec spCustomerPriceLookUp ?,?,?,?,?,?',
+                array($deliveryDate,$productCode,$customerCode,$warehouse,$userid,$companyId)
             );
 
         return response()->json($returnPrice);
@@ -234,11 +235,12 @@ class SalesFormFunctions extends Controller
     public function getGroupSpecials(Request $request)
     {
         $customerCode = $request->get('customerCode');
+        $companyId = $request->get('companyId');
 
         $deliveryDate = (new \DateTime($request->get('deliveryDate')))->format('Y-m-d H:m:s');
         $returnPastInvoices = DB::connection('sqlsrv3')
-            ->select('exec spCustomerGroupSpecials ?,?',
-                array($customerCode,$deliveryDate)
+            ->select('exec spCustomerGroupSpecials ?,?,?',
+                array($customerCode,$deliveryDate,$companyId)
             );
             //->select("EXEC spCustomerGroupSpecials '".$customerCode."','".$deliveryDate."'");
         return response()->json($returnPastInvoices);
@@ -250,20 +252,30 @@ class SalesFormFunctions extends Controller
     public function combinedSpecials(Request $request)
     {
         $customerCode = $request->get('customerCode');
+        $companyId = $request->get('companyId');
 
         $deliveryDate = (new \DateTime($request->get('deliveryDate')))->format('Y-m-d');
         $returnGroupSpecials= DB::connection('sqlsrv3')
-            ->select('exec spCustomerGroupSpecials ?,?',
-                array($customerCode,$deliveryDate)
+            ->select('exec spCustomerGroupSpecials ?,?,?',
+                array($customerCode,$deliveryDate,$companyId)
             );
         $returnCustomer = DB::connection('sqlsrv3')
-            ->select('exec spCustomerDateDrivenSpecials ?,?',
-                array($customerCode,$deliveryDate)
+            ->select('exec spCustomerDateDrivenSpecials ?,?,?',
+                array($customerCode,$deliveryDate,$companyId)
             );
         $returnPastInvoices = DB::connection('sqlsrv3')
-            ->select('exec spGetCustomerPastInvoices ?',
-                array($customerCode)
+            ->select('exec spGetCustomerPastInvoices ?,?',
+                array($customerCode,$companyId)
             );
+        $backOrder = DB::connection('sqlsrv3')
+            ->select('exec spCustomerBackOrder ?,?',
+                array($customerCode,$companyId)
+            );
+
+        $arrays['recordsTotal'] = count($backOrder);
+        $arrays['data'] = $backOrder;
+        $arrays['recordsFiltered'] = count($backOrder);
+        $arrays['draw'] = intval($request->input('draw'));
 
         $customerContacts= DB::connection('sqlsrv3')->table('tblCustomers')->select('BuyerContact','BuyerTelephone','CellPhone')->where('CustomerPastelCode',$customerCode)->get();
 
@@ -271,6 +283,7 @@ class SalesFormFunctions extends Controller
         $output['GroupSpecials'] = $returnGroupSpecials;
         $output['pastInvoices'] = $returnPastInvoices;
         $output['contacts'] = $customerContacts;
+        $output['backorders'] = $arrays;
         return $output;
     }
 
@@ -308,6 +321,7 @@ class SalesFormFunctions extends Controller
         $OrderNo = $request->get('orderNo');
         $statement = $request->get('statement');
         $discount = $request->get('discount');
+        $companyId = $request->get('companyId');
         $OrderNo = str_replace("'", " ", $OrderNo);
         $DeliveryAddressID =0;
         $userID =  Auth::user()->UserID;
@@ -318,8 +332,8 @@ class SalesFormFunctions extends Controller
        // $returnPastInvoices = DB::connection('sqlsrv3')->select("EXEC spCRUDOrderHeaders 0,'".$customerCode."',".$DeliveryAddressID.",'".$OrderDate."','".$DeliveryDate."',".$LateOrder.",'".$OrderNo."',0,'".$statement."'".","."'0'".","."'0'".","."'0'".","."'0'".","."'0'".","."'0'".",".$userID.",0,".$discount);
         $returnPastInvoices = DB::connection('sqlsrv3')
             //->select("EXEC spCRUDOrderHeaders 0,'".$customerCode."',".$DeliveryAddressID.",'".$OrderDate."','".$DeliveryDate."',".$LateOrder.",'".$OrderNo."',0,'".$statement."'".","."'0'".","."'0'".","."'0'".","."'0'".","."'0'".","."'0'".",".$userID.",0,0.0");
-            ->select('exec spCRUDOrderHeaders ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
-                array(0,$customerCode,$DeliveryAddressID,$OrderDate,$DeliveryDate,$LateOrder,$OrderNo,0,$statement,'0','0','0','0','0','0',$userID,0,$discount)
+            ->select('exec spCRUDOrderHeaders ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+                array(0,$customerCode,$DeliveryAddressID,$OrderDate,$DeliveryDate,$LateOrder,$OrderNo,0,$statement,'0','0','0','0','0','0',$userID,0,$discount,$companyId)
             );
 
 
@@ -329,12 +343,12 @@ class SalesFormFunctions extends Controller
         $zero = 0;
         $countAddress = DB::connection('sqlsrv3')
            // ->select("EXEC spCrudDeliveryAddress ".$zero.",'00','00','000','000','000',00,00,'00','".$customerCode."',00,'Count'");
-           ->select('exec spCrudDeliveryAddress ?,?,?,?,?,?,?,?,?,?,?,?',
-               array($zero,'00','00','000','000','000',00,00,'00',$customerCode,00,'Count')
+           ->select('exec spCrudDeliveryAddress ?,?,?,?,?,?,?,?,?,?,?,?,?',
+               array($zero,'00','00','000','000','000',00,00,'00',$customerCode,00,'Count',$companyId)
            );
         $custSingleAddress = DB::connection('sqlsrv3')
-            ->select('exec spCrudDeliveryAddress ?,?,?,?,?,?,?,?,?,?,?,?',
-                array($zero,'00','00','000','000','000',00,00,'00',$customerCode,00,'Select')
+            ->select('exec spCrudDeliveryAddress ?,?,?,?,?,?,?,?,?,?,?,?,?',
+                array($zero,'00','00','000','000','000',00,00,'00',$customerCode,00,'Select',$companyId)
             );
 
         $output['orderId'] = $returnPastInvoices[0]->ID;
@@ -346,11 +360,172 @@ class SalesFormFunctions extends Controller
     {
         $orderlines = $request->get('orderlines');
         $orderheaders = $request->get('orderheaders');
+        $orderlinesupdate = $request->get('orderlinesupdate');
+        $orderheadersupdate = $request->get('orderheadersupdate');
         $OrderId = $request->get('OrderId');
+        $dimsid = $request->get('dimsid');
+        $companyid = $request->get('companyid');
+        $internalordernumber = $request->get('internalordernumber');
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
-        ///var_dump($orderlines);
-        ///
+        $customercode= "";
+        $globOrderNo = "";
+       // $gl = "";
+
+        $customerCode  = "CASH";
+        $productCode  = "ABC";
+        $deliveryDate = "2021-09-12";
+        $orderdate = "2021-09-12";
+        $invdate = "2021-09-12";
+
+        $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+     //   dd($sdkHelper->);
+     //   var_dump("Loaded ComHelper, version {$sdkHelper->AssemblyVersion}");
+        //Initialise
+        $sdkHelper->CreateCommonDBConnection("uid=sa;pwd=Linx_123;Initial Catalog=SageCommon;server=102.37.0.48\SQL2019,62019");
+        //var_dump("Connected to common");
+        $sdkHelper->SetLicense("DE12111039", "4626921");
+
+        switch($companyid){
+            case 1:
+                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Hendok Distribution;server=102.37.0.48\SQL2019,62019");
+                break;
+            case 2:
+                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Hendok (Pty) Ltd;server=102.37.0.48\SQL2019,62019");
+                break;
+            case 3:
+                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Ukhosi;server=102.37.0.48\SQL2019,62019");
+                break;
+        }
+
+        try {
+            $sdkHelper->BeginTran();
+            if ($sdkHelper->CurrentEvolutionDatabaseVersion != $sdkHelper->CompatibleEvolutionDatabaseVersion)
+            {
+                prn("Warning: the current database version is {$sdkHelper->CurrentEvolutionDatabaseVersion} while this version of the SDK is intended for version {$sdkHelper->CompatibleEvolutionDatabaseVersion}");
+            }
+            $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
+            foreach ($orderheaders as $val)
+            {
+                $customercode = $val['customerCode'];
+            }
+            if(strlen(trim($dimsid)) < 1  ){
+                foreach ($orderheaders as $val)
+                {
+                    $cashAccount = $sdkHelper->GetARAccount($val['customerCode'] );
+                    $salesOrder->Customer = $cashAccount;
+                    $salesOrder->TaxMode =0;
+                    $salesOrder->OrderDate = $val['orderDate'];
+                    $salesOrder->DeliveryDate =$val['deliveryDate'];
+                    $salesOrder->InvoiceDate = $val['deliveryDate'];
+                    $salesOrder->OrderNo = str_pad($val['orderId'], 8, $pad_string = "0", STR_PAD_LEFT);
+                    $salesOrder->ExternalOrderNo = $userName;
+                    $Representive = $sdkHelper->GetSalesRepresentative("Freddie");
+                    $salesOrder->Representative =$Representive;
+                    $globOrderNo = str_pad($val['orderId'], 8, $pad_string = "0", STR_PAD_LEFT);
+                }
+                foreach ($orderlines as $val)
+                {
+                    $orderDetail = new \COM("Pastel.Evolution.OrderDetail");
+                    $stockItem = $sdkHelper->GetStockItem($val['productCode']);
+                    $orderDetail->InventoryItem = $stockItem;
+                    $orderDetail->Quantity =  floatval($val['qty']);
+                    $orderDetail->TaxMode = 0;
+                    $orderDetail->TaxType = $sdkHelper->GetTaxRate("1");
+                    $orderDetail->Warehouse = $sdkHelper->GetWarehouseByCode("Mstr") ;
+                    $orderDetail->UnitSellingPrice =floatval($val['price']) /*$val['price']*/;
+                    $salesOrder->Detail->Add($orderDetail);
+                }
+
+                $reference = $salesOrder->Save();
+                $result = $sdkHelper->GetSalesOrder($globOrderNo);
+                $saved = DB::connection('sqlsrv3')->table('tblOrders')
+                    ->where('OrderId',$OrderId )
+                    ->update(['AutoIndex' => $result->ID,'intOwnerID'=>$companyid]);
+
+                if($saved){
+                    $outPut['result'] = "Success";
+                    $outPut['Error'] = "Success";
+                    return $outPut;
+                }
+                else{
+                    $outPut['result'] = $result;
+                    $outPut['Error'] = "Success";
+                    return $outPut;
+                }
+
+            }else{
+
+              //  $cashAccount = $sdkHelper->GetARAccount($customercode );
+                //$salesOrder->Customer = $cashAccount;
+                if(is_array($orderlines) ){
+                    foreach($orderlines as $val){
+                        $salesOrder = $sdkHelper->GetSalesOrder($internalordernumber);
+                        $orderDetail = new \COM("Pastel.Evolution.OrderDetail");
+
+                     echo $val['productCode'];
+
+                        $stockItem = $sdkHelper->GetStockItem($val['productCode']);
+                        $orderDetail->InventoryItem = $stockItem;
+                        $orderDetail->Quantity =  floatval($val['qty']);
+                        $orderDetail->TaxMode = 0;
+                        $orderDetail->TaxType = $sdkHelper->GetTaxRate("1");
+
+                        $orderDetail->Warehouse = $sdkHelper->GetWarehouseByCode("Mstr") ;
+                        $orderDetail->UnitSellingPrice =floatval($val['price']);
+                        $salesOrder->Detail->Add($orderDetail);
+                    }
+                    $salesOrder->Save();
+                }
+
+
+                //Update Orderlines
+                foreach ($orderlinesupdate as $val)
+                {
+                    $id =intval($val['formrelativeid']);
+                    $x = $sdkHelper->GetSalesOrder($internalordernumber);
+                    //echo $id;
+                    $x->Detail[$id]->Quantity =floatval($val['qty']);
+                    $reference = $x->Save();
+                }
+
+                $sdkHelper->CommitTran();
+                $outPut['result'] = "Success";
+                $outPut['Error'] = "Success";
+                return $outPut;
+            }
+        }catch (Error $err){
+            dd($err);
+            $outPut['result'] = $err;
+            $outPut['Error'] = "Success";
+            return $outPut;
+
+        }
+
+
+
+        //  dd($reference);
+        /*   $salesOrder->OrderNo = str_pad($val['orderId'], 8, $pad_string = "0", STR_PAD_LEFT);
+
+          dd($x->Detail->Count()) ;
+           $x->Detail->Quantity = 11.50;
+           $reference = $x->Save();
+           dd($reference);*/
+        /* echo $x->Detail[0] ;
+         $x->Detail[0]->ToProcess = 1;
+
+         $reference = $x->Process();
+         echo  $reference;*/
+
+        //$salesOrder->Representive =$Representive;
+        //Retrieve an existing inventory item using its code.
+
+
+
+
+
+//dd();
+        /*
         if (is_array($orderlines)) {
 
         $orderheaderxml = $this->toxml($orderheaders, "xml", array("result"));
@@ -360,8 +535,6 @@ class SalesFormFunctions extends Controller
         $getResult = DB::connection('sqlsrv4')
             ->select("EXEC spXmlOrderHeadersAndLines " . $OrderId . ",'" . $orderlinesrxml . "','" . $orderheaderxml . "','" . $userName . "'," . $userid);
 
-        // echo $orderheaderxml;
-        // echo $orderlinesrxml;
         $outPut['result'] = $getResult[0]->Result;
         $outPut['Error'] = $getResult[0]->error;
         return $outPut;
@@ -369,8 +542,11 @@ class SalesFormFunctions extends Controller
             $outPut['result'] = "Success";
             $outPut['Error'] = "Success";
             return $outPut;
-        }
+        }*/
 
+    }
+    public function insertOrderAndHeader(){
+        //Brand New Order
     }
     public function insertHeaderForOtherTrans(Request $request)
     {
@@ -554,6 +730,7 @@ class SalesFormFunctions extends Controller
         $DeliveryDate = (new \DateTime($request->get('deliveryDate')))->format('Y-m-d');
         $LateOrder = $request->get('OrderType');
         $OrderNo = $request->get('orderNo');
+        $companyId = $request->get('companyId');
         $statement = $request->get('statement');
         $DeliveryAddressID = 0;
         $userID =  Auth::user()->UserID;
@@ -561,8 +738,8 @@ class SalesFormFunctions extends Controller
 
         $returnCounts = DB::connection('sqlsrv3')
             //->select("EXEC spCRUDOrderHeaders 0,'".$customerCode."',".$DeliveryAddressID.",'".$OrderDate."','".$DeliveryDate."',".$LateOrder.",'".$OrderNo."',0,'".$statement."'".","."'0'".","."'0'".","."'0'".","."'0'".","."'0'".","."'0'".",".$userID.",0,0.0");
-            ->select('exec spCRUDOrderHeaders ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
-                array(0,$customerCode,$DeliveryAddressID,$OrderDate,$DeliveryDate,$LateOrder,$OrderNo,0,$statement,'0','0','0','0','0','0',$userID,0,0)
+            ->select('exec spCRUDOrderHeaders ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+                array(0,$customerCode,$DeliveryAddressID,$OrderDate,$DeliveryDate,$LateOrder,$OrderNo,0,$statement,'0','0','0','0','0','0',$userID,0,0,$companyId)
             );
         return response()->json($returnCounts);
     }
@@ -608,6 +785,9 @@ class SalesFormFunctions extends Controller
     {
         $OrderId= $request->get('OrderId');
         $OrderDetailId = $request->get('OrderDetailId');
+        $companyid = $request->get('company');
+        $internalordernumber = $request->get('internalordernumber');
+
         $Qty = 0;
         $Price = 0;
         $LineDisc = 0;
@@ -617,44 +797,40 @@ class SalesFormFunctions extends Controller
         $Comment = "delete line";
         $userID = Auth::user()->UserID;
         //DB::beginTransaction();
+        $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+        //   dd($sdkHelper->);
+        //   var_dump("Loaded ComHelper, version {$sdkHelper->AssemblyVersion}");
+        //Initialise
+        $sdkHelper->CreateCommonDBConnection("uid=sa;pwd=Linx_123;Initial Catalog=SageCommon;server=102.37.0.48\SQL2019,62019");
+        //var_dump("Connected to common");
+        $sdkHelper->SetLicense("DE12111039", "4626921");
 
-        if(strlen($OrderDetailId) > 1)
+        switch($companyid){
+            case 1:
+                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Hendok Distribution;server=102.37.0.48\SQL2019,62019");
+                break;
+            case 2:
+                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Hendok (Pty) Ltd;server=102.37.0.48\SQL2019,62019");
+                break;
+            case 3:
+                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Ukhosi;server=102.37.0.48\SQL2019,62019");
+                break;
+        }
+
+        $orderDetail = new \COM("Pastel.Evolution.OrderDetail");
+        if(strlen($OrderDetailId) > 0)
         {
-           $insertOrderDetailDelete = DB::connection('sqlsrv3')
-                ->statement("EXEC spCRUDOrderDetails ".$OrderId.",".$OrderDetailId .",'".$CustomerId."','".$productID."',
-            ".$Qty.",".$Qty.",".$Qty.",".$Price.",".$LineDisc.",'".$Comment."',".$userID.",".$UnitCount.",'Delete'");
-            //if it didn't delete 07 Jan 2018 use laravel delete
-            //$insertOrderDetailDelete = false;
-            if(!$insertOrderDetailDelete)
-            {
-                DB::connection('sqlsrv3')->table('tblOrderDetails')->where('OrderDetailId',$OrderDetailId)->delete();
-                $checkIfThereIsOrderDetailID = DB::connection('sqlsrv3')->table('tblOrderDetails')->select('OrderDetailId')->where('OrderDetailId',$OrderDetailId)->get();
-                if(count($checkIfThereIsOrderDetailID) < 1)
-                {
-                    $host = 'Browser';
-                    (new ConsoleManagement())->logMessage(2,1,0,'Line ID '.$OrderDetailId.' deleted',0,$OrderId,0,$CustomerId,Auth::user()->UserID,
-                        0,0,0,0,Auth::user()->UserID,$OrderId ,  1, $OrderId,"'".$host."'",'0');
-                    $outPut['deletedId'] = $OrderDetailId;
-                    return $outPut;
-                }
-                else{
-                    $outPut['deletedId'] = "FAILED";
-                    return $outPut;
-                }
-            }
-            else
-            {
-                $outPut['deletedId'] = $OrderDetailId;
-                return $outPut;
-            }
+//delete
 
+            $orderd = $sdkHelper->GetSalesOrder($internalordernumber);
+            $orderd->Detail[$OrderDetailId-1]->Delete();
+            $orderd->Save();
 
-           // DB::connection('sqlsrv3')->table('tblOrderDetails')->where('OrderDetailId',$OrderDetailId)->delete();
         }
 
         //DB::commit();
-       // $outPut['deletedId'] = $OrderDetailId;
-        //return $outPut;
+        $outPut['deletedId'] = $OrderDetailId;
+        return $outPut;
 
     }
     public function deleteByHiddenToken(Request $request)
@@ -810,11 +986,11 @@ class SalesFormFunctions extends Controller
         $dir = $request->input('order.0.dir');
         $search = $request->input('search.value');
 
-        $customersLookUp = DB::connection('sqlsrv3')->select("SELECT [CustomerPastelCode],[StoreName],[ContactTel],[ContactPerson] FROM tblCustomers 
+        $customersLookUp = DB::connection('sqlsrv3')->select("SELECT [CustomerPastelCode],[StoreName],[ContactTel],[ContactPerson] FROM tblCustomers
                                 WHERE CustomerPastelCode like '%{$search}%' or StoreName like '%{$search}%' or ContactTel like '%{$search}%' or
                                 ContactPerson like '%{$search}%' ORDER BY $order $dir OFFSET $start ROWS FETCH NEXT $limit ROWS ONLY");
 
-        $countFiltered= DB::connection('sqlsrv3')->select("SELECT [CustomerPastelCode]FROM tblCustomers 
+        $countFiltered= DB::connection('sqlsrv3')->select("SELECT [CustomerPastelCode]FROM tblCustomers
                                 WHERE  CustomerPastelCode like '%{$search}%' or StoreName like '%{$search}%' or ContactTel like '%{$search}%' or
                                 ContactPerson like '%{$search}%'");
         $output['recordsTotal'] = count($customersLookUp);
@@ -938,8 +1114,9 @@ class SalesFormFunctions extends Controller
     public function onCheckOrderHeaderDetails(Request $request)
     {
         $OrderId= $request->get('orderId');
+        $ownerid = $request->get('ownerid');
         $GetOrderDetails= DB::connection('sqlsrv3')
-            ->select("EXEC spOrderIdLines ".$OrderId);
+            ->select("EXEC spOrderIdLines ".$OrderId.",".$ownerid);
         return response()->json($GetOrderDetails);
     }
     public function onCheckOrderHeaderDetailsForOtherTrans(Request $request)

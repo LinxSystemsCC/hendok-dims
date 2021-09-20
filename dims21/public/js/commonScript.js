@@ -171,7 +171,7 @@ function getPriceForProductDependingOnCustAndDeliveryDate(url,customerCode,deliv
     return price;
 }
 
-function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instock,titles,tax,unitSizes,prohib,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,linediscount,dicountproperty)
+function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instock,titles,tax,unitSizes,prohib,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,linediscount,dicountproperty,urlTax)
 {
     calculator();
     var myRow = $(tag).find("tr").last();
@@ -200,14 +200,14 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
         '<td contenteditable="false" class="col-md-4"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" value ="'+prodDesc+'"><input name="col8" id ="col8_'+tokenId+'" class="col8 '+classAnonymouscols+'" readonly></td>' +
         '<td  contenteditable="false" class="col-md-1"><input type="text" name="prodBulk_"  id ="prodBulk_'+tokenId+'" class="prodBulk_ resize-input-inside inputs"><br><input name="col3" id ="col3_'+tokenId+'" class="col3 '+classAnonymouscols+'" readonly></td>' +
         '<td  contenteditable="false" class="col-md-1"><input type="text" name="prodQty_" id ="prodQty_'+tokenId+'"   onkeypress="return isFloatNumber(this,event)"  class="prodQty_ resize-input-inside inputs" value ="'+prodQty+'"><br><input name="col4" id ="col4_'+tokenId+'" class="col4 '+classAnonymouscols+'" readonly></td>' +
-        '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" value ="'+price+'" style="font-weight: 800;">' +
+        '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" value ="'+price+'" style="font-weight: 800;"><select name="coltax" id ="coltax'+tokenId+'" class="coltax '+classAnonymouscols+'" ></select>' +
         '</td>' +
         '<td  contenteditable="false"  class="col-md-1"><input type="text" name="prodDisc_" id ="prodDisc_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodDisc_ resize-input-inside inputs" value ="'+linediscount+'"  '+dicountproperty+' ><br><input name="col6" id ="col6_'+tokenId+'" class="col6 '+classAnonymouscols+'" style="color: brown;" readonly></td>' +
         '<td  contenteditable="false"  class="col-md-1"><input  type="text" name="prodUnitSize_" id ="prodUnitSize_' + tokenId + '" class="prodUnitSize_ resize-input-inside inputs" value="' +unitSizes + '" ></td>' +
         '<td contenteditable="false"  class="col-md-1"><input type="text" name="instockReadOnly" id ="instockReadOnly_' + tokenId + '" value ="'+instock+'" class="instockReadOnly_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;"><select name="col2" id ="col2_'+tokenId+'" class="col2 '+classAnonymouscols+'"></select>' +
         '<td contenteditable="false"  class="col-md-1"><input type="text" name="additionalcost_" id ="additionalcost_' + tokenId + '" value ="" class="additionalcost_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;">' +
         '<td  contenteditable="false" class="col-md-3"><input type="text" name="prodComment_" id ="prodComment_'+tokenId+'" class="prodComment_ resize-input-inside inputs lst"><br><input name="col9" id ="col9_'+tokenId+'" class="col9 '+classAnonymouscols+'" readonly></td>' +
-        '<td><input type="hidden" id="title_'+tokenId+'" class="title"  value ="'+titles+'" /><input type="hidden" id="theOrdersDetailsId" value="" /><input type="hidden" id ="taxCode'+tokenId+'" value ="'+tax+'" class="taxCodes" />' +
+        '<td><input type="hidden" id="title_'+tokenId+'" class="title"  value ="'+titles+'" /><input type="hidden" class="theOrdersDetailsId" value="" /><input type="hidden" id ="taxCode'+tokenId+'" value ="'+tax+'" class="taxCodes" />' +
         '<input type="hidden" id ="cost_'+tokenId+'" value ="'+cost+'" class="costs" /><input type="hidden" id ="inStock_'+tokenId+'" value ="'+instock+'" class="inStock" /><input type="hidden" value ="'+tokenId+'" class="hiddenToken" />' +
         '<input type="hidden" id ="priceholder_'+tokenId+'" value="'+price+'" class="priceholder" />' +
         '<input type="hidden" id ="alcohol_'+tokenId+'" value="" class="alcohol" /><input type="hidden" id ="margin_'+tokenId+'" value ="'+ProductMargin+'" class="margin" />' +
@@ -242,7 +242,22 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
     $.each(wareautocomplete, function (i, item) {
         $("#col2_"+tokenId).append("<option value='"+item.ID+"'>" + item.Warehouse + "</option>");
     });
+   /* $.each(taxes, function (i, item) {
+        $("#coltax"+tokenId).append("<option value='"+item.TaxId+"'>" + item.TaxCode + "</option>");
+    });
+*/
+    $.ajax({
+        url:urlTax ,
+        type: "GET",
+        data:{prodCodes:prodCodes },
+        success: function(data){
 
+            $.each(data, function (i, item) {
+                $("#coltax"+tokenId).append("<option value='"+item.TaxId+"'>" + item.TaxCode + "</option>");
+            });
+
+        }
+    });
 
     var Ltot = 1 * price;
     $("#col6_"+tokenId).val(Ltot.toFixed(2))

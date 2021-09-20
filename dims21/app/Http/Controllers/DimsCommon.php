@@ -450,6 +450,14 @@ class DimsCommon extends Controller
             ->statement("EXEC spInsertIntoTblCommunications '".$subject."','".$body."','".$type."','".$customerCode."'");
         return response()->json($message);
     }
+    public function getTaxForSelectedProduct(Request $request)
+    {
+        $prodCodes = $request->get('prodCodes');
+
+        $taxCodes =  DB::connection('sqlsrv3')
+            ->select("EXEC spReturnPrductTaxCodesandMore '".$prodCodes."'");
+        return response()->json($taxCodes);
+    }
     public function invoicedoc(Request $request)
     {
         $OrderId = $request->get('OrderId');

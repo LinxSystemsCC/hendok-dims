@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 //use App\Http\Co
 use Auth;
 
@@ -126,14 +127,6 @@ class TabletLoadingApp extends controller
         $status = $request->get('status');
         $productId = $request->get('productId');
 
-        /*foreach ($orderIDs as $values )
-        {
-                $arryhOLDid
-        }*/
-
-     /*   $getInvoicesOnRoute = DB::connection('sqlsrv4')
-            ->select("EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . ",'" . $routeId . "','" . $status . "'");*/
-        // echo "EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . "," . $routeId.",'".$status."'";
         $priority = DB::connection('sqlsrv3')
             ->select('exec spGetPriotityCustomerOrders ?,?,?,?,?,?',
                 array($deliveryDate,$deliveryDateTo,$OrderType,$routeId,$status,$productId)
@@ -142,6 +135,7 @@ class TabletLoadingApp extends controller
             ->select('exec spGetAllProductsOnOrderToPlan ?,?,?,?,?,?',
                 array($deliveryDate,$deliveryDateTo,$OrderType,$routeId,$status,$productId)
             );
+       // dd($allproducts);
 
         $coordinates = DB::connection('sqlsrv3')
             ->select('exec [spGetOnPlanningCustomerCoordinates] ?,?,?',
@@ -157,6 +151,23 @@ class TabletLoadingApp extends controller
         $outPut['referenceNo'] = $ID;
         $outPut['coord'] = $coordinates;
       //  $outPut['currentPrices'] = $GetCurrentPrices;
+        return response()->json($outPut);
+    }
+    public function getPriotyCustOnly(Request $request){
+        $routeId = $request->get('routeId');
+        //dd($routeId);
+        $routeId = implode(", ", $routeId);
+        $deliveryDate = $request->get('deliveryDate');
+        $deliveryDateTo = $request->get('deliveryDateTo');
+        $OrderType = $request->get('OrderType');
+        $status = $request->get('status');
+        $productId = $request->get('productId');
+
+        $priority = DB::connection('sqlsrv3')
+            ->select('exec spGetPriotityCustomerOrders ?,?,?,?,?,?',
+                array($deliveryDate,$deliveryDateTo,$OrderType,$routeId,$status,$productId)
+            );
+        $outPut['priority'] = $priority;
         return response()->json($outPut);
     }
     public function getmycustroutemap()
@@ -181,6 +192,7 @@ class TabletLoadingApp extends controller
         //dd($routeId);
         $routeId = implode(", ", $routeId);
 
+     //   dd("exec [spGetOnPlanningCustomerCoordinates] '$From','$To','$routeId'");
         $coordinates = DB::connection('sqlsrv3')
             ->select('exec [spGetOnPlanningCustomerCoordinates] ?,?,?',
                 array($From,$To,$routeId));
@@ -255,14 +267,94 @@ class TabletLoadingApp extends controller
     {
         $referenceno = $request->get('referenceno');
         $priority = $request->get('priority');
+      //  dd($priority);
         $orderheaderxml = $this->toxml($priority, "xml", array("result"));
+        $userId = Auth::user()->UserID;
+        $UserName = Auth::user()->UserName;
 
         $allproducts = DB::connection('sqlsrv3')
-            ->select('exec spSavePickingPlanLines ?,?',
-                array($orderheaderxml,$referenceno)
+            ->select('exec spSavePickingPlanLines ?,?,?,?',
+                array($orderheaderxml,$referenceno,$userId,$UserName)
             );//[spGetInProgressPlanningProducts]
 
         return response()->json($allproducts);
+    }
+    public function updatepickingheader(Request $request){
+        $routeId = $request->get('routeId');
+        $deliveryDate = $request->get('deliveryDate');
+        $OrderType = $request->get('OrderType');
+        $truckid = $request->get('truckid');
+        $ref = $request->get('ref');
+
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spSaveAndValidatePlan ?,?,?,?,?',
+                array($routeId,$OrderType,$truckid,$deliveryDate,$ref)
+            );
+        return response()->json($allproducts);
+    }
+    public function markreftobeapproved(Request $request){
+        $ref = $request->get('ref');
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spUpdatePickingToGoForApproval ?',
+                array($ref)
+            );
+        return response()->json($allproducts);
+    }
+    public function previewplan($ref){
+        $getRoutes = DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->get();
+        $deliverTypes = DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId', 'OrderType')->get();
+        $trucks = DB::connection('sqlsrv3')->table('tblTrucks')->select('TruckId', 'TruckName')->get();
+
+        return view('dims/pickingplanpreview')
+            ->with('routes',$getRoutes)
+            ->with('orderTypes',$deliverTypes)
+            ->with('trucks',$trucks)
+            ->with('ref',$ref);
+    }
+    public function pickingticketslist($datefrom,$dateTo,$status)
+    {
+        $userId = Auth::user()->UserID;
+        $UserName = Auth::user()->UserName;
+
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingPlanProgress ?,?,?',
+                array($datefrom,$dateTo,$status)
+            );//[spGetInProgressPlanningProducts]
+
+        return response()->json($allproducts);
+    }
+    public function GetPickingReferenceProducts(Request $request)
+    {
+        $userId = Auth::user()->UserID;
+        $UserName = Auth::user()->UserName;
+        $ref = $request->get('ref');
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingReferenceProducts ?',
+                array($ref)
+            );//[spGetInProgressPlanningProducts]
+       // $output["Products"] = $allproducts;
+        //$output["We"] = $allproducts;
+
+        return response()->json($allproducts);
+    }
+    public function updateplanlines(Request $request){
+        $planlines = $request->get('planlines');
+        foreach($planlines as $val){
+            DB::connection('sqlsrv3')->table('tblPickingPlan')
+                ->where('intAutoPicking',$val['id'] )
+                ->update(['mnyQty' => $val['mnq']]);
+        }
+        //$planlines
+    }
+    public function pickingtickets(){
+        $getRoutes = DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->get();
+        $deliverTypes = DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId', 'OrderType')->get();
+        $trucks = DB::connection('sqlsrv3')->table('tblTrucks')->select('TruckId', 'TruckName')->get();
+        return view('dims/planning_tickets')
+            ->with('routes',$getRoutes)
+            ->with('orderTypes',$deliverTypes)
+            ->with('trucks',$trucks)
+            ;
     }
     public function updateplan(Request $request)
     {
@@ -363,7 +455,12 @@ class TabletLoadingApp extends controller
         //  dd($outPut);
         return response()->json($outPut);
     }
+    public function pastels()
+    {
 
+
+
+    }
 
     private static function getTabs($tabcount)
     {

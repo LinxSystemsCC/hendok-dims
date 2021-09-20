@@ -56,19 +56,32 @@
                                 <label class="control-label" for="inputOrderId"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Order Id</label>
                                 <input type="text" class="form-control input-sm col-xs-1" id="orderId" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
                             </div>
+                            <div class="form-group col-md-2">
+                                <label class="control-label" for="inputOrderId"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">CompanyId</label>
+                                <input type="hidden" id="dimsid" >
+                                <input type="text" class="form-control input-sm col-xs-1" id="ownerid" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;" readonly>
+                            </div>
                             <button type="button" id="checkOrders" class="btn-xs btn-info">Check</button>
+                            <br><input type="text" class="form-control input-sm" id="internalordernumber" readonly>
                         </fieldset>
+
                     </form>
 
                 </div>
                 <fieldset class="well">
                     <legend class="well-legend">Filters</legend>
                     <form>
-                        <div class="form-group  col-md-2" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                        <div class="form-group  col-md-1" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                             <label class="control-label" for="inputOrderId"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Delivery Type</label>
                             <select class="form-control input-sm col-xs-1" id="orderType" style="height:26px;font-size: 10px;" disabled></select>
                         </div>
-                        <div class="form-group  col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                        <div class="form-group  col-md-2" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                            <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Company</label>
+                            <select class="form-control input-sm col-xs-2" id="company" style="height:26px;font-size: 10px;" >
+
+                            </select>
+                        </div>
+                        <div class="form-group  col-md-1"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                             <label class="control-label" for="inputCustAcc"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Account</label>
                             <input type="text" name="custCode" class="form-control input-sm col-xs-1" id="inputCustAcc" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
                             <input type="hidden" name="hiddenCustomerNotes" class="form-control input-sm col-xs-1" id="hiddenCustomerNotes" >
@@ -85,7 +98,7 @@
                             <input type="hidden" name="hiddenCustDiscount" class="form-control input-sm col-xs-1" id="hiddenCustDiscount" >
                             <input type="hidden" name="hiddencustomerGp" class="form-control input-sm col-xs-1" id="hiddencustomerGp" >
                         </div>
-                        <div class="form-group col-md-2 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                        <div class="form-group col-md-1 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                             <label class="control-label" for="inputOrderDate"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Order Date</label>
                             <input type="text" class="form-control input-sm col-xs-1" id="inputOrderDate" style="font-weight: 900;    color: black;font-size: 13px;">
                         </div>
@@ -230,7 +243,7 @@
                         <input type="text" name="message" id="messagebox" class="form-control input-sm col-xs-1" value="" >
                     </div>
                     <div class=" col-md-12"    style="padding-left: 0px;">
-                        <label class="control-label" for="orederNumber"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Order Number</label><br>
+                        <label class="control-label" for="orederNumber"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">External Order Number</label><br>
                         <input type="text"   id="orederNumber" maxlength="25" style="font-weight: 900;color: black;"><span id="characters"></span>/25
                         <button id="advancedorderNumber">Advanced Order No</button>
                         <input type="hidden" name="hiddenDeliveryAddressId" id="hiddenDeliveryAddressId">
@@ -305,20 +318,40 @@
                         <ul class="rig columns-1">
                             <li style=" width: 97%;font-family: sans-serif">
                                 <div class="tab-frame" >
-                                    <input type="radio" checked name="tab" id="tab1">
+                                    <input type="radio" checked name="tab" id="tab0">
+                                    <label for="tab0">Back Orders</label>
+
+                                    <input type="radio"  name="tab" id="tab1">
                                     <label for="tab1">Pattern</label>
 
                                     <input type="radio" name="tab" id="tab2">
                                     <label for="tab2">Specials</label>
+
                                     <input type="radio" name="tab" id="tab3">
                                     <label for="tab3">Invoices</label>
                                     <!-- <input type="radio" name="tab" id="tab4">
                                      <label for="tab4">Prices</label>-->
 
+                                    <div class="tab" style="overflow-y: scroll;height:56%">
+                                        <table id="backorders" class="table search-table" style="overflow-y: scroll; width: 100%;font-family: sans-serif;" >
+                                            <thead>
+                                            <tr>
+                                                <th>Description</th>
+                                                <th>Item Code</th>
+
+                                                <th>Original Qty</th>
+                                                <th>Processed Qty</th>
+                                                <th>Remaining Qty</th>
+                                                <th>Delivery Date</th>
+                                                <th>Sales O.Num</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
 
                                     <div class="tab" style="overflow-y: scroll;height:56%">
                                         <div style="display: block !important;">
-                                            <table class="table search-table" id="orderPatternIdTable" style="overflow-y: scroll; width: 100%;font-family: sans-serif;height:62% !important;">
+                                            <table class="table search-table" id="orderPatternIdTable" style="overflow-y: scroll; width: 100%;font-family: sans-serif;">
                                                 <thead>
 
                                                 <tr >
@@ -455,11 +488,19 @@
                 <table class="table2 table-bordered " id="createdOrders" style="overflow-y: auto;width:100%;color: black;    font-weight: 700;" tabindex=0>
                     <thead>
                     <tr>
-                        <th class="col-sm-1">OrderId</th><th class="col-sm-1">Invoice no</th><th class="col-sm-1">Cust Code</th><th>Cust Name</th><th class="col-sm-1">Order Types</th><th class="col-sm-1">Route</th><th class="col-sm-1">Delivery Date</th><th>Reference No</th><th>Created By</th><th>Total Inv</th><th>Terms</th> <th>Bal.Due</th><th>GP(%)</th></tr>
+                        <th class="col-sm-1">OrderId</th><th class="col-sm-1">Invoice no</th>
+                        <th class="col-sm-1">Cust Code</th><th>Cust Name</th><th class="col-sm-1">Order Types</th>
+                        <th class="col-sm-1">Route</th><th class="col-sm-1">Delivery Date</th><th>Reference No</th>
+                        <th>Created By</th><th>Total Exc</th><th>Tax</th><th>Total Inc</th><th>Company</th> <th>Doc State</th><th></th><th></th></tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>OrderId</th><th >Invoice no</th><th >Cust Code</th><th>Cust Name</th><th>Order Types</th><th>Route</th><th>Delivery Date</th><th>Reference No</th><th>Created By</th><th>Total Inc</th><th>Terms</th> <th>Bal.Due</th><th>GP(%)</th></tr>
+                        <th class="col-sm-1">OrderId</th><th class="col-sm-1">Invoice no</th>
+                        <th class="col-sm-1">Cust Code</th><th>Cust Name</th><th class="col-sm-1">Order Types</th>
+                        <th class="col-sm-1">Route</th><th class="col-sm-1">Delivery Date</th><th>Reference No</th>
+                        <th>Created By</th><th>Total Exc</th><th>Tax</th><th>Total Inc</th><th>Company</th> <th>Doc State</th><th></th><th></th>
+
+                    </tr>
                     </tfoot>
 
                 </table>
@@ -547,8 +588,7 @@
 
 
             </div>
-            <a href='{!!url("/getphonebook")!!}' clas="btn-md bnt-primary pull-right" style="color:black;font-weight:900;text-decoration: underline; padding: 3px;"   onclick="window.open(this.href, 'getphonebook',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Phone Book</a>
+
         </div>
         <div id="tabletLoading" title="Tablet Loading">
             <div class="col-lg-12">
@@ -1484,6 +1524,29 @@
             </form>
 
         </div>
+        <div title="ITEMS WITH ZERO COST" id="authItemsWithzerocosts">
+            <h2>PLEASE AUTHORIZE</h2>
+            <form>
+                <div class="form-group  col-md-4" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <label class="control-label" for="zerocostmanagername"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Name</label><br>
+                    <input class="" id="zerocostmanagername" name="zerocostmanagername"  style="height:30px;font-size: 10px;"  autocomplete="off" value="-"></input>
+                </div>
+                <div class="form-group  col-md-4"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <label class="control-label" for="zerocostmanagerpassword"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">PassWord</label><br>
+                    <input type="password" name="zerocostmanagerpassword" class="" id="zerocostmanagerpassword" style="height:30px;font-size: 10px;"   autocomplete="off" value="-">
+                </div><br>
+                <div  >
+                    <button type="button" id="doAuthZerocost" class="btn-success btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Authorise</button>
+                </div>
+                <div class="form-group  col-md-12" >
+
+
+                            <button type="button" id="cancelzerocostdialod" class="btn-danger btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;display:none;">Cancel</button>
+
+                </div>
+            </form>
+
+        </div>
         <div title="Additional Cost" id="addcostdialog">
             <table class="table2 table-bordered" id="additionalcost">
                 <thead>
@@ -1502,6 +1565,12 @@
         @include('dims.oninvoiced')
 
         @endsection
+        <style>
+            .dataTables_scrollBody{
+
+            }
+
+        </style>
         <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
 
         <script>
@@ -1523,6 +1592,7 @@
             var finalDataProduct = '';
             var finalDataProductTest = '';
             var wareautocomplete = '';
+            var taxes = '';
             var arrayProdCodesCheck = [];
             var arrayProds = [];
             var globalOrderIdToBePushed = [];
@@ -1551,14 +1621,16 @@
             var jArrayCustomer = JSON.stringify({!! json_encode($customers) !!});
             var jArrayCustomerAll = JSON.stringify({!! json_encode($customersDontcareStatus) !!});
             var jArrayOrderTypes = JSON.stringify({!! json_encode($orderTypes) !!});
+            var jarraycompany = JSON.stringify({!! json_encode($company) !!});
             var jArrayLastInserted = JSON.stringify({!! json_encode($LastInserted) !!});
             var jArraydelivDates = JSON.stringify({!! json_encode($delivDates) !!});
             var jArraydelivRoutes = JSON.stringify({!! json_encode($routesNames) !!});
             var jArraytrueOrFalse = JSON.stringify({!! json_encode($trueOrFalse) !!});
             var warehouses = JSON.stringify({!! json_encode($warehouses) !!});
+            var Arraytaxes = JSON.stringify({!! json_encode($taxes) !!});
 
             // console.debug(jArrayCustomer);
-            // var computerName = '<?php echo gethostname() ?>';
+            // var computerName = '<?php echo gethostname() ?>';generate
             var computerName = '<?php echo php_uname('n'); ?>';
             var byWho = '<?php echo Auth::user()->UserName ?>';
             $(function () {
@@ -1680,11 +1752,16 @@
                     $('#submitFilters').prop('disabled', false);
                 });
                 var toAppendOrderTypes = '';
+                var toAppendCompany = '';
                 // var toAppendOrderTypes = '';
                 $.each(JSON.parse(jArrayOrderTypes), function (i, o) {
                     toAppendOrderTypes += '<option value="' + o.OrderTypeId + '">' + o.OrderType + '</option>';
                 });
                 $('#orderType').append(toAppendOrderTypes);
+                $.each(JSON.parse(jarraycompany), function (i, o) {
+                    toAppendCompany += '<option value="' + o.OwnerID + '">' + o.CompanyName + '</option>';
+                });
+                $('#company').append(toAppendCompany);
                 $('#orderTypesTabletLoading').append(toAppendOrderTypes);
                 var toAppenddelvdates = '';
                 $.each(JSON.parse(jArraydelivDates), function (i, o) {
@@ -1716,7 +1793,9 @@
                         SoldByWeight: item.SoldByWeight,
                         strBulkUnit: item.strBulkUnit,
                         Available: parseFloat(item.Available).toFixed(2),
-                        ProductId:item.ProductId
+                        ProductId:item.ProductId,
+                        TaxId:item.TaxId,
+                        TaxCode:item.TaxCode
                     }
 
                 });
@@ -1724,6 +1803,14 @@
                     return {
                         ID: item.ID,
                         Warehouse: item.Warehouse
+
+                    }
+
+                });
+                taxes = $.map(JSON.parse(Arraytaxes), function (item) {
+                    return {
+                        TaxId: item.TaxId,
+                        TaxCode: item.TaxCode
 
                     }
 
@@ -1744,7 +1831,9 @@
                         SoldByWeight: item.SoldByWeight,
                         strBulkUnit: item.strBulkUnit,
                         Available: parseFloat(item.Available).toFixed(2),
-                        ProductId:item.ProductId
+                        ProductId:item.ProductId,
+                        TaxId:item.TaxId,
+                        TaxCode:item.TaxCode
                     }
 
                 });
@@ -1802,6 +1891,20 @@
             itemSelector: 'tr',
             placeholder: '<tr class="placeholder"/>'
         });*/
+                var columnsD = [{name: 'CustomerPastelCode', minWidth:'230px',valueField: 'StoreName'},
+                    {name: 'CustomerPastelCode', minWidth: '90px',valueField: 'StoreName'}];
+                $("#inputCustAcc").mcautocomplete({
+                    source: finalDataProductTest,
+                    columns: columnsD,
+                    autoFocus: true,
+                    minLength: searchstring,
+                    delay: 2,
+                    multiple: true,
+                    multipleSeparator: ",",
+                    select: function (e, ui) {
+
+                    }
+                });
 
                 $('input,textarea').attr('autocomplete', 'off');
                 $('#orederNumber').keyup(updateCount);
@@ -1840,6 +1943,7 @@
                 $('#pointOfSaleDialog').hide();
                 $('#posCashUp').hide();
                 $('#authDropDowns').hide();
+                $('#pricingOnCustomer').hide();
                 $('#prohibitedProductAuth').hide();
                 $('#authDiscount').hide();
                 $('#theCustomerNotes').hide();
@@ -1847,6 +1951,7 @@
                 $('#popTransaction').hide();
                 $('#popLessStock').hide();
                 $('#popZeroStock').hide();
+                $('#returns').hide();
                 $('#edit_row').hide();
                 $('#authDropDownsClosedRoutePass').hide();//authFinishOrder
                 $('#createOrderOnCallList').hide();
@@ -1866,12 +1971,16 @@
                 $('#ZeroPrice').hide();
                 $('#authonholdaccount').hide();
                 $('#addcostdialog').hide();
+                $('#authItemsWithzerocosts').hide();
 
                 if(isBlockDeliveryTypeChanges.length > 4) {
                     $("#orderType").prop('disabled', 'disabled');
                 }
 
+                $('#company').on('change', function() {
 
+                    window.location = '{!!url("/selectedCompany")!!}/'+ this.value;
+                });
 
 
                 var otable = ''; // Order Listing Table
@@ -2172,19 +2281,17 @@
                         "serverSide": false,
                         "stateSave": false,
                         "columns": [
-                            {"data": "OrderId", "class": "small", "bSortable": true},
+                            {"data": "OrderId", "class": "small"},
                             {"data": "InvoiceNo", "class": "small"},
                             {"data": "CustomerPastelCode", "class": "small"},
                             {"data": "StoreName", "class": "small"},
                             {"data": "LateOrder", "class": "small"},
-                            {"data": "Route", "class": "small"},
-                            {"data": "DeliveryDate", "class": "small"},
+                            {"data": "route", "class": "small"},
+                            {"data": "DeliveryDate", "class": "small", "bSortable": true},
                             {"data": "OrderNo", "class": "small"},
                             {"data": "UserName", "class": "small"},
-                            {"data": "inclusives", "class": "small"},
-                            {"data": "Terms", "class": "small"},
-                            {"data": "BalanceDue", "class": "small"},
-                            {"data": "GPperc", "class": "small", render:function(data, type, row, meta) {
+                            {"data": "OrdTotExcl", "class": "small",
+                                render:function(data, type, row, meta) {
                                     // check to see if this is JSON
                                     try {
                                         var jsn = JSON.parse(data);
@@ -2195,7 +2302,37 @@
                                     }
                                     return parseFloat(jsn).toFixed(2);
 
-                                }}
+                                } },
+                            {"data": "OrdTotTax", "class": "small",
+                                render:function(data, type, row, meta) {
+                                    // check to see if this is JSON
+                                    try {
+                                        var jsn = JSON.parse(data);
+                                        //console.log(" parsing json" + jsn);
+                                    } catch (e) {
+
+                                        return jsn.data;
+                                    }
+                                    return parseFloat(jsn).toFixed(2);
+
+                                } },
+                            {"data": "OrdTotIncl", "class": "small",
+                                render:function(data, type, row, meta) {
+                                    // check to see if this is JSON
+                                    try {
+                                        var jsn = JSON.parse(data);
+                                        //console.log(" parsing json" + jsn);
+                                    } catch (e) {
+
+                                        return jsn.data;
+                                    }
+                                    return parseFloat(jsn).toFixed(2);
+
+                                } },
+                            {"data": "CompanyName", "class": "small"},
+                            {"data": "DocState", "class": "small"},
+                            {"data": "OwnerID", "class": "small"},
+                            {"data": "dimsId", "class": "small"}
 
                         ],
                         "order": [[ 0, "desc" ]],
@@ -2257,6 +2394,11 @@
                                             if($('#orderId').val().length < 3)
                                             {
                                                 $('#orderId').val(data.OrderId);
+                                                $('#ownerid').val(data.OwnerID);
+                                                $('#invoiceNo').val(data.InvoiceNo);
+                                                $('#dimsid').val(data.dimsId);
+                                                $('#internalordernumber').val(data.OrderNo);
+                                                $('#company').prepend('<option value="'+data.OwnerID+'" selected="selected">'+data.CompanyName+'</option>');
                                                 $("#checkOrders").click();
                                             }
 
@@ -2308,14 +2450,12 @@
                                 {"data": "CustomerPastelCode", "class": "small"},
                                 {"data": "StoreName", "class": "small"},
                                 {"data": "LateOrder", "class": "small"},
-                                {"data": "Route", "class": "small"},
+                                {"data": "route", "class": "small"},
                                 {"data": "DeliveryDate", "class": "small", "bSortable": true},
                                 {"data": "OrderNo", "class": "small"},
                                 {"data": "UserName", "class": "small"},
-                                {"data": "inclusives", "class": "small"},
-                                {"data": "Terms", "class": "small"},
-                                {"data": "BalanceDue", "class": "small"},
-                                {"data": "GPperc", "class": "small", render:function(data, type, row, meta) {
+                                {"data": "OrdTotExcl", "class": "small",
+                                    render:function(data, type, row, meta) {
                                         // check to see if this is JSON
                                         try {
                                             var jsn = JSON.parse(data);
@@ -2326,7 +2466,49 @@
                                         }
                                         return parseFloat(jsn).toFixed(2);
 
-                                    }}
+                                    } },
+                                {"data": "OrdTotTax", "class": "small",
+                                    render:function(data, type, row, meta) {
+                                        // check to see if this is JSON
+                                        try {
+                                            var jsn = JSON.parse(data);
+                                            //console.log(" parsing json" + jsn);
+                                        } catch (e) {
+
+                                            return jsn.data;
+                                        }
+                                        return parseFloat(jsn).toFixed(2);
+
+                                    } },
+                                {"data": "OrdTotIncl", "class": "small",
+                                    render:function(data, type, row, meta) {
+                                        // check to see if this is JSON
+                                        try {
+                                            var jsn = JSON.parse(data);
+                                            //console.log(" parsing json" + jsn);
+                                        } catch (e) {
+
+                                            return jsn.data;
+                                        }
+                                        return parseFloat(jsn).toFixed(2);
+
+                                    } },
+                                {"data": "CompanyName", "class": "small",
+                                    render:function(data, type, row, meta) {
+                                        // check to see if this is JSON
+                                        try {
+                                            var jsn = JSON.parse(data);
+                                            //console.log(" parsing json" + jsn);
+                                        } catch (e) {
+
+                                            return jsn.data;
+                                        }
+                                        return parseFloat(jsn).toFixed(2);
+
+                                    } },
+                                {"data": "DocState", "class": "small"},
+                                {"data": "OwnerID", "class": "small"},
+                                {"data": "dimsId", "class": "small"}
 
                             ],
                             "order": [[ 6, "desc" ]],
@@ -2367,14 +2549,12 @@
                                 {"data": "CustomerPastelCode", "class": "small"},
                                 {"data": "StoreName", "class": "small"},
                                 {"data": "LateOrder", "class": "small"},
-                                {"data": "Route", "class": "small"},
+                                {"data": "route", "class": "small"},
                                 {"data": "DeliveryDate", "class": "small", "bSortable": true},
                                 {"data": "OrderNo", "class": "small"},
                                 {"data": "UserName", "class": "small"},
-                                {"data": "inclusives", "class": "small"},
-                                {"data": "Terms", "class": "small"},
-                                {"data": "BalanceDue", "class": "small"},
-                                {"data": "GPperc", "class": "small", render:function(data, type, row, meta) {
+                                {"data": "OrdTotExcl", "class": "small",
+                                    render:function(data, type, row, meta) {
                                         // check to see if this is JSON
                                         try {
                                             var jsn = JSON.parse(data);
@@ -2385,8 +2565,37 @@
                                         }
                                         return parseFloat(jsn).toFixed(2);
 
-                                    }}
+                                    } },
+                                {"data": "OrdTotTax", "class": "small",
+                                    render:function(data, type, row, meta) {
+                                        // check to see if this is JSON
+                                        try {
+                                            var jsn = JSON.parse(data);
+                                            //console.log(" parsing json" + jsn);
+                                        } catch (e) {
 
+                                            return jsn.data;
+                                        }
+                                        return parseFloat(jsn).toFixed(2);
+
+                                    } },
+                                {"data": "OrdTotIncl", "class": "small",
+                                    render:function(data, type, row, meta) {
+                                        // check to see if this is JSON
+                                        try {
+                                            var jsn = JSON.parse(data);
+                                            //console.log(" parsing json" + jsn);
+                                        } catch (e) {
+
+                                            return jsn.data;
+                                        }
+                                        return parseFloat(jsn).toFixed(2);
+
+                                    } },
+                                {"data": "CompanyName", "class": "small"},
+                                {"data": "DocState", "class": "small"},
+                                {"data": "OwnerID", "class": "small"},
+                                {"data": "dimsId", "class": "small"}
 
                             ],
 
@@ -2405,7 +2614,7 @@
                     $('#dialog').show();
                     $("#dialog").dialog({
                         height: 600,
-                        width: 1100, containment: false
+                        width: 1200, containment: false
                     }).dialogExtend({
                         "closable": true, // enable/disable close button
                         "maximizable": false, // enable/disable maximize button
@@ -2474,48 +2683,17 @@
                 $('#finishOrder').click(function () {
                     calculator();
 
-                    // if (parseFloat((parseFloat($('#totalmargin').val()).toFixed(2)) < parseFloat(parseFloat($('#hiddencustomerGp').val()).toFixed(2) )) && ($('#margin_auth').val() != 1) )
-                    if ( Math.round($('#totalmargin').val()  ) <  Math.round($('#hiddencustomerGp').val()  )  && ($('#margin_auth').val() != 1) && ($('#invoiceNo').val()).length < 3 )
-                    {
-                        $('#MarginProblems').show();
-                        showDialogWithoutClose('#MarginProblems',400,400);
-                        $('#MarginProblems').keydown(function(event) {
-                            if (event.keyCode == 27){
-                                return false;
+                    if(($('#creditLimitWarningMessage').text()).length > 10){
+                        var dialog = $('<p><strong style="color:black">' + $('#creditLimitWarningMessage').text() + '</strong></p>').dialog({
+                            height: 200, width: 700, modal: true, containment: false,  position: [0,28],
+                            buttons: {
+                                "Okay": function () {
+
+                                    dialog.dialog('close');
+                                }
                             }
                         });
-                        $('#doAuthCredits').off().click(function(){
-
-                            $.ajax({
-                                url: '{!!url("/verifyAuthOnAdmin")!!}' ,
-                                type: "POST",
-                                data:{ userName:$('#userAuthProhibitedCred_marg').val(),
-                                    userPassword:$('#userAuthPassWordCredit_marg').val(),
-                                    orderId:$('#orderId').val()
-                                },
-                                success: function(data){
-                                    if ($.isEmptyObject(data)){
-                                        alert("Wrong Credentials Or You don't have permissions, Please Try Again Or Talk to your manager!");
-                                    }else
-                                    {
-                                        $('#margin_auth').val(1);
-                                        consoleManagementAuths('{!!url("/logMessageAuthMargin")!!}',12,1,'Authorized Order Margin by '+data[0].UserName + '( ' +$('#totalmargin').val()+' )',
-                                            0,$('#orderId').val(),'',$('#inputCustAcc').val(),0,0,0,$('#userAuthProhibitedCred_marg').val(),$('#orderId').val(),0,computerName,$('#orderId').val(),0,data[0].UserID,data[0].UserName);
-                                        $("#MarginProblems").dialog('close');
-                                        finishThis();
-
-
-                                        //calculator();
-                                    }
-                                }
-                            });
-
-                        });
-                        $('#doCancelAuthCredits').off().click(function(){
-                            $('#MarginProblems').dialog('close');
-                        });
-                        //
-                    }else{
+                    }
 
                         $.ajax({
                             url: '{!!url("/isClosedRoute")!!}',
@@ -2568,7 +2746,7 @@
                                 // }
                             }
                         });
-                    }
+
                 });
                 $('#abilityToEmailOrder').click(function () {
                     var ob = new Array();
@@ -2626,6 +2804,9 @@
 
                 $('#checkOrders').click(function () {
 
+                    if($('#ownerid').val().length < 1){
+                        $('#ownerid').val($('#company').val());
+                    }
                     var account = '';
                     var Description = '';
                     var DeliveryDate = '';
@@ -2653,7 +2834,10 @@
                     $.ajax({
                         url: '{!!url("/onCheckOrderHeader")!!}',
                         type: "POST",
-                        data: {invoiceNo: $('#invoiceNo').val(), orderId: $('#orderId').val()},
+                        data: {
+                            invoiceNo: $('#invoiceNo').val(),
+                            ownerid: $('#ownerid').val(),
+                            orderId: $('#orderId').val()},
                         success: function (data) {
                             console.debug("************ check" + data.returns);
                             if (data.returns != "inserted") {
@@ -2775,7 +2959,10 @@
                                     $.ajax({
                                         url: '{!!url("/onCheckOrderHeaderDetails")!!}',
                                         type: "POST",
-                                        data: {orderId: $('#orderId').val()},
+                                        data: {
+                                            orderId: $('#orderId').val(),
+                                            ownerid: $('#ownerid').val()
+                                        },
                                         success: function (dataDetails) {
                                             InvoiceTotalPriceExcl = 0;
                                             InvoiceTotalPriceInc = 0;
@@ -2801,17 +2988,17 @@
                                                     var classAnonymouscols="anonymouscolsOff";
                                                 }
                                                 var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
-                                                    '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_' + tokenId + '" class="theProductCode_ set_autocomplete inputs" value="' + valueDetails.PastelCode + '" ' + props + ' ><br><input name="col1" id ="col1'+tokenId+'" class="col1 '+classAnonymouscols+'"  readonly></td>' +
-                                                    '<td contenteditable="false" class="col-md-4"><input name="prodDescription_" id ="prodDescription_' + tokenId + '" class="prodDescription_ set_autocomplete inputs" value="' + valueDetails.PastelDescription + '" ' + props + ' ><br><input name="col8" id ="col8'+tokenId+'" class="col8 '+classAnonymouscols+'" readonly></td>' +
+                                                    '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_' + tokenId + '" class="theProductCode_ set_autocomplete inputs" value="' + valueDetails.PastelCode + '" ' + props + ' readonly ><br><input name="col1" id ="col1'+tokenId+'" class="col1 '+classAnonymouscols+'"  readonly></td>' +
+                                                    '<td contenteditable="false" class="col-md-4"><input name="prodDescription_" id ="prodDescription_' + tokenId + '" class="prodDescription_ set_autocomplete inputs" value="' + valueDetails.PastelDescription + '" ' + props + ' readonly><br><input name="col8" id ="col8'+tokenId+'" class="col8 '+classAnonymouscols+'" readonly></td>' +
                                                     '<td  style="" contenteditable="false" class="col-md-1"><input type="text" name="prodBulk_"  id ="prodBulk_' + tokenId + '" class="prodBulk_ resize-input-inside"  value="' + valueDetails.UnitCount + '" '+ props + ' readonly><br><input name="col3" id ="col3'+tokenId+'" class="col3 '+classAnonymouscols+'" readonly></td>' +
                                                     '<td  contenteditable="false" class="col-md-1"><input type="text" name="prodQty_" id ="prodQty_' + tokenId + '"   onkeypress="return isFloatNumber(this,event)"  class="prodQty_ resize-input-inside inputs" value="' + (parseFloat(valueDetails.Qty)).toFixed(3) + '" ' + props + '><br><input name="col4" id ="col4'+tokenId+'" class="col4 '+classAnonymouscols+'" readonly></td>' +
                                                     '<td  contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_' + tokenId + '" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" value="' + (parseFloat(valueDetails.Price)).toFixed(2) + '" ' + props + '><br><input name="col1" id ="col1'+tokenId+'" class="col1 '+classAnonymouscols+'" readonly></td>' +
                                                     '<td  contenteditable="false"  class="col-md-1"><input type="text" name="prodDisc_" id ="prodDisc_' + tokenId + '" onkeypress="return isFloatNumber(this,event)" class="prodDisc_ resize-input-inside inputs" value="' + valueDetails.LineDisc + '" ' + props + ' {{$discountProperty}}><br><input name="col6" id ="col6'+tokenId+'" class="col6 '+classAnonymouscols+'" style="color: brown;" readonly></td>' +
                                                     '<td  contenteditable="false"  class="col-md-1"><input  type="text" name="prodUnitSize_" id ="prodUnitSize_' + tokenId + '" class="prodUnitSize_ resize-input-inside inputs" value="' + valueDetails.UnitSize + '" ' + props + ' ></td>' +
                                                     '<td contenteditable="false"  class="col-md-1"><input type="text" name="instockReadOnly" id ="instockReadOnly_' + tokenId + '" value="' + valueDetails.QtyInStock + '"  class="instockReadOnly_ resize-input-inside inputs" style="font-weight: 800;width: 80%;color:blue;"><select name="col2" id ="col2'+tokenId+'" class="col2 '+classAnonymouscols+'"><option value="' + valueDetails.ID + '" >"' + valueDetails.Warehouse + '"</option> </select>' +
-                                                    '<td contenteditable="false"  class="col-md-1"><input type="text" name="additionalcost_" id ="additionalcost_' + tokenId + '" value ="" class="additionalcost_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;">' +
+                                                    '<td contenteditable="false"  class="col-md-1"><input type="text" name="additionalcost_" id ="additionalcost_' + tokenId + '" value ="" class="additionalcost_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;    width: 25%;"><input type="text" name="lastunitcost_" id ="lastunitcost_' + tokenId + '" value ="" class="lastunitcost_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;    width: 60%;">' +
                                                     '<td  contenteditable="false" class="col-md-3"><input type="text" name="prodComment_" id ="prodComment_' + tokenId + '" class="prodComment_ resize-input-inside last inputs" value="' + valueDetails.Comment + '" ' + props + ' ><br><input name="col9" id ="col9'+tokenId+'" class="col9 '+classAnonymouscols+'" readonly></td>' +
-                                                    '<td><input type="hidden" id="title_' + tokenId + '" class="title" value="" /><input type="hidden" id="theOrdersDetailsId" value="' + valueDetails.OrderDetailId + '" /><input type="hidden" id ="taxCode' + tokenId + '" value="' + valueDetails.Tax + '" class="taxCodes" />' +
+                                                    '<td><input type="hidden" id="title_' + tokenId + '" class="title" value="" /><input type="hidden" class="theOrdersDetailsId" value="' + valueDetails.OrderDetailId + '" /><input type="hidden" id ="taxCode' + tokenId + '" value="' + valueDetails.Tax + '" class="taxCodes" />' +
                                                     '<input type="hidden" id ="cost_' + tokenId + '" value="' + valueDetails.Cost + '" class="costs" /><input type="hidden" id ="inStock_' + tokenId + '" value="' + valueDetails.QtyInStock + '" class="inStock" style="color:blue !important" /><input type="hidden" value ="' + tokenId + '" class="hiddenToken" />' +
                                                     '<input type="hidden" id ="priceholder_' + tokenId + '" value="' + (parseFloat(valueDetails.Price)).toFixed(2) + '" class="priceholder" />' +
                                                     '<input type="hidden" id ="alcohol_' + tokenId + '" value="" class="alcohol" /><input type="hidden" id ="margin_' + tokenId + '" value="" class="margin" />' +
@@ -3034,6 +3221,7 @@
                             orderDate: $('#inputOrderDate').val(),
                             routeId: $('#Routeid').val(),
                             OrderType: $('#orderType').val(),
+                            companyId: $('#company').val(),
                             orderNo: '',
                             statement: 'Check'
                         },
@@ -3139,7 +3327,8 @@
                                 OrderType: $('#orderType').val(),
                                 orderNo: '',
                                 statement: 'Insert',
-                                discount: $('#hiddenCustDiscount').val()
+                                discount: $('#hiddenCustDiscount').val(),
+                                companyId: $('#company').val()
                             },
                             success: function (data) {
 
@@ -3804,7 +3993,8 @@
                                     customerID: $('#inputCustAcc').val(),
                                     deliveryDate: $('#inputDeliveryDate').val(),
                                     productCode: productCode,
-                                    warehouseid:$('#headerWh').val()
+                                    warehouseid:$('#headerWh').val(),
+                                    companyId:$('#company').val()
                                 },
                                 success: function (data) {
                                     console.debug('sluuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuut');
@@ -3812,16 +4002,16 @@
                                     var price = '';
                                     if ($.isEmptyObject(data)) {
                                         price = '';
-                                        readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,'0',UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
+                                        readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,'0',UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount,"{!!url('/getTaxForSelectedProduct')!!}");
                                     } else {
                                         price = parseFloat(data[0].Price).toFixed(2);
                                         if (reportmarginControl === 'marginType5')
                                         {
 
-                                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
+                                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount,"{!!url('/getTaxForSelectedProduct')!!}");
 
                                         }else{
-                                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,multiLines,data[0].LineDisc,linediscount);
+                                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,multiLines,data[0].LineDisc,linediscount,"{!!url('/getTaxForSelectedProduct')!!}");
                                         }
                                     }
 
@@ -4255,7 +4445,8 @@
                                 customerID: $('#inputCustAcc').val(),
                                 deliveryDate: $('#inputDeliveryDate').val(),
                                 productCode: $('#theProductCode').val(),
-                                warehouseid:$('#headerWh').val()
+                                warehouseid:$('#headerWh').val(),
+                                companyId:$('#company').val()
                             },
                             success: function (data) {
                                 console.debug("********************"+data[0].AvailableToSell);
@@ -4293,7 +4484,8 @@
                                 customerID: $('#inputCustAcc').val(),
                                 deliveryDate: $('#inputDeliveryDate').val(),
                                 productCode: $('#theProductCode').val(),
-                                warehouseid:$('#headerWh').val()
+                                warehouseid:$('#headerWh').val(),
+                                companyId:$('#company').val()
                             },
                             success: function (data) {
                                 console.debug("the price" + parseFloat(data[0].Price).toFixed(2));
@@ -4509,6 +4701,8 @@
                             type: "POST",
                             data: {
                                 OrderId: $('#orderId').val(),
+                                company: $('#company').val(),
+                                internalordernumber: $('#internalordernumber').val(),
                                 OrderDetailId: orderLineID},
                             success: function(data){
 
@@ -4627,7 +4821,7 @@
                 });
                 $('#salesInvoiced').click(function(){
                     $('#prodonInvoice').show();
-                    showDialog('#prodonInvoice','85%',640);
+                    showDialog('#prodonInvoice','75%', 640);
                     productsOnInvoiced();
                     $('#tblOnInvoiced tbody').on('click', 'tr', function (e){
                         $("#tblOnInvoiced tbody tr").removeClass('row_selected');
@@ -4740,7 +4934,8 @@
                     type: "POST",
                     data: {
                         customerCode: $('#inputCustAcc').val(),
-                        deliveryDate: $('#inputDeliveryDate').val()
+                        deliveryDate: $('#inputDeliveryDate').val(),
+                        companyId: $('#company').val()
                     },
                     success: function (data) {
 
@@ -4767,6 +4962,66 @@
 
                         });
                         $('#customerSpecials').append(trHTML);
+
+                        var trHTML = '';
+                        console.debug(data.backorders);
+
+                        $('#backorders').DataTable( {
+                            data: data.backorders.data,
+                            "deferRender": true,
+                            "scrollY": "365px",
+                            "scrollCollapse": true,
+                            searching: true,
+                            bPaginate: false,
+                            bFilter: false,
+                            "LengthChange": false,
+                            "info":     false,
+                            "ordering": false,
+                            "bDestroy": true,
+                            "columns":[
+                                {     "data"     :     "PastelDescription"     },
+                                {     "data"     :     "PastelCode"},
+                                {     "data"     :     "Qty",render:function(data, type, row, meta) {
+                                        // check to see if this is JSON
+                                        try {
+                                            var jsn = JSON.parse(data);
+                                            //console.log(" parsing json" + jsn);
+                                        } catch (e) {
+
+                                            return jsn.data;
+                                        }
+                                        return parseFloat(jsn).toFixed(2);
+
+                                    } },
+                                {     "data"     :     "fQtyProcessed",render:function(data, type, row, meta) {
+                                        // check to see if this is JSON
+                                        try {
+                                            var jsn = JSON.parse(data);
+                                            //console.log(" parsing json" + jsn);
+                                        } catch (e) {
+
+                                            return jsn.data;
+                                        }
+                                        return parseFloat(jsn).toFixed(2);
+
+                                    } },
+                                {     "data"     :     "remaining",render:function(data, type, row, meta) {
+                                        // check to see if this is JSON
+                                        try {
+                                            var jsn = JSON.parse(data);
+                                            //console.log(" parsing json" + jsn);
+                                        } catch (e) {
+
+                                            return jsn.data;
+                                        }
+                                        return parseFloat(jsn).toFixed(2);
+
+                                    } },
+                                {     "data"     :     "DeliveryDate"},
+                                {     "data"     :     "OrderNo"},
+                            ]
+                        } );
+
                         var trHTML = '';
 
                         $.each(data.GroupSpecials, function (key, value) {
@@ -4821,6 +5076,11 @@
 
                         });
                         $('#pastInvoices').append(trHTML);
+
+                        var trHTML = '';
+                        var inv = 'id';
+                        var counter = 0;
+
 
                         //data.contacts[0].
                         $.each(data.contacts, function (key,value){
@@ -5052,7 +5312,9 @@
                                 return parseFloat(jsn).toFixed(2);
 
                             } ,"bSortable": true },
-                        {"data": "Backorder", "class": "small"}
+                        {"data": "CompanyName", "class": "small"},
+                        {"data": "OwnerID", "class": "small"}
+
 
                     ],
                     "deferRender": true,
@@ -5110,7 +5372,8 @@
                                 return parseFloat(jsn).toFixed(2);
 
                             } ,"bSortable": true },
-                        {"data": "Backorder", "class": "small"}
+                        {"data": "CompanyName", "class": "small"},
+                        {"data": "OwnerID", "class": "small"}
 
                     ],
                     "deferRender": true,
@@ -5440,14 +5703,14 @@
                     '<td style=""  contenteditable="false" class="col-md-1"><input type="text" name="prodBulk_"  id ="prodBulk_'+tokenId+'" class="prodBulk_ resize-input-inside" onkeypress="return isFloatNumber(this,event)" ><br><input name="col3" id ="col3'+tokenId+'" class="col3 '+classAnonymouscols+'"  readonly></td>' +
 
                     '<td  contenteditable="false" class="col-md-1"><input type="text" name="prodQty_" id ="prodQty_'+tokenId+'"   onkeypress="return isFloatNumber(this,event)" title="in stock" class="prodQty_ resize-input-inside inputs"><input name="col4" id ="col4'+tokenId+'" class="col4 '+classAnonymouscols+'"  readonly></td>' +
-                    '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" >' +
+                    '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ><select name="coltax" id ="coltax'+tokenId+'" class="coltax '+classAnonymouscols+'" ></select>' +
                     '<div style="display: initial;" data-value="'+tokenId+'"></div></td>' +
                     '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodDisc_" id ="prodDisc_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodDisc_ resize-input-inside inputs" {{$discountProperty}}><input name="col6" id ="col6'+tokenId+'" class="col6 '+classAnonymouscols+'"  style="color: brown;" readonly></td>' +
                     '<td  contenteditable="false"  class="col-md-1"><input  type="text" name="prodUnitSize_" id ="prodUnitSize_'+tokenId+'" class="prodUnitSize_ resize-input-inside" ><input name="col7" id ="col7'+tokenId+'" class="col7 '+classAnonymouscols+'" readonly></td>' +
                     '<td contenteditable="false"  class="col-md-1"><input type="text" name="instockReadOnly" id ="instockReadOnly_' + tokenId + '" class="instockReadOnly_ resize-input-inside inputs" style="font-weight: 800;color:blue;font-size:8px !important"><select name="col2" id ="col2'+tokenId+'" class="col2 '+classAnonymouscols+'" ></select></td>' +
-                    '<td contenteditable="false"  class="col-md-1"><input type="text" name="additionalcost" id ="additionalcost_' + tokenId + '" class="additionalcost_ resize-input-inside inputs" style="font-weight: 800;color:blue;font-size:8px !important"></td>' +
+                    '<td contenteditable="false"  class="col-md-1"><input type="text" name="additionalcost" id ="additionalcost_' + tokenId + '" class="additionalcost_ resize-input-inside inputs" style="font-weight: 800;color:blue;font-size:8px !important;    width: 25%;"><input type="text" name="lastunitcost_" id ="lastunitcost_' + tokenId + '" class="lastunitcost_ resize-input-inside inputs" style="font-weight: 800;color:blue;font-size:8px !important;    width: 60%;"></td>' +
                     '<td  contenteditable="false" class="col-md-3"><input type="text" name="prodComment_" id ="prodComment_'+tokenId+'" class="prodComment_ resize-input-inside lst inputs"><input name="col9" id ="col9'+tokenId+'" class="col9 '+classAnonymouscols+'"  readonly></td>' +
-                    '<td><input type="hidden" id="title_'+tokenId+'" class="title" value="'+isAuthMyLine+'" /><input type="hidden" id="theOrdersDetailsId" value="" /><input type="hidden" id ="taxCode'+tokenId+'" value="" class="taxCodes" />' +
+                    '<td><input type="hidden" id="title_'+tokenId+'" class="title" value="'+isAuthMyLine+'" /><input type="hidden" class="theOrdersDetailsId" value="" /><input type="hidden" id ="taxCode'+tokenId+'" value="" class="taxCodes" />' +
                     '<input type="hidden" id ="cost_'+tokenId+'" value="" class="costs" /><input type="hidden" id ="inStock_'+tokenId+'" value="" class="inStock" /><input type="hidden" value ="'+tokenId+'" class="hiddenToken" />' +
                     '<input type="hidden" id ="priceholder_'+tokenId+'" value="" class="priceholder" />' +
                     '<input type="hidden" id ="alcohol_'+tokenId+'" value="" class="alcohol" /><input type="hidden" id ="margin_'+tokenId+'" value="" class="margin" />' +
@@ -5467,6 +5730,12 @@
                 $("#col2"+tokenId).append("<option value='"+val+"'>" + txt + "</option>");
                 $.each(wareautocomplete, function (i, item) {
                     $("#col2"+tokenId).append("<option value='"+item.ID+"'>" + item.Warehouse + "</option>");
+                });
+
+                console.debug(taxes);
+
+                $.each(taxes, function (i, item) {
+                    $("#coltax"+tokenId).append("<option value='"+item.TaxId+"'>" + item.TaxCode + "</option>");
                 });
 
                 if(!$('.lst').is(":focus"))
@@ -5541,6 +5810,8 @@
                                 $('#unitWeight' + token_number).val(ui.item.UnitWeight);
                                 $('#strBulkUnit' + token_number).val(ui.item.strBulkUnit);
                                 $('#margin_' + token_number).val(ui.item.Margin);
+                                $('#theOrdersDetailsId' + token_number).val("");
+                                $("#coltax"+token_number).prepend("<option value='"+ui.item.TaxId+"' selected='selected'>" + ui.item.TaxCode + "</option>");
 
 
                                 if($.trim(ui.item.SoldByWeight) == "1")
@@ -5611,6 +5882,9 @@
                                 $('#unitWeight' + token_number).val(ui.item.UnitWeight);
                                 $('#strBulkUnit' + token_number).val(ui.item.strBulkUnit);
                                 $('#margin_' + token_number).val(ui.item.Margin);
+                                $('#theOrdersDetailsId' + token_number).val(ui.item.Margin);
+                                $("#coltax"+token_number).append("<option value='"+ui.item.TaxId+"'>" + ui.item.TaxCode + "</option>");
+
                                 if($.trim(ui.item.SoldByWeight) == "1")
                                 {
                                     $('#table').find('#prodBulk_' + token_number).focus();
@@ -6226,7 +6500,8 @@
                         customerID: $('#inputCustAcc').val(),
                         deliveryDate: $('#inputDeliveryDate').val(),
                         productCode: $('#prodCode_' + token_number).val(),
-                        warehouseid:$('#headerWh').val()
+                        warehouseid:$('#headerWh').val(),
+                        companyId:$('#company').val()
                     },
                     success: function (data) {
 
@@ -6246,55 +6521,24 @@
 
                                     if (data[0].AvailableToSell <= 0 && data[0].mustAuthLine != 0) {
                                         $('#title_' + token_number).val('preauthorised');
-                                        $('#appendErrormsg').empty();
-                                        $('#appendErrormsg').append("It appears that you don't have enough in stock");
-                                        showDialogWithoutClose("#authorisations", 500, 500);
-                                        //if (e.keyCode == 27) return false;
-                                        $('#noThanksRedo').off().click(function () {
-                                            $('#new_row_ajax' + token_number).remove();
-                                            calculator();
-                                            generateALine2();
-                                            $("#authorisations").dialog('close');
-                                        });
-                                        $('#doAuth').off().click(function () {
-                                            // $('#userAuthName').val();
-                                            console.debug($('#userAuthPassWord').val());
-                                            $('#userAuthPassWord').val();
-                                            $.ajax({
-                                                url: '{!!url("/verifyAuthOnAdmin")!!}',
-                                                type: "POST",
-                                                data: {
-                                                    userName: $('#userAuthName').val(),
-                                                    userPassword: $('#userAuthPassWord').val()
-                                                },
-                                                success: function (data) {
-                                                    //console.debug("bunch"+data);
-                                                    if ($.isEmptyObject(data)) {
-                                                        alert("Wrong Credentials Or You don't have permissions, Please Try Again Or Talk to your manager!");
-                                                    } else {
-                                                        $('#userAuthName').val('');
-                                                        $('#userAuthPassWord').val('');
-                                                        $('#title_' + token_number).val('preauthorised');
-                                                        console.debug('///////////////////' + $('#title_' + token_number).val());
+                                        var dialog = $('<p> It appears that you do not have enough in stock</p>').dialog({
+                                            height: 200, width: 700, modal: true, containment: false,
+                                            buttons: {
+                                                "OKAY": function () {
 
-                                                        consoleManagementAuths('{!!url("/logMessageAuth")!!}', 12, 1, 'Authorized out os Stock by ' + data[0].UserName,
-                                                            0, $('#orderId').val(), '', $('#inputCustAcc').val(), 0, 0, 0, $('#userNewVariable').val(), $('#orderId').val(), 0, computerName, $('#orderId').val(), 0, data[0].UserID, data[0].UserName);
-                                                        $("#authorisations").dialog('close');
-                                                        calculator();
+                                                    dialog.dialog('close');
 
-
-                                                    }
                                                 }
-                                            });
-
+                                            }
                                         });
-
+//var dialog
                                         //isCorrectCredentials
                                     }
                                     $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
                                     $('#prohibited_' + token_number).val(parseFloat(data[0].Prohibited).toFixed(2));
                                     $('#instockReadOnly_' + token_number).val(parseFloat(data[0].AvailableToSell).toFixed(2));
                                     $('#prodDisc_' + token_number).val(parseFloat(data[0].LineDisc).toFixed(2));
+                                    $('#lastunitcost_' + token_number).val(parseFloat(data[0].lastUnitCost).toFixed(2));
                                     $('#stockmanagement' + token_number).val(data[0].StockManagement);
 
                                     if(data[0].intAssociated != "0"){
@@ -6329,6 +6573,20 @@
                                 //   $( "#authorisations" ).dialog('close');
                                 // $( "#MarginProblems" ).dialog('close');
                                 authZeroPricing(token_number,$('#theOrdersDetailsId' + token_number).val(), $('#prodCode_' + token_number).val());
+                            }
+
+                            if(parseFloat(data[0].Price).toFixed(2) < parseFloat(data[0].lastUnitCost).toFixed(2)){
+
+                                var dialog = $('<p>Selling Price Is Below The Cost.Please Double Check Your Price.</p>').dialog({
+                                    height: 200, width: 700, modal: true, containment: false,
+                                    buttons: {
+                                        "OKAY": function () {
+
+                                            dialog.dialog('close');
+
+                                        }
+                                    }
+                                });
                             }
                         }else
                         {
@@ -6428,7 +6686,8 @@
                         customerID: $('#inputCustAcc').val(),
                         deliveryDate: $('#inputDeliveryDate').val(),
                         productCode: productCode,
-                        warehouseid:$('#headerWh').val()
+                        warehouseid:$('#headerWh').val(),
+                        companyId:$('#company').val()
                     },
                     success: function (data) {
                         console.debug(data);
@@ -6441,7 +6700,7 @@
                             console.debug("UnitWeight ===="+UnitWeight);
                             console.debug("SoldByWeight ===="+SoldByWeight);
                             console.debug("strBulkUnit ===="+strBulkUnit);
-                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, ' ', price, 0, inStock, title, tax,unitSizes,0,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
+                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, ' ', price, 0, inStock, title, tax,unitSizes,0,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount,"{!!url('/getTaxForSelectedProduct')!!}");
                         } else {
                             price = parseFloat(data[0].Price).toFixed(2);
 
@@ -6450,7 +6709,7 @@
                                 //cost = price;
                                 cost = cost;
                             }
-                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, cost, inStock, title, tax,unitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
+                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, cost, inStock, title, tax,unitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount,"{!!url('/getTaxForSelectedProduct')!!}");
                             // }
 
                         }
@@ -6713,56 +6972,12 @@
                     var price = $(this).closest('tr').find('.prodPrice_').val();
                     var theProductCode = $(this).closest('tr').find('.theProductCode_').val();
                     var Productmargin = $(this).closest('tr').find('.margin').val();
+                    var lastunitcost_ = $(this).closest('tr').find('.lastunitcost_').val();
                     var auth = $(this).closest('tr').find('.title').val();
 
                     var margin = marginCalculator(cost, price);
 
-                    if((parseFloat(Productmargin)  > parseFloat(margin).toFixed(2)) && auth.length>4 &&  price > 0 )
-                    {
-                        $('#MarginProblems').show();
-                        $('#userAuthProhibitedCred_marg').val('');
-                        $('#userAuthPassWordCredit_marg').val('');
-                        showDialogWithoutClose('#MarginProblems',400,400);
-                        $('#MarginProblems').keydown(function(event) {
-                            if (event.keyCode == 27){
-                                return false;
-                            }
-                        });
-                        $('#doAuthCredits').off().click(function(){
 
-                            $.ajax({
-                                url: '{!!url("/verifyAuthGroupLeaders")!!}' ,
-                                type: "POST",
-                                data:{ userName:$('#userAuthProhibitedCred_marg').val(),
-                                    userPassword:$('#userAuthPassWordCredit_marg').val(),
-                                    orderId:$('#orderId').val()
-                                },
-                                success: function(data){
-                                    if ($.isEmptyObject(data)){
-                                        alert("Wrong Credentials Or You don't have permissions, Please Try Again Or Talk to your manager!");
-                                    }else
-                                    {
-                                        $('#margin_auth').val(1);
-                                        consoleManagementAuths('{!!url("/logMessageAuthMargin")!!}',12,1,'Authorized Product ('+theProductCode+') Margin ( LM :'+margin+' PM '+Productmargin+')  by '+data[0].UserName,
-                                            0,$('#orderId').val(),'',$('#inputCustAcc').val(),0,0,0,$('#userAuthProhibitedCred_marg').val(),$('#orderId').val(),0,computerName,$('#orderId').val(),0,data[0].UserID,data[0].UserName);
-                                        $("#MarginProblems").dialog('close');
-                                        $this.closest('tr').find('.title').val('');
-
-
-
-                                        //calculator();
-                                    }
-                                }
-                            });
-
-                        });
-                        $('#doCancelAuthCredits').off().click(function(){
-                            $this.closest('tr').find('.prodPrice_').val('');
-                            $this.closest('tr').find('.prodPrice_').select();
-                            $this.closest('tr').find('.prodPrice_').focus();
-                            $('#MarginProblems').dialog('close');
-                        });
-                    }
 
 
                 });
@@ -9135,15 +9350,19 @@
                     }
                 });
                 var orderlines = new Array();
+                var orderlinesupdate = new Array();
                 var orderheaders = new Array();
+                var orderheadersupdate = new Array();
+                var reltid =0;
                 $('#table > tbody  > tr').each(function() {
+
                     var data = $(this);
 
-                    var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
+                    var orderDetailID = $(this).closest('tr').find('.theOrdersDetailsId').val();
                     var comment = $(this).closest('tr').find('.prodComment_').val();
                     //comment = comment.replace("'","");
                     console.debug($(this).closest('tr').find('.col2').val());
-                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0) {
+                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && orderDetailID.trim().length<1) {
                         orderlines.push({
                             'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
                             'qty': $(this).closest('tr').find('.prodQty_').val(),
@@ -9155,13 +9374,48 @@
                             'OrderId':$('#orderId').val(),
                             'hiddenToken':$(this).closest('tr').find('.hiddenToken').val(),
                             'prodBulk':$(this).closest('tr').find('.prodBulk_').val(),
-                            'warehouse':$(this).closest('tr').find('.col2').val()
+                            'warehouse':$(this).closest('tr').find('.col2').val(),
+                            'coltax':$(this).closest('tr').find('.coltax').val()
                     });
 
 
                     }
 
+                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && orderDetailID.trim().length>0) {
+                        orderlinesupdate.push({
+                            'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
+                            'qty': $(this).closest('tr').find('.prodQty_').val(),
+                            'price': $(this).closest('tr').find('.prodPrice_').val(),
+                            'comment': escapeHtml(comment),
+                            'orderDetailID': orderDetailID,
+                            'customerCode': escapeHtml($('#inputCustAcc').val()),
+                            'orderNo': escapeHtml($('#internalordernumber').val()),
+                            'prodDisc': $(this).closest('tr').find('.prodDisc_').val(),
+                            'OrderId':$('#orderId').val(),
+                            'hiddenToken':$(this).closest('tr').find('.hiddenToken').val(),
+                            'prodBulk':$(this).closest('tr').find('.prodBulk_').val(),
+                            'warehouse':$(this).closest('tr').find('.col2').val(),
+                            'coltax':$(this).closest('tr').find('.coltax').val(),
+                            'formrelativeid':reltid
+                        });
+
+                        reltid++;
+                    }
+
+
+
+
                 });
+
+                if(($('#internalordernumber').val()).trim().length> 3){
+                    orderheadersupdate.push({
+                        'ExternalONum':dateReturn($("#orederNumber").val()),
+                        'InternalOrderNumber': $('#internalordernumber').val(),
+                        'deliveryDate': dateReturn($("#inputDeliveryDate").val())
+
+
+                    });
+                }
 
 
                 orderheaders.push({
@@ -9185,15 +9439,20 @@
                 });
 
                 console.debug(orderlines);
-                console.debug(orderheaders);
+                //console.debug(orderheade
                 $.ajax({
                     url: '{!!url("/orderheaderAndOrderLines")!!}',
                     type: "POST",
                     data: {
                         OrderId: $('#orderId').val(),
+                        dimsid: $('#dimsid').val(),
                         orderheaders: orderheaders,
                         orderlines:orderlines,
-                        type: type
+                        orderlinesupdate:orderlinesupdate,
+                        orderheadersupdate:orderheadersupdate,
+                        type: type,
+                        companyid: $('#company').val(),
+                        internalordernumber: $('#internalordernumber').val()
                     },
                     success: function (data) {
 
