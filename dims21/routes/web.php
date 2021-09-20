@@ -5,6 +5,7 @@ use App\Http\Controllers\TabletLoadingApp;
 use App\Http\Controllers\ArtificialCrud;
 use App\Http\Controllers\RecentRegistered;
 use App\Http\Controllers\DimsCommon;
+use App\Http\Controllers\MachinesAndTransfers;
 use App\Http\Controllers\SalesFormFunctions;
 use App\Http\Controllers\ApisContoller;
 use App\Http\Controllers\OnlineOrders;
@@ -62,6 +63,16 @@ Route::resource('cart', 'CartController');
 Route::get('custCode',[SalesFormFunctions::class, 'CustomerCode']);
 Route::get('getExportForm', [DimsExportController::class,'getExportForm']);
 Route::get('getDimsUsers', [UserFeature::class,'getDimsUsers']);
+
+//MACHINESANDTRANSFERS STARTS HERE!!!!
+Route::get('viewTransfersCrRec',[MachinesAndTransfers::class,'viewTransfersCrRec']);
+Route::get('createTransfer',[MachinesAndTransfers::class,'createTransfer']);
+Route::post('saveTransfer',[MachinesAndTransfers::class,'saveTransfer']);
+Route::get('receiveTransfer',[MachinesAndTransfers::class,'receiveTransfer']);
+
+
+
+//MACHINESANDTRANSFERS ENDS HERE!!!!
 
 //DIMS COMMON STARTS HERE!!!!
 Route::get('getCommonRoutes', [DimsCommon::class,'getCommonRoutes']);
