@@ -321,7 +321,11 @@ Route::get('GetPickingReferenceProducts',[TabletLoadingApp::class,'GetPickingRef
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);
+Route::get('pickingticketslistnotdone/{ref}',[TabletLoadingApp::class,'pickingticketslistnotdone']);
+Route::get('topuppickingplan/{ref}',[TabletLoadingApp::class,'topuppickingplan']);
 Route::post('updateplanlines',[TabletLoadingApp::class,'updateplanlines']);
+Route::post('addplantoanotherplan',[TabletLoadingApp::class,'addplantoanotherplan']);
+Route::post('pickingNickName',[TabletLoadingApp::class,'pickingNickName']);
 Route::get('plannedmaproute',[TabletLoadingApp::class,'plannedmaproute']);
 Route::get('routePlannerPrintPreview/{date}/{dateTo}/{ordertype}/{route}/{status}',[TabletLoadingApp::class,'routePlannerPrintPreview']);
 Route::post('moveTheOrder',[TabletLoadingApp::class,'moveTheOrder']);

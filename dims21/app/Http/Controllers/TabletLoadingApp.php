@@ -279,6 +279,18 @@ class TabletLoadingApp extends controller
 
         return response()->json($allproducts);
     }
+    public function pickingNickName(Request $request){
+
+        $referenceno = $request->get('referenceno');
+        $nickname = $request->get('nickname');
+        DB::connection('sqlsrv3')->table('tblPickingPlan')
+            ->where('strUnickReference',$referenceno )
+            ->update(['strPickingNickname' => $nickname]);
+
+        DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference',$referenceno )
+            ->update(['strPickingNickname' => $nickname]);
+    }
     public function updatepickingheader(Request $request){
         $routeId = $request->get('routeId');
         $deliveryDate = $request->get('deliveryDate');
@@ -311,6 +323,11 @@ class TabletLoadingApp extends controller
             ->with('trucks',$trucks)
             ->with('ref',$ref);
     }
+    public function topuppickingplan($ref){
+
+        return view('dims/topup')
+            ->with('ref',$ref);
+    }
     public function pickingticketslist($datefrom,$dateTo,$status)
     {
         $userId = Auth::user()->UserID;
@@ -319,6 +336,18 @@ class TabletLoadingApp extends controller
         $allproducts = DB::connection('sqlsrv3')
             ->select('exec spGetPickingPlanProgress ?,?,?',
                 array($datefrom,$dateTo,$status)
+            );//[spGetInProgressPlanningProducts]
+
+        return response()->json($allproducts);
+    }
+    public function pickingticketslistnotdone($ref)
+    {
+        $userId = Auth::user()->UserID;
+        $UserName = Auth::user()->UserName;
+
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetOpenPickingPlans ?',
+                array($ref)
             );//[spGetInProgressPlanningProducts]
 
         return response()->json($allproducts);
@@ -334,6 +363,19 @@ class TabletLoadingApp extends controller
             );//[spGetInProgressPlanningProducts]
        // $output["Products"] = $allproducts;
         //$output["We"] = $allproducts;
+
+        return response()->json($allproducts);
+    }
+    public function addplantoanotherplan(Request $request)
+    {
+        $userId = Auth::user()->UserID;
+        $UserName = Auth::user()->UserName;
+        $from = $request->get('from');
+        $to = $request->get('to');
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spMergePickingPlans ?,?',
+                array($from,$to)
+            );
 
         return response()->json($allproducts);
     }

@@ -399,7 +399,7 @@ class SalesFormFunctions extends Controller
         }
 
         try {
-            $sdkHelper->BeginTran();
+            //$sdkHelper->BeginTran();
             if ($sdkHelper->CurrentEvolutionDatabaseVersion != $sdkHelper->CompatibleEvolutionDatabaseVersion)
             {
                 prn("Warning: the current database version is {$sdkHelper->CurrentEvolutionDatabaseVersion} while this version of the SDK is intended for version {$sdkHelper->CompatibleEvolutionDatabaseVersion}");
@@ -489,7 +489,7 @@ class SalesFormFunctions extends Controller
                     $reference = $x->Save();
                 }
 
-                $sdkHelper->CommitTran();
+              //  $sdkHelper->CommitTran();
                 $outPut['result'] = "Success";
                 $outPut['Error'] = "Success";
                 return $outPut;

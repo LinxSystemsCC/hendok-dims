@@ -167,6 +167,7 @@
                         <button id="previewplan" class="btn-sm btn-danger">Preview Plan</button>
                         <br><br>
                         <button id="viewpickingticket" class="btn-lg btn-primary" >View Planning Ref Tickets</button>
+                        <button class="btn-sm btn-primary pull-right" id="topup">Top Up</button>
 
                     </div>
 
@@ -368,6 +369,11 @@
         });
          $('#prodexclude').click(function(){
             window.open('{!!url("/getProductToSelect")!!}', 'ProductsList', "location=1,status=1,scrollbars=1, width=1500,height=850");
+        });
+
+         $('#topup').click(function(){
+             var ref = $('#referenceno').val();
+            window.open('{!!url("/topuppickingplan")!!}/'+ref, 'topuppickingplan', "location=1,status=1,scrollbars=1, width=1500,height=850");
         });
 
 
@@ -726,6 +732,30 @@ console.debug(checkedLines);
                     priority: checkedLines
                 },
                 success: function (data) {
+                    console.debug("Plan Priority");
+
+                    var nname = data[0].nickname; console.debug(nname);
+                    if (nname == "aegona"){
+                        var dialog2 = $('<input type="text" placeholder="Picking Nickname" class="thisplannickname" style="border: 2px solid black;height:50px !important">').dialog({
+                            height: 200, width: 700,modal: true,containment: false,
+                            buttons: {
+                                "SAVE": function () {
+                                    dialog2.dialog('close');
+                                    $.ajax({
+                                        url: '{!!url("/pickingNickName")!!}',
+                                        type: "POST",
+                                        data: {
+                                            referenceno: $('#referenceno').val(),
+                                            nickname: $('.thisplannickname').val()
+                                        },
+                                        success: function (data) {
+
+                                        } });
+
+                                }
+                            }
+                        });
+                    }
                     var dialog = $('<p><strong>Would you like to refresh your priority list?</strong></p>').dialog({
                         height: 200, width: 700,modal: true,containment: false,
                         buttons: {
@@ -862,8 +892,29 @@ console.debug(checkedLines);
                     priority: checkedLinesPriority
                 },
                 success: function (data) {
-                    console.debug(data);
-                    // upDateOrderHeaderAndPOS();
+
+                    var nname = data[0].nickname; console.debug(nname);
+                    if (nname == "aegona"){
+                        var dialog2 = $('<input type="text" placeholder="Picking Nickname" class="thisplannickname" style="border: 2px solid black;height:50px !important">').dialog({
+                            height: 200, width: 700,modal: true,containment: false,
+                            buttons: {
+                                "SAVE": function () {
+                                    dialog2.dialog('close');
+                                    $.ajax({
+                                        url: '{!!url("/pickingNickName")!!}',
+                                        type: "POST",
+                                        data: {
+                                            referenceno: $('#referenceno').val(),
+                                            nickname: $('.thisplannickname').val()
+                                        },
+                                        success: function (data) {
+
+                                        } });
+
+                                }
+                            }
+                        });
+                    }
 
                     $.ajax({
                         url: '{!!url("/getProgressPlan")!!}',
@@ -1163,6 +1214,7 @@ console.debug(checkedLines);
                 productId: $('#prodexclude').val(),
             },
             success: function (data) {
+                $('#referenceno').val(data.referenceNo);
                 localStorage.removeItem('routeplanner');
                 //localStorage.routeplanner = JSON.stringify({name: "John",routeId: $('#rouTabletLoadingtesonPlanning').val(),deliveryDate: $('#deliveryDatesonPlanning').val()});
                 localStorage.setItem('routeplanner', JSON.stringify({deliveryDate: $('#deliveryDatesonPlanning').val(),
@@ -1176,7 +1228,7 @@ console.debug(checkedLines);
                 var inv = 'id';
                 var counter = 0;
                 console.debug("**************  referenceNo "+data.referenceNo);
-                $('#referenceno').val(data.referenceNo);
+
                 $.each(data.priority, function (key, value) {
 
                     if (inv != value.CustomerId)

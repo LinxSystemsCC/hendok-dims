@@ -6575,7 +6575,7 @@
                                 authZeroPricing(token_number,$('#theOrdersDetailsId' + token_number).val(), $('#prodCode_' + token_number).val());
                             }
 
-                            if(parseFloat(data[0].Price).toFixed(2) < parseFloat(data[0].lastUnitCost).toFixed(2)){
+                            if(parseFloat(data[0].Price).toFixed(2) < 1 /*parseFloat(data[0].lastUnitCost).toFixed(2)*/ ){
 
                                 var dialog = $('<p>Selling Price Is Below The Cost.Please Double Check Your Price.</p>').dialog({
                                     height: 200, width: 700, modal: true, containment: false,
