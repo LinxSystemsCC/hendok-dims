@@ -740,6 +740,10 @@
                                     <a href='{!!url("/viewStatusReport")!!}'  onclick="window.open(this.href, 'viewBlockedAccount',
 'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Progress and Status Report</a>
                                 </li>
+                                <li>
+                                    <a href='{!!url("/viewTransfersCrRec")!!}'  onclick="window.open(this.href, 'viewTransfersCrRec',
+'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Transfers Creation and Received</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="dropdown">
