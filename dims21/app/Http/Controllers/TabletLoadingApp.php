@@ -307,7 +307,7 @@ class TabletLoadingApp extends controller
     public function markreftobeapproved(Request $request){
         $ref = $request->get('ref');
         $allproducts = DB::connection('sqlsrv3')
-            ->select('exec spUpdatePickingToGoForApproval ?',
+            ->statement('exec spUpdatePickingToGoForApproval ?',
                 array($ref)
             );
         return response()->json($allproducts);
@@ -360,11 +360,19 @@ class TabletLoadingApp extends controller
         $allproducts = DB::connection('sqlsrv3')
             ->select('exec spGetPickingReferenceProducts ?',
                 array($ref)
-            );//[spGetInProgressPlanningProducts]
-       // $output["Products"] = $allproducts;
-        //$output["We"] = $allproducts;
+            );
 
-        return response()->json($allproducts);
+        $headers = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingRefHeader ?',
+                array($ref)
+            );//[spGetInProgressPlanningProducts]
+
+       // $refstatus = DB::connection('sqlsrv3')->table('tblPickingPlanHeader')->select('intStatus')->where('strUnickReference',$ref)->get();
+
+        $output["Products"] = $allproducts;
+        $output["header"] = $headers;
+
+        return response()->json($output);
     }
     public function addplantoanotherplan(Request $request)
     {
@@ -424,6 +432,20 @@ class TabletLoadingApp extends controller
             );//[spGetInProgressPlanningProducts]
 
         return response()->json($allproducts);
+    }
+    public function getPickingAuth(){
+        $price = DB::connection('sqlsrv3')->select('exec spGetToBeAuthPickings ?', array("Picking Price"));
+        $limit = DB::connection('sqlsrv3')->select('exec spGetToBeAuthPickings ?', array("Picking Credit Limit"));
+        $nostock = DB::connection('sqlsrv3')->select('exec spGetToBeAuthPickings ?', array("Picking No Stock"));
+        $load = DB::connection('sqlsrv3')->select('exec spGetToBeAuthPickings ?', array("Picking Load"));
+        $priority = DB::connection('sqlsrv3')->select('exec spGetToBeAuthPickings ?', array("Picking Priority"));
+
+        return view('dims/approvingscreen')
+            ->with('price',$price)
+            ->with('limit',$limit)
+            ->with('nostock',$nostock)
+            ->with('load',$load)
+            ->with('priority',$priority);
     }
     public function getProgressPlan(Request $request)
     {
@@ -496,6 +518,50 @@ class TabletLoadingApp extends controller
         }
         //  dd($outPut);
         return response()->json($outPut);
+    }
+    public function updatepickingauthstatus(Request $request){
+        $authIds = $request->get('authIds');
+        $userid = \Illuminate\Support\Facades\Auth::user()->UserID;
+        $username = \Illuminate\Support\Facades\Auth::user()->UserName;
+        $result = false;
+        foreach ($authIds as $val){
+            $result = DB::connection('sqlsrv3')
+                ->statement('exec spAuthPickingLinesByDept ?,?,?',
+                    array($val['autoid'],$userid,$username)
+                );
+        }
+
+        return response()->json($result);
+    }
+    public function cancelpickingplan(Request $request){
+        $ref = $request->get('ref');
+        DB::connection('sqlsrv3')->table('tblPickingPlan')
+            ->where('strUnickReference',$ref )
+            ->update(['intProductsPlanStatus' => 4]);
+
+      $result =  DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference',$ref )
+            ->update(['intStatus' => 4]);
+
+      return $result;
+    }
+    public function updatepickingheaderonthefly(Request $request){
+        $refno = $request->get('refno');
+        $routeid = $request->get('routeid');
+        $userid = \Illuminate\Support\Facades\Auth::user()->UserID;
+        $result = DB::connection('sqlsrv3')
+            ->statement('exec spSavePickingHeaderRoute ?,?,?',
+                array($routeid,$refno,$userid)
+            );
+        return response()->json($result);
+    }
+    public function pickingplanlist($ref){
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingReferenceProducts ?',
+                array($ref)
+            );
+        return view('dims/prickingplanlist')
+            ->with('listproducts',$allproducts);
     }
     public function pastels()
     {

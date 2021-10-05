@@ -298,7 +298,7 @@
                 var counter = 0;
                 var massTotal = 0;
                 $('#productsbyref').empty();
-                $.each(data, function (key, value) {
+                $.each(data.Products, function (key, value) {
                     trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" class="hidden_row1'+counter+' hidden_row"><td style="padding: 0px;width: 10%;">'+
                         '<input type="checkbox" name="unique" id ="unique" style="height: 20px !important;width: 50px !important;"  class="unique" value="' +value.intAutoPicking + '" /></td>' +
                         '<td style="padding: 0px;width: 30%;">'+value.StoreName+'</td>'+
@@ -314,7 +314,16 @@
                 //
                 $('#productsbyref').append(trHTML);
                 $('#weight').val(parseFloat(massTotal*1000).toFixed(2));
-
+                $.each(data.header, function (key, value) {
+                    $('#routes').prepend('<option value="'+value.intRouteId+'" selected="selected">'+value.routename+'</option>');
+                    $('#ordertypes').prepend('<option value="'+value.intOrderTypeId+'" selected="selected">'+value.OrderType+'</option>');
+                    $('#truckid').prepend('<option value="'+value.TruckId+'" selected="selected">'+value.TruckName+'</option>');
+                    $('#deliverydate').val(value.dteDispatch);
+                    if(value.intStatus != 0 ) {
+                        $('#doneplanning').hide();
+                        //routes
+                    }
+                });
 
 
             }

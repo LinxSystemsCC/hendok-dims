@@ -142,10 +142,12 @@
     Date From <input id="datefrom1">
     Date To<input id="dateeto1">
     Status <select id="status">
-        <option value="0">Plan no finalized</option>
-        <option value="1">Finalized</option>
-        <option value="2">Picking</option>
-        <option value="3">Auth</option>
+        <option value="0">Plan not finalized</option>
+        <option value="1">Picking </option>
+        <option value="2">Declined Plan</option>
+        <option value="3">Completed Picking</option>
+        <option value="4">Cancelled</option>
+        <option value="5">Awaiting Auth</option>
     </select>
 
     <button id="submit">Submit</button>
@@ -178,7 +180,7 @@
 
         </table>
 
-
+<button id="cancelplan" style="background: red;float: right;">CANCEL PLAN</button>
     </div>
 </div>
 <div style="display: flex;">
@@ -199,6 +201,7 @@
         </select>
         Delivery Date<input id="deliverydate">
         <button id="doneplanning" class="btn-lg btn-primary">Process</button>
+        <button id="print" class="btn-lg btn-primary">Print Picking</button>
         <br><br>
         <table>
             <thead>
@@ -249,6 +252,36 @@
             }
         });
 
+        $('#print').click(function(){
+            var ref = $('#ref').val();
+            window.open('{!!url("/pickingplanlist")!!}/'+ref, 'pickingplanlist', "location=1,status=1,scrollbars=1, width=1500,height=850");
+        });
+
+        $('#cancelplan').click(function(){
+            var dialog = $('<p><strong style="color:red">Are you sure you want to cancel the plan?</strong></p>').dialog({
+                height: 200, width: 700,modal: true,containment: false,
+                buttons: {
+                    "YES": function () {
+                        dialog.dialog('close');
+                        $.ajax({
+                            url: '{!!url("/cancelpickingplan")!!}',
+                            type: "POST",
+                            data: {
+                                ref:$('#ref').val()
+                            },
+                            success: function (data) {
+                                    alert("Plan Ref #"+$('#ref').val()+" has been cancelled");
+                            }
+                        });
+                    },
+                    "NO": function () {
+                        dialog.dialog('close');
+                    }
+                }
+            });
+
+
+        });
 
         $('#doneplanning').click(function(){
         $('#sendforapproval').hide();
@@ -342,6 +375,8 @@
         {headerName: "Date Time", field: "dteUpdated",width: 180},
         {headerName: "Reference No", field: "strUnickReference",width: 200},
         {headerName: "User Name", field: "UserName",width: 200},
+        {headerName: "Assigned Route", field: "routename",width: 150},
+        {headerName: "NickName", field: "strPickingNickname",width: 100},
         {headerName: "Status", field: "intProductsPlanStatus",width: 100}
     ];
 
@@ -411,7 +446,7 @@
                 var counter = 0;
                 var massTotal = 0;
                 $('#productsbyref').empty();
-                $.each(data, function (key, value) {
+                $.each(data.Products, function (key, value) {
                     trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" class="hidden_row1'+counter+' hidden_row"><td style="padding: 0px;width: 10%;">'+
                         '<input type="checkbox" name="unique" id ="unique" style="height: 20px !important;width: 50px !important;"  class="unique" value="' +value.intAutoPicking + '" /></td>' +
                         '<td style="padding: 0px;width: 30%;">'+value.StoreName+'</td>'+
@@ -427,7 +462,17 @@
                 //
                 $('#productsbyref').append(trHTML);
                 $('#weight').val(parseFloat(massTotal*1000).toFixed(2));
-
+                //header
+                $.each(data.header, function (key, value) {
+                    $('#routes').prepend('<option value="'+value.intRouteId+'" selected="selected">'+value.routename+'</option>');
+                    $('#ordertypes').prepend('<option value="'+value.intOrderTypeId+'" selected="selected">'+value.OrderType+'</option>');
+                    $('#truckid').prepend('<option value="'+value.TruckId+'" selected="selected">'+value.TruckName+'</option>');
+                    $('#deliverydate').val(value.dteDispatch);
+                   if(value.intStatus != 0 ) {
+                       $('#doneplanning').hide();
+                        //routes
+                   }
+                });
 
 
             }

@@ -391,7 +391,7 @@ class SalesFormFunctions extends Controller
                 $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Hendok Distribution;server=102.37.0.48\SQL2019,62019");
                 break;
             case 2:
-                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Hendok (Pty) Ltd;server=102.37.0.48\SQL2019,62019");
+                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Henroof;server=102.37.0.48\SQL2019,62019");
                 break;
             case 3:
                 $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Ukhosi;server=102.37.0.48\SQL2019,62019");
@@ -410,6 +410,13 @@ class SalesFormFunctions extends Controller
                 $customercode = $val['customerCode'];
             }
             if(strlen(trim($dimsid)) < 1  ){
+              //  dd($orderlines);
+                if(is_null($orderlines)){
+                    $outPut['result'] = "Success";
+                    $outPut['Error'] = "Success";
+                    return $outPut;
+                }
+
                 foreach ($orderheaders as $val)
                 {
                     $cashAccount = $sdkHelper->GetARAccount($val['customerCode'] );
@@ -430,6 +437,7 @@ class SalesFormFunctions extends Controller
                     $stockItem = $sdkHelper->GetStockItem($val['productCode']);
                     $orderDetail->InventoryItem = $stockItem;
                     $orderDetail->Quantity =  floatval($val['qty']);
+                    //$orderDetail->cDescription =  $val['description'];
                     $orderDetail->TaxMode = 0;
                     $orderDetail->TaxType = $sdkHelper->GetTaxRate("1");
                     $orderDetail->Warehouse = $sdkHelper->GetWarehouseByCode("Mstr") ;
@@ -810,7 +818,7 @@ class SalesFormFunctions extends Controller
                 $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Hendok Distribution;server=102.37.0.48\SQL2019,62019");
                 break;
             case 2:
-                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Hendok (Pty) Ltd;server=102.37.0.48\SQL2019,62019");
+                $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Henroof;server=102.37.0.48\SQL2019,62019");
                 break;
             case 3:
                 $sdkHelper->CreateConnection("uid=sa;pwd=Linx_123;Initial Catalog=Ukhosi;server=102.37.0.48\SQL2019,62019");

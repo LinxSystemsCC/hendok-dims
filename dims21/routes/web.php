@@ -329,11 +329,13 @@ Route::get('pastels',[TabletLoadingApp::class,'pastels']);
 Route::get('getmycustroutemap',[TabletLoadingApp::class,'getmycustroutemap']);
 Route::get('pickingtickets',[TabletLoadingApp::class,'pickingtickets']);
 Route::get('GetPickingReferenceProducts',[TabletLoadingApp::class,'GetPickingReferenceProducts']);
+Route::get('pickingplanlist/{ref}',[TabletLoadingApp::class,'pickingplanlist']);
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);
 Route::get('pickingticketslistnotdone/{ref}',[TabletLoadingApp::class,'pickingticketslistnotdone']);
 Route::get('topuppickingplan/{ref}',[TabletLoadingApp::class,'topuppickingplan']);
+Route::get('getPickingAuth',[TabletLoadingApp::class,'getPickingAuth']);
 Route::post('updateplanlines',[TabletLoadingApp::class,'updateplanlines']);
 Route::post('addplantoanotherplan',[TabletLoadingApp::class,'addplantoanotherplan']);
 Route::post('pickingNickName',[TabletLoadingApp::class,'pickingNickName']);
@@ -400,6 +402,9 @@ Route::post('forcecredits',[TabletLoadingApp::class,'forcecredits']);
 Route::post('combineroutes',[TabletLoadingApp::class,'combineroutes']);
 Route::post('updatepickingheader',[TabletLoadingApp::class,'updatepickingheader']);
 Route::post('markreftobeapproved',[TabletLoadingApp::class,'markreftobeapproved']);
+Route::post('updatepickingauthstatus',[TabletLoadingApp::class,'updatepickingauthstatus']);
+Route::post('updatepickingheaderonthefly',[TabletLoadingApp::class,'updatepickingheaderonthefly']);
+Route::post('cancelpickingplan',[TabletLoadingApp::class,'cancelpickingplan']);
 Route::get('creditNoteReasonsJSonWithBook',[TabletLoadingApp::class,'creditNoteReasonsJSonWithBook']);
 
 //TABLET LOADING APP ENDS HERE !!!

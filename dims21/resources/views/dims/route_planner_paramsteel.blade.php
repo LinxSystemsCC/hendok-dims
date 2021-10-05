@@ -136,6 +136,16 @@
                     </div>
 
                 </div>
+                <div class="col-lg-12" style="background: #9ab5bb; height:50px;">
+                    <label>Assign Route</label>
+                    <select id="temppickingroute">
+                        <option value="-99">Select Route</option>
+                        @foreach($routes as $values)
+                            <option value="{{$values->Routeid}}">{{$values->Route}}</option>
+                        @endforeach
+                    </select>
+
+                </div>
                 <div class="col-lg-12">
                     <div class="flex-container2">
                         <div class="flex-child2 " style="text-align: center">
@@ -155,6 +165,7 @@
 
                     </div>
                 </div>
+
 
                 <div class="col-lg-12" style="background: orange; height:100px;">
 
@@ -352,6 +363,33 @@
         $("#returns").hide();
         $("#customerPlanned").hide();
         //
+
+        $("#temppickingroute").change(function () {
+            var id = this.value;
+            var firstDropVal = $( "#temppickingroute option:selected" ).text();;
+            var dialog = $('<p><strong style="color:green">Are you sure that you want to assign '+firstDropVal+'</strong></p>').dialog({
+                height: 200, width: 700,modal: true,containment: false,
+                buttons: {
+                    "YES": function () {
+                        dialog.dialog('close');
+                        $.ajax({
+                            url: '{!!url("/updatepickingheaderonthefly")!!}',
+                            type: "POST",
+                            data: {
+                                routeid: id,
+                                refno: $('#referenceno').val()
+                            },
+                            success: function (data) {
+
+                            }
+                        });
+                    },
+                    "NO": function () {
+                        dialog.dialog('close');
+                    }
+                }
+            });
+        });
 
         $('#viewpickingticket').click(function(){
 
@@ -708,247 +746,276 @@
 
         $('#planpriority').on('click',function(){
 
-            var checkedLines = new Array();
+            var routeSelect = $('#temppickingroute').val();
+            if(routeSelect != -99){
+                var checkedLines = new Array();
 
-            $('[name="unique"]:checked').each(function(checkbox) {
-                // selected.push(checkbox);
-                var id = $(this).val();
-                checkedLines.push({
-                    'orderdetail': id,
-                    'qty': $(this).closest('tr').find('.remaining').val(),
-                    'pickingtype':'priority',
-                    'ownerId':$(this).closest('tr').find('.OwnerID').val(),
-                    'referenceNo':$('#referenceno').val()
+                $('[name="unique"]:checked').each(function(checkbox) {
+                    // selected.push(checkbox);
+                    var id = $(this).val();
+                    checkedLines.push({
+                        'orderdetail': id,
+                        'qty': $(this).closest('tr').find('.remaining').val(),
+                        'pickingtype':'priority',
+                        'ownerId':$(this).closest('tr').find('.OwnerID').val(),
+                        'referenceNo':$('#referenceno').val()
+                    });
+
                 });
 
-            });
-console.debug(checkedLines);
-            $.ajax({
-                url: '{!!url("/saveplan")!!}',
-                type: "POST",
-                data: {
+                $.ajax({
+                    url: '{!!url("/saveplan")!!}',
+                    type: "POST",
+                    data: {
 
-                    referenceno: $('#referenceno').val(),
-                    priority: checkedLines
-                },
-                success: function (data) {
-                    console.debug("Plan Priority");
+                        referenceno: $('#referenceno').val(),
+                        priority: checkedLines
+                    },
+                    success: function (data) {
+                        console.debug("Plan Priority");
 
-                    var nname = data[0].nickname; console.debug(nname);
-                    if (nname == "aegona"){
-                        var dialog2 = $('<input type="text" placeholder="Picking Nickname" class="thisplannickname" style="border: 2px solid black;height:50px !important">').dialog({
+                        var nname = data[0].nickname; console.debug(nname);
+                        if (nname == "aegona"){
+                            var dialog2 = $('<input type="text" placeholder="Picking Nickname" class="thisplannickname" style="border: 2px solid black;height:50px !important">').dialog({
+                                height: 200, width: 700,modal: true,containment: false,
+                                buttons: {
+                                    "SAVE": function () {
+                                        dialog2.dialog('close');
+                                        $.ajax({
+                                            url: '{!!url("/pickingNickName")!!}',
+                                            type: "POST",
+                                            data: {
+                                                referenceno: $('#referenceno').val(),
+                                                nickname: $('.thisplannickname').val()
+                                            },
+                                            success: function (data) {
+
+                                            } });
+
+                                    }
+                                }
+                            });
+                        }
+                        var dialog = $('<p><strong>Would you like to refresh your priority list?</strong></p>').dialog({
                             height: 200, width: 700,modal: true,containment: false,
                             buttons: {
-                                "SAVE": function () {
-                                    dialog2.dialog('close');
+                                "YES": function () {
+
                                     $.ajax({
-                                        url: '{!!url("/pickingNickName")!!}',
+                                        url: '{!!url("/getPriotyCustOnly")!!}',
                                         type: "POST",
                                         data: {
-                                            referenceno: $('#referenceno').val(),
-                                            nickname: $('.thisplannickname').val()
+                                            routeId: $('#rouTabletLoadingtesonPlanning').val(),
+                                            deliveryDate: $('#deliveryDatesonPlanning').val(),
+                                            OrderType: $('#orderTypesTabletLoadingonPlanning').val(),
+                                            deliveryDateTo: $('#deliveryDatesonPlanning2').val(),
+                                            dateTo: $('#deliveryDatesonPlanning2').val(),
+                                            status: $('#statusRoutePlanner').val(),
+                                            productId: $('#prodexclude').val(),
                                         },
                                         success: function (data) {
+                                            var trHTML = '';
+                                            var style = '';
+                                            var classes = 'onDrag';
+                                            $('#priority').empty();
 
-                                        } });
+                                            var inv = 'id';
+                                            var counter = 0;
+                                            console.debug("**************  referenceNo "+data.referenceNo);
 
+                                            $.each(data.priority, function (key, value) {
+
+                                                if (inv != value.CustomerId)
+                                                {
+                                                    var k = parseInt(counter)+parseInt(1);
+                                                    trHTML +='<tr ondblclick="this.style.display = none" class="fast_remove" style="font-size: 14px;font-weight: 600;" onclick="show_hide_row(\'hidden_row1'+ k +'\') ;"><td>'+
+                                                        value.StoreName +'</td><td>'+
+                                                        value.orderid +'</td><td>'+
+                                                        value.OrderDate +'</td><td>'+
+                                                        value.DeliveryDate +'</td><td>'+
+                                                        value.OrderNo +'<input type="hidden" class="dontTakeme" value="thisIsIt"></td></tr>';
+                                                    counter++;
+
+                                                }
+                                                trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" class="hidden_row1'+counter+' hidden_row"><td style="padding: 0px;width: 10%;">'+
+                                                    '<input type="checkbox" name="unique" id ="unique" style="height: 20px !important;width: 50px !important;"  class="unique" value="' +value.OrderDetailId + '" /></td>' +
+                                                    '<td style="padding: 0px;width: 30%;">'+value.PastelDescription+'</td>'+
+                                                    '<td>'+
+                                                    '<input type="number" min="0" style="height: 26px !important; width: 76px;" class="remaining" value="' + parseFloat(value.mnyQtyRemaining).toFixed(2) + '" style="" ><input type="hidden" class="volume" value="' +value.volumes + '" />' +
+                                                    '<input type="hidden" id ="OrderDetailId" class="OrderDetailId" value="' +value.OrderDetailId + '" /> <input type="hidden" class="prodmass" value="' +value.weights + '" /><input type="hidden" class="fltLatitude" value="' +value.fltLatitude + '" /><input type="hidden" class="fltLongitude" value="' +value.fltLongitude + '" /><input type="hidden" class="OwnerID" value="' +value.OwnerID + '" /></td>' +
+
+                                                    '<td style="padding: 0px;width: 100px;color:red;"> Avl '+ parseFloat(value.Available).toFixed(0)+'</td>'+
+                                                    '<td style="padding: 0px;width: 100px;">'+value.pallaetQty+'</td><input type="hidden" class="infowindow" value="' +value.infowindow + '" /><input type="hidden" class="PastelDescription" value="' +value.PastelDescription + '" />'+
+                                                    '<td style="padding: 0px;width: 100px;"> Wgt '+parseFloat(value.weights).toFixed(1)+'</td>'+
+                                                    '<td style="padding: 0px;width: 100px;"> Vol '+value.volume+'</td>'+
+                                                    '</tr>';
+//
+                                                inv = value.CustomerId
+
+
+                                            });
+                                            $('#priority').append(trHTML);
+                                        }
+                                    });
+                                    dialog.dialog('close');
+                                },
+                                "NO": function () {
+                                    dialog.dialog('close');
                                 }
                             }
                         });
-                    }
-                    var dialog = $('<p><strong>Would you like to refresh your priority list?</strong></p>').dialog({
-                        height: 200, width: 700,modal: true,containment: false,
-                        buttons: {
-                            "YES": function () {
-
-                                $.ajax({
-                                url: '{!!url("/getPriotyCustOnly")!!}',
-                                type: "POST",
-                                data: {
-                                    routeId: $('#rouTabletLoadingtesonPlanning').val(),
-                                    deliveryDate: $('#deliveryDatesonPlanning').val(),
-                                    OrderType: $('#orderTypesTabletLoadingonPlanning').val(),
-                                    deliveryDateTo: $('#deliveryDatesonPlanning2').val(),
-                                    dateTo: $('#deliveryDatesonPlanning2').val(),
-                                    status: $('#statusRoutePlanner').val(),
-                                    productId: $('#prodexclude').val(),
-                                },
-                                success: function (data) {
-                                    var trHTML = '';
-                                    var style = '';
-                                    var classes = 'onDrag';
-                                    $('#priority').empty();
-
-                                    var inv = 'id';
-                                    var counter = 0;
-                                    console.debug("**************  referenceNo "+data.referenceNo);
-
-                                    $.each(data.priority, function (key, value) {
-
-                                        if (inv != value.CustomerId)
-                                        {
-                                            var k = parseInt(counter)+parseInt(1);
-                                            trHTML +='<tr ondblclick="this.style.display = none" class="fast_remove" style="font-size: 14px;font-weight: 600;" onclick="show_hide_row(\'hidden_row1'+ k +'\') ;"><td>'+
-                                                value.StoreName +'</td><td>'+
-                                                value.orderid +'</td><td>'+
-                                                value.OrderDate +'</td><td>'+
-                                                value.DeliveryDate +'</td><td>'+
-                                                value.OrderNo +'<input type="hidden" class="dontTakeme" value="thisIsIt"></td></tr>';
-                                            counter++;
-
-                                        }
-                                        trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" class="hidden_row1'+counter+' hidden_row"><td style="padding: 0px;width: 10%;">'+
-                                            '<input type="checkbox" name="unique" id ="unique" style="height: 20px !important;width: 50px !important;"  class="unique" value="' +value.OrderDetailId + '" /></td>' +
-                                            '<td style="padding: 0px;width: 30%;">'+value.PastelDescription+'</td>'+
-                                            '<td>'+
-                                            '<input type="number" min="0" style="height: 26px !important; width: 76px;" class="remaining" value="' + parseFloat(value.mnyQtyRemaining).toFixed(2) + '" style="" ><input type="hidden" class="volume" value="' +value.volumes + '" />' +
-                                            '<input type="hidden" id ="OrderDetailId" class="OrderDetailId" value="' +value.OrderDetailId + '" /> <input type="hidden" class="prodmass" value="' +value.weights + '" /><input type="hidden" class="fltLatitude" value="' +value.fltLatitude + '" /><input type="hidden" class="fltLongitude" value="' +value.fltLongitude + '" /><input type="hidden" class="OwnerID" value="' +value.OwnerID + '" /></td>' +
-
-                                            '<td style="padding: 0px;width: 100px;color:red;"> Avl '+ parseFloat(value.Available).toFixed(0)+'</td>'+
-                                            '<td style="padding: 0px;width: 100px;">'+value.pallaetQty+'</td><input type="hidden" class="infowindow" value="' +value.infowindow + '" /><input type="hidden" class="PastelDescription" value="' +value.PastelDescription + '" />'+
-                                            '<td style="padding: 0px;width: 100px;"> Wgt '+parseFloat(value.weights).toFixed(1)+'</td>'+
-                                            '<td style="padding: 0px;width: 100px;"> Vol '+value.volume+'</td>'+
-                                            '</tr>';
-//
-                                        inv = value.CustomerId
 
 
-                                    });
-                                    $('#priority').append(trHTML);
-                                }
-                            });
-                                dialog.dialog('close');
+                        //getPriotyCustOnly
+                        console.debug(data);
+                        // upDateOrderHeaderAndPOS();
+
+
+                        $.ajax({
+                            url: '{!!url("/getProgressPlan")!!}',
+                            type: "GET",
+                            data: {
+
+                                referenceno: $('#referenceno').val(),
+
                             },
-                            "NO": function () {
-                                dialog.dialog('close');
+                            success: function (data) {
+                                console.debug(data);
+                                var trHTML = '';
+                                var counter = 0;
+                                $('#plannedprogress').empty();
+                                $.each(data, function (key, value) {
+                                    trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" >'+
+                                        '<td style="">'+value.PastelDescription+'</td>'+
+                                        '<td>'+
+                                        '<input type="number" min="0" style="height: 50px !important;" class="Qty" value="' + parseFloat(value.Qty).toFixed(2) + '" style="" >' +
+                                        '<input type="hidden" id ="ProductId" class="ProductId" value="' +value.ProductId + '" /></td>' +
+                                        '' +
+                                        '</tr>';
+                                    counter++;
+                                });
+
+                                $('#plannedprogress').append(trHTML);
+
                             }
+                        });
+
+
+
+                    }
+                });
+            }else{
+
+                var dialog = $('<p><strong style="color:red">Please Assign Route First</strong></p>').dialog({
+                    height: 200, width: 700,modal: true,containment: false,
+                    buttons: {
+                        "Okay": function () {
+                            dialog.dialog('close');
                         }
-                    });
+                    }
+                });
+            }
 
-
-                    //getPriotyCustOnly
-                    console.debug(data);
-                    // upDateOrderHeaderAndPOS();
-
-
-                    $.ajax({
-                        url: '{!!url("/getProgressPlan")!!}',
-                        type: "GET",
-                        data: {
-
-                            referenceno: $('#referenceno').val(),
-
-                        },
-                        success: function (data) {
-                            console.debug(data);
-                            var trHTML = '';
-                            var counter = 0;
-                            $('#plannedprogress').empty();
-                            $.each(data, function (key, value) {
-                                trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" >'+
-                                    '<td style="">'+value.PastelDescription+'</td>'+
-                                    '<td>'+
-                                    '<input type="number" min="0" style="height: 50px !important;" class="Qty" value="' + parseFloat(value.Qty).toFixed(2) + '" style="" >' +
-                                    '<input type="hidden" id ="ProductId" class="ProductId" value="' +value.ProductId + '" /></td>' +
-                                    '' +
-                                    '</tr>';
-                                counter++;
-                            });
-
-                            $('#plannedprogress').append(trHTML);
-
-                        }
-                    });
-
-
-
-                }
-            });
 
         });
 
 
         $('#planallproducts').on('click',function(){
-            var checkedLinesPriority = new Array();
-            $('[name="uniqueallproducts"]:checked').each(function(checkbox) {
-                // selected.push(checkbox);
-                var id = $(this).val();
-                checkedLinesPriority.push({
-                    'orderdetail': id,
-                    'qty': $(this).closest('tr').find('.remaining').val(),
-                    'ownerId': $(this).closest('tr').find('.ownerId').val(),
-                    'pickingtype':'productsonorders',
-                    'referenceNo':$('#referenceno').val()
-                });
 
-            });
-            console.debug(checkedLinesPriority);
-            $.ajax({
-                url: '{!!url("/saveplan")!!}',
-                type: "POST",
-                data: {
 
-                    referenceno: $('#referenceno').val(),
-                    priority: checkedLinesPriority
-                },
-                success: function (data) {
-
-                    var nname = data[0].nickname; console.debug(nname);
-                    if (nname == "aegona"){
-                        var dialog2 = $('<input type="text" placeholder="Picking Nickname" class="thisplannickname" style="border: 2px solid black;height:50px !important">').dialog({
-                            height: 200, width: 700,modal: true,containment: false,
-                            buttons: {
-                                "SAVE": function () {
-                                    dialog2.dialog('close');
-                                    $.ajax({
-                                        url: '{!!url("/pickingNickName")!!}',
-                                        type: "POST",
-                                        data: {
-                                            referenceno: $('#referenceno').val(),
-                                            nickname: $('.thisplannickname').val()
-                                        },
-                                        success: function (data) {
-
-                                        } });
-
-                                }
-                            }
-                        });
-                    }
-
-                    $.ajax({
-                        url: '{!!url("/getProgressPlan")!!}',
-                        type: "GET",
-                        data: {
-
-                            referenceno: $('#referenceno').val(),
-
-                        },
-                        success: function (data) {
-                            console.debug(data);
-                            var trHTML = '';
-                            var counter = 0;
-                            $('#plannedprogress').empty();
-                            $.each(data, function (key, value) {
-                                trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" >'+
-                                    '<td style="">'+value.PastelDescription+'</td>'+
-                                    '<td>'+
-                                    '<input type="number" min="0" style="height: 50px !important;" class="Qty" value="' + parseFloat(value.Qty).toFixed(2) + '" style="" >' +
-                                    '<input type="hidden" id ="ProductId" class="ProductId" value="' +value.ProductId + '" /></td>' +
-                                    '' +
-                                    '</tr>';
-                                counter++;
-                            });
-
-                            $('#plannedprogress').append(trHTML);
-
-                        }
+            var routeSelect = $('#temppickingroute').val();
+            if(routeSelect != -99){
+                var checkedLinesPriority = new Array();
+                $('[name="uniqueallproducts"]:checked').each(function(checkbox) {
+                    // selected.push(checkbox);
+                    var id = $(this).val();
+                    checkedLinesPriority.push({
+                        'orderdetail': id,
+                        'qty': $(this).closest('tr').find('.remaining').val(),
+                        'ownerId': $(this).closest('tr').find('.ownerId').val(),
+                        'pickingtype':'productsonorders',
+                        'referenceNo':$('#referenceno').val()
                     });
 
+                });
+                console.debug(checkedLinesPriority);
+                $.ajax({
+                    url: '{!!url("/saveplan")!!}',
+                    type: "POST",
+                    data: {
+
+                        referenceno: $('#referenceno').val(),
+                        priority: checkedLinesPriority
+                    },
+                    success: function (data) {
+
+                        var nname = data[0].nickname; console.debug(nname);
+                        if (nname == "aegona"){
+                            var dialog2 = $('<input type="text" placeholder="Picking Nickname" class="thisplannickname" style="border: 2px solid black;height:50px !important">').dialog({
+                                height: 200, width: 700,modal: true,containment: false,
+                                buttons: {
+                                    "SAVE": function () {
+                                        dialog2.dialog('close');
+                                        $.ajax({
+                                            url: '{!!url("/pickingNickName")!!}',
+                                            type: "POST",
+                                            data: {
+                                                referenceno: $('#referenceno').val(),
+                                                nickname: $('.thisplannickname').val()
+                                            },
+                                            success: function (data) {
+
+                                            } });
+
+                                    }
+                                }
+                            });
+                        }
+
+                        $.ajax({
+                            url: '{!!url("/getProgressPlan")!!}',
+                            type: "GET",
+                            data: {
+
+                                referenceno: $('#referenceno').val(),
+
+                            },
+                            success: function (data) {
+                                console.debug(data);
+                                var trHTML = '';
+                                var counter = 0;
+                                $('#plannedprogress').empty();
+                                $.each(data, function (key, value) {
+                                    trHTML +='<tr style="font-size: 12px;color: black;background: lightgrey" >'+
+                                        '<td style="">'+value.PastelDescription+'</td>'+
+                                        '<td>'+
+                                        '<input type="number" min="0" style="height: 50px !important;" class="Qty" value="' + parseFloat(value.Qty).toFixed(2) + '" style="" >' +
+                                        '<input type="hidden" id ="ProductId" class="ProductId" value="' +value.ProductId + '" /></td>' +
+                                        '' +
+                                        '</tr>';
+                                    counter++;
+                                });
+
+                                $('#plannedprogress').append(trHTML);
+
+                            }
+                        });
 
 
-                }
-            });
+
+                    }
+                });
+
+            }else{
+                var dialog = $('<p><strong style="color:red">Please Assign Route First</strong></p>').dialog({
+                    height: 200, width: 700,modal: true,containment: false,
+                    buttons: {
+                        "Okay": function () {
+                            dialog.dialog('close');
+                        }
+                    }
+                });
+            }
         });
 
         $('#doneplanning').click(function(){
