@@ -3,9 +3,9 @@
 @section('content')
     <div class="col-lg-12" style="background: white;font-weight: 900;padding: 0px 126px 3px 129px">
         <div class="form-group  col-md-6" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-            <button id="bulkID" class=" form-control btn-success btn-md" value="{{$bulkID}}">Print</button>
+            <button id="bulkID" class=" form-control btn-success btn-md" value="{{$bulkID}}">Preview PDF & Print</button>
         </div>
-        <div class="form-group  col-md-6" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+        <div class="form-group  col-md-6" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;display: none;">
             <label class="control-label" for="inputOrderId"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Printers</label>
             <select class="form-control input-sm " id="printerVal" style="height:26px;font-size: 10px;color:black;">
                 @foreach($printers as $value)
@@ -86,28 +86,11 @@
             }
         });
         $('#bulkID').click(function(){
+            //insertIntoTblPickingPerRoute
+            var bulkId = $('#bulkID').val();
 
-            $.ajax({
-                url: '{!!url("/insertIntoTblPickingPerRoute")!!}',
-                type: "POST",
-                data: {
-                    bulkID:$('#bulkID').val(),
-                    printerVal: $('#printerVal').val()
-                },
-                success: function (data) {
-                    if ( data != 'false'){
-                        var dialog = $('<p><strong>Done Printing Picking Slip</strong></p>').dialog({
-                            height: 200, width: 700, modal: true, containment: false,
-                            buttons: {
-                                "OKAY": function () {
-                                    dialog.dialog('close');
-                                }
-                            }
-                        });
-                    }
+            window.open('{!!url("/bulkpickingslip")!!}/'+bulkId, bulkId, "location=1,status=1,scrollbars=1, width=1200,height=850");
 
-                }
-            });
         });
     });
 </script>
