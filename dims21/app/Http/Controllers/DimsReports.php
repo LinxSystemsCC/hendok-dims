@@ -163,7 +163,7 @@ class DimsReports extends controller
             //echo $orderDetails[$i];
             DB::connection('sqlsrv3')
                 ->statement("EXEC spBulkPickingCreate '".$deliverydate."',".$orderDetails[$i].",".$orderType.",'".$timestamp."'");
-            $this->slackUser($orderType,$orderDetails[$i],$deliverydate);
+         //   $this->slackUser($orderType,$orderDetails[$i],$deliverydate);
         }
     }
     public function slackUser($ordertype,$route,$delvirateDate)
@@ -256,7 +256,7 @@ class DimsReports extends controller
     {
     $userAuthID = Auth::user()->UserID;
     $ID =$request->get('ID');
-    $Reviewed = $request->get('Reviewed'); 
+    $Reviewed = $request->get('Reviewed');
      DB::connection('sqlsrv3')
         ->statement('exec spUpdateReviewed ?,?,?',
         array($userAuthID,$ID,$Reviewed));

@@ -20,6 +20,7 @@ use App\Http\Controllers\OnlineOrdersReconController;
 use App\Http\Controllers\ControlPanelController;
 use App\Http\Controllers\ExternalFunctions;
 use App\Http\Controllers\JasperReports;
+use App\Http\Controllers\TestControllerReg;
 use Illuminate\Support\Facades\Route;
 
 
@@ -72,6 +73,7 @@ Route::resource('cart', 'CartController');
 
 Route::get('custCode',[SalesFormFunctions::class, 'CustomerCode']);
 Route::post('checkZeroCostOnOrder',[SalesFormFunctions::class, 'checkZeroCostOnOrder']);
+Route::post('checkstockonorders',[SalesFormFunctions::class, 'checkstockonorders']);
 Route::get('getExportForm', [DimsExportController::class,'getExportForm']);
 Route::get('getDimsUsers', [UserFeature::class,'getDimsUsers']);
 
@@ -218,11 +220,14 @@ Route::get('customersalespage',[DimsCommon::class,'viewCreditLimit']);
 Route::get('getDeliveryAddressOrderPattern/{account}/{addressid}',[DimsCommon::class,'getDeliveryAddressOrderPattern']);
 Route::get('customersalesJson/{datefrom1}/{dateto1}/{datefrom2}/{dateto3}',[DimsCommon::class,'customersalesJson']);
 Route::get('customerupdatepricingfromcustomerssalespage/{custcode}/{datefrom}/{dateto}/{datefrom2}/{dateto2}',[DimsCommon::class,'customerupdatepricingfromcustomerssalespage']);
+
 Route::get('bulpickingbyBatch/{timestamp}',[DimsCommon::class,'bulpickingbyBatch']);
 Route::get('UpdateDocument',[DimsCommon::class,'UpdateDocument']);
 Route::post('updateDocumentupdate',[DimsCommon::class,'UpdateDocumentupdate']);
 Route::get('/WebstoreMessages',[DimsCommon::class,'WebstoreMessages']);
 Route::get('/getMessageGrid',[DimsCommon::class,'getMessageGrid'] );
+Route::get('viewcustomerpricingjson/{custcode}/{datefrom}/{dateto}/{datefrom2}/{dateto2}',[DimsCommon::class,'viewcustomerpricingjson'] );
+Route::get('printcustomerpricingjson/{custcode}/{datefrom}/{dateto}/{datefrom2}/{dateto2}',[DimsCommon::class,'printcustomerpricingjson']);
 Route::post('updateMessage',[DimsCommon::class,'updateMessage'] );
 
 //DIMS COMMON ENDS HERE HERE!!!!
@@ -378,6 +383,8 @@ Route::post('updateIQInvoices',[TabletLoadingApp::class,'updateIQInvoices']);
 Route::post('forcecredits',[TabletLoadingApp::class,'forcecredits']);
 Route::post('combineroutes',[TabletLoadingApp::class,'combineroutes']);
 Route::get('creditNoteReasonsJSonWithBook',[TabletLoadingApp::class,'creditNoteReasonsJSonWithBook']);
+Route::get('ordermapvisualisation/{route}/{otype}/{deldate}',[TabletLoadingApp::class,'ordermapvisualisation']);
+Route::post('ordervisualjson',[TabletLoadingApp::class,'ordervisualjson']);
 
 //TABLET LOADING APP ENDS HERE !!!
 
@@ -418,6 +425,7 @@ Route::post('updategridproductsAndTeams',[ProductsController::class,'updategridp
 Route::post('savedatafromimport', [ProductsController::class,'savedatafromimport']);
 Route::get('itemsOutOfStockBeforePicking',[ProductsController::class,'itemsOutOfStockBeforePicking']);
 Route::get('getViewItemsOutOfStock', [ProductsController::class,'getViewItemsOutOfStock']);
+Route::get('getProductsAndPrices', [ProductsController::class,'getProductsAndPrices']);
 Route::post('printAllBarcode', [ProductsController::class,'printAllBarcode']);
 //PRODUCT CONTROLLER ENDS HERE!!!
 
@@ -639,6 +647,7 @@ Route::get('testJaspr/{id}', [JasperReports::class,'testJaspr'] );
 Route::get('CashOffPDF/{ref}/{type}',[JasperReports::class,'CashOffPDF']  );
 Route::get('specialnsJasper/{id}/{dateFrom}/{dateTo}', [JasperReports::class,'specialnsJasper'] );
 Route::get('pdforder/{id}',[JasperReports::class,'PDFOrders']  );
+Route::get('bulkpickingslip/{id}',[JasperReports::class,'bulkpickingslip']  );
 Route::get('PDFDelDate/{id}',[JasperReports::class,'PDFDelDate'] );
 Route::get('overallSpecailJasper/{datefrom}/{dateto}',[JasperReports::class,'overallSpecailJasper']  );
 Route::get('excelorder/{id}',[JasperReports::class,'EXCELOrders']  );
@@ -726,6 +735,9 @@ Route::get('getFreshOrderHeaders ',[OnlineOrders::class,'getFreshOrderHeaders'])
 Route::get('getOrderLines/{id}',[OnlineOrders::class,'getOrderLines']);
 Route::get('getNewDealToAuth/{id}',[OnlineOrders::class,'getNewDealToAuth']);
 Route::post('postauthdeal',[OnlineOrders::class,'postauthdeal']);
+Route::post('postMyMarketOrders',[OnlineOrders::class,'postMyMarketOrders']);
+Route::post('UpdateOrderStatus',[OnlineOrders::class,'UpdateOrderStatus']);
+Route::get('UpdateOrderStatusmanually/{orderid}',[OnlineOrders::class,'UpdateOrderStatusmanually']);
 
 //ONLINE ORDERS ENDS HERE!!!
 
@@ -833,3 +845,10 @@ Route::get('/xero/getItems', [\App\Http\Controllers\XeroController::class, 'getI
 Route::get('getOrderTypes',[ApisController::class,'getOrderTypes'] );
 Route::get('getRoutes',[ApisController::class,'getRoutes'] );
 Route::get('sendfcm',[ApisController::class,'sendFCMMessage'] );
+
+
+
+/**************************TEST CONTROLLER*************************************/
+
+
+Route::get('regTestJsonCall',[TestControllerReg::class,'regTestJsonCall'] );
