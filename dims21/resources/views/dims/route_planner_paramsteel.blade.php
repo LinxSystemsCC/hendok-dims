@@ -380,7 +380,9 @@
                                 refno: $('#referenceno').val()
                             },
                             success: function (data) {
-
+                                localStorage.removeItem('routechosen');
+                                //localStorage.routeplanner = JSON.stringify({name: "John",routeId: $('#rouTabletLoadingtesonPlanning').val(),deliveryDate: $('#deliveryDatesonPlanning').val()});
+                                localStorage.setItem('routechosen', JSON.stringify({routes: firstDropVal }));
                             }
                         });
                     },

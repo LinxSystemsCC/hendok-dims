@@ -345,6 +345,7 @@ Route::post('moveTheOrder',[TabletLoadingApp::class,'moveTheOrder']);
 Route::post('moveTheOrderArray', [TabletLoadingApp::class,'moveTheOrderArray']);
 Route::get('truckControlFromDate',[TabletLoadingApp::class,'truckControlFromDate']);
 Route::get('amalgamation',[TabletLoadingApp::class,'amalgamation']);
+Route::get('planningusingflex',[TabletLoadingApp::class,'planningusingflex']);
 Route::get('retrieve/{del}/{route}/{ordertype}',[TabletLoadingApp::class,'retrieve']);
 Route::get('driverFleetInfo/{del}/{route}/{ordertype}', [TabletLoadingApp::class,'driverFleetInfo']);
 Route::get('bulkPickingPerUserJSON/{from}/{to}',[TabletLoadingApp::class,'bulkPickingPerUserJSON']);

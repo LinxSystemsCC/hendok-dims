@@ -178,6 +178,10 @@ class TabletLoadingApp extends controller
     {
         return view('dims/plannedroutemap');
     }
+    public function planningusingflex()
+    {
+        return view('dims/planningusingflexgrid');
+    }
     public function getProductToSelect()
     {
         $categories = DB::connection('sqlsrv3')
@@ -1130,6 +1134,10 @@ class TabletLoadingApp extends controller
         //dd($livebulk);
         return view('dims/driverlivefleet')
             ->with('performance', $livebulk)->with('delDate', $Date);
+    }
+    public function pickingticketslive()
+    {
+        return view('dims/livepickingtickets');
     }
     public function routePlannerSuggestions($deliveryDate,$OrderType,$routeId,$status)
     {
