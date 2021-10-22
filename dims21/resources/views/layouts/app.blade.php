@@ -620,18 +620,18 @@
                                 </li>
                                 <li>
                                     <a href='{!!url("/getPickingAuth")!!}' onclick="window.open(this.href, 'getPickingAuth',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Bulk Picking</a>
+'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Authorise Picking</a>
                                 </li>
 
-                                <li>
+                                <li style="display: none">
                                     <a href='{!!url("/massCustomer")!!}' onclick="window.open(this.href, 'massc',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Customers</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/massProducts")!!}' onclick="window.open(this.href, 'massp',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Products</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/viewproductbydate")!!}' onclick="window.open(this.href, 'viewproductbydate',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Products By Date</a>
                                 </li>
@@ -684,21 +684,24 @@
                                 @endif
 
                                 <li>
-                                    <a href='{!!url("/routeplanner")!!}' target="_blank">Route Plan</a>
+                                    <a href='{!!url("/routeplanner")!!}' target="_blank">Picking Planner</a>
+                                </li>
+                                <li>
+                                    <a href='{!!url("/routeplannerreal")!!}' target="_blank">Route Planner</a>
                                 </li>
 
 
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/customersalespage")!!}' onclick="window.open(this.href, 'salescustomers',
 'left=20,top=20,width=1200,height=950,toolbar=1,resizable=0'); return false;">Customer Sales</a>
                                 </li>
 
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/getdriverscashoff")!!}' onclick="window.open(this.href, 'getdriverscashoff',
 'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Drivers Cashoff</a>
                                 </li>
 
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/viewdailycash")!!}' onclick="window.open(this.href, 'viewdailycash',
 'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Daily Sales</a>
                                 </li>
@@ -819,54 +822,54 @@
                                 </li>
                                 @endif
 
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/getProductsStopedBuying")!!}'  onclick="window.open(this.href, 'getProductsStopedBuying',
 'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Stopped Buying</a>
                                 </li>
 
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/brands")!!}'  onclick="window.open(this.href, 'brands',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Brands</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/groups")!!}'  onclick="window.open(this.href, 'groups',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Groups</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/taxes")!!}'  onclick="window.open(this.href, 'taxes',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Taxes</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/pickingteam")!!}'  onclick="window.open(this.href, 'pickingteam',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Picking Team</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/groupbrands")!!}'  onclick="window.open(this.href, 'groupbrands',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Group Brands</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/webstore")!!}'  onclick="window.open(this.href, 'webstore',
 'left=20,top=20,width=900,height=900,toolbar=1,resizable=0'); return false;">Web Store</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/remoteorders")!!}'  onclick="window.open(this.href, 'webstore',
 'left=20,top=20,width=900,height=900,toolbar=1,resizable=0'); return false;">Remote Orders</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/missedvisit")!!}'  onclick="window.open(this.href, 'briefcase',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Salesman Briefcase</a>
                                 </li>
 
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/registercards")!!}'  onclick="window.open(this.href, 'registercards',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Business Loyalty Cards</a>
                                 </li>
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/registercardswalking")!!}'  onclick="window.open(this.href, 'registercardswalking',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Personal Loyalty Cards</a>
                                 </li>
 
-                                <li>
+                                <li  style="display: none">
                                     <a href='{!!url("/viewassignuserstotill")!!}/{{(new \DateTime())->format('Y-m-d')}}'  onclick="window.open(this.href, 'viewassignuserstotill',
 'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;"> POS Panel</a>
                                 </li>
