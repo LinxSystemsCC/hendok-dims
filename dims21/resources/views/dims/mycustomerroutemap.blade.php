@@ -376,6 +376,7 @@
     {
 
         console.debug(routes);
+        locations = [];
         $.ajax({
             url: '{!!url("/getcustomergeneralplanmap")!!}',
             type: "POST",
