@@ -79,7 +79,9 @@
         width: 100%;
         border: 1px solid #ddd;
     }
-
+    tbody tr:nth-child(odd) {
+        background-color: #ccc;
+    }
     th, td {
         text-align: left;
         padding: 2px;
