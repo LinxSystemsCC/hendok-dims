@@ -44,7 +44,7 @@
                             </div>
                             <div class="form-group col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                                 <label class="control-label" for="rouTabletLoadingtesonPlanning"  style="margin-bottom: 0px;font-weight: 700;font-size: 14px;">Route</label>
-                                <select  id="rouTabletLoadingtesonPlanning" class="form-control input-sm col-xs-1" name="multicheckbox[]" multiple="multiple" >
+                                <select  id="rouTabletLoadingtesonPlanning" class="form-control input-sm col-xs-1" name="multicheckbox[]" multiple="multiple" style="width:300px; height:300px;" >
 
                                     @foreach($routes as $values)
                                         <option value="{{$values->Routeid}}">{{$values->Route}} ( Mass:{{round($values->m,2)}} )</option>
