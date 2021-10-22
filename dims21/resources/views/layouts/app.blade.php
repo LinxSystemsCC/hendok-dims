@@ -618,6 +618,10 @@
                                     <a href='{!!url("/pickingmain")!!}' onclick="window.open(this.href, 'bulkpicking',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Bulk Picking</a>
                                 </li>
+                                <li>
+                                    <a href='{!!url("/getPickingAuth")!!}' onclick="window.open(this.href, 'getPickingAuth',
+'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Bulk Picking</a>
+                                </li>
 
                                 <li>
                                     <a href='{!!url("/massCustomer")!!}' onclick="window.open(this.href, 'massc',
