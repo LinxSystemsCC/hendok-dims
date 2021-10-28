@@ -40,6 +40,17 @@
 <body style="font-family: Sans-serif">
     <div class="container">
 
+        <table>
+            <tr>
+                <td  class="col-xs-2">Date Loaded</td>
+                <td  class="col-xs-2"> </td>
+                <td  class="col-xs-2">Dunnages #</td>
+                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2">Load Completed</td>
+                <td  class="col-xs-2"></td>
+            </tr>
+        </table>
+
         <table id="orderHeaderPrint">
             <thead>
             <tr >
