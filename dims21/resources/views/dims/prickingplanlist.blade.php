@@ -41,16 +41,67 @@
     <div class="container">
 
         <table>
+            <tbody>
             <tr>
                 <td  class="col-xs-2">Date Loaded</td>
-                <td  class="col-xs-2"> </td>
+                <td  class="col-xs-2" style="width: 117px;"> </td>
                 <td  class="col-xs-2">Dunnages #</td>
-                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2" style="width: 117px;"></td>
                 <td  class="col-xs-2">Load Completed</td>
+                <td  class="col-xs-2" style="width: 117px;"></td>
+            </tr>
+            <tr>
+                <td  class="col-xs-2">Time Loaded</td>
+                <td  class="col-xs-2"> </td>
+                <td  class="col-xs-2">Straps #</td>
+                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2">Load Secured</td>
                 <td  class="col-xs-2"></td>
             </tr>
-        </table>
+            <tr>
+                <td  class="col-xs-2">Team Leader</td>
+                <td  class="col-xs-2"> </td>
+                <td  class="col-xs-2">Pallets #</td>
+                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2">Team Leader Signed</td>
+                <td  class="col-xs-2"></td>
+            </tr>
+            <tr>
+                <td  class="col-xs-2">Checker Name</td>
+                <td  class="col-xs-2"> </td>
+                <td  class="col-xs-2">Plastic Corners #</td>
+                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2"></td>
+            </tr>
+            <tr>
+                <td  class="col-xs-2">Ticket #</td>
+                <td  class="col-xs-2"> </td>
+                <td  class="col-xs-2">Tarps #</td>
+                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2">Stands #</td>
+                <td  class="col-xs-2"></td>
+            </tr>
+            <tr>
+                <td  class="col-xs-2">Driver Name</td>
+                <td  class="col-xs-2"> </td>
+                <td  class="col-xs-2">Trailer Type</td>
+                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2">Falcon Sign</td>
+                <td  class="col-xs-2"></td>
+            </tr>
+            <tr>
+                <td  class="col-xs-2">Horse Reg#</td>
+                <td  class="col-xs-2"> </td>
+                <td  class="col-xs-2">Trailer Reg #</td>
+                <td  class="col-xs-2"></td>
+                <td  class="col-xs-2">Trailer No.</td>
+                <td  class="col-xs-2"></td>
+            </tr>
 
+            </tbody>
+        </table>
+<hr><br>
         <table id="orderHeaderPrint">
             <thead>
             <tr >
@@ -64,7 +115,7 @@
 
             </tr>
             </thead>
-            <tbody>
+            <tbody >
             @foreach($listproducts as $val )
                 <tr>
                     <td>{{ $val->StoreName}}</td>
@@ -84,7 +135,7 @@
 </body>
 <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
 <style>
-    table {
+    table tbody {
 
         border-spacing: 0;
         width: 100%;
