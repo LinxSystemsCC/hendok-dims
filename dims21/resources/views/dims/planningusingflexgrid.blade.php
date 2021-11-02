@@ -272,12 +272,12 @@ Route Assigned: <input id="routeassigned" readonly>
                     },
                     onContentReady: function (e) {
                         var selectedDatasUsers = e.component.getDataSource().items();
-                        console.log("work code");
-                        //console.log(selectedDatasUsers);
+                        console.log("work code 2");
+                        var qty = 0;
+                            //console.log(selectedDatasUsers);
                         $.each(selectedDatasUsers, function(key, value) {
                           //  console.log( value.toplan);
-                            var qty = qty + ((value.mnyQtyRemaining) *  (value.Mass));
-
+                             qty = qty + ((value.mnyQtyRemaining) *  (value.Mass));
                             console.log("no zero*************"+ qty);
                             if(qty !="0"){
 
