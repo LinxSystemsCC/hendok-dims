@@ -109,6 +109,7 @@
                 <th class="col-xs-2">Code</th>
                 <th class="col-xs-2">Description</th>
                 <th class="col-xs-2" >Qty</th>
+                <th class="col-xs-2" >Weights</th>
                 <th class="col-xs-2" >Comments</th>
                 <th class="col-xs-2" >Picked Qty</th>
 
@@ -127,6 +128,7 @@
                     <td>{{ $val->PastelCode}}</td>
                     <td>{{ $val->PastelDescription}}</td>
                     <td>{{ $val->mnyQty}}</td>
+                    <td>{{ $val->weightPlanned}}</td>
                     <td></td>
                     <td></td>
 
