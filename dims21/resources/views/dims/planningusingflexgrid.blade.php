@@ -277,7 +277,7 @@ Route Assigned: <input id="routeassigned" readonly>
                             //console.log(selectedDatasUsers);
                         $.each(selectedDatasUsers, function(key, value) {
                           //  console.log( value.toplan);
-                             qty = qty + ((value.mnyQtyRemaining) );
+                             qty = qty + value.mnyQtyRemaining;
                             console.log("no zero*************"+ qty);
                             if(qty !="0"){
 
