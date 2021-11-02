@@ -276,14 +276,14 @@ Route Assigned: <input id="routeassigned" readonly>
                         //console.log(selectedDatasUsers);
                         $.each(selectedDatasUsers, function(key, value) {
                           //  console.log( value.toplan);
-                            var qty = value.mnyQtyRemaining;
+                            var qty = qty + ((value.mnyQtyRemaining) *  (value.Mass));
 
                             console.log("no zero*************"+ qty);
                             if(qty !="0"){
 
                             }
                         });
-
+                            $('#weightshere').val(qty);
                     },
 
                     onRowClick: function (e) {
