@@ -276,9 +276,11 @@ Route Assigned: <input id="routeassigned" readonly>
                         //console.log(selectedDatasUsers);
                         $.each(selectedDatasUsers, function(key, value) {
                           //  console.log( value.toplan);
-                            var qty = value.toplan;
+                            var qty = value.mnyQtyRemaining;
+
+                            console.log("no zero*************"+ qty);
                             if(qty !="0"){
-                                console.log("no zero"+ value.toplan);
+
                             }
                         });
 
