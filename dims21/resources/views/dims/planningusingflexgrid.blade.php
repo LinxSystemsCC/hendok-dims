@@ -283,7 +283,7 @@ Route Assigned: <input id="routeassigned" readonly>
 
                             }
                         });
-                            $('#weightshere').val( qty.toFixed(3));
+                            $('#weightshere').val( qty);
                     },
 
                     onRowClick: function (e) {
