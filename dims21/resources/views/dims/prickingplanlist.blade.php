@@ -116,9 +116,12 @@
             </tr>
             </thead>
             <tbody >
+            <?php $storenames = ""; ?>
             @foreach($listproducts as $val )
                 <tr>
+                    @if($storenames != $val->StoreName )
                     <td>{{ $val->StoreName}}</td>
+                    @endif
                     <td>{{ $val->PastelCode}}</td>
                     <td>{{ $val->PastelDescription}}</td>
                     <td>{{ $val->mnyQty}}</td>
@@ -126,6 +129,7 @@
                     <td></td>
 
                 </tr>
+                <?php $storenames = $val->StoreName; ?>
             @endforeach
 
             </tbody>

@@ -250,7 +250,7 @@ Route Assigned: <input id="routeassigned" readonly>
 
                         }
                         ,{
-                            dataField: "toplan",
+                            dataField: "mnyQtyRemaining",
                             caption: "Plan",
                             dataType:"number"
 
