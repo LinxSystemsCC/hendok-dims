@@ -121,6 +121,8 @@
                 <tr>
                     @if($storenames != $val->StoreName )
                     <td>{{ $val->StoreName}}</td>
+                        @else
+                        <td></td>
                     @endif
                     <td>{{ $val->PastelCode}}</td>
                     <td>{{ $val->PastelDescription}}</td>
