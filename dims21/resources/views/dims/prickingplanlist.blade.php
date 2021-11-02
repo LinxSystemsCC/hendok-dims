@@ -110,8 +110,8 @@
                 <th class="col-xs-2">Description</th>
                 <th class="col-xs-2" >Qty</th>
                 <th class="col-xs-2" >Weights</th>
-                <th class="col-xs-2" >Comments</th>
-                <th class="col-xs-2" >Picked Qty</th>
+
+                <th class="col-xs-2" >Qty to Load</th>
 
 
             </tr>
@@ -129,7 +129,7 @@
                     <td>{{ $val->PastelDescription}}</td>
                     <td>{{ $val->mnyQty}}</td>
                     <td>{{ $val->weightPlanned}}</td>
-                    <td></td>
+
                     <td></td>
 
                 </tr>
@@ -150,7 +150,7 @@
         border: 1px solid #ddd;
     }
     tbody tr:nth-child(odd) {
-        background-color: #ccc;
+        background-color: #efefef;
     }
     th, td {
         text-align: left;

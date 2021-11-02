@@ -213,7 +213,10 @@ Route Assigned: <input id="routeassigned" readonly>
                         {
                             width: 80,
                             dataField: "OrderNo",
-                            caption: "Sales Order No"
+                            caption: "Sales Order No",
+                            headerFilter: {
+                                allowSearch: true,
+                            },
 
                         },{
                             dataField: "areaname",
