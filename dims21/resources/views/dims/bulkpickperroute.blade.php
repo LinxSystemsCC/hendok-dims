@@ -5,7 +5,7 @@
         <div class="form-group  col-md-6" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
             <button id="bulkID" class=" form-control btn-success btn-md" value="{{$bulkID}}">Preview PDF & Print</button>
         </div>
-        <div class="form-group  col-md-6" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;display: none;">
+        <div class="form-group  col-md-6" style="margin-bottom: 0px;font-weight: 700;font-size: 11px">
             <label class="control-label" for="inputOrderId"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Printers</label>
             <select class="form-control input-sm " id="printerVal" style="height:26px;font-size: 10px;color:black;">
                 @foreach($printers as $value)
@@ -70,6 +70,7 @@
 <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
 
 <script>
+    var isJasper = "<?php  echo env('JASPER'); ?>";
     $(document).ready(function() {
         $('#orderListing').hide();
         $('#pricing').hide();
@@ -80,16 +81,40 @@
         $('#salesOnOrder').hide();
         $('#salesInvoiced').hide();
         $('#posCashUp').hide();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
         $('#bulkID').click(function(){
-            //insertIntoTblPickingPerRoute
             var bulkId = $('#bulkID').val();
+            if(isJasper !="LTRUE"){
+            $.ajax({
+                url: '{!!url("/insertIntoTblPickingPerRoute")!!}',
+                type: "POST",
+                data: {
+                    bulkID:$('#bulkID').val(),
+                    printerVal: $('#printerVal').val()
+                },
+                success: function (data) {
+                    if ( data != 'false'){
+                        var dialog = $('<p><strong>Done Printing Picking Slip</strong></p>').dialog({
+                            height: 200, width: 700, modal: true, containment: false,
+                            buttons: {
+                                "OKAY": function () {
+                                    dialog.dialog('close');
+                                }
+                            }
+                        });
+                    }
 
-            window.open('{!!url("/bulkpickingslip")!!}/'+bulkId, bulkId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                }
+            });
+            }else{
+                window.open('{!!url("/bulkpickingslip")!!}/'+bulkId, bulkId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+            }
+            //insertIntoTblPickingPerRoute
 
         });
     });
