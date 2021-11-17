@@ -206,7 +206,10 @@ Route Assigned: <input id="routeassigned" readonly>
                         {
                             width:300,
                             dataField: "StoreName",
-                            caption: "Customer Name"
+                            caption: "Customer Name",
+                            headerFilter: {
+                                allowSearch: true,
+                            }
 
                         },
 
@@ -238,7 +241,10 @@ Route Assigned: <input id="routeassigned" readonly>
 
                         },{
                             dataField: "PastelDescription",
-                            caption: "Item Name"
+                            caption: "Item Name",
+                            headerFilter: {
+                                allowSearch: true,
+                            }
 
                         },{
                             width: 80,
