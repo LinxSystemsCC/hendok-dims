@@ -29,13 +29,13 @@
     <label for="Code">Item Name: {{$val->Description_1}}</label><br>
     <input type="text" id="Code" name="Code" value="{{$val->Code}}" readonly><br>
     <label for="barcode">Scan/Enter Barcode</label><br>
-    <input type="text" id="barcode" name="barcode"  style="height: 60px; width: 100%" required><br><br>
+    <input type="text" id="barcode" name="barcode"  style="height: 60px; width: 100%"  autocomplete="off" required><br><br>
 
         <label for="location">Scan/Enter Location</label><br>
-        <input type="text" id="location" name="location" style="height: 60px; width: 100%" required><br><br>
+        <input type="text" id="location" name="location" style="height: 60px; width: 100%"  autocomplete="off" required><br><br>
 
         <label for="location">Expiry Date</label><br>
-        <input type="date" id="expdate" name="expdate" style="height: 60px; width: 100%" required><br><br>
+        <input type="date" id="expdate" name="expdate" style="height: 60px; width: 100%"  autocomplete="off" required><br><br>
     @endforeach
     <input type="submit" value="Submit">
 </form>
