@@ -33,6 +33,9 @@
 
         <label for="location">Scan/Enter Location</label><br>
         <input type="text" id="location" name="location" style="height: 60px; width: 100%" required><br><br>
+
+        <label for="location">Expiry Date</label><br>
+        <input type="date" id="expdate" name="expdate" style="height: 60px; width: 100%" required><br><br>
     @endforeach
     <input type="submit" value="Submit">
 </form>
