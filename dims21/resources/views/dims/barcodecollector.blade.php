@@ -31,7 +31,7 @@
 
     @foreach($products as $val)
         <tr>
-            <td><a href={!!url("/recordbarcode")!!}/{{$val->Code}}>{{$val->Description_1}}</a> </td>
+            <td><a href={!!url("/recordbarcode")!!}/{{$val->Code}}>{{$val->Description_1}}</a> <br> {{$val->group3}}</td>
             <td>{{$val->strItemBarcode}}<br>{{$val->strLocationName}}<br>{{$val->dteExpiryDate}}</td>
 
         </tr>
