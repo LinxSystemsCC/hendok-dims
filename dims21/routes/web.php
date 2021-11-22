@@ -21,6 +21,7 @@ use App\Http\Controllers\ControlPanelController;
 use App\Http\Controllers\ExternalFunctions;
 use App\Http\Controllers\JasperReports;
 use App\Http\Controllers\TestControllerReg;
+use App\Http\Controllers\WareHouseManagementController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -393,6 +394,7 @@ Route::get('viewproductbydate', [ProductsController::class,'viewproductbydate'])
 Route::get('devexpressproducts', [ProductsController::class,'devExpressProductsgrid']);
 Route::get('listProdutsToBePrinted', [ProductsController::class,'listProdutsToBePrinted']);
 Route::get('listProdutsToBePrintedJson', [ProductsController::class,'listProdutsToBePrintedJson']);
+Route::get('getQrcode', [ProductsController::class,'getQrcode']);
 Route::get('productbydatejson/{date1}/{date2}/{productId}', [ProductsController::class,'productbydatejson']);
 
 Route::get('gridEditViewProducts', [ProductsController::class,'gridEditViewProducts']);
@@ -774,6 +776,13 @@ Route::get('productsOnBackOrders',[BackOrderController::class,'productsOnBackOrd
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 Route::get('warehouseitems', [WareHouseController::class,'warehouseInvetoryItems']);
 Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
+
+
+//WareHouseManagementController
+Route::get('getProductsnames', [WareHouseManagementController::class,'getProductsnames']);
+Route::get('recordbarcode/{code}', [WareHouseManagementController::class,'recordbarcode']);
+Route::post('savebarcode', [WareHouseManagementController::class,'savebarcode']);
+
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 
