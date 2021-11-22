@@ -29,9 +29,10 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
         $itemCode = $request->get("Code");
         $barcode = $request->get("barcode");
         $strLocationName = $request->get("location");
+        $expdate = $request->get("expdate");
 
         DB::connection('barcoding')->table('tblTempItemsAndBarcodes')->insert(
-            ['strPastelCode' => $itemCode, 'strItemBarcode' => $barcode,'strLocationName'=> $strLocationName]
+            ['strPastelCode' => $itemCode, 'strItemBarcode' => $barcode,'strLocationName'=> $strLocationName,'dteExpiryDate'=>$expdate]
         );
 
         return redirect('getProductsnames');
