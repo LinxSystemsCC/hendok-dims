@@ -28,6 +28,7 @@
         @csrf
     <label for="Code">Item Name: {{$val->Description_1}}</label><br>
     <input type="text" id="Code" name="Code" value="{{$val->Code}}" readonly><br>
+    <input type="hidden" id="cat" name="cat" value="{{$val->cat}}" >
     <label for="barcode">Scan/Enter Barcode</label><br>
     <input type="text" id="barcode" name="barcode"  style="height: 60px; width: 100%"  autocomplete="off" required><br><br>
 

@@ -779,9 +779,16 @@ Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
 
 
 //WareHouseManagementController
-Route::get('getProductsnames', [WareHouseManagementController::class,'getProductsnames']);
+Route::get('productscats', [WareHouseManagementController::class,'productscats']);
+Route::get('getProductsnames/{cat}', [WareHouseManagementController::class,'getProductsnames']);
 Route::get('recordbarcode/{code}', [WareHouseManagementController::class,'recordbarcode']);
 Route::post('savebarcode', [WareHouseManagementController::class,'savebarcode']);
+
+Route::get('stockmover', [WareHouseManagementController::class,'stockmover']);
+Route::get('scanshelffrom', [WareHouseManagementController::class,'scanshelffrom']);
+Route::post('goscanproductfrom', [WareHouseManagementController::class,'goscanproductfrom']);
+Route::post('goscanshelfto', [WareHouseManagementController::class,'goscanshelfto']);
+Route::post('goscanproductto', [WareHouseManagementController::class,'goscanproductto']);
 
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
