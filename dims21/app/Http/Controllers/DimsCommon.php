@@ -896,10 +896,9 @@ class DimsCommon extends Controller
         //
         $sessionUserId = Auth::user()->UserID;
         $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )
-            ->join('tblAccessOnCustomers', 'viewtblCustomers.GroupId', '=', 'tblAccessOnCustomers.intGroupId')
             ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute')
             ->where('StatusId',1)
-            ->where('intUserId',$sessionUserId)
+
             ->orderBy('CustomerPastelCode','ASC')->get();
         $queryProducts =DB::connection('sqlsrv3')->table("viewActiveProductWithVat" )
             ->select('ProductId','PastelCode','PastelDescription','UnitSize','Tax','Cost','QtyInStock','Margin','Alcohol','Available','PurchOrder')->orderBy('PastelDescription','ASC')->distinct()->get();
@@ -1023,6 +1022,18 @@ class DimsCommon extends Controller
             ->with('custAcc',$custCode)
             ->with('customergridpricing',$massDataInfo);
 
+    }
+    public function viewcustomerpricingjson($custCode,$datefrom,$dateto,$datefrom2,$dateto2){
+        return view('dims/customerpricingexcel')
+            ->with('dateFrom',$datefrom)->with('dateto',$dateto)
+            ->with('dateFrom2',$datefrom2)->with('dateto2',$dateto2)
+            ->with('custAcc',$custCode);
+    }
+    public function printcustomerpricingjson($custCode,$datefrom,$dateto,$datefrom2,$dateto2)
+    {
+        $massDataInfo=  DB::connection('sqlsrv3')
+            ->select("EXEC spGridCustomerPricing '".$custCode."','".$datefrom."','".$dateto."','".$datefrom2."','".$dateto2."'");
+        return response()->json($massDataInfo);
     }
     public function updatecustomergridpricing(Request $request)
     {
