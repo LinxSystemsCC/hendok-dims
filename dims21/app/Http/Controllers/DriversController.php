@@ -142,13 +142,14 @@ class DriversController extends Controller
     public function addRoutesItem(Request $request)
     {
         $Route = $request->get('Route');
+        $location = $request->get('location');
         // dd("EXEC spCRUDRoutes NULL,'".$Route."','Insert'");
         $userAuthID = \Illuminate\Support\Facades\Auth::user()->GroupId;
         $v  =  new \App\Http\Controllers\SalesForm();
         $things = $v->getThings($userAuthID,'Add Routes');
         if($things != "0") {
             $insertRoutes = DB::connection('sqlsrv3')
-                ->statement("EXEC spCRUDRoutes NULL,'" . $Route . "','Insert'");
+                ->statement("EXEC spCRUDRoutes $location,'" . $Route . "','Insert'");
         }
         return response()->json($Route);
 
@@ -163,8 +164,10 @@ class DriversController extends Controller
         $readRoutes = DB::connection('sqlsrv3')
             ->select("EXEC spCRUDRoutes ".$Routeid.",'".$Route."','Select'");
         $things = $v->getThings($userAuthID,'Add Routes');
+        $locations = DB::connection('sqlsrv3')
+            ->select("Select * from tblLocations");
 
-        return view('dims/routes1')
+        return view('dims/routes1')->with('locations',$locations)
             ->with('readRoutesItems',$readRoutes)->with('routesfullaccess',$things);
     }
 
@@ -172,7 +175,11 @@ class DriversController extends Controller
     {
         $Routeid = $request->get('Routeid');
         $Route = $request->get('Route');
+        $locationID = $request->get('locationID');
 
+        DB::connection('sqlsrv3')->table('tblRoutes')
+            ->where('Routeid', $Routeid)
+            ->update(['LocationId' =>$locationID]);
         $updateRoutes = DB::connection('sqlsrv3')
             ->statement("EXEC spCRUDRoutes ".$Routeid.",'".$Route."','Update'");
         return response()->json($updateRoutes);
@@ -519,7 +526,7 @@ dbo.fnRouteLoader($routingId) as strLoadedBy,bitCashUpCheckedIt cashdealtwithit
         $html ="<!DOCTYPE html>
 <html>
 <head>
-    
+
 </head>
 <body style=\"font-family: Sans-serif\">";
         $html .= "<table style='width:100% ;background: black;color: white;border: 1px solid white;'>";
