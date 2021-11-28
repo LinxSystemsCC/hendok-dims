@@ -54,6 +54,7 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
     }
     public function goscanproductfrom(Request $request){
         $shelffrom = $request->get("shelffrom");
+        //dd($shelffrom);
         return view('stockmover/productfrom')->with('shelffrom',$shelffrom);
 
 
@@ -76,8 +77,38 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
         $shelfto = $request->get("shelfto");
 
         return view('stockmover/productto')->with('shelffrom',$shelffrom)->with('productfrom',$productfrom)->with('Qty',$Qty)->with('shelfto',$shelfto);
+    }
+    public function gofinish(Request $request){
+        $shelffrom = $request->get("shelffrom");
+        $productfrom = $request->get("productfrom");
+        $Qty = $request->get("Qty");
+        $shelfto = $request->get("shelfto");
+        $productto= $request->get("productto");
+        $confirmqty = $request->get("confirmqty");
+        $expiry = $request->get("expiry");
 
 
+        return view('stockmover/finishedstockmoving')->with('shelffrom',$shelffrom)
+            ->with('productfrom',$productfrom)
+            ->with('productto',$productto)
+            ->with('Qty',$Qty)
+            ->with('confirmqty',$confirmqty)
+            ->with('expiry',$expiry)
+            ->with('shelfto',$shelfto);
+    }
+    public function savestockmover(Request $request){
+
+        $shelffrom = $request->get("shelffrom");
+        $productfrom = $request->get("productfrom");
+        $Qty = $request->get("Qty");
+        $shelfto = $request->get("shelfto");
+        $productto= $request->get("productto");
+        $confirmqty = $request->get("confirmqty");
+
+        DB::connection('barcoding')->table('tblInventoryAndBinMover')->insert(
+            ['strShelfFrom' => $shelffrom, 'strBarcodeFrom' => $productfrom,'strShelTo'=> $shelfto,'strBarcodeTo'=>$productto
+                ,'mnyQtyFrom'=> $Qty,'mnyQtyTo'=>$confirmqty]
+        );
     }
 
 }

@@ -45,6 +45,7 @@ class SalesForm extends Controller
 
             ->orderBy('CustomerPastelCode','ASC')->get();
         $deliverTypes= DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->get();
+
         $users = DB::connection('sqlsrv3')->table('tblDIMSUSERS')->select('UserID','UserName','strSalesmanCode')->get();
         $getDeliveryDates = DB::connection('sqlsrv3')->table('vwDistinctDelvDates')->select('DeliveryDate')->orderBy('DeliveryDate', 'desc')->get();
         $getRoutes =  DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse','0')->orderBy('Route', 'asc')->get();

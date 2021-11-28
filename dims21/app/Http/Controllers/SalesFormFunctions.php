@@ -18,7 +18,7 @@ class SalesFormFunctions extends Controller
     {
         $this->middleware('auth');
     }
-    //
+    //returnProductPrice
     public function CustomerCode(Request $request)
     {
         $term = $request->get('term','');;
@@ -373,6 +373,15 @@ class SalesFormFunctions extends Controller
             return $outPut;
         }
 
+    }
+    public function checkstockonorders(Request $request){
+        $orderlines = $request->get('orderlinesprodValidations');
+        $orderheaderxml = $this->toxml($orderlines, "xml", array("result"));
+
+        //dd($orderheaderxml);
+        $getResult = DB::connection('sqlsrv4')
+            ->select("EXEC spCheckStockBeforeSavingOrder '" . $orderheaderxml . "'");
+        return response()->json($getResult);
     }
     public function checkZeroCostOnOrder(Request $request)
     {
@@ -1626,6 +1635,28 @@ class SalesFormFunctions extends Controller
             return $outPut;
         }
 
+    }
+    public function getordertorelease(Request $request)
+    {
+        $orders = DB::connection('sqlsrv3')
+            ->select("EXEC spGetListOfOrdersToRelease");
+        return view('dims/releaseorders');
+    }
+    public function getorderlineslist($orderid)
+    {
+        $orders = DB::connection('sqlsrv3')
+            ->select("EXEC spGetListOfLinesToRelease '$orderid'");
+        return response()->json($orders);
+
+    }
+    public function ordertorelease(Request $request)
+    {
+        $orderid  =  $request-get("OrderId");
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $updateErrors = DB::connection('sqlsrv3')
+            ->select("EXEC spReleaseOrder ".$orderid.",'".$userName."',".$userid);
+       // return view('dims/releaseorders');
     }
     public function getAllProductsAndCosts()
     {

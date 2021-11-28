@@ -316,6 +316,9 @@ Route::post('getCustomerOrderId', [SalesFormFunctions::class,'getCustomerOrderId
 Route::post('productPriceLookUp', [SalesFormFunctions::class,'productPriceLookUp']);
 Route::post('associatedItem',[SalesFormFunctions::class,'associatedItem']);
 Route::post('changeDeliveryAddressOnNoInvoiceNo', [SalesFormFunctions::class,'changeDeliveryAddressOnNoInvoiceNo']);
+Route::get('getordertorelease', [SalesFormFunctions::class,'getordertorelease']);
+Route::get('getorderlineslist', [SalesFormFunctions::class,'getorderlineslist']);
+Route::post('postreleaseorder', [SalesFormFunctions::class,'postreleaseorder']);
 
 //SALES FORM FUNCTIONS ENDS HERE!!!
 
@@ -789,6 +792,7 @@ Route::get('scanshelffrom', [WareHouseManagementController::class,'scanshelffrom
 Route::post('goscanproductfrom', [WareHouseManagementController::class,'goscanproductfrom']);
 Route::post('goscanshelfto', [WareHouseManagementController::class,'goscanshelfto']);
 Route::post('goscanproductto', [WareHouseManagementController::class,'goscanproductto']);
+Route::post('gofinish', [WareHouseManagementController::class,'gofinish']);
 
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
