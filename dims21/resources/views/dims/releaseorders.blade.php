@@ -347,7 +347,7 @@ OrderID selected <input type="text" id="account">
         console.log('### api.forEachNode() ###');
         values = new Array();
         gridOptions.api.forEachNode(this.printNode) ;
-        console.debug(values);
+       // console.debug(values);
         $.ajax({
             url: '{!!url("/postreleaseorder")!!}',
             type: "POST",
@@ -358,16 +358,10 @@ OrderID selected <input type="text" id="account">
             },
             success: function (data) {
                 console.debug(data);
-                if (data.Result == "SUCCESS") {
+              //  if (data.Result == "SUCCESS") {
 
                     location.reload();
-                }
-                $.each(data, function (key, value) {
-                    console.debug("if "+value.Result);
-                    if (value.Result == "SUCCESS") {
-
-                    }
-                });
+                //}
 
 
             }
