@@ -78,9 +78,9 @@
                 <th>Order Number</th>
                 <th>User Name</th>
                 <th>Notes</th>
-                <th>Delivery Add</th>
+
                 <th>Route</th>
-                <th>AddressID</th>
+               
                 <th>O.OrderId</th>
                 <th>Selected</th>
 
