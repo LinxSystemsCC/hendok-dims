@@ -1533,6 +1533,9 @@
             .hide-close-btn .ui-dialog-titlebar-close{
                 display: none;
             }
+            .ui-dialog-titlebar-close{
+                display: none;
+            }
         </style>
         <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
 
