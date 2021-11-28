@@ -1662,7 +1662,7 @@ class SalesFormFunctions extends Controller
     }
     public function postreleaseorder(Request $request)
     {
-        $orderid  =  $request-get("OrderId");
+        $orderid  =  $request->get("orderids");
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
         $updateErrors = DB::connection('sqlsrv3')
