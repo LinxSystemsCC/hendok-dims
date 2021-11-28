@@ -1660,13 +1660,14 @@ class SalesFormFunctions extends Controller
         return response()->json($orders);
 
     }
-    public function ordertorelease(Request $request)
+    public function postreleaseorder(Request $request)
     {
         $orderid  =  $request-get("OrderId");
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
         $updateErrors = DB::connection('sqlsrv3')
             ->select("EXEC spReleaseOrder ".$orderid.",'".$userName."',".$userid);
+        return response()->json($updateErrors);
         // return view('dims/releaseorders');
     }
     public function getAllProductsAndCosts()
