@@ -357,6 +357,7 @@ OrderID selected <input type="text" id="account">
 
             },
             success: function (data) {
+                console.debug(data);
                 if (data.Result == "SUCCESS") {
 
                     location.reload();
