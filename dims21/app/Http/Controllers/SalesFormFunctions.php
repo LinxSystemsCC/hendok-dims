@@ -878,7 +878,7 @@ class SalesFormFunctions extends Controller
         $isQoutation = DB::connection('sqlsrv3')
             ->select("select * from tblOrders where OrderId = " . $OrderId);
         $responseFromOrdeLock = (new DimsCommon())->checkUserLock($OrderId);
-        dd($responseFromOrdeLock);
+       // dd($responseFromOrdeLock);
         if (count($isQoutation) > 0) {
             $GetOrderHeader = DB::connection('sqlsrv3')
                 ->select("EXEC spReturnInvoiceOrderIdData '" . $OrderId . "','" . $InvoiceNumber . "'");
