@@ -93,12 +93,8 @@
     </div>
     <div>
 
-        <input type="hidden" id="orderdate">
-        <input type="hidden" id="deldate">
-        <input type="hidden" id="ordernumber">
-        <input type="hidden" id="username">
-        <input type="hidden" id="notes">
-        <input type="hidden" id="addressID">
+        <input type="hidden" id="orderids">
+
 
     </div>
 </div>
@@ -285,13 +281,13 @@ ACCOUNT SELECTED <input type="text" id="account">
                     //console.debug(hiddenUserName);
 
                     //$(this).siblings('input[type="checkbox"]').not(this).prop('checked', false);
-                    $('#account').val(customerCode);
+                  /*  $('#account').val(customerCode);
                     $('#orderdate').val(Orderdate);
                     $('#deldate').val(deliverydate);
                     $('#ordernumber').val(orderNumber);
                     $('#username').val(hiddenUserName);
-                    $('#notes').val(notes);
-                    $('#addressID').val(addressID);
+                    $('#notes').val(notes);*/
+                    $('#orderids').val($(".checkid").val());
                     $( "#myGrid" ).empty();
                     $('#myGrid').show();
                     // specify the columns
@@ -351,14 +347,8 @@ ACCOUNT SELECTED <input type="text" id="account">
             url: '{!!url("/postreleaseorder")!!}',
             type: "POST",
             data: {
-                value: values,
-                custCode:$('#account').val(),
-                orderdate:$('#orderdate').val(),
-                deldate:$('#deldate').val(),
-                ordernumber:$('#ordernumber').val(),
-                username:$('#username').val(),
-                notes:$('#notes').val(),
-                addressID:$('#addressID').val()
+                
+                orderids:$('#orderids').val()
 
             },
             success: function (data) {
