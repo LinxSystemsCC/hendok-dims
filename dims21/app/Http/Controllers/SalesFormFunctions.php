@@ -888,6 +888,7 @@ class SalesFormFunctions extends Controller
             return response()->json($outPut);
         } else {
 
+            dd($responseFromOrdeLock[0]->orderID);
         if ($responseFromOrdeLock[0]->orderID == "inserted") {
             if ($edit == "Yes") {
                 $GetOrderHeader = DB::connection('sqlsrv3')
