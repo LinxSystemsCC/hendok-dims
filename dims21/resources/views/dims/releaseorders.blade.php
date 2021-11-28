@@ -101,7 +101,7 @@
     </div>
 </div>
 
-ACCOUNT SELECTED <input type="text" id="account">
+OrderID selected <input type="text" id="account">
 <table style="display:none">
     <tr>
         <td valign="top">
@@ -357,8 +357,10 @@ ACCOUNT SELECTED <input type="text" id="account">
 
             },
             success: function (data) {
+                if (data.Result == "SUCCESS") {
 
-                console.debug(data);
+                    location.reload();
+                }
                 $.each(data, function (key, value) {
                     console.debug("if "+value.Result);
                     if (value.Result == "SUCCESS") {
