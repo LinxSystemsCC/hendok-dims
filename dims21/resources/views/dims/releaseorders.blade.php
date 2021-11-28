@@ -76,6 +76,8 @@
                 <th>Order Date</th>
                 <th>Delivery Date</th>
                 <th>Order Number</th>
+                <th>Payment Type</th>
+                <th>Total(inc)</th>
                 <th>User Name</th>
                 <th>Notes</th>
 
@@ -268,6 +270,8 @@ ACCOUNT SELECTED <input type="text" id="account">
                         value.DeliveryDate + '</td>' +
                         '</td><td>' +
                         value.OrderNumber + '</td><td>' +
+                        value.strPaymentTerm + '</td><td>' +
+                        value.inclusive + '</td><td>' +
                         value.UserName + '</td><td>' +
                         value.Notes + '</td><td>' +
                         value.Route + '</td><td>' +
@@ -288,6 +292,7 @@ ACCOUNT SELECTED <input type="text" id="account">
                     $('#username').val(hiddenUserName);
                     $('#notes').val(notes);*/
                     $('#orderids').val($(".checkid").val());
+                    $('#account').val($(".checkid").val());
                     $( "#myGrid" ).empty();
                     $('#myGrid').show();
                     // specify the columns
@@ -347,7 +352,7 @@ ACCOUNT SELECTED <input type="text" id="account">
             url: '{!!url("/postreleaseorder")!!}',
             type: "POST",
             data: {
-                
+
                 orderids:$('#orderids').val()
 
             },
