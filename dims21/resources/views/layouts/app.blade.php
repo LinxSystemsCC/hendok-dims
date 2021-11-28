@@ -63,6 +63,12 @@
 
 
     <style>
+        .hide-close-btn .ui-dialog-titlebar-close{
+            display: none;
+        }
+        .ui-dialog-titlebar-close{
+            display: none;
+        }
         /*TAB*/
         .anonymouscols{
 
