@@ -1647,6 +1647,12 @@ class SalesFormFunctions extends Controller
             ->select("EXEC spGetListOfOrdersToRelease");
         return view('dims/releaseorders');
     }
+    public function getorderheadertorelease(Request $request)
+    {
+        $orders = DB::connection('sqlsrv3')
+            ->select("EXEC spGetListOfOrdersToRelease");
+        return response()->json($orders);
+    }
     public function getorderlineslist($orderid)
     {
         $orders = DB::connection('sqlsrv3')

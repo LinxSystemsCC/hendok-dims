@@ -257,7 +257,7 @@ ACCOUNT SELECTED <input type="text" id="account">
     function retreiveorders()
     {
         $.ajax({
-            url: '{!!url("/getordertorelease")!!}',
+            url: '{!!url("/getorderheadertorelease")!!}',
             type: "GET",
             data: {
             },
