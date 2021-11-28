@@ -80,7 +80,7 @@
                 <th>Notes</th>
 
                 <th>Route</th>
-               
+
                 <th>O.OrderId</th>
                 <th>Selected</th>
 
@@ -274,6 +274,7 @@ ACCOUNT SELECTED <input type="text" id="account">
                         value.OrderNumber + '</td><td>' +
                         value.UserName + '</td><td>' +
                         value.Notes + '</td><td>' +
+                        value.Route + '</td><td>' +
                         value.Route + '</td>' +
                         +'<td><input type="checkbox" class="checkid" value="'+  value.OrderId +'" id="ID"> ' +
                         '</td></tr>';
