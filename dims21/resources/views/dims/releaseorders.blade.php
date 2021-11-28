@@ -64,11 +64,8 @@
     </style>
 </head>
 <body style="font-family: Sans-serif">
-<h2>Remote Orders </h2>
-<button class="btn-md btn-primary" id="incompleted" style="float: right">Incompleted Orders</button>
-<button class="btn-md btn-primary" id="orderhistory" style="float: right;display: none;">Orders History</button>
-<br>
-Orders Discount is <input type="text" id="orderdiscount" value="{{env('APP_ONLINE_MARGIN_PERCENTAGE')}}" readonly>
+<h2>Orders To Release </h2>
+
 <div class="table-container" style="height:360px">
     <div >
         <table id="orderheaders" class="table">
@@ -360,8 +357,8 @@ ACCOUNT SELECTED <input type="text" id="account">
                 ordernumber:$('#ordernumber').val(),
                 username:$('#username').val(),
                 notes:$('#notes').val(),
-                addressID:$('#addressID').val(),
-                orderdiscount:$('#orderdiscount').val()
+                addressID:$('#addressID').val()
+
             },
             success: function (data) {
 
