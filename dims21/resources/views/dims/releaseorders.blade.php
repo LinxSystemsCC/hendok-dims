@@ -275,8 +275,8 @@ ACCOUNT SELECTED <input type="text" id="account">
                         value.UserName + '</td><td>' +
                         value.Notes + '</td><td>' +
                         value.Route + '</td><td>' +
-                        value.Route + '</td>' +
-                        +'<td><input type="checkbox" class="checkid" value="'+  value.OrderId +'" id="ID"> ' +
+                        value.OrderId + '</td>' +
+                        +'<td><input type="checkbox" class="checkid" value="'+value.OrderId +'">' +
                         '</td></tr>';
                 });
                 $('#orderheaders').append(trHTML);
