@@ -115,7 +115,7 @@
                         <button class="btn-danger pull-right" id="deleteAllLines">Delete All Lines</button>
                         <input type="text" class=" pull-right" id="customerpricelist" style="font-weight: 900;border: 0px;">
                         @if($userActions !=0)
-                        <button type="button" id="button_user_actions" class="btn-xs btn-info pull-right">User Actions</button>
+                            <button type="button" id="button_user_actions" class="btn-xs btn-info pull-right">User Actions</button>
                         @endif
 
                         <table id="table" class="table table-bordered table-condensed" style="font-family: sans-serif;color:black">
@@ -1071,7 +1071,7 @@
                 </table>
             </div>
             <div class="col-md-12">
-                <table class="table" id="individualCost" style="width:100%
+                <table class="table" id="individualCost" style="width:100%">
                 <thead>
                 <tr>
                     <th>Cost</th><th>Remaining</th></tr>
@@ -1488,7 +1488,7 @@
             <table class="table2 table-bordered" id="additionalcost">
                 <thead>
                 <tr>
-                <th>Item Code</th><th>Item Description</th><th>QTY</th><th>Price</th><th>Total</th>
+                    <th>Item Code</th><th>Item Description</th><th>QTY</th><th>Price</th><th>Total</th>
                 </tr>
                 </thead>
             </table>
@@ -2590,7 +2590,7 @@
 
                                 }else{
 
-                                   if( ($('#invoiceNo').val()).length <5 )
+                                    if( ($('#invoiceNo').val()).length <5 )
                                     {authFinishOrder();}
 
                                 }
@@ -2686,8 +2686,9 @@
                         success: function (data) {
                             console.debug("************ check" + data.returns);
                             if (data.returns != "inserted") {
+                                $('#orderId').val("");
                                 var dialog = $('<p>Sorry <strong style="color:red">' + data.data[0].orderID + '</strong></p>').dialog({
-                                    height: 200, width: 700,
+                                    height: 200, width: 700,modal: true,
                                     buttons: {
                                         "Okay": function () {
                                             dialog.dialog('close');
@@ -4453,6 +4454,8 @@
                         buttons: {
                             "Finish": function () {
 
+
+
                                 $.ajax({
                                     url: '{!!url("/deleteallLinesOnOrder")!!}',
                                     type: "POST",
@@ -4883,22 +4886,22 @@
             {
                 var orderlinesValidations = [];
 
-                    $('#table > tbody  > tr').each(function() {
-                        var data = $(this);
+                $('#table > tbody  > tr').each(function() {
+                    var data = $(this);
 
-                        var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
-                        var comment = $(this).closest('tr').find('.prodComment_').val();
-                        //comment = comment.replace("'","");
+                    var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
+                    var comment = $(this).closest('tr').find('.prodComment_').val();
+                    //comment = comment.replace("'","");
 
-                        console.debug($(this).closest('tr').find('.col2').val());
-                        if (($(this).closest('tr').find('.theProductCode_').val()).length > 0) {
-                            orderlinesValidations.push({
-                                'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
-                                'qty': $(this).closest('tr').find('.prodQty_').val(),
-                                'price': $(this).closest('tr').find('.prodPrice_').val()
-                            });
-                        }
-                    });
+                    console.debug($(this).closest('tr').find('.col2').val());
+                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0) {
+                        orderlinesValidations.push({
+                            'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
+                            'qty': $(this).closest('tr').find('.prodQty_').val(),
+                            'price': $(this).closest('tr').find('.prodPrice_').val()
+                        });
+                    }
+                });
 
                 $.ajax({
                     url: '{!!url("/checkZeroCostOnOrder")!!}',
@@ -4908,68 +4911,68 @@
                         orderlines: orderlinesValidations
                     },
                     success: function (data) {
-                            if(data.result != "Nothing")
-                            {
+                        if(data.result != "Nothing")
+                        {
 
-                                authorZeroCostOnSaving(data.data);
-                            }else
-                            {
+                            authorZeroCostOnSaving(data.data);
+                        }else
+                        {
 
 
-                                $('<div></div>').appendTo('body')
-                                    .html('<div><h6>Yes or No?</h6></div>')
-                                    .dialog({
-                                        modal: true,
-                                        title: 'Click Yes to Print the Sales Order Or No to exit.',
-                                        zIndex: 10000,
-                                        autoOpen: true,
-                                        width: '65%',
-                                        resizable: false,
-                                        buttons: {
-                                            DelUser: {
-                                                class: 'leftButton',
-                                                text: 'Point Of Sale ',
-                                                click: function () {
-                                                    allInoneDocumentsave("POS");
+                            $('<div></div>').appendTo('body')
+                                .html('<div><h6>Yes or No?</h6></div>')
+                                .dialog({
+                                    modal: true,
+                                    title: 'Click Yes to Print the Sales Order Or No to exit.',
+                                    zIndex: 10000,
+                                    autoOpen: true,
+                                    width: '65%',
+                                    resizable: false,
+                                    buttons: {
+                                        DelUser: {
+                                            class: 'leftButton',
+                                            text: 'Point Of Sale ',
+                                            click: function () {
+                                                allInoneDocumentsave("POS");
 
-                                                }
-                                            },
-                                            Yes: function () {
-                                                allInoneDocumentsave("YES");
-                                            },
-                                            No: function () {
+                                            }
+                                        },
+                                        Yes: function () {
+                                            allInoneDocumentsave("YES");
+                                        },
+                                        No: function () {
 
-                                                allInoneDocumentsave("NO");
-                                            },
-                                            PDF:function(){
-                                                var dialog = $('<p><strong style="color:black"> Please wait...</strong></p>').dialog({
-                                                    height: 200, width: 700, modal: true, containment: false,
-                                                    buttons: {
-                                                        "Okay": function () {
-                                                            dialog.dialog('close');
-                                                        }
+                                            allInoneDocumentsave("NO");
+                                        },
+                                        PDF:function(){
+                                            var dialog = $('<p><strong style="color:black"> Please wait...</strong></p>').dialog({
+                                                height: 200, width: 700, modal: true, containment: false,
+                                                buttons: {
+                                                    "Okay": function () {
+                                                        dialog.dialog('close');
                                                     }
-                                                });
-                                                if (($('#invoiceNo').val()).length > 3) {
-                                                    window.open('{!!url("/pdforder")!!}/'+$('#orderId').val(), "PDF", "location=1,status=1,scrollbars=1, width=1200,height=850");
-//View PDF
-                                                    disableOnFinish();
-                                                    $(this).dialog("close");
-                                                    $('#finishOrder').hide();
-                                                } else {
-                                                    //finishArray2 -- use to be
-                                                    allInoneDocumentsave("PDF");
                                                 }
-
+                                            });
+                                            if (($('#invoiceNo').val()).length > 3) {
+                                                window.open('{!!url("/pdforder")!!}/'+$('#orderId').val(), "PDF", "location=1,status=1,scrollbars=1, width=1200,height=850");
+//View PDF
+                                                disableOnFinish();
                                                 $(this).dialog("close");
+                                                $('#finishOrder').hide();
+                                            } else {
+                                                //finishArray2 -- use to be
+                                                allInoneDocumentsave("PDF");
                                             }
 
-                                        },
-                                        close: function (event, ui) {
-                                            $(this).remove();
+                                            $(this).dialog("close");
                                         }
-                                    });
-                            }
+
+                                    },
+                                    close: function (event, ui) {
+                                        $(this).remove();
+                                    }
+                                });
+                        }
 
 
                     }
@@ -5741,13 +5744,13 @@
 
                                         $this.find(".additionalcost_").val(parseFloat(0) );
                                         totalAddCst = totalAddCst + parseFloat(0);
-                                       // $('#totaddidtionalcst').val(totalAddCst);
+                                        // $('#totaddidtionalcst').val(totalAddCst);
                                     }
                                     else{
                                         console.debug('tot '+ mQty*data[0].Price);
                                         $this.find(".additionalcost_").val(parseFloat(mQty*data[0].Price) );
                                         totalAddCst = totalAddCst + parseFloat(mQty*data[0].Price);
-                                     //   $('#totaddidtionalcst').val(totalAddCst);
+                                        //   $('#totaddidtionalcst').val(totalAddCst);
                                     }
                                 }
                             });
@@ -5762,35 +5765,35 @@
             function focusoutcaladditionalcost(productCode,mQty,$this)
             {
 
-                  //  var totalAddCst = 0;
-                   // var $this =$(this).closest('tr');
-                  //  var mQty = $this.find('.prodQty_').val();
-                   // var productCode = $this.find('.theProductCode_').val();
+                //  var totalAddCst = 0;
+                // var $this =$(this).closest('tr');
+                //  var mQty = $this.find('.prodQty_').val();
+                // var productCode = $this.find('.theProductCode_').val();
 
 
-                    if( $.trim((productCode)).length > 1 &&  parseFloat(mQty)  > 0){
-                        $.ajax({
-                            url: '{!!url("/associatedItem")!!}',
-                            type: "POST",
-                            data: {
-                                productCode: productCode,
-                                customerCode: $('#inputCustAcc').val(),
-                                delDate: $('#inputDeliveryDate').val(),
-                            },
-                            success: function (data) {
-                                if( !$.trim(data)) {
+                if( $.trim((productCode)).length > 1 &&  parseFloat(mQty)  > 0){
+                    $.ajax({
+                        url: '{!!url("/associatedItem")!!}',
+                        type: "POST",
+                        data: {
+                            productCode: productCode,
+                            customerCode: $('#inputCustAcc').val(),
+                            delDate: $('#inputDeliveryDate').val(),
+                        },
+                        success: function (data) {
+                            if( !$.trim(data)) {
 
-                                    $('#' + $this).val(parseFloat(0));
-                                }else{
-                                    console.debug('tot ' + mQty * data[0].Price);
-                                    $('#' + $this).val(parseFloat(mQty * data[0].Price));
-                                }
-                               // totalAddCst = totalAddCst + parseFloat(mQty*data[0].Price);
-                                //$('#totaddidtionalcst').val(totalAddCst);
+                                $('#' + $this).val(parseFloat(0));
+                            }else{
+                                console.debug('tot ' + mQty * data[0].Price);
+                                $('#' + $this).val(parseFloat(mQty * data[0].Price));
                             }
-                        });
+                            // totalAddCst = totalAddCst + parseFloat(mQty*data[0].Price);
+                            //$('#totaddidtionalcst').val(totalAddCst);
+                        }
+                    });
 
-                    }
+                }
 
             }
             function calculator()
@@ -5907,7 +5910,7 @@
                 $('#totalInc').val(parseFloat(sumarrayOnInclusiveForDiscount).toFixed(2));
                 $('#totalInOrder').val(parseFloat(sumarrayOnInclusiveForDiscountAndLineDisc).toFixed(2));
                 $('#totalmargin').val(totalMargin.toFixed(2));
-             // calcAdditionalCost();
+                // calcAdditionalCost();
 
                 // console.debug("array sum" + sumarray.toFixed(2));
                 //console.debug("array sum" + sumPriceInc.toFixed(2));
@@ -6391,18 +6394,18 @@
                         {
 
                             if($('#marginandpriceauthbycustomer').val().length > 1 ){
-                            $('#prodPrice_'+token_number).val('0');
-                            $('#ZeroPrice').show();
-                            showDialogWithoutClose('#ZeroPrice','40%',250);
-                            $('#ZeroPrice').keydown(function(event) {
-                                if (event.keyCode == 27){
-                                    return false;
-                                }
-                            });
+                                $('#prodPrice_'+token_number).val('0');
+                                $('#ZeroPrice').show();
+                                showDialogWithoutClose('#ZeroPrice','40%',250);
+                                $('#ZeroPrice').keydown(function(event) {
+                                    if (event.keyCode == 27){
+                                        return false;
+                                    }
+                                });
 
-                            // $( "#MarginProblems" ).dialog('close');
-                            authZeroPricing(token_number,$('#theOrdersDetailsId' + token_number).val(), $('#prodCode_' + token_number).val());
-                            $( "#authorisations" ).dialog('close');
+                                // $( "#MarginProblems" ).dialog('close');
+                                authZeroPricing(token_number,$('#theOrdersDetailsId' + token_number).val(), $('#prodCode_' + token_number).val());
+                                $( "#authorisations" ).dialog('close');
                             }
                         }
 
@@ -7179,7 +7182,7 @@
 
                 }
                 if (key == 107) {
-                 //   console.debug('productCode' + productCode);
+                    //   console.debug('productCode' + productCode);
                     $('#addcostdialog').show();
                     $("#addcostdialog").dialog({
                         height: 450,
@@ -7238,17 +7241,17 @@
                             var trHTMLSellingPrice = '';
 
                             $('#additionalcost tbody').empty();
-                                $.each(data, function (key, value) {
-                                    trHTMLSellingPrice += '<tr style="font-size: 10px;color:black"><td>' +
-                                        value.itemcode + '</td><td>' +
-                                        value.itemdescription + '</td><td>' +
-                                        parseFloat(prodQty_) + '</td><td>' +
-                                        value.Price + '</td><td>' +
-                                        parseFloat(prodQty_*value.Price)+
-                                        '</td></tr>';
-                                });
+                            $.each(data, function (key, value) {
+                                trHTMLSellingPrice += '<tr style="font-size: 10px;color:black"><td>' +
+                                    value.itemcode + '</td><td>' +
+                                    value.itemdescription + '</td><td>' +
+                                    parseFloat(prodQty_) + '</td><td>' +
+                                    value.Price + '</td><td>' +
+                                    parseFloat(prodQty_*value.Price)+
+                                    '</td></tr>';
+                            });
 
-                                $('#additionalcost').append(trHTMLSellingPrice);
+                            $('#additionalcost').append(trHTMLSellingPrice);
 
 
                         }
@@ -9215,7 +9218,7 @@
                             'hiddenToken':$(this).closest('tr').find('.hiddenToken').val(),
                             'prodBulk':$(this).closest('tr').find('.prodBulk_').val(),
                             'warehouse':$(this).closest('tr').find('.col2').val()
-                    });
+                        });
 
 
                     }
@@ -9340,23 +9343,23 @@
                                 if (data.Error !="ALREADY INVOICED"){
 
 
-                                if(data.result !="SUCCESS" && data.result !="Success")
-                                {
-                                    var dialog = $('<p><strong style="color:black">'+data.result+'</strong></p>').dialog({
-                                        height: 200, width: 700, modal: true, containment: false,
-                                        buttons: {
-                                            "Okay": function () {
-                                                dialog.dialog('close');
-                                            },
+                                    if(data.result !="SUCCESS" && data.result !="Success")
+                                    {
+                                        var dialog = $('<p><strong style="color:black">'+data.result+'</strong></p>').dialog({
+                                            height: 200, width: 700, modal: true, containment: false,
+                                            buttons: {
+                                                "Okay": function () {
+                                                    dialog.dialog('close');
+                                                },
 
-                                        }
-                                    });
-                                }
-                                else
-                                {
+                                            }
+                                        });
+                                    }
+                                    else
+                                    {
 
-                                    disableOnFinish();
-                                }
+                                        disableOnFinish();
+                                    }
                                 }else
                                 {
                                     var dialog = $('<p><strong style="color:black">This order has been invoiced.</strong></p>').dialog({
