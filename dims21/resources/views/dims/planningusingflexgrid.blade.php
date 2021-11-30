@@ -194,19 +194,34 @@ Route Assigned: <input id="routeassigned" readonly>
                         },{
                             width: 90,
                             dataField: "CompanyName",
-                            caption: "Company Name"
+                            caption: "Company Name",
+                            visible: false
 
                         },
                         {
                             width: 80,
                             dataField: "CustomerPastelCode",
+
                             caption: "Customer Code"
 
                         },
                         {
                             width:300,
                             dataField: "StoreName",
+                            groupIndex: 0,
                             caption: "Customer Name",
+
+                            headerFilter: {
+                                allowSearch: true,
+                            }
+
+                        },
+                        {
+                            width:300,
+                            dataField: "cName",
+
+                            caption: "Customer Name",
+
                             headerFilter: {
                                 allowSearch: true,
                             }
@@ -217,7 +232,7 @@ Route Assigned: <input id="routeassigned" readonly>
                             width: 80,
                             dataField: "OrderNo",
                             caption: "Sales Order No",
-                            groupIndex: 0,
+
                             headerFilter: {
                                 allowSearch: true,
                             },
@@ -288,7 +303,7 @@ Route Assigned: <input id="routeassigned" readonly>
                     summary: {
                         recalculateWhileEditing: true,
                         groupItems: [{
-                            column: 'OrderNo',
+                            column: 'StoreName',
                             summaryType: 'count',
                             displayFormat: '{0} lines',
                         },{
