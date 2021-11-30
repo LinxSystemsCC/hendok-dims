@@ -286,13 +286,24 @@ Route Assigned: <input id="routeassigned" readonly>
                         ,{
                             dataField: "qtyPlan",
                             caption: "Plan",
-                            dataType:"number"
+                            dataType:"number", cellTemplate: function(element, info) {
+                                element.append("<div>" + info.text + "</div>")
+                                    .css("background", "#5c95c573")
+                                    .css("font-size", "16px")
+                                    .css("font-weight", "900");
+                            }
 
                         },
                         {
-                            caption: "M X Q",dataField: "mxq",
+                            caption: "M X Q",dataField: "mxq",sColor: "Red",format: "#0.####",
                             calculateCellValue: function (rowData) {
                                 return rowData.Mass * rowData.qtyPlan;
+                            }
+                            , cellTemplate: function(element, info) {
+                                element.append("<div>" + info.text + "</div>")
+                                    .css("background", "#3175af")
+                                    .css("font-size", "16px")
+                                    .css("font-weight", "900");
                             }
                         }
 
@@ -320,15 +331,15 @@ Route Assigned: <input id="routeassigned" readonly>
                         totalItems: [
                             {
                             column: "qtyPlan",
-                            summaryType: "sum"
+                            summaryType: "sum",format: "#0.####"
                         },
                             {
                             column: "toplan",
-                            summaryType: "sum"
+                            summaryType: "sum",format: "#0.####"
                         },
                             {
                                 column: "mxq",
-                                summaryType: "sum"
+                                summaryType: "sum",format: "#0.####"
                             }
 
                         ]
