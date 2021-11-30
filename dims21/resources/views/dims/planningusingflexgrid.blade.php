@@ -31,7 +31,7 @@ Weights: <input id="weightshere" >
 Ref: <input id="ref" >
 Route Assigned: <input id="routeassigned" readonly>
 <button id="save"> Save</button>
-            <div id="gridContainer"/>
+            <div id="gridContainer" style="height: 800px;"/>
 
 
 
@@ -136,12 +136,7 @@ Route Assigned: <input id="routeassigned" readonly>
                 });
             }
 
-
-
         });
-
-
-
 
 
     });function getinfo(routeid,datefrom,dateto){
@@ -163,7 +158,9 @@ Route Assigned: <input id="routeassigned" readonly>
                 $("#gridContainer").dxDataGrid({
                     dataSource:data.priority,
                     showBorders: true,
-
+                    selection: {
+                        mode: 'multiple',
+                    },
                     filterRow: { visible: true },
                     filterPanel: { visible: true },
                     headerFilter: { visible: true },
@@ -174,25 +171,28 @@ Route Assigned: <input id="routeassigned" readonly>
                         editing: {
                             mode: "cell",
                             allowUpdating: true,
-                            allowAdding: true,
-                            allowDeleting: true
+                            selectTextOnEditStart: true,
+                            startEditAction: 'click',
+                            allowDeleting: true,
+                            confirmDelete: false
                         }
                     ,columnWidth:200,
                     columnAutoWidth:true,        allowColumnResizing: true,       columnResizingMode: "nextColumn",
                     columns: [
                         {
-                            width: 10,
+                            width: 30,
                             dataField: "CustomerId",
-                            caption: "Customer ID"
+                            caption: "Customer ID",
+                            visible: false
 
                         },
                         {
-                            width: 10,
+                            width: 30,
                             dataField: "OwnerID",
-                            caption: "CompanyId"
+                            caption: "CompanyId",   visible: false
 
                         },{
-                            width: 70,
+                            width: 90,
                             dataField: "CompanyName",
                             caption: "Company Name"
 
@@ -217,17 +217,18 @@ Route Assigned: <input id="routeassigned" readonly>
                             width: 80,
                             dataField: "OrderNo",
                             caption: "Sales Order No",
+                            groupIndex: 0,
                             headerFilter: {
                                 allowSearch: true,
                             },
 
                         },{
                             dataField: "areaname",
-                            caption: "Area"
+                            caption: "Area", width: 80
 
                         },{
                             dataField: "rname",
-                            caption: "Route Name"
+                            caption: "Route Name" ,width: 80
 
                         },{
                             width: 80,
@@ -239,14 +240,23 @@ Route Assigned: <input id="routeassigned" readonly>
                             dataField: "instruct",
                             caption: "Instruction"
 
-                        },{
+                        }
+                        ,{
+                            width: 80,
+                            dataField: "QtyOnHand",
+                            caption: "OnHand",dataType:"number"
+
+                        }
+                        ,
+                        {
                             dataField: "PastelDescription",
                             caption: "Item Name",
                             headerFilter: {
                                 allowSearch: true,
                             }
 
-                        },{
+                        }
+                      ,{
                             width: 80,
                             dataField: "Mass",
                             caption: "Mass",dataType:"number",format: "#0.####"
@@ -259,39 +269,81 @@ Route Assigned: <input id="routeassigned" readonly>
 
                         }
                         ,{
-                            dataField: "mnyQtyRemaining",
+                            dataField: "qtyPlan",
                             caption: "Plan",
                             dataType:"number"
 
+                        },
+                        {
+                            caption: "M X Q",dataField: "mxq",
+                            calculateCellValue: function (rowData) {
+                                return rowData.Mass * rowData.qtyPlan;
+                            }
                         }
 
                     ] ,
+                    sortByGroupSummaryInfo: [{
+                        summaryItem: 'count',
+                    }],
                     summary: {
                         recalculateWhileEditing: true,
+                        groupItems: [{
+                            column: 'OrderNo',
+                            summaryType: 'count',
+                            displayFormat: '{0} lines',
+                        },{
+                            column: 'qtyPlan',
+                            summaryType: 'sum',
+                            displayFormat: 'Total: {0}',
+                            showInGroupFooter: true,
+                        },{
+                            column: 'mxq',
+                            summaryType: 'sum',
+                            displayFormat: 'MXQ: {0}',
+                            showInGroupFooter: true,
+                        }],
                         totalItems: [
                             {
-                            column: "mnyQtyRemaining",
+                            column: "qtyPlan",
                             summaryType: "sum"
-                        }, {
+                        },
+                            {
                             column: "toplan",
                             summaryType: "sum"
                         },
+                            {
+                                column: "mxq",
+                                summaryType: "sum"
+                            }
 
                         ]
+
+
                     },
                     onContentReady: function (e) {
                         var selectedDatasUsers = e.component.getDataSource().items();
-                        console.log("work code 2");
+
                         var qty = 0;
-                            //console.log(selectedDatasUsers);
-                        $.each(selectedDatasUsers, function(key, value) {
-                          //  console.log( value.toplan);
-                             qty = qty +(parseFloat(value.Mass) * parseFloat(value.mnyQtyRemaining)  );
+                            console.log(selectedDatasUsers);  console.log("work wen 2");
+                        selectedDatasUsers.forEach((element, index, array) => {
+                            console.log(element.items[0]); // 100, 200, 300
+                            qty = qty +(parseFloat(element.items[0].Mass) * parseFloat(element.items[0].qtyPlan)  );
                             console.log("no zero*************"+ qty);
                             if(qty !="0"){
 
                             }
+                           // console.log(index); // 0, 1, 2
+                            //console.log(array); // same myArray object 3 times
                         });
+                      /*  $.each(selectedDatasUsers, function(key, value) {
+                            console.log( (value.items).Mass);
+                            console.log( key);
+                             //qty = qty +(parseFloat(value.items.Mass) * parseFloat(value.items.mnyQtyRemaining)  );
+                            console.log("no zero*************"+ qty);
+                            if(qty !="0"){
+
+                            }
+                        });*/
                             $('#weightshere').val( qty);
                     },
 
