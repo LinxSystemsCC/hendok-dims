@@ -180,7 +180,10 @@ class TabletLoadingApp extends controller
     }
     public function planningusingflex()
     {
-        return view('dims/planningusingflexgrid');
+        $routes = DB::connection('sqlsrv3')
+            ->select("Select Route,Routeid from tblRoutes order by  [Route]");
+
+        return view('dims/planningusingflexgrid')->with('routes',$routes);
     }
     public function getProductToSelect()
     {

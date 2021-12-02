@@ -27,14 +27,18 @@
 </head>
 <body style="font-family: Sans-serif">
 <h3>Flex Picking Plan</h3>
-Weights: <input id="weightshere" >
+<select  id="rouTabletLoadingtesonPlanning"  >
+
+    @foreach($routes as $values)
+        <option value="{{$values->Routeid}}">{{$values->Route}} </option>
+    @endforeach
+
+</select>
 Ref: <input id="ref" >
-Route Assigned: <input id="routeassigned" readonly>
+ <input id="routeassigned" readonly style="display: none;">
 <button id="save"> Save</button>
-            <div id="gridContainer" style="height: 800px;"/>
-
-
-
+<button id="print" style="float: right">View & Print</button>
+<div id="gridContainer" style="height: 800px;"/>
 
 <script>
 
@@ -67,8 +71,12 @@ Route Assigned: <input id="routeassigned" readonly>
             }
         });
 
+        $('#print').click(function() {
+            window.open('{!!url("/pickingplanlist")!!}/' + $('#ref').val(), "plan" + $('#ref').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
+        });
         $('#save').click(function(){
-            var selectedRo = $('#routeassigned').val();
+            //var selectedRo = $('#routeassigned').val();
+            var selectedRo = $('#rouTabletLoadingtesonPlanning').val();
             if(selectedRo.length < 1){
                 var dialog = $('<p><strong style="color:black"> Please Assign Route </strong></p>').dialog({
                     height: 200, width: 900, modal: true, containment: false,
@@ -82,8 +90,28 @@ Route Assigned: <input id="routeassigned" readonly>
             }else{
                 var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").items();
                 var checkedLines = new Array();
-                $.each(allGridItems, function(key, value) {
-                    //  console.log( value.toplan);
+                console.log( allGridItems);
+                allGridItems.forEach((element, index, array) => {
+
+
+                    $.each(element.items, function(key, value) {
+                        console.log( value);
+                        var qty = value.qtyPlan;
+                        if(qty !="0"){
+                            console.log("no zero"+ value.qtyPlan);
+                            checkedLines.push({
+                                'orderdetail': value.OrderDetailId,
+                                'qty': value.qtyPlan,
+                                'pickingtype':'priority',
+                                'ownerId':value.OwnerID,
+                                'referenceNo':$('#ref').val()
+                            });
+                        }
+                    });
+                });
+
+              /*  $.each(allGridItems, function(key, value) {
+                     console.log( value);
                     var qty = value.toplan;
                     if(qty !="0"){
                         console.log("no zero"+ value.toplan);
@@ -95,7 +123,7 @@ Route Assigned: <input id="routeassigned" readonly>
                             'referenceNo':$('#ref').val()
                         });
                     }
-                });
+                });*/
 
                 $.ajax({
                     url: '{!!url("/saveplan")!!}',
@@ -161,6 +189,7 @@ Route Assigned: <input id="routeassigned" readonly>
                     selection: {
                         mode: 'multiple',
                     },
+
                     filterRow: { visible: true },
                     filterPanel: { visible: true },
                     headerFilter: { visible: true },
@@ -370,7 +399,7 @@ Route Assigned: <input id="routeassigned" readonly>
 
                             }
                         });*/
-                            $('#weightshere').val( qty);
+                            //$('#weightshere').val( qty);
                     },
 
                     onRowClick: function (e) {
