@@ -4002,6 +4002,22 @@
 
                     $("#headerWh").prepend("<option value='"+data.ID+"'>" + data.Warehouse + "</option>");
                     GlobalcustomerId = data.CustomerId;
+
+                    if( data.CustomerOnHold != "0"){
+                        var dialog = $('<p><strong style="color:red">Account on Hold</strong></p>').dialog({
+                            height: 200, width: 700,modal: true,containment: false,
+                            buttons: {
+                                "Ignore": function () {
+                                    dialog.dialog('close');
+                                },
+                                "CANCEL": function () {
+                                    $('#inputCustAcc').val('');
+                                    $('#inputCustName').val('');
+                                    dialog.dialog('close');
+                                }
+                            }
+                        });
+                    }
                 });
 
 
@@ -4075,6 +4091,23 @@
                     $('#customerpricelist').val(data.termsAndList);
                     $("#headerWh").prepend("<option value='"+data.ID+"'>" + data.Warehouse + "</option>");
                     GlobalcustomerId = data.CustomerId;
+
+                    if(data.CustomerOnHold != "0"){
+                        var dialog = $('<p><strong style="color:red">Account on Hold</strong></p>').dialog({
+                            height: 200, width: 700,modal: true,containment: false,
+                            buttons: {
+                                "Ignore": function () {
+                                    dialog.dialog('close');
+                                },
+                                "CANCEL": function () {
+                                    $('#inputCustAcc').val('');
+                                    $('#inputCustName').val('');
+                                    dialog.dialog('close');
+                                }
+                            }
+                        });
+                    }
+
                 });
                 var custCodeOnOrder = $('#custCodeOnOrder').flexdatalist({
                     minLength: 1,
