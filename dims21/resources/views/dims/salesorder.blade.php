@@ -777,6 +777,14 @@
                 <input type="text" id="costOnCustomerOrangeForm" readonly style="background:red;">Cost
             </div>
         </div>
+
+        <div id="extrasononrder" title="Extras" style="background: #9ab5bb;">
+            <div class="col-lg-12">
+
+                <input type="text" id="randomweightdescription" readonly>
+
+            </div>
+        </div>
         <div id="addNewDeliveryAddressForSingleCustomer" title="Add Address" style="display:none">
             <button id="addNewLineOnAddress" class="btn-success btn-xs">New Line</button>
             <table class="table2" id="addNewAddForSingleACuustomer">
@@ -1861,6 +1869,7 @@
                 $('#copyOrderDialog').hide();
                 $('#copyOrderDialogComfirmation').hide();
                 $('#custLookUp').hide();
+                $('#extrasononrder').hide();
                 $('#creditLimitAuth').hide();
                 $('#reprintAuth').hide();
                 $('#addNewAddress').hide();
@@ -7210,7 +7219,52 @@
                 if ((key > 45 && key < 57) || (key > 95 && key < 106) ||  key == 8) {
                     calculator();
                 }
+//extrasononrder
+                if ( key == 107)
+                {
+                    console.debug('productCode'+productCode);
+                    $('#extrasononrder').show();
+                    $( "#extrasononrder" ).dialog({height: 450,
+                        width: 400,containment: false}).dialogExtend({
+                        "closable" : true, // enable/disable close button
+                        "maximizable" : false, // enable/disable maximize button
+                        "minimizable" : true, // enable/disable minimize button
+                        "collapsable" : true, // enable/disable collapse button
+                        "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                        "titlebar" : false, // false, 'none', 'transparent'
+                        "minimizeLocation" : "right", // sets alignment of minimized dialogues
+                        "icons" : { // jQuery UI icon class
+                            "close" : "ui-icon-circle-close",
+                            "maximize" : "ui-icon-circle-plus",
+                            "minimize" : "ui-icon-circle-minus",
+                            "collapse" : "ui-icon-triangle-1-s",
+                            "restore" : "ui-icon-bullet"
+                        },
+                        "load" : function(evt, dlg){ }, // event
+                        "beforeCollapse" : function(evt, dlg){ }, // event
+                        "beforeMaximize" : function(evt, dlg){ }, // event
+                        "beforeMinimize" : function(evt, dlg){ }, // event
+                        "beforeRestore" : function(evt, dlg){ }, // event
+                        "collapse" : function(evt, dlg){  }, // event
+                        "maximize" : function(evt, dlg){ }, // event
+                        "minimize" : function(evt, dlg){  }, // event
+                        "restore" : function(evt, dlg){  } // event
+                    });
 
+                    $.ajax({
+                        url: '{!!url("/getextracomunsforItems")!!}',
+                        type: "POST",
+                        data:{
+                            productCode:productCode,custCode : $('#inputCustAcc').val()
+                        },
+                        success: function(data) {
+                            //$( "#extrasononrder" ).dialog('close');
+                        }
+                    });
+                    /* $('#customerDetailLookUp tbody').on('dblclick', 'tr', function (){
+                alert("over here");
+            });*/
+                }
 
             });
 
