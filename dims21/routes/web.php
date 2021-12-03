@@ -244,6 +244,7 @@ Route::get('deliveryTypes',[SalesFormFunctions::class,'getDeliverTypes']);
 Route::post('updateCContactsOnOrder', [SalesFormFunctions::class,'updateCContactsOnOrder']);
 Route::post('orderheaderAndOrderLines', [SalesFormFunctions::class,'orderheaderAndOrderLines']);
 Route::post('getCutomerPriceOnOrderForm', [SalesFormFunctions::class,'returnProductPrice']);
+Route::post('getextracomunsforItems', [SalesFormFunctions::class,'getextracomunsforItems']);
 Route::post('getCutomerPastInvoices', [SalesFormFunctions::class,'getCustomerPast10Invoices']);
 Route::post('customerSpecials', [SalesFormFunctions::class,'getCustomerSpecials']);
 Route::post('groupSpecials', [SalesFormFunctions::class,'getGroupSpecials']);
