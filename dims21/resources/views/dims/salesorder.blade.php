@@ -1803,7 +1803,8 @@
                         strRoute:item.strRoute,
                         mnyCustomerGp:item.mnyCustomerGp,
                         Warehouse:item.Warehouse,
-                        ID:item.ID
+                        ID:item.ID,
+                        CustomerOnHold:item.CustomerOnHold
                     }
 
                 });
@@ -1824,7 +1825,8 @@
                         strRoute:item.strRoute,
                         mnyCustomerGp:item.mnyCustomerGp,
                         Warehouse:item.Warehouse,
-                        ID:item.ID
+                        ID:item.ID,
+                        CustomerOnHold:item.CustomerOnHold
                     }
 
                 });
