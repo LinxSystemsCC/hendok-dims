@@ -36,6 +36,17 @@ class SalesFormFunctions extends Controller
         else
             return ['value'=>'No Result Found','id'=>''];
     }
+    public function getextracomunsforItems(Request $request){
+
+        $custCode = $request->get('custCode');
+        $productCode = $request->get('productCode');
+        $returnCustomerRoute = DB::connection('sqlsrv3')
+            ->select('exec spGetproductExtraInfo ?,?',
+                array($productCode,$custCode)
+            );
+        // ->select("EXEC spCustomerRouteAndAllRoutesByPriority '".$customerCode."'");
+        return response()->json($returnCustomerRoute);
+    }
     public function isClosedRoute(Request $request)
     {
         //$deliveryDate = $request->get('delDate');
