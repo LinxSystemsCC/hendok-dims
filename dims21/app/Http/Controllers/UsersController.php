@@ -11,7 +11,7 @@ class UsersController extends Controller
 {
      public function addUser(Request $request)
    {
-	  
+
        $UserName = $request->get('UserName');
        $Password = $request->get('Password');
 	   $Email = $request->get('Email');
@@ -30,14 +30,14 @@ class UsersController extends Controller
 	   $SessionId = $request->get('SessionId');
        $PinCode = $request->get('PinCode');
 	   $strField6 = bcrypt($request->get('strField6'));
-	   
-	   
+
+
 	   $insertUser = DB::connection('sqlsrv3')
                         ->statement("EXEC spCRUDUsers NULL,'".$UserName."','".$Password."','".$Email."',".$StatusId.",".$Administrator.",".$GroupId.",".$Exporting.",
-						".$exportAllOrders.",".$ExportAllReturns.",'".$PrinterPathInvoice."','".$PrinterPathPickingSlip."','".$PrinterPathSalesOrder."',".$TabletUser.", 
+						".$exportAllOrders.",".$ExportAllReturns.",'".$PrinterPathInvoice."','".$PrinterPathPickingSlip."','".$PrinterPathSalesOrder."',".$TabletUser.",
 						'".$CellPhone."', ".$RunPastelLinks.",'".$SessionId."',	".$PinCode.", '".$strField6."','Insert'");
 		return response()->json($insertUser);
-			
+
 	}
 
     public function PathsAndEmails()
@@ -97,26 +97,26 @@ class UsersController extends Controller
 	   $SessionId = "NULL";
        $PinCode = 0;
 	   $strField6 = "NULL";
-	   
+
 	   $getPrinters = DB::connection('sqlsrv3')
 				->select("SELECT * FROM tblPrinters");
-				
+
 		$getStatus= DB::connection('sqlsrv3')
 				->select("SELECT * FROM tblDIMSUsers");
-	   
-	   
+
+
 	   $readUsers = DB::connection('sqlsrv3')
                         ->select("EXEC spCRUDUsers ".$UserID.",'".$UserName."','".$Password."','".$Email."',".$StatusId.",".$Administrator.",".$GroupId.",".$Exporting.",
-						".$exportAllOrders.",".$ExportAllReturns.",'".$PrinterPathInvoice."','".$PrinterPathPickingSlip."','".$PrinterPathSalesOrder."',".$TabletUser.", 
+						".$exportAllOrders.",".$ExportAllReturns.",'".$PrinterPathInvoice."','".$PrinterPathPickingSlip."','".$PrinterPathSalesOrder."',".$TabletUser.",
 						'".$CellPhone."', ".$RunPastelLinks.",'".$SessionId."',	".$PinCode.", '".$strField6."','Select'");
-									
+
 		return view('dims/usersCrud')
 		->with('readUser',$readUsers)
 		->with('getStatus',$getStatus)
 		->with('getPrinters',$getPrinters);
-		
+
 	}
-	
+
 	public function editUser(Request $request)
 	{
 	   $UserID = $request->get('UserID');
@@ -138,16 +138,16 @@ class UsersController extends Controller
 	   $SessionId = $request->get('SessionId');
        $PinCode = $request->get('PinCode');
 	   $strField6 = bcrypt($request->get('strField6'));
-	   
-	   	   
+
+
 	   $updateUsers = DB::connection('sqlsrv3')
                         ->statement("EXEC spCRUDUsers ".$UserID.",'".$UserName."','".$Password."','".$Email."',".$StatusId.",".$Administrator.",".$GroupId.",".$Exporting.",
-						".$exportAllOrders.",".$ExportAllReturns.",'".$PrinterPathInvoice."','".$PrinterPathPickingSlip."','".$PrinterPathSalesOrder."',".$TabletUser.", 
+						".$exportAllOrders.",".$ExportAllReturns.",'".$PrinterPathInvoice."','".$PrinterPathPickingSlip."','".$PrinterPathSalesOrder."',".$TabletUser.",
 						'".$CellPhone."', ".$RunPastelLinks.",'".$SessionId."',	".$PinCode.", '".$strField6."','Update'");
 		return response()->json($updateUsers);
-			
+
 	}
-	
+
 	public function deleteUser(Request $request)
 	{
 	   $UserID = $request->get('UserID');
@@ -169,12 +169,12 @@ class UsersController extends Controller
 	   $SessionId = $request->get('SessionId');
        $PinCode = $request->get('PinCode');
 	   $strField6 = bcrypt($request->get('strField6'));
-	   
-	   
-	   
+
+
+
 	   $deleteUser = DB::connection('sqlsrv3')
                         ->statement("EXEC spCRUDUsers ".$UserID.",'".$UserName."','".$Password."','".$Email."',".$StatusId.",".$Administrator.",".$GroupId.",".$Exporting.",
-						".$exportAllOrders.",".$ExportAllReturns.",'".$PrinterPathInvoice."','".$PrinterPathPickingSlip."','".$PrinterPathSalesOrder."',".$TabletUser.", 
+						".$exportAllOrders.",".$ExportAllReturns.",'".$PrinterPathInvoice."','".$PrinterPathPickingSlip."','".$PrinterPathSalesOrder."',".$TabletUser.",
 						'".$CellPhone."', ".$RunPastelLinks.",'".$SessionId."',	".$PinCode.", '".$strField6."','Delete'");
 		return response()->json($deleteUser);
 	}
@@ -189,8 +189,8 @@ class UsersController extends Controller
                         Monday,Tueday,Wednesday,Thursday,Friday,Saturday,Sunday,routeid,viewtblCustomers.UserName,viewtblCustomers.GroupName,viewtblCustomers.GroupId,
                         BuyerTelephone,viewtblCustomers.CellPhone,ContactPerson,BuyerContact,u.UserID
                         from viewtblCustomers
-                        
-                         inner join tblDimsusers u 
+
+                         inner join tblDimsusers u
                         on u.UserName =  viewtblCustomers.UserName
                          where  viewtblCustomers.StatusId = 1 and routeid in ($routes) and  u.UserId in($users) order by storeName");
 
@@ -204,8 +204,8 @@ class UsersController extends Controller
                         Monday,Tueday,Wednesday,Thursday,Friday,Saturday,Sunday,routeid,viewtblCustomers.UserName,viewtblCustomers.GroupName,viewtblCustomers.GroupId,
                         BuyerTelephone,viewtblCustomers.CellPhone,ContactPerson,BuyerContact,u.UserID
                         from viewtblCustomers
-                         
-                         inner join tblDimsusers u 
+
+                         inner join tblDimsusers u
                         on u.UserName =  viewtblCustomers.UserName
                          where  viewtblCustomers.StatusId = 1 and u.UserId in ($users) order by storeName");
 
@@ -297,7 +297,7 @@ class UsersController extends Controller
         $getUsers = DB::connection('sqlsrv3')
             ->select("select  UserID,UserName,Password,
 			tblDIMSUSERS.Administrator,tblDIMSUSERS.GroupID,PinCode,strPickingTeams,GroupName
-			from tblDIMSUSERS inner join 
+			from tblDIMSUSERS inner join
 			tblDIMSGROUPS on tblDIMSGROUPS.GroupId = tblDIMSUSERS.GroupId ");
         //dd($getUsers);
         return view('dims/grid_Users')

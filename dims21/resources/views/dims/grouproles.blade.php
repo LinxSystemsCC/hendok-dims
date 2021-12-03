@@ -143,7 +143,8 @@
 
                     $('#listofsystemroles').empty();
                     $('#currentroles').empty();
-                    $('today').empty();
+                    $('.today').empty();
+                    $('.btncurrentroles').empty();
                     $.each(data.userroles, function (key, value) {
                         trHTML += '<tr class="fast_remove"  style="font-size: 15px;color:black"><td><input type="checkbox" name="checkcurrentroles[]" value ="'+value.OptionDesc+'" style="height:18px !important;width:30px"></td><td>' +
                             value.OptionDesc+'</td></tr>';
