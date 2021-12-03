@@ -7214,6 +7214,7 @@
 
                 var qty= $(this).closest("tr").find(".prodQty_").val();
                 var prices = $(this).closest("tr").find(".prodPrice_").val();
+                var productCode = $(this).closest("tr").find(".theProductCode_").val();
                 var linetotal = qty * prices;
                 $(this).closest("tr").find(".col6").val(linetotal.toFixed(2));
                 if ((key > 45 && key < 57) || (key > 95 && key < 106) ||  key == 8) {
