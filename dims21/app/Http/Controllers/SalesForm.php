@@ -28,18 +28,18 @@ class SalesForm extends Controller
        if(env('CustomerAccess') == 1){
            $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )
                ->join('tblAccessOnCustomers', 'viewtblCustomers.GroupId', '=', 'tblAccessOnCustomers.intGroupId')
-               ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName','CustomerOnHold')
+               ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName','CustomerOnHold','termsAndList')
                ->where('StatusId',1)
                ->where('intUserId',$sessionUserId)
                ->orderBy('CustomerPastelCode','ASC')->get();
        }else{
            $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )
-               ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName','CustomerOnHold')
+               ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName','CustomerOnHold','termsAndList')
                ->where('StatusId',1)
                ->orderBy('CustomerPastelCode','ASC')->get();
        }
         $queryCustomersDontCareStatus =DB::connection('sqlsrv3')->table("viewtblCustomers" )
-            ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName','CustomerOnHold')
+            ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName','CustomerOnHold','termsAndList')
 
             ->orderBy('CustomerPastelCode','ASC')->get();
         $deliverTypes= DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->get();
