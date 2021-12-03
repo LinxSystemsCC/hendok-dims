@@ -1804,7 +1804,8 @@
                         mnyCustomerGp:item.mnyCustomerGp,
                         Warehouse:item.Warehouse,
                         ID:item.ID,
-                        CustomerOnHold:item.CustomerOnHold
+                        CustomerOnHold:item.CustomerOnHold,
+                        termsAndList:item.termsAndList
                     }
 
                 });
@@ -1826,7 +1827,8 @@
                         mnyCustomerGp:item.mnyCustomerGp,
                         Warehouse:item.Warehouse,
                         ID:item.ID,
-                        CustomerOnHold:item.CustomerOnHold
+                        CustomerOnHold:item.CustomerOnHold,
+                        termsAndList:item.termsAndList
                     }
 
                 });
