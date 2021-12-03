@@ -4002,6 +4002,7 @@
 
                     $("#headerWh").prepend("<option value='"+data.ID+"'>" + data.Warehouse + "</option>");
                     GlobalcustomerId = data.CustomerId;
+                    console.debug("onhold"+data.CustomerOnHold);
 
                     if( data.CustomerOnHold != 0){
                         var dialog = $('<p><strong style="color:red">Account on Hold</strong></p>').dialog({
@@ -4091,7 +4092,7 @@
                     $('#customerpricelist').val(data.termsAndList);
                     $("#headerWh").prepend("<option value='"+data.ID+"'>" + data.Warehouse + "</option>");
                     GlobalcustomerId = data.CustomerId;
-
+                    console.debug("onhold"+data.CustomerOnHold);
                     if(data.CustomerOnHold != 0){
                         var dialog = $('<p><strong style="color:red">Account on Hold</strong></p>').dialog({
                             height: 200, width: 700,modal: true,containment: false,
