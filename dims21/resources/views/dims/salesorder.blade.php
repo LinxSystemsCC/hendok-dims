@@ -1536,7 +1536,9 @@
             .ui-dialog-titlebar-close{
                 display: none;
             }
+
         </style>
+
         <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
 
         <script>
@@ -2695,6 +2697,7 @@
                             console.debug("************ check" + data.returns);
                             if (data.returns != "inserted") {
                                 $('#orderId').val("");
+                                $('#deleteAllLines').hide();
                                 var dialog = $('<p>Sorry <strong style="color:red">' + data.data[0].orderID + '</strong></p>').dialog({
                                     height: 200, width: 700,modal: true,
                                     buttons: {
@@ -2726,7 +2729,7 @@
                                     $('#CustomerId').val(value.CustomerId);
                                     $('#balDue').val(parseFloat(value.BalanceDue).toFixed(2));
                                     $('#margin_auth').val(value.Authorised);
-                                    $('#customerpricelist').val(value.PriceListName);
+                                    $('#customerpricelist').val(value.termsAndList);
 
 
                                     console.debug('************************************* ttreat as '+value.TreatAsQuotation);
@@ -3995,7 +3998,7 @@
                     $('#routeonabutton').val(data.strRoute);
                     $('#hiddencustomerGp').val(data.mnyCustomerGp);
                     $('#CustomerId').val(data.CustomerId);
-                    $('#customerpricelist').val(data.PriceListName);
+                    $('#customerpricelist').val(data.termsAndList);
 
                     $("#headerWh").prepend("<option value='"+data.ID+"'>" + data.Warehouse + "</option>");
                     GlobalcustomerId = data.CustomerId;
@@ -4069,7 +4072,7 @@
                     $('#routeonabutton').val(data.strRoute);
                     $('#hiddencustomerGp').val(data.mnyCustomerGp);
                     $('#CustomerId').val(data.CustomerId);
-                    $('#customerpricelist').val(data.PriceListName);
+                    $('#customerpricelist').val(data.termsAndList);
                     $("#headerWh").prepend("<option value='"+data.ID+"'>" + data.Warehouse + "</option>");
                     GlobalcustomerId = data.CustomerId;
                 });
