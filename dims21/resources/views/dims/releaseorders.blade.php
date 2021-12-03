@@ -215,7 +215,14 @@ OrderID selected <input type="text" id="account">
         </div>
     </form>
 </div>
-
+<style>
+    .backgroudnormal{
+        background:white;
+    }
+    .backgroudcolorbad{
+        background: red;
+    }
+</style>
 
 <script type="text/javascript" charset="utf-8">
 
@@ -262,8 +269,14 @@ OrderID selected <input type="text" id="account">
             success: function (data) {
                 var trHTML = '';
                 $('.fast_removeOrders').empty();
+                var classes = 'backgroudnormal';
                 $.each(data, function (key, value) {
-                    trHTML += '<tr role="row" class="fast_removeOrders"  style="font-size: 13px;color:black"><td>' +
+                    if(value.CustomerOnHold !="0"){
+                         classes = 'backgroudcolorbad';
+                    }else{
+                         classes = 'backgroudnormal';
+                    }
+                    trHTML += '<tr role="row" class="fast_removeOrders '+classes+'"  style="font-size: 13px;color:black"><td>' +
                         value.CustomerCode + '</td><td>' +
                         value.StoreName + '</td><td>' +
                         value.OrderDate + '</td><td>' +
