@@ -271,10 +271,10 @@ OrderID selected <input type="text" id="account">
                 $('.fast_removeOrders').empty();
                 var classes = 'backgroudnormal';
                 $.each(data, function (key, value) {
-                    if(value.CustomerOnHold ==2){
+                    if(value.CustomerOnHold == 2){
                          classes = 'backgroudcolorbad';
                     }
-                    if(value.CustomerOnHold ==0){
+                    if(value.CustomerOnHold == 0){
                          classes = 'backgroudnormal';
                     }
                     trHTML += '<tr role="row" class="fast_removeOrders '+classes+'"  style="font-size: 13px;color:black"><td>' +
@@ -290,7 +290,7 @@ OrderID selected <input type="text" id="account">
                         value.Notes + '</td><td>' +
                         value.Route + '</td><td>' +
                         value.OrderId + '</td>' +
-                        '<td><input type="checkbox" class="checkid" value="' +value.OrderId +'" id="ID">' +
+                        '<td><input type="checkbox" class="checkid" value="' +value.OrderId +'" id="ID"> <input type="hidden" class="onhold" value="' +value.CustomerOnHold +'" id="ID">' +
                         '</td></tr>';
                 });
                 $('#orderheaders').append(trHTML);
