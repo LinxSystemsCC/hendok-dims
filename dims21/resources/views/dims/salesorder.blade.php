@@ -7259,6 +7259,9 @@
                             productCode:productCode,custCode : $('#inputCustAcc').val()
                         },
                         success: function(data) {
+                            console.debug("Testing this this" +data);
+
+                            $('#randomweightdescription').val(data[0].Description_2);
                             //$( "#extrasononrder" ).dialog('close');
                         }
                     });
