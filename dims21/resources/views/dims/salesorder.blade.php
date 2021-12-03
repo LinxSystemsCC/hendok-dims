@@ -781,7 +781,7 @@
         <div id="extrasononrder" title="Extras" style="background: #9ab5bb;">
             <div class="col-lg-12">
 
-                <input type="text" id="randomweightdescription" readonly>
+                <input type="text" id="randomweightdescription" style="width: 100%;" readonly>
 
             </div>
         </div>
