@@ -273,7 +273,8 @@ OrderID selected <input type="text" id="account">
                 $.each(data, function (key, value) {
                     if(value.CustomerOnHold !="0"){
                          classes = 'backgroudcolorbad';
-                    }else{
+                    }
+                    if(value.CustomerOnHold =="2"){
                          classes = 'backgroudnormal';
                     }
                     trHTML += '<tr role="row" class="fast_removeOrders '+classes+'"  style="font-size: 13px;color:black"><td>' +
