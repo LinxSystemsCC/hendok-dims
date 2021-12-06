@@ -115,6 +115,7 @@
             <thead>
             <tr style="    background: black;    color: white;" >
                 <th class="col-xs-2">Storename</th>
+                <th class="col-xs-1">Area</th>
                 <th class="col-xs-2">Order Date</th>
                 <th class="col-xs-2">Sales Order No</th>
                 <th class="col-xs-2">Instruction</th>
@@ -123,6 +124,7 @@
                 <th class="col-xs-2" >Weights</th>
 
                 <th class="col-xs-2" >Qty to Load</th>
+                <th class="col-xs-2" >Qty to Invoice</th>
 
 
             </tr>
@@ -143,12 +145,14 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                 </tr>
                     <?php $subtotal = 0;$count = 0; ?>
                 @endif
                 <tr>
 
                     <td>{{ $val->StoreName}}</td>
+                    <td>{{ $val->areas}}</td>
 
 
 
@@ -159,6 +163,7 @@
                     <td>{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
+                    <td></td>
                     <td></td>
 
 
@@ -175,6 +180,7 @@
 
                         </td>
                     @endif
+                    <td>{{ $val->areas}}</td>
                     <td>{{ $val->OrderDate}}</td>
                     <td>{{ $val->OrderNum}}</td>
                     <td>{{ $val->ExtOrderNum}}</td>
@@ -182,6 +188,7 @@
                     <td>{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
+                    <td></td>
                     <td></td>
 
 
@@ -201,7 +208,9 @@
                 <td> </td>
                 <td> </td>
                 <td> </td>
+                <td> </td>
                 <td>{{ $Grandtotal}}</td>
+                <td> </td>
                 <td> </td>
             </tr>
 
