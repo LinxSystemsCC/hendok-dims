@@ -131,7 +131,7 @@
             </tr>
             </thead>
             <tbody >
-            <?php $storenames = "";$subtotal=0;$Grandtotal=0;$istrue = true;$count = 0; ?>
+            <?php $storenames = "";$orderNumber=""; $subtotal=0;$Grandtotal=0;$area = "";$orderdate=""; $istrue = true;$count = 0; ?>
             @foreach($listproducts as $val )     <?php $subtotal = 0 ?>
             <?php $subtotal = $subtotal + floatval($val->weightPlanned);    ?>
                 <?php $Grandtotal = $Grandtotal + floatval($val->weightPlanned);?>
@@ -170,7 +170,7 @@
                     <td></td>
 
 
-                </tr><?php $istrue = true; $storenames = $val->StoreName; ?>
+                </tr><?php $istrue = true; $storenames = $val->StoreName; $orderNumber =  $val->OrderNum;$area =  $val->areas;$orderdate = $val->OrderDate  ?>
 
                 @else
                 <tr>
@@ -183,9 +183,24 @@
 
                         </td>
                     @endif
+                    @if($area !=  $val->areas)
                     <td>{{ $val->areas}}</td>
+                        @else
+                        <td></td>
+                        @endif
+                        @if($orderdate != $val->OrderDate)
                     <td>{{ $val->OrderDate}}</td>
-                    <td>{{ $val->OrderNum}}</td>
+                        @else
+                            <td></td>
+                            @endif
+
+                        @if($orderNumber != $val->OrderNum)
+                    <td>{{$orderNumber}}</td>
+                        @else
+                            <td style="">
+
+                            </td>
+                            @endif
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
@@ -197,7 +212,7 @@
 
 
                 </tr>
-                <?php $storenames = $val->StoreName;
+                <?php $storenames = $val->StoreName; $orderNumber =  $val->OrderNum;$area =  $val->areas;
                 if($storenames == $val->StoreName){
                     $istrue = true;
                 }
