@@ -111,7 +111,7 @@
             </tbody>
         </table>
 <hr><br>
-        <table id="orderHeaderPrint" style="font-size: 12px;">
+        <table id="orderHeaderPrint" style="font-size: 11px;">
             <thead>
             <tr style="    background: black;    color: white;" >
                 <th class="col-xs-2">Storename</th>
