@@ -119,6 +119,7 @@
                 <th class="col-xs-2">Order Date</th>
                 <th class="col-xs-2">Sales Order No</th>
                 <th class="col-xs-2">Instruction</th>
+                <th class="col-xs-2">Line No</th>
                 <th class="col-xs-2">Description</th>
                 <th class="col-xs-2" >Qty</th>
                 <th class="col-xs-2" >Weights</th>
@@ -146,6 +147,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                 </tr>
                     <?php $subtotal = 0;$count = 0; ?>
                 @endif
@@ -159,6 +161,7 @@
                     <td>{{ $val->OrderDate}}</td>
                     <td>{{ $val->OrderNum}}</td>
                     <td>{{ $val->ExtOrderNum}}</td>
+                    <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
                     <td>{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
@@ -184,6 +187,7 @@
                     <td>{{ $val->OrderDate}}</td>
                     <td>{{ $val->OrderNum}}</td>
                     <td>{{ $val->ExtOrderNum}}</td>
+                    <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
                     <td>{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
@@ -203,6 +207,7 @@
             @endforeach
             <tr style="background: grey;color: white;font-weight: 900">
                 <td> Grand Total</td>
+                <td> </td>
                 <td> </td>
                 <td> </td>
                 <td> </td>
