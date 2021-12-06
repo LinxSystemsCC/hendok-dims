@@ -27,6 +27,12 @@
 </head>
 <body style="font-family: Sans-serif">
 <h3>Flex Picking Plan</h3>
+<div class="dx-field" style="display: none;">
+    <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
+    <div class="dx-field-value">
+        <div id="gridBox"></div>
+    </div>
+</div>
 <select  id="rouTabletLoadingtesonPlanning"  >
 
     @foreach($routes as $values)
@@ -70,6 +76,42 @@ Ref: <input id="ref" >
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+/*
+        $('#gridBox').dxDropDownBox({
+            value: [3],
+            valueExpr: 'ID',
+            placeholder: 'Select a value...',
+            displayExpr: 'CompanyName',
+            showClearButton: true,
+            dataSource: makeAsyncDataSource('customers.json'),
+            contentTemplate(e) {
+                const v = e.component.option('value');
+                const $dataGrid = $('<div>').dxDataGrid({
+                    dataSource: e.component.getDataSource(),
+                    columns: ['CompanyName', 'City', 'Phone'],
+                    hoverStateEnabled: true,
+                    paging: { enabled: true, pageSize: 10 },
+                    filterRow: { visible: true },
+                    scrolling: { mode: 'virtual' },
+                    height: 345,
+                    selection: { mode: 'multiple' },
+                    selectedRowKeys: v,
+                    onSelectionChanged(selectedItems) {
+                        const keys = selectedItems.selectedRowKeys;
+                        e.component.option('value', keys);
+                    },
+                });
+
+                dataGrid = $dataGrid.dxDataGrid('instance');
+
+                e.component.on('valueChanged', (args) => {
+                    const { value } = args;
+                    dataGrid.selectRows(value, false);
+                });
+
+                return $dataGrid;
+            },
+        });*/
 
         $('#print').click(function() {
             window.open('{!!url("/pickingplanlist")!!}/' + $('#ref').val(), "plan" + $('#ref').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");

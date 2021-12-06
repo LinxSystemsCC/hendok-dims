@@ -34,6 +34,15 @@
         .rag-amber-outer .rag-element {
             background-color: lightsalmon;
         }
+        table, td, th {
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
 
     </style>
 </head>
@@ -102,11 +111,13 @@
             </tbody>
         </table>
 <hr><br>
-        <table id="orderHeaderPrint">
+        <table id="orderHeaderPrint" style="font-size: 12px;">
             <thead>
-            <tr >
+            <tr style="    background: black;    color: white;" >
                 <th class="col-xs-2">Storename</th>
-                <th class="col-xs-2">Code</th>
+                <th class="col-xs-2">Order Date</th>
+                <th class="col-xs-2">Sales Order No</th>
+                <th class="col-xs-2">Instruction</th>
                 <th class="col-xs-2">Description</th>
                 <th class="col-xs-2" >Qty</th>
                 <th class="col-xs-2" >Weights</th>
@@ -117,24 +128,82 @@
             </tr>
             </thead>
             <tbody >
-            <?php $storenames = ""; ?>
-            @foreach($listproducts as $val )
+            <?php $storenames = "";$subtotal=0;$Grandtotal=0;$istrue = true;$count = 0; ?>
+            @foreach($listproducts as $val )     <?php $subtotal = 0 ?>
+            <?php $subtotal = $subtotal + floatval($val->weightPlanned);    ?>
+                <?php $Grandtotal = $Grandtotal + floatval($val->weightPlanned);?>
+            @if($storenames != $val->StoreName )
+                @if($count > 0 )
+                <tr style="background: darkgray;color: white; font-weight: 900;">
+                    <td></td>
+                    <td> </td>
+                    <td>Next Customer</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                    <?php $subtotal = 0;$count = 0; ?>
+                @endif
                 <tr>
-                    @if($storenames != $val->StoreName )
+
                     <td>{{ $val->StoreName}}</td>
-                        @else
-                        <td></td>
-                    @endif
-                    <td>{{ $val->PastelCode}}</td>
+
+
+
+                    <td>{{ $val->OrderDate}}</td>
+                    <td>{{ $val->OrderNum}}</td>
+                    <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->PastelDescription}}</td>
-                    <td>{{ $val->mnyQty}}</td>
-                    <td>{{ $val->weightPlanned}}</td>
+                    <td>{{ floatval($val->mnyQty)}}</td>
+                    <td>{{ floatval($val->weightPlanned)}}</td>
 
                     <td></td>
 
+
+                </tr><?php $istrue = true; $storenames = $val->StoreName; ?>
+
+                @else
+                <tr>
+
+                    @if($storenames != $val->StoreName )
+                        <td>{{ $val->StoreName}}</td>
+
+                    @else
+                        <td>
+
+                        </td>
+                    @endif
+                    <td>{{ $val->OrderDate}}</td>
+                    <td>{{ $val->OrderNum}}</td>
+                    <td>{{ $val->ExtOrderNum}}</td>
+                    <td>{{ $val->PastelDescription}}</td>
+                    <td>{{ floatval($val->mnyQty)}}</td>
+                    <td>{{ floatval($val->weightPlanned)}}</td>
+
+                    <td></td>
+
+
                 </tr>
-                <?php $storenames = $val->StoreName; ?>
+                <?php $storenames = $val->StoreName;
+                if($storenames == $val->StoreName){
+                    $istrue = true;
+                }
+                ?>
+                @endif
+            <?php $count++; ?>
             @endforeach
+            <tr style="background: grey;color: white;font-weight: 900">
+                <td> Grand Total</td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td>{{ $Grandtotal}}</td>
+                <td> </td>
+            </tr>
 
             </tbody>
         </table>
@@ -149,7 +218,7 @@
         width: 100%;
         border: 1px solid #ddd;
     }
-    tbody tr:nth-child(odd) {
+    /*tbody tr:nth-child(odd) {
         background-color: #efefef;
     }
     th, td {
@@ -159,7 +228,7 @@
 
     tr:nth-child(even) {
         background-color: #f2f2f2;
-    }
+    }*/
 </style>
 <script>
     $(document).ready(function (){
