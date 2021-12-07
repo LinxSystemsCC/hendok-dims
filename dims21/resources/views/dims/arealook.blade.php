@@ -27,7 +27,7 @@
 </head>
 <body style="font-family: Sans-serif">
 <h3>View Areas</h3>
-<div class="dx-field" >
+<div>
 
     <div class="dx-field-value">
         <div id="gridBox"></div>
@@ -58,7 +58,7 @@
             success: function (data) {
 
                 $('#gridBox').dxDropDownBox({
-                    value: [3],
+
                     valueExpr: 'iAreasID',
                     placeholder: 'Select a value...',
                     displayExpr: 'Route',
