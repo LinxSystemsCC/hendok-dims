@@ -185,6 +185,18 @@ class TabletLoadingApp extends controller
 
         return view('dims/planningusingflexgrid')->with('routes',$routes);
     }
+    public function arealook()
+    {
+
+        return view('dims/arealook');
+    }
+    public function arealookjson()
+    {
+        //viewGridAreas
+        $routes = DB::connection('sqlsrv3')
+            ->select("Select * from viewGridAreas order by  [Route]");
+        return response()->json($routes);
+    }
     public function getProductToSelect()
     {
         $categories = DB::connection('sqlsrv3')
