@@ -194,7 +194,7 @@ class TabletLoadingApp extends controller
     {
         //viewGridAreas
         $routes = DB::connection('sqlsrv3')
-            ->select("Select * from viewGridAreas order by  [Route] order by areaname");
+            ->select("Select * from viewGridAreas order by areaname");
         return response()->json($routes);
     }
     public function getProductToSelect()
