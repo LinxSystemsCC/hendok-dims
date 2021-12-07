@@ -43,8 +43,10 @@
                             </div>
 
                             <div class="form-group  col-md-1"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                                <label class="control-label" for="prodexclude"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Exclude Products</label>
-                                 <input id="prodexclude" class="form-control input-sm col-xs-1" value="-1" readonly>
+                                <br>
+                                <a href='{!!url("/arealook")!!}' onclick="window.open(this.href, 'arealook',
+'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;" >View Areas</a>
+                                 <input id="prodexclude" class="form-control input-sm col-xs-1" value="-1" readonly style="display: none;">
                             </div>
                             <div class="form-group col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                                 <label class="control-label" for="rouTabletLoadingtesonPlanning"  style="margin-bottom: 0px;font-weight: 700;font-size: 14px;">Route</label>

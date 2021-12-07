@@ -26,9 +26,9 @@
     </style>
 </head>
 <body style="font-family: Sans-serif">
-<h3>Flex Picking Plan</h3>
+<h3>View Areas</h3>
 <div class="dx-field" >
-    <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
+
     <div class="dx-field-value">
         <div id="gridBox"></div>
     </div>
