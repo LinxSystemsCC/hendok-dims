@@ -59,16 +59,16 @@
 
                 $('#gridBox').dxDropDownBox({
                     value: [3],
-                    valueExpr: 'ID',
+                    valueExpr: 'iAreasID',
                     placeholder: 'Select a value...',
-                    displayExpr: 'CompanyName',
+                    displayExpr: 'Route',
                     showClearButton: true,
                     dataSource: data,
                     contentTemplate(e) {
                         const v = e.component.option('value');
                         const $dataGrid = $('<div>').dxDataGrid({
                             dataSource: e.component.getDataSource(),
-                            columns: ['CompanyName', 'City', 'Phone'],
+                            columns: ['Route', 'areaname'],
                             hoverStateEnabled: true,
                             paging: {enabled: true, pageSize: 10},
                             filterRow: {visible: true},
