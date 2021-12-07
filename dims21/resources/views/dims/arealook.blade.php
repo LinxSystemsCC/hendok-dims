@@ -29,8 +29,8 @@
 <h3>View Areas</h3>
 <div>
 
-    <div class="dx-field-value">
-        <div id="gridBox"></div>
+    <div class="dx-field-value" style="width: 100%;">
+        <div style="width: 100%;" id="gridBox"></div>
     </div>
 </div>
 
@@ -73,7 +73,7 @@
                             paging: {enabled: true, pageSize: 10},
                             filterRow: {visible: true},
                             scrolling: {mode: 'virtual'},
-                            height: 345,
+                            height: 400,
                             selection: {mode: 'multiple'},
                             selectedRowKeys: v,
                             onSelectionChanged(selectedItems) {
