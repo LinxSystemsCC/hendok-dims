@@ -121,11 +121,11 @@
                 <th class="col-xs-2">Instruction</th>
                 <th class="col-xs-2">Line No</th>
                 <th class="col-xs-2">Description</th>
-                <th class="col-xs-2" >Qty</th>
+                <th class="col-xs-2" style="width: 100px;" >Quantity</th>
                 <th class="col-xs-2" >Weights</th>
 
-                <th class="col-xs-2" >Qty to Load</th>
-                <th class="col-xs-2" >Qty to Invoice</th>
+                <th class="col-xs-2" >To Load</th>
+                <th class="col-xs-2" >To Invoice</th>
 
 
             </tr>
@@ -163,7 +163,7 @@
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
-                    <td>{{ floatval($val->mnyQty)}}</td>
+                    <td style="font-size: 13px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
                     <td></td>
@@ -204,7 +204,7 @@
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
-                    <td>{{ floatval($val->mnyQty)}}</td>
+                    <td  style="font-size: 13px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
                     <td></td>
