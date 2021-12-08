@@ -116,7 +116,7 @@
             <tr style="    background: black;    color: white;" >
                 <th class="col-xs-2">Storename</th>
                 <th class="col-xs-1">Area</th>
-                <th class="col-xs-2">Order Date</th>
+                <th class="col-xs-2" style="width: 80px">Order Date</th>
                 <th class="col-xs-2">Sales Order No</th>
                 <th class="col-xs-2">Instruction</th>
                 <th class="col-xs-2">Line No</th>
@@ -140,7 +140,8 @@
                 <tr style="background: darkgray;color: white; font-weight: 900;">
                     <td></td>
                     <td> </td>
-                    <td>Next Customer</td>
+                    <td>NEXT</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
