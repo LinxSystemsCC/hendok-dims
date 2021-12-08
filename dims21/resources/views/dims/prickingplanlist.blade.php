@@ -163,7 +163,7 @@
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
-                    <td style="font-size: 13px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
+                    <td style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
                     <td></td>
@@ -204,7 +204,7 @@
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
-                    <td  style="font-size: 13px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
+                    <td  style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
                     <td></td>
