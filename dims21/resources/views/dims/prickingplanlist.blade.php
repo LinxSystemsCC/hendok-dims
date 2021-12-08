@@ -195,7 +195,7 @@
                             @endif
 
                         @if($orderNumber != $val->OrderNum)
-                    <td>{{$orderNumber}}</td>
+                    <td>{{$val->OrderNum}}</td>
                         @else
                             <td style="">
 
