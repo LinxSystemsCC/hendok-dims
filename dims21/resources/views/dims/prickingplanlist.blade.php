@@ -121,7 +121,7 @@
                 <th class="col-xs-2">Instruction</th>
                 <th class="col-xs-2">Line No</th>
                 <th class="col-xs-2">Description</th>
-                <th class="col-xs-2" style="width: 90px;" >Quantity</th>
+                <th class="col-xs-2" style="width: 80px;" >Quantity</th>
                 <th class="col-xs-2" >Weights</th>
 
                 <th class="col-xs-2" >To Load</th>
