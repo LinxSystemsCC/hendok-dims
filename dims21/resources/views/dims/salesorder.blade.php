@@ -9432,7 +9432,7 @@
                             }
                             else
                             {
-                                var dialog = $('<p><strong style="color:black">'+data.result+'</strong></p>').dialog({
+                                var dialog = $('<p><strong style="color:black">'+data.result+'<br><i style="color:red;font-weight:900">'+data.result+'<i></strong></p>').dialog({
                                     height: 200, width: 700, modal: true, containment: false,
                                     buttons: {
                                         "Okay": function () {
