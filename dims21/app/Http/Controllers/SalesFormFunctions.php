@@ -377,10 +377,12 @@ class SalesFormFunctions extends Controller
             // echo $orderlinesrxml;
             $outPut['result'] = $getResult[0]->Result;
             $outPut['Error'] = $getResult[0]->error;
+            $outPut['Extras'] = $getResult[0]->Extras;
             return $outPut;
         }else{
             $outPut['result'] = "Success";
             $outPut['Error'] = "Success";
+            $outPut['Extras'] = "";
             return $outPut;
         }
 
