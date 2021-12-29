@@ -76,7 +76,9 @@
                 <th>Order Date</th>
                 <th>Delivery Date</th>
                 <th>Order Number</th>
-                <th>Payment Type</th>
+                <th>Payment Term</th>
+                <th>BalanceDue</th>
+                <th>Credit Limit</th>
                 <th>Total(inc)</th>
                 <th>User Name</th>
                 <th>Notes</th>
@@ -284,7 +286,9 @@ OrderID selected <input type="text" id="account">
                         value.DeliveryDate + '</td>' +
                         '</td><td>' +
                         value.OrderNumber + '</td><td>' +
-                        value.strPaymentTerm + '</td><td>' +
+                        value.strPaymentTerm+'('+value.termsDescriptions + ' )</td><td>' +
+                        value.BalanceDue + '</td><td>' +
+                        value.CreditLimit + '</td><td>' +
                         value.inclusive + '</td><td>' +
                         value.UserName + '</td><td>' +
                         value.Notes + '</td><td>' +
