@@ -17,7 +17,7 @@ class WareHouseManagementController extends Controller
         $getProducts= DB::connection('barcoding')->select("Select * from viewBarcodeCollecter
 left outer join tblTempItemsAndBarcodes
 on tblTempItemsAndBarcodes.strPastelCode = viewBarcodeCollecter.Code
-where [GROUP 1] = '$cat' and len(strItemBarcode) > 4
+where [GROUP 1] = '$cat' and strItemBarcode is null
 ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
 
         return view('dims/barcodecollector')
