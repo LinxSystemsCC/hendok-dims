@@ -44,7 +44,7 @@
 
     @foreach($products as $val)
         <tr>
-            <td><a href={!!url("/recordbarcode")!!}/{{$val->Code}}>{{$val->Description_1}}</a> <br> {{$val->group3}}</td>
+            <td><a href={!!url("/recordbarcode")!!}/{{$val->Code}}>{{$val->Description_1}}</a> <br>{{$val->Code}}<br> {{$val->group3}}</td>
             <td>{{$val->strItemBarcode}}<br>{{$val->strLocationName}}<br>{{$val->dteExpiryDate}}</td>
 
         </tr>
@@ -59,7 +59,7 @@
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[1];
+            td = tr[i].getElementsByTagName("td")[0];
             if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
