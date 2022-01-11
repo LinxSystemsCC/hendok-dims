@@ -23,6 +23,15 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
         return view('dims/barcodecollector')
             ->with('products',$getProducts)->with('cat',$cat);
     }
+    public function getwarehouseinventorygrid()
+    {
+        return view('stockmover/warehouseinventorygrid');
+
+    }
+    public function jsonWarehouseGrid(){
+        $getProducts= DB::connection('barcoding')->select("Select * from viewWareHouseStockDataGrid order by productName");
+        return response()->json($getProducts);
+    }
     public function recordbarcode($productCode)
     {
         $getProducts= DB::connection('barcoding')->select("Select * from viewBarcodeCollecter  where Code='$productCode' ");
@@ -56,17 +65,13 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
         $shelffrom = $request->get("shelffrom");
         //dd($shelffrom);
         return view('stockmover/productfrom')->with('shelffrom',$shelffrom);
-
-
     }
 
     public function goscanshelfto(Request $request){
         $shelffrom = $request->get("shelffrom");
         $productfrom = $request->get("productfrom");
         $Qty = $request->get("Qty");
-
         return view('stockmover/shelfto')->with('shelffrom',$shelffrom)->with('productfrom',$productfrom)->with('Qty',$Qty);
-
 
     }
 

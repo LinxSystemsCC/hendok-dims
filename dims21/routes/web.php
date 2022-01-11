@@ -790,6 +790,8 @@ Route::get('recordbarcode/{code}', [WareHouseManagementController::class,'record
 Route::post('savebarcode', [WareHouseManagementController::class,'savebarcode']);
 
 Route::get('stockmover', [WareHouseManagementController::class,'stockmover']);
+Route::get('getwarehouseinventorygrid', [WareHouseManagementController::class,'getwarehouseinventorygrid']);
+Route::get('jsonWarehouseGrid', [WareHouseManagementController::class,'jsonWarehouseGrid']);
 Route::get('scanshelffrom', [WareHouseManagementController::class,'scanshelffrom']);
 Route::post('goscanproductfrom', [WareHouseManagementController::class,'goscanproductfrom']);
 Route::post('goscanshelfto', [WareHouseManagementController::class,'goscanshelfto']);
