@@ -89,7 +89,7 @@
 
                 },
                 {
-                    width: 80,
+                    width: 300,
                     dataField: "productName",
                     caption: "Product Name"
 
@@ -139,7 +139,7 @@
                 }
                 ,
                 {
-                    width:380,
+                    width:100,
                     dataField: "scannedLocation",
                     caption: "Scanned Location",
                     headerFilter: {
