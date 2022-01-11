@@ -9,6 +9,8 @@
 
         <a href='{!!url("/getCostsPerdate")!!}' onclick="window.open(this.href, 'getCostsPerdate',
 'left=20,top=20,width=1000,height=900,toolbar=1,resizable=0'); return false;" style="color:black;font-size: 15px;font-weight:900;background: #179a17; padding: 4px;">Products Cost History</a>
+        <a href='{!!url("/getwarehouseinventorygrid")!!}' onclick="window.open(this.href, 'getCostsPerdate',
+'left=20,top=20,width=1000,height=900,toolbar=1,resizable=0'); return false;" style="color:black;font-size: 15px;font-weight:900;background: #179a17; padding: 4px;">Warehouse Inventory</a>
 
         <button class="btn-success btn" id="printAll">Print ALL Barcodes</button>
     </div>
