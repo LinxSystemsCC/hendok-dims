@@ -97,7 +97,7 @@
     </div>
     <div>
 
-        <input type="text" id="orderids">
+        <input type="hidden" id="orderids">
 
     </div>
 </div>
