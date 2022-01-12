@@ -97,8 +97,7 @@
     </div>
     <div>
 
-        <input type="hidden" id="orderids">
-
+        <input type="text" id="orderids">
 
     </div>
 </div>
@@ -300,6 +299,7 @@ OrderID selected <input type="text" id="account">
                 $('#orderheaders').append(trHTML);
                 $(".checkid").change(function() {
 
+                    var $val = $(this).val();
                     //console.debug(hiddenUserName);
 
                     //$(this).siblings('input[type="checkbox"]').not(this).prop('checked', false);
@@ -309,8 +309,8 @@ OrderID selected <input type="text" id="account">
                     $('#ordernumber').val(orderNumber);
                     $('#username').val(hiddenUserName);
                     $('#notes').val(notes);*/
-                    $('#orderids').val($(".checkid").val());
-                    $('#account').val($(".checkid").val());
+                    $('#orderids').val($val);
+                    $('#account').val($val);
                     $( "#myGrid" ).empty();
                     $('#myGrid').show();
                     // specify the columns
