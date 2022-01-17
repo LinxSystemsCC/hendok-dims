@@ -598,6 +598,7 @@
                     $remoteorders = $v->getThings(Auth::user()->GroupId,'Remote Orders');
                      $briefcase = $v->getThings(Auth::user()->GroupId,'Briefcase');
                      $webstoremassage= $v->getThings(Auth::user()->GroupId,'Webstore Messages');
+                     $released= $v->getThings(Auth::user()->GroupId,'released');
                    // $console = $v->getThings(Auth::user()->GroupId,'Extras DIMS Management Console');
 
                     }
@@ -630,10 +631,13 @@
                                     <a href='{!!url("/pickingmain")!!}' onclick="window.open(this.href, 'bulkpicking',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Bulk Picking</a>
                                 </li>
+
+                                @if($released !="0")
                                 <li>
                                     <a href='{!!url("/getordertorelease")!!}' onclick="window.open(this.href, 'getordertorelease',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Order Release Screen</a>
                                 </li>
+                                @endif
 
                                 <li>
                                     <a href='{!!url("/customerflexgrid")!!}' onclick="window.open(this.href, 'customerflexgrid',
