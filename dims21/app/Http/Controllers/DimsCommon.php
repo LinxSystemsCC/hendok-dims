@@ -522,9 +522,20 @@ class DimsCommon extends Controller
     {
         $OrderId = $request->get('OrderId');
         $userID = Auth::user()->UserID;
-        $message =  DB::connection('sqlsrv3')
-            ->statement("EXEC spPrintInvoice  ".$OrderId.",".$userID);
-        return response()->json($OrderId);
+        $v  =  new \App\Http\Controllers\SalesForm();
+
+        $hasauthInvoicePrinting = $v->getThings(Auth::user()->GroupId,'Print Invoice');
+        if ($hasauthInvoicePrinting == "1"){
+           $return =  DB::connection('sqlsrv3')
+                ->statement("EXEC spPrintInvoice  ".$OrderId.",".$userID);
+
+            return response()->json($OrderId);
+        }else{
+            //will log
+            return response()->json($OrderId);
+        }
+
+
     }
 
     public function getDataFromManagementConsole(Request $request)
@@ -1961,14 +1972,14 @@ class DimsCommon extends Controller
         return response()->json($returncosts);
     }
     private static function getTabs($tabcount)
+{
+    $tabs = '';
+    for($i = 0; $i < $tabcount; $i++)
     {
-        $tabs = '';
-        for($i = 0; $i < $tabcount; $i++)
-        {
-            $tabs .= "\t";
-        }
-        return $tabs;
+        $tabs .= "\t";
     }
+    return $tabs;
+}
 
     private static function asxml($arr, $elements = Array(), $tabcount = 0)
     {
