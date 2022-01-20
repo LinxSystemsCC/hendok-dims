@@ -58,7 +58,9 @@
             Dispatched:item.Dispatched,//
             OrderId:item.OrderId,//
             Loaded:item.Loaded,
-            Reviewed:booleanfromitem
+            Reviewed:booleanfromitem,
+            InvoiceNo:item.InvoiceNo,
+            StoreName:item.StoreName
         }
 
     });
