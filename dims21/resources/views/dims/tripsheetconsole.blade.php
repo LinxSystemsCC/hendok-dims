@@ -85,7 +85,9 @@
                             $("#gridContainer").dxDataGrid({
                                 dataSource:Commands,
                                 showBorders: true,
-                                width:1500,
+                                paging: {
+                                    enabled: false
+                                },
                                 filterRow: { visible: true },scrolling: {
             columnRenderingMode: "virtual"
         },
