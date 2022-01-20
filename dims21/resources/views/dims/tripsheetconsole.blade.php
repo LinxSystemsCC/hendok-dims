@@ -43,7 +43,7 @@
 
 
 <script>
-    
+
     var jArray = JSON.stringify({!! json_encode($consolelogs) !!});
 
     var Commands = $.map(JSON.parse(jArray), function (item) {
@@ -63,22 +63,22 @@
 
     });
 
-  
+
 
         $( document ).on( 'focus', ':input', function(){
 
             $( this ).attr( 'autocomplete', 'off' );
         });
         var clickTimer, lastRowClickedId;
-        $(document).ready(function() {  
-           
-           
+        $(document).ready(function() {
+
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-            
+
 
                             $("#gridContainer").dxDataGrid({
                                 dataSource:Commands,
@@ -107,7 +107,13 @@
                                         dataField: "Command",
                                         caption: "Command"
 
-                                    },{allowEditing:false,
+                                    }
+                                    ,{allowEditing:false,
+                                        dataField: "StoreName",
+                                        caption: "Customer"
+
+                                    }
+                                    ,{allowEditing:false,
                                         dataField: "ProductDesc",
                                         caption: "Product Description"
 
@@ -123,7 +129,13 @@
                                         dataField: "Dispatched",
                                         caption: "Dispatched"
 
-                                    },{allowEditing:false,
+                                    },
+                                    {allowEditing:false,
+                                        dataField: "InvoiceNo",
+                                        caption: "Invoice No"
+
+                                    }
+                                    ,{allowEditing:false,
                                         dataField: "OrderId",
                                         caption: "Order ID"
 
@@ -135,11 +147,11 @@
                                         dataType:"boolean",
                                         dataField: "Reviewed",
                                         caption: "Reviewed",
-                                        
+
                                     },
 
                                 ] ,
-                                
+
                                 onRowUpdated: function(e) {
                                     $.ajax({
                                         url:'{!!url("/updateReviewedStatus")!!}',
@@ -153,7 +165,7 @@
                                         }
                                     });
                                 },
-                            
+
                                 onInitNewRow: function(e) {
                                     console.debug("InitNewRow");
                                 },
@@ -166,9 +178,9 @@
                                 onRowUpdating: function(e) {
                                     console.debug("RowUpdating");
                                 }
-                                
+
                         });
-                
+
             });
     </script>
 </div>
