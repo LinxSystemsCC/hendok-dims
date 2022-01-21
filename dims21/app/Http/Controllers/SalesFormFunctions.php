@@ -1656,8 +1656,8 @@ class SalesFormFunctions extends Controller
     }
     public function getordertorelease(Request $request)
     {
-        $orders = DB::connection('sqlsrv3')
-            ->select("EXEC spGetListOfOrdersToRelease");
+        /*$orders = DB::connection('sqlsrv3')
+            ->select("EXEC spGetListOfOrdersToRelease");*/
         return view('dims/releaseorders');
     }
     public function getorderheadertorelease(Request $request)
@@ -1670,6 +1670,23 @@ class SalesFormFunctions extends Controller
     {
         $orders = DB::connection('sqlsrv3')
             ->select("EXEC spGetListOfLinesToRelease '$orderid'");
+        return response()->json($orders);
+
+    }
+    public function getbelowgp()
+    {
+        return view('dims/belowgp');
+    }
+    public function getbelowgpheader(Request $request)
+    {
+        $orders = DB::connection('sqlsrv3')
+            ->select("EXEC spCustomerWrongGP");
+        return response()->json($orders);
+    }
+    public function getbelowgplines($orderid)
+    {
+        $orders = DB::connection('sqlsrv3')
+            ->select("EXEC spCustomerWrongGPLines '$orderid'");
         return response()->json($orders);
 
     }

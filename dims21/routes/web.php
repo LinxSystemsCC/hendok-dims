@@ -319,6 +319,9 @@ Route::post('productPriceLookUp', [SalesFormFunctions::class,'productPriceLookUp
 Route::post('associatedItem',[SalesFormFunctions::class,'associatedItem']);
 Route::post('changeDeliveryAddressOnNoInvoiceNo', [SalesFormFunctions::class,'changeDeliveryAddressOnNoInvoiceNo']);
 Route::get('getordertorelease', [SalesFormFunctions::class,'getordertorelease']);
+Route::get('getbelowgp', [SalesFormFunctions::class,'getbelowgp']);
+Route::get('getbelowgpheader', [SalesFormFunctions::class,'getbelowgpheader']);
+Route::get('getbelowgplines/{orderdeid}', [SalesFormFunctions::class,'getbelowgplines']);
 Route::get('getorderheadertorelease', [SalesFormFunctions::class,'getorderheadertorelease']);
 Route::get('getorderlineslist/{orderid}', [SalesFormFunctions::class,'getorderlineslist']);
 Route::post('postreleaseorder', [SalesFormFunctions::class,'postreleaseorder']);
