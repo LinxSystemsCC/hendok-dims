@@ -125,6 +125,10 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                                 caption: "Qty Ordered",
                                 headerFilter: {
                                     allowSearch: true,
+                                },
+                                format: {
+                                    type: "fixedPoint",
+                                    precision: 3
                                 }
 
                             },
@@ -134,6 +138,10 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                                 caption: "Qty Dispatched",
                                 headerFilter: {
                                     allowSearch: true,
+                                },
+                                format: {
+                                    type: "fixedPoint",
+                                    precision: 3
                                 }
 
                             },
