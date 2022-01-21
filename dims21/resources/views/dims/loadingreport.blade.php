@@ -146,7 +146,7 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
 
                             },
                             {
-                                width:89,
+                                width:100,
                                 dataField: "UserName",
                                 caption: "UserName",
                                 headerFilter: {
@@ -156,7 +156,7 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                             },
 
                             {
-                                width: 150,
+                                width: 200,
                                 dataField: "Route",
                                 caption: "Route",
                                 headerFilter: {
