@@ -107,6 +107,9 @@ if ((Auth::guest()))
         <a style="text-decoration: underline" href='{!!url("/getNoStockItem")!!}'  onclick="window.open(this.href, 'nostocks',
 'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">No Stock Item</a><br>
         @endif
+        <a style="text-decoration: underline" href='{!!url("/getShortLoadedReport")!!}'  onclick="window.open(this.href, 'getShortLoadedReport',
+'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Short Loaded</a><br>
+
         @if ($routeandLoading != "0")
         <a style="text-decoration: underline" href='{!!url("/viewStatusReport")!!}'  onclick="window.open(this.href, 'consolidatedreport',
 'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;" style="text-decoration: underline">Route and Loading status</a>
