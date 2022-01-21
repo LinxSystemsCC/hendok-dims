@@ -765,7 +765,7 @@ class TabletLoadingApp extends controller
         $livebulk = DB::connection('sqlsrv3')
             ->select("EXEC spLogisticsPlan '" . $Date . "'");
 
-        $livePalnned = DB::connection('sqlsrv3')
+        $livePalnned = DB::connection('retsol')
             ->select("EXEC spLogisticsPlannedRoutes '" . $Date . "'");
 
         //dd($livebulk);
@@ -787,7 +787,7 @@ class TabletLoadingApp extends controller
 
         $trucks =  DB::connection('sqlsrv3')
             ->select("select * from tblTrucks (nolock) order by RegNo");
-        $routinginfo =  DB::connection('sqlsrv3')
+        $routinginfo =  DB::connection('retsol')
             ->select("select cast(DeliveryDate as date ) as DeliveryDate,r.Route,ot.OrderType,strdrivername,mnykmdone,mnykmoutt,strSealNumber
 ,dtm,ass.DriverName AssitName,driv.DriverName,driv.DriverId,ass.DriverId as assId,tblTrucks.TruckId,TruckName,RegNo
  from tblDeliveryDateRouting (nolock) tdd
@@ -854,10 +854,33 @@ and  cast(dteDeliveryDate as date) = cast(tdd.DeliveryDate as date)
     }
     public function driverreq_perrouteJson($routingid)
     {
-        $gridcustomerjsonspecials =  DB::connection('sqlsrv3')
+        $gridcustomerjsonspecials =  DB::connection('retsol')
             ->select("EXEC spDriversAppRequisitionPerRoute ".$routingid);
         return response()->json($gridcustomerjsonspecials);
 
+    }
+    public function ordermapvisualisation($route,$ordertype,$deldate){
+        $getTypes=  DB::connection('sqlsrv3')
+            ->select("select OrderTypeId,OrderType,1 p from tblOrdertypes (nolock) where OrderType = '$ordertype'  union all select OrderTypeId,OrderType,2 p from tblOrdertypes (nolock)");
+
+        $getroutes=  DB::connection('sqlsrv3')
+            ->select("select RouteId,Route, 1 p from tblRoutes (nolock)  where Route = '$route' union all select RouteId,Route, 2 p from tblRoutes (nolock)");
+
+        return view('dims/deliveredordervisualization')
+            ->with('ot', $ordertype)
+            ->with('getTypes', $getTypes)
+            ->with('getRoutes', $getroutes)
+            ->with('defauldate',$deldate)
+            ->with('route', $route);
+    }
+    public function ordervisualjson(Request $request)
+    {
+        $route =$request->get('rid');
+        $ordertype =$request->get('oid');
+        $deldate =$request->get('delivdate');
+        $driversondutyStops=  DB::connection('retsol')
+            ->select("EXEC spDriversAppCoordinatedStopsByInvoice '".$deldate."','".$route."','".$ordertype."'");
+        return response()->json($driversondutyStops);
     }
    public function getDrivers()
    {
@@ -923,6 +946,16 @@ and  cast(dteDeliveryDate as date) = cast(tdd.DeliveryDate as date)
             ->select("Select [OrderTypeId] as orderTypeIdT From tblOrderTypes Where OrderType = '$orderTypeName' ");
 
         return $getComponents[0]->orderTypeIdT;
+    }
+    public function getShortLoadedReport(){
+        return view('dims/loadingreport');
+    }
+    public function jsonshortloadedreport(Request $request){
+        $datefrom = $request->get('datefrom');
+        $dateto = $request->get('dateto');//started at Hoxies
+        $shorloadedJasper=  DB::connection('sqlsrv3')
+            ->select("EXEC spCustomerLoadingReportPerUser '".$datefrom."','".$dateto."'");
+        return response()->json($shorloadedJasper);
     }
     function resultOnForcePrint()
     {
