@@ -22,6 +22,7 @@ use App\Http\Controllers\ExternalFunctions;
 use App\Http\Controllers\JasperReports;
 use App\Http\Controllers\TestControllerReg;
 use App\Http\Controllers\WareHouseManagementController;
+use App\Http\Controllers\SalesManBriefcase;
 use Illuminate\Support\Facades\Route;
 
 
@@ -391,6 +392,8 @@ Route::post('combineroutes',[TabletLoadingApp::class,'combineroutes']);
 Route::get('creditNoteReasonsJSonWithBook',[TabletLoadingApp::class,'creditNoteReasonsJSonWithBook']);
 Route::get('ordermapvisualisation/{route}/{otype}/{deldate}',[TabletLoadingApp::class,'ordermapvisualisation']);
 Route::post('ordervisualjson',[TabletLoadingApp::class,'ordervisualjson']);
+Route::get('getShortLoadedReport',[TabletLoadingApp::class,'getShortLoadedReport']);
+Route::get('jsonshortloadedreport',[TabletLoadingApp::class,'jsonshortloadedreport']);
 
 //TABLET LOADING APP ENDS HERE !!!
 
@@ -841,6 +844,23 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('verifyemail', [LayaltyProgramController::class,'verifyemail']);
     Route::get('checkifIdexists',[LayaltyProgramController::class,'checkifIdexists'] );
     Route::get('routeplanner',[TabletLoadingApp::class,'routeplanner']);
+
+
+
+});
+
+
+/***********************SalesManBriefcase**********************************************************************/
+Route::group(['middleware' => 'auth'], function() {
+
+    Route::get('landingBriefcase', [SalesManBriefcase::class,'landingBriefcase']);
+    Route::get('visits', [SalesManBriefcase::class,'visits']);
+    Route::get('jsonVisistsBriefcase', [SalesManBriefcase::class,'jsonVisistsBriefcase']);
+    Route::get('visualvisits', [SalesManBriefcase::class,'visualvisits']);
+    Route::get('getmarkerinfobriefcase', [SalesManBriefcase::class,'getmarkerinfobriefcase']);
+    Route::get('customercomments', [SalesManBriefcase::class,'customercomments']);
+    Route::get('jsonCustomerComments', [SalesManBriefcase::class,'jsonCustomerComments']);
+
 
 
 
