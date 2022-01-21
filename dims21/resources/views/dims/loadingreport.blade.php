@@ -61,7 +61,6 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                     dateto: $('#to').val()
                 },
                 success: function (data) {
-
                     //localStorage.routeplanner = JSON.stringify({name: "John",routeId: $('#rouTabletLoadingtesonPlanning').val(),deliveryDate: $('#deliveryDatesonPlanning').val()});
 
                     $("#gridContainer").dxDataGrid({
@@ -70,7 +69,6 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                         selection: {
                             mode: 'multiple',
                         },
-
                         filterRow: { visible: true },
                         filterPanel: { visible: true },
                         headerFilter: { visible: true },
@@ -124,7 +122,6 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                             {
                                 width:75,
                                 dataField: "Qty",
-                                groupIndex: 0,
                                 caption: "Qty Dispatched",
                                 headerFilter: {
                                     allowSearch: true,
