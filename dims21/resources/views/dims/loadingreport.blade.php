@@ -120,7 +120,16 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
 
                             },
                             {
-                                width:75,
+                                width:85,
+                                dataField: "QtyOrdered",
+                                caption: "Qty Ordered",
+                                headerFilter: {
+                                    allowSearch: true,
+                                }
+
+                            },
+                            {
+                                width:85,
                                 dataField: "Qty",
                                 caption: "Qty Dispatched",
                                 headerFilter: {
