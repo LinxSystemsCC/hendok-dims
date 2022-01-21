@@ -267,7 +267,7 @@ OrderID selected <input type="text" id="account">
                     trHTML += '<tr role="row" class="fast_removeOrders '+classes+'"  style="font-size: 13px;color:black"><td>' +
                         value.CustomerPastelCode + '</td><td>' +
                         value.StoreName + '</td><td>' +
-                        value.DeliveryDate + '</td>' +
+                        value.DeliveryDate + '</td><td>' +
                         value.UserName + '</td><td>' +
                         value.OrderId + '</td>' +
                         '<td><input type="checkbox" class="checkid" value="' +value.OrderId +'" id="ID">' +
