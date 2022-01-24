@@ -6769,9 +6769,9 @@
                     }
 
                     ///var margin = marginCalculator(cost, price);
-                    if ((productmargin > margin) && isAuthPrice != 'LTRUE' && authString === 'PRICECHANGED' )
+                    if ((productmargin > margin) && isAuthPrice !== 'LTRUE' && authString === 'PRICECHANGED' )
                     {
-                        console.debug("price length=++++++++++================================================="+$.trim(prodCell).length);
+                        console.debug("Morning vibe================================================="+$.trim(prodCell).length);
                         if($.trim(prodCell).length > 0)
                         {
 
