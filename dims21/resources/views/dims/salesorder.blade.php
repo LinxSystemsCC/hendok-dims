@@ -6716,6 +6716,7 @@
                                     console.debug('margin vs CompanyMargin '+ margin+' vs '+CompanyMargin+'prodCell '+prodCell+' $cost '+$cost+'auth string **********'+authString.length);
                                     if( margin < CompanyMargin && prodCell != $cost && isAuthPrice != "LFALSE") {
                                         console.debug("I need auth+++++++++++++++++++++++++++++++"+$('#' + $cellProdCodeID).val());
+                                        console.debug("I need auth isAuthPrice+++++++++++++++++++++++++++++++"+isAuthPrice);
                                         authPopup("Price", $('#' + $cellsId).val(), theProductCode_, $('#' + $cellProdCodeID).val(), 'Changed Price ' + $cellProdCode.val() + '(' + $cellProdDescription.val() + ')', $isAuthAtrr, $hiddenToken,$.trim(theOrdersDetailsId));
                                     }
                                 }
