@@ -79,10 +79,11 @@ $('#submit').click(function(){
         url: '{!!url("/stocksheetforstocktakexml")!!}',
         type: "POST",
         data: {
-            lines: checkedLines
+            lines: checkedLines,stocktake: $('#stocksheetname').val()
         },
         success: function (data) {
           //  location.reload();
+            location.reload();
         }
     });
 });
