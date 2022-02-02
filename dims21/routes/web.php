@@ -794,6 +794,9 @@ Route::get('productscats', [WareHouseManagementController::class,'productscats']
 Route::get('getProductsnames/{cat}', [WareHouseManagementController::class,'getProductsnames']);
 Route::get('recordbarcode/{code}', [WareHouseManagementController::class,'recordbarcode']);
 Route::post('savebarcode', [WareHouseManagementController::class,'savebarcode']);
+Route::get('stocksheetforstocktake', [WareHouseManagementController::class,'stocksheetforstocktake']);
+Route::get('stocksheetforstocktakejson', [WareHouseManagementController::class,'stocksheetforstocktakejson']);
+Route::get('stocksheetforstocktakexml', [WareHouseManagementController::class,'stocksheetforstocktakexml']);
 
 Route::get('stockmover', [WareHouseManagementController::class,'stockmover']);
 Route::get('getwarehouseinventorygrid', [WareHouseManagementController::class,'getwarehouseinventorygrid']);
@@ -863,6 +866,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getmarkerinfobriefcase', [SalesManBriefcase::class,'getmarkerinfobriefcase']);
     Route::get('customercomments', [SalesManBriefcase::class,'customercomments']);
     Route::get('jsonCustomerComments', [SalesManBriefcase::class,'jsonCustomerComments']);
+    Route::get('createrandomquestions', [SalesManBriefcase::class,'createrandomquestions']);
 
 
 
