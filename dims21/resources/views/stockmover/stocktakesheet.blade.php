@@ -64,15 +64,15 @@ $('#submit').click(function(){
  //   let selectedKeys = allGridItems.option("selectedItemKeys");
    console.log( allGridItems);
 //    allGridItems.forEach((element, index, array) => {
-        $.each(allGridItems.items, function(key, value) {
-          //PastelCode,PastelDescription,PickingTeam,UnitSize,'Master' as LocationName,1 LocationId,ProductId
+    allGridItems.forEach((element, index, array) => {
 
-                checkedLines.push({
-                    'PastelCode': value.PastelCode,
-                    'PickingTeam': value.PickingTeam
-                });
-
+        console.log( element.PastelCode);
+        checkedLines.push({
+            'PastelCode': element.PastelCode,
+            'PickingTeam': element.PickingTeam
         });
+    });
+
     //});
 
     $.ajax({
