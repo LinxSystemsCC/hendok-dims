@@ -56,7 +56,7 @@ Stock Take Name<input type="text" id="stocksheetname" ><br>
             }
         });
 $('#submit').click(function(){
-    var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource");
+    var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").items();
  //   var dataGrid = $("#dataGridContainer").dxDataGrid("instance");
    // calculateStatistics();
    // var selectedRowsData = allGridItems.getSelectedRowsData();
