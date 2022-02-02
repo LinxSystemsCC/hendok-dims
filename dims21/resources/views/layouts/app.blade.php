@@ -648,6 +648,10 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Products</a>
                                 </li>
                                 <li>
+                                    <a href='{!!url("/stocksheetforstocktake")!!}' onclick="window.open(this.href, 'stocksheetforstocktake',
+'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Stock Take Sheet</a>
+                                </li>
+                                <li>
                                     <a href='{!!url("/viewproductbydate")!!}' onclick="window.open(this.href, 'viewproductbydate',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Products By Date</a>
                                 </li>
