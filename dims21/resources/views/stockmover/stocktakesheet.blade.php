@@ -172,6 +172,24 @@ $('#submit').click(function(){
 
                             },
                             {
+                                width:150,
+                                dataField: "filtersecond",
+                                caption: "Second Filter",
+                                headerFilter: {
+                                    allowSearch: true,
+                                }
+
+                            },
+                            {
+                                width:150,
+                                dataField: "filterthird",
+                                caption: "Third Filter",
+                                headerFilter: {
+                                    allowSearch: true,
+                                }
+
+                            },
+                            {
                                 width:90,
                                 dataField: "LocationId",
                                 caption: "LocationId",

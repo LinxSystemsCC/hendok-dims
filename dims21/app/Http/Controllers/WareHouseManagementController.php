@@ -124,8 +124,18 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
         return response()->json($getRouteProducts);
     }
     public function stocksheetforstocktakexml(Request $request){
+
         $orderlines = $request->get('lines');
+        //dd($orderlines);
         $orderlinesrxml = $this->toxml($orderlines, "xml", array("result"));
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $stocktake = $request->get('stocktake');
+
+        $getResult = DB::connection('sqlsrv4')
+            ->select("EXEC spXMLMakeStockTake '" . $orderlinesrxml . "'," . $userid . ",'" . $userName . "','" . $stocktake . "'");
+
+        return response()->json($getResult);
     }
 
     private static function getTabs($tabcount)
