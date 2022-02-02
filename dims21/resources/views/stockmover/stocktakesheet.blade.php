@@ -63,8 +63,8 @@ $('#submit').click(function(){
     var checkedLines = new Array();
  //   let selectedKeys = allGridItems.option("selectedItemKeys");
    console.log( allGridItems);
-    allGridItems.forEach((element, index, array) => {
-        $.each(element.items, function(key, value) {
+//    allGridItems.forEach((element, index, array) => {
+        $.each(allGridItems.items, function(key, value) {
           //PastelCode,PastelDescription,PickingTeam,UnitSize,'Master' as LocationName,1 LocationId,ProductId
 
                 checkedLines.push({
@@ -73,7 +73,7 @@ $('#submit').click(function(){
                 });
 
         });
-    });
+    //});
 
     $.ajax({
         url: '{!!url("/stocksheetforstocktakexml")!!}',
