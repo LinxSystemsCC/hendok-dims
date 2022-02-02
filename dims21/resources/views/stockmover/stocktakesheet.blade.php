@@ -174,6 +174,15 @@ $('#submit').click(function(){
                             },
                             {
                                 width:150,
+                                dataField: "strCategory",
+                                caption: "Main Categories",
+                                headerFilter: {
+                                    allowSearch: true,
+                                }
+
+                            },
+                            {
+                                width:150,
                                 dataField: "filtersecond",
                                 caption: "Second Filter",
                                 headerFilter: {
