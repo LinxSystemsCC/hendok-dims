@@ -796,7 +796,7 @@ Route::get('recordbarcode/{code}', [WareHouseManagementController::class,'record
 Route::post('savebarcode', [WareHouseManagementController::class,'savebarcode']);
 Route::get('stocksheetforstocktake', [WareHouseManagementController::class,'stocksheetforstocktake']);
 Route::get('stocksheetforstocktakejson', [WareHouseManagementController::class,'stocksheetforstocktakejson']);
-Route::get('stocksheetforstocktakexml', [WareHouseManagementController::class,'stocksheetforstocktakexml']);
+Route::post('stocksheetforstocktakexml', [WareHouseManagementController::class,'stocksheetforstocktakexml']);
 
 Route::get('stockmover', [WareHouseManagementController::class,'stockmover']);
 Route::get('getwarehouseinventorygrid', [WareHouseManagementController::class,'getwarehouseinventorygrid']);
