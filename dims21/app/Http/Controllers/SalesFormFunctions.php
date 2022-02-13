@@ -403,27 +403,34 @@ class SalesFormFunctions extends Controller
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
         ///var_dump($orderlines);
-        ///
-        if (is_array($orderlines)) {
+         $v  =  new \App\Http\Controllers\SalesForm();
+        $hasauthcosts = $v->getThings(Auth::user()->GroupId,'Auth Zero Cost Grid');
+        if($hasauthcosts =="1"){
+            if (is_array($orderlines)) {
 
-            $orderlinesrxml = $this->toxml($orderlines, "xml", array("result"));
-            $getResult = DB::connection('sqlsrv4')
-                ->select("EXEC spXmlProductHavingZeroCost " . $OrderId . ",'" . $orderlinesrxml . "'");
+                $orderlinesrxml = $this->toxml($orderlines, "xml", array("result"));
+                $getResult = DB::connection('sqlsrv4')
+                    ->select("EXEC spXmlProductHavingZeroCost " . $OrderId . ",'" . $orderlinesrxml . "'");
 
-            if(count($getResult) > 0)
-            {
-                $outPut['result'] = "SUCCESS";
-                $outPut['data'] = $getResult;
+                if(count($getResult) > 0)
+                {
+                    $outPut['result'] = "SUCCESS";
+                    $outPut['data'] = $getResult;
+                }else{
+                    $outPut['result'] = "Nothing";
+                }
+
+                return $outPut;
             }else{
                 $outPut['result'] = "Nothing";
-            }
 
-            return $outPut;
+                return $outPut;
+            }
         }else{
             $outPut['result'] = "Nothing";
-
             return $outPut;
         }
+
 
     }
     public function insertHeaderForOtherTrans(Request $request)
@@ -1229,6 +1236,25 @@ class SalesFormFunctions extends Controller
             ->select("EXEC spGetDeliveryAddressWithRouteAndUsers '".$CustCode."',".$DeliveryAddressIId);
         return response()->json($getAddress);
     }
+    public function splitorders(Request $request)
+    {
+        $orderid= $request->get('orderID');
+        $returndata = DB::connection('sqlsrv3')
+            ->select("EXEC spGetProductForBackOrder ".$orderid);
+        return response()->json($returndata);
+    }
+    public function splitordersmake(Request $request)
+    {
+        $backorder = $request->get('backorder');
+        $orderid= $request->get('orderID');
+        $userid  = Auth::user()->UserID;
+        $username  = Auth::user()->UserName;
+
+        $backorderxml = $this->toxml($backorder, "xml", array("result"));
+        $returndata = DB::connection('sqlsrv3')
+            ->select("EXEC spXMLSplitOrder '".$backorderxml."','".$username."',".$userid.",".$orderid);
+        return response()->json($returndata);
+    }
     public function postOrderDetailsAsJsonArray(Request $request)
     {
 
@@ -1691,6 +1717,16 @@ class SalesFormFunctions extends Controller
 
     }
     public function postreleaseorder(Request $request)
+    {
+        $orderid  =  $request->get("orderids");
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $updateErrors = DB::connection('sqlsrv3')
+            ->select("EXEC spReleaseOrder ".$orderid.",'".$userName."',".$userid);
+        return response()->json($updateErrors);
+        // return view('dims/releaseorders');
+    }
+    public function postordergpproblem(Request $request)
     {
         $orderid  =  $request->get("orderids");
         $userid = Auth::user()->UserID;

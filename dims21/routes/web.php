@@ -296,6 +296,8 @@ Route::post('DeleteOrderDetailsOrtherTrans',[SalesFormFunctions::class,'DeleteOr
 Route::post('updateAuthHeader', [SalesFormFunctions::class,'updateAuthHeader']);
 Route::post('selectAddressFromMultiAddressDeliveruyAddressId', [SalesFormFunctions::class,'selectAddressFromMultiAddressDeliveruyAddressId']);
 Route::post('updateOrderHeader', [SalesFormFunctions::class,'UpdateOrderHearder']);
+Route::post('splitorders', [SalesFormFunctions::class,'splitorders']);
+Route::post('splitordersmake', [SalesFormFunctions::class,'splitordersmake']);
 Route::post('deleteByHiddenToken', [SalesFormFunctions::class,'deleteByHiddenToken']);
 Route::post('updateOrderHeaderForOtherTransactions', [SalesFormFunctions::class,'updateOrderHeaderForOtherTransactions']);
 Route::post('tempDeliverAddress', [SalesFormFunctions::class,'tempDeliverAddress']);
@@ -867,6 +869,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('customercomments', [SalesManBriefcase::class,'customercomments']);
     Route::get('jsonCustomerComments', [SalesManBriefcase::class,'jsonCustomerComments']);
     Route::get('createrandomquestions', [SalesManBriefcase::class,'createrandomquestions']);
+    Route::get('saveQuestions', [SalesManBriefcase::class,'saveQuestions']);
 
 
 

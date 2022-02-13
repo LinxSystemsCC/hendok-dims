@@ -1530,6 +1530,35 @@
 
         </div>
 
+        <div title="Item having less stock" id="itemoutofstock">
+            <h2>These lines exceeds the available qty.</h2>
+            <form>
+
+                <div class="form-group  col-md-12" >
+                    <table class="table2 table-bordered  dataTable">
+                        <thead>
+                        <tr>
+                            <td>Item Code</td>
+                            <td>Item Name</td>
+                            <td>Ordered</td>
+                            <td>Available</td>
+                            <td>On Hand</td>
+                            <td>Back</td>
+                            <td>Select</td>
+                        </tr>
+                        </thead>
+                        <tbody id="griditemoutofstock">
+
+                        </tbody>
+                    </table>
+
+                    <button type="button" id="cancelsplitorder" class="btn-danger btn-xs pull-left" style="margin-top: 29px;margin-right: 15px;">Cancel</button>
+                    <button type="button" id="splitorder" class="btn-danger btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">SPILT </button>
+
+                </div>
+            </form>
+
+        </div>
 
 
 
@@ -1579,6 +1608,8 @@
             var isAllowedToChangeInv = "<?php  echo Auth::user()->authInvoices; ?>";
             var isAuthMyLine = "<?php  echo env('APP_AUTHLINE'); ?>";
             var isAuthPrice = "<?php  echo env('APP_AUTH_PRICE'); ?>";
+            var hassplitorder = "<?php  echo env('SPLITORDER'); ?>";
+            var authzerocost = "<?php  echo env('AUTHZEROCOST'); ?>";
             var isBlockRouteChanges = "<?php  echo env('APP_ROUTECHANGES'); ?>";
             var searchstring = "<?php  echo env('STRING_LENGTH'); ?>";
             var isBlockDeliveryTypeChanges = "<?php  echo env('APP_DELIVERYTYPE'); ?>";
@@ -1917,6 +1948,7 @@
                 $('#authonholdaccount').hide();
                 $('#addcostdialog').hide();
                 $('#authItemsWithzerocosts').hide();
+                $('#itemoutofstock').hide();
 
 
                 if(isBlockDeliveryTypeChanges.length > 4) {
@@ -4971,7 +5003,6 @@
                     success: function (data) {
                         if(data.result != "Nothing")
                         {
-
                             authorZeroCostOnSaving(data.data);
                         }else
                         {
@@ -9445,9 +9476,12 @@ console.debug(data);
                                 });
                             }
 
+                            console.debug("YES OR NO BEFORE*************"+type);
                             if (type == "NO" || type == "YES" )
                             {
+
                                 console.debug(data.result);
+                                console.debug("YES OR NO");
                                 console.debug(data.Error);
                                 if (data.Error !="ALREADY INVOICED"){
 
@@ -9466,8 +9500,15 @@ console.debug(data);
                                     }
                                     else
                                     {
+                                        console.debug("hassplitorder****************"+hassplitorder);
+                                        if(hassplitorder =="LTRUE"){
+                                            splitorder();
+                                        }else{
+                                            disableOnFinish();
+                                        }
 
-                                        disableOnFinish();
+
+
                                     }
                                 }else
                                 {
@@ -9483,7 +9524,7 @@ console.debug(data);
                                 }
                             }
 
-
+                            console.debug("YES OR NO AFTER*************");
                             if (type == "PDF")
                             {
                                 console.debug(data.result);
@@ -9530,7 +9571,12 @@ console.debug(data);
 
                                         },
                                         success: function (data) {
-                                            disableOnFinish();
+                                            if(hassplitorder =="LTRUE"){
+                                                splitorder();
+                                            }else{
+                                                disableOnFinish();
+                                            }
+
 
                                         }
                                     });
@@ -9741,6 +9787,87 @@ console.debug(data);
                         }
                     });
 
+                });
+
+            }
+            function splitorder()
+            {
+                $.ajax({
+                    url: '{!!url("/splitorders")!!}',
+                    type: "POST",
+                    data: {
+                        orderID: $('#orderId').val()
+                    },
+                    success: function (data) {
+                        var trHTML = '';
+
+                        $('#griditemoutofstock').empty();
+                        $('#itemoutofstock').show(); //table
+                        $( "#itemoutofstock" ).dialog({height: 800, modal: true, closeOnEscape: false,
+                            width: 800,containment: false}).dialogExtend({
+                            "closable" : false, // enable/disable close button
+                            "maximizable" : false, // enable/disable maximize button
+                            "minimizable" : true, // enable/disable minimize button
+                            "collapsable" : true, // enable/disable collapse button
+                            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                            "titlebar" : false, // false, 'none', 'transparent'
+                            "minimizeLocation" : "right", // sets alignment of minimized dialogues
+                            "icons" : { // jQuery UI icon class
+                                "close" : "ui-icon-circle-close",
+                                "maximize" : "ui-icon-circle-plus",
+                                "minimize" : "ui-icon-circle-minus",
+                                "collapse" : "ui-icon-triangle-1-s",
+                                "restore" : "ui-icon-bullet"
+                            },
+                            "load" : function(evt, dlg){ }, // event
+                            "beforeCollapse" : function(evt, dlg){ }, // event
+                            "beforeMaximize" : function(evt, dlg){ }, // event
+                            "beforeMinimize" : function(evt, dlg){ }, // event
+                            "beforeRestore" : function(evt, dlg){ }, // event
+                            "collapse" : function(evt, dlg){  }, // event
+                            "maximize" : function(evt, dlg){ }, // event
+                            "minimize" : function(evt, dlg){  }, // event
+                            "restore" : function(evt, dlg){  } // event
+                        });
+                        $.each(data, function (key, value) {
+                            trHTML += '<tr style="font-size: 13px;color: black;background: lightgrey;font-family: Roboto;font-weight: normal" >' +
+                                '<td style="">' + value.strPastelCustomerCode + '</td>' +
+                                '<td style="">' + value.strPastelDescription + '</td>' +
+                                '<td style="">' + value.dblQtyOrdered + '</td>' +
+                                '<td style="">' + value.dblQtyAvailable + '</td>' +
+                                '<td style="">' + value.dblQtyOnHand + '</td>' +
+                                '<td style=""><input type="number" class="quantitynew" min="0" max="' + value.dblQty + '"  value="' + value.dblQty + '"</td>' +
+                                '<td style=""><input type="checkbox" style="width:80px; height: 18px !important;" name="OrderDetailId" value="' + value.OrderDetailId + '"> </td>' +
+                                '</tr>';
+
+                        });
+                        $('#griditemoutofstock').append(trHTML);
+
+                        $('#splitorder').click(function(){
+                            var favorite = [];
+                            $.each($("input[name='OrderDetailId']:checked"), function(){
+                                var orderdedatilId = $(this).val();
+                                favorite.push({
+                                    'qty': $(this).closest('tr').find('.quantitynew').val(),
+                                    'orderdedatilId': orderdedatilId,
+                                });
+
+                            });
+                            $.ajax({
+                                url: '{!!url("/splitordersmake")!!}',
+                                type: "POST",
+                                data: {
+                                    backorder:favorite,
+                                    orderID: $('#orderId').val()
+                                },
+                                success: function (data) {
+                                    disableOnFinish();
+                                }
+                            });
+
+                        });
+
+                    }
                 });
 
             }
