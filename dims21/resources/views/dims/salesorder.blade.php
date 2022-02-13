@@ -9867,6 +9867,11 @@ console.debug(data);
 
                         });
 
+                        $('#cancelsplitorder').click(function(){
+                            $("#itemoutofstock").dialog('close');
+                            disableOnFinish();
+                        });
+
                     }
                 });
 
