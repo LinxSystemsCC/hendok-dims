@@ -9799,78 +9799,93 @@ console.debug(data);
                         orderID: $('#orderId').val()
                     },
                     success: function (data) {
-                        var trHTML = '';
 
-                        $('#griditemoutofstock').empty();
-                        $('#itemoutofstock').show(); //table
-                        $( "#itemoutofstock" ).dialog({height: 800, modal: true, closeOnEscape: false,
-                            width: 800,containment: false}).dialogExtend({
-                            "closable" : false, // enable/disable close button
-                            "maximizable" : false, // enable/disable maximize button
-                            "minimizable" : true, // enable/disable minimize button
-                            "collapsable" : true, // enable/disable collapse button
-                            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-                            "titlebar" : false, // false, 'none', 'transparent'
-                            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-                            "icons" : { // jQuery UI icon class
-                                "close" : "ui-icon-circle-close",
-                                "maximize" : "ui-icon-circle-plus",
-                                "minimize" : "ui-icon-circle-minus",
-                                "collapse" : "ui-icon-triangle-1-s",
-                                "restore" : "ui-icon-bullet"
-                            },
-                            "load" : function(evt, dlg){ }, // event
-                            "beforeCollapse" : function(evt, dlg){ }, // event
-                            "beforeMaximize" : function(evt, dlg){ }, // event
-                            "beforeMinimize" : function(evt, dlg){ }, // event
-                            "beforeRestore" : function(evt, dlg){ }, // event
-                            "collapse" : function(evt, dlg){  }, // event
-                            "maximize" : function(evt, dlg){ }, // event
-                            "minimize" : function(evt, dlg){  }, // event
-                            "restore" : function(evt, dlg){  } // event
-                        });
-                        $.each(data, function (key, value) {
-                            trHTML += '<tr style="font-size: 13px;color: black;background: lightgrey;font-family: Roboto;font-weight: normal" >' +
-                                '<td style="">' + value.strPastelCustomerCode + '</td>' +
-                                '<td style="">' + value.strPastelDescription + '</td>' +
-                                '<td style="">' + value.dblQtyOrdered + '</td>' +
-                                '<td style="">' + value.dblQtyAvailable + '</td>' +
-                                '<td style="">' + value.dblQtyOnHand + '</td>' +
-                                '<td style=""><input type="number" class="quantitynew" min="0" max="' + value.dblQty + '"  value="' + value.dblQty + '"</td>' +
-                                '<td style=""><input type="checkbox" style="width:80px; height: 18px !important;" name="OrderDetailId" value="' + value.OrderDetailId + '"> </td>' +
-                                '</tr>';
+                        if(data.length > 0) {
+                            var trHTML = '';
+                            $('#griditemoutofstock').empty();
+                            $('#itemoutofstock').show(); //table
+                            $("#itemoutofstock").dialog({
+                                height: 800, modal: true, closeOnEscape: false,
+                                width: 800, containment: false
+                            }).dialogExtend({
+                                "closable": false, // enable/disable close button
+                                "maximizable": false, // enable/disable maximize button
+                                "minimizable": true, // enable/disable minimize button
+                                "collapsable": true, // enable/disable collapse button
+                                "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                                "titlebar": false, // false, 'none', 'transparent'
+                                "minimizeLocation": "right", // sets alignment of minimized dialogues
+                                "icons": { // jQuery UI icon class
+                                    "close": "ui-icon-circle-close",
+                                    "maximize": "ui-icon-circle-plus",
+                                    "minimize": "ui-icon-circle-minus",
+                                    "collapse": "ui-icon-triangle-1-s",
+                                    "restore": "ui-icon-bullet"
+                                },
+                                "load": function (evt, dlg) {
+                                }, // event
+                                "beforeCollapse": function (evt, dlg) {
+                                }, // event
+                                "beforeMaximize": function (evt, dlg) {
+                                }, // event
+                                "beforeMinimize": function (evt, dlg) {
+                                }, // event
+                                "beforeRestore": function (evt, dlg) {
+                                }, // event
+                                "collapse": function (evt, dlg) {
+                                }, // event
+                                "maximize": function (evt, dlg) {
+                                }, // event
+                                "minimize": function (evt, dlg) {
+                                }, // event
+                                "restore": function (evt, dlg) {
+                                } // event
+                            });
+                            $.each(data, function (key, value) {
+                                trHTML += '<tr style="font-size: 13px !important;color: black;background: lightgrey;font-weight: normal" >' +
+                                    '<td style="">' + value.strPastelCustomerCode + '</td>' +
+                                    '<td style="font-size: 13px !important;">' + value.strPastelDescription + '</td>' +
+                                    '<td style="">' + value.dblQtyOrdered + '</td>' +
+                                    '<td style="">' + value.dblQtyAvailable + '</td>' +
+                                    '<td style="">' + value.dblQtyOnHand + '</td>' +
+                                    '<td style=""><input type="number" class="quantitynew" min="0" max="' + value.dblQty + '"  value="' + value.dblQty + '"</td>' +
+                                    '<td style=""><input type="checkbox" style="width:80px; height: 18px !important;" name="OrderDetailId" value="' + value.OrderDetailId + '"> </td>' +
+                                    '</tr>';
 
-                        });
-                        $('#griditemoutofstock').append(trHTML);
+                            });
+                            $('#griditemoutofstock').append(trHTML);
 
-                        $('#splitorder').click(function(){
-                            var favorite = [];
-                            $.each($("input[name='OrderDetailId']:checked"), function(){
-                                var orderdedatilId = $(this).val();
-                                favorite.push({
-                                    'qty': $(this).closest('tr').find('.quantitynew').val(),
-                                    'orderdedatilId': orderdedatilId,
+                            $('#splitorder').click(function () {
+                                var favorite = [];
+                                $.each($("input[name='OrderDetailId']:checked"), function () {
+                                    var orderdedatilId = $(this).val();
+                                    favorite.push({
+                                        'qty': $(this).closest('tr').find('.quantitynew').val(),
+                                        'orderdedatilId': orderdedatilId,
+                                    });
+
+                                });
+                                $.ajax({
+                                    url: '{!!url("/splitordersmake")!!}',
+                                    type: "POST",
+                                    data: {
+                                        backorder: favorite,
+                                        orderID: $('#orderId').val()
+                                    },
+                                    success: function (data) {
+                                        disableOnFinish();
+                                    }
                                 });
 
                             });
-                            $.ajax({
-                                url: '{!!url("/splitordersmake")!!}',
-                                type: "POST",
-                                data: {
-                                    backorder:favorite,
-                                    orderID: $('#orderId').val()
-                                },
-                                success: function (data) {
-                                    disableOnFinish();
-                                }
+
+                            $('#cancelsplitorder').click(function () {
+                                $("#itemoutofstock").dialog('close');
+                                disableOnFinish();
                             });
-
-                        });
-
-                        $('#cancelsplitorder').click(function(){
-                            $("#itemoutofstock").dialog('close');
+                        }else{
                             disableOnFinish();
-                        });
+                        }
 
                     }
                 });
