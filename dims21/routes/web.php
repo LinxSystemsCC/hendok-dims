@@ -276,6 +276,7 @@ Route::post('checkIfOrderExistsWithOrderTypeForOtherTrans', [SalesFormFunctions:
 Route::post('onCheckOrderHeaderDetailsForOtherTrans', [SalesFormFunctions::class,'onCheckOrderHeaderDetailsForOtherTrans']);
 Route::post('convertToSalesOrder', [SalesFormFunctions::class,'convertToSalesOrder']);
 Route::post('treatAsQuote', [SalesFormFunctions::class,'treatAsQuote']);
+Route::post('markitawaitingstock', [SalesFormFunctions::class,'markitawaitingstock']);
 Route::post('generalPriceChecking',[SalesFormFunctions::class,'generalPriceChecking']);
 Route::post('advancedorderno', [SalesFormFunctions::class,'advancedOrderNo']);
 Route::post('generalPriceCheckAndLastCost', [SalesFormFunctions::class,'generalPriceCheckAndLastCost']);

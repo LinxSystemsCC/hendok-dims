@@ -2111,6 +2111,33 @@ class SalesFormFunctions extends Controller
         );
 
     }
+    public function markitawaitingstock(Request $request)
+    {
+        $orderId = $request->get('orderId');
+        $isQuote = $request->get('isQuote');
+        $Message = "";
+
+        $userName =   Auth::user()->UserName;
+        $dateFrom = (new \DateTime())->format('Y-m-d H:i:s');
+
+        DB::connection('sqlsrv4')->table('tblOrders')
+            ->where('OrderId',$orderId )
+            ->update(['AwaitingStock' => $isQuote]);
+        if($isQuote == "1")
+        {
+            $Message="The Order has been changed to Awaiting Stock by ".$userName;
+        }
+        else{
+            $Message="The Order has been changed to NOT Awaiting Stock ".$userName;
+        }
+        $userId =   Auth::user()->UserID;
+
+        DB::connection('sqlsrv3')->table('tblManagementConsol')->insert(
+            ['OrderId' => $orderId, 'UserId' => $userId,'ConsoleTypeId'=>2,'Importance'=> 1 ,'dtm'=>$dateFrom,'LoggedBy'=>$userName,'UserId'=>$userId,
+                'Message'=>$Message ]
+        );
+
+    }
     private static function getTabs($tabcount)
     {
         $tabs = '';

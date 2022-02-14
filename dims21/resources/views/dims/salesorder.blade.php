@@ -2545,10 +2545,14 @@
                 var TotalExc = 0;
                 var TotalInc = 0;
                 $('#awaitingStock').on('change',function(){
-                    if($(this).prop('checked')){
-                        $(this).val('1');
-                    }else{
-                        $(this).val('0');
+                    if($('#awaitingStock').is(':checked')) {
+                        isAwaitingStock(1);
+                        $('#awaitingStock').val("1");
+                    }else
+                    {
+                        alert("NOT WAITING FOR STOCK");
+                        isAwaitingStock(0);
+                        $('#awaitingStock').val("0");
                     }
 
                 });
@@ -2785,6 +2789,15 @@
                                     else
                                     {
                                         $('#treatAsQuote').prop('checked',false);
+                                    }
+
+                                    if(value.AwaitingStock == '1')
+                                    {
+                                        $('#awaitingStock').prop('checked',true);
+                                    }
+                                    else
+                                    {
+                                        $('#awaitingStock').prop('checked',false);
                                     }
 
                                     $('#orderType').prepend('<option value="'+value.LateOrder+'" selected="selected">'+value.OrderType+'</option>');
@@ -9317,6 +9330,21 @@
                     },
                     success: function (data) {
                         console.debug("data saved");
+                    }
+                });
+            }
+            function isAwaitingStock(val) {
+
+                $.ajax({
+                    url: '{!!url("/markitawaitingstock")!!}',
+                    type: "POST",
+                    data: {
+                        isQuote: val,
+                        orderId: $('#orderId').val(),
+
+                    },
+                    success: function (data) {
+                        console.debug("data saved awaiting stock");
                     }
                 });
             }
