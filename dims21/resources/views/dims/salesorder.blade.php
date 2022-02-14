@@ -142,6 +142,12 @@
 
                 </div><h6 id="numberOfLines" style=" margin-bottom: 0px !important;" class="hidebody">0 Lines  </h6>
                 <div class="col-md-5 pull-right hidebody" style="line-height: 1.1;">
+                    Special Notification<br>
+                    <select id="notification">
+                        <option value="2">Normal</option>
+                        <option value="1">Low</option>
+                        <option value="3">High</option>
+                    </select>
                     <h5 id="availableOnTheFly" > </h5>
                     <input type="hidden" id="instockGlobal" >
                     <legend class="well-legend">Line Extra Info</legend>
@@ -2779,7 +2785,7 @@
                                     $('#balDue').val(parseFloat(value.BalanceDue).toFixed(2));
                                     $('#margin_auth').val(value.Authorised);
                                     $('#customerpricelist').val(value.termsAndList);
-
+                                    $('#notification').prepend('<option value="'+value.intNotification+'" selected="selected">'+value.specificNotification+'</option>');
 
                                     console.debug('************************************* ttreat as '+value.TreatAsQuotation);
                                     if(value.TreatAsQuotation == '1')
@@ -9399,6 +9405,7 @@
                     'orderId': $('#orderId').val(),
                     'deliveryDate': dateReturn($("#inputDeliveryDate").val()),
                     'OrderType': $('#orderType').val(),
+                    'notification': $('#notification').val(),
                     'orderNo': (escapeHtml($('#orederNumber').val())),
                     'messagebox': (escapeHtml($('#messagebox').val())),
                     'awaitingStock': $('#awaitingStock').val(),
