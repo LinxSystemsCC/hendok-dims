@@ -654,9 +654,9 @@ class DimsCommon extends Controller
     public function masscustomerdatatable(Request $request){
         $userid =Auth::user()->UserID;
         $massCustomer = DB::connection('sqlsrv3')
+
             ->select("SELECT * FROM viewtblCustomers inner join tblAccessOnCustomers on
                         tblAccessOnCustomers.intGroupId = viewtblCustomers.GroupId
-                        left outer join tblCustomerCategories on CCCode = CustomerCategory
                          where intUserId = $userid and StatusId = 1 Order by StoreName");
         $output['recordsTotal'] = count($massCustomer);
         $output['data'] = $massCustomer;
