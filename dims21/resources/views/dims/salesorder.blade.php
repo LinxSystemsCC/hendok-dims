@@ -6626,12 +6626,13 @@
             $(function(){
                 $('#tblOnsalesOrder,#tblOnInvoiced').on('keydown', function(ev) {
 
-                    if(ev.keyCode === 107 && ($('#orderId').val()).length < 1)
+                    if((ev.keyCode === 107 || ev.keyCode === 17) && ($('#orderId').val()).length < 1)
                     {
                         if ((globalOrderIdToBePushed[0]).length > 1) {
                             $('#orderId').val(globalOrderIdToBePushed[0]);
                             $('#checkOrders').click();
                             $('#prodOnOrder').dialogExtend("minimize");
+                            $('#prodonInvoice').dialogExtend("minimize");
                         }
 
                     }else if(($('#orderId').val()).length > 3)
