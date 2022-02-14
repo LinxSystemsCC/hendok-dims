@@ -7157,7 +7157,7 @@
                     calculator();
 
                 }
-                if ( key == 107)
+                if ( key == 107 || key==17)
                 {
                     console.debug('productCode'+productCode);
                     $('#custLookUp').show();
