@@ -1123,6 +1123,8 @@
                     <th>Address 1 </th><th>Address 2</th>
                     <th>Address 3 </th><th>Address 4</th>
                     <th>Address 5</th>
+                    <th>Route</th>
+                    <th>Route ID</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -5417,7 +5419,7 @@
 
             }
             function confirmmultideliveryaddressonfinish(){
-                console.debug("******************************* Routing ID"+$('#hiddenDeliveryAddressIdAfterSaved').val());
+                console.debug("******************************* Routing ID "+$('#hiddenDeliveryAddressIdAfterSaved').val());
 
                 $.ajax({
                     url: '{!! url("/selectCustomerMultiAddressconfirm") !!}',
@@ -8479,7 +8481,7 @@
             }
             function disableOnFinish()
             {
-                if($('#hiddenDeliveryAddressIdAfterSaved').val() == "0" || $('#hiddenDeliveryAddressIdAfterSaved').val() == undefined){
+                if($('#hiddenDeliveryAddressId').val() == "0" ){
                 //Clear Order lock for that order
                     $.ajax({
                     url:'{!!url("/clearorderlocksperorder")!!}',
@@ -9166,7 +9168,9 @@
                                 value.DAddress2 + '</td><td>' +
                                 value.DAddress3 + '</td><td>' +
                                 value.DAddress4 + '</td><td>' +
-                                value.DAddress5 + '</td>' +
+                                value.DAddress5 + '</td><td>' +
+                                value.Route + '</td><td>' +
+                                value.Routeid + '</td>' +
                                 '</tr>';
                         });
                         $('#tbldeliveryAddressOnOrderWithoutInoiceNo').append(trHTML);
@@ -9178,6 +9182,7 @@
                             var address3 = $(this).closest('tr').find('td:eq(3)').text();
                             var address4 = $(this).closest('tr').find('td:eq(4)').text();
                             var address5 = $(this).closest('tr').find('td:eq(5)').text();
+                            var routeids = $(this).closest('tr').find('td:eq(7)').text();
                             $('#hiddenDeliveryAddressId').val(deliveryID);
                             $('#address1hidden').val($.trim(address1));
                             $('#address2hidden').val($.trim(address2));
@@ -9186,6 +9191,19 @@
                             $('#address5hidden').val($.trim(address5));
                             $('#deliveryAddressOnOrderWithoutInoiceNo').dialog('close');
                             $('#customerSelectedDelDate').val($.trim(address1)+' '+$.trim(address2)+' '+$.trim(address3)+' '+$.trim(address4)+' '+$.trim(address4));
+                            $.ajax({
+                                url: '{!! url("/changerouteonorder") !!}',
+                                type: "POST",
+                                data: {
+                                    routeId: routeids,
+                                    OrderId: $('#orderId').val(),
+
+                                },success: function (data) {
+//console.debug(data);
+                                    $('#routeonabutton').val(data);
+
+                                }
+                            });
 
                         });
 
