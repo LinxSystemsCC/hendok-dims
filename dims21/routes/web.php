@@ -285,6 +285,8 @@ Route::post('getCallListNew',[SalesFormFunctions::class,'getCallListNew'] );
 Route::post('insertCallistFilters', [SalesFormFunctions::class,'insertCallistFilters']);
 Route::post('isCalled',[SalesFormFunctions::class,'insertCallID']);
 Route::post('selectCustomerMultiAddress',[SalesFormFunctions::class,'selectCustomerMultiAddress']);
+Route::post('selectCustomerMultiAddressconfirm',[SalesFormFunctions::class,'selectCustomerMultiAddressconfirm']);
+Route::post('submitchangeddeliveryaddress',[SalesFormFunctions::class,'submitchangeddeliveryaddress']);
 Route::post('copyOrdersToCustomers', [SalesFormFunctions::class,'copyOrdersToCustomers']);
 Route::post('generatePDFForOrders',[SalesFormFunctions::class,'generatePDFForOrders']);
 Route::post('countAddress', [SalesFormFunctions::class,'countAddress']);

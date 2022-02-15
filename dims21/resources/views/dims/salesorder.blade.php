@@ -626,7 +626,7 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label class="control-label" for="generalRouteForNewDeliveryAddress"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Route</label>
-                        <select id="generalRouteForNewDeliveryAddress" class="form-control input-sm col-xs-1">
+                        <select id="generalRouteForNewDeliveryAddress" class="form-control input-sm col-xs-1 generalRouteForNewDeliveryAddress">
                         </select>
                     </div>
                     <div class="form-group">
@@ -655,7 +655,7 @@
                         <select class="form-control input-sm col-xs-1" id="salesPerson">
                         </select>
                     </div>
-                    <button type="button" id="doneCustomAddress" class="btn-success">Done</button>
+                    <button type="button" id="doneCustomAddress" class="btn-success doneCustomAddress">Done</button>
 
                 </div>
                 <div class="col-lg-8" >
@@ -666,7 +666,7 @@
                     </div>
 
                 </div>
-                <div  class="col-lg-12" style="background: #f8f8f8;">
+                <div  class="col-lg-12" id="dynamicaddress" style="background: #f8f8f8;">
                     <form>
                         <table class="table table-bordered table-condensed">
                             <tr>
@@ -4688,6 +4688,7 @@
 
 
 
+
                 function datePicker() {
                     var today = new Date();
                     $("#inputDeliveryDate").datepicker({
@@ -5409,6 +5410,148 @@
                         $('#callListTable tbody').on('click', 'tr', function (e){
                             $("#callListTable tbody tr").removeClass('row_selectedYellowish');
                             $(this).addClass('row_selectedYellowish');
+                        });
+
+                    }
+                });
+
+            }
+            function confirmmultideliveryaddressonfinish(){
+                console.debug("******************************* Routing ID"+$('#hiddenDeliveryAddressIdAfterSaved').val());
+
+                $.ajax({
+                    url: '{!! url("/selectCustomerMultiAddressconfirm") !!}',
+                    type: "POST",
+                    data: {
+                        customerCode: $("#inputCustAcc").val(),
+                        OrderId:  $('#orderId').val()
+                    },
+                    success: function (data) {
+                        var toAppend = '';
+                        var routnamereturn="";
+                        var routeidreturn ="";
+                        $('#listaddresses').empty();
+                        $(".generalRouteForNewDeliveryAddress").empty();
+                        $.each(data.addresses, function (i, o) {
+                            toAppend += '<li value="' + o.DeliveryAddressID + '" style="border-bottom: 4px solid black;">' + o.DAddress1 + ' ' + o.DAddress2 + ' ' + o.DAddress3 + '<br>' + o.DAddress4 + '<br>' + o.DAddress5 + '</li>';
+                        });
+                        $('#listaddresses').append(toAppend);
+                        $('#changeDeliveryAddress').show();
+                        $('#dynamicaddress').empty();
+                        $('#doneCustomAddress').empty();
+                        $.each(data.selectedaddress, function (i, o) {
+                            routnamereturn = o.Route;
+                            routeidreturn = o.Routeid;
+                            $('#address1').val(o.DAddress1);
+                            $('#address2').val(o.DAddress2);
+                            $('#address3').val(o.DAddress3);
+                            $('#address4').val(o.DAddress4);
+                            $('#address5').val(o.DAddress5);
+                        });
+                        $('.generalRouteForNewDeliveryAddress').prepend('<option value="'+routeidreturn+'"  selected="selected">'+routnamereturn+'</option>');
+
+                        var toAppendr = '';
+                        $.each(data.routes,function(i,o){
+                            toAppendr += '<option value="'+o.Routeid+'">'+o.Route+'</option>';
+                        });
+
+                        $('.generalRouteForNewDeliveryAddress').append(toAppendr);
+
+                        getDimsUsers('#salesPerson', '{!!url("/getDimsUsers")!!}');
+                        getDimsUsers('#salesPersonOnDynamic', '{!!url("/getDimsUsers")!!}');
+                        //$('body').pleaseWait('stop');
+                        // $('#doneCustomAddress').hide();
+
+                        onClickingDeliveryAddress();
+                        $('#generateDynamicAddress').on('click', 'tr', function () {
+                            $('#address1').val('');
+                            $('#address2').val('');
+                            $('#address3').val('');
+                            $('#address4').val('');
+                            $('#address5').val('');
+                            //$('#doneCustomAddress').show();
+                            console.debug($(this).closest('tr').find('td').eq(1).text());
+                            $('#address1').val($(this).closest('tr').find('td').eq(2).text());
+                            console.debug($('#address1').val());
+                            $('#address2').val($(this).closest('tr').find('td').eq(3).text());
+                            $('#address3').val($(this).closest('tr').find('td').eq(4).text());
+                            $('#address4').val($(this).closest('tr').find('td').eq(5).text());
+                            $('#address5').val($(this).closest('tr').find('td').eq(6).text());
+                            $('.generalRouteForNewDeliveryAddress').prepend('<option value="'+$(this).closest('tr').find('#hiddenRouteId').val()+'" selected="selected">'+$(this).closest('tr').find('td').eq(1).text()+'</option>');
+                            $('#deliveryAddressIdOnPopUp').val($(this).closest('tr').find('#hiddenDeliveryAddressIdAfterSaved').val());
+                        });
+                        var $input = $('<button type="button" id="updateaddresses">UPDATE</button> <button type="button" style="float:right;" id="ignoresave">IGNORE</button>');
+                        $input.appendTo($("#dynamicaddress"));
+                        $('#updateaddresses').click(function () {
+
+                            if($('#generalRouteForNewDeliveryAddress').val() === 'null')
+                            {
+                                alert('The RouteID/Route Name is not correct,Please Choose the Route Or Speak to the manager.');
+
+                            }else
+                            {
+                                    var selectedAddress = new Array();
+                                    selectedAddress.push({
+                                        'orderId': $('#orderId').val(),
+                                        'DeliveryAddressID': $('#hiddenDeliveryAddressId').val(),
+                                        'routeid': $('.generalRouteForNewDeliveryAddress').val(),
+                                        'address1': (escapeHtml($('#address1').val())),
+                                        'address2': (escapeHtml($('#address2').val())),
+                                        'address3':( escapeHtml($('#address3').val())),
+                                        'address4': (escapeHtml($('#address4').val())),
+                                        'address5': (escapeHtml($('#address5').val()))
+
+                                    });
+
+                                    $.ajax({
+                                        url: '{!! url("/submitchangeddeliveryaddress") !!}',
+                                        type: "POST",
+                                        data: {
+
+                                            OrderId: $('#orderId').val(),
+                                            delvdata:selectedAddress
+
+                                        },success: function (data) {
+                                            console.debug(data[0]);
+                                            if(data[0].results =="SUCCESS"){
+                                                $.ajax({
+                                                    url: '{!!url("/clearorderlocksperorder")!!}',
+                                                    type: "POST",
+                                                    data: {
+                                                        OrderId: $('#orderId').val()
+                                                    },
+                                                    success: function (data) {
+                                                        empties()
+                                                        location.reload();
+                                                    }
+                                                });
+
+                                            }
+
+    //console.debug(data);
+
+                                        }
+                                    });
+
+
+                            }
+
+
+                        });
+
+                        $('#ignoresave').click(function(){
+                            $.ajax({
+                                url: '{!!url("/clearorderlocksperorder")!!}',
+                                type: "POST",
+                                data: {
+                                    OrderId: $('#orderId').val()
+                                },
+                                success: function (data) {
+                                    empties();
+                                    location.reload();
+
+                                }
+                            });
                         });
 
                     }
@@ -8336,8 +8479,9 @@
             }
             function disableOnFinish()
             {
+                if($('#hiddenDeliveryAddressIdAfterSaved').val() == "0" || $('#hiddenDeliveryAddressIdAfterSaved').val() == undefined){
                 //Clear Order lock for that order
-                $.ajax({
+                    $.ajax({
                     url:'{!!url("/clearorderlocksperorder")!!}',
                     type: "POST",
                     data: {
@@ -8374,11 +8518,40 @@
                         $("#inputOrderDate").prop("disabled", false);
                     }
                 });
+                }
+                else{
+                    confirmmultideliveryaddressonfinish();
+                }
 
-
-
-
-
+            }
+            function empties(){
+                $('#orderId').val('');
+                $('#address1').val('');
+                $('#address2').val('');
+                $('#address3').val('');
+                $('#address4').val('');
+                $('#address5').val('');
+                $('#orederNumber').val('');
+                $('#invoiceNo').val('');
+                $('#generalRouteForNewDeliveryAddress').empty();
+                $('#salesPerson').empty();
+                $('#customerSelectedDelDate').val('');
+                $('#inputCustAcc').val('');
+                $('#inputCustName').val('');
+                // $('#inputDeliveryDate').val('');
+                // $('#inputOrderDate').val('');
+                $(".fast_remove").empty();
+                // $("#orderPatternIdTable").empty();
+                $('.hidebody').hide();
+                $('.itCanHide').show();
+                $('#submitFilters').show();
+                $("#inputDeliveryDate").prop("disabled", false);
+                $("#changeDelvDate").prop("disabled", false);
+                $("#changeDelvDate").prop("disabled", false);
+                $("#inputCustName").prop("disabled", false);
+                $("#inputCustAcc").prop("disabled", false);
+                $("#orderId").prop("disabled", false);
+                $("#inputOrderDate").prop("disabled", false);
             }
             function marginCalculator(cost,onCellVal)
             {

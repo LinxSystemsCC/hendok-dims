@@ -1164,6 +1164,37 @@ class SalesFormFunctions extends Controller
 
         return response()->json($countAddress);
     }
+    public function selectCustomerMultiAddressconfirm(Request $request)
+    {
+        $CustCode= $request->get('customerCode');
+        $OrderId = $request->get('OrderId');
+
+        $zero = 0;
+        $returnAddress = DB::connection('sqlsrv3')
+            ->select("EXEC spCrudDeliveryAddress ".$zero.",'00','00','000','000','000',00,00,'00','".$CustCode."',00,'Select'");
+
+        $returnselected = DB::connection('sqlsrv3')
+            ->select("EXEC spGetSelectedAddressForMultiDeliveries ".$OrderId);
+
+        $routes = DB::connection('sqlsrv3')
+            ->select("select * from tblRoutes order by Route");
+
+        $output["addresses"] = $returnAddress;
+        $output["selectedaddress"] = $returnselected;
+        $output["routes"] = $routes;
+
+        return response()->json($output);
+    }
+    public function submitchangeddeliveryaddress(Request $request){
+        $delvdata = $request->get('delvdata');
+        $OrderId = $request->get('OrderId');
+        $delvdataxml = $this->toxml($delvdata, "xml", array("result"));
+        $returndata = DB::connection('sqlsrv3')
+            ->select("EXEC spXMLUpdateOrderDeliveryaddress '".$delvdataxml."',".$OrderId);
+        return response()->json($returndata);
+
+
+    }
     public function countomerSingleAddress(Request $request)
     {
         $CustCode= $request->get('customerCode');
