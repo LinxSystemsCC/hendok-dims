@@ -8481,7 +8481,9 @@
             }
             function disableOnFinish()
             {
+
                 if($('#hiddenDeliveryAddressId').val() == "0" ){
+                    console.debug("what is happening");
                 //Clear Order lock for that order
                     $.ajax({
                     url:'{!!url("/clearorderlocksperorder")!!}',
