@@ -1,10 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col-lg-12">
-        <a href='{!!url("/invoicesnotprinting")!!}' onclick="window.open(this.href, 'invoicesnotprinting',
-'left=20,top=20,width=500,height=600,toolbar=1,resizable=0'); return false;" style="color:black;font-size: 15px;font-weight:900;background: red;padding: 2px;">Check Why Invoices Not Printing</a>
-        <button id="amalgamate" class="pull-right" style="background: #260ee8;color: white;font-weight: 900;font-size: 19px;    padding: 2px;display: none;">Amalgamate</button>
+
+    <?php
+                        if ((Auth::guest()))
+                            {
+
+                            }else{
+                                    $v  =  new \App\Http\Controllers\SalesForm();
+                                    $routeplanner = $v->getThings(Auth::user()->GroupId,'Route Planner Particulars');
+                                    $logistic = $v->getThings(Auth::user()->GroupId,'Logistic Planner');
+                         }
+     ?>
+    <div class="container" style="width: 100%;display:none;">
+
+        <div class="row">
+            <button id="startPlanning" class="btn-success btn-md center-block" style="margin-top: 20px;width: 103px;padding: 28px;">START</button>
+            <button id="ordersNotCorrect" class="btn-success btn-md center-block" style="margin-top: 20px;width: 103px;">ROUTES DIFFERENCES</button>
+            <button id="visualise" class="btn-success btn-md center-block" style="display:none;margin-top: 20px;width: 103px;padding: 28px;">Search</button>
+            <button id="printTruckSheet" class="btn-success btn-md center-block" style="display:none;margin-top: 20px;width: 103px;padding: 28px;">Print</button>
+        </div>
+    </div>
+
     <div id="routePlanningPopUp" title="Route Planning">
         <div class="col-lg-12">
             <div class="col-lg-12" >
@@ -12,45 +29,48 @@
                     <form>
                         <fieldset class="well">
                             <legend class="well-legend">Create</legend>
-                            <div class="form-group  col-md-3" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                                <label class="control-label" for="deliveryDatesonPlanning"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Delivery Date</label>
-                                <input name="deliveryDatesonPlanning" class="form-control input-sm col-xs-1" id="deliveryDatesonPlanning" >
+                            <div class="form-group  col-md-2" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                                <label class="control-label" for="deliveryDatesonPlanning"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">From</label>
+                                <input name="deliveryDatesonPlanning" class="form-control input-sm col-xs-1" id="deliveryDatesonPlanning" value="{{$selectedDelivDate}}" >
                             </div>
-
+                            <div class="form-group  col-md-2" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                                <label class="control-label" for="deliveryDatesonPlanning2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">To</label>
+                                <input name="deliveryDatesonPlanning2" class="form-control input-sm col-xs-1" id="deliveryDatesonPlanning2" value="{{$selectedDelivDate}}" >
+                            </div>
                             <div class="form-group  col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                                 <label class="control-label" for="orderTypesTabletLoadingonPlanning"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Delivery Type</label>
                                 <select name="orderTypesTabletLoadingonPlanning" class="form-control input-sm col-xs-1" id="orderTypesTabletLoadingonPlanning" style="height:30px;font-size: 10px;">
-                                    <option value="-99">------All------</option>
+
                                     @foreach($orderTypeSelected  as $values)
                                         <option value="{{$values->OrderTypeId}}">{{$values->OrderType}}</option>
                                     @endforeach
+                                    <option value="-99">All</option>
 
                                 </select>
                             </div>
                             <div class="form-group col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                                 <label class="control-label" for="rouTabletLoadingtesonPlanning"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Route</label>
-
                                 <select  id="rouTabletLoadingtesonPlanning" class="form-control input-sm col-xs-1" name="multicheckbox[]" multiple="multiple" >
 
-                                    @foreach($routeSelected  as $values)
+                                    @foreach($routes as $values)
                                         <option value="{{$values->Routeid}}">{{$values->Route}}</option>
-                                        @endforeach
+                                    @endforeach
 
                                 </select>
                             </div>
                             <div class="form-group col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                                <label class="control-label" for="rouTabletLoadingtesonPlanning"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Status</label>
+                                <label class="control-label" for="statusRoutePlanner"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Status @if (Auth::guest()) [<i style="color:red;">LOGGED OUT</i>] @endif</label>
                                 <select  id="statusRoutePlanner" class="form-control input-sm col-xs-1" >
 
-                                   @if ($status == 1)
+                                    @if ($status == 1)
                                         <option value="1">Invoiced</option>
-                                       @else
+                                    @else
                                         <option value="0">Not Invoiced</option>
                                     @endif
                                     @if ($status == 3)
-                                           <option value="3">All</option>
-                                        @endif
-                                       <option value="3">All</option>
+                                        <option value="3">All</option>
+                                    @endif
+                                    <option value="3">All</option>
                                     <option value="0">Not Invoiced</option>
                                     <option value="1">Invoiced</option>
                                 </select>
@@ -63,8 +83,7 @@
                                 <button type="button" id="tabletLoadingGoonProducts" class="btn-sm btn-success">Products </button>
                             </div>
 
-
-                            <input type="text"  class="form-control input-sm col-xs-1" id="myInput" onkeyup="myFunction()" placeholder="Search for customers based on your criteria.">
+                            <input type="text"  class="form-control input-sm col-xs-1" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
                         </fieldset>
                     </form>
                     <div >
@@ -86,20 +105,24 @@
                         <table class="table tablesorter" id="unsequenced" style="overflow-y: scroll;height: 60%">
                             <thead>
                             <tr>
+                                <th style="font-size: 10px;">Ord date</th>
                                 <th style="font-size: 10px;">Delv date</th>
+                                <th style="font-size: 10px;">Route</th>
+                                <th class="col-md-4" id="facility_header"  style="font-size: 10px;">Customer</th>
                                 <th style="font-size: 10px;">InvNO</th>
                                 <th style="font-size: 10px;">OrderID</th>
+                                <th style="font-size: 10px;">Delivery Type</th>
                                 <th style="font-size: 7px;width:1px;display: none;">Ignore</th>
                                 <th style="font-size: 7px;width:1px;display: none;">Ignor2</th>
                                 <th style="font-size: 10px;">Seq</th>
                                 <th style="font-size: 10px;color:blue;">Mass</th>
+                                <th style="font-size: 10px;color:red;">OrderValue</th>
+                                <th style="font-size: 10px;color:blue;">Address</th>
+                                <th style="font-size: 10px;color:blue;">Notes</th>
+                                <th style="font-size: 10px;color:blue;">OnHold</th>
                                 <th>Action</th>
-                                <th>OrderNO</th>
-                                <th style="font-size: 10px;">Delivery Type</th>
-                                <th style="font-size: 10px;">Route</th>
-                                <th class="col-md-4" style="font-size: 10px;">Customer</th>
-                                <th >TripId</th>
                                 <th>Select</th>
+                                <th>Status</th>
                             </tr>
                             </thead>
 
@@ -115,48 +138,50 @@
 
         </div>
         <div class="col-lg-12" style="background: greenyellow">
+            @if($routeplanner !="0")
             <div class="col-lg-1">
-                <button id="requence" class="btn-md center-block" style="margin-top: 20px;background: black;color: white;font-weight: 900;">Resequence</button>
+                <button id="printPriview" class="btn-warning btn-md pull-left" style="margin-top: 20px;">Print Preview</button>
             </div>
-
-            <div class="col-lg-1">
+            <div class="col-lg-2">
                 <button id="doneSorting" class="btn-success btn-md center-block" style="margin-top: 20px;">Finished</button>
             </div>
+            <div class="col-lg-2">
 
-            <div class="col-lg-1">
                 <button id="moveSelectedOrders" class="btn-primary btn-md center-block" style="margin-top: 20px;">Move Orders</button>
+
             </div>
             <div class="col-lg-1">
-                <button id="selectAll" class="btn-danger btn-md " style="margin-top: 20px;">Select All</button>
+                <button id="selectAll" class="btn-danger btn-md center-block" style="margin-top: 20px;">Select All</button>
             </div>
             <div class="col-lg-1">
-                <button id="Deselectselect" class="btn-primary btn-md " style="margin-top: 20px;">Deselect</button>
+                <button id="Deselectselect" class="btn-primary btn-md center-block" style="margin-top: 20px;">Deselect</button>
             </div>
             <div class="col-lg-1">
-                <button id="printPriview" class="btn-success btn-md pull-right" style="margin-top: 20px;">Print Sequence</button>
+                <button id="notifypickers" class="btn-primary btn-lg center-block" style="margin-top: 20px;">NOTIFY PICKERS</button>
             </div>
             <div class="col-lg-1">
                 <button id="suggestions" class="btn-success btn-md pull-right" style="margin-top: 20px;">Suggestions</button>
             </div>
-            <div class="col-lg-1">
+            <div class="col-lg-2">
                 <h1 id="totalorders"></h1>
             </div>
 
-
+            <button id="instantPrint" class="btn-success btn-md pull-right" style="margin-top: 20px;">Print</button>
             <button id="updateSorting" class="btn-success btn-md center-block" style="margin-top: 20px;">Update</button>
 
-            <a href='#' id="lplan">Logistic Plan</a>
-            <br>
-            <a href='{!!url("liveBulkPicking")!!}'  id="livebulk" style="color: #0c0c0c;font-weight: 900">Live BulkPicking</a>
+            @endif
+                @if($logistic !="0")
+                        <a href='#' id="lplan" style="font-weight: 900;text-decoration: underline;font-size: 22px;">Logistics Plan</a>
+                @endif
+
 
         </div>
     </div>
-    </div>
     <div id="popupmoveThis" title="Order Change">
-        <h5>Please choose the route and order type</h5>
+        <h5>Please move an order by chosing below</h5>
         <form>
             <div class="form-group  col-md-4" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                <label class="control-label" for="truckNameSheetMaster"  style="margin-bottom: 0px;font-weight: 700;font-size: 14px;">Route</label>
+                <label class="control-label" for="truckNameSheetMaster"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Route</label>
                 <select name="eRouteName" class="form-control input-sm col-sm-1"  id="eRouteName" style="font-size: 14px;" >
                     @foreach($routes as $value)
                         <option value="{{$value->Routeid}}">{{$value->Route}}</option>
@@ -170,6 +195,10 @@
                         <option value="{{$value->OrderTypeId}}">{{$value->OrderType}}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="form-group  col-md-2" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                <label class="control-label" for="delDateChange"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">From</label>
+                <input name="delDateChange" class="form-control input-sm col-xs-1" id="delDateChange" >
             </div>
 
         </form>
@@ -192,7 +221,7 @@
         </div><button id="doneWithTruckSheetMasterData" class="btn-success btn-md center-block">Submit</button>
     </div>
 
-
+    </div>
     <div id="straightForwardPrintThtTruckControlId" class="col-lg-12" title="Print Truck Control Sheet">
         <div class="col-lg-12">
 
@@ -218,72 +247,8 @@
     <div id="confirmMove">Finished moving the Orders
         <button class="btn-md" id="okayclose">Okay</button>
     </div>
-    <div id="movingOrders" title="You are about to move the below orders." style="background:gray;">
-        <div id="movingOrdesBtn" class="form-group  col-md-12">
-
-            <button class="btn-md btn-success" id="continuemove">Continue</button>
-        </div>
-        <div id="listoforders" class="form-group  col-md-12">
-
-
-        </div>
-    </div>
-    <div title="numberpad" id="numberpad">
-        <input type="number" id="filledinseq" ><br>
-        <input type="hidden" id="orderid" ><br>
-        <button id="submitpad" class="btn-sm btn-primary">Submit</button>
-
-    </div>
-    <div title="Amalgamation" id="combineroutes">
-        <h4>Planned Routes</h4>
-        <table id="tablewithseq" class="table-bordered">
-            <thead>
-            <tr>
-                <th>Routeid</th>
-                <th>Delivery Type Id</th>
-                <th>Route</th>
-                <th>Order Type</th>
-                <th>Delivery Date</th>
-                <th>Number Of Stops</th>
-                <th>Sequence</th>
-            </tr>
-            </thead>
-            <tbody id="mergeroutes">
-
-            </tbody>
-
-        </table>
-        <hr style="border: 1px solid black;">
-        <div style="background: yellow;">
-            <h3>Select New Route and Delivery Type.</h3>
-            <form style="background: yellow;">
-                <div class="form-group  col-md-4" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                    <label class="control-label" for="truckNameSheetMaster"  style="margin-bottom: 0px;font-weight: 700;font-size: 14px;">Route</label>
-                    <select name="eRouteName" class="form-control input-sm col-sm-1"  id="routenew" style="font-size: 14px;" >
-                        @foreach($routes as $value)
-                            <option value="{{$value->Routeid}}">{{$value->Route}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group  col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                    <label class="control-label" for="deliveryTypeRun"  style="margin-bottom: 0px;font-weight: 700;font-size: 14px;">Delivery Type(Run)</label>
-                    <select name="deliveryTypeRun" class="form-control input-sm col-sm-1" id="ordertypenew" style="font-size: 14px;">
-                        @foreach($orderTypes as $value)
-                            <option value="{{$value->OrderTypeId}}">{{$value->OrderType}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group  col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                    <label class="control-label" for="deliveryTypeRun"  style="margin-bottom: 0px;font-weight: 700;font-size: 14px;">Date</label>
-                     <input type="date" class="form-control input-sm col-sm-1" id="dateto">
-                </div>
-
-            </form>
-        </div>
-        <br>
-        <div id="savebutton">
-
-        </div>
+    <div id="creditOnHold">Account is currently on Hold ,Report to Accounts Department Please .
+        <button class="btn-md" id="reportOnHold">Okay</button>
     </div>
     <script src="{{ asset('public/js/tableSorter.js') }}"></script>
 @endsection
@@ -292,33 +257,18 @@
         height: 26px !important;
     }
     .backgroudcolor{
-        background:#83c8f9;
+        background:red;
     }
-    .backgroudcolorOffloaded{
-        background:#fd00ff8a;
-    }
-    .backgroudcolorOrange{
-        background:darkorange;
-    }
-    .backgroudcolorBlue{
-        background:mediumslateblue;
+    .lockedbackgroudcolor{
+        background:#9b9bdc;
     }
     .backgroudcolorOffloadedHighNotification{
         background: rgba(4, 255, 31, 0.54);
     }
-    .backgroudcolorBadCredit{
-        background: rgba(0, 0, 0, 0.97);
-        color:#6f9af0;
-    }
-    .backgroudcolorLoadingProgress{
-        background: rgba(212, 176, 13, 0.97);
-    }
-   /* .backgroudcolorBlockedAcc{
-        background: rgba(212, 0, 4, 0.97);
-        color:#6f9af0;
-    }*/
 </style>
+
 <script src="{{ asset('public/js/jquery-2.2.3.min.js') }}"></script>
+
 <script>
 
     var jArrayOrderTypes = JSON.stringify({!! json_encode($orderTypes) !!});
@@ -326,10 +276,9 @@
     var jArraydelivroutes = JSON.stringify({!! json_encode($routes) !!});
     var jArraydDrivers = JSON.stringify({!! json_encode($drivers) !!});
     var jArraydtrucks = JSON.stringify({!! json_encode($trucks) !!});
-    var authdialogMoveOrder = "<?php  echo env('APP_AUTH_ORDER_MOVE_DIALOG'); ?>";
 
     var computerName = '<?php echo gethostname() ?>';
-
+    var loggedIn = '{{ auth()->check() ? 'true' : 'false' }}';
     $(document).ready(function() {
         //$('#routePlanningPopUp').hide();
         $('#orderListing').hide();
@@ -352,9 +301,9 @@
         $('#posCashUp').hide();
         $('#salesInvoiced').hide();
         $('#confirmMove').hide();
-        $('#movingOrders').hide();
-        $('#numberpad').hide();
-        $('#combineroutes').hide();
+        $("#creditOnHold").hide();
+        //
+
         var Odate = new Date();
         var newODate = $.datepicker.formatDate('dd-mm-yy', new Date(Odate));
         $('#lplan').click(function(){
@@ -362,6 +311,8 @@
         });
 
         $("#unsequenced").tablesorter();
+
+
         var toAppendOrderTypes = '';
         $.each(JSON.parse(jArrayOrderTypes),function(i,o){
             toAppendOrderTypes += '<option value="'+o.OrderTypeId+'">'+o.OrderType+'</option>';
@@ -379,6 +330,11 @@
 
 
         $('#recentTruckIDOnPrintButton').append(toAppendRecentTruckIdFilter);
+        $('#rouTabletLoadingtesonPlanning').multiselect({
+            columns: 1,
+            placeholder: 'Select Route(s)',
+            selectAll: true
+        });
 
         //DRIVERS
         var toAppendDrivers = '';
@@ -394,7 +350,8 @@
         $.each(JSON.parse(jArraydelivroutes),function(i,o){
             toAppendroute += '<option value="'+o.Routeid+'">'+o.Route+'</option>';
         });
-        $('#rouTabletLoadingtesonPlanning').append(toAppendroute);
+        // $('#rouTabletLoadingtesonPlanning').append(toAppendroute);
+
         //$('#eRouteName').append(toAppendroute);
         // $('#routeSheetMaster').append(toAppendroute);
         //TRUCKS
@@ -405,17 +362,14 @@
         $('#truckName').append(toAppendTrucks);
         $('#truckNameSheetMaster').append(toAppendTrucks);
 
-        $('#rouTabletLoadingtesonPlanning').multiselect({
-            columns: 1,
-            placeholder: 'Select Route(s)',
-            selectAll: true
-        });
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+
+
 
         $tabs = $("#unsequenced");
         $( "tbody.connectedSortable" )
@@ -433,25 +387,37 @@
         ;
 
         $('#unsequenced tbody').on('dblclick', 'tr', function () {
-            var orderId = $(this).closest('tr').find('td:eq(2)').text();
-            var orderType = $(this).closest('tr').find('td:eq(5)').text();
-            var orderTypeID = $(this).closest('tr').find('td:eq(6)').text();
-            var routeId = $(this).closest('tr').find('td:eq(7)').text();
-            var routeName = $(this).closest('tr').find('td:eq(1)').text();
-            var invoiceNo = $(this).closest('tr').find('td:eq(1)').text();
+            var orderId = $(this).closest('tr').find('td:eq(5)').text();
+            var orderType = $(this).closest('tr').find('td:eq(6)').text();
+            var orderTypeID = $(this).closest('tr').find('td:eq(7)').text();
+            var routeId = $(this).closest('tr').find('td:eq(8)').text();
+            var routeName = $(this).closest('tr').find('td:eq(2)').text();
+            var invoiceNo = $(this).closest('tr').find('td:eq(4)').text();
 
             if(($.trim(invoiceNo)).length < 5)
             {
-
+                //showDialog('#popupmoveThis','60%',220);
+                $('#submitChanges').click(function(){
                     $.ajax({
-                        url: '{!!url("/sequenceOrdersByMode")!!}',
+                        url: '{!!url("/moveTheOrder")!!}',
                         type: "POST",
-                        data: {mode:1,orderId:orderId,seq:0},
+                        data: {orderTypeId:$('#deliveryTypeRun').val(),routeId:$('#eRouteName').val(),orderId:orderId},
                         success: function (data) {
-                                console.debug(data);
-                                $('#tabletLoadingGoonPlanning').click();
-                        }
 
+                            //$('#tabletLoadingGoonPlanning').click();
+                            showDialog('#confirmMove','60%',220);//
+                            $('#okayclose').click(function(){
+                                $("#popupmoveThis").dialog('close');
+                                $("#confirmMove").dialog('close');
+                                window.location = '{!!url("/routePlannerExtParam")!!}/'+$('#deliveryDatesonPlanning').val()+'/'+$('#orderTypesTabletLoadingonPlanning').val()+'/1085/'+$('#statusRoutePlanner').val();
+
+                                //
+                                //$('#tabletLoadingGoonPlanning').click();
+                                // $('#unsequenced').scrollTop();
+                            });
+
+                        }
+                    });
                 });
             }
             else
@@ -471,79 +437,14 @@
             $('#straightForwardPrintThtTruckControlId').show();
             showDialog('#straightForwardPrintThtTruckControlId','60%',620);
         });
+        $('#suggestions').click(function(){
 
-        $('#amalgamate').click(function(){
-            //combineroutes
-            $('#combineroutes').show();
-            showDialog('#combineroutes','60%',620);
-            $('.onDrag').remove();
-
-            $.ajax({
-                url: '{!!url("/amalgamation")!!}',
-                type: "get",
-                data: {deldate:$('#deliveryDatesonPlanning').val()},
-                success: function (data) {
-                    var trHTML = '';
-
-                    $.each(data, function (key, value) {
-                        var classes = 'onDrag';
-
-
-                        trHTML += '<tr role="row" class="'+classes+'" style="height: 26px !important;"  ><td>' +
-                            value.RouteId + '</td><td>' +
-                            value.LateOrder + '</td><td>' +
-                            value.Route + '</td><td>' +
-                            value.OrderType + '</td><td>' +
-                            value.DeliveryDate + '</td>' +
-                            '<td><input type="hidden" calss="routeid" style="height:20px;width:30px" value="'+value.RouteId+'"><input type="hidden" calss="ordertypeid" style="height:20px;width:30px" value="'+value.LateOrder+'"></td>' +
-                            '<td contenteditable="true"></td>' +
-                            '</tr>';
-                    });
-                    $('#mergeroutes').append(trHTML);
-                    $('#savebutton').append("<button id='saveamalga'>Save</button>");
-
-
-                    $('#saveamalga').click(function(){
-                        var productsLinesOnPickingOneOrder = new Array();
-                        $('#tablewithseq > tbody  > tr').each(function() {
-                            var data = $(this);
-                            console.debug(data);
-                            console.debug( $(this).closest('tr').find('td:eq(0)').text());
-                            console.debug( $(this).closest('tr').find('td:eq(1)').text());
-                            console.debug( $(this).closest('tr').find('td:eq(6)').text());
-                            if ( ( $(this).closest('tr').find('td:eq(6)').text()).length > 0) {
-                                productsLinesOnPickingOneOrder.push({
-                                    'routeid': $(this).closest('tr').find('td:eq(0)').text(),
-                                    'ordertypeid': $(this).closest('tr').find('td:eq(2)').text(),
-                                    'date': $(this).closest('tr').find('td:eq(5)').text(),
-                                    'sequence': $(this).closest('tr').find('td:eq(6)').text(),
-
-                                });
-                            }
-
-                        });
-                        $.ajax({
-                            url: '{!!url("/combineroutes")!!}',
-                            type: "POST",
-                            data: {
-                                routenew: $('#routenew').val(),
-                                ordertypenew: $('#ordertypenew').val(),
-                                dateto: $('#date').val(),
-                                sequence: productsLinesOnPickingOneOrder
-                            },
-                            success: function (data) {
-                                console.debug(data);
-                                // upDateOrderHeaderAndPOS();
-                            }
-                        });
-
-                    });
-                }
-
-            });
-
+            var orderType =$('#orderTypesTabletLoadingonPlanning').val();
+            var routeId =$('#rouTabletLoadingtesonPlanning').val();
+            if(orderType !='-99' && routeId !='-99'){
+                window.open('{!!url("/routePlannerSuggestions")!!}/'+$('#deliveryDatesonPlanning').val()+'/'+$('#orderTypesTabletLoadingonPlanning').val()+'/'+$('#rouTabletLoadingtesonPlanning').val()+'/'+$('#statusRoutePlanner').val());
+            }
         });
-
         $('#serchInvBtn').click(function(){
 
             $.ajaxSetup({
@@ -571,37 +472,33 @@
 
             //routesToSequence();
         });
+        $('#notifypickers').click(function(){
 
-            $('#printPriview').click(function(){
-                window.open('{!!url("/routePlannerPrintPreview")!!}/'+$('#deliveryDatesonPlanning').val()+'/'+$('#deliveryDatesonPlanning').val()+'/'+$('#orderTypesTabletLoadingonPlanning').val()+'/'+$('#rouTabletLoadingtesonPlanning').val()+'/'+$('#statusRoutePlanner').val() , "products", "width=760, height=500, scrollbars=yes");
-            });
+            $.ajax({
+                url: '{!!url("/notifypickers")!!}',
+                type: "POST",
+                data: {
+                    routeId: $('#rouTabletLoadingtesonPlanning').val(),
+                    deliveryDate: $('#deliveryDatesonPlanning').val(),
+                    OrderType: $('#orderTypesTabletLoadingonPlanning').val(),
+                    dateTo: $('#deliveryDatesonPlanning2').val()
 
-        $('#suggestions').click(function(){
+                },
+                success: function (data) {
 
-            var orderType =$('#orderTypesTabletLoadingonPlanning').val();
-            var routeId =$('#rouTabletLoadingtesonPlanning').val();
-            if(orderType !='-99' && routeId !='-99'){
-                window.open('{!!url("/routePlannerSuggestions")!!}/'+$('#deliveryDatesonPlanning').val()+'/'+$('#orderTypesTabletLoadingonPlanning').val()+'/'+$('#rouTabletLoadingtesonPlanning').val()+'/'+$('#statusRoutePlanner').val());
-            }
-        });
-            $('#requence').click(function(){
-                var orderType =$('#orderTypesTabletLoadingonPlanning').val();
-                var routeId =$('#rouTabletLoadingtesonPlanning').val();
-                if(orderType !='-99' && routeId !='-99'){
-                    $.ajax({
-                        url: '{!!url("/resequenceOrders")!!}',
-                        type: "POST",
-                        data: {deldate:$('#deliveryDatesonPlanning').val(),orderType:orderType,routeId:routeId},
-                        success: function (data) {
-                            console.debug(data);
-                            $('#tabletLoadingGoonPlanning').click();
+                    var dialog = $('<p><strong style="color:black"> <i>You Have Nofitied the Pickers to Pick </i>'+data+'</strong></p>').dialog({
+                        height: 200, width: 900, modal: true, containment: false,
+                        buttons: {
+                            "Okay": function () {
+                                dialog.dialog('close');
+                            },
+
                         }
-
                     });
                 }
+            });
 
-             });
-
+        });
         $('#tabletLoadingGoonProducts').click(function(){
             if (($('#deliveryDatesonPlanning').val()).length > 6)
             {
@@ -651,22 +548,19 @@
             });
 
         });
-        $("#deliveryDatesonPlanning").datepicker({
+        $("#deliveryDatesonPlanning,#deliveryDatesonPlanning2,#delDateChange").datepicker({
             changeMonth: true,//this option for allowing user to select month
             changeYear: true,
             dateFormat: 'yy-mm-dd' });
-        var dt_to = $.datepicker.formatDate('yy-mm-dd', new Date());
-        $("#deliveryDatesonPlanning").val(dt_to);
         $('#doneSorting').click(function(){
             var sortedOrderIds = new Array();
             var stringyFy = '';
             $('#unsequenced > tbody > tr').each(function() {
                 var data = $(this);
                 var index =  $(this).closest('tr').index();
-                sortedOrderIds.push({'index':index,'orderId': $(data).find('td:eq(2)').text()});//
-
+                sortedOrderIds.push({'index':index,'orderId': $(data).find('td:eq(5)').text()});//
             });
-
+            console.debug(sortedOrderIds);
             $.ajax({
                 url: '{!!url("/sequencingTheStops")!!}',
                 type: "POST",
@@ -684,160 +578,126 @@
             //console.debug(sortedOrderIds);
 
         });
+        $('#printPriview').click(function(){
+            window.location = '{!!url("/routePlannerPrintPreview")!!}/'+$('#deliveryDatesonPlanning').val()+'/'+$('#deliveryDatesonPlanning2').val()+'/'+$('#orderTypesTabletLoadingonPlanning').val()+'/'+$('#rouTabletLoadingtesonPlanning').val()+'/'+$('#statusRoutePlanner').val();
+        });
         $('#unsequenced').on('click', 'button', function (e) {
             var $this = $(this);
             var row_index = $this.closest('tr').index();
             var row_closestTrColumns = $this.closest('tr');
-            var orderId = row_closestTrColumns.find('td:eq(2)').text();
+            var orderId = row_closestTrColumns.find('td:eq(5)').text();
             console.debug("**********************orderId "+orderId);
             window.open('{!!url("/productontheminiorderform")!!}/'+orderId, "productsontheorder", "width=760, height=500, scrollbars=yes")
 
         });
-        $('#moveSelectedOrders').on('click',function(){
-            var valuesProd = new Array();
-            $('#listoforders').empty();
-            var htmls = '';
-            $.each($("input[name='caseProd[]']:checked"),
-                function () {
-                    var data = $(this).parents('tr:eq(0)');
-                    valuesProd.push({ 'orderId':$(data).find('td:eq(2)').text()});
-                    htmls += '<h5>' +$(data).find('td:eq(2)').text()+' - '+ $(data).find('td:eq(11)').text() + '</h5>' ;
-                });
-            $('#listoforders').append(htmls);
-            if (valuesProd.length > 0 && authdialogMoveOrder === 'LTRUE')
-            {
-                $('#movingOrders').show();
-                showDialog('#movingOrders','60%',500);
-            }
-            if(authdialogMoveOrder === 'LTRUE') {
-                $('#continuemove').click(function () {
-                    showDialog('#popupmoveThis', '60%', 220);
-                    $('#submitChanges').click(function () {
-                        console.debug("after clicking submit****************" + valuesProd);
-                        //
 
-                        $.ajax({
-                            url: '{!!url("/moveTheOrderArray")!!}',
-                            type: "POST",
-                            data: {
-                                orderTypeId: $('#deliveryTypeRun').val(),
-                                routeId: $('#eRouteName').val(),
-                                orderId: valuesProd
-                            },
-                            success: function (data) {
-
-                                //$('#tabletLoadingGoonPlanning').click();
-                                showDialog('#confirmMove', '60%', 220);//
-                                $('#okayclose').click(function () {
-                                    $("#popupmoveThis").dialog('close');
-                                    $("#confirmMove").dialog('close');
-                                    location.reload(true);
-                                });
-                            }
-                        });
-                    });
-                });
-            }else{
-                showDialog('#popupmoveThis', '60%', 220);
-                $('#submitChanges').click(function () {
-                    console.debug("after clicking submit****************" + valuesProd);
-                    //
-
-                    $.ajax({
-                        url: '{!!url("/moveTheOrderArray")!!}',
-                        type: "POST",
-                        data: {
-                            orderTypeId: $('#deliveryTypeRun').val(),
-                            routeId: $('#eRouteName').val(),
-                            orderId: valuesProd
-                        },
-                        success: function (data) {
-
-                            //$('#tabletLoadingGoonPlanning').click();
-                            showDialog('#confirmMove', '60%', 220);//
-                            $('#okayclose').click(function () {
-                                $("#popupmoveThis").dialog('close');
-                                $("#confirmMove").dialog('close');
-                                location.reload(true);
-                            });
-                        }
-                    });
-                });
-            }
-
-        });
         $('#selectAll').on('click',function(){
+            var filters = [];
+            var allchecked = [];
             $($("input[name='caseProd[]']")).each(function(){
                 $(this).prop('checked',true);
-            });
-        });
+                var newFilter = $(this).closest('tr').find('td:eq(3)').text();
+                $(this).closest('tr').find('td:eq(3)').css('background-color', '#ffcccc');
+                //#ffcccc;
+                if(!$(this).is(":checked"))
+                {
+                    $(this).closest('tr').find('td:eq(3)').css('background-color', 'yellow');
+                    //alert('you are unchecked ' + );
+                    var found = jQuery.inArray(newFilter, allchecked);
+                    if (found >= 0) {
+                        // Element was found, remove it.
+                        allchecked.splice(found, 1);
+                    }
+                }else
+                {
+                    allchecked.push(newFilter);
 
+                }
+                var filters = [];
+                $.each(allchecked, function(i, el){
+                    if($.inArray(el, filters) === -1) filters.push(el);
+                });
+
+                console.debug("all   +"+allchecked.length);
+                console.debug(" fil +"+filters.length);
+                console.debug(filters);
+                $("#totalorders").empty();
+                $("#totalorders").append('N/STOPS :'+filters.length);
+            });
+
+            /*
+                $("input:checkbox").click(function() {
+                    var newFilter = $(this).closest('tr').find('td:eq(3)').text();
+                     $(this).closest('tr').find('td:eq(3)').css('background-color', '#ffcccc');
+                    //#ffcccc;
+                if(!$(this).is(":checked"))
+                {
+                     $(this).closest('tr').find('td:eq(3)').css('background-color', 'yellow');
+                    //alert('you are unchecked ' + );
+                    var found = jQuery.inArray(newFilter, allchecked);
+                            if (found >= 0) {
+                                // Element was found, remove it.
+                                allchecked.splice(found, 1);
+                            }
+                }else
+                {
+                    allchecked.push(newFilter);
+
+                }
+                var filters = [];
+                    $.each(allchecked, function(i, el){
+                        if($.inArray(el, filters) === -1) filters.push(el);
+                    });
+
+                console.debug("all   +"+allchecked.length);
+                console.debug(" fil +"+filters.length);
+                console.debug(filters);
+                if(filters.length > 20)
+
+            */
+
+
+        });
+        $(".ghost").click(function(){
+            if($(this).is(":checked")) {
+                alert($(this).val());
+            }
+        });
         $('#Deselectselect').on('click',function(){
             $($("input[name='caseProd[]']")).each(function(){
                 $(this).prop('checked',false);
             });
+            $("#totalorders").empty();
+            $("#totalorders").append('N/STOPS : 0');
         });
-        //
-      /*  $(document).on('click', '.DeliverySequence', function(e) {
-            //numberpad
-            var orderId = $(this).closest('tr').find('td:eq(2)').text();
-            var invoiceNo = $(this).closest('tr').find('td:eq(1)').text();
-            $('#numberpad').show();
-            showDialog('#numberpad', '60%', 220);//
-            $('#filledinseq').val('');
-            $('#submitpad').click(function () {
-                if(($.trim(invoiceNo)).length < 5)
-                {
-                    $.ajax({
+        $('#moveSelectedOrders').on('click',function(){
+            var valuesProd = new Array();
+            $.each($("input[name='caseProd[]']:checked"),
+                function () {
+                    var data = $(this).parents('tr:eq(0)');
+                    valuesProd.push({ 'orderId':$(data).find('td:eq(5)').text()});
+                });
+            showDialog('#popupmoveThis','60%',220);
+            $('#submitChanges').click(function(){
+                console.debug("after clicking submit****************"+valuesProd);
+                $.ajax({
+                    url: '{!!url("/moveTheOrderArray")!!}',
+                    type: "POST",
+                    data: {orderTypeId:$('#deliveryTypeRun').val(),routeId:$('#eRouteName').val(),orderId:valuesProd,delivDate:$('#delDateChange').val()},
+                    success: function (data) {
 
-                        type: "POST",
-                        data: {mode:2,orderId:orderId,seq:$('#filledinseq').val()},
-                        success: function (data) {
-                            console.debug(data);
-                            $( "#numberpad" ).dialog('close');
-                            $('#tabletLoadingGoonPlanning').click();
-                        }
+                        //$('#tabletLoadingGoonPlanning').click();
+                        showDialog('#confirmMove','60%',220);//
+                        $('#okayclose').click(function(){
+                            $("#popupmoveThis").dialog('close');
+                            $("#confirmMove").dialog('close');
+                            window.location = '{!!url("/routePlannerExtParam")!!}/'+$('#deliveryDatesonPlanning').val()+'/'+$('#orderTypesTabletLoadingonPlanning').val()+'/1085/'+$('#statusRoutePlanner').val();
 
-                    });
-                }
-                else
-                {
-                    alert("SORRY ,THIS IS ALREADY INVOICED YOU CAN NOT MOVE IT");
-                    $("#numberpad").dialog('close');
-                }
-
+                            // $('#unsequenced').scrollTop();
+                        });
+                    }
+                });
             });
-
-        });*/
-        $(document).on('keyup', '.DeliverySequence', function(e) {
-            //numberpad
-            var code = (e.keyCode ? e.keyCode : e.which);
-            // var testLst = $(this).closest('tr');
-            if ((code == 13 )) {
-
-
-                var orderId = $(this).closest('tr').find('td:eq(2)').text();
-                var invoiceNo = $(this).closest('tr').find('td:eq(1)').text();
-                var valTyped = $(this).val();
-                if (($.trim(invoiceNo)).length < 5) {
-                    $.ajax({
-                        url: '{!!url("/sequenceOrdersByMode")!!}',
-                        type: "POST",
-                        data: {mode: 2, orderId: orderId, seq: valTyped},
-                        success: function (data) {
-                            console.debug(data);
-
-                            $('#tabletLoadingGoonPlanning').click();
-                        }
-
-                    });
-                } else {
-                    alert("SORRY ,THIS IS ALREADY INVOICED YOU CAN NOT MOVE IT");
-                    $("#numberpad").dialog('close');
-                }
-
-            }
-
 
         });
 
@@ -853,7 +713,7 @@
 
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[11];
+            td = tr[i].getElementsByTagName("td")[2];
             if (td) {
                 if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
                     tr[i].style.display = "";
@@ -863,7 +723,6 @@
             }
         }
     }
-
     function showDialog(tag,width,height)
     {
         $( tag ).dialog({height: height, modal: false,
@@ -895,7 +754,6 @@
     }
     function getMultiRoutSelected()
     {
-        console.debug($('#deliveryDatesonPlanning').val());
 
         $.ajax({
             url: '{!!url("/getRouteDataMultiSelected")!!}',
@@ -904,93 +762,82 @@
                 routeId: $('#rouTabletLoadingtesonPlanning').val(),
                 deliveryDate: $('#deliveryDatesonPlanning').val(),
                 OrderType: $('#orderTypesTabletLoadingonPlanning').val(),
+                dateTo: $('#deliveryDatesonPlanning2').val(),
                 status: $('#statusRoutePlanner').val()
             },
             success: function (data) {
                 var trHTML = '';
                 var style = '';
                 var classes = 'onDrag';
-                var columClass = '';
                 $('.onDrag').remove();
                 var massTotal = 0;
                 var ordervalue = 0;
+                var status = 0;
+                var readTheOnly = '';
                 $.each(data, function (key, value) {
-                    var classes = 'onDrag';
-                    var columClass = '';
-                  /*  if (value.DeliveryDate ==0)
+
+                    /* if((value.bitCreditHold) == "1")
+                     {
+                         status = 1;
+                         classes = 'onDrag backgroudcolor';
+                         readTheOnly ='disabled';
+                     }*/
+
+                    classes = 'onDrag';
+                    if((value.Backorder) == "1")
                     {
                         classes = 'onDrag backgroudcolor';
-                    }*/
-                    if (value.offloaded ==1)
-                    {
-                        classes = 'onDrag backgroudcolorOffloaded';
+
                     }
-                    if (value.StatusId ==2)
-                    {
-                        classes = 'onDrag backgroudcolor';
-                    }
-                    if (value.courierColor =="blue")
-                    {
-                        classes = 'onDrag backgroudcolorBlue';
-                    }
-                    if (value.collectionColor =="orange")
-                    {
-                        classes = 'onDrag backgroudcolorOrange';
+                    if ((value.Locked) == "1") {
+                        //
+                        classes = 'onDrag lockedbackgroudcolor';
                     }
                     if(value.intNotification == 3)
                     {
                         classes = 'onDrag backgroudcolorOffloadedHighNotification';
                     }
-                    if(value.limit == 1)
-                    {
-                        classes = 'onDrag backgroudcolorBadCredit';
-                    }
-                    if(value.Loaded == 1)
-                    {
-                        columClass = 'backgroudcolorLoadingProgress';
-                    }
-
+//status ---this was @value.tTime
                     massTotal =  parseFloat(massTotal) + parseFloat(value.Mass);
                     ordervalue =  parseFloat(ordervalue) + parseFloat(value.OrderValue);
-                    trHTML += '<tr role="row" class="'+classes+'" style="height: 26px !important;"  ><td>' +
-                        value.DeliveryDate + '</td><td>' +
+                    trHTML += '<tr role="row" class="'+classes+'" style="height: 26px !important;"  >'+
+                        '<td style="height: 26px ;font-size:10px;color:black;">' +
+                        value.OrderDate + '</td><td style="height: 26px ;font-size:10px;color:blue;    font-weight: 900;">' +
+                        value.DeliveryDate + '</td><td style="height: 26px ;font-size:10px;color:black;">' +
+                        value.Route + '</td><td style="background:yellow;font-size:14px">' +
 
-                        value.InvoiceNo + '</td><td>' +
-                        value.OrderId + '</td>' +
-                        '<td style="display: none;">' +
+                        value.StoreName+ '</td><td style="height: 26px ;font-size:10px;color:black;">' +
+                        value.InvoiceNo + '</td><td style="height: 26px ;font-size:10px;color:black;">' +
+                        value.OrderId + '</td><td style="font-weight:900">' +
+                        value.OrderType + '</td><td style="display: none;">' +
                         value.OrderTypeId + '</td><td style="display: none;">' +
-                        value.RouteId + '</td><td style="width: 17px;">' +
-                        '<input type="text" name="DeliverySequence" class="DeliverySequence" value="'+value.DeliverySequence+'" onkeypress="return isFloatNumber(this,event)" style="background: #a6f30e;font-weight: 900;" >'+
-                        '</td><td style="color:blue">' +
-                        parseFloat(value.Mass).toFixed(0) + '</td><td>' +
-                        '<button class="btn-xs btn-success" style="width: 76px;height: 24px;font-size: 8px;"  value="'+value.OrderId+'">View Products</button></td>' +
-                        '<td style="font-weight:900">' +
-                        value.OrderNo + '</td>'+
-                        '<td style="font-weight:900">' +
-                        value.OrderType + '</td><td>'+
-                        value.Route + '</td>' +
-                        '<td style="background:yellow">' +
-
-                    value.StoreName + '</td><td class="'+columClass+'">'+
-                    value.DeliveryDateRoutingID + '</td>'+
-                        '<td><input type="checkbox" name="caseProd[]" style="height:20px;width:30px" value="'+value.OrderId+'"></td>' +
-
-                        '</tr>';
+                        value.RouteId + '</td><td>' +
+                        value.DeliverySequence + '</td><td style="color:blue;font-size: 8;">' +
+                        parseFloat(value.Mass).toFixed(3) + '</td><td  style="font-size: 10px;">' +
+                        parseFloat(value.OrderValue).toFixed(3) + '</td><td style="height: 26px ;font-size:10px;color:black;">' +
+                        value.deliveryAddress1 + '</td><td style="font-size:10px;">' +
+                        value.optionalField + '</td><td>' +
+                        value.tTime + '  </td><td>' +
+                        '<button class="btn-xs btn-success" style="width: 50px;height: 24px;font-size: 8px;"  value="'+value.OrderId+'">View</button>' +
+                        '</td><td><input type="checkbox" name="caseProd[]" style="height:20px;width:30px" onchange="Selectallcheckbox('+status+','+value.OrderId +')" class="ghost" value="'+value.OrderId+'"  readTheOnly></td><td>' +
+                        value.UserField3+
+                        '<td></tr>';
                 });
                 $('#unsequenced').append(trHTML);
                 $('#mass').val(parseFloat(massTotal).toFixed(3));
                 $('#ordervaluetot').val(parseFloat(ordervalue).toFixed(2));
                 $("#unsequenced").trigger("update");
 
+
                 var filters = [];
                 var allchecked = [];
                 $("input:checkbox").click(function() {
-                    var newFilter = $(this).closest('tr').find('td:eq(11)').text();
-                    $(this).closest('tr').find('td:eq(11)').css('background-color', '#ffcccc');
+                    var newFilter = $(this).closest('tr').find('td:eq(3)').text();
+                    $(this).closest('tr').find('td:eq(3)').css('background-color', '#ffcccc');
                     //#ffcccc;
                     if(!$(this).is(":checked"))
                     {
-                        $(this).closest('tr').find('td:eq(11)').css('background-color', 'yellow');
+                        $(this).closest('tr').find('td:eq(3)').css('background-color', 'yellow');
                         //alert('you are unchecked ' + );
                         var found = jQuery.inArray(newFilter, allchecked);
                         if (found >= 0) {
@@ -1010,10 +857,9 @@
                     console.debug("all   +"+allchecked.length);
                     console.debug(" fil +"+filters.length);
                     console.debug(filters);
-
-                    if(filters.length > 40)
+                    if(filters.length > 20)
                     {
-                        var dialog = $('<p><strong style="color:red">You have put too many stops, the limit is 40</strong></p>').dialog({
+                        var dialog = $('<p><strong style="color:red">You have put too many stops, the limit is 20</strong></p>').dialog({
                             height: 200, width: 700,modal: true,containment: false,
                             buttons: {
                                 "Okay": function () {
@@ -1024,10 +870,39 @@
                     }
                     $("#totalorders").empty();
                     $("#totalorders").append('N/STOPS :'+filters.length);
+
                 });
 
             }
         });
+    }
+
+    function Selectallcheckbox(element,orderid){
+
+        //url = sendCommunicationForCreditControl
+        /*if(element == "1")
+        {
+            $("#creditOnHold").show();
+            showDialog("#creditOnHold", 400 ,400);
+
+            $("#reportOnHold").click(function(){
+
+                    $.ajax({
+                        url:  ,
+                        type: "GET",
+                        data:{
+                            orderID:orderid
+                        },
+                        success: function(data){
+
+                        }
+                    });
+
+            });
+
+
+        }*/
+
     }
     function printDoc(url,docType,docID,isDeliveryNote,invoiceNumber)
     {
@@ -1040,7 +915,6 @@
             }
         });
     }
-
     function truckControlSheetHeaderOnFiltering(truckControlId)
     {
 //getTruckControlSheetHeaderByTruckId
@@ -1170,21 +1044,8 @@
 
     }
 
-    function isFloatNumber(item,evt) {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode==46)
-        {
-            var regex = new RegExp(/\./g)
-            var count = $(item).val().match(regex).length;
-            if (count > 1)
-            {
-                return false;
-            }
-        }
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
-        }
-        return true;
-    }
+
+</script>
+<script>
+
 </script>

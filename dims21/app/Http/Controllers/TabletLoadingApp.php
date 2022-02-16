@@ -9,6 +9,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 //use App\Http\Co
 use Auth;
 
@@ -116,24 +118,29 @@ class TabletLoadingApp extends controller
     public function getRouteDataMultiSelected(Request $request)
     {
         $routeId = $request->get('routeId');
-        //dd($routeId);
+        // dd($routeId);
         $routeId = implode(", ", $routeId);
         $deliveryDate = $request->get('deliveryDate');
-        $orderIDs = DB::connection('sqlsrv4')->table('tblOrderTypes')->select('OrderTypeId')->get();
+        $dateTo = $request->get('dateTo');
 
         $OrderType = $request->get('OrderType');
         $status = $request->get('status');
 
-        /*foreach ($orderIDs as $values )
-        {
-                $arryhOLDid
-        }*/
-
-        $getInvoicesOnRoute = DB::connection('sqlsrv4')
-            ->select("EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . ",'" . $routeId . "','" . $status . "'");
+        $getInvoicesOnRoute = DB::connection('sqlsrv3')
+            ->select("EXEC spGetStopsToSort '" . $deliveryDate . "','".$dateTo."'," . $OrderType . ",'" . $routeId."','".$status."'" );
         // echo "EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . "," . $routeId.",'".$status."'";
 
         return response()->json($getInvoicesOnRoute);
+        //old
+        /*$routeId = $request->get('routeId');
+        $routeId = implode(", ", $routeId);
+        $deliveryDate = $request->get('deliveryDate');
+        $orderIDs = DB::connection('sqlsrv4')->table('tblOrderTypes')->select('OrderTypeId')->get();
+        $OrderType = $request->get('OrderType');
+        $status = $request->get('status');
+        $getInvoicesOnRoute = DB::connection('sqlsrv4')
+            ->select("EXEC spGetStopsToSort '" . $deliveryDate . "'," . $OrderType . ",'" . $routeId . "','" . $status . "'");
+        return response()->json($getInvoicesOnRoute);*/
     }
 
     public function spTabletLoading($orderId)
@@ -273,26 +280,24 @@ class TabletLoadingApp extends controller
     {
         $GroupId = Auth::user()->GroupId;
         $things = (new SalesForm())->getThings($GroupId, 'Allow Call Logger');
-        $deliverTypes = DB::connection('sqlsrv4')->table('tblOrderTypes')->select('OrderTypeId', 'OrderType')->get();
+        $deliverTypes = DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->get();
+        $deliverTypeSelected = DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->where('OrderTypeId',$orderType)->get();
+        $trucks = DB::connection('sqlsrv3')->table('tblTrucks')->select('TruckName','TruckId','RegNo')->orderBy('TruckName','ASC')->get();
+        $tblDrivers = DB::connection('sqlsrv3')->table('tblDrivers')->select('DriverName','DriverId')->orderBy('DriverName','ASC')->get();
+        $getDeliveryDates = DB::connection('sqlsrv3')->table('vwDistinctDelvDates')->select('DeliveryDate')->orderBy('DeliveryDate', 'desc')->get();
 
-        $deliverTypeSelected = DB::connection('sqlsrv4')->table('tblOrderTypes')->select('OrderTypeId', 'OrderType')->where('OrderTypeId', $orderType)->get();
-        $trucks = DB::connection('sqlsrv4')->table('tblTrucks')->select('TruckName', 'TruckId', 'RegNo')->orderBy('TruckName', 'ASC')->get();
-        $tblDrivers = DB::connection('sqlsrv4')->table('tblDrivers')->select('DriverName', 'DriverId')->orderBy('DriverName', 'ASC')->get();
-        $getDeliveryDates = DB::connection('sqlsrv4')->table('vwDistinctDelvDates')->select('DeliveryDate')->orderBy('DeliveryDate', 'desc')->get();
-
-        $getRoutes = DB::connection('sqlsrv4')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse', '0')->orderBy('Route', 'asc')->get();
-        $getSelectedRoute = DB::connection('sqlsrv4')->table('tblRoutes')->select('Routeid', 'Route')->where('Routeid', $route)->get();
-
-
+        $getRoutes =  DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse','0')->orderBy('Route', 'asc')->get();
+        $getSelectedRoute =  DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->where('Routeid',$route)->get();
+        $DocDateTime = (new \DateTime())->format('Y-m-d');
         return view('dims/route_planner_params')
-            ->with('routes', $getRoutes)
-            ->with('routeSelected', $getSelectedRoute)
-            ->with('trucks', $trucks)->with('drivers', $tblDrivers)
-            ->with('orderTypes', $deliverTypes)
-            ->with('orderTypeSelected', $deliverTypeSelected)
-            ->with('selectedDelivDate', $delvDate)
-            ->with('status', $status)
-            ->with('delivDates', $getDeliveryDates)->with('things', $things);
+            ->with('routes',$getRoutes)
+            ->with('routeSelected',$getSelectedRoute)
+            ->with('trucks',$trucks)->with('drivers',$tblDrivers)
+            ->with('orderTypes',$deliverTypes)
+            ->with('orderTypeSelected',$deliverTypeSelected)
+            ->with('selectedDelivDate',$DocDateTime)
+            ->with('status',$status)
+            ->with('delivDates',$getDeliveryDates);
     }
 
     public function getRouteDifference(Request $request)
@@ -460,19 +465,25 @@ class TabletLoadingApp extends controller
 
     public function moveTheOrderArray(Request $request)
     {
+
+        $userid = \Illuminate\Support\Facades\Auth::user()->UserID;
+        $userName = \Illuminate\Support\Facades\Auth::user()->UserName;
+
         $orderId = $request->get('orderId');
         $routeId = $request->get('routeId');
         $orderTypeId = $request->get('orderTypeId');
-        $userid = \Illuminate\Support\Facades\Auth::user()->UserID;
-        $userName = \Illuminate\Support\Facades\Auth::user()->UserName;
+        $delivDate= $request->get('delivDate');
+//
         foreach ($orderId as $value) {
-            /* DB::connection('sqlsrv4')->table('tblOrders')
-                 ->where('OrderId', $value['orderId'])->
-                 update(['LateOrder' => $orderTypeId, 'RouteId' => $routeId, 'DeliverySequence' => 0]);*/
-            DB::connection('sqlsrv3')
-                ->statement("EXEC spMoveOrder " . $value['orderId'] . "," . $routeId . "," . $orderTypeId . "," . $userid . "," . $userName);
 
+            /*DB::connection('sqlsrv3')->table('tblOrders')
+                ->where('OrderId', $value['orderId'])->
+                update(['LateOrder' => $orderTypeId, 'RouteId' => $routeId,
+                    'DeliverySequence' => 0,'DeliveryDate'=>$delivDate]);*/
+            $getTruckControlSheetDetails = DB::connection('sqlsrv3')
+                ->statement("EXEC spMoveOrder " . $value['orderId'].",'".$delivDate."',".$routeId.",".$orderTypeId.",".$userid.",'".$userName."'");
         }
+
     }
 
     public function sequenceOrdersByMode(Request $request)
@@ -974,6 +985,27 @@ and  cast(dteDeliveryDate as date) = cast(tdd.DeliveryDate as date)
             echo "INVALID INVOICE NUMBER";
         }
     }
+    public function routePlannerExtParamDrivers($delvDate,$orderType,$route,$status)
+    {
+        $deliverTypes = DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->get();
+        $deliverTypeSelected = DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->where('OrderTypeId',$orderType)->get();
+        $trucks = DB::connection('sqlsrv3')->table('tblTrucks')->select('TruckName','TruckId','RegNo')->orderBy('TruckName','ASC')->get();
+        $tblDrivers = DB::connection('sqlsrv3')->table('tblDrivers')->select('DriverName','DriverId')->orderBy('DriverName','ASC')->get();
+        $getDeliveryDates = DB::connection('sqlsrv3')->table('vwDistinctDelvDates')->select('DeliveryDate')->orderBy('DeliveryDate', 'desc')->get();
+
+        $getRoutes =  DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse','0')->orderBy('Route', 'asc')->get();
+        $getSelectedRoute =  DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->where('Routeid',$route)->get();
+
+        return view('dims/route_sorting_drivers')
+            ->with('routes',$getRoutes)
+            ->with('routeSelected',$getSelectedRoute)
+            ->with('trucks',$trucks)->with('drivers',$tblDrivers)
+            ->with('orderTypes',$deliverTypes)
+            ->with('orderTypeSelected',$deliverTypeSelected)
+            ->with('selectedDelivDate',$delvDate)
+            ->with('status',$status)
+            ->with('delivDates',$getDeliveryDates);
+    }
     public function printLoadingSheet($routingId)
     {
 
@@ -992,6 +1024,55 @@ and  cast(dteDeliveryDate as date) = cast(tdd.DeliveryDate as date)
             ->select("select count(OrderId) as OrderId From tblOrders where Loaded = 0 and RouteId=$routeId and LateOrder=$orderType and DeliveryDate='$deliveryDate'");
 
         echo intval($getComponents[0]->OrderId);
+    }
+    public function notifypickers(Request $request)
+    {
+        $routeId = $request->get('routeId');
+        // dd($routeId);
+        $routeId = implode(", ", $routeId);
+        $deliveryDate = $request->get('deliveryDate');
+        $dateTo = $request->get('dateTo');
+
+        $OrderType = $request->get('OrderType');
+        $orderTypename =DB::connection('sqlsrv3')->table('tblOrderTypes')->where('OrderTypeId', $OrderType)->first();
+        $routeName =DB::connection('sqlsrv3')->table('tblRoutes')->where('RouteId', $routeId)->first();
+        //var_dump($orderTypename->OrderType);
+
+
+        $getInvoicesOnRoute = DB::connection('sqlsrv3')
+            ->statement("EXEC spCreateNotifications " . $routeId . ",".$OrderType.",'".$dateTo."'" );
+        //echo "EXEC spGetStopsToSort '" . $deliveryDate . "','".$dateTo."'," . $OrderType . ",'" . $routeId."'";
+        $datar = $routeName->Route.' Route No '.$orderTypename->OrderType .' For '.$dateTo;
+        $returns = "";
+        $returns = $this->slackUser($orderTypename->OrderType,$routeName->Route,$dateTo);
+//spCreateNotifications
+        return response()->json($datar);
+    }
+
+    public function slackUser($ordertype,$route,$delvirateDate)
+    {
+        //dd("TEST");
+        $url = "https://hooks.slack.com/services/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";
+        try {
+
+
+            $client = new Client();
+
+            //$route = str_replace(' ', '%20', $route);
+            //$ordertype = str_replace(' ', '%20', $ordertype);
+            $message ="Please Check ". $route." ".$ordertype." For ".$delvirateDate ;
+
+            $request = $client->post($url, ['body' => json_encode(
+                [
+                    'text' => $message ,
+
+                ]
+            )]);
+        } catch (Exception $e) {
+            exit();
+        }
+        $stream = $request->getBody()->getContents();
+        return $stream;
     }
     public function getData($orderDate,$orderType,$routeName,$driver,$assistant,$truckname,$assistanttwo,$userId)
     {

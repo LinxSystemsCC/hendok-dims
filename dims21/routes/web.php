@@ -403,6 +403,7 @@ Route::get('ordermapvisualisation/{route}/{otype}/{deldate}',[TabletLoadingApp::
 Route::post('ordervisualjson',[TabletLoadingApp::class,'ordervisualjson']);
 Route::get('getShortLoadedReport',[TabletLoadingApp::class,'getShortLoadedReport']);
 Route::get('jsonshortloadedreport',[TabletLoadingApp::class,'jsonshortloadedreport']);
+Route::get('routePlannerExtParamdrivers/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'routePlannerExtParamDrivers']);
 
 //TABLET LOADING APP ENDS HERE !!!
 
