@@ -8482,50 +8482,62 @@
             function disableOnFinish()
             {
 
-                if($('#hiddenDeliveryAddressId').val() == "0" ){
-                    console.debug("what is happening");
-               
-                    $.ajax({
-                    url:'{!!url("/clearorderlocksperorder")!!}',
+                $.ajax({
+                    url: '{!!url("/checkifhasmultiaddress")!!}',
                     type: "POST",
                     data: {
-                        OrderId: $('#orderId').val()
+                        account: $('#inputCustAcc').val()
                     },
-                    success: function(data){
-                        location.reload(true);
-                        $('#orderId').val('');
-                        $('#address1').val('');
-                        $('#address2').val('');
-                        $('#address3').val('');
-                        $('#address4').val('');
-                        $('#address5').val('');
-                        $('#orederNumber').val('');
-                        $('#invoiceNo').val('');
-                        $('#generalRouteForNewDeliveryAddress').empty();
-                        $('#salesPerson').empty();
-                        $('#customerSelectedDelDate').val('');
-                        $('#inputCustAcc').val('');
-                        $('#inputCustName').val('');
-                        // $('#inputDeliveryDate').val('');
-                        // $('#inputOrderDate').val('');
-                        $(".fast_remove").empty();
-                        // $("#orderPatternIdTable").empty();
-                        $('.hidebody').hide();
-                        $('.itCanHide').show();
-                        $('#submitFilters').show();
-                        $("#inputDeliveryDate").prop("disabled", false);
-                        $("#changeDelvDate").prop("disabled", false);
-                        $("#changeDelvDate").prop("disabled", false);
-                        $("#inputCustName").prop("disabled", false);
-                        $("#inputCustAcc").prop("disabled", false);
-                        $("#orderId").prop("disabled", false);
-                        $("#inputOrderDate").prop("disabled", false);
+                    success: function (data) {
+
+                        if(data[0].result =="SUCCESS") {
+
+                            confirmmultideliveryaddressonfinish();
+
+                            }
+                            else{
+                            $.ajax({
+                                url:'{!!url("/clearorderlocksperorder")!!}',
+                                type: "POST",
+                                data: {
+                                    OrderId: $('#orderId').val()
+                                },
+                                success: function(data){
+                                    location.reload(true);
+                                    $('#orderId').val('');
+                                    $('#address1').val('');
+                                    $('#address2').val('');
+                                    $('#address3').val('');
+                                    $('#address4').val('');
+                                    $('#address5').val('');
+                                    $('#orederNumber').val('');
+                                    $('#invoiceNo').val('');
+                                    $('#generalRouteForNewDeliveryAddress').empty();
+                                    $('#salesPerson').empty();
+                                    $('#customerSelectedDelDate').val('');
+                                    $('#inputCustAcc').val('');
+                                    $('#inputCustName').val('');
+                                    // $('#inputDeliveryDate').val('');
+                                    // $('#inputOrderDate').val('');
+                                    $(".fast_remove").empty();
+                                    // $("#orderPatternIdTable").empty();
+                                    $('.hidebody').hide();
+                                    $('.itCanHide').show();
+                                    $('#submitFilters').show();
+                                    $("#inputDeliveryDate").prop("disabled", false);
+                                    $("#changeDelvDate").prop("disabled", false);
+                                    $("#changeDelvDate").prop("disabled", false);
+                                    $("#inputCustName").prop("disabled", false);
+                                    $("#inputCustAcc").prop("disabled", false);
+                                    $("#orderId").prop("disabled", false);
+                                    $("#inputOrderDate").prop("disabled", false);
+                                }
+                            });
+                            }
+
                     }
                 });
-                }
-                else{
-                    confirmmultideliveryaddressonfinish();
-                }
+
 
             }
             function empties(){

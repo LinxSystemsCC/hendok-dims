@@ -231,6 +231,7 @@ Route::get('/getMessageGrid',[DimsCommon::class,'getMessageGrid'] );
 Route::get('viewcustomerpricingjson/{custcode}/{datefrom}/{dateto}/{datefrom2}/{dateto2}',[DimsCommon::class,'viewcustomerpricingjson'] );
 Route::get('printcustomerpricingjson/{custcode}/{datefrom}/{dateto}/{datefrom2}/{dateto2}',[DimsCommon::class,'printcustomerpricingjson']);
 Route::post('updateMessage',[DimsCommon::class,'updateMessage'] );
+Route::post('checkifhasmultiaddress',[DimsCommon::class,'checkifhasmultiaddress'] );
 
 //DIMS COMMON ENDS HERE HERE!!!!
 

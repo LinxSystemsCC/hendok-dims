@@ -77,6 +77,7 @@ class DimsCommon extends Controller
         return $DocId;
 
     }
+
     public function intoTblPrintedDocPickingSlips(Request $request)
     {
 
@@ -285,6 +286,12 @@ class DimsCommon extends Controller
         $output['done'] = $hasAccess;
         $output['result'] = $activeUser;
         return response()->json($output);
+    }
+    public function checkifhasmultiaddress(Request $request){
+        $customerCode = $request->get('account');
+        $hasmulti = DB::connection('sqlsrv3')
+            ->select("Exec spHasMultiDeliveryAddress '".$customerCode."'");
+        return response()->json($hasmulti);
     }
     public function AuthBulkZeroCost(Request $request)
     {
