@@ -3453,7 +3453,7 @@
                         GlobalRouteId = $("#routeName").val();
                         console.debug("route id" + $("#routeName").val());
                         $('.hidebody').show();
-                        $('.itCanHide').show();
+                        $('.itCanHide').hide();
                         // generateALine();
 
                         $.each(wareautocomplete, function (i, item) {
