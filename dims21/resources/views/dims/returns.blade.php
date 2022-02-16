@@ -360,7 +360,7 @@
                 <table class="table2 table-bordered" id="createdOrders" style="overflow-y: auto;width:100%;color: black;    font-weight: 700;">
                     <thead>
                     <tr>
-                        <th class="col-sm-1">OrderId</th><th class="col-sm-1">Invoice no</th><th class="col-sm-1">Cust Code</th><th>Cust Name</th><th>Order Types</th><th>Route</th><th>Delivery Date</th><th>Reference No</th></tr>
+                        <th class="col-sm-1">OrderId</th><th class="col-sm-1">Invoice no</th><th class="col-sm-1">Cust Code</th><th>Cust Name</th><th>Order Types</th><th>Route</th><th>Delivery Date</th><th>Order Date</th><th>Reference No</th></tr>
                     </thead>
 
                 </table>
@@ -1588,6 +1588,7 @@
                     {"data": "LateOrder", "class": "small"},
                     {"data": "Route", "class": "small"},
                     {"data": "DeliveryDate", "class": "small", "bSortable": true},
+                            {"data": "OrderDate", "class": "small"},
                     {"data": "OrderNo", "class": "small"},
 
                 ],
@@ -1660,6 +1661,7 @@
                         {"data": "LateOrder", "class": "small"},
                         {"data": "Route", "class": "small"},
                         {"data": "DeliveryDate", "class": "small", "bSortable": true},
+                            {"data": "OrderDate", "class": "small"},
                         {"data": "OrderNo", "class": "small"},
 
 
@@ -1704,6 +1706,7 @@
                         {"data": "LateOrder", "class": "small"},
                         {"data": "Route", "class": "small"},
                         {"data": "DeliveryDate", "class": "small", "bSortable": true},
+                            {"data": "OrderDate", "class": "small"},
                         {"data": "OrderNo", "class": "small"},
 
 

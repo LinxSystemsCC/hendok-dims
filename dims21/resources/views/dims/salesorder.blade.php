@@ -461,11 +461,11 @@
                 <table class="table2 table-bordered " id="createdOrders" style="overflow-y: auto;width:100%;color: black;    font-weight: 700;" tabindex=0>
                     <thead>
                     <tr>
-                        <th class="col-sm-1">OrderId</th><th class="col-sm-1">Invoice no</th><th class="col-sm-1">Cust Code</th><th>Cust Name</th><th class="col-sm-1">Order Types</th><th class="col-sm-1">Route</th><th class="col-sm-1">Delivery Date</th><th>Reference No</th><th>Created By</th><th>Total Inv</th><th>Terms</th> <th>Bal.Due</th><th>GP(%)</th></tr>
+                        <th class="col-sm-1">OrderId</th><th class="col-sm-1">Invoice no</th><th class="col-sm-1">Cust Code</th><th>Cust Name</th><th class="col-sm-1">Order Types</th><th class="col-sm-1">Route</th><th class="col-sm-1">Delivery Date</th><th>Order Date</th><th>Reference No</th><th>Created By</th><th>Total Inv</th><th>Terms</th> <th>Bal.Due</th><th>GP(%)</th></tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>OrderId</th><th >Invoice no</th><th >Cust Code</th><th>Cust Name</th><th>Order Types</th><th>Route</th><th>Delivery Date</th><th>Reference No</th><th>Created By</th><th>Total Inc</th><th>Terms</th> <th>Bal.Due</th><th>GP(%)</th></tr>
+                        <th>OrderId</th><th >Invoice no</th><th >Cust Code</th><th>Cust Name</th><th>Order Types</th><th>Route</th><th>Delivery Date</th><th>Order Date</th><th>Reference No</th><th>Created By</th><th>Total Inc</th><th>Terms</th> <th>Bal.Due</th><th>GP(%)</th></tr>
                     </tfoot>
 
                 </table>
@@ -2271,6 +2271,7 @@
                             {"data": "LateOrder", "class": "small"},
                             {"data": "Route", "class": "small"},
                             {"data": "DeliveryDate", "class": "small"},
+                            {"data": "OrderDate", "class": "small"},
                             {"data": "OrderNo", "class": "small"},
                             {"data": "UserName", "class": "small"},
                             {"data": "inclusives", "class": "small"},
@@ -2402,6 +2403,7 @@
                                 {"data": "LateOrder", "class": "small"},
                                 {"data": "Route", "class": "small"},
                                 {"data": "DeliveryDate", "class": "small", "bSortable": true},
+                            {"data": "OrderDate", "class": "small"},
                                 {"data": "OrderNo", "class": "small"},
                                 {"data": "UserName", "class": "small"},
                                 {"data": "inclusives", "class": "small"},
@@ -2461,6 +2463,7 @@
                                 {"data": "LateOrder", "class": "small"},
                                 {"data": "Route", "class": "small"},
                                 {"data": "DeliveryDate", "class": "small", "bSortable": true},
+                            {"data": "OrderDate", "class": "small"},
                                 {"data": "OrderNo", "class": "small"},
                                 {"data": "UserName", "class": "small"},
                                 {"data": "inclusives", "class": "small"},
