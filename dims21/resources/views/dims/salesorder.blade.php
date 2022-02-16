@@ -5205,6 +5205,7 @@
                     },
                     "columns": [
                         {"data": "OrderId", "class": "small", "bSortable": true},
+                        {"data": "OrderDate", "class": "small"},
                         {"data": "DeliveryDate", "class": "small"},
                         {"data": "CustomerPastelCode", "class": "small"},
                         {"data": "StoreName", "class": "small"},
@@ -5263,6 +5264,7 @@
                     },
                     "columns": [
                         {"data": "OrderId", "class": "small", "bSortable": true},
+                        {"data": "OrderDate", "class": "small"},
                         {"data": "DeliveryDate", "class": "small"},
                         {"data": "CustomerPastelCode", "class": "small"},
                         {"data": "StoreName", "class": "small"},

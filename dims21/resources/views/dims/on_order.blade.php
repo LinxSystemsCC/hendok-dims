@@ -35,6 +35,7 @@
 
             <tr style="font-size: 17px;">
                 <th class="col-sm-1">Order Id</th>
+                <th class="col-sm-1">Order Date</th>
                 <th class="col-sm-1">Delivery Date</th>
                 <th >Cust Code</th>
                 <th class="col-md-3">Store Name</th>
