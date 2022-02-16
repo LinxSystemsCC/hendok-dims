@@ -85,7 +85,7 @@
                             <input type="hidden" name="hiddenCustDiscount" class="form-control input-sm col-xs-1" id="hiddenCustDiscount" >
                             <input type="hidden" name="hiddencustomerGp" class="form-control input-sm col-xs-1" id="hiddencustomerGp" >
                         </div>
-                        <div class="form-group col-md-2 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                        <div class="form-group col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                             <label class="control-label" for="inputOrderDate"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Order Date</label>
                             <input type="text" class="form-control input-sm col-xs-1" id="inputOrderDate" style="font-weight: 900;    color: black;font-size: 13px;">
                         </div>
@@ -3453,7 +3453,7 @@
                         GlobalRouteId = $("#routeName").val();
                         console.debug("route id" + $("#routeName").val());
                         $('.hidebody').show();
-                        $('.itCanHide').hide();
+                        $('.itCanHide').show();
                         // generateALine();
 
                         $.each(wareautocomplete, function (i, item) {
