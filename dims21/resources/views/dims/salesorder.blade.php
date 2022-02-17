@@ -9758,7 +9758,7 @@ console.debug(data);
                                     }
                                 }else
                                 {
-                                    var dialog = $('<p><strong style="color:black">This order has been invoiced.</strong></p>').dialog({
+                                    var dialog = $('<p><strong style="color:black">This order has been invoiced, staged or loaded.</strong></p>').dialog({
                                         height: 200, width: 700, modal: true, containment: false,
                                         buttons: {
                                             "Okay": function () {
