@@ -2123,10 +2123,14 @@ class SalesFormFunctions extends Controller
 
         $userName =   Auth::user()->UserName;
         $dateFrom = (new \DateTime())->format('Y-m-d H:i:s');
-
-        DB::connection('sqlsrv4')->table('tblOrders')
+        DB::connection('sqlsrv4')
+        ->statement('exec spUpdateQuote ?,?',
+        array($orderId,$isQuote));
+        /*DB::connection('sqlsrv4')->table('tblOrders')
             ->where('OrderId',$orderId )
-            ->update(['TreatAsQuotation' => $isQuote]);
+            ->update(['TreatAsQuotation' => $isQuote, 'TreatAsQuote'=>$isQuote]);*/
+
+           
         if($isQuote == "1")
         {
             $Message="The Order has been changed to be a quote by ".$userName;
