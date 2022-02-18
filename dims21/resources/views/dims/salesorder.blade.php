@@ -2962,6 +2962,7 @@
                                                     $(".getOrderDetailLine ").css("display", "none");
                                                     $("#deleteAllLines").hide(); 
                                                     $('#changeDeliveryAddressOnNotInvoiced').hide();
+                                                    $('#updateaddresses').hide();
                                                 }
 
                                             }
