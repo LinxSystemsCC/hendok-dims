@@ -2960,6 +2960,8 @@
                                             } else {
                                                 if(isAllowedToChangeInv !=1){
                                                     $(".getOrderDetailLine ").css("display", "none");
+                                                    $("#deleteAllLines").hide(); 
+                                                    $('#changeDeliveryAddressOnNotInvoiced').hide();
                                                 }
 
                                             }
