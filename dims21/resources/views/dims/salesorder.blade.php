@@ -5490,16 +5490,9 @@
                             $('.generalRouteForNewDeliveryAddress').prepend('<option value="'+$(this).closest('tr').find('#hiddenRouteId').val()+'" selected="selected">'+$(this).closest('tr').find('td').eq(1).text()+'</option>');
                             $('#deliveryAddressIdOnPopUp').val($(this).closest('tr').find('#hiddenDeliveryAddressIdAfterSaved').val());
                         });
-                        var $input;
-                        if(isAllowedToChangeInv !=1){
-                            $('<button type="button" style="float:right;" id="ignoresave">IGNORE</button>');
-                             
-                                                    
-                                                }else{
-                                                    $('<button type="button" id="updateaddresses">UPDATE</button> <button type="button" style="float:right;" id="ignoresave">IGNORE</button>');
                         
-                                                }
-                        var $input = $input.appendTo($("#dynamicaddress"));
+                        var $input = $('<button type="button" id="updateaddresses">UPDATE</button> <button type="button" style="float:right;" id="ignoresave">IGNORE</button>');
+                        $input.appendTo($("#dynamicaddress"));
                         $('#updateaddresses').click(function () {
 
                             if($('#generalRouteForNewDeliveryAddress').val() === 'null')
