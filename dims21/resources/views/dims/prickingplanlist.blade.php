@@ -124,7 +124,7 @@
                 <th class="col-xs-2" style="width: 80px;" >Quantity</th>
                 <th class="col-xs-2" >Weights</th>
 
-                <th class="col-xs-2" >To Load</th>
+
                 <th class="col-xs-2" >To Invoice</th>
 
 
@@ -147,7 +147,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+
                     <td></td>
                 </tr>
                     <?php $subtotal = 0;$count = 0; ?>
@@ -167,7 +167,7 @@
                     <td style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
-                    <td></td>
+
                     <td></td>
 
 
@@ -208,7 +208,7 @@
                     <td  style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
-                    <td></td>
+
                     <td></td>
 
 
@@ -231,7 +231,7 @@
                 <td> </td>
                 <td> </td>
                 <td>{{ $Grandtotal}}</td>
-                <td> </td>
+
                 <td> </td>
             </tr>
 

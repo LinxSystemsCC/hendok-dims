@@ -316,10 +316,17 @@ Ref: <input id="ref" >
                             dataField: "rname",
                             caption: "Route Name" ,width: 80
 
-                        },{
+                        }
+                        ,{
                             width: 80,
                             dataField: "DeliveryDate",
                             caption: "Due Date"
+
+                        }
+                        ,{
+                            width: 80,
+                            dataField: "OrderDate",
+                            caption: "Ordered Date"
 
                         }
                         ,{
@@ -335,6 +342,7 @@ Ref: <input id="ref" >
                         }
                         ,
                         {
+                            width:380,
                             dataField: "PastelDescription",
                             caption: "Item Name",
                             headerFilter: {
@@ -347,6 +355,7 @@ Ref: <input id="ref" >
                             dataField: "Mass",
                             caption: "Mass",dataType:"number",format: "#0.####"
 
+
                         }
                         ,{
                             width: 80,
@@ -355,6 +364,7 @@ Ref: <input id="ref" >
 
                         }
                         ,{
+                            width: 80,
                             dataField: "qtyPlan",
                             caption: "Plan",
                             dataType:"number", cellTemplate: function(element, info) {
@@ -366,6 +376,7 @@ Ref: <input id="ref" >
 
                         },
                         {
+                            width: 80,
                             caption: "M X Q",dataField: "mxq",sColor: "Red",format: "#0.####",
                             calculateCellValue: function (rowData) {
                                 return rowData.Mass * rowData.qtyPlan;
@@ -443,7 +454,12 @@ Ref: <input id="ref" >
                         });*/
                             //$('#weightshere').val( qty);
                     },
+                    onRowPrepared(e) {
+                        if (e.rowType == 'data' && e.data.DocType ==1) {
+                            e.rowElement.css('background', 'yellow');
+                        }
 
+                    },
                     onRowClick: function (e) {
 
 
