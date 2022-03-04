@@ -214,7 +214,7 @@
 
 
                 </tr>
-                <?php $storenames = $val->StoreName; $orderNumber =  $val->OrderNum;$area =  $val->areas;
+                <?php $storenames = $val->StoreName;$subtotal = $subtotal + floatval($val->weightPlanned);  $orderNumber =  $val->OrderNum;$area =  $val->areas;
                 if($storenames == $val->StoreName){
                     $istrue = true;
                 }
