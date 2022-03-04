@@ -146,7 +146,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{$subtotal}} </td>
+                    <td>{{$subtotal- floatval($val->weightPlanned)}} </td>
 
                     <td></td>
                 </tr>
