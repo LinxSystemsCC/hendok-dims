@@ -582,6 +582,14 @@ class TabletLoadingApp extends controller
         return view('dims/prickingplanlist')
             ->with('listproducts',$allproducts);
     }
+    public function pickingplanlisttest($ref){
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingReferenceProducts ?',
+                array($ref)
+            );
+        return view('dims/prickingplanlisttest')
+            ->with('listproducts',$allproducts);
+    }
     public function pastels()
     {
 

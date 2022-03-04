@@ -330,6 +330,7 @@ Route::get('getmycustroutemap',[TabletLoadingApp::class,'getmycustroutemap']);
 Route::get('pickingtickets',[TabletLoadingApp::class,'pickingtickets']);
 Route::get('GetPickingReferenceProducts',[TabletLoadingApp::class,'GetPickingReferenceProducts']);
 Route::get('pickingplanlist/{ref}',[TabletLoadingApp::class,'pickingplanlist']);
+Route::get('pickingplanlisttest/{ref}',[TabletLoadingApp::class,'pickingplanlisttest']);
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);
