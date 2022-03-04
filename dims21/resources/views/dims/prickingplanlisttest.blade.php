@@ -133,7 +133,7 @@
             <tbody >
             <?php $storenames = "";$orderNumber=""; $subtotal=0;$Grandtotal=0;$area = "";$orderdate=""; $istrue = true;$count = 0; ?>
             @foreach($listproducts as $val )
-            <?php if($count > 0 ){$subtotal = 0;}  $subtotal = $subtotal + floatval($val->weightPlanned);    ?>
+            <?php if($storenames != $val->StoreName && $count > 0 ){$subtotal = 0;}  $subtotal = $subtotal + floatval($val->weightPlanned);    ?>
                 <?php $Grandtotal = $Grandtotal + floatval($val->weightPlanned);?>
             @if($storenames != $val->StoreName )
                 @if($count > 0 )
