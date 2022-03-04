@@ -133,9 +133,7 @@
             <tbody >
             <?php $storenames = "";$orderNumber=""; $subtotal=0;$Grandtotal=0;$area = "";$orderdate=""; $istrue = true;$count = 0; ?>
             @foreach($listproducts as $val )
-
-            <?php   $subtotal = $subtotal + floatval($val->weightPlanned);    ?>
-            <?php if($count == 0 ){$subtotal = 0;} ?>
+            <?php      ?>
                 <?php $Grandtotal = $Grandtotal + floatval($val->weightPlanned);?>
             @if($storenames != $val->StoreName )
 
@@ -174,7 +172,7 @@
                     <td></td>
 
 
-                </tr><?php $istrue = true; $storenames = $val->StoreName; $orderNumber =  $val->OrderNum;$area =  $val->areas;$orderdate = $val->OrderDate  ?>
+                </tr><?php $istrue = true; $storenames = $val->StoreName;$subtotal = $subtotal + floatval($val->weightPlanned);  $orderNumber =  $val->OrderNum;$area =  $val->areas;$orderdate = $val->OrderDate  ?>
 
                 @else
                 <tr>
