@@ -146,7 +146,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td> {{$subtotal}}</td>
 
                     <td></td>
                 </tr>
