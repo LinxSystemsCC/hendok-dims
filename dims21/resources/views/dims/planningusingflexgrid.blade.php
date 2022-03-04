@@ -270,7 +270,7 @@ Ref: <input id="ref" >
 
                         },
                         {
-                            width: 80,
+                            width:40,
                             dataField: "CustomerPastelCode",
 
                             caption: "Customer Code"
@@ -314,7 +314,7 @@ Ref: <input id="ref" >
 
                         },{
                             dataField: "rname",
-                            caption: "Route Name" ,width: 80
+                            caption: "Route Name" ,width: 50
 
                         }
                         ,{
@@ -342,7 +342,7 @@ Ref: <input id="ref" >
                         }
                         ,
                         {
-                            width:380,
+                            width:360,
                             dataField: "PastelDescription",
                             caption: "Item Name",
                             headerFilter: {
