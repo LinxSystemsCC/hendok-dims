@@ -222,6 +222,19 @@
                 @endif
             <?php $count++; ?>
             @endforeach
+            <tr style="background: darkgray;color: white; font-weight: 900;">
+                <td></td>
+                <td> </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{$subtotal}} </td>
+
+                <td></td>
+            </tr>
             <tr style="background: grey;color: white;font-weight: 900">
                 <td> Grand Total</td>
                 <td> </td>
