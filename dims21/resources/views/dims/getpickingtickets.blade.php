@@ -25,7 +25,7 @@
     </style>
 </head>
 <body style="font-family: Sans-serif">
-<h3>Short Loaded</h3>
+<h3>List Picking Tickets</h3>
 
 <div class="dx-field" style="display: none;">
     <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
