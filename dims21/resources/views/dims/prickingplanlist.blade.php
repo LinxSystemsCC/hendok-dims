@@ -48,8 +48,13 @@
 </head>
 <body style="font-family: Sans-serif">
 <div class="container">
-
-    <table>
+    <div style="display: flex;">
+        <div style="width: 10%">
+    {!! QrCode::size(60)->generate($ref); !!}<br>
+            {{$ref}}
+        </div>
+        <div style="width: 90%">
+    <table style="font-size: 11px;">
         <tbody>
         <tr>
             <td  class="col-xs-2">Date Loaded</td>
@@ -110,7 +115,10 @@
 
         </tbody>
     </table>
+        </div>
+    </div>
     <hr><br>
+
     <table id="orderHeaderPrint" style="font-size: 11px;">
         <thead>
         <tr style="    background: black;    color: white;" >

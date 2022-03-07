@@ -347,6 +347,20 @@ class TabletLoadingApp extends controller
         return view('dims/topup')
             ->with('ref',$ref);
     }
+    public function viewpickingtickets(){
+
+        return view('dims/getpickingtickets');
+    }
+    public function jsongetpickingplan(Request $request){
+        $dateFrom = (new \DateTime($request->get('from')))->format('Y-m-d');
+        $dateTo = (new \DateTime($request->get('to')))->format('Y-m-d');
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingTicketsToPrint ?,?',
+                array($dateFrom,$dateTo)
+            );//[spGetInProgressPlanningProducts]
+
+        return response()->json($allproducts);
+    }
     public function pickingticketslist($datefrom,$dateTo,$status)
     {
         $userId = Auth::user()->UserID;
@@ -580,7 +594,7 @@ class TabletLoadingApp extends controller
                 array($ref)
             );
         return view('dims/prickingplanlist')
-            ->with('listproducts',$allproducts);
+            ->with('listproducts',$allproducts)->with('ref',$ref);
     }
     public function pickingplanlisttest($ref){
         $allproducts = DB::connection('sqlsrv3')
@@ -588,7 +602,7 @@ class TabletLoadingApp extends controller
                 array($ref)
             );
         return view('dims/prickingplanlisttest')
-            ->with('listproducts',$allproducts);
+            ->with('listproducts',$allproducts)->with('ref',$ref);
     }
     public function pastels()
     {

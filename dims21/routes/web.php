@@ -333,6 +333,8 @@ Route::get('pickingplanlist/{ref}',[TabletLoadingApp::class,'pickingplanlist']);
 Route::get('pickingplanlisttest/{ref}',[TabletLoadingApp::class,'pickingplanlisttest']);
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
+Route::get('viewpickingtickets',[TabletLoadingApp::class,'viewpickingtickets']);
+Route::get('jsongetpickingplan',[TabletLoadingApp::class,'jsongetpickingplan']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);
 Route::get('pickingticketslistnotdone/{ref}',[TabletLoadingApp::class,'pickingticketslistnotdone']);
 Route::get('topuppickingplan/{ref}',[TabletLoadingApp::class,'topuppickingplan']);
