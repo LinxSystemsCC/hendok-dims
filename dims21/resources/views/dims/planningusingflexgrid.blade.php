@@ -27,6 +27,8 @@
 </head>
 <body style="font-family: Sans-serif">
 <h3>Flex Picking Plan</h3>
+<a href='{!!url("/viewpickingtickets")!!}' onclick="window.open(this.href, 'viewpickingtickets',
+'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;" style="background: red;padding:10px;color: black;font-weight: 900" >My Picking Sips</a>
 <div class="dx-field" style="display: none;">
     <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
     <div class="dx-field-value">

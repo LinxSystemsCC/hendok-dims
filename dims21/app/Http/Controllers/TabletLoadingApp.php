@@ -593,8 +593,14 @@ class TabletLoadingApp extends controller
             ->select('exec spGetPickingReferenceProducts ?',
                 array($ref)
             );
+
+        $getsequence = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingReferenceToSequence ?',
+                array($ref)
+            );
+
         return view('dims/prickingplanlist')
-            ->with('listproducts',$allproducts)->with('ref',$ref);
+            ->with('listproducts',$allproducts)->with('ref',$ref)->with('sequence',$getsequence);
     }
     public function pickingplanlisttest($ref){
         $allproducts = DB::connection('sqlsrv3')
@@ -603,6 +609,14 @@ class TabletLoadingApp extends controller
             );
         return view('dims/prickingplanlisttest')
             ->with('listproducts',$allproducts)->with('ref',$ref);
+    }
+    public function sequencepickingplans(Request $request){
+        $arraystops = $request->get('stopsseq');
+        $referenceno = $request->get('referenceno');
+        foreach ($arraystops as $value) {
+            DB::connection('sqlsrv3')
+                ->statement("EXEC spSequencePickingPlans '" . $value['onum'] . "','" . $referenceno . "',". $value['Qty'] );
+        }
     }
     public function pastels()
     {

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="{{ asset('js/ag_grid.js') }}"></script>
-    <script src="{{ asset('public/js/jquery-2.2.3.min.js') }}"></script>
+
+    <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
+
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/ag_css.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ag_cc_theme.css') }}">
     <link rel="stylesheet" href="{{ asset('css/jquery-ui2.min.css') }}" type="text/css" />
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
@@ -49,9 +51,9 @@
 <body style="font-family: Sans-serif">
 <div class="container">
     <div style="display: flex;">
-        <div style="width: 10%">
+        <div style="width: 10%" id="qrs">
     {!! QrCode::size(60)->generate($ref); !!}<br>
-            {{$ref}}
+            <i style="font-size: 7px;">{{$ref}}</i>
         </div>
         <div style="width: 90%">
     <table style="font-size: 11px;">
@@ -260,9 +262,25 @@
         </tbody>
     </table>
 </div>
+<div id="seqpopup">
+    <input type="hidden"  id="refno" value="{{$ref}}">
+    <table id="sequences" style="font-size: 12px;">
+        <tbody>
+    @foreach($sequence as $val )
+     <tr>
+         <td> {{$val->StoreName}}</td>
+         <td><input type="hidden" value="{{$val->OrderNum}}" class="onum">{{$val->OrderNum}}</td>
+         <td>  <input type="number"  name="ordernumber[]" class="qty" value="{{$val->intSequence}}"></td>
+     </tr>
+
+        @endforeach
+        </tbody>
+        </table>
+    <button class="btn-lg btn-success" id="saveseq">SAVE</button>
+</div>
 
 </body>
-<script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
+
 <style>
     table tbody {
 
@@ -285,8 +303,41 @@
 <script>
     $(document).ready(function (){
 
+        $('#seqpopup').hide();
         $('#continue').click(function(){
             window.location = '{!!url("/home")!!}';
+        });
+        $('#qrs').click(function(){
+            alert("testing");
+            $('#seqpopup').show();
+            var dialog2 = $('#seqpopup').dialog({
+                height: 800, width: 700, modal: true, containment: false
+            });
+            $('#saveseq').click(function(){
+                var stopsseq = new Array();
+                $('#sequences > tbody  > tr').each(function() {
+              //      var onum = $(this).closest('tr').find('.onum').val();
+                    stopsseq.push({
+                        'onum': $(this).closest('tr').find('.onum').val(),
+                        'Qty': $(this).closest('tr').find('.qty').val(),
+                    });
+
+                });
+
+                console.debug(stopsseq);
+
+                $.ajax({
+                    url: '{!!url("/sequencepickingplans")!!}',
+                    type: "GET",
+                    data: {
+                        referenceno: $('#refno').val(),
+                        stopsseq:stopsseq
+                    },
+                    success: function (data) {
+
+                    }
+                });
+            });
         });
 
     });
