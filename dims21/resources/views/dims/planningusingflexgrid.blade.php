@@ -458,6 +458,9 @@ Ref: <input id="ref" >
                         if (e.rowType == 'data' && e.data.DocType ==1) {
                             e.rowElement.css('background', 'yellow');
                         }
+                        if (e.rowType == 'data' && e.data.isRoofing !="Roofing" && parseInt(e.data.qtyPlan) >  parseInt(e.data.QtyOnHand) ) {
+                            e.rowElement.css('background', 'red');
+                        }
 
                     },
                     onRowClick: function (e) {
