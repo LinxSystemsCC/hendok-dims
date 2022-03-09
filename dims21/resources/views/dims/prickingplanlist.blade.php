@@ -143,13 +143,28 @@
         <tbody >
         <?php $storenames = "";$orderNumber=""; $subtotal=0;$Grandtotal=0;$area = "";$orderdate=""; $istrue = true;$count = 0; ?>
         @foreach($listproducts as $val )
-            <?php      ?>
+            <?php   $externalCount = 0;   ?>
+            @if($count == 0 )
+                <tr style="background: darkgray;color: white; font-weight: 900;">
+                    <td>STOP :{{$val->intSequence}}</td>
+                    <td> </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td> </td>
+
+                    <td></td>
+                </tr>
+                @endif
             <?php $Grandtotal = $Grandtotal + floatval($val->weightPlanned);?>
             @if($storenames != $val->StoreName )
 
                 @if($count > 0 )
                     <tr style="background: darkgray;color: white; font-weight: 900;">
-                        <td></td>
+                        <td>STOP :{{$val->intSequence}}</td>
                         <td> </td>
                         <td>NEXT</td>
                         <td></td>
@@ -335,6 +350,7 @@
                     },
                     success: function (data) {
 
+                        location.reload();
                     }
                 });
             });
