@@ -598,9 +598,18 @@ class TabletLoadingApp extends controller
             ->select('exec spGetPickingReferenceToSequence ?',
                 array($ref)
             );
+        $pickingheader = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingSheetHeader ?',
+                array($ref)
+            );
+        $trucks = DB::connection('sqlsrv3')
+            ->select('Select * from tblTrucks where intType=2' );
 
-        return view('dims/prickingplanlist')
-            ->with('listproducts',$allproducts)->with('ref',$ref)->with('sequence',$getsequence);
+        $teamleaders = DB::connection('sqlsrv3')
+            ->select("Select * from tblDimsusers where strPickingTeams='TeamLeader'" );
+
+        return view('dims/prickingplanlist')->with('teamleaders',$teamleaders)->with('pickingheader',$pickingheader)
+            ->with('listproducts',$allproducts)->with('ref',$ref)->with('sequence',$getsequence)->with('trucks',$trucks);
     }
     public function pickingplanlisttest($ref){
         $allproducts = DB::connection('sqlsrv3')
@@ -613,9 +622,11 @@ class TabletLoadingApp extends controller
     public function sequencepickingplans(Request $request){
         $arraystops = $request->get('stopsseq');
         $referenceno = $request->get('referenceno');
+        $teamleaderId  = $request->get('teamleaderId');
+        $truckname  = $request->get('truckname');
         foreach ($arraystops as $value) {
             DB::connection('sqlsrv3')
-                ->statement("EXEC spSequencePickingPlans '" . $value['onum'] . "','" . $referenceno . "',". $value['Qty'] );
+                ->statement("EXEC spSequencePickingPlans '" . $value['onum'] . "','" . $referenceno . "',". $value['Qty'].",".$teamleaderId.",".$truckname );
         }
     }
     public function pastels()

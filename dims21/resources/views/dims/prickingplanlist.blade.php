@@ -56,6 +56,7 @@
             <i style="font-size: 7px;">{{$ref}}</i>
         </div>
         <div style="width: 90%">
+
     <table style="font-size: 11px;">
         <tbody>
         <tr>
@@ -76,7 +77,8 @@
         </tr>
         <tr>
             <td  class="col-xs-2">Team Leader</td>
-            <td  class="col-xs-2"> </td>
+
+            <td  class="col-xs-2"> @foreach($pickingheader as $value) {{$value->UserName}} @endforeach </td>
             <td  class="col-xs-2">Pallets #</td>
             <td  class="col-xs-2"></td>
             <td  class="col-xs-2">Team Leader Signed</td>
@@ -102,7 +104,7 @@
             <td  class="col-xs-2">Driver Name</td>
             <td  class="col-xs-2"> </td>
             <td  class="col-xs-2">Trailer Type</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2"> @foreach($pickingheader as $value) {{$value->TruckName}}  @endforeach</td>
             <td  class="col-xs-2">Falcon Sign</td>
             <td  class="col-xs-2"></td>
         </tr>
@@ -117,6 +119,7 @@
 
         </tbody>
     </table>
+                
         </div>
     </div>
     <hr><br>
@@ -291,6 +294,18 @@
         @endforeach
         </tbody>
         </table>
+    Team Leader<br>
+    <select id="teamleaders">
+        @foreach($teamleaders as $value)
+            <option value="{{$value->UserID}}">{{$value->UserName}}</option>
+            @endforeach
+    </select><br>
+    Trailor Type<br>
+    <select id="truckname">
+        @foreach($trucks as $value)
+            <option value="{{$value->TruckId}}">{{$value->TruckName}}</option>
+        @endforeach
+    </select><br>
     <button class="btn-lg btn-success" id="saveseq">SAVE</button>
 </div>
 
@@ -346,7 +361,9 @@
                     type: "GET",
                     data: {
                         referenceno: $('#refno').val(),
-                        stopsseq:stopsseq
+                        stopsseq:stopsseq,
+                        teamleaderId:$('#teamleaders').val(),
+                        truckname:$('#truckname').val()
                     },
                     success: function (data) {
 
