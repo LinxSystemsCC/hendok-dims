@@ -757,12 +757,12 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">C-Panel <span class="caret"></span></a>
                             <ul class="dropdown-menu" >
 
-                                @if($drivers !="0")
+
                                 <li>
                                     <a href='{!!url("/drivers")!!}'  onclick="window.open(this.href, 'drivers',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Drivers</a>
                                 </li>
-                                @endif
+
                                 @if($grid !=0)
                                 <li>
                                     <a href='{!!url("/grid_Users")!!}'  onclick="window.open(this.href, 'users',
@@ -779,12 +779,12 @@
                                     <a href='{!!url("/assets")!!}'  onclick="window.open(this.href, 'assets',
 'left=20,top=20,width=1600,height=999,toolbar=1,resizable=0'); return false;">Assets</a>
                                 </li>
-                                    @if($trucks !="0")
+
                                 <li>
                                     <a href='{!!url("/trucks")!!}'  onclick="window.open(this.href, 'trucks',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Trucks</a>
                                 </li>
-                                    @endif
+
                                 @if($routes !="0")
                                 <li>
                                     <a href='{!!url("/routes1")!!}'  onclick="window.open(this.href, 'routes',

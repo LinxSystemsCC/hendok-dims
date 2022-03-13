@@ -76,7 +76,7 @@ class DriversController extends Controller
 
 
         $deleteDriver = DB::connection('sqlsrv3')
-            ->statement("EXEC spCRUDDrivers ".$DriverId.",'".$DriverName."','".$GLCode."','Delete'");
+            ->statement("EXEC spCRUDDrivers ".$DriverId.",'".$DriverName."','".$GLCode."','Delete',1");
         return response()->json($deleteDriver);
     }
 
@@ -87,8 +87,9 @@ class DriversController extends Controller
         $TruckName = $request->get('TruckName');
         $RegNo = $request->get('RegNo');
         $Capacity = $request->get('Capacity');
+        $transportmodeid = $request->get('transportmodeid');
         $insertTrucks = DB::connection('sqlsrv3')
-            ->statement("EXEC spCRUDTrucks NULL,'".$TruckName."','".$RegNo."',".$Capacity.",'Insert'");
+            ->statement("EXEC spCRUDTrucks NULL,'".$TruckName."','".$RegNo."',".$Capacity.",'Insert',".$transportmodeid);
         return response()->json($insertTrucks);
 
     }
@@ -100,7 +101,7 @@ class DriversController extends Controller
         $RegNo = "NULL";
         $Capacity = 0;
         $readTrucks = DB::connection('sqlsrv3')
-            ->select("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Select'");
+            ->select("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Select',1");
 
         return view('dims/trucks')
             ->with('readTrucksItems',$readTrucks);
@@ -112,10 +113,11 @@ class DriversController extends Controller
         $TruckName = $request->get('TruckName');
         $RegNo = $request->get('RegNo');
         $Capacity = $request->get('Capacity');
+        $transportmodeid = $request->get('transportmodeid');
 
 
         $updateTrucks = DB::connection('sqlsrv3')
-            ->statement("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Update'");
+            ->statement("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Update',".$transportmodeid);
         return response()->json($updateTrucks);
 
     }
@@ -129,7 +131,7 @@ class DriversController extends Controller
 
 
         $deleteTrucks = DB::connection('sqlsrv3')
-            ->statement("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Delete'");
+            ->statement("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Delete',1");
         return response()->json($deleteTrucks);
     }
 
@@ -519,7 +521,7 @@ dbo.fnRouteLoader($routingId) as strLoadedBy,bitCashUpCheckedIt cashdealtwithit
         $html ="<!DOCTYPE html>
 <html>
 <head>
-    
+
 </head>
 <body style=\"font-family: Sans-serif\">";
         $html .= "<table style='width:100% ;background: black;color: white;border: 1px solid white;'>";

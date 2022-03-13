@@ -39,14 +39,14 @@
 	<div class="container" style="width: 100%;">
 		<div class="form-group row add">
             <a href='{!!url("/driverspdfdocs")!!}' onclick="window.open(this.href, 'managementSearch',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;">Invoices</a>
+'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;display: none">Invoices</a>
             <a href='{!!url("/driversperformancereport")!!}' onclick="window.open(this.href, 'driversperformance',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;">Drivers Performance</a>
+'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;display: none">Drivers Performance</a>
 
             <a href='{!!url("/noOfStops")!!}' onclick="window.open(this.href, 'noofdel',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;">NO.Delveries</a>
+'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;display: none">NO.Delveries</a>
             <a href='{!!url("/liveFleetDeliveries")!!}' onclick="window.open(this.href, 'fleet',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;">Live Fleet</a>
+'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;display: none">Live Fleet</a>
 			<div class="col-lg-12" >
 
 				<div class="col-lg-4">
@@ -173,6 +173,7 @@
         $('#dropdown').hide();
         $('#editDriver').hide();
         $('#salesInvoiced').hide();
+        $('#returns').hide();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

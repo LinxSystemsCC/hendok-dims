@@ -94,7 +94,7 @@
         </tr>
         <tr>
             <td  class="col-xs-2">Ticket #</td>
-            <td  class="col-xs-2"> </td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->strTicket}} @endforeach </td>
             <td  class="col-xs-2">Tarps #</td>
             <td  class="col-xs-2"></td>
             <td  class="col-xs-2">Stands #</td>
@@ -102,7 +102,7 @@
         </tr>
         <tr>
             <td  class="col-xs-2">Driver Name</td>
-            <td  class="col-xs-2"> </td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->drivers}} @endforeach </td>
             <td  class="col-xs-2">Trailer Type</td>
             <td  class="col-xs-2"> @foreach($pickingheader as $value) {{$value->TruckName}}  @endforeach</td>
             <td  class="col-xs-2">Falcon Sign</td>
@@ -112,14 +112,14 @@
             <td  class="col-xs-2">Horse Reg#</td>
             <td  class="col-xs-2"> </td>
             <td  class="col-xs-2">Trailer Reg #</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->RegNo}} @endforeach</td>
             <td  class="col-xs-2">Trailer No.</td>
             <td  class="col-xs-2"></td>
         </tr>
 
         </tbody>
     </table>
-                
+
         </div>
     </div>
     <hr><br>
@@ -281,6 +281,11 @@
     </table>
 </div>
 <div id="seqpopup">
+    <a href='{!!url("/ticketsdept")!!}/{{$ref}}' onclick="window.open(this.href, 'ticketsdept',
+'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;" style="background: red;padding:2px;color: black;font-weight: 900" >Assign Transport</a>
+    <br>
+    <br>
+    <br>
     <input type="hidden"  id="refno" value="{{$ref}}">
     <table id="sequences" style="font-size: 12px;">
         <tbody>
@@ -338,7 +343,7 @@
             window.location = '{!!url("/home")!!}';
         });
         $('#qrs').click(function(){
-            alert("testing");
+            alert("Open Info Dialog");
             $('#seqpopup').show();
             var dialog2 = $('#seqpopup').dialog({
                 height: 800, width: 700, modal: true, containment: false

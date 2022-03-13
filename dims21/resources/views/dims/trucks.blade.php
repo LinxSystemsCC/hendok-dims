@@ -40,7 +40,7 @@ overflow-y: scroll
         <div class="form-group row add">
 		   <div class="col-lg-12" >
 				<div class="col-lg-4">
-				
+
 					<form>
                         <fieldset class="well">
                             <legend class="well-legend">Add Screen</legend>
@@ -56,11 +56,18 @@ overflow-y: scroll
                                 <label class="control-label" for="Capacity"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Capacity</h4></label>
                                 <input type="text" class="form-control input-sm col-s-2" id="Capacity" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter The Trucks Capacity" required>
                             </div>
+                            <div class="form-group ">
+                                <label class="control-label" for="Capacity"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Transport Mode</h4></label>
+                                <select id="transportmode">
+                                    <option value="1">Truck</option>
+                                    <option value="2">Trailor</option>
+                                </select>
+                            </div>
                            <button class=" btn btn-success fa fa-plus-circle" type="submit" id="add" >ADD</button>
-						   
+
                         </fieldset>
                     </form>
-					
+
 				</div>
 				<div class="col-lg-8">
 						<div class="col-lg-12  visible-md visible-lg" >
@@ -75,7 +82,9 @@ overflow-y: scroll
 													<th class="text-center "><h3>Truck Name</h3></th>
 													<th class="text-center "><h3> Truck Reg No.</h3></th>
 													<th class="text-center "><h3> Truck Capacity</h3></th>
-													
+													<th class="text-center "><h3> Transport Mode</h3></th>
+													<th class="text-center "><h3> Transport Int</h3></th>
+
 												</tr>
 											</thead>
 											<tbody>
@@ -85,23 +94,25 @@ overflow-y: scroll
 													<td class="text-center" >{{$values->TruckName}}</td>
 													<td class="text-center" >{{$values->RegNo}}</td>
 													<td class="text-center" >{{$values->Capacity}}</td>
+													<td class="text-center" >{{$values->TransportMode}}</td>
+													<td class="text-center" >{{$values->intType}}</td>
 													</tr>
-												@endforeach	
-											</tbody>											
-											
+												@endforeach
+											</tbody>
+
 											</table>
 										</div>
-									   
-									  
+
+
 									</form>
 								</div>
 							</div>
-					</div>		
-				</div>	
-				
-				
+					</div>
+				</div>
+
+
 			</div>
-			
+
 		</div>
 	 <div id="editTrucks" title="Please Edit Truck Information">
 		<form>
@@ -122,8 +133,15 @@ overflow-y: scroll
 					<label class="control-label" for="CapacityEdit"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Truck Capacity</label>
 					<input type="text" class="form-control input-sm col-xs-1" id="CapacityEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter Truck Capacity" required>
 				</div>
-				
-			  
+                <div class="form-group ">
+                    <label class="control-label" for="Capacity"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Transport Mode</h4></label>
+                    <select id="transportmodeupdate">
+                        <option value="1">Truck</option>
+                        <option value="2">Trailor</option>
+                    </select>
+                </div>
+
+
 			</fieldset>
 		</form>
 		<div class="col-lg-4">
@@ -132,14 +150,14 @@ overflow-y: scroll
 		<div class="col-lg-4">
 		<button class=" btn btn-danger "  type="submit" id="delete">DELETE</button>
 		</div>
-        
 
-	    	
-	
-	
+
+
+
+
 	</div>
-</div>	
-	
+</div>
+
 
 
 @endsection
@@ -166,11 +184,11 @@ $(document).ready(function(){
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-		
+
 $("#add").click(function()
 {
 
-	
+
 	  $.ajax({
                     url: '{!!url("/addTrucksItem")!!}',
                     type: "POST",
@@ -179,14 +197,15 @@ $("#add").click(function()
                         TruckName: $('#TruckName').val(),
 						RegNo: $('#RegNo').val(),
 						Capacity: $('#Capacity').val(),
+                        transportmodeid: $('#transportmode').val(),
                         statement: 'Insert'
                     },
-                    success: function (data) 
+                    success: function (data)
 					{
 						location.reload(true);
                     }
                 });
-	
+
 
 });
 
@@ -199,27 +218,32 @@ $("#add").click(function()
 		 var truckName = row.find('td:eq(1)').text();
 		 var regNo = row.find('td:eq(2)').text();
 		 var capacity = row.find('td:eq(3)').text();
-		 showDialog('#editTrucks',600,600);
+		 var transportmode = row.find('td:eq(4)').text();
+		 var transportmodeint = row.find('td:eq(5)').text();
+
+         $('#transportmodeupdate').prepend('<option value="'+transportmodeint+'" selected="selected">'+transportmode+'</option>');
+
+      showDialog('#editTrucks',600,600);
 		 $('#updatemessage').empty();
 		 $('#TruckNameEdit').val(truckName);
 		 $('#RegNoEdit').val(regNo);
 		 $('#CapacityEdit').val(capacity);
 		 $('#TruckIdEdit').val(truckId);
 		 $('#updatemessage').append("You are now editing the information of " + truckName+"!");
-		 
+
    });
  $('#tableTrucks tbody').on('click', 'button', function (e) {
          $('#deleteTrucks').show();
 		 var $this = $(this);
 		 var row = $this.closest("button");
-		 showDialog('#deleteTrucks',600,600); 
-   
+		 showDialog('#deleteTrucks',600,600);
+
 });
-   
+
 $("#edit").click(function()
 {
 
-		
+
 	  $.ajax({
                     url: '{!!url("/editTrucksItem")!!}',
                     type: "POST",
@@ -228,27 +252,28 @@ $("#edit").click(function()
                         TruckName: $('#TruckNameEdit').val(),
 						RegNo: $('#RegNoEdit').val(),
 						Capacity: $('#CapacityEdit').val(),
+                        transportmodeid: $('#transportmodeupdate').val(),
                         statement: 'Update'
                     },
-                    success: function (data) 
+                    success: function (data)
 					{
 						location.reload(true);
-				
+
 
                     }
-					
-					
-			
-            
+
+
+
+
                 });
-	
+
 
 });
 
 $("#delete").click(function()
 {
 
-		
+
 	  $.ajax({
                     url: '{!!url("/deleteTrucksItem")!!}',
                     type: "POST",
@@ -256,19 +281,19 @@ $("#delete").click(function()
                         TruckId: $('#TruckIdEdit').val(),
                         statement: 'Delete'
                     },
-                    success: function (data) 
+                    success: function (data)
 					{
 						location.reload(true);
                     }
-					         
+
                 });
-	
+
 
 });
-		
- 
 
-	
+
+
+
 });
   function showDialog(tag,width,height)
     {

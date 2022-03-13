@@ -608,6 +608,8 @@ class TabletLoadingApp extends controller
         $teamleaders = DB::connection('sqlsrv3')
             ->select("Select * from tblDimsusers where strPickingTeams='TeamLeader'" );
 
+
+
         return view('dims/prickingplanlist')->with('teamleaders',$teamleaders)->with('pickingheader',$pickingheader)
             ->with('listproducts',$allproducts)->with('ref',$ref)->with('sequence',$getsequence)->with('trucks',$trucks);
     }
@@ -629,7 +631,55 @@ class TabletLoadingApp extends controller
                 ->statement("EXEC spSequencePickingPlans '" . $value['onum'] . "','" . $referenceno . "',". $value['Qty'].",".$teamleaderId.",".$truckname );
         }
     }
-    public function pastels()
+    public function ticketsdept($ref){
+        $tickets = DB::connection('weights')
+            ->select("SELECT TICKET_NUMBER,TICKET_DATE,TICKET_TIME,'' wigh
+                                    FROM  [WB_Ticket_Trans]
+                             where SECOND_WEIGH_OPERATOR = '' order by TICKET_NUMBER" );
+
+        $ticketselected = DB::connection('sqlsrv3')
+            ->select("SELECT strTicket from tblPickingPlanHeader where strUnickReference='".$ref."'" );
+
+        $trucks = DB::connection('sqlsrv3')
+            ->select("SELECT TruckId,RegNo from tblTrucks order by RegNo" );
+
+        $truckstodrive = DB::connection('sqlsrv3')
+            ->select("SELECT TruckId,RegNo from tblTrucks t inner join tblPickingPlanHeader h on t.TruckId = h.intTruckId where strUnickReference='".$ref."' order by RegNo" );
+        $drivers = DB::connection('sqlsrv3')
+            ->select("SELECT DriverId,DriverName from tblDrivers order by DriverName" );
+
+        $driverone = DB::connection('sqlsrv3')
+            ->select("SELECT DriverId,DriverName from tblDrivers d inner join tblPickingPlanHeader h on d.DriverId = h.intDriverOne where strUnickReference='".$ref."'" );
+
+        $drivertwo = DB::connection('sqlsrv3')
+            ->select("SELECT DriverId,DriverName from tblDrivers d inner join tblPickingPlanHeader h on d.DriverId = h.intDriverTwo where strUnickReference='".$ref."'" );
+        //dd($tickets);
+
+        return view('dims/tickets')
+            ->with('tickets',$tickets)
+            ->with('trucks',$trucks)
+            ->with('ref',$ref)
+            ->with('driverone',$driverone)
+            ->with('drivertwo',$drivertwo)
+            ->with('truckstodrive',$truckstodrive)
+            ->with('ticketselected',$ticketselected)
+            ->with('drivers',$drivers);
+        //return view('dims/prickingplanlist')->with('tickets',$tickets);
+    }
+    public function addtransport(Request $request){
+        $truckname = $request->get('TruckName');
+        $DriverOne = $request->get('DriverOne');
+        $DriverTwo = $request->get('DriverTwo');
+        $Ticket = $request->get('Ticket');
+        $ref = $request->get('ref');
+
+
+        $result =  DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference',$ref )
+            ->update(['intDriverOne' => $DriverOne,'intDriverTwo' => $DriverTwo,'strTicket' => $Ticket,'intTruckId' => $truckname]);
+
+    }
+    public function routemapper()
     {
 
 

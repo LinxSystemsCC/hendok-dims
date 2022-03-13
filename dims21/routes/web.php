@@ -5,6 +5,7 @@ use App\Http\Controllers\TabletLoadingApp;
 use App\Http\Controllers\ArtificialCrud;
 use App\Http\Controllers\RecentRegistered;
 use App\Http\Controllers\DimsCommon;
+use App\Http\Controllers\DriversController;
 use App\Http\Controllers\MachinesAndTransfers;
 use App\Http\Controllers\SalesFormFunctions;
 use App\Http\Controllers\ApisContoller;
@@ -413,6 +414,8 @@ Route::post('updatepickingauthstatus',[TabletLoadingApp::class,'updatepickingaut
 Route::post('updatepickingheaderonthefly',[TabletLoadingApp::class,'updatepickingheaderonthefly']);
 Route::post('cancelpickingplan',[TabletLoadingApp::class,'cancelpickingplan']);
 Route::get('creditNoteReasonsJSonWithBook',[TabletLoadingApp::class,'creditNoteReasonsJSonWithBook']);
+Route::get('ticketsdept/{ref}',[TabletLoadingApp::class,'ticketsdept']);
+Route::post('addtransport',[TabletLoadingApp::class,'addtransport']);
 
 //TABLET LOADING APP ENDS HERE !!!
 
