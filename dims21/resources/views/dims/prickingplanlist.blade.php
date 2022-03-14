@@ -197,7 +197,7 @@
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
 
-                    <td></td>
+                    <td>{{ floatval($val->Toinvoice)}}</td>
 
 
                 </tr><?php $istrue = true; $storenames = $val->StoreName;$subtotal = $subtotal + floatval($val->weightPlanned);  $orderNumber =  $val->OrderNum;$area =  $val->areas;$orderdate = $val->OrderDate  ?>
@@ -238,7 +238,7 @@
                     <td>{{ floatval($val->weightPlanned)}}</td>
 
 
-                    <td></td>
+                    <td>{{ floatval($val->Toinvoice)}}</td>
 
 
                 </tr>
