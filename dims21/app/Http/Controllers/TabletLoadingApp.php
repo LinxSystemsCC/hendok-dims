@@ -309,6 +309,7 @@ class TabletLoadingApp extends controller
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference',$referenceno )
             ->update(['strPickingNickname' => $nickname]);
+
     }
     public function updatepickingheader(Request $request){
         $routeId = $request->get('routeId');
@@ -620,6 +621,11 @@ class TabletLoadingApp extends controller
             );
         return view('dims/prickingplanlisttest')
             ->with('listproducts',$allproducts)->with('ref',$ref);
+    }
+    public function plannickname($ref){
+
+        return view('dims/plannickname')
+           ->with('ref',$ref);
     }
     public function sequencepickingplans(Request $request){
         $arraystops = $request->get('stopsseq');

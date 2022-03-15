@@ -12,11 +12,12 @@
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
 
-    <link rel="stylesheet" href="{{ asset('css/jquery-ui2.min.css') }}" type="text/css" />
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <!-- DevExtreme library -->
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui2.min.css') }}" type="text/css" />
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/ag_css.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ag_cc_theme.css') }}">
 
     <style>
         .dx-datagrid{
@@ -48,6 +49,12 @@ Ref: <input id="ref" >
 <button id="print" style="float: right">View & Print</button>
 <div id="gridContainer" style="height: 800px;"/>
 
+<div id="nameyourplan">
+<input type="text" id="saveplanNickName" ><br>
+    <button id="savethisnickname" style="width:50px;height:50px;">SAVE</button>
+</div>
+</div>
+</body>
 <script>
 
     $( document ).on( 'focus', ':input', function(){
@@ -73,47 +80,13 @@ Ref: <input id="ref" >
         }
     };
     $(document).ready(function() {
+        $('#nameyourplan').hide();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-/*
-        $('#gridBox').dxDropDownBox({
-            value: [3],
-            valueExpr: 'ID',
-            placeholder: 'Select a value...',
-            displayExpr: 'CompanyName',
-            showClearButton: true,
-            dataSource: makeAsyncDataSource('customers.json'),
-            contentTemplate(e) {
-                const v = e.component.option('value');
-                const $dataGrid = $('<div>').dxDataGrid({
-                    dataSource: e.component.getDataSource(),
-                    columns: ['CompanyName', 'City', 'Phone'],
-                    hoverStateEnabled: true,
-                    paging: { enabled: true, pageSize: 10 },
-                    filterRow: { visible: true },
-                    scrolling: { mode: 'virtual' },
-                    height: 345,
-                    selection: { mode: 'multiple' },
-                    selectedRowKeys: v,
-                    onSelectionChanged(selectedItems) {
-                        const keys = selectedItems.selectedRowKeys;
-                        e.component.option('value', keys);
-                    },
-                });
 
-                dataGrid = $dataGrid.dxDataGrid('instance');
-
-                e.component.on('valueChanged', (args) => {
-                    const { value } = args;
-                    dataGrid.selectRows(value, false);
-                });
-
-                return $dataGrid;
-            },
-        });*/
 
         $('#print').click(function() {
             window.open('{!!url("/pickingplanlist")!!}/' + $('#ref').val(), "plan" + $('#ref').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
@@ -154,20 +127,7 @@ Ref: <input id="ref" >
                     });
                 });
 
-              /*  $.each(allGridItems, function(key, value) {
-                     console.log( value);
-                    var qty = value.toplan;
-                    if(qty !="0"){
-                        console.log("no zero"+ value.toplan);
-                        checkedLines.push({
-                            'orderdetail': value.OrderDetailId,
-                            'qty': value.toplan,
-                            'pickingtype':'priority',
-                            'ownerId':value.OwnerID,
-                            'referenceNo':$('#ref').val()
-                        });
-                    }
-                });*/
+
 
                 $.ajax({
                     url: '{!!url("/saveplan")!!}',
@@ -180,30 +140,8 @@ Ref: <input id="ref" >
                     success: function (data) {
                         console.debug("Plan Priority");
 
-                        var nname = data[0].nickname;
-                        console.debug(nname);
-                        if (nname == "aegona") {
-                            var dialog2 = $('<input type="text" placeholder="Picking Nickname" class="thisplannickname" style="border: 2px solid black;height:50px !important">').dialog({
-                                height: 200, width: 700, modal: true, containment: false,
-                                buttons: {
-                                    "SAVE": function () {
-                                        dialog2.dialog('close');
-                                        $.ajax({
-                                            url: '{!!url("/pickingNickName")!!}',
-                                            type: "POST",
-                                            data: {
-                                                referenceno: $('#ref').val(),
-                                                nickname: $('.thisplannickname').val()
-                                            },
-                                            success: function (data) {
+                        window.open('{!!url("/plannickname")!!}/' + $('#ref').val(), "plannickname" + $('#ref').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
 
-                                            }
-                                        });
-
-                                    }
-                                }
-                            });
-                        }
                     }
                 });
             }
@@ -492,6 +430,5 @@ Ref: <input id="ref" >
 
     }
 </script>
-</div>
-</body>
+
 </html>
