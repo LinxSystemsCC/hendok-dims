@@ -84,7 +84,7 @@
             Welcome to DIMS
         </div>
         @if (Auth::check())
-            <i class="icon-hand-right"></i> <h3><a href="{{ url('/sales') }}">Continue</a></h3>
+            <i class="icon-hand-right"></i> <h3><a href="{{ url('/home') }}">Continue</a></h3>
         @else
             <div class="links">
                 <div class="col-md-8 col-md-offset-2" style="color:black;font-weight: 900">
