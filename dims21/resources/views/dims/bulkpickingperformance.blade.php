@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="20">
+    <meta http-equiv="refresh" content="600">
     <script src="{{ asset('js/ag_grid.js') }}"></script>
     <script src="{{ asset('public/js/jquery-2.2.3.min.js') }}"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
