@@ -38,7 +38,21 @@
 </head>
 <body>
 <div class="col-md-12" style="background: black;color:white;height: 1500px;">
-
+<table class="table">
+    <tbody>
+    <tr>
+        <td style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;"> </td>
+        <td style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;"> </td>
+        <td style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;"> </td>
+        <td style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;"> </td>
+        <td style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;"> </td>
+        <td style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;"> </td>
+        <td style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;"> </td>
+        <td style="color:#efefef;font-size: 20px;font-family: sans-serif;font-weight: 900;">PLANNED <input id="totalplanned" style="color: black"> </td>
+        <td style="color:#efefef;font-size: 20px;font-family: sans-serif;font-weight: 900;">PICKED<input id="totalpicked" style="color: black"> </td>
+        <td style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;"> </td>
+    </tr></tbody>
+</table>
     <table class="table" id="livepickingtable">
         <thead>
         <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Time Generated</th>
@@ -52,6 +66,7 @@
         <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Picked</th>
         <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Status</th>
         </thead>
+        <?php $totalplanned = 0; $totalpicked = 0; ?>
         <tbody style="font-size: 21px;font-family: sans-serif;font-weight: 900;">
         @foreach($performance as $val)
             @if( $val->blnAttended =="NOT STARTED")
@@ -72,10 +87,22 @@
                 <td>{{$val->weightsPlnned}}</td>
                 <td>{{$val->picked}}</td>
                 <td>{{$val->blnAttended}}</td>
+                    <?php $totalplanned = $totalplanned + $val->weightsPlnned ; $totalpicked = $totalpicked+ $val->picked; ?>
 
             </tr>
 
         @endforeach
+
+                <tr>        <td style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">T </td>
+                    <td style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;"> </td>
+                    <td style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;"> </td>
+                    <td style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;"> </td>
+                    <td style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;"> </td>
+                    <td style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;"> </td>
+                    <td style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;"> </td>
+                    <td style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;"><input id="totalplannedtt" value="{{$totalplanned}}" style="color: black;width: 97px;"> </td>
+                    <td style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;"><input id="totalpickedtt" value="{{$totalpicked}}" style="color: black;width: 97px;"> </td>
+                    <td style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;"> </td></tr>
         </tbody>
     </table>
 
@@ -84,6 +111,9 @@
 <script type="text/javascript" charset="utf-8">
 
     $(document).ready(function() {
+        $('#totalplanned').val($('#totalplannedtt').val());
+        $('#totalpicked').val($('#totalpickedtt').val());
+
         $('#livepickingtable').on('dblclick', 'tbody tr', function () {
 
 
