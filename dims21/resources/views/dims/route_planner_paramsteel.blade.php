@@ -16,6 +16,10 @@
             <div class="col-lg-12" >
                 <div class="form-group  col-md-1"  style="margin-top: 15px; margin-left: -14px;margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                     <a href='{!!url("/planningusingflex")!!}' target="_blank" style="font-size: 16px;text-decoration: underline;float: right">Flex Planning</a>
+
+                </div>
+                <div class="form-group  col-md-2"  style="margin-top: 15px; margin-left: -14px;margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <a href='{!!url("/customerarealookup")!!}' style="font-size: 16px;text-decoration: underline;float: right"    onclick="window.open('{!!url("/customerarealookup")!!}','name','width=750,height=400')">Customer Lookup</a>
                 </div>
                 <div class="col-lg-12">
 

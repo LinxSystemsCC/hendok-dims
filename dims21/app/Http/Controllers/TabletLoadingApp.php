@@ -190,11 +190,23 @@ class TabletLoadingApp extends controller
 
         return view('dims/arealook');
     }
+    public function customerarealookup()
+    {
+
+        return view('dims/customerarealookup');
+    }
     public function arealookjson()
     {
         //viewGridAreas
         $routes = DB::connection('sqlsrv3')
             ->select("Select * from viewGridAreas order by areaname");
+        return response()->json($routes);
+    }
+    public function customerarealookupjson()
+    {
+        //viewGridAreas
+        $routes = DB::connection('sqlsrv3')
+            ->select("Select * from viewGridCustomerAreaLookUp order by [Name]");
         return response()->json($routes);
     }
     public function getProductToSelect()

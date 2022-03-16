@@ -353,7 +353,9 @@ Route::get('truckControlFromDate',[TabletLoadingApp::class,'truckControlFromDate
 Route::get('amalgamation',[TabletLoadingApp::class,'amalgamation']);
 Route::get('planningusingflex',[TabletLoadingApp::class,'planningusingflex']);
 Route::get('arealook',[TabletLoadingApp::class,'arealook']);
+Route::get('customerarealookup',[TabletLoadingApp::class,'customerarealookup']);
 Route::get('arealookjson',[TabletLoadingApp::class,'arealookjson']);
+Route::get('customerarealookupjson',[TabletLoadingApp::class,'customerarealookupjson']);
 Route::get('retrieve/{del}/{route}/{ordertype}',[TabletLoadingApp::class,'retrieve']);
 Route::get('driverFleetInfo/{del}/{route}/{ordertype}', [TabletLoadingApp::class,'driverFleetInfo']);
 Route::get('bulkPickingPerUserJSON/{from}/{to}',[TabletLoadingApp::class,'bulkPickingPerUserJSON']);
