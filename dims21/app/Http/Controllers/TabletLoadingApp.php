@@ -195,6 +195,7 @@ class TabletLoadingApp extends controller
 
         return view('dims/customerarealookup');
     }
+
     public function arealookjson()
     {
         //viewGridAreas
@@ -603,7 +604,7 @@ class TabletLoadingApp extends controller
                 array($routeid,$refno,$userid)
             );
         return response()->json($result);
-    }
+}
     public function pickingplanlist($ref){
         $allproducts = DB::connection('sqlsrv3')
             ->select('exec spGetPickingReferenceProducts ?',
@@ -702,8 +703,28 @@ class TabletLoadingApp extends controller
     }
     public function routemapper()
     {
+        $sageareas = DB::connection('sqlsrv')
+            ->select("SELECT* from viewSageAreas" );
+        $routes = DB::connection('sqlsrv')
+            ->select("SELECT* from tblRoutes" );
 
-
+//viewSageAreas
+        return view('dims/mapareatoroute')
+            ->with('sageareas',$sageareas)
+            ->with('routes',$routes);
+    }
+    public function jsonreturnroutemappers()
+    {
+        $routesmapped = DB::connection('sqlsrv')
+            ->select("SELECT* from tblRoutesAreaMappings" );
+        return response()->json($routesmapped);
+    }
+    public function maproutetoareinsert(Request $request){
+        $route = $request->get('route');
+        $area = $request->get('area');
+        DB::connection('sqlsrv')->table('tblRoutesAreaMappings')->insert(
+            ['strRoute' => $route, 'strRouteDescription' =>$area]
+        );
 
     }
 
@@ -1238,8 +1259,8 @@ class TabletLoadingApp extends controller
     public function liveBulkPicking()
     {
         $Date = (new \DateTime())->format('Y-m-d');
-        $livebulk = DB::connection('sqlsrv3')
-            ->select("EXEC spBulkPickingLiveGrid '" . $Date . "'");
+        $livebulk = DB::connection('sqlsrv')
+            ->select("select * from viewLivePickingProgress order by intAutoPickingHeader");
 
         //dd($livebulk);
         return view('dims/bulkpickingperformance')

@@ -38,29 +38,21 @@
 </head>
 <body>
 <div class="col-md-12" style="background: black;color:white;height: 1500px;">
-    <a href='{!!url("/userpickingloadingperformancereport")!!}' onclick="window.open(this.href, 'massc',
-'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;" >Advance</a>
+
     <table class="table" id="livepickingtable">
         <thead>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Type</th>
+        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Time Generated</th>
+        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Reference</th>
         <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Route</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Delivery Date</th>
-
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">A</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">B</th>
-		<th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">C</th>
-		<th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">D</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">E</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">F</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">G</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">H</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">I</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">J</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">K</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;">L</th>
-
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Trailor/Truck Type</th>
+        <th style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;">Team Leader</th>
+        <th style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;">T.Start</th>
+        <th style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;">T.End</th>
+        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Planned</th>
+        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Picked</th>
+        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Status</th>
         </thead>
-        <tbody style="font-size: 25px;font-family: sans-serif;font-weight: 900;">
+        <tbody style="font-size: 21px;font-family: sans-serif;font-weight: 900;">
         @foreach($performance as $val)
             @if( $val->blnAttended =="NOT STARTED")
             <tr style="background: red;color: black">@endif
@@ -70,23 +62,16 @@
             @if( $val->blnAttended =="DONE")
                 <tr style="background: green;color: black" >
                     @endif
-                <td>{{$val->OrderType}}   </td>
-                <td>{{$val->Route}}</td>
-                <td>{{$val->dDelDate}}</td>
-                <td>{{$val->A}}</td>
-                <td>{{$val->B}}</td>
-                <td>{{$val->C}}</td>
-                <td>{{$val->D}}</td>
-                <td>{{$val->E}}</td>
-                <td>{{$val->F}}</td>
-                <td>{{$val->G}}</td>
-                <td>{{$val->H}}
-
-                </td><td>{{$val->I}}</td>
-                <td>{{$val->J}}</td>
-                <td>{{$val->K}}</td>
-                <td>{{$val->L}}</td>
-                
+                <td>{{$val->dteTimeCreated}}   </td>
+                <td>{{$val->strUnickReference}}</td>
+                <td>{{$val->strPickingNickname}}</td>
+                <td>{{$val->trucktrailortype}}</td>
+                <td>{{$val->TeamLeader}}</td>
+                <td>{{$val->startPicking}}</td>
+                <td>{{$val->endPicking}}</td>
+                <td>{{$val->weightsPlnned}}</td>
+                <td>{{$val->picked}}</td>
+                <td>{{$val->blnAttended}}</td>
 
             </tr>
 
@@ -104,11 +89,11 @@
 
             var $this = $(this);
             var row = $this.closest("tr");
-            var ordertype = row.find('td:eq(0)').text();
-            var route = row.find('td:eq(1)').text();
+            var ref = row.find('td:eq(1)').text();
+           // var route = row.find('td:eq(1)').text();
             var del = row.find('td:eq(2)').text();
 
-            window.open('{!!url("/designPickingInformationPerTeam")!!}/'+del+"/"+route+"/"+ordertype, 'onewinbulk', "location=1,status=1,scrollbars=1, width=1200,height=850");
+            window.open('{!!url("/pickingplanlist")!!}/'+ref, 'onewinbulk', "location=1,status=1,scrollbars=1, width=1200,height=850");
 
         });
     });

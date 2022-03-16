@@ -26,7 +26,7 @@
                     <form>
                         <fieldset class="well">
                             <legend class="well-legend">Create</legend>
-                            <div class="form-group  col-md-2" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                            <div class="form-group  col-md-2" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">.
                                 <label class="control-label" for="deliveryDatesonPlanning"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">From</label>
                                 <input name="deliveryDatesonPlanning" class="form-control input-sm col-xs-1" id="deliveryDatesonPlanning" value="{{$selectedDelivDate}}" >
                             </div>

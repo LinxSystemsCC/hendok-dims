@@ -353,6 +353,8 @@ Route::get('truckControlFromDate',[TabletLoadingApp::class,'truckControlFromDate
 Route::get('amalgamation',[TabletLoadingApp::class,'amalgamation']);
 Route::get('planningusingflex',[TabletLoadingApp::class,'planningusingflex']);
 Route::get('arealook',[TabletLoadingApp::class,'arealook']);
+Route::get('routemapper',[TabletLoadingApp::class,'routemapper']);
+Route::get('jsonreturnroutemappers',[TabletLoadingApp::class,'jsonreturnroutemappers']);
 Route::get('customerarealookup',[TabletLoadingApp::class,'customerarealookup']);
 Route::get('arealookjson',[TabletLoadingApp::class,'arealookjson']);
 Route::get('customerarealookupjson',[TabletLoadingApp::class,'customerarealookupjson']);
@@ -419,6 +421,7 @@ Route::post('cancelpickingplan',[TabletLoadingApp::class,'cancelpickingplan']);
 Route::get('creditNoteReasonsJSonWithBook',[TabletLoadingApp::class,'creditNoteReasonsJSonWithBook']);
 Route::get('ticketsdept/{ref}',[TabletLoadingApp::class,'ticketsdept']);
 Route::post('addtransport',[TabletLoadingApp::class,'addtransport']);
+Route::post('maproutetoareinsert',[TabletLoadingApp::class,'maproutetoareinsert']);
 
 //TABLET LOADING APP ENDS HERE !!!
 
