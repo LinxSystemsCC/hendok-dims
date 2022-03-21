@@ -40,6 +40,7 @@
                 <th >Cust Code</th>
                 <th class="col-md-3">Store Name</th>
                 <th>Qty</th>
+                <th>In Stock</th>
                 <th>Prod Code</th>
                 <th class="col-md-4">Prod Description</th>
                 <th>Comment</th>

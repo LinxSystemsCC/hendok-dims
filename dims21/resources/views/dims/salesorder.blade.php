@@ -4582,10 +4582,23 @@
                                         delivdate: $('#inputDeliveryDate').val()
                                     },
                                     success: function (dataDetails) {
+                                        if(dataDetails[0].Result=='THIS ORDER HAS ALREADY BEEN PARTIALLY PICKED OR LOADED')
+                                        {
+                                            console.log("PICKED OR LOADED!");
+                                            
+                                        dialog.dialog('close');
+                                            var dialogalreadydone= $('<p><strong style="color:red">This order has already been partially picked or loaded. Delete failed.</strong></p>').dialog({
+                                                height: 200, width: 700,modal: true,containment: false,
+                                                buttons:{"Okay": function () {
+                                                    dialogalreadydone.dialog('close');
+                                                }}
+                                            });
+                                        }
+                                        else{
                                         $("#table > tbody:last").children().remove();
                                         dialog.dialog('close');
                                         generateALine2();
-
+                                        }
                                     }
                                 });
                                 //dialog.dialog('close');
@@ -5228,6 +5241,8 @@
                                 return parseFloat(jsn).toFixed(2);
 
                             } ,"bSortable": true },
+                            
+                        {"data": "InStock", "class": "small"},
                         {"data": "PastelCode", "class": "small"},
                         {"data": "PastelDescription", "class": "small"},
                         {"data": "Comment", "class": "small"},
