@@ -160,7 +160,7 @@ dd("hererererere");
         $LoggedBy = Auth::user()->UserName;
         $userId = Auth::user()->UserID;
         $deleteallLines= DB::connection('sqlsrv3')
-            ->statement("EXEC spDeleteAllLinesOnOrder ".$orderId.",'".$LoggedBy."',".$userId.",'".$customerCode."','".$delivdate."'");
+            ->select("EXEC spDeleteAllLinesOnOrder ".$orderId.",'".$LoggedBy."',".$userId.",'".$customerCode."','".$delivdate."'");
 
         return response()->json($deleteallLines);
     }
