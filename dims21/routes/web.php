@@ -331,6 +331,7 @@ Route::get('getbelowgplines/{orderdeid}', [SalesFormFunctions::class,'getbelowgp
 Route::get('getorderheadertorelease', [SalesFormFunctions::class,'getorderheadertorelease']);
 Route::get('getorderlineslist/{orderid}', [SalesFormFunctions::class,'getorderlineslist']);
 Route::post('postreleaseorder', [SalesFormFunctions::class,'postreleaseorder']);
+Route::get('viewordersonawaiting/{orderid}', [SalesFormFunctions::class,'viewordersonawaiting']);
 
 //SALES FORM FUNCTIONS ENDS HERE!!!
 
@@ -470,6 +471,9 @@ Route::post('emailSalesOrder', [EmailController::class,'emailSalesOrder']);
 
 //DIMS REPORTS CONTROLLER STARTS HERE !!!
 Route::get('reports', [DimsReports::class,'reports']);
+Route::get('getAwaitingStock', [DimsReports::class,'getAwaitingStock']);
+Route::get('jsonawaitingstockorders', [DimsReports::class,'jsonawaitingstockorders']);
+Route::get('jsonawaitingstock', [DimsReports::class,'jsonawaitingstock']);
 Route::get('LoadLogs/{routingId}',[DimsReports::class,'LoadLogs']);
 Route::post('updateReviewedStatus',[DimsReports::class,'updateReviewedStatus']);
 Route::get('outstandingDriversCashoff', [DimsReports::class,'outstandingDriversCashoff']);
@@ -607,7 +611,7 @@ Route::post('postResendEmailJson',[DriversController::class,'postResendEmailJson
 
 //DRIVERSCONTROLLER CONTROLLER ENDS HERE !!!
 
-//USERS CONTROLLER CONTROLLER STARTS HERE !!!
+//USERS CONTROLLER CONTROLLER STARTS HERE !!!retrieve
 Route::get('usersCrud', [UsersController::class,'readUser']);
 Route::get('viewUserRole',[UsersController::class,'viewUserRole'] );
 Route::post('systemrolesandgrouproles',[UsersController::class,'systemrolesandgrouproles'] );
@@ -875,6 +879,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('jsonCustomerComments', [SalesManBriefcase::class,'jsonCustomerComments']);
     Route::get('createrandomquestions', [SalesManBriefcase::class,'createrandomquestions']);
     Route::get('saveQuestions', [SalesManBriefcase::class,'saveQuestions']);
+    Route::get('getdatagraph', [SalesManBriefcase::class,'getdatagraph']);
 
 
 

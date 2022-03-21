@@ -106,6 +106,7 @@
                 <div class="panel panel-default hidebody" id="toAutoScroll" style="height: 44%;min-height: 200px;overflow-y:auto;" >
                     <div id="two-columns" class="grid-container" style="display:none;">
                         <button type="button" id="button_row" class="btn-xs btn-success">Add</button>
+                        <button type="button" id="copythisorder" class="btn-xs btn-primary" style="display: none;">Copy Order</button>
 
                         <button type="button" id="edit_row" class="btn-xs btn-success">Edit</button>
 
@@ -123,12 +124,12 @@
                             <tr>
                                 <th class="<?php  echo env('PRODUCT_CODE_LENGTH'); ?>">Code</th>
                                 <th class="col-md-4">Description</th>
-                                <th style="" class="col-md-1">Bulk</th>
+                                <th style=""  >Bulk</th>
                                 <th class="col-md-1">Qty</th>
                                 <th class="col-md-1">Price</th>
                                 <th class="col-md-1">Disc% L.Tot</th>
-                                <th  class="col-md-1">UOM</th>
-                                <th  >In Stock</th>
+                                <th  >UOM</th>
+                                <th  >InStk</th>
                                 <th  >Addt.Cst</th>
                                 <th class="col-md-3">Comment</th>
                                 <th class="col-md-1 table-header">Actions</th>
@@ -2920,7 +2921,7 @@
                                                     '<td  contenteditable="false"  class="col-md-1"><input  type="text" name="prodUnitSize_" id ="prodUnitSize_' + tokenId + '" class="prodUnitSize_ resize-input-inside inputs" value="' + valueDetails.UnitSize + '" ' + props + ' ></td>' +
                                                     '<td contenteditable="false"  class="col-md-1"><input type="text" name="instockReadOnly" id ="instockReadOnly_' + tokenId + '" value="' + valueDetails.QtyInStock + '"  class="instockReadOnly_ resize-input-inside inputs" style="font-weight: 800;width: 80%;color:blue;"><select name="col2" id ="col2'+tokenId+'" class="col2 '+classAnonymouscols+'"><option value="' + valueDetails.ID + '" >"' + valueDetails.Warehouse + '"</option> </select>' +
                                                     '<td contenteditable="false"  class="col-md-1"><input type="text" name="additionalcost_" id ="additionalcost_' + tokenId + '" value ="" class="additionalcost_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;">' +
-                                                    '<td  contenteditable="false" class="col-md-3"><input type="text" name="prodComment_" id ="prodComment_' + tokenId + '" class="prodComment_ resize-input-inside last inputs" value="' + valueDetails.Comment + '" ' + props + ' ><br><input name="col9" id ="col9'+tokenId+'" class="col9 '+classAnonymouscols+'" readonly></td>' +
+                                                    '<td  contenteditable="false" class="col-md-3"><input type="text" name="prodComment_" id ="prodComment_' + tokenId + '" class="prodComment_ resize-input-inside last inputs" title="' + valueDetails.Comment + '"  value="' + valueDetails.Comment + '" ' + props + ' ><br><input name="col9" id ="col9'+tokenId+'" class="col9 '+classAnonymouscols+'" readonly></td>' +
                                                     '<td><input type="hidden" id="title_' + tokenId + '" class="title" value="" /><input type="hidden" id="theOrdersDetailsId" value="' + valueDetails.OrderDetailId + '" /><input type="hidden" id ="taxCode' + tokenId + '" value="' + valueDetails.Tax + '" class="taxCodes" />' +
                                                     '<input type="hidden" id ="cost_' + tokenId + '" value="' + valueDetails.Cost + '" class="costs" /><input type="hidden" id ="inStock_' + tokenId + '" value="' + valueDetails.QtyInStock + '" class="inStock" style="color:blue !important" /><input type="hidden" value ="' + tokenId + '" class="hiddenToken" />' +
                                                     '<input type="hidden" id ="priceholder_' + tokenId + '" value="' + (parseFloat(valueDetails.Price)).toFixed(2) + '" class="priceholder" />' +
@@ -2960,9 +2961,9 @@
                                             } else {
                                                 if(isAllowedToChangeInv !=1){
                                                     $(".getOrderDetailLine ").css("display", "none");
-                                                    $("#deleteAllLines").hide(); 
+                                                    $("#deleteAllLines").hide();
                                                     $('#changeDeliveryAddressOnNotInvoiced').hide();
-                                                    
+
                                                 }
 
                                             }
@@ -5490,7 +5491,7 @@
                             $('.generalRouteForNewDeliveryAddress').prepend('<option value="'+$(this).closest('tr').find('#hiddenRouteId').val()+'" selected="selected">'+$(this).closest('tr').find('td').eq(1).text()+'</option>');
                             $('#deliveryAddressIdOnPopUp').val($(this).closest('tr').find('#hiddenDeliveryAddressIdAfterSaved').val());
                         });
-                        
+
                         var $input = $('<button type="button" id="updateaddresses">UPDATE</button> <button type="button" style="float:right;" id="ignoresave">IGNORE</button>');
                         $input.appendTo($("#dynamicaddress"));
                         $('#updateaddresses').click(function () {
@@ -5771,7 +5772,7 @@
                 var tokenId=new Date().valueOf();
                 var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
                     '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'" style="font-weight:900;border: 2px solid gray;" class="theProductCode_ set_autocomplete inputs"><br><input name="col1" id ="col1'+tokenId+'" class="col1 '+classAnonymouscols+'"  readonly></td>' +
-                    '<td contenteditable="false" class="col-md-4"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" style="font-weight:900;border: 2px solid gray;" tabindex="-1"><br>' +
+                    '<td contenteditable="false" class="col-md-4"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" style="font-weight:900;border: 2px solid gray;font-size:10px" tabindex="-1"><br>' +
                     '<input name="col8" id ="col8'+tokenId+'" class="col8 '+classAnonymouscols+ '" readonly></td>' +
                     '<td style=""  contenteditable="false" class="col-md-1"><input type="text" name="prodBulk_"  id ="prodBulk_'+tokenId+'" class="prodBulk_ resize-input-inside" onkeypress="return isFloatNumber(this,event)" ><br><input name="col3" id ="col3'+tokenId+'" class="col3 '+classAnonymouscols+'"  readonly></td>' +
 
@@ -5863,6 +5864,7 @@
                                     $('#prodPrice_'+token_number).val('0');
                                 }
                                 $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                                $('#prodDescription_' + token_number).prop('title', ui.item.PastelDescription);
                                 $('#prodCode_' + token_number).val(ui.item.PastelCode);
                                 //checkIfOrderHasMultipleProducts(ui.item.extra,token_number);
                                 $('#prodQty_' + token_number).val('');
@@ -5932,6 +5934,7 @@
                                 var token_number = ID.substring(n + 1, ID.length);
 
                                 $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                                $('#prodDescription_' + token_number).prop('title', ui.item.PastelDescription);
                                 $('#prodCode_' + token_number).val(ui.item.PastelCode);
                                 //checkIfOrderHasMultipleProducts(ui.item.extra,token_number);
                                 $('#prodQty_' + token_number).val('');
@@ -7256,7 +7259,6 @@
                 var prodComment_ = $(this).closest("tr").find(".prodComment_").val(prodBulk+' '+strBulkUnit);
                 var qty = $(this).closest("tr").find(".prodQty_").val(parseFloat( prodBulk * bulkUnitCalc).toFixed(3));
 
-
             });
             $(document).on('change', '.col2', function() {
                 var colid =$(this).attr("id");
@@ -7414,6 +7416,10 @@
                     // $('#'+$priceToken).val($('#lastprice').val());
                     $( "#custLookUp" ).dialog('close');
                 });
+            });
+            $(document).on('keydown', '.prodComment_', function(e) {
+//$(this).closest("tr").find(".prodComment_").val()
+                $(this).prop('title', $(this).closest("tr").find(".prodComment_").val());
             });
             $(document).on('keydown', '.prodQty_', function(e) {
                 var key = (e.keyCode ? e.keyCode : e.which);
