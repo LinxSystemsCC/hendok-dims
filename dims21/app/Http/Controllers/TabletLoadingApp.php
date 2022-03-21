@@ -776,7 +776,7 @@ class TabletLoadingApp extends controller
         $livebulk = DB::connection('sqlsrv3')
             ->select("EXEC spLogisticsPlan '" . $Date . "'");
 
-        $livePalnned = DB::connection('retsol')
+        $livePalnned = DB::connection('sqlsrv3')
             ->select("EXEC spLogisticsPlannedRoutes '" . $Date . "'");
 
         //dd($livebulk);
