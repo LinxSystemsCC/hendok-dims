@@ -3926,7 +3926,7 @@
                                 },
                                 success: function (data) {
                                     //console.debug('sluuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuut');
-                                    console.debug('something'+data[0].LineDisc);
+
                                     console.debug(data);
                                     var price = '';
                                     if ($.isEmptyObject(data)) {
@@ -3934,12 +3934,14 @@
                                         readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,'0',UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
                                     } else {
                                         price = parseFloat(data[0].Price).toFixed(2);
+                                        console.debug('something'+data[0].LineDisc);
                                         if (reportmarginControl === 'marginType5')
                                         {
-
+                                            console.debug('margin 5'+data[0].LineDisc);
                                             readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
 
                                         }else{
+                                            console.debug('margin not 5'+data[0].LineDisc);
                                             readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,multiLines,data[0].LineDisc,linediscount);
                                         }
                                     }
