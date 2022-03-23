@@ -192,8 +192,8 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
         $("#"+myRowId).remove();
     }
     console.debug("SoldByWeight "+SoldByWeight);
-    console.debug("UnitWeight "+UnitWeight);
-    console.debug("strBulkUnit "+strBulkUnit);
+    console.debug("dicountproperty "+dicountproperty);
+    console.debug("linediscount "+linediscount);
     var tokenId=new Date().valueOf();
     var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove">' +
         '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'" class="theProductCode_ set_autocomplete inputs" value ="'+prodCodes+'"><br><input name="col1" id ="col1_'+tokenId+'" class="col1 '+classAnonymouscols+'" readonly></td>' +
