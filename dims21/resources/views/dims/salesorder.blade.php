@@ -3925,7 +3925,8 @@
                                     warehouseid:$('#headerWh').val()
                                 },
                                 success: function (data) {
-                                    console.debug('sluuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuut');
+                                    //console.debug('sluuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuut');
+                                    console.debug('something'+data[0].LineDisc);
                                     console.debug(data);
                                     var price = '';
                                     if ($.isEmptyObject(data)) {
