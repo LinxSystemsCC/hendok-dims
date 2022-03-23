@@ -3938,10 +3938,12 @@
                                         if (reportmarginControl === 'marginType5')
                                         {
                                             console.debug('margin 5'+data[0].LineDisc);
+                                            console.debug('linediscount# '+linediscount);
                                             readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
 
                                         }else{
                                             console.debug('margin not 5'+data[0].LineDisc);
+                                            console.debug('linediscount not# '+linediscount);
                                             readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,multiLines,data[0].LineDisc,linediscount);
                                         }
                                     }
