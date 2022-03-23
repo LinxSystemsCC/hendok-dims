@@ -106,7 +106,7 @@
                 <div class="panel panel-default hidebody" id="toAutoScroll" style="height: 44%;min-height: 200px;overflow-y:auto;" >
                     <div id="two-columns" class="grid-container" style="display:none;">
                         <button type="button" id="button_row" class="btn-xs btn-success">Add</button>
-                        <button type="button" id="copythisorder" class="btn-xs btn-primary" style="display: none;">Copy Order</button>
+                        <button type="button" id="copythisorder" class="btn-xs btn-primary" style="">Copy Order</button>
 
                         <button type="button" id="edit_row" class="btn-xs btn-success">Edit</button>
 
@@ -1975,6 +1975,10 @@
 
                 $('#salesQuotebtn').click(function () {
                     window.open('{!!url("/salesquote")!!}');
+                });
+                $('#copythisorder').click(function () {
+                    window.open('{!!url("/copyorder")!!}/'+$('#orderId').val(),"copyorder", "location=1,status=1,scrollbars=1, width=1200,height=850");
+
                 });
 
                 $('#returns').click(function () {
@@ -4586,7 +4590,7 @@
                                         if(dataDetails[0].Result=='THIS ORDER HAS ALREADY BEEN PARTIALLY PICKED OR LOADED')
                                         {
                                             console.log("PICKED OR LOADED!");
-                                            
+
                                         dialog.dialog('close');
                                             var dialogalreadydone= $('<p><strong style="color:red">This order has already been partially picked or loaded. Delete failed.</strong></p>').dialog({
                                                 height: 200, width: 700,modal: true,containment: false,
@@ -5242,7 +5246,7 @@
                                 return parseFloat(jsn).toFixed(2);
 
                             } ,"bSortable": true },
-                            
+
                         {"data": "InStock", "class": "small"},
                         {"data": "PastelCode", "class": "small"},
                         {"data": "PastelDescription", "class": "small"},
