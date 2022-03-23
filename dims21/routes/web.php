@@ -74,6 +74,8 @@ Route::resource('shop', 'HomeController', ['only' => ['show']]);
 Route::resource('cart', 'CartController');
 
 Route::get('custCode',[SalesFormFunctions::class, 'CustomerCode']);
+Route::get('copyorder/{orderid}',[SalesFormFunctions::class, 'copyorder']);
+Route::post('insertCopyorder',[SalesFormFunctions::class, 'insertCopyorder']);
 Route::post('checkZeroCostOnOrder',[SalesFormFunctions::class, 'checkZeroCostOnOrder']);
 Route::post('checkstockonorders',[SalesFormFunctions::class, 'checkstockonorders']);
 Route::get('getExportForm', [DimsExportController::class,'getExportForm']);
