@@ -36,6 +36,31 @@ class SalesFormFunctions extends Controller
         else
             return ['value'=>'No Result Found','id'=>''];
     }
+    public function copyorder($orderid){
+        $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )
+            ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName','CustomerOnHold','termsAndList')
+            ->where('StatusId',1)
+            ->orderBy('CustomerPastelCode','ASC')->get();
+
+        return view('dims/copyorder')->with('customers',$queryCustomers)->with('orderid',$orderid);
+
+    }
+    public function insertCopyorder(Request $request){
+        $custCode = $request->get('custCode');
+        $orderid = $request->get('orderid');
+        $deliverydate = $request->get('deliverydate');
+        $recalcprices = $request->get('recalcprice');
+
+        $userid = Auth::user()->UserID;
+        $username = Auth::user()->UserName;
+
+        $returnmsg= DB::connection('sqlsrv3')
+            ->select('exec spCopyOrder ?,?,?,?,?,?',
+                array($orderid,$custCode,(new \DateTime($deliverydate))->format('Y-m-d') ,$userid,$recalcprices,$username)
+            );
+
+        return response()->json($returnmsg);
+    }
     public function getextracomunsforItems(Request $request){
 
         $custCode = $request->get('custCode');
@@ -2130,7 +2155,7 @@ class SalesFormFunctions extends Controller
             ->where('OrderId',$orderId )
             ->update(['TreatAsQuotation' => $isQuote, 'TreatAsQuote'=>$isQuote]);*/
 
-           
+
         if($isQuote == "1")
         {
             $Message="The Order has been changed to be a quote by ".$userName;
@@ -2146,6 +2171,7 @@ class SalesFormFunctions extends Controller
         );
 
     }
+
     public function markitawaitingstock(Request $request)
     {
         $orderId = $request->get('orderId');
@@ -2172,6 +2198,13 @@ class SalesFormFunctions extends Controller
                 'Message'=>$Message ]
         );
 
+    }
+    public function viewordersonawaiting($orderid){
+        //$orderid
+        $getRouteProducts = DB::connection('sqlsrv4')
+            ->select("EXEC spTabletLoading " . $orderid);
+        return view('dims/awaitingdialog')->with('orderId', $orderid)
+            ->with('products', $getRouteProducts);
     }
     private static function getTabs($tabcount)
     {

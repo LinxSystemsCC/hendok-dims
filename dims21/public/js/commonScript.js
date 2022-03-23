@@ -197,7 +197,7 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
     var tokenId=new Date().valueOf();
     var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove">' +
         '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'" class="theProductCode_ set_autocomplete inputs" value ="'+prodCodes+'"><br><input name="col1" id ="col1_'+tokenId+'" class="col1 '+classAnonymouscols+'" readonly></td>' +
-        '<td contenteditable="false" class="col-md-4"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" value ="'+prodDesc+'"><input name="col8" id ="col8_'+tokenId+'" class="col8 '+classAnonymouscols+'" readonly></td>' +
+        '<td contenteditable="false" class="col-md-4"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" title ="'+prodDesc+'" value ="'+prodDesc+'"><input name="col8" id ="col8_'+tokenId+'" class="col8 '+classAnonymouscols+'" readonly></td>' +
         '<td  contenteditable="false" class="col-md-1"><input type="text" name="prodBulk_"  id ="prodBulk_'+tokenId+'" class="prodBulk_ resize-input-inside inputs"><br><input name="col3" id ="col3_'+tokenId+'" class="col3 '+classAnonymouscols+'" readonly></td>' +
         '<td  contenteditable="false" class="col-md-1"><input type="text" name="prodQty_" id ="prodQty_'+tokenId+'"   onkeypress="return isFloatNumber(this,event)"  class="prodQty_ resize-input-inside inputs" value ="'+prodQty+'"><br><input name="col4" id ="col4_'+tokenId+'" class="col4 '+classAnonymouscols+'" readonly></td>' +
         '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" value ="'+price+'" style="font-weight: 800;">' +
@@ -229,6 +229,7 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
         $('#prodBulk_' + tokenId).val(1);
         $('#prodQty_' + tokenId).val(UnitWeight);
         $('#prodComment_' + tokenId).val(1 +' '+strBulkUnit );
+       // $('#prodComment_' + tokenId).prop('title', 1 +' '+strBulkUnit );
 
     }else
     {
