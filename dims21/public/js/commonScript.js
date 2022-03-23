@@ -191,7 +191,7 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
     {
         $("#"+myRowId).remove();
     }
-    console.debug("SoldByWeight "+SoldByWeight);
+    //console.debug("SoldByWeight "+SoldByWeight);
     console.debug("dicountproperty "+dicountproperty);
     console.debug("linediscount "+linediscount);
     var tokenId=new Date().valueOf();
