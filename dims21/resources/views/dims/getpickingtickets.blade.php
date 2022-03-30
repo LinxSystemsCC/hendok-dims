@@ -110,7 +110,7 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                             },
                             {
                                 width: 150,
-                                dataField: "dtm",
+                                dataField: "isCancelled",
                                 caption: "Status",
                                 headerFilter: {
                                     allowSearch: true,
@@ -126,6 +126,13 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
 
 
                         ] ,
+                        onRowPrepared(e) {
+                            if (e.rowType == 'data' && e.data.isCancelled ==1) {
+                                e.rowElement.css('background', 'red');
+                            }
+
+
+                        },
                         onRowClick: function (e) {
                             window.open('{!!url("/pickingplanlist")!!}/'+e.data.strUnickReference, "strUnickReference", "location=1,status=1,scrollbars=1, width=1200,height=850");
                         },
