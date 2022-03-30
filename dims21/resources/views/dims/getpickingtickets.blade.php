@@ -107,7 +107,23 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                                     allowSearch: true,
                                 }
 
+                            },
+                            {
+                                width: 150,
+                                dataField: "dtm",
+                                caption: "Status",
+                                headerFilter: {
+                                    allowSearch: true,
+                                },    cellTemplate: function(element, info) {
+                                    element.append("<div>" + info.text + "</div>")
+                                        .css("background", "#5c95c573")
+                                        .css("font-size", "16px")
+                                        .css("font-weight", "900");
+                                }
+
                             }
+
+
 
                         ] ,
                         onRowClick: function (e) {

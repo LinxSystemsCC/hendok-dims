@@ -13,7 +13,6 @@
             text-align: left;
             padding: 4px;
         }
-
         tr:nth-child(even) {
             background-color: #dddddd;
         }
@@ -29,8 +28,6 @@
         @foreach($OrderTypes as $value)
             <td><h2>{{$value->OrderType}}</h2></td>
         @endforeach
-
-
     </tr>
 </table>
     <table style="width:100%;font-size:13px;">

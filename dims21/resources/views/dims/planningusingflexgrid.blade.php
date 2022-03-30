@@ -300,13 +300,13 @@ Ref: <input id="ref" >
                         ,{
                             width: 80,
                             dataField: "mnyQtyRemaining",
-                            caption: "Outstanding Quantity"
+                            caption: "Outstanding Quantity",format: "#0.####"
 
                         }
                         ,{
                             width: 80,
                             dataField: "qtyPlan",
-                            caption: "Plan",
+                            caption: "Plan",format: "#0.####",
                             dataType:"number", cellTemplate: function(element, info) {
                                 element.append("<div>" + info.text + "</div>")
                                     .css("background", "#5c95c573")

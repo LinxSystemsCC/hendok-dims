@@ -33,7 +33,7 @@ Auth::routes();
 
 //Route::get('/home', 'SalesForm@index')->name('home');
 Route::get('home/',[SalesForm::class, 'index'])->name('home');
-Route::get('/sales',[SalesForm::class, 'sales']);
+Route::get('sales',[SalesForm::class, 'sales']);
 Route::get('selectedCompany/{companyid}',[SalesForm::class, 'selectedCompany']);//STEEL
 Route::get('pl', [SalesForm::class,'pl']);
 Route::get('returns',[SalesForm::class,'returns']);
@@ -420,6 +420,7 @@ Route::post('updatepickingheaderonthefly',[TabletLoadingApp::class,'updatepickin
 Route::post('cancelpickingplan',[TabletLoadingApp::class,'cancelpickingplan']);
 Route::get('creditNoteReasonsJSonWithBook',[TabletLoadingApp::class,'creditNoteReasonsJSonWithBook']);
 Route::get('ticketsdept/{ref}',[TabletLoadingApp::class,'ticketsdept']);
+Route::get('markplandeleted',[TabletLoadingApp::class,'markplandeleted']);
 Route::post('addtransport',[TabletLoadingApp::class,'addtransport']);
 Route::post('maproutetoareinsert',[TabletLoadingApp::class,'maproutetoareinsert']);
 

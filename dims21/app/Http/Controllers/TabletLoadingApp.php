@@ -625,7 +625,7 @@ class TabletLoadingApp extends controller
         $teamleaders = DB::connection('sqlsrv3')
             ->select("Select * from tblDimsusers where strPickingTeams='TeamLeader'" );
 
-
+//dd($pickingheader);
 
         return view('dims/prickingplanlist')->with('teamleaders',$teamleaders)->with('pickingheader',$pickingheader)
             ->with('listproducts',$allproducts)->with('ref',$ref)->with('sequence',$getsequence)->with('trucks',$trucks);
@@ -700,6 +700,13 @@ class TabletLoadingApp extends controller
             ->where('strUnickReference',$ref )
             ->update(['intDriverOne' => $DriverOne,'intDriverTwo' => $DriverTwo,'strTicket' => $Ticket,'intTruckId' => $truckname]);
 
+    }
+    public function markplandeleted(Request $request){
+        $referenceno = $request->get('referenceno');
+        $planstatus = $request->get('planstatus');
+          DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference',$referenceno )
+            ->update(['isCancelled' => $planstatus]);
     }
     public function routemapper()
     {

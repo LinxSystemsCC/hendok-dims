@@ -283,10 +283,20 @@
 </div>
 <div id="seqpopup">
     <a href='{!!url("/ticketsdept")!!}/{{$ref}}' onclick="window.open(this.href, 'ticketsdept',
-'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;" style="background: red;padding:2px;color: black;font-weight: 900" >Assign Transport</a>
+'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;" style="background: #13b0bb;padding:2px;color: black;font-weight: 900" >Assign Transport</a>
     <br>
     <br>
     <br>
+    @foreach($pickingheader as $value)
+        @if($value->isCancelled == "0")
+        <button class="planstatus" value="1" style="background: #bb1523;float: right;">Delete This Plan</button>
+        @endif
+
+            @if($value->isCancelled == "1")
+                <button class="planstatus" value="0" style="background: #0BA008;float: right;">Re-Activate This Plan</button>
+            @endif
+    @endforeach
+
     <input type="hidden"  id="refno" value="{{$ref}}">
     <table id="sequences" style="font-size: 12px;">
         <tbody>
@@ -300,6 +310,7 @@
         @endforeach
         </tbody>
         </table>
+    <hr>
     Team Leader<br>
     <select id="teamleaders">
         @foreach($teamleaders as $value)
@@ -343,6 +354,22 @@
         $('#continue').click(function(){
             window.location = '{!!url("/home")!!}';
         });
+
+        $('.planstatus').click(function(){
+            $.ajax({
+                url: '{!!url("/markplandeleted")!!}',
+                type: "GET",
+                data: {
+                    referenceno: $('#refno').val(),
+                    planstatus:$('.planstatus').val()
+                },
+                success: function (data) {
+
+                    alert("DONE UPDATING");
+                    location.reload()
+                }
+            });
+        });
         $('#qrs').click(function(){
             alert("Open Info Dialog");
             $('#seqpopup').show();
@@ -373,7 +400,7 @@
                     },
                     success: function (data) {
 
-                        location.reload();
+                   //     location.reload();
                     }
                 });
             });
