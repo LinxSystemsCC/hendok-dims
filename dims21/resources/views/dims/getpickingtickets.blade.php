@@ -110,7 +110,7 @@ From<input type="date" id="from"> - To<input type="date" id="to"> <button class=
                             },
                             {
                                 width: 150,
-                                dataField: "isCancelled",
+                                dataField: "statustext",
                                 caption: "Status",
                                 headerFilter: {
                                     allowSearch: true,
