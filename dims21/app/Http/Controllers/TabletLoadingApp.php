@@ -324,7 +324,7 @@ class TabletLoadingApp extends controller
             ->update(['strPickingNickname' => $nickname]);
         //spPickingPlannerCreditLimitEmail
          DB::connection('sqlsrv3')
-            ->statement('exec spPickingPlannerCreditLimitEmail');
+            ->statement('exec spPickingPlannerCreditLimitEmail ?',array($referenceno));
 
     }
     public function updatepickingheader(Request $request){
