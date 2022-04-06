@@ -614,13 +614,17 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Extras <span class="caret"></span></a>
                             <ul class="dropdown-menu" >
-                                <li>
+                                <li style="display: none;">
                                     <a href='{!!url("/pickingmain")!!}' onclick="window.open(this.href, 'bulkpicking',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Bulk Picking</a>
                                 </li>
                                 <li>
                                     <a href='{!!url("/liveBulkPicking")!!}' onclick="window.open(this.href, 'liveBulkPicking',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Status Picking</a>
+                                </li>
+                                <li>
+                                    <a href='{!!url("/viewpickingtickets")!!}' onclick="window.open(this.href, 'viewpickingtickets',
+'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Picking Tickets</a>
                                 </li>
                                 <li>
                                     <a href='{!!url("/getPickingAuth")!!}' onclick="window.open(this.href, 'getPickingAuth',
@@ -645,15 +649,7 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Customer Special</a>
                                 </li>
                                 @endif
-                                <li>
-                                    <a href='{!!url("/import_excel")!!}' onclick="window.open(this.href, 'pricelistimport',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >DIMS Price List Import</a>
-                                </li>
 
-                                <li>
-                                    <a href='{!!url("/massgridspecialscustomer")!!}' onclick="window.open(this.href, 'massGrid',
-'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" >Mass Customer Specials</a>
-                                </li>
 
                                 @if ($groupspecialAccess != "0")
                                 <li>
@@ -676,9 +672,6 @@
 
                                 <li>
 
-                                    <a href='{!!url("/getreportLayout")!!}' onclick="window.open(this.href, 'reports',
-'left=20,top=20,width=1500,height=1000,toolbar=1,resizable=0'); return false;" >Reports</a>
-                                </li>
 
                                 @if($backorders !="0")
                                 <li>
@@ -690,67 +683,28 @@
                                 <li>
                                     <a href='{!!url("/routeplanner")!!}' target="_blank">Picking Planner</a>
                                 </li>
-                                <li>
+                                <li style="display: none;">
                                     <a href='{!!url("/routeplannerreal")!!}' target="_blank">Route Planner</a>
                                 </li>
 
 
-                                <li  style="display: none">
-                                    <a href='{!!url("/customersalespage")!!}' onclick="window.open(this.href, 'salescustomers',
-'left=20,top=20,width=1200,height=950,toolbar=1,resizable=0'); return false;">Customer Sales</a>
-                                </li>
-
-                                <li  style="display: none">
-                                    <a href='{!!url("/getdriverscashoff")!!}' onclick="window.open(this.href, 'getdriverscashoff',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Drivers Cashoff</a>
-                                </li>
-
-                                <li  style="display: none">
-                                    <a href='{!!url("/viewdailycash")!!}' onclick="window.open(this.href, 'viewdailycash',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Daily Sales</a>
-                                </li>
 
 
-                                @if ($things != "0")
-                                <li>
-                                    <a href='{!!url("/getViewCallLogger")!!}' onclick="window.open(this.href, 'viewdailycash',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Call Logger</a>
-                                </li>
-                                @endif
+
+
 
                                 <li style="display: none;">
                                     <a href='{!!url("/gridPickingSlipCollectios")!!}'  onclick="window.open(this.href, 'gridPickingSlipCollectios',
 'left=20,top=20,width=1500,height=500,toolbar=1,resizable=0'); return false;">Picking Slips</a>
                                 </li>
-                                @if(env('APP_STOCK_COUNT_PALLADIUM') =='TRUE')
-                                <li>
-                                    <a href='{!!url("/getPickingDeptPalladium")!!}'  onclick="window.open(this.href, 'getPickingDept',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Sheet</a>
-                                </li>
-                                    @else
-                                    <li>
-                                        <a href='{!!url("/getPickingDept")!!}'  onclick="window.open(this.href, 'getPickingDept',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Sheet</a>
-                                    </li>
-                                @endif
                                 @if ($creditreport != "0")
                                 <li>
                                     <a href='{!!url("/creditNoteReasonsView")!!}'  onclick="window.open(this.href, 'creditNoteReasonsView',
 'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Credit Note Report</a>
                                 </li>
                                 @endif
-                                <li>
-                                    <a href='{!!url("/viewBlockedAccount")!!}'  onclick="window.open(this.href, 'viewBlockedAccount',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Blocked Orders</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/getNoStockItem")!!}'  onclick="window.open(this.href, 'viewBlockedAccount',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">No Stock Item</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/viewStatusReport")!!}'  onclick="window.open(this.href, 'viewBlockedAccount',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Progress and Status Report</a>
-                                </li>
+
+
                                 <li>
                                     <a href='{!!url("/viewTransfersCrRec")!!}'  onclick="window.open(this.href, 'viewTransfersCrRec',
 'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Transfers Creation and Received</a>
@@ -795,10 +749,7 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Routes</a>
                                 </li>
                                 @endif
-                                <li>
-                                    <a href='{!!url("/glcodes")!!}'  onclick="window.open(this.href, 'routes',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">GL Codes</a>
-                                </li>
+
                                 <li style="display: none;">
                                     <a href='{!!url("/usersCrud")!!}'  onclick="window.open(this.href, 'users',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Users</a>
@@ -809,10 +760,7 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Order Types</a>
                                 </li>
                                     @endif
-                                <li>
-                                    <a href='{!!url("/pickingLiveGrid")!!}'  onclick="window.open(this.href, 'pickingLiveGrid',
-'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Picking/Loading Performance</a>
-                                </li>
+
                                 @if($salesperformance !="0")
                                 <li>
                                     <a href='{!!url("/salesPerformanceview")!!}'  onclick="window.open(this.href, 'telesalesperformance',
@@ -884,18 +832,8 @@
 'left=20,top=20,width=500,height=400,toolbar=1,resizable=0'); return false;">Download Messaging App</a>
                                 </li>
                                 @endif
-                                    <li>
-                                        <a href='{!!url("/WebstoreMessages")!!}' onclick="window.open(this.href, 'WebstoreMessages',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Webstore Messages</a>
-                                    </li>
-                                    <li>
-                                        <a href='{!!url("/PathEditor")!!}' onclick="window.open(this.href, 'PathEditor',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Edit Printer Paths</a>
-                                    </li>
-                                    <li>
-                                        <a href='{!!url("/viewDeletedOrders")!!}' onclick="window.open(this.href, 'viewDeletedOrders',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Deleted Orders</a>
-                                    </li>
+
+
 
                             </ul>
                         </li>
