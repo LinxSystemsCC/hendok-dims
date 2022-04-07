@@ -56,7 +56,7 @@
     <table class="table" id="livepickingtable">
         <thead>
         <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Time Generated</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Reference</th>
+        <th style="color:#61ff13;font-size: 9px;font-family: sans-serif;font-weight: 900;">Reference</th>
         <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Route</th>
         <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Trailor/Truck Type</th>
         <th style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;">Team Leader</th>
