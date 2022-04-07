@@ -56,19 +56,19 @@
     <table class="table" id="livepickingtable">
         <thead>
         <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Time Generated</th>
-        <th style="color:#61ff13;font-size: 9px;font-family: sans-serif;font-weight: 900;">Reference</th>
-        <th style="color:#61ff13;font-size: 25px;font-family: sans-serif;font-weight: 900;">Route</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Reference</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Route</th>
         <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Trailor/Truck Type</th>
         <th style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;">Team Leader</th>
         <th style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;">T.Start</th>
         <th style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;">T.End</th>
-        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Planned</th>
-        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Picked</th>
-        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Load Efficiency</th>
-        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Driver/Horse Assigned</th>
-        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Truck Extras Assigned</th>
-        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">WB Ticket Assigned</th>
-        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Ready To Process</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Planned</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Picked</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Load Efficiency</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Driver/Horse Assigned</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Truck Extras Assigned</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">WB Ticket Assigned</th>
+        <th style="color:#61ff13;font-size: 17px;font-family: sans-serif;font-weight: 900;">Ready To Process</th>
         <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Status</th>
         </thead>
         <?php $totalplanned = 0; $totalpicked = 0; ?>
@@ -83,7 +83,7 @@
                 <tr style="background: green;color: black" >
                     @endif
                 <td>{{$val->dteTimeCreated}}   </td>
-                <td>{{$val->strUnickReference}}</td>
+                <td style="font-size: 9px;">{{$val->strUnickReference}}</td>
                 <td>{{$val->strPickingNickname}}</td>
                 <td>{{$val->trucktrailortype}}</td>
                 <td>{{$val->TeamLeader}}</td>
