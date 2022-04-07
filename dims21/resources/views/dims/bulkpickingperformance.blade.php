@@ -64,6 +64,11 @@
         <th style="color:#61ff13;font-size: 16px;font-family: sans-serif;font-weight: 900;">T.End</th>
         <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Planned</th>
         <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Picked</th>
+        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Load Efficiency</th>
+        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Driver/Horse Assigned</th>
+        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Truck Extras Assigned</th>
+        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">WB Ticket Assigned</th>
+        <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Ready To Process</th>
         <th style="color:#61ff13;font-size: 20px;font-family: sans-serif;font-weight: 900;">Status</th>
         </thead>
         <?php $totalplanned = 0; $totalpicked = 0; ?>
@@ -86,6 +91,27 @@
                 <td>{{$val->endPicking}}</td>
                 <td>{{$val->weightsPlnned}}</td>
                 <td>{{$val->picked}}</td>
+                <td>{{$val->Effeciency}}</td>
+                    @if( $val->truckAssigned =="YES")
+                     <td style="background: #0BA008"> </td>
+                    @else
+                        <td style="background: darkred">-</td>
+                    @endif
+                    @if( $val->isextraThere =="YES")
+                        <td style="background: #0BA008"> </td>
+                    @else
+                        <td style="background: darkred">-</td>
+                    @endif
+                    @if( $val->WBAssigned =="YES")
+                        <td style="background: #0BA008"> </td>
+                    @else
+                        <td style="background: darkred">-</td>
+                    @endif
+                    @if( $val->readyToProcess =="YES")
+                        <td style="background: #0BA008"> </td>
+                    @else
+                        <td style="background: darkred">-</td>
+                    @endif
                 <td>{{$val->blnAttended}}</td>
                     <?php $totalplanned = $totalplanned + $val->weightsPlnned ; $totalpicked = $totalpicked+ $val->picked; ?>
 
