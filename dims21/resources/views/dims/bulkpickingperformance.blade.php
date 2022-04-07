@@ -82,7 +82,7 @@
             @if( $val->blnAttended =="DONE")
                 <tr style="background: green;color: black" >
                     @endif
-                <td>{{$val->dteTimeCreated}}   </td>
+                <td style="font-size: 12px;">{{$val->dteTimeCreated}}   </td>
                 <td style="font-size: 9px;">{{$val->strUnickReference}}</td>
                 <td>{{$val->strPickingNickname}}</td>
                 <td>{{$val->trucktrailortype}}</td>
