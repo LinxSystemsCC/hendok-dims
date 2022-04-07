@@ -37,7 +37,7 @@
     </style>
 </head>
 <body>
-<div class="col-md-12" style="background: black;color:white;">
+<div style="background: black;color:white;">
 <table class="table">
     <tbody>
     <tr>
