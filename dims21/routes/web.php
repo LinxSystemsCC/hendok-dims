@@ -333,6 +333,7 @@ Route::get('getbelowgplines/{orderdeid}', [SalesFormFunctions::class,'getbelowgp
 Route::get('getorderheadertorelease', [SalesFormFunctions::class,'getorderheadertorelease']);
 Route::get('getorderlineslist/{orderid}', [SalesFormFunctions::class,'getorderlineslist']);
 Route::post('postreleaseorder', [SalesFormFunctions::class,'postreleaseorder']);
+Route::post('removeorderfromawaitingstock', [SalesFormFunctions::class,'removeorderfromawaitingstock']);
 Route::get('viewordersonawaiting/{orderid}', [SalesFormFunctions::class,'viewordersonawaiting']);
 
 

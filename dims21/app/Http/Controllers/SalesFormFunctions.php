@@ -2200,11 +2200,29 @@ class SalesFormFunctions extends Controller
 
     }
     public function viewordersonawaiting($orderid){
-        //$orderid
+
         $getRouteProducts = DB::connection('sqlsrv4')
             ->select("EXEC spTabletLoading " . $orderid);
         return view('dims/awaitingdialog')->with('orderId', $orderid)
             ->with('products', $getRouteProducts);
+    }
+    public function removeorderfromawaitingstock(Request $request){
+        //$orderid
+
+        $userId =   Auth::user()->UserID;
+        $userName =   Auth::user()->UserName;
+        $OrderId =  $request->get("OrderId");
+        $dateFrom = (new \DateTime($request->get("deliverydate") ))->format('Y-m-d');
+        DB::connection('sqlsrv3')->table('tblOrders')
+            ->where('OrderId', $OrderId)
+            ->update(['DeliveryDate' =>$dateFrom,'AwaitingStock'=>0]);
+
+        DB::connection('sqlsrv3')->table('tblManagementConsol')->insert(
+            ['OrderId' => $OrderId, 'UserId' => $userId,'ConsoleTypeId'=>2,'Importance'=> 1 ,'dtm'=>$dateFrom,'LoggedBy'=>$userName,'UserId'=>$userId,
+                'Message'=>"Removed the order From Awaiting Stock " ]
+        );
+
+        echo  "Done";
     }
     private static function getTabs($tabcount)
     {

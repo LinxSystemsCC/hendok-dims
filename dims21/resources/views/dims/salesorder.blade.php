@@ -1599,6 +1599,7 @@
 
             //alert("isChrome"+isChrome);
             //element.autocomplete = isChrome ? 'disabled' :  'off';
+            var ismulti = false;
             var reportmarginControl = 'marginType1';
             var booze = '';
             var spool = 0;
@@ -5454,6 +5455,7 @@
             function confirmmultideliveryaddressonfinish(){
                 console.debug("******************************* Routing ID "+$('#hiddenDeliveryAddressIdAfterSaved').val());
 
+
                 $.ajax({
                     url: '{!! url("/selectCustomerMultiAddressconfirm") !!}',
                     type: "POST",
@@ -5550,17 +5552,22 @@
                                         },success: function (data) {
                                             console.debug(data[0]);
                                             if(data[0].results =="SUCCESS"){
-                                                $.ajax({
-                                                    url: '{!!url("/clearorderlocksperorder")!!}',
-                                                    type: "POST",
-                                                    data: {
-                                                        OrderId: $('#orderId').val()
-                                                    },
-                                                    success: function (data) {
-                                                        empties()
-                                                        location.reload();
+                                                var dialog = $('<p><strong style="color:black">Updated To Address ID #'+$('#hiddenDeliveryAddressId').val()+' </strong></p>').dialog({
+                                                    height: 200, width: 700, modal: true, containment: false,
+                                                    buttons: {
+
+                                                        "Okay": function () {
+
+                                                            dialog.dialog('close');
+                                                        }
+
                                                     }
                                                 });
+                                                if(hassplitorder =="LTRUE"){
+                                                    splitorder();
+                                                }else{
+                                                    disableOnFinish();
+                                                }
 
                                             }
 
@@ -6536,7 +6543,7 @@
                     $("#deliveryAddressIdOnPopUp").val(selKeyVal);
                     //$('#doneCustomAddress').show();
                     //pass this to fetch address
-                    console.debug(selKeyVal);
+                    console.debug("just assigned this now*******"+selKeyVal);
                     fetchDeliveyAddressFronSelect(selKeyVal);
 
                     // $("#listOfDelivAdress" ).dialog("close");
@@ -6978,7 +6985,7 @@
 
                             if (authString.length > 0 && ($('#' + $cellProdCodeID).val()).length > 0) {
                                 authPopup("Price", $('#' + $cellsId).val(), theProductCode_, $('#'+$cellProdCodeID).val(), 'Price below margin ' + $cellProdCode.val() + '(' + $cellProdDescription.val() + ')', $isAuthAtrr, $hiddenToken,$.trim(theOrdersDetailsId));
-                            }
+            }
                         }
                     }
 
@@ -8518,8 +8525,7 @@
                 });
 
             }
-            function disableOnFinish()
-            {
+            function checkifhasmultiaddress(){
 
                 $.ajax({
                     url: '{!!url("/checkifhasmultiaddress")!!}',
@@ -8529,12 +8535,17 @@
                     },
                     success: function (data) {
 
-                        if(data[0].result =="SUCCESS") {
+                                if (data[0].result == "SUCCESS") {
 
-                            confirmmultideliveryaddressonfinish();
 
-                            }
-                            else{
+                                }
+                        }
+                    });
+                //        confirmmultideliveryaddressonfinish();
+
+            }
+            function disableOnFinish()
+            {
                             $.ajax({
                                 url:'{!!url("/clearorderlocksperorder")!!}',
                                 type: "POST",
@@ -8572,12 +8583,6 @@
                                     $("#inputOrderDate").prop("disabled", false);
                                 }
                             });
-                            }
-
-                    }
-                });
-
-
             }
             function empties(){
                 $('#orderId').val('');
@@ -9158,6 +9163,12 @@
                     "minimize" : function(evt, dlg){  }, // event
                     "restore" : function(evt, dlg){  } // event
                 });
+                $('#authorisations').keydown(function(event) {
+                    if (event.keyCode == 27) {
+                        return false;
+                    }
+                });
+
 
             }
 
@@ -9780,14 +9791,29 @@ console.debug(data);
                                     }
                                     else
                                     {
-                                        console.debug("hassplitorder****************"+hassplitorder);
-                                        if(hassplitorder =="LTRUE"){
-                                            splitorder();
-                                        }else{
-                                            disableOnFinish();
-                                        }
+                                       // console.debug("yes or no*************"+checkifhasmultiaddress());
+                                     //   checkifhasmultiaddress();
+                                        console.debug("check point ismulti***"+ismulti);
+                                        $.ajax({
+                                            url: '{!!url("/checkifhasmultiaddress")!!}',
+                                            type: "POST",
+                                            data: {
+                                                account: $('#inputCustAcc').val()
+                                            },
+                                            success: function (data) {
 
+                                                if (data[0].result == "SUCCESS") {
+                                                    confirmmultideliveryaddressonfinish()
 
+                                                }else{
+                                                    if(hassplitorder =="LTRUE"){
+                                                        splitorder();
+                                                    }else{
+                                                        disableOnFinish();
+                                                    }
+                                                }
+                                            }
+                                        });
 
                                     }
                                 }else
@@ -9851,11 +9877,28 @@ console.debug(data);
 
                                         },
                                         success: function (data) {
-                                            if(hassplitorder =="LTRUE"){
-                                                splitorder();
-                                            }else{
-                                                disableOnFinish();
-                                            }
+
+                                            $.ajax({
+                                                url: '{!!url("/checkifhasmultiaddress")!!}',
+                                                type: "POST",
+                                                data: {
+                                                    account: $('#inputCustAcc').val()
+                                                },
+                                                success: function (data) {
+
+                                                    if (data[0].result == "SUCCESS") {
+                                                        confirmmultideliveryaddressonfinish()
+
+                                                    }else{
+                                                        if(hassplitorder =="LTRUE"){
+                                                            splitorder();
+                                                        }else{
+                                                            disableOnFinish();
+                                                        }
+                                                    }
+                                                }
+                                            });
+
 
 
                                         }
@@ -10072,6 +10115,7 @@ console.debug(data);
             }
             function splitorder()
             {
+
                 $.ajax({
                     url: '{!!url("/splitorders")!!}',
                     type: "POST",
