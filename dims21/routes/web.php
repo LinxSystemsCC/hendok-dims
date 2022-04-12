@@ -335,6 +335,8 @@ Route::get('getorderlineslist/{orderid}', [SalesFormFunctions::class,'getorderli
 Route::post('postreleaseorder', [SalesFormFunctions::class,'postreleaseorder']);
 Route::get('viewordersonawaiting/{orderid}', [SalesFormFunctions::class,'viewordersonawaiting']);
 
+
+
 //SALES FORM FUNCTIONS ENDS HERE!!!
 
 
@@ -406,6 +408,9 @@ Route::get('ordermapvisualisation/{route}/{otype}/{deldate}',[TabletLoadingApp::
 Route::post('ordervisualjson',[TabletLoadingApp::class,'ordervisualjson']);
 Route::get('getShortLoadedReport',[TabletLoadingApp::class,'getShortLoadedReport']);
 Route::get('jsonshortloadedreport',[TabletLoadingApp::class,'jsonshortloadedreport']);
+Route::get('pickingslipsbydep',[TabletLoadingApp::class,'pickingslipsbydep']);
+Route::post('getPickingSlipbyDeptInfo', [TabletLoadingApp::class,'getPickingSlipbyDeptInfo']);
+Route::post('printselectedCustomers', [TabletLoadingApp::class,'printselectedCustomers']);
 Route::get('routePlannerExtParamdrivers/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'routePlannerExtParamDrivers']);
 
 //TABLET LOADING APP ENDS HERE !!!
@@ -819,6 +824,11 @@ Route::post('goscanproductfrom', [WareHouseManagementController::class,'goscanpr
 Route::post('goscanshelfto', [WareHouseManagementController::class,'goscanshelfto']);
 Route::post('goscanproductto', [WareHouseManagementController::class,'goscanproductto']);
 Route::post('gofinish', [WareHouseManagementController::class,'gofinish']);
+Route::get('getbininfo', [WareHouseManagementController::class,'getbininfo']);
+Route::get('jsonbininfoGrid', [WareHouseManagementController::class,'jsonbininfoGrid']);
+Route::get('jsonGetProductsInTheBin', [WareHouseManagementController::class,'jsonGetProductsInTheBin']);
+Route::get('bininfoGridProducts', [WareHouseManagementController::class,'bininfoGridProducts']);
+Route::get('jsonbininfoGridProducts', [WareHouseManagementController::class,'jsonbininfoGridProducts']);
 
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
