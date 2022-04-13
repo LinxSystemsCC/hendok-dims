@@ -7,6 +7,7 @@
  */
 
 namespace App\Http\Controllers;
+ 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Exception\GuzzleException;
@@ -14,7 +15,7 @@ use GuzzleHttp\Client;
 //use App\Http\Co
 use Auth;
 
-class TabletLoadingApp extends controller
+class TabletLoadingApp extends Controller
 {
 
     public function getRouteData(Request $request)
