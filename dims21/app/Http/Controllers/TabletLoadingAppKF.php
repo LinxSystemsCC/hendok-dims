@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 
-class TabletLoadingApp extends controller
+class TabletLoadingAppKF extends controller
 {
 
     public function getRouteData(Request $request)
@@ -141,7 +141,7 @@ class TabletLoadingApp extends controller
         $orderTypename =DB::connection('sqlsrv3')->table('tblOrderTypes')->where('OrderTypeId', $OrderType)->first();
         $routeName =DB::connection('sqlsrv3')->table('tblRoutes')->where('RouteId', $routeId)->first();
          //var_dump($orderTypename->OrderType);
-		
+
 
            $getInvoicesOnRoute = DB::connection('sqlsrv3')
             ->statement("EXEC spCreateNotifications " . $routeId . ",".$OrderType.",'".$dateTo."'" );
@@ -152,7 +152,7 @@ class TabletLoadingApp extends controller
 //spCreateNotifications
         return response()->json($datar);
     }
-	
+
 	 public function slackUser($ordertype,$route,$delvirateDate)
     {
         //dd("TEST");
@@ -165,7 +165,7 @@ class TabletLoadingApp extends controller
 			//$route = str_replace(' ', '%20', $route);
 			//$ordertype = str_replace(' ', '%20', $ordertype);
 			$message ="Please Check ". $route." ".$ordertype." For ".$delvirateDate ;
-			
+
             $request = $client->post($url, ['body' => json_encode(
                 [
                     'text' => $message ,
@@ -493,7 +493,7 @@ class TabletLoadingApp extends controller
 	 public function liveBulkPicking()
     {
         $Date = (new \DateTime())->format('Y-m-d');
-		
+
 		//dd($Date);
         $livebulk = DB::connection('sqlsrv3')
             ->select("EXEC spBulkPickingLiveGrid '" .$Date."'");
@@ -624,7 +624,7 @@ on ot.OrderTypeId = tdd.OrderTypeId
             ->select("EXEC spDriversAppRequisitionReport '".$datefrom."','".$dateTo."'");
         return response()->json($gridcustomerjsonspecials);
 
-    } 
+    }
 	public function driverreq_perrouteJson($routingid)
     {
         $gridcustomerjsonspecials =  DB::connection('sqlsrv3')
