@@ -23,6 +23,7 @@ use App\Http\Controllers\JasperReports;
 use App\Http\Controllers\TestControllerReg;
 use App\Http\Controllers\WareHouseManagementController;
 use App\Http\Controllers\SalesManBriefcase;
+use App\Http\Controllers\KerstonSpecialController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -878,6 +879,17 @@ Route::group(['middleware' => 'auth'], function() {
 
 
 });
+//KERSTON SPECIAL CONTROLLER STARTS HERE !!!
+Route::group(['middleware' => 'auth'], function() {
+
+    Route::get('kerstonspecial', [KerstonSpecialController::class,'kerstonspecial']);
+    Route::get('andNewSpecialKF', [KerstonSpecialController::class,'andNewSpecialKF']);
+    Route::post('getCurrentHistoryCustomerSpecialsKF', [KerstonSpecialController::class,'getCurrentHistoryCustomerSpecialsKF']);
+    Route::post('customerByDateOrContractSpecKF', [KerstonSpecialController::class,'customerByDateOrContractSpecKF']);
+
+
+});
+
 
 
 /***********************SalesManBriefcase**********************************************************************/
