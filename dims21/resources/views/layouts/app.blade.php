@@ -665,6 +665,12 @@
                                     <a href='{!!url("/import_excel")!!}' onclick="window.open(this.href, 'pricelistimport',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >DIMS Price List Import</a>
                                 </li>
+                                <!--Probably add some or other check from ENV file to make sure only KF sees this-->
+
+                                <li>
+                                    <a href='{!!url("/kerstonspecial")!!}' onclick="window.open(this.href, 'massGrid',
+'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" > Customer Specials</a>
+                                </li>
 
                                 <li>
                                     <a href='{!!url("/massgridspecialscustomer")!!}' onclick="window.open(this.href, 'massGrid',
