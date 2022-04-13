@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
 use Khill\Lavacharts\Lavacharts;
 
-class DimsReports extends controller
+class DimsReports extends Controller
 {
 
     public function reports()
