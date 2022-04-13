@@ -628,6 +628,10 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Extras <span class="caret"></span></a>
                             <ul class="dropdown-menu" >
                                 <li>
+                                    <a href='{!!url("/getAwaitingStock")!!}' onclick="window.open(this.href, 'getAwaitingStock',
+'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Awaiting Stock</a>
+                                </li>
+                                <li>
                                     <a href='{!!url("/pickingmain")!!}' onclick="window.open(this.href, 'bulkpicking',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Bulk Picking</a>
                                 </li>

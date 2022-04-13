@@ -519,5 +519,21 @@ $salesMonthToDate = DB::connection('sqlsrv3')
     {
         return view('dims/printwithout');
     }
+    public function getAwaitingStock(){
+        return view('dims/awaitingstockreport');
+    }
+    public function jsonawaitingstock(Request $request){
+
+        $shorloadedJasper=  DB::connection('sqlsrv3')
+            ->select("EXEC spGetAwaitingStockData 'AllProducts'");
+        return response()->json($shorloadedJasper);
+    }
+    public function jsonawaitingstockorders(Request $request){
+        $productId  = $request->get('productId');
+//EXEC dbo.spGetAwaitingStockData @strWhichData ='OrdersForAProduct', @intProductId =0
+        $shorloadedJasper=  DB::connection('sqlsrv3')
+            ->select("EXEC spGetAwaitingStockData 'OrdersForAProduct',".$productId);
+        return response()->json($shorloadedJasper);
+    }
 
 }

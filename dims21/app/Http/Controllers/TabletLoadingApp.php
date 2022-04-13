@@ -1261,5 +1261,45 @@ EOD;
         }
         return $protocol . "://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
     }
+    public function pickingslipsbydep(){
+        $routes =  DB::connection('sqlsrv3')
+            ->select("Select * from tblRoutes order by Route");
+
+        $ordertypes =  DB::connection('sqlsrv3')
+            ->select("Select * from tblOrderTypes order by OrderTypeid");
+
+        $strDepartment =  DB::connection('sqlsrv3')
+            ->select("select * from tblPickingDepartments order by strDepartment");
+        return view('dims/pickingslipsbydep')
+            ->with("routes",$routes)
+            ->with("ordertype",$ordertypes)
+            ->with("strDepartment",$strDepartment)
+            ;
+    }
+    public function getPickingSlipbyDeptInfo(Request $request){
+        //deliverydate
+        $routeid = $request->get("routeid");
+        $ordertypeid = $request->get("ordertypeid");
+        $deliverydate =(new \DateTime($request->get('deliverydate')))->format('Y-m-d');
+        $deptype = $request->get("deptype");
+        $LogisticsInsertMapRoute = $request->get("LogisticsInsertMapRoute");
+        $getlist =DB::connection('sqlsrv3')
+            ->select('exec spGetListOfPickingSlips ?,?,?,?',
+                array($routeid,$ordertypeid,$deliverydate,$deptype)
+            );
+        return response()->json($getlist);
+    }public function printselectedCustomers(Request $request){
+    $Orderid = $request->get("Orderid");
+    $deptId = $request->get("deptId");
+    $routeid = $request->get("routeid");
+    $ordertypeid = $request->get("ordertypeid");
+    $deliverydate =(new \DateTime($request->get('deliverydate')))->format('Y-m-d') ;
+    $orderheaderxml = $this->toxml($Orderid, "xml", array("result"));
+
+    $create =DB::connection('sqlsrv3')
+        ->select('exec spCreatePickingSlips ?,?,?,?,?',
+            array($orderheaderxml,$routeid,$ordertypeid,$deliverydate,$deptId)
+        );
+}
 
 }
