@@ -101,7 +101,7 @@
                     </form>
                 </fieldset>
             </div>
-            <div class="col-md-7 visible-md visible-lg" >
+            <div class="col-md-8 visible-md visible-lg" >
 
                 <div class="panel panel-default hidebody" id="toAutoScroll" style="height: 44%;min-height: 200px;overflow-y:auto;" >
                     <div id="two-columns" class="grid-container" style="display:none;">
@@ -276,10 +276,10 @@
                     <button type="button" id="printDocument" class="btn-xs btn-primary " style=" width: 115px;display:none;">Print</button>
                 </div>
             </div>
-            <div class="col-md-5 hidebody">
-                <div  style="background: #999;height:50px">
+            <div class="col-md-4 hidebody">
+                <div  class="col-md-12" style="background: #999;height:50px">
                     <form>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label class="control-label" for="codeSearch"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Route</label>
                             <input type="button" id="routeonabutton" class="btn-md btn-primary" value="TEST LONG ROUTE IF ">
 

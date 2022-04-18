@@ -522,6 +522,9 @@ $salesMonthToDate = DB::connection('sqlsrv3')
     public function getAwaitingStock(){
         return view('dims/awaitingstockreport');
     }
+    public function getAwaitingStockbycustomer(){
+        return view('dims/awaitingstockbycustomer');
+    }
     public function jsonawaitingstock(Request $request){
 
         $shorloadedJasper=  DB::connection('sqlsrv3')
@@ -529,6 +532,19 @@ $salesMonthToDate = DB::connection('sqlsrv3')
         return response()->json($shorloadedJasper);
     }
     public function jsonawaitingstockorders(Request $request){
+        $productId  = $request->get('productId');
+//EXEC dbo.spGetAwaitingStockData @strWhichData ='OrdersForAProduct', @intProductId =0
+        $shorloadedJasper=  DB::connection('sqlsrv3')
+            ->select("EXEC spGetAwaitingStockData 'OrdersForAProduct',".$productId);
+        return response()->json($shorloadedJasper);
+    }
+    public function jsonawaitingstockorderlistbycustomer(Request $request){
+
+        $shorloadedJasper=  DB::connection('sqlsrv3')
+            ->select("EXEC spGetAwaitingStockData 'AllOrders'");
+        return response()->json($shorloadedJasper);
+    }
+    public function jsonawaitingstockorderproductsfortheid(Request $request){
         $productId  = $request->get('productId');
 //EXEC dbo.spGetAwaitingStockData @strWhichData ='OrdersForAProduct', @intProductId =0
         $shorloadedJasper=  DB::connection('sqlsrv3')

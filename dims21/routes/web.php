@@ -481,7 +481,9 @@ Route::post('emailSalesOrder', [EmailController::class,'emailSalesOrder']);
 //DIMS REPORTS CONTROLLER STARTS HERE !!!
 Route::get('reports', [DimsReports::class,'reports']);
 Route::get('getAwaitingStock', [DimsReports::class,'getAwaitingStock']);
+Route::get('getAwaitingStockbycustomer', [DimsReports::class,'getAwaitingStockbycustomer']);
 Route::get('jsonawaitingstockorders', [DimsReports::class,'jsonawaitingstockorders']);
+Route::get('jsonawaitingstockorderlistbycustomer', [DimsReports::class,'jsonawaitingstockorderlistbycustomer']);
 Route::get('jsonawaitingstock', [DimsReports::class,'jsonawaitingstock']);
 Route::get('LoadLogs/{routingId}',[DimsReports::class,'LoadLogs']);
 Route::post('updateReviewedStatus',[DimsReports::class,'updateReviewedStatus']);

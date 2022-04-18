@@ -26,7 +26,9 @@
     </style>
 </head>
 <body style="font-family: Sans-serif">
-<h3>Flex Picking Plan</h3>
+<h3>Item And Locations</h3>
+<a href='{!!url("/getbininfo")!!}' onclick="window.open(this.href, 'binlocationinfo',
+'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;" style="background: red;padding:10px;color: black;font-weight: 900" >View Bin Location Info</a>
 <div class="dx-field" style="display: none;">
     <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
     <div class="dx-field-value">
@@ -59,10 +61,6 @@
             $("#gridContainer").dxDataGrid({
             dataSource:data,
             showBorders: true,
-            selection: {
-                mode: 'multiple',
-            },
-
             filterRow: { visible: true },
             filterPanel: { visible: true },
             headerFilter: { visible: true },
@@ -72,7 +70,7 @@
             ,
             editing: {
                 mode: "cell",
-                allowUpdating: true,
+                allowUpdating: false,
                 selectTextOnEditStart: true,
                 startEditAction: 'click',
                 allowDeleting: false,
@@ -83,23 +81,18 @@
             columns: [
                 {
                     width: 90,
-                    dataField: "Code",
+                    dataField: "strLoactionName",
+                    caption: "Location",
+                    headerFilter: {
+                        allowSearch: true,
+                    }
+
+
+                },
+                {
+                    width: 90,
+                    dataField: "PastelCode",
                     caption: "Item Code",
-                    visible: false
-
-                },
-                {
-                    width: 300,
-                    dataField: "productName",
-                    caption: "Product Name"
-
-                },
-                {
-                    width:300,
-                    dataField: "groupone",
-                    groupIndex: 0,
-                    caption: "Group 1",
-
                     headerFilter: {
                         allowSearch: true,
                     }
@@ -107,10 +100,16 @@
                 },
                 {
                     width:300,
-                    dataField: "grouptwo",
-
-                    caption: "Group 2",
-
+                    dataField: "PastelDescription",
+                    caption: "Item Description",
+                    headerFilter: {
+                        allowSearch: true,
+                    }
+                },
+                {
+                    width:100,
+                    dataField: "BarCode",
+                    caption: "BarCode",
                     headerFilter: {
                         allowSearch: true,
                     }
@@ -119,29 +118,27 @@
 
                 {
                     width: 80,
-                    dataField: "groupthree",
-                    caption: "Group 3",
-
+                    dataField: "mnyQty",
+                    caption: "Qty",dataType:"number",
                     headerFilter: {
                         allowSearch: true,
-                    },
-
-                }, {
-                    dataField: "dteExpiryDate",
-                    caption: "Expiry Date", width: 80, dataType: "date"
+                    }
 
                 }
                 ,{
                     width: 80,
-                    dataField: "QtyOnHand",
-                    caption: "OnHand",dataType:"number"
+                    dataField: "strTransactionType",
+                    caption: "Type",
+                    headerFilter: {
+                        allowSearch: true,
+                    }
 
                 }
                 ,
                 {
                     width:100,
-                    dataField: "scannedLocation",
-                    caption: "Scanned Location",
+                    dataField: "dtemoved",
+                    caption: "Date",
                     headerFilter: {
                         allowSearch: true,
                     }
