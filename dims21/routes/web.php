@@ -687,7 +687,7 @@ Route::get('pdforder/{id}',[JasperReports::class,'PDFOrders']  );
 Route::get('bulkpickingslip/{id}',[JasperReports::class,'bulkpickingslip']  );
 Route::get('PDFDelDate/{id}',[JasperReports::class,'PDFDelDate'] );
 Route::get('overallSpecailJasper/{datefrom}/{dateto}',[JasperReports::class,'overallSpecailJasper']  );
-Route::get('excelorder/{id}',[JasperReports::class,'EXCELOrders']  );
+Route::get('excelorders/{id}',[JasperReports::class,'EXCELOrders']  );
 Route::get('groupSpecailJasper/{datefrom}/{dateto}/{groupid}',[JasperReports::class,'groupSpecailJasper']  );
 Route::get('compilereports',[JasperReports::class,'compileExample']  );
 Route::get('FreshOrders',[JasperReports::class,'FreshOrders']  );
