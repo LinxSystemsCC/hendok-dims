@@ -17,10 +17,11 @@
                     <label class="control-label" for="inputCustName"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Customer Name</label>
                     <input type="text" name="custDescription" class="form-control input-sm col-xs-1" id="inputCustName" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
                    </div>
-                <div class="form-group col-md-3 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                   <div class="form-group col-md-3 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                     <label class="control-label" for="dateFrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract Date From</label>
                     <input type="text" class="form-control input-sm col-xs-1" id="dateFrom" style="font-weight: 900;    color: black;font-size: 13px;">
                 </div>
+                
                 <div class="form-group col-md-3 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                      <label class="control-label" for="dateTo"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract Date To</label>
                      <input type="text" class="form-control input-sm col-xs-1" id="dateTo" style="font-weight: 900;    color: black;font-size: 13px;"><br>
@@ -28,11 +29,22 @@
 
 
                 <button type="button" id="submitFiltersOnCustSpecial" class="btn-xs btn-primary" style="margin-left: 450px;">Submit</button>
+                
+                <button type="button" id="postPriceList1" class="btn-xs btn-primary" style="margin-left: 450px;">Pricelist 1 Convert</button>
+                
+                <button type="button" id="postPricelist2" class="btn-xs btn-primary" style="margin-left: 450px;">Pricelist 2 Convert</button>
+                <div class="form-group col-md-3 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <label class="control-label" for="custheadid"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract ID</label>
+                    <select  class="form-control input-sm col-xs-1" id="custheadid" style="font-weight: 900;    color: black;font-size: 13px;">
+</select>
+                </div>
 
 
             </form>
+        
         </fieldset>
     </div>
+    
     <div class="col-lg-12" id="afterFilter">
         <h5 id="specialslink"></h5>
         <h4>Current Specials<button type="button" id="extend" class="btn-xs btn-primary" style="float: right;">Extend</button> <button class="btn-md btn-success" id="bulkediting" style="    float: right;">Bulk Editing</button></h4>
@@ -69,51 +81,7 @@
 
             </table>
         </div>
-        <div  style="background: green;height: 80%;display: none;">
-            <h4>Please start adding new products below.</h4>
-            <fieldset class="well" style="display:none;">
-                <legend class="well-legend">Filters</legend>
-                <form>
-                    <div class="form-group col-md-3 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                        <label class="control-label" for="dateFrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Date From</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="dateFrom" style="font-weight: 900;    color: black;font-size: 13px;">
-                    </div>
-                    <div class="form-group col-md-3 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                        <label class="control-label" for="dateTo"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Date To</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="dateTo" style="font-weight: 900;    color: black;font-size: 13px;">
-
-                    </div>
-
-                    <button type="button" id="createnewSpecial" class="btn-xs btn-success">Create</button>
-                </form>
-            </fieldset>
-            <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
-
-                <button class="btn-success btn-xs" id="addLine">Add</button>
-                <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed">
-                    <thead>
-                    <tr style="font-size: 12px;">
-                        <td>Code</td>
-                        <td>Description</td>
-                        <td>DtFrom</td>
-                        <td>DtTo</td>
-                        <td>Price</td>
-                        <td>Cost</td>
-                        <td>Current GP</td>
-                        <td>Cost Created</td>
-                        <td>Actions</td>
-
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-
-                </table>
-
-            </div>
-            <div class="col-lg-12" style="background: white;">
-                <button id="doneCreating" class="btn-xs btn-success">Done</button>
-            </div>
-        </div>
+     
         <input type="button" id="deleteSelected" class="btn-xs btn-danger" value="Delete Selected">
         <input type="button" id="checkall" class="btn-xs btn-danger" value="Check All" style="float:right;">
 
@@ -217,6 +185,8 @@
     });
 
     $(document).ready(function() {
+        $('#dateFrom').prop('disabled', true);
+        $('#dateTo').prop('disabled', true);
         $('#orderListing').hide();
         $('#pricing').hide();
         $('#pricingOnCustomer').hide();
@@ -276,15 +246,52 @@
 
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
-            $('#customerId').val(data.CustomerId);
+            $('#customerId').val(data.CustomerId);        
+            $('#dateFrom').prop('disabled', false);
+            $('#dateTo').prop('disabled', false);
+            $("#custheadid").empty();
+            $.ajax({
+                url: '{!!url("/getContractsPerCustomerID")!!}',
+                type: "POST",
+                data: {
+                    customerid: $('#customerId').val()
+                },
+                success: function (data) {
+                    var trHTML = "";
+                    $.each(data, function (key, value) {
 
+                        trHTML += 
+                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+'</option>';
+
+                    });
+                    $("#custheadid").append(trHTML);
+                }
+            });
         });
         inputCustName.on('select:flexdatalist', function (event, data) {
 
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
+            $('#dateFrom').prop('disabled', false);
+            $('#dateTo').prop('disabled', false);
+            $("#custheadid").empty();
+            $.ajax({
+                url: '{!!url("/getContractsPerCustomerID")!!}',
+                type: "POST",
+                data: {
+                    customerid: $('#customerId').val()
+                },
+                success: function (data) {
+                    $.each(data, function (key, value) {
 
+                        trHTML += 
+                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+'</option>';
+
+                    });
+                    $("#custheadid").append(trHTML);
+                }
+            });
         });
 
         $('#addLine').click(function(){
@@ -304,9 +311,14 @@
             dateFormat: 'yy-mm-dd'
         });
         $("#dateFrom,#dateTo,#specialFrom,#specialTo,#specialdateext").datepicker({
+            
             changeMonth: true,//this option for allowing user to select month
             changeYear: true, //this option for allowing user to select from year range
-            dateFormat: 'dd-mm-yy'
+            dateFormat: 'dd-mm-yy',
+            onSelect: function(dateString,txtDate) {
+                    console.log("bring it");
+                    refreshcontractsviadate();
+                }
         });
         $('#tblCreateNewSpecial').on('click', 'button', function (e) {
             var $this = $(this);
@@ -314,6 +326,62 @@
         });
 
 
+        $('#postPricelist2').click(function()
+        {
+            var dialog = $('<p>This will convert the current contract ID to the selected Pricelist price. Press cancel if this was a mis-click!</p>').dialog({
+                        height: 200, width: 700, modal: true, containment: false,
+                        buttons: {
+                            "OKAY": function () {
+                                $.ajax({
+                                    url: '{!!url("/convertContractPriceBulk")!!}',
+                                    type: "POST",
+                                    data: {
+                                        contractId: $('#custheadid').val(),
+                                        pricelist: 'PRICE LIST 2'
+                                    },
+                                    success: function (data) {
+                                        dialog.dialog('close');
+                                        location.reload(true);
+                                    }
+                                });
+
+                            },
+                            "CANCEL": function () {
+                               dialog.dialog('close');
+
+                            }
+                        }
+                    });
+
+        });
+        $('#postPricelist1').click(function()
+        {
+            var dialog = $('<p>This will convert the current contract ID to the selected Pricelist price. Press cancel if this was a mis-click!</p>').dialog({
+                        height: 200, width: 700, modal: true, containment: false,
+                        buttons: {
+                            "OKAY": function () {
+                                $.ajax({
+                                    url: '{!!url("/convertContractPriceBulk")!!}',
+                                    type: "POST",
+                                    data: {
+                                        contractId: $('#custheadid').val(),
+                                        pricelist: 'PRICE LIST 1'
+                                    },
+                                    success: function (data) {
+                                        dialog.dialog('close');
+                                        location.reload(true);
+                                    }
+                                });
+
+                            },
+                            "CANCEL": function () {
+                               dialog.dialog('close');
+
+                            }
+                        }
+                    });
+
+        });
         $('#doneCreating').click(function()
         {
             var productsLinesOnPicking = new Array();
@@ -406,7 +474,7 @@
 
         });
         $('#submitFiltersOnCustSpecial').click(function(){
-            if (($.trim($('#dateFrom').val())).length > 7 && ($.trim($('#dateTo').val())).length > 7){
+       
 
 
             $('#afterFilter').show();
@@ -424,10 +492,7 @@
                 url: '{!!url("/customerByDateOrContractSpecKF")!!}',
                 type: "POST",
                 data: {
-                    customerCode: $('#inputCustAcc').val(),
-                    dateFrom: $('#dateFrom').val(),
-                    dateTo:  $('#dateTo').val()/*,
-                    contractId: $('#headerId').val()*/
+                    contractId: $('#custheadid').val()
                 },
                 success: function (data) {
                     var trHTML ="";
@@ -462,9 +527,7 @@
                     $('#tblCreatedCustomerSpecials').append(trHTML);
                 }
             });
-            }else {
-                alert("Please check your date criteria");
-            }
+            
             $('#checkall').on('click',function(){
                 $($("input[name='checkproduct[]']")).each(function(){
                     $(this).prop('checked',true);
@@ -866,6 +929,35 @@
             "minimize" : function(evt, dlg){  }, // event
             "restore" : function(evt, dlg){  } // event
         });
+    }
+    function refreshcontractsviadate()
+    {
+        if($("#dateFrom").val() == undefined || $("#dateTo").val() == undefined) {
+       
+            }
+            else{
+            $("#custheadid").empty();
+                $.ajax({
+                url: '{!!url("/getContractsPerCustomerIDWithDates")!!}',
+                type: "POST",
+                data: {
+                    customerid: $('#customerId').val(),
+                    datefrom:$("#dateFrom").val(),
+                    dateto:$("#dateTo").val()
+                },
+                success: function (data) {
+                    var trHTML ="";
+                    $.each(data, function (key, value) {
+
+                        trHTML += 
+                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+'</option>';
+
+                     $("#custheadid").empty();
+                    });
+                    $("#custheadid").append(trHTML);
+                }
+            });
+            }
     }
 
 </script>
