@@ -28,7 +28,18 @@
 
                 <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-primary">Submit</button>
                 <button type="button" id="addinHistory" class="btn-xs btn-primary">Get History</button>
+                <button type="button" id="pricelist1convert" class="btn-xs btn-primary">Price List 1</button>
+                <button type="button" id="pricelist2convert" class="btn-xs btn-primary">Price List 2</button>
+               
             </form>
+            <form action ="{{url('/importexcel')}}" method="post" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                    <div class = "form-group" style ="float:right">
+                    <input type="file" name="select_file" />
+                    <input type="submit" name="upload"  class="btn-xs btn-primary" value="Upload">
+
+                </div>
+                </form>
         </fieldset>
     </div>
     <div class="col-lg-12" id="afterFilter">
@@ -229,9 +240,31 @@
             $('#addinCurrentPrices').show();
             $('#addinHistory').show();
             $('#afterFilter').show();
-            generateALine2();
         });
         
+        $('#pricelist2convert').click(function(){
+            $('#tblCreateNewSpecial > tbody  > tr').each(function() {
+                
+            var ID = $(this).attr('id');
+            var jID = '#'+ID;
+            var x = ID.indexOf("x");
+            var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
+            $('#prodPrice_'+ get_token_number).val(roundquick($('#PL2_'+get_token_number).val()));
+            $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
+            
+            });
+        });
+        $('#pricelist1convert').click(function(){
+            $('#tblCreateNewSpecial > tbody  > tr').each(function() {
+                
+                var ID = $(this).attr('id');
+            var jID = '#'+ID;
+            var x = ID.indexOf("x");
+            var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
+            $('#prodPrice_'+ get_token_number).val(roundquick($('#PL1_'+get_token_number).val()));
+            $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
+            });
+        });
         $('#addinHistory').click(function(){
             
             var theVal = this.value;
@@ -259,13 +292,13 @@
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+value.PL1+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+value.PL2+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+value.PL3+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+value.PL4+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+value.PL5+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+value.PL6+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
             '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
  $('#tblCreateNewSpecial tbody')
             .append( $row )
@@ -646,6 +679,10 @@
     {
         return ((cost/onCellVal))*100;
     }
+    function roundquick(val)
+    {
+        return parseFloat(val).toFixed(2);
+    }
     function productPrice(token_number)
     {
         $.ajax({
@@ -658,6 +695,7 @@
                 warehouseid:1
             },
             success: function (data) {
+                    $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
                     $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
                     $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
             }
