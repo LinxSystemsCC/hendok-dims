@@ -283,6 +283,7 @@
                     customerid: $('#customerId').val()
                 },
                 success: function (data) {
+                    var trHTML = "";
                     $.each(data, function (key, value) {
 
                         trHTML += 
