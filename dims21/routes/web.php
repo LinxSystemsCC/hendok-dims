@@ -886,9 +886,14 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('andNewSpecialKF', [KerstonSpecialController::class,'andNewSpecialKF']);
     Route::post('getCurrentHistoryCustomerSpecialsKF', [KerstonSpecialController::class,'getCurrentHistoryCustomerSpecialsKF']);
     Route::post('customerByDateOrContractSpecKF', [KerstonSpecialController::class,'customerByDateOrContractSpecKF']);
-
+    Route::post('getContractsPerCustomerID',[KerstonSpecialController::class,'getContractsPerCustomerID']);
+    Route::post('getContractsPerCustomerIDWithDates',[KerstonSpecialController::class,'getContractsPerCustomerIDWithDates']);
+    Route::post('/importexcel',[KerstonSpecialController::class,'importexcel']);
+    Route::get('export/{SpecialHeaderId}',[KerstonSpecialController::class,'export']);
+    Route::post('convertContractPriceBulk',[KerstonSpecialController::class,'convertContractPriceBulk']);
 
 });
+
 
 
 
