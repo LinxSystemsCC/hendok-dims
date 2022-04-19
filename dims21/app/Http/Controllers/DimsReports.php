@@ -551,5 +551,19 @@ $salesMonthToDate = DB::connection('sqlsrv3')
             ->select("EXEC spGetAwaitingStockData 'OrdersForAProduct',".$productId);
         return response()->json($shorloadedJasper);
     }
+    public function pricelistview(){
+
+        $pricelist =  DB::connection('sqlsrv3')
+            ->select("select * from tblPriceLists order by PriceList");
+        //
+        return view('dims/pricelistview')->with('pricelist',$pricelist);
+    }
+    public function getProductsMappedToThePriceList(Request $request){
+        $pricelistid  = $request->get('pricelistid');
+        $returnproductsandPrices=  DB::connection('sqlsrv3')
+            ->select("EXEC spPriceListProducts ".$pricelistid);
+        return response()->json($returnproductsandPrices);
+
+    }
 
 }

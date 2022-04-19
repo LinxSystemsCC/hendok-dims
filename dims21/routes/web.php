@@ -521,6 +521,8 @@ Route::get('rptToSeeInTockVsOrders', [DimsReports::class,'rptToSeeInTockVsOrders
 Route::get('getJsonSrockVsOrdered/{date1}/{date2}/{percentage}',[DimsReports::class,'getJsonSrockVsOrdered']);
 Route::post('topOrdersOfACustomer',[DimsReports::class,'topOrdersOfACustomer']);
 Route::post('contactDetailsOnOrder', [DimsReports::class,'contactDetailsOnOrder']);
+Route::get('pricelistview', [DimsReports::class,'pricelistview']);
+Route::get('getProductsMappedToThePriceList', [DimsReports::class,'getProductsMappedToThePriceList']);
 
 //DIMS REPORTS CONTROLLER ENDS HERE !!!
 
