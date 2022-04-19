@@ -31,8 +31,8 @@
                 <button type="button" id="submitFiltersOnCustSpecial" class="btn-xs btn-primary" style="margin-left: 450px;">Submit</button>
                 
                 <button type="button" id="postPriceList1" class="btn-xs btn-primary" style="margin-left: 450px;">Pricelist 1 Convert</button>
-                
-                <button type="button" id="postPricelist2" class="btn-xs btn-primary" style="margin-left: 450px;">Pricelist 2 Convert</button>
+                <button type="button" id="postPricelist2" class="btn-xs btn-primary" >Pricelist 2 Convert</button>
+                <button type="button" id="exportexcel" class="btn-xs btn-primary" >Export Excel</button>
                 <div class="form-group col-md-3 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                     <label class="control-label" for="custheadid"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract ID</label>
                     <select  class="form-control input-sm col-xs-1" id="custheadid" style="font-weight: 900;    color: black;font-size: 13px;">
@@ -326,7 +326,10 @@
             $this.closest('tr').remove();
         });
 
-
+        $('#exportexcel').click(function()
+        {
+            window.location = '{!!url("/export")!!}/'+$('#custheadid').val(); 
+        });
         $('#postPricelist2').click(function()
         {
             var dialog = $('<p>This will convert the current contract ID to the selected Pricelist price. Press cancel if this was a mis-click!</p>').dialog({

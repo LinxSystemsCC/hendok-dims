@@ -13,10 +13,11 @@ use App\Exports\SpecialsExport;
 
 class KerstonSpecialController extends Controller
 { 
-    public function export($SpecialHeaderId) 
+    public function export($contractId) 
     {
+        
        // return Excel::download(new SpecialsExport(), 'specials.xlsx');
-        return (new SpecialsExport($SpecialHeaderId))->download('specials.xlsx');
+        return (new SpecialsExport($contractId))->download('specials.xlsx');
     }
     public function import() 
     {
