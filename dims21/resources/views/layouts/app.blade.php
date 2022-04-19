@@ -684,6 +684,10 @@
                                     <a href='{!!url("/massgridspecialscustomer")!!}' onclick="window.open(this.href, 'massGrid',
 'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" >Mass Customer Specials</a>
                                 </li>
+                                <li>
+                                    <a href='{!!url("/pricelistview")!!}' onclick="window.open(this.href, 'pricelistview',
+'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" >Price List Information</a>
+                                </li>
 
                                 @if ($groupspecialAccess != "0")
                                 <li>

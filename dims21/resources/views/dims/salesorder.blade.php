@@ -6860,7 +6860,7 @@
             });
             $(document).ready(function() {
                 $('#table,#tableDispatch tbody').on('focusout','tr', function () {
-                    //+ alert("slut");
+                    //alert("focusing out tests");
 
                     calculator();
                     var $cells = $(this).find(".prodPrice_");
