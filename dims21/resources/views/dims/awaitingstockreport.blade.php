@@ -26,7 +26,7 @@
     </style>
 </head>
 <body style="font-family: Sans-serif">
-<h3>Awaiting Stock</h3>
+<h3>Awaiting Stock Items</h3>
 
 <div class="dx-field" style="display: none;">
     <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
