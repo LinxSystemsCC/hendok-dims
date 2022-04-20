@@ -17,7 +17,7 @@ class InvoicingController extends Controller
         //   dd($sdkHelper->);
         //   var_dump("Loaded ComHelper, version {$sdkHelper->AssemblyVersion}");
         //Initialise
-        $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx;Initial Catalog=SageCommon;server=HK-SQL2019');
+        $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
         //var_dump("Connected to common");
         $sdkHelper->SetLicense("DE12111039", "4626921");
         $returnToInvoices = DB::connection('sqlsrv3')
