@@ -280,6 +280,9 @@
 
         </tbody>
     </table>
+    <div>
+        @foreach($pickingheader as $value) {{$value->strNotesandInstructions}} @endforeach
+    </div>
 </div>
 <div id="seqpopup">
     <a href='{!!url("/ticketsdept")!!}/{{$ref}}' onclick="window.open(this.href, 'ticketsdept',
@@ -323,6 +326,10 @@
             <option value="{{$value->TruckId}}">{{$value->TruckName}}</option>
         @endforeach
     </select><br>
+    <label>Any Instructions</label>
+    <textarea maxlength="1900" id="someinstruction">
+
+    </textarea>
     <button class="btn-lg btn-success" id="saveseq">SAVE</button>
 </div>
 
@@ -391,12 +398,13 @@
 
                 $.ajax({
                     url: '{!!url("/sequencepickingplans")!!}',
-                    type: "GET",
+                    type: "post",
                     data: {
                         referenceno: $('#refno').val(),
                         stopsseq:stopsseq,
                         teamleaderId:$('#teamleaders').val(),
-                        truckname:$('#truckname').val()
+                        truckname:$('#truckname').val(),
+                        someinstruction:$('#someinstruction').val()
                     },
                     success: function (data) {
 

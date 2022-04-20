@@ -648,10 +648,14 @@ class TabletLoadingApp extends controller
         $referenceno = $request->get('referenceno');
         $teamleaderId  = $request->get('teamleaderId');
         $truckname  = $request->get('truckname');
+        $someinstruction  = $request->get('someinstruction');
         foreach ($arraystops as $value) {
             DB::connection('sqlsrv3')
                 ->statement("EXEC spSequencePickingPlans '" . $value['onum'] . "','" . $referenceno . "',". $value['Qty'].",".$teamleaderId.",".$truckname );
         }
+        $result =  DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference',$referenceno )
+            ->update(['strNotesandInstructions' => $someinstruction]);
     }
     public function ticketsdept($ref){
         $tickets = DB::connection('weights')
