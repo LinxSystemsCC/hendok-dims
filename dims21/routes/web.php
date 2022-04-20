@@ -11,6 +11,7 @@ use App\Http\Controllers\SalesFormFunctions;
 use App\Http\Controllers\ApisContoller;
 use App\Http\Controllers\OnlineOrders;
 use App\Http\Controllers\ConsoleManagement;
+use App\Http\Controllers\InvoicingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
 
@@ -336,7 +337,7 @@ Route::get('pickingplanlisttest/{ref}',[TabletLoadingApp::class,'pickingplanlist
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
 Route::get('viewpickingtickets',[TabletLoadingApp::class,'viewpickingtickets']);
-Route::get('sequencepickingplans',[TabletLoadingApp::class,'sequencepickingplans']);
+Route::post('sequencepickingplans',[TabletLoadingApp::class,'sequencepickingplans']);
 Route::get('jsongetpickingplan',[TabletLoadingApp::class,'jsongetpickingplan']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);
 Route::get('pickingticketslistnotdone/{ref}',[TabletLoadingApp::class,'pickingticketslistnotdone']);
@@ -533,6 +534,10 @@ Route::post('stockApi', [LoadingAppAPIs::class,'stockApi']);
 Route::get('slack', [LoadingAppAPIs::class,'slack']);
 
 //LOADING APP API CONTROLLER ENDS  HERE !!!
+
+//SAGE Invoicing
+Route::get('invoicepickings/{ref}', [InvoicingController::class,'invoicepickings']);
+//SAGE Invoicing Ends Here
 
 //PALLADIUMDIMSSTATUS CONTROLLER STARTS HERE !!!
 
