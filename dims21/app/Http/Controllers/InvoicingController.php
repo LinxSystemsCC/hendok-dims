@@ -44,6 +44,7 @@ class InvoicingController extends Controller
                     array($reference,$val->SalesOrderNo,$val->intOwnerID)
                 );
             $x = $sdkHelper->GetSalesOrder($val->SalesOrderNo);
+            var_dump($returnGetsalesorderNoLines);
             foreach ($returnGetsalesorderNoLines as $innverVal){
                 $lineno = $innverVal->LineNos - 1;
                 $x->Detail[$lineno]->ToProcess =floatval($innverVal->Toinvoice);
