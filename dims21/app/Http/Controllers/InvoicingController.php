@@ -25,7 +25,7 @@ class InvoicingController extends Controller
                 array($reference)
             );
         var_dump($returnToInvoices);
-        $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
+      //  $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
         $orderno = "";
         foreach ($returnToInvoices as $val) {
             switch($val->intOwnerID){
@@ -44,7 +44,7 @@ class InvoicingController extends Controller
                 ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
                     array($reference,$val->SalesOrderNo,$val->intOwnerID)
                 );
-        
+
             var_dump($returnGetsalesorderNoLines);
             $x = $sdkHelper->GetSalesOrder($val->SalesOrderNo);
 
