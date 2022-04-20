@@ -361,6 +361,11 @@
         $('#continue').click(function(){
             window.location = '{!!url("/home")!!}';
         });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
         $('.planstatus').click(function(){
             $.ajax({
