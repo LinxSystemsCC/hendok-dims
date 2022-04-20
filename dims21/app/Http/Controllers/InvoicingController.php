@@ -51,8 +51,11 @@ class InvoicingController extends Controller
             }
             echo "**************** Sales Order Number".$val->SalesOrderNo;
             $reference = $x->Save();
-
+            DB::connection('sqlsrv3')->table('tblProcessSalesOrders')->insert(
+                ['strOrderNo' => $val->SalesOrderNo, 'intAutoindexID' =>$val->intOrderId,'intOwnerId'=> $val->intOwnerId]
+            );
         }
+
 
     }
 }
