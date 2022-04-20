@@ -39,7 +39,7 @@ class InvoicingController extends Controller
                     $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhozi_Dims;server=HK-SQL2019,1433');
                     break;
             }
-            echo "I am a new sales order Number------ "+$val->SalesOrderNo;
+            echo "I am a new sales order Number------ ".$val->SalesOrderNo;
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                 ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
                     array($reference,$val->SalesOrderNo,$val->intOwnerID)
