@@ -24,6 +24,7 @@ class InvoicingController extends Controller
             ->select('exec spGetOrderNumbersToInvoice ?',
                 array($reference)
             );
+        var_dump($returnToInvoices);
         $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
         $orderno = "";
         foreach ($returnToInvoices as $val) {
