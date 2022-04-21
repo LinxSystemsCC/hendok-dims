@@ -86,6 +86,24 @@ class KerstonSpecialController extends Controller
                 ->with('products',$queryProducts)
                 ->with('customers',$queryCustomers);
     }
+    public function XmlCreateCustomerSpecialsKF(Request $request)
+    {
+        $customerCode = $request->get('customerCode');
+        $customerId = $request->get('customerId');
+        $orderDetails = $request->get('orderDetails');
+        $date = (new \DateTime($request->get('contractDateFrom')))->format('Y-m-d');
+        $dateTo = (new \DateTime($request->get('contractDateTo')))->format('Y-m-d');
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+
+        $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
+
+        $returnresults = DB::connection('sqlsrv3')
+            ->select("EXEC spXMLCustomerSpecials '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId);
+        $outPut['result'] = $returnresults[0]->Result;
+        return $outPut;
+
+    }
     public function getCurrentHistoryCustomerSpecialsKF(Request $request){
         $customerCode = $request->get('customercode');
         $customerid =$request->get('customerId');
@@ -97,6 +115,18 @@ class KerstonSpecialController extends Controller
         return response()->json($GetCustomerSpecail);
         
     }
+    public function getCurrentContractCustomerSpecialsKF(Request $request){
+        $contractid = $request->get('contractid');
+        
+        $GetCustomerSpecail = DB::connection('sqlsrv3')
+        ->select('exec spCustomerSpecialContractKF ?',
+        array($contractid));
+
+        return response()->json($GetCustomerSpecail);
+        
+    }
+
+    //below refers to 1st page
     public function getContractsPerCustomerID(Request $request){
         $customerid = $request->get('customerid');
         $getcontracts = DB::connection('sqlsrv3')

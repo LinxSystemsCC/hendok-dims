@@ -895,6 +895,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/importexcel',[KerstonSpecialController::class,'importexcel']);
     Route::get('export/{SpecialHeaderId}',[KerstonSpecialController::class,'export']);
     Route::post('convertContractPriceBulk',[KerstonSpecialController::class,'convertContractPriceBulk']);
+    Route::post('getCurrentContractCustomerSpecialsKF',[KerstonSpecialController::class,'getCurrentContractCustomerSpecialsKF']);
+    Route::post('XmlCreateCustomerSpecialsKF',[KerstonSpecialController::class,'XmlCreateCustomerSpecialsKF']);
 
 });
 
