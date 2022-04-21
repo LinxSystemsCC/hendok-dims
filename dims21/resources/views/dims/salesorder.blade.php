@@ -5583,6 +5583,9 @@
                         });
 
                         $('#ignoresave').click(function(){
+                            if(hassplitorder =="LTRUE"){
+                                splitorder();
+                            }else{
                             $.ajax({
                                 url: '{!!url("/clearorderlocksperorder")!!}',
                                 type: "POST",
@@ -5595,7 +5598,9 @@
 
                                 }
                             });
+                            }
                         });
+
 
                     }
                 });
