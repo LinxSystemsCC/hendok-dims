@@ -59,6 +59,7 @@
     <script src="{{ asset('js/pdfmake.min.js') }}"></script>
     <script src="{{ asset('js//vfs_fonts.js') }}"></script>
     <script src="{{ asset('js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('js/tableSorter.js') }}"></script>
 
 
 

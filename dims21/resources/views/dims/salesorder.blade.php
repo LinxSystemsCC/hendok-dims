@@ -6661,14 +6661,14 @@
                                     if(data[0].theMg == "NEEDAUTH"){
                                         linetotal(1,data[0].Price,data[0].Tax,marginCalculator(data[0].Cost,data[0].Price));
                                         $('#prodPrice_' + token_number).focus();
-                                        var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
+                                       /* var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
                                             height: 200, width: 700,modal: true,containment: false,
                                             buttons: {
                                                 "Okay": function () {
                                                     dialog.dialog('close');
                                                 }
                                             }
-                                        });
+                                        });*/
                                     }
                                     if(data[0].intAssociated != "0"){
                                         $('#' + token_number).css('background', '#FF0000');
@@ -6692,14 +6692,14 @@
                             {
                                 if(data[0].theMg == "NEEDAUTH"){
                                     $('#prodPrice_' + token_number).focus();
-                                    var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
+                                   /* var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
                                         height: 200, width: 700,modal: true,containment: false,
                                         buttons: {
                                             "Okay": function () {
                                                 dialog.dialog('close');
                                             }
                                         }
-                                    });
+                                    });*/
                                 }
                                 //theOrdersDetailsId
                                 $('#prodPrice_' + token_number).val('0');
@@ -6721,14 +6721,14 @@
                         {
                             if(data[0].theMg == "NEEDAUTH"){
                                 $('#prodPrice_' + token_number).focus();
-                                var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
+                               /* var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
                                     height: 200, width: 700,modal: true,containment: false,
                                     buttons: {
                                         "Okay": function () {
                                             dialog.dialog('close');
                                         }
                                     }
-                                });
+                                });*/
                             }
 
                             if($('#marginandpriceauthbycustomer').val().length > 1 ){
