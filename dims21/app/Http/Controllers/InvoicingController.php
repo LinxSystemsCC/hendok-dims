@@ -75,7 +75,7 @@ class InvoicingController extends Controller
         $returnSalesOrders = DB::connection('sqlsrv3')
             ->select('exec spGetOrderNumbersToFinalize ');
         foreach ($returnSalesOrders as $val) {
-            switch ($val->intOwnerID) {
+            switch ($val->intOwnerId) {
                 case 1:
                     $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok_Dims;server=HK-SQL2019,1433');
                     break;
@@ -86,7 +86,7 @@ class InvoicingController extends Controller
                     $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhozi_Dims;server=HK-SQL2019,1433');
                     break;
             }
-            $x = $sdkHelper->GetSalesOrder($val->SalesOrderNo);
+            $x = $sdkHelper->GetSalesOrder($val->strOrderNo);
             $reference = $x->Process();
             echo "*************".$reference;
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
