@@ -702,7 +702,7 @@ class TabletLoadingApp extends controller
 
         $result =  DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference',$ref )
-            ->update(['intDriverOne' => $DriverOne,'intDriverTwo' => $DriverTwo,'strTicket' => $Ticket,'intTruckId' => $truckname]);
+            ->update(['intDriverOne' => $DriverOne,'intDriverTwo' => $DriverTwo,'intTruckId' => $truckname]);
 
     }
     public function markplandeleted(Request $request){

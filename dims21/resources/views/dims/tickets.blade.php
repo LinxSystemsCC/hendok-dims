@@ -78,9 +78,9 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group ">
+                            <div class="form-group " style="display: none;">
                                 <label class="control-label" for="Ticket"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Ticket</h4></label>
-                                <select id="Ticket" class="form-control input-sm col-s-2" required>
+                                <select id="Ticket" class="form-control input-sm col-s-2" >
                                     @foreach($ticketselected as $val)
                                         <option value="{{$val->strTicket}}">{{$val->strTicket}}</option>
                                     @endforeach
@@ -139,7 +139,7 @@
                     TruckName: $('#TruckName').val(),
                     DriverOne: $('#DriverOne').val(),
                     DriverTwo: $('#DriverTwo').val(),
-                    Ticket: $('#Ticket').val(),
+                    Ticket:1,
                     ref: $('#ref').val()
                 },
                 success: function (data)
