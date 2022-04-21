@@ -59,16 +59,8 @@
 								<input type="text" class="form-control input-sm col-s-2" id="DriverName" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Name You Want To Add" required>
 							</div>
 							<div class="form-group ">
-								<label class="control-label" for="GLCode"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Driver GL Code</h4></label>
-
-								@if(count($glCode)>0)
-									<select id="glCode">
-										<option value="0">-- PLease Choose GL Code--</option>
-										@foreach($glCode as $values)
-											<option value="{{$values->GLCode}}">{{$values->GLCode}}</option>
-										@endforeach
-									</select>
-							@endif
+								<label class="control-label" for="glCode"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Driver Code</h4></label>
+                                <input type="text" class="form-control input-sm col-s-2" id="glCode" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="" required>
 
 							<!--<input type="text" class="form-control input-sm col-s-2" id="GLCode" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a GLCode" required>-->
 							</div>
@@ -89,7 +81,7 @@
 											<tr>
 												<th class="text-center " ><h3>Driver ID</h3></th>
 												<th class="text-center "><h3>Driver Name</h3></th>
-												<th class="text-center "><h3>GL Codes</h3></th>
+												<th class="text-center "><h3>Codes</h3></th>
 
 											</tr>
 											</thead>
@@ -126,13 +118,9 @@
 						<input type="hidden" class="form-control input-sm col-xs-1" id="DriverIdEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Name You want to add" required>
 					</div>
 					<div class="form-group ">
-						<label class="control-label" for="GLCodeEdit"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Driver GL Code</label>
-                        <select id="GLCodeEdit">
+						<label class="control-label" for="GLCodeEdit"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Driver Code</label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="GLCodeEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;"required>
 
-                            @foreach($glCode as $values)
-                                <option value="{{$values->GLCode}}">{{$values->GLCode}}</option>
-                            @endforeach
-                        </select>
                     </div>
 
 

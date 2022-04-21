@@ -667,10 +667,10 @@ class TabletLoadingApp extends controller
             ->select("SELECT strTicket from tblPickingPlanHeader where strUnickReference='".$ref."'" );
 
         $trucks = DB::connection('sqlsrv3')
-            ->select("SELECT TruckId,RegNo from tblTrucks order by RegNo" );
+            ->select("SELECT TruckId,RegNo from tblTrucks where isUsedOnlyForPlanning = 0 order by RegNo" );
 
         $truckstodrive = DB::connection('sqlsrv3')
-            ->select("SELECT TruckId,RegNo from tblTrucks t inner join tblPickingPlanHeader h on t.TruckId = h.intTruckId where strUnickReference='".$ref."' order by RegNo" );
+            ->select("SELECT TruckId,RegNo from tblTrucks t inner join tblPickingPlanHeader h on t.TruckId = h.intTruckId where isUsedOnlyForPlanning = 0 and strUnickReference='".$ref."' order by RegNo" );
         $drivers = DB::connection('sqlsrv3')
             ->select("SELECT DriverId,DriverName from tblDrivers order by DriverName" );
 
