@@ -3927,25 +3927,31 @@
                                 },
                                 success: function (data) {
                                     //console.debug('sluuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuut');
+                                    var weneedauth = 0;
+                                    if(data[0].theMg == "NEEDAUTH"){
+                                        weneedauth = 1;
 
+                                    }
                                     console.debug(data);
                                     var price = '';
                                     if ($.isEmptyObject(data)) {
                                         price = '';
-                                        readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,'0',UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
+                                        linetotal(1,0,tax,marginCalculator(0,0));
+                                        readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,'0',UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount,weneedauth);
                                     } else {
                                         price = parseFloat(data[0].Price).toFixed(2);
                                         console.debug('something'+data[0].LineDisc);
+                                        linetotal(1,price,tax,marginCalculator(data[0].Cost,price));
                                         if (reportmarginControl === 'marginType5')
                                         {
                                             console.debug('margin 5'+data[0].LineDisc);
                                             console.debug('linediscount# '+linediscount);
-                                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
+                                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount,weneedauth);
 
                                         }else{
                                             console.debug('margin not 5'+data[0].LineDisc);
                                             console.debug('linediscount not# '+linediscount);
-                                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,multiLines,data[0].LineDisc,linediscount);
+                                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, Prodcost, ProdQnt, titles, tax,UnitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,multiLines,data[0].LineDisc,linediscount,weneedauth);
                                         }
                                     }
 
@@ -5286,7 +5292,6 @@
             }
             function productsOnInvoiced()
             {
-
                 productsOnOrders = $('#tblOnInvoiced').DataTable({
                     "ajax": {
                         url: '{!!url("/productsOnInvoiced")!!}', "type": "post", data: function (data) {
@@ -5555,9 +5560,7 @@
                                                 var dialog = $('<p><strong style="color:black">Updated To Address ID #'+$('#hiddenDeliveryAddressId').val()+' </strong></p>').dialog({
                                                     height: 200, width: 700, modal: true, containment: false,
                                                     buttons: {
-
                                                         "Okay": function () {
-
                                                             dialog.dialog('close');
                                                         }
 
@@ -6655,6 +6658,18 @@
                                     $('#prodDisc_' + token_number).val(parseFloat(data[0].LineDisc).toFixed(2));
                                     $('#stockmanagement' + token_number).val(data[0].StockManagement);
 
+                                    if(data[0].theMg == "NEEDAUTH"){
+                                        linetotal(1,data[0].Price,data[0].Tax,marginCalculator(data[0].Cost,data[0].Price));
+                                        $('#prodPrice_' + token_number).focus();
+                                        var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
+                                            height: 200, width: 700,modal: true,containment: false,
+                                            buttons: {
+                                                "Okay": function () {
+                                                    dialog.dialog('close');
+                                                }
+                                            }
+                                        });
+                                    }
                                     if(data[0].intAssociated != "0"){
                                         $('#' + token_number).css('background', '#FF0000');
                                     }
@@ -6675,6 +6690,17 @@
                             }
                             else
                             {
+                                if(data[0].theMg == "NEEDAUTH"){
+                                    $('#prodPrice_' + token_number).focus();
+                                    var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
+                                        height: 200, width: 700,modal: true,containment: false,
+                                        buttons: {
+                                            "Okay": function () {
+                                                dialog.dialog('close');
+                                            }
+                                        }
+                                    });
+                                }
                                 //theOrdersDetailsId
                                 $('#prodPrice_' + token_number).val('0');
                                 if($('#marginandpriceauthbycustomer').val().length >1) {
@@ -6693,6 +6719,17 @@
                             }
                         }else
                         {
+                            if(data[0].theMg == "NEEDAUTH"){
+                                $('#prodPrice_' + token_number).focus();
+                                var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
+                                    height: 200, width: 700,modal: true,containment: false,
+                                    buttons: {
+                                        "Okay": function () {
+                                            dialog.dialog('close');
+                                        }
+                                    }
+                                });
+                            }
 
                             if($('#marginandpriceauthbycustomer').val().length > 1 ){
                                 $('#prodPrice_'+token_number).val('0');
@@ -6797,6 +6834,11 @@
                         console.debug(data);
                         var price = '';
 
+                        var weneedauth = 0;
+                        if(data[0].theMg == "NEEDAUTH"){
+                            weneedauth = 1;
+
+                        }
                         // console.debug("********************"+data[0].AvailableToSell);
 
                         if ($.isEmptyObject(data)) {
@@ -6804,7 +6846,7 @@
                             console.debug("UnitWeight ===="+UnitWeight);
                             console.debug("SoldByWeight ===="+SoldByWeight);
                             console.debug("strBulkUnit ===="+strBulkUnit);
-                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, ' ', price, 0, inStock, title, tax,unitSizes,0,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
+                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, ' ', price, 0, inStock, title, tax,unitSizes,0,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount,weneedauth);
                         } else {
                             price = parseFloat(data[0].Price).toFixed(2);
 
@@ -6813,7 +6855,7 @@
                                 //cost = price;
                                 cost = cost;
                             }
-                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, cost, inStock, title, tax,unitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount);
+                            readyMadeLineOrderLine('#table tbody', producutDescr, productCode, '', price, cost, inStock, title, tax,unitSizes,data[0].Prohibited,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,data[0].LineDisc,linediscount,weneedauth);
                             // }
 
                         }
@@ -7070,26 +7112,190 @@
                     }
 
                 });
+//prodDescription_
+            /*    $(document).on("focusout",".prodDescription_",function(){
+                     var auth = $(this).closest('tr').find('.title').val();
+                     var cost = $(this).closest('tr').find('.costs').val();
+                     var price = $(this).closest('tr').find('.prodPrice_').val();
+                     var theProductCode = $(this).closest('tr').find('.theProductCode_').val();
+                     var margin = $(this).closest('tr').find('.margin').val();
+                     var prodQty = $(this).closest('tr').find('.prodQty_').val();
+                     var hiddenToken = $(this).closest('tr').find('.hiddenToken').val();
+                     var $cellsId = $(this).find(".prodPrice_").attr("id");
 
+                     if(theProductCode.length > 0 && auth.length > 4){
+                         somemainAuth(theProductCode,price,prodQty,cost,margin,hiddenToken)
+                     }
+                    //alert("product name "+auth);
+                 });
+                 $(document).on("focusout",".theProductCode_",function(){
+                     var auth = $(this).closest('tr').find('.title').val();
+                     var cost = $(this).closest('tr').find('.costs').val();
+                     var price = $(this).closest('tr').find('.prodPrice_').val();
+                     var theProductCode = $(this).closest('tr').find('.theProductCode_').val();
+                     var margin = $(this).closest('tr').find('.margin').val();
+                     var prodQty = $(this).closest('tr').find('.prodQty_').val();
+                     var hiddenToken = $(this).closest('tr').find('.hiddenToken').val();
+                     var $cellsId = $(this).find(".prodPrice_").attr("id");
+
+                     if(theProductCode.length > 0 && auth.length > 4){
+                         somemainAuth(theProductCode,price,prodQty,cost,margin,hiddenToken)
+                     }
+                    // alert("product code "+auth );
+                 });
+                 $(document).on("focusout",".prodBulk_",function(){
+                     var auth = $(this).closest('tr').find('.title').val();
+                     var cost = $(this).closest('tr').find('.costs').val();
+                     var price = $(this).closest('tr').find('.prodPrice_').val();
+                     var theProductCode = $(this).closest('tr').find('.theProductCode_').val();
+                     var margin = $(this).closest('tr').find('.margin').val();
+                     var prodQty = $(this).closest('tr').find('.prodQty_').val();
+                     var hiddenToken = $(this).closest('tr').find('.hiddenToken').val();
+                     var $cellsId = $(this).find(".prodPrice_").attr("id");
+
+                     if(theProductCode.length > 0 && auth.length > 4){
+                         somemainAuth(theProductCode,price,prodQty,cost,margin,hiddenToken)
+                     }
+                    // alert("product Bulk "+auth);
+                 });
+                 $(document).on("focusout",".prodQty_",function(){
+                     var auth = $(this).closest('tr').find('.title').val();
+                     var cost = $(this).closest('tr').find('.costs').val();
+                     var price = $(this).closest('tr').find('.prodPrice_').val();
+                     var theProductCode = $(this).closest('tr').find('.theProductCode_').val();
+                     var margin = $(this).closest('tr').find('.margin').val();
+                     var prodQty = $(this).closest('tr').find('.prodQty_').val();
+                     var hiddenToken = $(this).closest('tr').find('.hiddenToken').val();
+                     var $cellsId = $(this).find(".prodPrice_").attr("id");
+
+                     if(theProductCode.length > 0 && auth.length > 4){
+                         somemainAuth(theProductCode,price,prodQty,cost,margin,hiddenToken)
+                     }
+                   //  alert("product qty "+auth);
+                 });
+                 $(document).on("focusout",".prodComment_",function(){
+                     var auth = $(this).closest('tr').find('.title').val();
+                     var cost = $(this).closest('tr').find('.costs').val();
+                     var price = $(this).closest('tr').find('.prodPrice_').val();
+                     var theProductCode = $(this).closest('tr').find('.theProductCode_').val();
+                     var margin = $(this).closest('tr').find('.margin').val();
+                     var prodQty = $(this).closest('tr').find('.prodQty_').val();
+                     var hiddenToken = $(this).closest('tr').find('.hiddenToken').val();
+                     var $cellsId = $(this).find(".prodPrice_").attr("id");
+
+                     if(theProductCode.length > 0 && auth.length > 4){
+                         somemainAuth(theProductCode,price,prodQty,cost,margin,hiddenToken)
+                     }
+                    // somemainAuth(productCode,price,qty,cost,itemMargin,token_number)
+                     //alert("product comment "+auth);
+                 });*/
+                 function somemainAuth(productCode,price,qty,cost,itemMargin,token_number){
+                     price = parseFloat(price);
+                     qty = parseFloat(qty);
+                     cost = parseFloat(cost);
+                     itemMargin = parseFloat(itemMargin);
+                     console.debug("token_number**********************"+token_number);
+                   //  var n = token_number.indexOf("_");
+                     var  token_numbernew = token_number;
+                     console.debug("token_numbernew****"+token_numbernew);
+                     console.debug("itemMargin****"+itemMargin);
+                     console.debug("cost****"+cost);
+                     console.debug("price****"+price);
+
+                     if(marginCalculator(cost,price) <  itemMargin && productCode.length > 0 && itemMargin.length > 0){
+                         $('#MarginProblems').show();
+                         $('#userAuthProhibitedCred_marg').val('');
+                         $('#userAuthPassWordCredit_marg').val('');
+                         showDialogWithoutClose('#MarginProblems',400,400);
+                         $('#MarginProblems').keydown(function(event) {
+                             if (event.keyCode == 27) {
+                                 return false;
+                             }
+                         });
+                         $('#MarginProblems').keyup(function(event) {
+                             if (event.keyCode == 27) {
+                                 return false;
+                             }
+                         });
+
+                         $('#doAuthCredits').off().click(function(){
+                             //$('#MarginProblems').dialog('close');
+                             $.ajax({
+                                 url: '{!!url("/verifyAuthGroupLeaders")!!}' ,
+                                 type: "POST",
+                                 data:{ userName:$('#userAuthProhibitedCred_marg').val(),
+                                     userPassword:$('#userAuthPassWordCredit_marg').val(),
+                                     orderId:$('#orderId').val()
+                                 },
+                                 success: function(datainner){
+                                     console.debug(datainner);
+                                     if ($.isEmptyObject(datainner)){
+                                         $('#new_row_ajax'+token_numbernew).remove();
+                                         calculator();
+                                         generateALine2();
+                                         alert("Wrong Credentials Or You don't have permissions, Please Try Again Or Talk to your manager!");
+
+                                     }else
+                                     {
+                                         //console.debug("title "+title);
+                                         $('#margin_auth').val(1);
+                                         consoleManagementAuths('{!!url("/logMessageAuthMargin")!!}',12,1,'Authorized Product ('+$('#prodCode_' + token_numbernew).val()+')  by '+datainner[0].UserName,
+                                             0,$('#orderId').val(),'',$('#inputCustAcc').val(),0,0,0,$('#userAuthProhibitedCred_marg').val(),$('#orderId').val(),0,computerName,$('#orderId').val(),0,datainner[0].UserID,data[0].UserName);
+                                         $("#MarginProblems").dialog('close');
+
+                                         $('#title_' + token_numbernew).val('');
+                                         $('#MarginProblems').dialog('close');
+
+
+                                     }
+                                     //calculator();
+                                 }
+
+                             });
+
+                         });
+                         $('#doCancelAuthCredits').off().click(function(){
+                             console.debug("Function has occured as margin problem cancel click");
+                             $('#MarginProblems').dialog('close');
+
+                             $('#new_row_ajax'+token_numbernew).remove();
+                             calculator();
+                             generateALine2();
+
+                         });
+
+                     }
+
+                 }
                 $(document).on("focusout",".prodPrice_",function(){
 
                     var $this = $(this);
-                    var cost = $(this).closest('tr').find('.costs').val();
                     var price = $(this).closest('tr').find('.prodPrice_').val();
+                    if(price.length<1){
+                        price = 0;
+                    }
+                    var cost = $(this).closest('tr').find('.costs').val();
+                  //  var price = $(this).closest('tr').find('.prodPrice_').val();
                     var theProductCode = $(this).closest('tr').find('.theProductCode_').val();
                     var Productmargin = $(this).closest('tr').find('.margin').val();
                     var auth = $(this).closest('tr').find('.title').val();
 
+
                     var margin = marginCalculator(cost, price);
 
-                    if((parseFloat(Productmargin)  > parseFloat(margin).toFixed(2)) && auth.length>4 &&  price > 0 )
+                    if((parseFloat(Productmargin)  > parseFloat(margin).toFixed(2)) && auth.length>4  )
                     {
                         $('#MarginProblems').show();
                         $('#userAuthProhibitedCred_marg').val('');
                         $('#userAuthPassWordCredit_marg').val('');
                         showDialogWithoutClose('#MarginProblems',400,400);
                         $('#MarginProblems').keydown(function(event) {
-                            if (event.keyCode == 27){
+                            if (event.keyCode == 27) {
+                                return false;
+                            }
+                        });
+                        $('#MarginProblems').keyup(function(event) {
+                            if (event.keyCode == 27) {
                                 return false;
                             }
                         });
@@ -7350,6 +7556,7 @@
                 var productCode = $(this).closest("tr").find(".theProductCode_").val();
                 var costing = $(this).closest("tr").find(".costs").val();
                 var hiddenToken = $(this).closest("tr").find(".hiddenToken").val();
+                $(this).closest('tr').find('.title').val('authorize');
 
                 if ((key > 45 && key < 57) || (key > 95 && key < 106) ||  key == 8) {
                     $('#'+$isAuth).val('PRICECHANGED');
