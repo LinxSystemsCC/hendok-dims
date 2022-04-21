@@ -50,12 +50,10 @@ class InvoicingController extends Controller
             echo "Saved Order Number----------".$val->SalesOrderNo."<br>";
             $reference = $x->Save();
 
-            DB::connection('sqlsrv3')->table('tblProcessSalesOrders')->insert(
-                ['strOrderNo' => $val->SalesOrderNo, 'intAutoindexID' =>$val->intOrderId,'intOwnerId'=> $val->intOwnerID]
-            );
+
 
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                ->select('exec spGetOrderNumbersLinesToProcess ?,?,?,?,?',
+                ->select('exec spProcessSavedSalesOrderLinesByOrderNumber ?,?,?,?,?',
                     array($userid,$val->intOrderId,$val->SalesOrderNo,$val->intOwnerID,$userName)
                 );
         }
