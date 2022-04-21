@@ -50,8 +50,6 @@ class InvoicingController extends Controller
             echo "Saved Order Number----------".$val->SalesOrderNo."<br>";
             $reference = $x->Save();
 
-
-
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                 ->select('exec spProcessSavedSalesOrderLinesByOrderNumber ?,?,?,?,?',
                     array($userid,$val->intOrderId,$val->SalesOrderNo,$val->intOwnerID,$userName)

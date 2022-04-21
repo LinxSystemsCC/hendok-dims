@@ -45,7 +45,7 @@ overflow-y: scroll
                         <fieldset class="well">
                             <legend class="well-legend">Add Screen</legend>
                             <div class="form-group ">
-                                <label class="control-label" for=  "TruckName" style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Truck Name</h4></label>
+                                <label class="control-label" for=  "TruckName" style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Fleet No</h4></label>
                                 <input type="text" class="form-control input-sm col-s-2" id="TruckName" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Truck You Want To Add" required>
                               </div>
                             <div class="form-group ">
@@ -57,11 +57,15 @@ overflow-y: scroll
                                 <input type="text" class="form-control input-sm col-s-2" id="Capacity" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter The Trucks Capacity" required>
                             </div>
                             <div class="form-group ">
-                                <label class="control-label" for="Capacity"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Transport Mode</h4></label>
+                                <label class="control-label" for="Capacity"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Type</h4></label>
                                 <select id="transportmode">
-                                    <option value="1">Truck</option>
-                                    <option value="2">Trailor</option>
+                                    <option value="1">Articulated Horse</option>
+                                    <option value="2">Rigid</option>
                                 </select>
+                            </div>
+                            <div class="form-group ">
+                                <label class="control-label" for="model"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Model</h4></label>
+                                <input type="text" class="form-control input-sm col-s-2" id="model" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="" required>
                             </div>
                            <button class=" btn btn-success fa fa-plus-circle" type="submit" id="add" >ADD</button>
 
@@ -79,11 +83,12 @@ overflow-y: scroll
 											<thead>
 												<tr>
 													<th class="text-center " ><h3>Truck ID</h3></th>
-													<th class="text-center "><h3>Truck Name</h3></th>
+													<th class="text-center "><h3>Fleet No</h3></th>
 													<th class="text-center "><h3> Truck Reg No.</h3></th>
 													<th class="text-center "><h3> Truck Capacity</h3></th>
-													<th class="text-center "><h3> Transport Mode</h3></th>
-													<th class="text-center "><h3> Transport Int</h3></th>
+													<th class="text-center "><h3> Type</h3></th>
+													<th class="text-center "><h3> Type ID</h3></th>
+													<th class="text-center "><h3> Model</h3></th>
 
 												</tr>
 											</thead>
@@ -96,6 +101,7 @@ overflow-y: scroll
 													<td class="text-center" >{{$values->Capacity}}</td>
 													<td class="text-center" >{{$values->TransportMode}}</td>
 													<td class="text-center" >{{$values->intType}}</td>
+													<td class="text-center" >{{$values->Model}}</td>
 													</tr>
 												@endforeach
 											</tbody>
@@ -121,7 +127,7 @@ overflow-y: scroll
 				<div><h2 id="updatemessage">  </h2>
 				</div>
 				<div class="form-group ">
-					<label class="control-label" for="TruckNameEdit"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Truck Name</label>
+					<label class="control-label" for="TruckNameEdit"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Fleet No</label>
 					<input type="text" class="form-control input-sm col-xs-1" id="TruckNameEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Name You want to add" required>
 					<input type="hidden" class="form-control input-sm col-xs-1" id="TruckIdEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Name You want to add" required>
 				  </div>
@@ -134,10 +140,14 @@ overflow-y: scroll
 					<input type="text" class="form-control input-sm col-xs-1" id="CapacityEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter Truck Capacity" required>
 				</div>
                 <div class="form-group ">
-                    <label class="control-label" for="Capacity"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Transport Mode</h4></label>
+					<label class="control-label" for="modelEdit"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Model</label>
+					<input type="text" class="form-control input-sm col-xs-1" id="modelEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="" required>
+				</div>
+                <div class="form-group ">
+                    <label class="control-label" for="Capacity"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Type</h4></label>
                     <select id="transportmodeupdate">
-                        <option value="1">Truck</option>
-                        <option value="2">Trailor</option>
+                        <option value="1">Articulated Horse</option>
+                        <option value="2">Rigid</option>
                     </select>
                 </div>
 
@@ -198,6 +208,7 @@ $("#add").click(function()
 						RegNo: $('#RegNo').val(),
 						Capacity: $('#Capacity').val(),
                         transportmodeid: $('#transportmode').val(),
+                        model: $('#model').val(),
                         statement: 'Insert'
                     },
                     success: function (data)
@@ -220,6 +231,7 @@ $("#add").click(function()
 		 var capacity = row.find('td:eq(3)').text();
 		 var transportmode = row.find('td:eq(4)').text();
 		 var transportmodeint = row.find('td:eq(5)').text();
+		 var model = row.find('td:eq(6)').text();
 
          $('#transportmodeupdate').prepend('<option value="'+transportmodeint+'" selected="selected">'+transportmode+'</option>');
 
@@ -229,6 +241,7 @@ $("#add").click(function()
 		 $('#RegNoEdit').val(regNo);
 		 $('#CapacityEdit').val(capacity);
 		 $('#TruckIdEdit').val(truckId);
+		 $('#modelEdit').val(model);
 		 $('#updatemessage').append("You are now editing the information of " + truckName+"!");
 
    });
@@ -253,6 +266,7 @@ $("#edit").click(function()
 						RegNo: $('#RegNoEdit').val(),
 						Capacity: $('#CapacityEdit').val(),
                         transportmodeid: $('#transportmodeupdate').val(),
+                        model: $('#modelEdit').val(),
                         statement: 'Update'
                     },
                     success: function (data)

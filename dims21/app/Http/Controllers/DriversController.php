@@ -88,8 +88,9 @@ class DriversController extends Controller
         $RegNo = $request->get('RegNo');
         $Capacity = $request->get('Capacity');
         $transportmodeid = $request->get('transportmodeid');
+        $model= $request->get('model');
         $insertTrucks = DB::connection('sqlsrv3')
-            ->statement("EXEC spCRUDTrucks NULL,'".$TruckName."','".$RegNo."',".$Capacity.",'Insert',".$transportmodeid);
+            ->statement("EXEC spCRUDTrucks NULL,'".$TruckName."','".$RegNo."',".$Capacity.",'Insert',".$transportmodeid.",'".$model."'");
         return response()->json($insertTrucks);
 
     }
@@ -114,6 +115,7 @@ class DriversController extends Controller
         $RegNo = $request->get('RegNo');
         $Capacity = $request->get('Capacity');
         $transportmodeid = $request->get('transportmodeid');
+        $model= $request->get('model');
 
 
         $updateTrucks = DB::connection('sqlsrv3')
