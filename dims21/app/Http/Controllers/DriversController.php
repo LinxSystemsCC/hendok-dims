@@ -102,7 +102,7 @@ class DriversController extends Controller
         $RegNo = "NULL";
         $Capacity = 0;
         $readTrucks = DB::connection('sqlsrv3')
-            ->select("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Select',1");
+            ->select("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Select',1,1");
 
         return view('dims/trucks')
             ->with('readTrucksItems',$readTrucks);
@@ -133,7 +133,7 @@ class DriversController extends Controller
 
 
         $deleteTrucks = DB::connection('sqlsrv3')
-            ->statement("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Delete',1");
+            ->statement("EXEC spCRUDTrucks ".$TruckId.",'".$TruckName."','".$RegNo."',".$Capacity.",'Delete',1,1");
         return response()->json($deleteTrucks);
     }
 
