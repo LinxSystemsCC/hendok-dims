@@ -73,7 +73,7 @@ class InvoicingController extends Controller
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
 
         //Initialise, We to find the resusable way
-        try {
+
         $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
         //var_dump("Connected to common");
         $sdkHelper->SetLicense("DE12111039", "4626921");
@@ -91,22 +91,24 @@ class InvoicingController extends Controller
                     $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhozi_Dims;server=HK-SQL2019,1433');
                     break;
             }
-            $x = $sdkHelper->GetSalesOrder($val->strOrderNo);
-            $reference = $x->Process();
-            echo "*************".$reference;
-            $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
-                    array($userid,$val->intAutoindexID,$val->strOrderNo,$val->intOwnerId,$userName)
-                );
+            try {
+                $x = $sdkHelper->GetSalesOrder($val->strOrderNo);
+                $reference = $x->Process();
+                echo "*************".$reference;
+                $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+                    ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
+                        array($userid,$val->intAutoindexID,$val->strOrderNo,$val->intOwnerId,$userName)
+                    );
+            }catch (Error $err){
+                    echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+                    echo $err;
+            }
             //spPrintProcessedInvoiceNo
 
         }
         echo "*****************************Done Invoicing******************";
         echo "*****************************Printing Started Please Check Your Printer******************";
         echo "*****************************Printer Name Is: ".$PrinterPathInvoice;
-        }catch (Error $err){
-            echo "<h3 style='color: darkred'>__________Errors_________</h3>";
-            echo $err;
-        }
+
     }
 }
