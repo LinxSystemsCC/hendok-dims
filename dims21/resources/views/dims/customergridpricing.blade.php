@@ -29,7 +29,7 @@
     </div>
     <div class="col-lg-12" >
 <input id="custAcc" value="{{$custAcc}}">
-
+<button class="btn-lg btn-danger" id="printpreview">Preview & Print</button>
         <table class="table">
             <thead style="background: lavender;">
             <tr>
@@ -174,6 +174,12 @@
                 $('#salesInvoiced').hide();
                 $('#Attention').hide();
                 //   $("table#table").trigger("update");
+
+                $('#printpreview').click(function(){
+
+                    window.open('{!!url("/viewcustomerpricingjson")!!}/'+$('#custAcc').val()+'/'+$('#dateFromFilter').val()+'/'+$('#dateToFilter').val()+'/'+$('#dateFromFilter2').val()+'/'+$('#dateToFilter2').val(),'_blank');
+
+                });
 
                 //$('table').DataTable();
 

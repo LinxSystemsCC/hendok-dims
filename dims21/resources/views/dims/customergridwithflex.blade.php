@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/jquery-ui2.min.css') }}" type="text/css" />
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <!-- DevExtreme library -->
@@ -26,18 +29,13 @@
     </style>
 </head>
 <body style="font-family: Sans-serif">
+<h4>Customers</h4>
+<div style="display: flex">
 
-<table class='border' style = "width:800">
-                <tbody>
+    <div style="width: 80%" id="gridContainer"></div>
 
-<tr>
-                        <td>
-                            <div id="gridContainer"/>
+<div style="margin-top: 5%">
 
-
-                        </td>
-
-<td>
 <label class="control-label" for="customerid"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Customer ID</label>
 <input type = "text" id = "customerid"readonly>
 <br>
@@ -108,14 +106,10 @@
 <br>
 <br>
             <button class="form-control btn-md btn-success" id="update">Update</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-
+</div>
+</div>
 <script>
-    
+
     var jArray = JSON.stringify({!! json_encode($routes) !!});
 
     var Routes = $.map(JSON.parse(jArray), function (item) {
@@ -136,7 +130,7 @@
             SalesAnalysisCode:item.SalesAnalysisCode,
             DeliverySequence:item.DeliverySequence,
             DocPrintOrEmail:item.DocPrintOrEmail,
-            Discount:item.Discount, 
+            Discount:item.Discount,
             CreditLimit:item.CreditLimit,
             UniqueDelivery:item.UniqueDelivery,
             PriorityCustomer:item.PriorityCustomer,
@@ -177,20 +171,20 @@
             $( this ).attr( 'autocomplete', 'off' );
         });
         var clickTimer, lastRowClickedId;
-        $(document).ready(function() {  
+        $(document).ready(function() {
             for(var index = 0; index < RoutesOnly.length;index++){
                 $('#route').append('<option value="'+RoutesOnly[index].RouteId+'">'+RoutesOnly[index].Route +'</option>');
-          
+
             }
             for(var index = 0; index < GroupsOnly.length;index++){
                 $('#GroupName').append('<option value="'+GroupsOnly[index].GroupId+'">'+GroupsOnly[index].Group +'</option>');
-          
+
             }
             for(var index = 0; index < SalesMen.length;index++){
                 $('#SalesRep').append('<option value="'+SalesMen[index].SalesCode+'">'+SalesMen[index].Name +'</option>');
-          
+
             }
-           
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -233,16 +227,35 @@
                                 });
                     }
                 });
-           
+
         });
 
                             $("#gridContainer").dxDataGrid({
                                 dataSource:Routes,
                                 showBorders: true,
-                                width:1000,
                                 filterRow: { visible: true },scrolling: {
             columnRenderingMode: "virtual"
-        },columnWidth:200,
+        },
+                                export: {
+                                    enabled: true,
+
+                                },
+                                onExporting(e) {
+                                    var pricelistnamesheet = $('#pricelist option:selected').text();
+                                    const workbook = new ExcelJS.Workbook();
+                                    const worksheet = workbook.addWorksheet('customers');
+
+                                    DevExpress.excelExporter.exportDataGrid({
+                                        component: e.component,
+                                        worksheet,
+                                        autoFilterEnabled: true,
+                                    }).then(() => {
+                                        workbook.xlsx.writeBuffer().then((buffer) => {
+                                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }),'customers.xlsx');
+                                        });
+                                    });
+                                    e.cancel = true;
+                                },columnWidth:200,
         columnAutoWidth:true,
                                 columns: [
                                     {
@@ -312,7 +325,7 @@
                                     },{
                                         dataField: "DocPrintOrEmail",
                                         caption: "Receives Email?"
-                                        
+
                                     },{
                                         dataField: "Discount",
                                         caption: "Discount"
@@ -344,9 +357,9 @@
                                     },
 
                                 ] ,
-                                
+
                         onRowClick: function (e) {
-                          
+
                             $('#customerid').val(e.key.CustomerId);
                             $('#CustomerStorename').val(e.key.StoreName);
                             $('#pastelcode').val(e.key.CustomerPastelCode);
@@ -368,7 +381,7 @@
 
                         },
 
-                            
+
                                 onInitNewRow: function(e) {
                                     console.debug("InitNewRow");
                                 },
@@ -382,7 +395,7 @@
                                     console.debug("RowUpdating");
                                 }
                         });
-                
+
             });
     </script>
 </div>

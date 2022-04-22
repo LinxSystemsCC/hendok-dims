@@ -6,7 +6,8 @@
         <fieldset class="well">
             <legend class="well-legend">Add Filters</legend>
             <form>
-                <div class="form-group  col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                <div class="col-md-12">
+                <div class="form-group  col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                     <label class="control-label" for="inputCustAcc"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Account</label>
                     <input type="text" name="custCode" class="form-control input-sm col-xs-1" id="inputCustAcc" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
                     <input type="hidden" name="customerId" class="form-control input-sm col-xs-1" id="customerId" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
@@ -16,63 +17,74 @@
                     <label class="control-label" for="inputCustName"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Customer Name</label>
                     <input type="text" name="custDescription" class="form-control input-sm col-xs-1" id="inputCustName" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
                 </div>
-                <div class="form-group col-md-3 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                <div class="form-group col-md-2 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <label class="control-label" for="custheadid"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract ID</label>
+                    <select  class="form-control input-sm col-xs-1" id="custheadid" style="font-weight: 900;    color: black;font-size: 13px;">
+
+                    </select>
+                </div>
+                <div class="form-group col-md-2 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                     <label class="control-label" for="dateFrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract- Date From</label>
                     <input type="text" class="form-control input-sm col-xs-1" id="dateFrom" style="font-weight: 900;    color: black;font-size: 13px;">
                 </div>
-                <div class="form-group col-md-3 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                <div class="form-group col-md-2 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                     <label class="control-label" for="dateTo"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract- Date To</label>
                     <input type="text" class="form-control input-sm col-xs-1" id="dateTo" style="font-weight: 900;    color: black;font-size: 13px;">
 
                 </div>
-                <div class="form-group col-md-3 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                <label class="control-label" for="custheadid"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract ID</label>
-                    <select  class="form-control input-sm col-xs-1" id="custheadid" style="font-weight: 900;    color: black;font-size: 13px;">
+                </div>
 
-            </select>
-        </div>
-                <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-primary">Submit</button>
-                <button type="button" id="addinHistory" class="btn-xs btn-primary">Get History</button>
-                <button type="button" id="pricelist1convert" class="btn-xs btn-primary">Price List 1</button>
-                <button type="button" id="pricelist2convert" class="btn-xs btn-primary">Price List 2</button>
-                <button type="button" id="getContractDetails" class="btn-xs btn-primary">Get Contract Details</button>
-               
+
             </form>
-            <form action ="{{url('/importexcel')}}" method="post" enctype="multipart/form-data">
-                {{ csrf_field() }}
-                    <div class = "form-group" style ="float:right">
-                    <input type="file" name="select_file" />
-                    <input type="submit" name="upload"  class="btn-xs btn-primary" value="Upload">
+            <div class="col-md-12" style="margin-top: 25px;">
+
+                <div class="col-md-8">
+                    <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-primary" style="padding: 2px 49px;">Submit</button>
+                    <button type="button" id="addinHistory" class="btn-xs btn-primary" style="padding: 2px 49px;">Get History</button>
+                    <button type="button" id="pricelist1convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 1</button>
+                    <button type="button" id="pricelist2convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 2</button>
+                    <button type="button" id="getContractDetails" class="btn-xs btn-primary " style="padding: 2px 19px;">Get Contract Details</button>
 
                 </div>
-                </form>
+                <div class="col-md-4">
+                    <form action ="{{url('/importexcel')}}" method="post" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class = "form-group" style ="float:right">
+                            <input type="file" name="select_file" />
+                            <input type="submit" name="upload"  class="btn-xs btn-primary" value="Upload">
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </fieldset>
     </div>
     <div class="col-lg-12" id="afterFilter">
             <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
 
                 <button class="btn-success btn-xs" id="addLine">Add Line</button>
-                <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed table-intel tablesorter clusterize-content fixed_header">
+                <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed table-intel tablesorter">
                     <thead>
                     <tr style="font-size: 12px;">
-                        <td>Code</td>
-                        <td>Description</td>
-                        <td>DtFrom</td>
-                        <td>DtTo</td>
-                        <td>Price</td>
-                        <td>Average Qty</td>
-                        <td>Cost</td>
-                        <td>Current GP</td>
-                        <td>Cost Created</td>
-                        <td>Less 10%</td>
-                        <td>Pricelist 1</td>
-                        <td>Pricelist 2</td>
-                        <td>Pricelist 3</td>
-                        <td>Pricelist 4</td>
-                        <td>Pricelist 5</td>
-                         <td>Pricelist 6</td>
-                        <td>C.S Price</td>
-                        <td>Actions</td>
+                        <th>Code</th>
+                        <th>Description</th>
+                        <th>DtFrom</th>
+                        <th>DtTo</th>
+                        <th>Price</th>
+                        <th>Average Qty</th>
+                        <th>Cost</th>
+                        <th>Current GP</th>
+                        <th>Cst.Crtd</th>
+                        <th>Less 10%</th>
+                        <th>Pricelist 1</th>
+                        <th>Pricelist 2</th>
+                        <th>Pricelist 3</th>
+                        <th>Pricelist 4</th>
+                        <th>Pricelist 5</th>
+                         <th>Pricelist 6</th>
+                        <th>C.S Price</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody class="clusterize-scroll"></tbody>
@@ -86,7 +98,7 @@
 
 
     </div>
-<script src="{{ asset('js/tableSorter.js') }}"></script>
+
 @endsection
 <style>
 .tablesorter thead tr .header {
@@ -139,6 +151,7 @@
     }
 </style>
 <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
+
 <script>
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -221,7 +234,8 @@
     });
 
     $(document).ready(function() {
-        $('#tblCreateNewSpecial').tablesorter();
+        //$('#tblCreateNewSpecial').tablesorter();
+        $("#tblCreateNewSpecial").tablesorter();
         $('#orderListing').hide();
         $('#addinCurrentPrices').hide();
         $('#addinHistory').hide();
@@ -289,7 +303,7 @@
                     trHTML+='<option selected="true" disabled="disabled">Select a Contract ID</option>';
                     $.each(data, function (key, value) {
 
-                        trHTML += 
+                        trHTML +=
                         '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+'</option>';
 
                     });
@@ -318,27 +332,27 @@
             dateFormat: 'dd-mm-yy'
         });
         $('#submitFiltersOnCreatingCustSpecial').click(function(){
-            
+
             $('#addinCurrentPrices').show();
             $('#addinHistory').show();
             $('#afterFilter').show();
         });
-        
+
         $('#pricelist2convert').click(function(){
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-                
+
             var ID = $(this).attr('id');
             var jID = '#'+ID;
             var x = ID.indexOf("x");
             var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
             $('#prodPrice_'+ get_token_number).val(roundquick($('#PL2_'+get_token_number).val()));
             $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
-            
+
             });
         });
         $('#pricelist1convert').click(function(){
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-                
+
                 var ID = $(this).attr('id');
             var jID = '#'+ID;
             var x = ID.indexOf("x");
@@ -348,7 +362,7 @@
             });
         });
         $('#addinHistory').click(function(){
-            
+
             var theVal = this.value;
             $.ajax({
                 url: '{!!url("/getCurrentHistoryCustomerSpecialsKF")!!}',
@@ -365,23 +379,23 @@
                     var contractTo = $('#dateTo').val();
                     var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
                     var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
-            '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
-            '<td contenteditable="false"  class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
-            '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-            '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+value.Cost+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false" class="col-sm-1"> <i style="font-size: 0px">'+value.PastelCode+'"</i> <input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
+            '<td contenteditable="false"  class="col-md-3"><i style="font-size: 0px">'+value.PastelDescription+'"</i> <input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
+            '<td  contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+contractFrom+'"</i><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
+            '<td contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+contractTo+'"</i><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+            '<td contenteditable="false"  ><i style="font-size: 0px">'+value.avgQty+'"</i> <input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+            '<td contenteditable="false" ><i style="font-size: 0px">'+value.Cost+'"</i> <input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+value.Cost+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+            '<td contenteditable="false"  ><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL1+'"</i> <input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL2+'"</i> <input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL3+'"</i> <input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL4+'"</i> <input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL5+'"</i> <input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL6+'"</i> <input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
             '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
  $('#tblCreateNewSpecial tbody')
             .append( $row )
@@ -395,7 +409,7 @@
             }
         }
         var resort  = true;
-        $('table').trigger('update',[resort]);
+        $('#tblCreateNewSpecial').trigger('update',[resort]);
         $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
         $('input').on('click keyup' ,function(){
             // $('input').click(function(){
@@ -444,8 +458,8 @@
                             }
                         });
                         productPrice(token_number);
-                               
-                                
+
+
                     }
                 });
 
@@ -495,9 +509,9 @@
                 });
             }
             //calculator();
-            
+
         });
-        
+
         $(".dateTo,.dateFrom").datepicker({
             changeMonth: true,//this option for allowing user to select month
             changeYear: true, //this option for allowing user to select from year range
@@ -506,16 +520,16 @@
         $('#tblCreateNewSpecial').on('click', 'button', function (e) {
             var $this = $(this);
             $this.closest('tr').remove();
-        }); 
+        });
     });
 
-        }            
+        }
                     });
-                   
+
         });
         $('#pricelist1convert').click(function(){
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-                
+
                 var ID = $(this).attr('id');
             var jID = '#'+ID;
             var x = ID.indexOf("x");
@@ -563,7 +577,7 @@
             '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
  $('#tblCreateNewSpecial tbody')
             .append( $row )
-            .trigger('addRows', [ $row, false 
+            .trigger('addRows', [ $row, false
         ]);
             if(!$('.lst').is(":focus"))
         {
@@ -621,8 +635,8 @@
                             }
                         });
                         productPrice(token_number);
-                               
-                                
+
+
                     }
                 });
 
@@ -672,9 +686,9 @@
                 });
             }
             //calculator();
-            
+
         });
-        
+
         $(".dateTo,.dateFrom").datepicker({
             changeMonth: true,//this option for allowing user to select month
             changeYear: true, //this option for allowing user to select from year range
@@ -683,18 +697,18 @@
         $('#tblCreateNewSpecial').on('click', 'button', function (e) {
             var $this = $(this);
             $this.closest('tr').remove();
-        }); 
+        });
     });
 
-        }            
+        }
                     });
-                   
+
         });
-        
+
         $('#doneCreating').click(function()
         {
 
-        
+
             var productsLinesOnPicking = new Array();
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
                 // var data = $(this);
@@ -754,20 +768,20 @@
                 }
             });
         });
-       
+
         $(document).on('click', '.PL1_', function(e) {
         var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
         $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
         $(document).on('click', '.PL2_', function(e) {
-            
+
         var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
         $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
         $(document).on('click', '.PL3_', function(e) {
-            
+
         var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
         $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
@@ -787,13 +801,13 @@
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
         $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
-     
+
         $(document).on('click', '.less10perc_', function(e) {
         var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
         $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
-     
+
 
     });
     function generateALine2()
@@ -878,7 +892,7 @@
                         });
                         productPrice(token_number);
                                 var placeholderclick = '#PL1_'+ token_number;
-                                
+
                     }
                 });
 
@@ -927,9 +941,9 @@
                 });
             }
             //calculator();
-            
+
         });
-        
+
         $(".dateTo,.dateFrom").datepicker({
             changeMonth: true,//this option for allowing user to select month
             changeYear: true, //this option for allowing user to select from year range
