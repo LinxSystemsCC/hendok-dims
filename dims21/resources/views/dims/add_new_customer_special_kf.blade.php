@@ -86,6 +86,27 @@
 
 
     </div>
+    <div title="Items having duplicate specials" id="duplicatespecials">
+            <h2>These lines have duplicate specials.</h2>
+            <form>
+
+                <div class="form-group  col-md-12" >
+                    <table class="table2 table-bordered  dataTable">
+                        <thead>
+                        <tr>
+                            <td>Item Code</td>
+                            <td>Item Name</td>
+                        </tr>
+                        </thead>
+                        <tbody id="gridduplicatespecials">
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </form>
+
+        </div>
 <script src="{{ asset('js/tableSorter.js') }}"></script>
 @endsection
 <style>
@@ -234,6 +255,7 @@
         $('#salesInvoiced').hide();
         $('#posCashUp').hide();
         $('#afterFilter').hide();
+        $('#duplicatespecials').hide();
 
         var inputCustAccount = $('#inputCustAcc').flexdatalist({
             minLength: 1,
@@ -549,7 +571,7 @@
             '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+value.Cost+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+roundquick(value.Cost)+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
@@ -715,6 +737,23 @@
                 }
             });
             $.ajax({
+                url: '{!!url("/XmlCreateCustomerSpecialsKFValid")!!}', // createCustomerSpecials
+                type: "POST",
+                data: {
+                    customerCode: $('#inputCustAcc').val(),
+                    customerId: $('#customerId').val(),
+                    contractDateFrom: $('#dateFrom').val(),
+                    contractDateTo: $('#dateTo').val(),
+                    contractid: $('#custheadid').val(),
+                    orderDetails: productsLinesOnPicking
+                },
+                success: function (data) {
+                    console.log("data tag " + data);
+                    console.log("data result tag " +data.result);
+                    var duplicateresult = data.result;
+                    if (data.result.length ==0) // so if there is nothing  do the following
+                    {
+                        $.ajax({
                 url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
                 type: "POST",
                 data: {
@@ -722,27 +761,107 @@
                     customerId: $('#customerId').val(),
                     contractDateFrom: $('#dateFrom').val(),
                     contractDateTo: $('#dateTo').val(),
+                    contractid: $('#custheadid').val(),
                     orderDetails: productsLinesOnPicking
-                },
-                success: function (data) {
-
-                    if (data.result !="SUCCESS")
-                    {
-                        var dialog = $('<p>'+data.result+'</p>').dialog({
-                            height: 200, width: 700, modal: true, containment: false,
-                            buttons: {
-                                "OKAY": function () {
-                                    dialog.dialog('close');
-                                }
-                            }
-                        });
-                    }else{
-                        var dialog = $('<p>Special Create</p>').dialog({
+                },success: function (data) {
+                        var dialog = $('<p>Special Created!</p>').dialog({
                         height: 200, width: 700, modal: true, containment: false,
                         buttons: {
                             "OKAY": function () {
                                 location.reload(true);
                                 dialog.dialog('close');
+                            }
+                        }
+                    });
+                }
+                });
+                    }else{// so if there is nothing  do the following
+
+                          var dialog = $('<p>There appears to be some duplicates, press YES to push the products in duplicate or Cancel to view the products that are in duplicate </p>').dialog({
+                        height: 200, width: 700, modal: true, containment: false,
+                        buttons: {
+                            "YES": function () {
+                                $.ajax({
+                url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
+                type: "POST",
+                data: {
+                    customerCode: $('#inputCustAcc').val(),
+                    customerId: $('#customerId').val(),
+                    contractDateFrom: $('#dateFrom').val(),
+                    contractDateTo: $('#dateTo').val(),
+                    contractid: $('#custheadid').val(),
+                    orderDetails: productsLinesOnPicking
+                },success: function (data) {
+                        var dialog = $('<p>Special Created!</p>').dialog({
+                        height: 200, width: 700, modal: true, containment: false,
+                        buttons: {
+                            "OKAY": function () {
+                                location.reload(true);
+                                dialog.dialog('close');
+                            }
+                        }
+                    });
+                }
+                });
+                                location.reload(true);
+                                dialog.dialog('close');
+                            },"CANCEL":function(){
+
+                                var trHTML = "";
+                                
+                            $('#gridduplicatespecials').empty();
+                                $('#duplicatespecials').show(); //table
+                            $("#duplicatespecials").dialog({
+                                height: 800, modal: true, closeOnEscape: false,
+                                width: 800, containment: false
+                            }).dialogExtend({
+                                "closable": false, // enable/disable close button
+                                "maximizable": false, // enable/disable maximize button
+                                "minimizable": true, // enable/disable minimize button
+                                "collapsable": true, // enable/disable collapse button
+                                "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                                "titlebar": false, // false, 'none', 'transparent'
+                                "minimizeLocation": "right", // sets alignment of minimized dialogues
+                                "icons": { // jQuery UI icon class
+                                    "close": "ui-icon-circle-close",
+                                    "maximize": "ui-icon-circle-plus",
+                                    "minimize": "ui-icon-circle-minus",
+                                    "collapse": "ui-icon-triangle-1-s",
+                                    "restore": "ui-icon-bullet"
+                                },
+                                "load": function (evt, dlg) {
+                                }, // event
+                                "beforeCollapse": function (evt, dlg) {
+                                }, // event
+                                "beforeMaximize": function (evt, dlg) {
+                                }, // event
+                                "beforeMinimize": function (evt, dlg) {
+                                }, // event
+                                "beforeRestore": function (evt, dlg) {
+                                }, // event
+                                "collapse": function (evt, dlg) {
+                                }, // event
+                                "maximize": function (evt, dlg) {
+                                }, // event
+                                "minimize": function (evt, dlg) {
+                                }, // event
+                                "restore": function (evt, dlg) {
+                                } // event
+                            });
+                            $.each(duplicateresult, function (key, value) {
+                                trHTML += '<tr style="font-size: 13px !important;color: black;background: lightgrey;font-weight: normal" >' +
+                                    '<td style="">' + value.strPastelCustomerCode + '</td>' +
+                                    '<td style="font-size: 13px !important;">' + value.strPastelDescription + '</td>' +
+                                    '<td style="">' + value.dblQtyOrdered + '</td>' +
+                                    '<td style="">' + value.dblQtyAvailable + '</td>' +
+                                    '<td style="">' + value.dblQtyOnHand + '</td>' +
+                                    '<td style=""><input type="number" class="quantitynew" min="0" max="' + value.dblQty + '"  value="' + value.dblQty + '"</td>' +
+                                    '<td style=""><input type="checkbox" style="width:80px; height: 18px !important;" name="OrderDetailId" value="' + value.OrderDetailId + '"> </td>' +
+                                    '</tr>';
+
+                            });
+                            $('#gridduplicatespecials').append(trHTML);
+                               
                             }
                         }
                     });
@@ -807,7 +926,7 @@
             '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
             '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
@@ -907,7 +1026,7 @@
                         $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
                         $('#prodCode_' + token_number).val(ui.item.PastelCode);
                         $('#cost_' + token_number).val(ui.item.Cost);
-                        $('#avgQty_' + token_number).val(ui.item.avgQty);
+                        avgQty(token_number);
                         $('#PL1_' + token_number).val(ui.item.PriceList1);
                         $('#PL2_' + token_number).val(ui.item.PriceList2);
                         $('#PL3_' + token_number).val(ui.item.PriceList3);
@@ -966,6 +1085,22 @@
                     $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
                     $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
                     $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
+            }
+        });
+    }
+    function avgQty(token_number)
+    {
+        $.ajax({
+            url: '{!!url("/getCustomerAvgQty")!!}',
+            type: "POST",
+            data: {
+                customerID: $('#customerId').val(),
+                deliveryDate:today,
+                productCode: $('#prodCode_' + token_number).val(),
+                warehouseid:1
+            },
+            success: function (data) {
+                    $('#avgQty_' + token_number).val(data[0].Qty);
             }
         });
     }

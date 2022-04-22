@@ -86,6 +86,34 @@ class KerstonSpecialController extends Controller
                 ->with('products',$queryProducts)
                 ->with('customers',$queryCustomers);
     }
+    public function getCustomerAvgQty(Request $request){
+
+        $customerid = $request ->get('customerID');
+        $productcode = $request ->get('productCode');
+        $getAvgQty = DB::connection('sqlsrv3')
+        ->select('exec spGetAvgQtyProducts ?,?',
+        array($customerid,$productcode));
+        return response()->json($getAvgQty);
+    }
+    public function XmlCreateCustomerSpecialsKFValid(Request $request)
+    {
+        $customerCode = $request->get('customerCode');
+        $customerId = $request->get('customerId');
+        $contractid = $request->get('contractid');
+        $orderDetails = $request->get('orderDetails');
+        $date = (new \DateTime($request->get('contractDateFrom')))->format('Y-m-d');
+        $dateTo = (new \DateTime($request->get('contractDateTo')))->format('Y-m-d');
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
+
+        $returnresults = DB::connection('sqlsrv3')
+            ->select("EXEC spXMLCustomerSpecialsKFValidation '".$orderDetailsxml."',".$customerId.",'".$contractid."'");
+       
+        $outPut['result'] = $returnresults;   
+        return $outPut;
+
+    }
     public function XmlCreateCustomerSpecialsKF(Request $request)
     {
         $customerCode = $request->get('customerCode');
@@ -99,10 +127,24 @@ class KerstonSpecialController extends Controller
         $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
 
         $returnresults = DB::connection('sqlsrv3')
-            ->select("EXEC spXMLCustomerSpecials '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId);
+            ->select("EXEC spXMLCustomerSpecialsKF '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId);
         $outPut['result'] = $returnresults[0]->Result;
         return $outPut;
 
+    }
+    public function getDuplicateProductsCS(Request $request)
+    {
+        $customerId = $request->get('customerId');
+        $orderDetails = $request->get('orderDetails');
+        $contractid= $request->get('contractid');
+
+        $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
+
+        $returnresults = DB::connection('sqlsrv3')
+            ->select("EXEC spXMLCustomerSpecialGetDupes '".$orderDetailsxml."',".$customerId.",".$contractid);
+      
+        return view('dims/productduplicate')
+        ->with('products',$returnresults);
     }
     public function getCurrentHistoryCustomerSpecialsKF(Request $request){
         $customerCode = $request->get('customercode');
@@ -149,6 +191,42 @@ class KerstonSpecialController extends Controller
   
         
         return response()->json($getcontracts);
+    }public static function toxml($arr, $root = "xml", $elements = Array())
+    {
+        $result = '';
+        $result .= "<" . $root . ">\r\n";
+        $result .= self::asxml($arr, $elements, 1);
+        $result .= "</" . $root . ">\r\n";
+        return $result;
+    }private static function getTabs($tabcount)
+    {
+        $tabs = '';
+        for($i = 0; $i < $tabcount; $i++)
+        {
+            $tabs .= "\t";
+        }
+        return $tabs;
+    }
+    private static function asxml($arr, $elements = Array(), $tabcount = 0)
+    {
+        $result = '';
+        $tabs = self::getTabs($tabcount);
+        foreach($arr as $key => $val)
+        {
+            $element = isset($elements[0]) ? $elements[0] : $key;
+            $result .= $tabs;
+            $result .= "<" . $element . ">";
+            if(!is_array($val))
+                $result .= $val;
+            else
+            {
+                $result .= "\r\n";
+                $result .= self::asxml($val, array_slice($elements, 1, true), $tabcount+1);
+                $result .= $tabs;
+            }
+            $result .= "</" . $element . ">\r\n";
+        }
+        return $result;
     }
 }
 /*class KerstonSpecialExportController implements FromQuery{
