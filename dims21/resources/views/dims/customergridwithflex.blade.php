@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="{{ asset('css/jquery-ui2.min.css') }}" type="text/css" />
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <!-- DevExtreme library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
 
@@ -231,6 +234,26 @@
         });
 
                             $("#gridContainer").dxDataGrid({
+                                export: {
+            enabled: true
+        },   onExporting: function(e) { 
+        var workbook = new ExcelJS.Workbook(); 
+        var worksheet = workbook.addWorksheet('Main sheet'); 
+        DevExpress.excelExporter.exportDataGrid({ 
+            worksheet: worksheet, 
+            component: e.component,
+            customizeCell: function(options) {
+                var excelCell = options;
+                excelCell.font = { name: 'Arial', size: 12 };
+                excelCell.alignment = { horizontal: 'left' };
+            } 
+        }).then(function() {
+            workbook.xlsx.writeBuffer().then(function(buffer) { 
+                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx'); 
+            }); 
+        }); 
+        e.cancel = true; 
+    },
                                 dataSource:Routes,
                                 showBorders: true,
                                 filterRow: { visible: true },scrolling: {
