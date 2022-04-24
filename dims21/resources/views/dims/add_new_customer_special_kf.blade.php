@@ -44,6 +44,7 @@
                     <button type="button" id="pricelist1convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 1</button>
                     <button type="button" id="pricelist2convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 2</button>
                     <button type="button" id="getContractDetails" class="btn-xs btn-primary " style="padding: 2px 19px;">Get Contract Details</button>
+                    <button type="button" id="copyContractIntoLines" class="btn-xs btn-primary " style="padding: 2px 19px;">Copy Contract</button>
 
                 </div>
                 <div class="col-md-4">
@@ -98,7 +99,7 @@
 
 
     </div>
-    <div title="Items having duplicate specials" id="duplicatespecials">
+    <div title="Items having duplicate specials. Press Yes to push the products, No closes the dialog" id="duplicatespecials">
             <h2>These lines have duplicate specials.</h2>
             <form>
 
@@ -823,11 +824,39 @@
 
                             $('#gridduplicatespecials').empty();
                                 $('#duplicatespecials').show(); //table
-                            $("#duplicatespecials").dialog({
-                                height: 800, modal: true, closeOnEscape: false,
-                                width: 800, containment: false
+                            var dialog = $("#duplicatespecials").dialog({
+                                height: 800, modal: true, closeOnEscape: true,
+                                width: 800, buttons: {
+                            "NO": function () {
+                                dialog.dialog('close');
+                            },"YES": function () {
+                                $.ajax({
+                url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
+                type: "POST",
+                data: {
+                    customerCode: $('#inputCustAcc').val(),
+                    customerId: $('#customerId').val(),
+                    contractDateFrom: $('#dateFrom').val(),
+                    contractDateTo: $('#dateTo').val(),
+                    contractid: $('#custheadid').val(),
+                    orderDetails: productsLinesOnPicking
+                },success: function (data) {
+                        var dialog = $('<p>Special Created!</p>').dialog({
+                        height: 200, width: 700, modal: true, containment: false,
+                        buttons: {
+                            "OKAY": function () {
+                                location.reload(true);
+                                dialog.dialog('close');
+                            }
+                        }
+                    });
+                }
+                });
+
+                            }
+                        },containment: false,
                             }).dialogExtend({
-                                "closable": false, // enable/disable close button
+                                "closable": true, // enable/disable close button
                                 "maximizable": false, // enable/disable maximize button
                                 "minimizable": true, // enable/disable minimize button
                                 "collapsable": true, // enable/disable collapse button
@@ -862,13 +891,8 @@
                             });
                             $.each(duplicateresult, function (key, value) {
                                 trHTML += '<tr style="font-size: 13px !important;color: black;background: lightgrey;font-weight: normal" >' +
-                                    '<td style="">' + value.strPastelCustomerCode + '</td>' +
-                                    '<td style="font-size: 13px !important;">' + value.strPastelDescription + '</td>' +
-                                    '<td style="">' + value.dblQtyOrdered + '</td>' +
-                                    '<td style="">' + value.dblQtyAvailable + '</td>' +
-                                    '<td style="">' + value.dblQtyOnHand + '</td>' +
-                                    '<td style=""><input type="number" class="quantitynew" min="0" max="' + value.dblQty + '"  value="' + value.dblQty + '"</td>' +
-                                    '<td style=""><input type="checkbox" style="width:80px; height: 18px !important;" name="OrderDetailId" value="' + value.OrderDetailId + '"> </td>' +
+                                    '<td style="">' + value.PastelCode + '</td>' +
+                                    '<td style="font-size: 13px !important;">' + value.PastelDescription + '</td>' +
                                     '</tr>';
 
                             });
@@ -876,7 +900,40 @@
 
                             }
                         }
-                    });
+                    }).dialogExtend({
+                                "closable": true, // enable/disable close button
+                                "maximizable": false, // enable/disable maximize button
+                                "minimizable": true, // enable/disable minimize button
+                                "collapsable": true, // enable/disable collapse button
+                                "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                                "titlebar": false, // false, 'none', 'transparent'
+                                "minimizeLocation": "right", // sets alignment of minimized dialogues
+                                "icons": { // jQuery UI icon class
+                                    "close": "ui-icon-circle-close",
+                                    "maximize": "ui-icon-circle-plus",
+                                    "minimize": "ui-icon-circle-minus",
+                                    "collapse": "ui-icon-triangle-1-s",
+                                    "restore": "ui-icon-bullet"
+                                },
+                                "load": function (evt, dlg) {
+                                }, // event
+                                "beforeCollapse": function (evt, dlg) {
+                                }, // event
+                                "beforeMaximize": function (evt, dlg) {
+                                }, // event
+                                "beforeMinimize": function (evt, dlg) {
+                                }, // event
+                                "beforeRestore": function (evt, dlg) {
+                                }, // event
+                                "collapse": function (evt, dlg) {
+                                }, // event
+                                "maximize": function (evt, dlg) {
+                                }, // event
+                                "minimize": function (evt, dlg) {
+                                }, // event
+                                "restore": function (evt, dlg) {
+                                } // event
+                            });
 
                     }
 
@@ -1008,6 +1065,7 @@
                             }
                         });
                         productPrice(token_number);
+                        $('#gp_' + token_number).val(marginCalculator(ui.item.Cost,$('#prodPrice_'+ token_number).val()));
                                 var placeholderclick = '#PL1_'+ token_number;
 
                     }
@@ -1052,6 +1110,7 @@
                         });
 
                         productPrice(token_number);
+                        $('#gp_' + token_number).val(marginCalculator(ui.item.Cost,$('#prodPrice_'+ token_number).val()));
 
                     }
 
