@@ -600,6 +600,7 @@
                      $briefcase = $v->getThings(Auth::user()->GroupId,'Briefcase');
                      $webstoremassage= $v->getThings(Auth::user()->GroupId,'Webstore Messages');
                      $released= $v->getThings(Auth::user()->GroupId,'released');
+                     $printeredit= $v->getThings(Auth::user()->GroupId,'Edit Printer');
                    // $console = $v->getThings(Auth::user()->GroupId,'Extras DIMS Management Console');
 
                     }
@@ -924,10 +925,12 @@
 'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Webstore Messages</a>
                                     </li>
                                     @endif
+                                    @if($printeredit !=0)
                                     <li>
                                         <a href='{!!url("/PathEditor")!!}' onclick="window.open(this.href, 'PathEditor',
 'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Edit Printer Paths</a>
                                     </li>
+                                    @endif
                                     <li>
                                         <a href='{!!url("/viewDeletedOrders")!!}' onclick="window.open(this.href, 'viewDeletedOrders',
 'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Deleted Orders</a>
