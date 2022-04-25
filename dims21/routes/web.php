@@ -684,6 +684,7 @@ Route::get('testJaspr/{id}', [JasperReports::class,'testJaspr'] );
 Route::get('CashOffPDF/{ref}/{type}',[JasperReports::class,'CashOffPDF']  );
 Route::get('specialnsJasper/{id}/{dateFrom}/{dateTo}', [JasperReports::class,'specialnsJasper'] );
 Route::get('pdforder/{id}',[JasperReports::class,'PDFOrders']  );
+Route::get('pdfpricelist/{id}',[JasperReports::class,'PDFPricelist']  );
 Route::get('bulkpickingslip/{id}',[JasperReports::class,'bulkpickingslip']  );
 Route::get('PDFDelDate/{id}',[JasperReports::class,'PDFDelDate'] );
 Route::get('overallSpecailJasper/{datefrom}/{dateto}',[JasperReports::class,'overallSpecailJasper']  );
