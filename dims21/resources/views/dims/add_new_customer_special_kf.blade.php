@@ -1047,11 +1047,13 @@
                                 trHTML += '<tr style="font-size: 13px !important;color: black;background: lightgrey;font-weight: normal" >' +
                                     '<td style="">' + value.PastelCode + '</td>' +
                                     '<td style="font-size: 13px !important;">' + value.PastelDescription + '</td>' +
+                                    '<td style="font-size: 13px !important;">' + value.Price + '</td>' +
                                     '<td style="font-size: 13px !important;">' + value.dateFrom + '</td>' +
                                     '<td style="font-size: 13px !important;">' + value.dateTo + '</td>' +
                                     '<td style="font-size: 13px !important;">' + value.Contract + '</td>' +
                                     '</tr>';
 
+                           
                             });
                             $('#gridduplicatespecials').append(trHTML);
 
