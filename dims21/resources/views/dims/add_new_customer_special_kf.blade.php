@@ -285,6 +285,8 @@
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
+        
+            
 
         });
         var inputCustNumber = $('#inputCustAcc').flexdatalist({
@@ -312,6 +314,7 @@
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
+            $("#custheadid").empty();
                 //start option population here async
                 $.ajax({
                 url: '{!!url("/getContractsPerCustomerID")!!}',
@@ -325,7 +328,7 @@
                     $.each(data, function (key, value) {
 
                         trHTML +=
-                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+'</option>';
+                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+'-' +  value.DateFrom+' To ' + value.DateTo  + '</option>';
 
                     });
                     $("#custheadid").append(trHTML);
@@ -339,7 +342,25 @@
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
+            $("#custheadid").empty();
+                //start option population here async
+                $.ajax({
+                url: '{!!url("/getContractsPerCustomerID")!!}',
+                type: "POST",
+                data: {
+                    customerid: $('#customerId').val()
+                },
+                success: function (data) {
+                    var trHTML = "";
+                    trHTML+='<option selected="true" disabled="disabled">Select a Contract ID</option>';
+                    $.each(data, function (key, value) {
 
+                        trHTML +=
+                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+'-' +  value.DateFrom+' To ' + value.DateTo  + '</option>';
+                    });
+                    $("#custheadid").append(trHTML);
+                }
+            });
 
 
         });
@@ -560,6 +581,7 @@
             });
         });
         $('#getContractDetails').click(function(){
+            $('#tblCreateNewSpecial > tbody').empty();
             $('#addinCurrentPrices').show();
             $('#addinHistory').show();
             $('#afterFilter').show();
