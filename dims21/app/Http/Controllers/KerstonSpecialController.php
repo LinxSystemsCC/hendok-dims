@@ -12,21 +12,21 @@ use App\Exports\SpecialsExport;
 
 
 class KerstonSpecialController extends Controller
-{ 
-    public function export($contractId) 
+{
+    public function export($contractId)
     {
-        
+
        // return Excel::download(new SpecialsExport(), 'specials.xlsx');
         return (new SpecialsExport($contractId))->download('specials.xlsx');
     }
-    public function import() 
+    public function import()
     {
         Excel::import(new SpecialsImport, 'specials.xlsx');
-        
+
         return redirect('/')->with('success', 'All good!');
     }
     public function importexcel(Request $request){
-        
+
         $this->validate($request, [
             'select_file'  => 'required|mimes:xls,xlsx'
            ]);
@@ -48,7 +48,7 @@ class KerstonSpecialController extends Controller
             );
 
     }
-    
+
     public function kerstonspecial()
     {
         //
@@ -66,7 +66,7 @@ class KerstonSpecialController extends Controller
     }
     public function customerByDateOrContractSpecKF(Request $request)
     {
-       
+
         $contractId = $request->get('contractId');
 
         $GetCustomerSpecail = DB::connection('sqlsrv3')
@@ -109,8 +109,8 @@ class KerstonSpecialController extends Controller
 
         $returnresults = DB::connection('sqlsrv3')
             ->select("EXEC spXMLCustomerSpecialsKFValidation '".$orderDetailsxml."',".$customerId.",'".$contractid."'");
-       
-        $outPut['result'] = $returnresults;   
+
+        $outPut['result'] = $returnresults;
         return $outPut;
 
     }
@@ -142,30 +142,47 @@ class KerstonSpecialController extends Controller
 
         $returnresults = DB::connection('sqlsrv3')
             ->select("EXEC spXMLCustomerSpecialGetDupes '".$orderDetailsxml."',".$customerId.",".$contractid);
-      
+
         return view('dims/productduplicate')
         ->with('products',$returnresults);
     }
     public function getCurrentHistoryCustomerSpecialsKF(Request $request){
         $customerCode = $request->get('customercode');
         $customerid =$request->get('customerId');
-        
+
         $GetCustomerSpecail = DB::connection('sqlsrv3')
         ->select('exec spCustomerSpecialHistoryKF ?,?',
         array($customerCode,$customerid));
 
         return response()->json($GetCustomerSpecail);
-        
+
+    }
+    public function copycontract(Request $request){
+
+        $contructId = $request->get('contructId');
+        $customerIdToCopyTo =$request->get('customerIdToCopyTo');
+        $contractIdToCopyTo =$request->get('contractIdToCopyTo');
+        $dateFrom =(new \DateTime($request->get('dateFrom')))->format('Y-m-d');
+        $dateTo = (new \DateTime($request->get('dateTo')))->format('Y-m-d');
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        //dd($userName);
+       $GetCustomerSpecail = DB::connection('sqlsrv3')
+        ->select('exec spCopyCustomerSpecialFrom ?,?,?,?,?,?,?',
+        array($contructId,$customerIdToCopyTo,$contractIdToCopyTo,$dateFrom,$dateTo,$userid,$userName));
+
+        return response()->json($GetCustomerSpecail);
+
     }
     public function getCurrentContractCustomerSpecialsKF(Request $request){
         $contractid = $request->get('contractid');
-        
+
         $GetCustomerSpecail = DB::connection('sqlsrv3')
         ->select('exec spCustomerSpecialContractKF ?',
         array($contractid));
 
         return response()->json($GetCustomerSpecail);
-        
+
     }
 
     //below refers to 1st page
@@ -174,7 +191,15 @@ class KerstonSpecialController extends Controller
         $getcontracts = DB::connection('sqlsrv3')
         ->select('exec spGetContractsPerCustomerId ?',
         array($customerid));
-        
+
+        return response()->json($getcontracts);
+    }
+    public function validatethecontractId(Request $request){
+        $enteredcontract = $request->get('entercontracts');
+        $getcontracts = DB::connection('sqlsrv3')
+        ->select('exec spValidateContractID ?',
+        array($enteredcontract));
+
         return response()->json($getcontracts);
     }
      function getContractsPerCustomerIDWithDates(Request $request){
@@ -183,13 +208,13 @@ class KerstonSpecialController extends Controller
         $dateTo =  $request->get('dateto');
         $dateFrom = (new \DateTime($dateFrom))->format('Y-m-d');
         $dateTo = (new \DateTime($dateTo))->format('Y-m-d');
-        
-        
+
+
         $getcontracts = DB::connection('sqlsrv3')
         ->select('exec spGetContractsPerCustomerId ?,?,?',
         array($customerid,$dateFrom,$dateTo));
-  
-        
+
+
         return response()->json($getcontracts);
     }public static function toxml($arr, $root = "xml", $elements = Array())
     {
@@ -230,5 +255,5 @@ class KerstonSpecialController extends Controller
     }
 }
 /*class KerstonSpecialExportController implements FromQuery{
-    
+
 }*/

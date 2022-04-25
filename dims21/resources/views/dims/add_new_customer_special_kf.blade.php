@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col-lg-12"  style="background: white;">
-        <h3 style="text-align: center;">Add New Customer Special</h3>
+    <div class="col-lg-12"  style="background: white;    font-family: 'Helvetica Neue', arial, sans-serif;">
+        <h3 style="text-align: center;">Customer Specials</h3>
         <fieldset class="well">
             <legend class="well-legend">Add Filters</legend>
             <form>
@@ -23,14 +23,18 @@
 
                         </select>
                     </div>
-                    <div class="form-group col-md-2 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <div class="form-group col-md-1 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                         <label class="control-label" for="dateFrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract- Date From</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="dateFrom" style="font-weight: 900;    color: black;font-size: 13px;">
                     </div>
-                    <div class="form-group col-md-2 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <div class="form-group col-md-1 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                         <label class="control-label" for="dateTo"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract- Date To</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="dateTo" style="font-weight: 900;    color: black;font-size: 13px;">
 
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="control-label" for="submitFiltersOnCreatingCustSpecial"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">.</label>
+                        <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;">Submit</button>
                     </div>
                 </div>
 
@@ -39,7 +43,7 @@
             <div class="col-md-12" style="margin-top: 25px;">
 
                 <div class="col-md-8">
-                    <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-primary" style="padding: 2px 49px;">Submit</button>
+
                     <button type="button" id="addinHistory" class="btn-xs btn-primary" style="padding: 2px 49px;">Get History</button>
                     <button type="button" id="pricelist1convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 1</button>
                     <button type="button" id="pricelist2convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 2</button>
@@ -61,7 +65,7 @@
 
         </fieldset>
     </div>
-    <div class="col-lg-12" id="afterFilter">
+    <div class="col-lg-12" id="afterFilter" style="    font-family: 'Helvetica Neue', arial, sans-serif;">
             <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
 
                 <button class="btn-success btn-xs" id="addLine">Add Line</button>
@@ -120,6 +124,27 @@
             </form>
 
         </div>
+    <div title="Copy Contract" id="dialogcopycontracts">
+        <h3>Copy Contract From </h3>
+        <form>
+            <div class="col-md-12">
+            <div class="form-group  col-md-12" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                <label class="control-label" for="custcodeto"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Enter Contact ID You Want To Copy From</label>
+                <input class="form-control input-sm col-md-4 auto-complete-off" name="entercontracts" id="entercontracts" style="height:30px;font-size: 10px;"></input>
+            </div>
+                <div class="col-md-12">
+            <button type="button" id="validateConTractId" class="btn-warning btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Validate The Contract ID</button>
+
+                </div>
+                <div class="col-md-12" id="messagevalidatingthecontract">
+
+                </div>
+                <div class="col-md-12">
+                    <button type="button" id="finalisecopy" class="btn-success btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Finalise Copying</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
 @endsection
 <style>
@@ -184,6 +209,7 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
+
     var jArray = JSON.stringify({!! json_encode($products) !!});
     var jArrayCustomer = JSON.stringify({!! json_encode($customers) !!});
     $.ajaxSetup({
@@ -269,6 +295,8 @@
         $('#posCashUp').hide();
         $('#afterFilter').hide();
         $('#duplicatespecials').hide();
+        $('#dialogcopycontracts').hide();
+
 
         var inputCustAccount = $('#inputCustAcc').flexdatalist({
             minLength: 1,
@@ -321,11 +349,12 @@
                 },
                 success: function (data) {
                     var trHTML = "";
-                    trHTML+='<option selected="true" disabled="disabled">Select a Contract ID</option>';
+                    $("#custheadid").empty();
+                    trHTML+='<option value="-99">Select a Contract ID</option>';
                     $.each(data, function (key, value) {
 
                         trHTML +=
-                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+'</option>';
+                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+' ['+value.DateFrom+' TO '+value.DateFrom+']' +'</option>';
 
                     });
                     $("#custheadid").append(trHTML);
@@ -357,6 +386,94 @@
             $('#addinCurrentPrices').show();
             $('#addinHistory').show();
             $('#afterFilter').show();
+        });
+        $('#copyContractIntoLines').click(function(){
+
+            //copy contract
+            var dFrom =$('#dateFrom').val();
+            var dateTo =$('#dateTo').val();
+            $('#messagevalidatingthecontract').empty();
+
+            console.debug("customerid-----------"+$('#custheadid').val()+"---------dFrom-----"+dFrom.length+"------------"+dateTo.length);
+            if($('#custheadid').val() == "-99" && dFrom.length < 8 && dateTo.length < 8  )
+            {
+                var dialog = $('<p>Sorry <strong style="color:red"> Please put in the dates, or make sure you have selected the contract ID</strong></p>').dialog({
+                    height: 200, width: 700,
+                    buttons: {
+                        "OK": function () {
+
+                            dialog.dialog('close');
+                          }
+                    }
+                });
+            }else{
+                $('#entercontracts').val("");
+                $('#dialogcopycontracts').show();
+                showDialogWithoutClose('#dialogcopycontracts',400,400);
+            }
+
+        });
+        $('#finalisecopy').click(function(){
+
+            //copy contract
+            var contractidtouse = $('#entercontracts').val();
+            //	@contructId as bigint,
+
+            if( contractidtouse.length < 2 )
+            {
+                var dialog = $('<p>Sorry <strong style="color:red">Please Put In The Contract ID You Want To Copy The Data From </strong></p>').dialog({
+                    height: 200, width: 700,
+                    buttons: {
+                        "OK": function () {
+
+                            dialog.dialog('close');
+                        }
+                    }
+                });
+            }else{
+                $.ajax({
+                    url: '{!!url("/copycontract")!!}',
+                    type: "POST",
+                    data: {
+                        contructId: contractidtouse,
+                        customerIdToCopyTo: $('#customerId').val(),
+                        contractIdToCopyTo: $('#custheadid').val(),
+                        dateFrom: $('#dateFrom').val(),
+                        dateTo: $('#dateTo').val()
+
+                    },
+                    success: function (data) {
+                        console.debug(data[0].result);
+                        if( data[0].result=="Success"){
+                            $('#dialogcopycontracts').hide();
+                            $('#getContractDetails').click();
+
+                        }
+
+                    }
+                });
+            }
+
+
+        });
+        $('#validateConTractId').click(function(){
+
+            //copy contract
+            $.ajax({
+                url: '{!!url("/validatethecontractId")!!}',
+                type: "GET",
+                data: {
+                    entercontracts: $('#entercontracts').val()
+                },
+                success: function (data) {
+                    console.debug(data[0].result);
+                    //$('#messagevalidatingthecontract').empty();
+
+                    $('#messagevalidatingthecontract').append( data[0].result );
+                    $('#messagevalidatingthecontract').dialog('close');
+
+                }
+            });
         });
 
         $('#pricelist2convert').click(function(){
@@ -393,7 +510,7 @@
                     customerId: $('#customerId').val()
                 },
                 success: function (data) {
-
+                    $('#tblCreateNewSpecial tbody').empty();
                     var trHTML = '';
                     $.each(data, function (key, value) {
                         var contractFrom = $('#dateFrom').val();
@@ -403,8 +520,8 @@
                             '<td contenteditable="false" class="col-sm-1"> <i style="font-size: 0px">'+value.PastelCode+'"</i> <input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
                             '<td contenteditable="false"  class="col-md-3"><i style="font-size: 0px">'+value.PastelDescription+'"</i> <input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
                             '<td  contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+contractFrom+'"</i><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-                            '<td contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+contractTo+'"</i><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+contractTo+'"</i><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside inputs"></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
                             '<td contenteditable="false"  ><i style="font-size: 0px">'+value.avgQty+'"</i> <input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
                             '<td contenteditable="false" ><i style="font-size: 0px">'+value.Cost+'"</i> <input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+value.Cost+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
                             '<td contenteditable="false"  ><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
@@ -573,6 +690,7 @@
                 success: function (data) {
                     console.log(data);
                     var trHTML = '';
+                    $('#tblCreateNewSpecial tbody').empty();
                     $.each(data, function (key, value) {
                     var contractFrom = $('#dateFrom').val();
                     var contractTo = $('#dateTo').val();
@@ -580,9 +698,9 @@
                     var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
             '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
             '<td contenteditable="false"  class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
-            '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-            '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+            '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+value.Date+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
+            '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+value.DateTo+'" class="dateTo resize-input-inside inputs"></td>' +
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+roundquick(value.Cost)+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
@@ -984,6 +1102,10 @@
 
 
     });
+    function marginCalculator(cost,onCellVal)
+    {
+        return (1-(cost/onCellVal))*100;
+    }
     function generateALine2()
     {
         var contractFrom = $('#dateFrom').val();
@@ -993,8 +1115,8 @@
             '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'" class="theProductCode_ set_autocomplete inputs"></td>' +
             '<td contenteditable="false" class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
             '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-            '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+            '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside inputs"></td>' +
+            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
@@ -1156,6 +1278,7 @@
                     $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
                     $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
                     $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
+                $('#gp_'+token_number).val(roundquick(marginCalculator(data[0].Cost,data[0].Price)));
             }
         });
     }
@@ -1304,5 +1427,59 @@
 
         return newdateDelivDate
     }
+    function isFloatNumber(item,evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode==46)
+        {
+            var regex = new RegExp(/\./g)
+            var count = $(item).val().match(regex).length;
+            if (count > 1)
+            {
+                return false;
+            }
+        }
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+    function showDialogWithoutClose(tag,width,height)
+    {
+        $( tag ).dialog({height: height, modal: true,
+            width: width,containment: false}).dialogExtend({
+            "closable" : false, // enable/disable close button
+            "maximizable" : false, // enable/disable maximize button
+            "minimizable" : true, // enable/disable minimize button
+            "collapsable" : true, // enable/disable collapse button
+            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+            "titlebar" : false, // false, 'none', 'transparent'
+            "minimizeLocation" : "right", // sets alignment of minimized dialogues
+            "icons" : { // jQuery UI icon class
+                "close" : "ui-icon-circle-close",
+                "maximize" : "ui-icon-circle-plus",
+                "minimize" : "ui-icon-circle-minus",
+                "collapse" : "ui-icon-triangle-1-s",
+                "restore" : "ui-icon-bullet"
+            },
+            "load" : function(evt, dlg){ }, // event
+            "beforeCollapse" : function(evt, dlg){ }, // event
+            "beforeMaximize" : function(evt, dlg){ }, // event
+            "beforeMinimize" : function(evt, dlg){ }, // event
+            "beforeRestore" : function(evt, dlg){ }, // event
+            "collapse" : function(evt, dlg){  }, // event
+            "maximize" : function(evt, dlg){ }, // event
+            "minimize" : function(evt, dlg){  }, // event
+            "restore" : function(evt, dlg){  } // event
+        });
+        $('#authorisations').keydown(function(event) {
+            if (event.keyCode == 27) {
+                return false;
+            }
+        });
+
+
+    }
+
 
 </script>
