@@ -66,78 +66,78 @@
         </fieldset>
     </div>
     <div class="col-lg-12" id="afterFilter" style="    font-family: 'Helvetica Neue', arial, sans-serif;">
-            <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
+        <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
 
-                <button class="btn-success btn-xs" id="addLine">Add Line</button>
-                <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed table-intel tablesorter">
-                    <thead>
-                    <tr style="font-size: 12px;">
-                        <th>Code</th>
-                        <th>Description</th>
-                        <th>DtFrom</th>
-                        <th>DtTo</th>
-                        <th>Price</th>
-                        <th>Average Qty</th>
-                        <th>Cost</th>
-                        <th>Current GP</th>
-                        <th>Cst.Crtd</th>
-                        <th>Less 10%</th>
-                        <th>Pricelist 1</th>
-                        <th>Pricelist 2</th>
-                        <th>Pricelist 3</th>
-                        <th>Pricelist 4</th>
-                        <th>Pricelist 5</th>
-                        <th>Pricelist 6</th>
-                        <th>C.S Price</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody class="clusterize-scroll"></tbody>
+            <button class="btn-success btn-xs" id="addLine">Add Line</button>
+            <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed table-intel tablesorter">
+                <thead>
+                <tr style="font-size: 12px;">
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>DtFrom</th>
+                    <th>DtTo</th>
+                    <th>Price</th>
+                    <th>Average Qty</th>
+                    <th>Cost</th>
+                    <th>Current GP</th>
+                    <th>Cst.Crtd</th>
+                    <th>Less 10%</th>
+                    <th>Pricelist 1</th>
+                    <th>Pricelist 2</th>
+                    <th>Pricelist 3</th>
+                    <th>Pricelist 4</th>
+                    <th>Pricelist 5</th>
+                    <th>Pricelist 6</th>
+                    <th>C.S Price</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody class="clusterize-scroll"></tbody>
 
-                </table>
+            </table>
 
-            </div>
-            <div class="col-lg-12" style="background: white;">
-                <button id="doneCreating" class="btn-xs btn-success">Done</button>
-            </div>
+        </div>
+        <div class="col-lg-12" style="background: white;">
+            <button id="doneCreating" class="btn-xs btn-success">Done</button>
+        </div>
 
 
     </div>
     <div title="Items having duplicate specials. Press Yes to push the products, No closes the dialog" id="duplicatespecials">
-            <h2>These lines have duplicate specials.</h2>
-            <form>
+        <h2>These lines have duplicate specials.</h2>
+        <form>
 
-                <div class="form-group  col-md-12" >
-                    <table class="table2 table-bordered  dataTable">
-                        <thead>
-                        <tr>
-                            <td>Item Code</td>
-                            <td>Item Name</td>
-                            <td>Price</td>
-                            <td>Date From</td>
-                            <td>Date To</td>
-                            <td>Contract ID</td>
-                        </tr>
-                        </thead>
-                        <tbody id="gridduplicatespecials">
+            <div class="form-group  col-md-12" >
+                <table class="table2 table-bordered  dataTable">
+                    <thead>
+                    <tr>
+                        <td>Item Code</td>
+                        <td>Item Name</td>
+                        <td>Price</td>
+                        <td>Date From</td>
+                        <td>Date To</td>
+                        <td>Contract ID</td>
+                    </tr>
+                    </thead>
+                    <tbody id="gridduplicatespecials">
 
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
 
-                </div>
-            </form>
+            </div>
+        </form>
 
-        </div>
+    </div>
     <div title="Copy Contract" id="dialogcopycontracts">
         <h3>Copy Contract From </h3>
         <form>
             <div class="col-md-12">
-            <div class="form-group  col-md-12" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                <label class="control-label" for="custcodeto"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Enter Contact ID You Want To Copy From</label>
-                <input class="form-control input-sm col-md-4 auto-complete-off" name="entercontracts" id="entercontracts" style="height:30px;font-size: 10px;"></input>
-            </div>
+                <div class="form-group  col-md-12" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <label class="control-label" for="custcodeto"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Enter Contact ID You Want To Copy From</label>
+                    <input class="form-control input-sm col-md-4 auto-complete-off" name="entercontracts" id="entercontracts" style="height:30px;font-size: 10px;"></input>
+                </div>
                 <div class="col-md-12">
-            <button type="button" id="validateConTractId" class="btn-warning btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Validate The Contract ID</button>
+                    <button type="button" id="validateConTractId" class="btn-warning btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Validate The Contract ID</button>
 
                 </div>
                 <div class="col-md-12" id="messagevalidatingthecontract">
@@ -152,7 +152,7 @@
 
 @endsection
 <style>
-.tablesorter thead tr .header {
+    .tablesorter thead tr .header {
         background-image:url({{asset('images/bg.gif')}});
         background-repeat: no-repeat;
         background-position: center right;
@@ -344,8 +344,8 @@
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
-                //start option population here async
-                $.ajax({
+            //start option population here async
+            $.ajax({
                 url: '{!!url("/getContractsPerCustomerID")!!}',
                 type: "POST",
                 data: {
@@ -359,7 +359,7 @@
                     $.each(data, function (key, value) {
 
                         trHTML +=
-                        '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+' ['+value.DateFrom+' TO '+value.DateFrom+']' +'</option>';
+                            '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+' ['+value.DateFrom+' TO '+value.DateFrom+']' +'</option>';
 
                     });
                     $("#custheadid").append(trHTML);
@@ -412,6 +412,22 @@
             $('#afterFilter').show();
             $('#tblCreateNewSpecial tbody').empty();
         });
+        $("#custheadid").change(function(){   // 1st way
+            var end = this.value;
+            $.ajax({
+                url: '{!!url("/getcontractDates")!!}',
+                type: "POST",
+                data: {
+                    contractId: end
+                },
+                success: function (data) {
+
+                    $('#dateFrom').val($.datepicker.formatDate('dd-mm-yy', new Date( data[0].DateFrom)) );
+                    $('#dateTo').val( $.datepicker.formatDate('dd-mm-yy', new Date( data[0].DateTo))  );
+
+                }
+            });
+        });
         $('#copyContractIntoLines').click(function(){
 
             //copy contract
@@ -428,7 +444,7 @@
                         "OK": function () {
 
                             dialog.dialog('close');
-                          }
+                        }
                     }
                 });
             }else{
@@ -470,8 +486,8 @@
                     success: function (data) {
                         console.debug(data[0].result);
                         if( data[0].result=="Success"){
-                           // $('#dialogcopycontracts').dialog('close');
-                           // $('#getContractDetails').click();
+                            // $('#dialogcopycontracts').dialog('close');
+                            // $('#getContractDetails').click();
                             //contractId
                             var dialog = $('<p> <strong style="color:red">Contract ID is '+data[0].contractId+' </strong></p>').dialog({
                                 height: 200, width: 700,
@@ -503,7 +519,6 @@
                 success: function (data) {
                     console.debug(data[0].result);
                     //$('#messagevalidatingthecontract').empty();
-
                     $('#messagevalidatingthecontract').append( data[0].result );
                     $('#messagevalidatingthecontract').dialog('close');
 
@@ -514,12 +529,12 @@
         $('#pricelist2convert').click(function(){
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
 
-            var ID = $(this).attr('id');
-            var jID = '#'+ID;
-            var x = ID.indexOf("x");
-            var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
-            $('#prodPrice_'+ get_token_number).val(roundquick($('#PL2_'+get_token_number).val()));
-            $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
+                var ID = $(this).attr('id');
+                var jID = '#'+ID;
+                var x = ID.indexOf("x");
+                var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
+                $('#prodPrice_'+ get_token_number).val(roundquick($('#PL2_'+get_token_number).val()));
+                $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
 
             });
         });
@@ -527,11 +542,11 @@
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
 
                 var ID = $(this).attr('id');
-            var jID = '#'+ID;
-            var x = ID.indexOf("x");
-            var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
-            $('#prodPrice_'+ get_token_number).val(roundquick($('#PL1_'+get_token_number).val()));
-            $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
+                var jID = '#'+ID;
+                var x = ID.indexOf("x");
+                var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
+                $('#prodPrice_'+ get_token_number).val(roundquick($('#PL1_'+get_token_number).val()));
+                $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
             });
         });
         $('#addinHistory').click(function(){
@@ -573,142 +588,142 @@
                         $('#tblCreateNewSpecial tbody')
                             .append( $row )
                             .trigger('addRows', [ $row, false ]);
-            if(!$('.lst').is(":focus"))
-        {
-            $('#prodCode_' + tokenId).focus();
-
-            if ($('#checkboxDescription').is(':checked')) {
-                $('#prodDescription_' + tokenId).focus();
-            }
-        }
-        var resort  = true;
-        $('table').trigger('update',[resort]);
-        $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
-        $('input').on('click keyup' ,function(){
-            // $('input').click(function(){
-            var ID = $(this).attr('id');
-            var jID = '#'+ID;
-            var x = ID.indexOf("_");
-            var get_token_number = ID.substring(x+1,ID.length);
-
-            if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
-                var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
-                    {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
-                    ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                $(""+jID+"").mcautocomplete({
-                    source: finalDataProductDescription,
-                    columns:columnsD,
-                    autoFocus: true,
-                    minlength: 2,
-                    delay: 0,
-                    multiple: true,
-                    multipleSeparator: ",",
-                    select:function (e, ui) {
-                        console.log(ui.item);
-                        var n = ID.indexOf("_");
-                        var token_number = ID.substring(n + 1, ID.length);
-
-                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                        if(!$('.lst').is(":focus"))
                         {
-                            $('#prodQty_'+token_number).val('0');
-                            $('#prodPrice_'+token_number).val('0');
-                        }
-                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                        $('#cost_' + token_number).val(ui.item.Cost);
-                        $('#prodPrice_' + token_number).val('');
-                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                        $('#PL6_' + token_number).val(ui.item.PriceList6);
+                            $('#prodCode_' + tokenId).focus();
 
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            if ($('#checkboxDescription').is(':checked')) {
+                                $('#prodDescription_' + tokenId).focus();
                             }
-                        });
-                        productPrice(token_number);
-
-
-                    }
-                });
-
-            }
-
-            if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
-                var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
-                    {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
-                    ,
-                    {name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                $("" + jID + "").mcautocomplete({
-                    source: finalDataProduct,
-                    columns:columnsC,
-                    minlength: 1,
-                    autoFocus: true,
-                    delay: 0,
-                    select:function (e, ui) {
-                        console.log(ui.item);
-                        var n = ID.indexOf("_");
-                        var token_number = ID.substring(n + 1, ID.length);
-                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
-                        {
-                            $('#prodQty_'+token_number).val('0');
-                            $('#prodPrice_'+token_number).val('0');
                         }
-                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                        $('#prodPrice_' + token_number).val('');
-                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                        $('#cost_' + token_number).val(ui.item.Cost);
-                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                        $('#PL6_' + token_number).val(ui.item.PriceList6);
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        var resort  = true;
+                        $('table').trigger('update',[resort]);
+                        $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
+                        $('input').on('click keyup' ,function(){
+                            // $('input').click(function(){
+                            var ID = $(this).attr('id');
+                            var jID = '#'+ID;
+                            var x = ID.indexOf("_");
+                            var get_token_number = ID.substring(x+1,ID.length);
+
+                            if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
+                                var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
+                                    {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
+                                    ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
+                                $(""+jID+"").mcautocomplete({
+                                    source: finalDataProductDescription,
+                                    columns:columnsD,
+                                    autoFocus: true,
+                                    minlength: 2,
+                                    delay: 0,
+                                    multiple: true,
+                                    multipleSeparator: ",",
+                                    select:function (e, ui) {
+                                        console.log(ui.item);
+                                        var n = ID.indexOf("_");
+                                        var token_number = ID.substring(n + 1, ID.length);
+
+                                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                                        {
+                                            $('#prodQty_'+token_number).val('0');
+                                            $('#prodPrice_'+token_number).val('0');
+                                        }
+                                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
+                                        $('#avgQty_' + token_number).val(ui.item.avgQty);
+                                        $('#cost_' + token_number).val(ui.item.Cost);
+                                        $('#prodPrice_' + token_number).val('');
+                                        $('#PL1_' + token_number).val(ui.item.PriceList1);
+                                        $('#PL2_' + token_number).val(ui.item.PriceList2);
+                                        $('#PL3_' + token_number).val(ui.item.PriceList3);
+                                        $('#PL4_' + token_number).val(ui.item.PriceList4);
+                                        $('#PL5_' + token_number).val(ui.item.PriceList5);
+                                        $('#PL6_' + token_number).val(ui.item.PriceList6);
+
+                                        $.ajaxSetup({
+                                            headers: {
+                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                            }
+                                        });
+                                        productPrice(token_number);
+
+
+                                    }
+                                });
+
                             }
+
+                            if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
+                                var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
+                                    {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
+                                    ,
+                                    {name: 'Available', minWidth:'20px',valueField: 'Available'}];
+                                $("" + jID + "").mcautocomplete({
+                                    source: finalDataProduct,
+                                    columns:columnsC,
+                                    minlength: 1,
+                                    autoFocus: true,
+                                    delay: 0,
+                                    select:function (e, ui) {
+                                        console.log(ui.item);
+                                        var n = ID.indexOf("_");
+                                        var token_number = ID.substring(n + 1, ID.length);
+                                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                                        {
+                                            $('#prodQty_'+token_number).val('0');
+                                            $('#prodPrice_'+token_number).val('0');
+                                        }
+                                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                                        $('#prodPrice_' + token_number).val('');
+                                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
+                                        $('#avgQty_' + token_number).val(ui.item.avgQty);
+                                        $('#cost_' + token_number).val(ui.item.Cost);
+                                        $('#PL1_' + token_number).val(ui.item.PriceList1);
+                                        $('#PL2_' + token_number).val(ui.item.PriceList2);
+                                        $('#PL3_' + token_number).val(ui.item.PriceList3);
+                                        $('#PL4_' + token_number).val(ui.item.PriceList4);
+                                        $('#PL5_' + token_number).val(ui.item.PriceList5);
+                                        $('#PL6_' + token_number).val(ui.item.PriceList6);
+                                        $.ajaxSetup({
+                                            headers: {
+                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                            }
+                                        });
+
+                                        productPrice(token_number);
+
+                                    }
+
+                                });
+                            }
+                            //calculator();
+
                         });
 
-                        productPrice(token_number);
-
-                    }
-
-                });
-            }
-            //calculator();
-
-        });
-
-        $(".dateTo,.dateFrom").datepicker({
-            changeMonth: true,//this option for allowing user to select month
-            changeYear: true, //this option for allowing user to select from year range
-            dateFormat: 'dd-mm-yy'
-        });
-        $('#tblCreateNewSpecial').on('click', 'button', function (e) {
-            var $this = $(this);
-            $this.closest('tr').remove();
-        });
-    });
-
-        }
+                        $(".dateTo,.dateFrom").datepicker({
+                            changeMonth: true,//this option for allowing user to select month
+                            changeYear: true, //this option for allowing user to select from year range
+                            dateFormat: 'dd-mm-yy'
+                        });
+                        $('#tblCreateNewSpecial').on('click', 'button', function (e) {
+                            var $this = $(this);
+                            $this.closest('tr').remove();
+                        });
                     });
+
+                }
+            });
 
         });
         $('#pricelist1convert').click(function(){
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
 
                 var ID = $(this).attr('id');
-            var jID = '#'+ID;
-            var x = ID.indexOf("x");
-            var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
-            $('#prodPrice_'+ get_token_number).val(roundquick($('#PL1_'+get_token_number).val()));
-            $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
+                var jID = '#'+ID;
+                var x = ID.indexOf("x");
+                var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
+                $('#prodPrice_'+ get_token_number).val(roundquick($('#PL1_'+get_token_number).val()));
+                $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
             });
         });
         $('#getContractDetails').click(function(){
@@ -727,162 +742,160 @@
                     var trHTML = '';
                     $('#tblCreateNewSpecial tbody').empty();
                     $.each(data, function (key, value) {
-                    var contractFrom = $('#dateFrom').val();
-                    var contractTo = $('#dateTo').val();
-                    var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
-                    var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
-            '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
-            '<td contenteditable="false"  class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
-            '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+value.Date+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-            '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+value.DateTo+'" class="dateTo resize-input-inside inputs"></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+roundquick(value.Cost)+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
- $('#tblCreateNewSpecial tbody')
-            .append( $row )
-            .trigger('addRows', [ $row, false
-        ]);
-            if(!$('.lst').is(":focus"))
-        {
-            $('#prodCode_' + tokenId).focus();
-
-            if ($('#checkboxDescription').is(':checked')) {
-                $('#prodDescription_' + tokenId).focus();
-            }
-        }
-        $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
-        $('input').on('click keyup' ,function(){
-            // $('input').click(function(){
-            var ID = $(this).attr('id');
-            var jID = '#'+ID;
-            var x = ID.indexOf("_");
-            var get_token_number = ID.substring(x+1,ID.length);
-
-            if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
-                var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
-                    {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
-                    ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                $(""+jID+"").mcautocomplete({
-                    source: finalDataProductDescription,
-                    columns:columnsD,
-                    autoFocus: true,
-                    minlength: 2,
-                    delay: 0,
-                    multiple: true,
-                    multipleSeparator: ",",
-                    select:function (e, ui) {
-                        console.log(ui.item);
-                        var n = ID.indexOf("_");
-                        var token_number = ID.substring(n + 1, ID.length);
-
-                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                        var contractFrom = $('#dateFrom').val();
+                        var contractTo = $('#dateTo').val();
+                        var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
+                        var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
+                            '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
+                            '<td contenteditable="false"  class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
+                            '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+value.Date+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
+                            '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+value.DateTo+'" class="dateTo resize-input-inside inputs"></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+roundquick(value.Cost)+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
+                        $('#tblCreateNewSpecial tbody')
+                            .append( $row )
+                            .trigger('addRows', [ $row, false
+                            ]);
+                        if(!$('.lst').is(":focus"))
                         {
-                            $('#prodQty_'+token_number).val('0');
-                            $('#prodPrice_'+token_number).val('0');
-                        }
-                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                        $('#cost_' + token_number).val(ui.item.Cost);
-                        $('#prodPrice_' + token_number).val('');
-                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                        $('#PL6_' + token_number).val(ui.item.PriceList6);
+                            $('#prodCode_' + tokenId).focus();
 
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            if ($('#checkboxDescription').is(':checked')) {
+                                $('#prodDescription_' + tokenId).focus();
                             }
-                        });
-                        productPrice(token_number);
-
-
-                    }
-                });
-
-            }
-
-            if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
-                var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
-                    {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
-                    ,
-                    {name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                $("" + jID + "").mcautocomplete({
-                    source: finalDataProduct,
-                    columns:columnsC,
-                    minlength: 1,
-                    autoFocus: true,
-                    delay: 0,
-                    select:function (e, ui) {
-                        console.log(ui.item);
-                        var n = ID.indexOf("_");
-                        var token_number = ID.substring(n + 1, ID.length);
-                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
-                        {
-                            $('#prodQty_'+token_number).val('0');
-                            $('#prodPrice_'+token_number).val('0');
                         }
-                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                        $('#prodPrice_' + token_number).val('');
-                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                        $('#cost_' + token_number).val(ui.item.Cost);
-                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                        $('#PL6_' + token_number).val(ui.item.PriceList6);
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
+                        $('input').on('click keyup' ,function(){
+                            // $('input').click(function(){
+                            var ID = $(this).attr('id');
+                            var jID = '#'+ID;
+                            var x = ID.indexOf("_");
+                            var get_token_number = ID.substring(x+1,ID.length);
+
+                            if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
+                                var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
+                                    {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
+                                    ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
+                                $(""+jID+"").mcautocomplete({
+                                    source: finalDataProductDescription,
+                                    columns:columnsD,
+                                    autoFocus: true,
+                                    minlength: 2,
+                                    delay: 0,
+                                    multiple: true,
+                                    multipleSeparator: ",",
+                                    select:function (e, ui) {
+                                        console.log(ui.item);
+                                        var n = ID.indexOf("_");
+                                        var token_number = ID.substring(n + 1, ID.length);
+
+                                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                                        {
+                                            $('#prodQty_'+token_number).val('0');
+                                            $('#prodPrice_'+token_number).val('0');
+                                        }
+                                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
+                                        $('#cost_' + token_number).val(ui.item.Cost);
+                                        $('#prodPrice_' + token_number).val('');
+                                        $('#avgQty_' + token_number).val(ui.item.avgQty);
+                                        $('#PL1_' + token_number).val(ui.item.PriceList1);
+                                        $('#PL2_' + token_number).val(ui.item.PriceList2);
+                                        $('#PL3_' + token_number).val(ui.item.PriceList3);
+                                        $('#PL4_' + token_number).val(ui.item.PriceList4);
+                                        $('#PL5_' + token_number).val(ui.item.PriceList5);
+                                        $('#PL6_' + token_number).val(ui.item.PriceList6);
+
+                                        $.ajaxSetup({
+                                            headers: {
+                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                            }
+                                        });
+                                        productPrice(token_number);
+
+
+                                    }
+                                });
+
                             }
+
+                            if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
+                                var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
+                                    {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
+                                    ,
+                                    {name: 'Available', minWidth:'20px',valueField: 'Available'}];
+                                $("" + jID + "").mcautocomplete({
+                                    source: finalDataProduct,
+                                    columns:columnsC,
+                                    minlength: 1,
+                                    autoFocus: true,
+                                    delay: 0,
+                                    select:function (e, ui) {
+                                        console.log(ui.item);
+                                        var n = ID.indexOf("_");
+                                        var token_number = ID.substring(n + 1, ID.length);
+                                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                                        {
+                                            $('#prodQty_'+token_number).val('0');
+                                            $('#prodPrice_'+token_number).val('0');
+                                        }
+                                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                                        $('#prodPrice_' + token_number).val('');
+                                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
+                                        $('#avgQty_' + token_number).val(ui.item.avgQty);
+                                        $('#cost_' + token_number).val(ui.item.Cost);
+                                        $('#PL1_' + token_number).val(ui.item.PriceList1);
+                                        $('#PL2_' + token_number).val(ui.item.PriceList2);
+                                        $('#PL3_' + token_number).val(ui.item.PriceList3);
+                                        $('#PL4_' + token_number).val(ui.item.PriceList4);
+                                        $('#PL5_' + token_number).val(ui.item.PriceList5);
+                                        $('#PL6_' + token_number).val(ui.item.PriceList6);
+                                        $.ajaxSetup({
+                                            headers: {
+                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                            }
+                                        });
+
+                                        productPrice(token_number);
+
+                                    }
+
+                                });
+                            }
+                            //calculator();
+
                         });
 
-                        productPrice(token_number);
-
-                    }
-
-                });
-            }
-            //calculator();
-
-        });
-
-        $(".dateTo,.dateFrom").datepicker({
-            changeMonth: true,//this option for allowing user to select month
-            changeYear: true, //this option for allowing user to select from year range
-            dateFormat: 'dd-mm-yy'
-        });
-        $('#tblCreateNewSpecial').on('click', 'button', function (e) {
-            var $this = $(this);
-            $this.closest('tr').remove();
-        });
-    });
-
-        }
+                        $(".dateTo,.dateFrom").datepicker({
+                            changeMonth: true,//this option for allowing user to select month
+                            changeYear: true, //this option for allowing user to select from year range
+                            dateFormat: 'dd-mm-yy'
+                        });
+                        $('#tblCreateNewSpecial').on('click', 'button', function (e) {
+                            var $this = $(this);
+                            $this.closest('tr').remove();
+                        });
                     });
+
+                }
+            });
 
         });
 
         $('#doneCreating').click(function()
         {
-
-
             var productsLinesOnPicking = new Array();
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
                 // var data = $(this);
@@ -920,179 +933,113 @@
                     if (data.result.length ==0) // so if there is nothing  do the following
                     {
                         $.ajax({
-                url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
-                type: "POST",
-                data: {
-                    customerCode: $('#inputCustAcc').val(),
-                    customerId: $('#customerId').val(),
-                    contractDateFrom: $('#dateFrom').val(),
-                    contractDateTo: $('#dateTo').val(),
-                    contractid: $('#custheadid').val(),
-                    orderDetails: productsLinesOnPicking
-                },success: function (data) {
-                        var dialog = $('<p>Special Created!</p>').dialog({
-                        height: 200, width: 700, modal: true, containment: false,
-                        buttons: {
-                            "OKAY": function () {
-                                location.reload(true);
-                                dialog.dialog('close');
+                            url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
+                            type: "POST",
+                            data: {
+                                customerCode: $('#inputCustAcc').val(),
+                                customerId: $('#customerId').val(),
+                                contractDateFrom: $('#dateFrom').val(),
+                                contractDateTo: $('#dateTo').val(),
+                                contractid: $('#custheadid').val(),
+                                orderDetails: productsLinesOnPicking
+                            },success: function (data) {
+                                var dialog = $('<p>Special Created!</p>').dialog({
+                                    height: 200, width: 700, modal: true, containment: false,
+                                    buttons: {
+                                        "OKAY": function () {
+                                            location.reload(true);
+                                            dialog.dialog('close');
+                                        }
+                                    }
+                                });
                             }
-                        }
-                    });
-                }
-                });
+                        });
                     }else{// so if there is nothing  do the following
 
-                          var dialog = $('<p>There appears to be some duplicates, press YES to push the products in duplicate or Cancel to view the products that are in duplicate </p>').dialog({
-                        height: 200, width: 700, modal: true, containment: false,
-                        buttons: {
-                            "YES": function () {
-                                $.ajax({
-                url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
-                type: "POST",
-                data: {
-                    customerCode: $('#inputCustAcc').val(),
-                    customerId: $('#customerId').val(),
-                    contractDateFrom: $('#dateFrom').val(),
-                    contractDateTo: $('#dateTo').val(),
-                    contractid: $('#custheadid').val(),
-                    orderDetails: productsLinesOnPicking
-                },success: function (data) {
-                        var dialog = $('<p>Special Created!</p>').dialog({
-                        height: 200, width: 700, modal: true, containment: false,
-                        buttons: {
-                            "OKAY": function () {
-                                location.reload(true);
-                                dialog.dialog('close');
-                            }
-                        }
-                    });
-                }
-                });
-                                location.reload(true);
-                                dialog.dialog('close');
-                            },"CANCEL":function(){
+                        var trHTML = "";
 
-                                var trHTML = "";
-
-                            $('#gridduplicatespecials').empty();
-                                $('#duplicatespecials').show(); //table
-                            var dialog = $("#duplicatespecials").dialog({
-                                height: 800, modal: true, closeOnEscape: true,
-                                width: 800, buttons: {
-                            "NO": function () {
-                                dialog.dialog('close');
-                            },"YES": function () {
-                                $.ajax({
-                url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
-                type: "POST",
-                data: {
-                    customerCode: $('#inputCustAcc').val(),
-                    customerId: $('#customerId').val(),
-                    contractDateFrom: $('#dateFrom').val(),
-                    contractDateTo: $('#dateTo').val(),
-                    contractid: $('#custheadid').val(),
-                    orderDetails: productsLinesOnPicking
-                },success: function (data) {
-                        var dialog = $('<p>Special Created!</p>').dialog({
-                        height: 200, width: 700, modal: true, containment: false,
-                        buttons: {
-                            "OKAY": function () {
-                                location.reload(true);
-                                dialog.dialog('close');
-                            }
-                        }
-                    });
-                }
-                });
-
-                            }
-                        },containment: false,
-                            }).dialogExtend({
-                                "closable": true, // enable/disable close button
-                                "maximizable": false, // enable/disable maximize button
-                                "minimizable": true, // enable/disable minimize button
-                                "collapsable": true, // enable/disable collapse button
-                                "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-                                "titlebar": false, // false, 'none', 'transparent'
-                                "minimizeLocation": "right", // sets alignment of minimized dialogues
-                                "icons": { // jQuery UI icon class
-                                    "close": "ui-icon-circle-close",
-                                    "maximize": "ui-icon-circle-plus",
-                                    "minimize": "ui-icon-circle-minus",
-                                    "collapse": "ui-icon-triangle-1-s",
-                                    "restore": "ui-icon-bullet"
+                        $('#gridduplicatespecials').empty();
+                        $('#duplicatespecials').show(); //table
+                        var dialog = $("#duplicatespecials").dialog({
+                            height: 800, modal: true, closeOnEscape: true,
+                            width: 800, buttons: {
+                                "NO": function () {
+                                    dialog.dialog('close');
                                 },
-                                "load": function (evt, dlg) {
-                                }, // event
-                                "beforeCollapse": function (evt, dlg) {
-                                }, // event
-                                "beforeMaximize": function (evt, dlg) {
-                                }, // event
-                                "beforeMinimize": function (evt, dlg) {
-                                }, // event
-                                "beforeRestore": function (evt, dlg) {
-                                }, // event
-                                "collapse": function (evt, dlg) {
-                                }, // event
-                                "maximize": function (evt, dlg) {
-                                }, // event
-                                "minimize": function (evt, dlg) {
-                                }, // event
-                                "restore": function (evt, dlg) {
-                                } // event
-                            });
-                            $.each(duplicateresult, function (key, value) {
-                                //p.PastelCode,p.PastelDescription,cs.SpecialHeaderId as [Contract] ,ts.dateFrom, ts.dateTo, CustomerPastelCode, p.PastelCode, p.PastelDescription AS Pdesc, cs.Price
-                                trHTML += '<tr style="font-size: 13px !important;color: black;background: lightgrey;font-weight: normal" >' +
-                                    '<td style="">' + value.PastelCode + '</td>' +
-                                    '<td style="font-size: 13px !important;">' + value.PastelDescription + '</td>' +
-                                    '<td style="font-size: 13px !important;">' + value.Price + '</td>' +
-                                    '<td style="font-size: 13px !important;">' + value.dateFrom + '</td>' +
-                                    '<td style="font-size: 13px !important;">' + value.dateTo + '</td>' +
-                                    '<td style="font-size: 13px !important;">' + value.Contract + '</td>' +
-                                    '</tr>';
+                                "YES": function () {
+                                    $.ajax({
+                                        url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
+                                        type: "POST",
+                                        data: {
+                                            customerCode: $('#inputCustAcc').val(),
+                                            customerId: $('#customerId').val(),
+                                            contractDateFrom: $('#dateFrom').val(),
+                                            contractDateTo: $('#dateTo').val(),
+                                            contractid: $('#custheadid').val(),
+                                            orderDetails: productsLinesOnPicking
+                                        },success: function (data) {
+                                            var dialog = $('<p>Special Created!</p>').dialog({
+                                                height: 200, width: 700, modal: true, containment: false,
+                                                buttons: {
+                                                    "OKAY": function () {
+                                                        location.reload();
+                                                        //dialog.dialog('close');
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
 
-                           
-                            });
-                            $('#gridduplicatespecials').append(trHTML);
+                                }
+                            },containment: false,
+                        }).dialogExtend({
+                            "closable": true, // enable/disable close button
+                            "maximizable": false, // enable/disable maximize button
+                            "minimizable": true, // enable/disable minimize button
+                            "collapsable": true, // enable/disable collapse button
+                            "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                            "titlebar": false, // false, 'none', 'transparent'
+                            "minimizeLocation": "right", // sets alignment of minimized dialogues
+                            "icons": { // jQuery UI icon class
+                                "close": "ui-icon-circle-close",
+                                "maximize": "ui-icon-circle-plus",
+                                "minimize": "ui-icon-circle-minus",
+                                "collapse": "ui-icon-triangle-1-s",
+                                "restore": "ui-icon-bullet"
+                            },
+                            "load": function (evt, dlg) {
+                            }, // event
+                            "beforeCollapse": function (evt, dlg) {
+                            }, // event
+                            "beforeMaximize": function (evt, dlg) {
+                            }, // event
+                            "beforeMinimize": function (evt, dlg) {
+                            }, // event
+                            "beforeRestore": function (evt, dlg) {
+                            }, // event
+                            "collapse": function (evt, dlg) {
+                            }, // event
+                            "maximize": function (evt, dlg) {
+                            }, // event
+                            "minimize": function (evt, dlg) {
+                            }, // event
+                            "restore": function (evt, dlg) {
+                            } // event
+                        });
+                        $.each(duplicateresult, function (key, value) {
+                            //p.PastelCode,p.PastelDescription,cs.SpecialHeaderId as [Contract] ,ts.dateFrom, ts.dateTo, CustomerPastelCode, p.PastelCode, p.PastelDescription AS Pdesc, cs.Price
+                            trHTML += '<tr style="font-size: 13px !important;color: black;background: lightgrey;font-weight: normal" >' +
+                                '<td style="">' + value.PastelCode + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.PastelDescription + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.Price + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.dateFrom + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.dateTo + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.Contract + '</td>' +
+                                '</tr>';
 
-                            }
-                        }
-                    }).dialogExtend({
-                                "closable": true, // enable/disable close button
-                                "maximizable": false, // enable/disable maximize button
-                                "minimizable": true, // enable/disable minimize button
-                                "collapsable": true, // enable/disable collapse button
-                                "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-                                "titlebar": false, // false, 'none', 'transparent'
-                                "minimizeLocation": "right", // sets alignment of minimized dialogues
-                                "icons": { // jQuery UI icon class
-                                    "close": "ui-icon-circle-close",
-                                    "maximize": "ui-icon-circle-plus",
-                                    "minimize": "ui-icon-circle-minus",
-                                    "collapse": "ui-icon-triangle-1-s",
-                                    "restore": "ui-icon-bullet"
-                                },
-                                "load": function (evt, dlg) {
-                                }, // event
-                                "beforeCollapse": function (evt, dlg) {
-                                }, // event
-                                "beforeMaximize": function (evt, dlg) {
-                                }, // event
-                                "beforeMinimize": function (evt, dlg) {
-                                }, // event
-                                "beforeRestore": function (evt, dlg) {
-                                }, // event
-                                "collapse": function (evt, dlg) {
-                                }, // event
-                                "maximize": function (evt, dlg) {
-                                }, // event
-                                "minimize": function (evt, dlg) {
-                                }, // event
-                                "restore": function (evt, dlg) {
-                                } // event
-                            });
+
+                        });
+                        $('#gridduplicatespecials').append(trHTML);
 
                     }
 
@@ -1103,42 +1050,42 @@
         });
 
         $(document).on('click', '.PL1_', function(e) {
-        var costing = $(this).closest('tr').find('.cost_').val();
+            var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
-        $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
+            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
         $(document).on('click', '.PL2_', function(e) {
 
-        var costing = $(this).closest('tr').find('.cost_').val();
+            var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
-        $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
+            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
         $(document).on('click', '.PL3_', function(e) {
 
-        var costing = $(this).closest('tr').find('.cost_').val();
+            var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
-        $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
+            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
         $(document).on('click', '.PL4_', function(e) {
-        var costing = $(this).closest('tr').find('.cost_').val();
+            var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
-        $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
+            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
         $(document).on('click', '.PL5_', function(e) {
-        var costing = $(this).closest('tr').find('.cost_').val();
+            var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
-        $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
+            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
         $(document).on('click', '.PL6_', function(e) {
-        var costing = $(this).closest('tr').find('.cost_').val();
+            var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
-        $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
+            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
 
         $(document).on('click', '.less10perc_', function(e) {
-        var costing = $(this).closest('tr').find('.cost_').val();
+            var costing = $(this).closest('tr').find('.cost_').val();
             $(this).closest('tr').find('.prodPrice_').val($(this).val());
-        $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
+            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
         });
 
 
@@ -1229,7 +1176,7 @@
                         });
                         productPrice(token_number);
                         $('#gp_' + token_number).val(marginCalculator(ui.item.Cost,$('#prodPrice_'+ token_number).val()));
-                                var placeholderclick = '#PL1_'+ token_number;
+                        var placeholderclick = '#PL1_'+ token_number;
 
                     }
                 });
@@ -1316,9 +1263,9 @@
                 warehouseid:1
             },
             success: function (data) {
-                    $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
-                    $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
-                    $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
+                $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
                 $('#gp_'+token_number).val(roundquick(marginCalculator(data[0].Cost,data[0].Price)));
             }
         });
@@ -1335,7 +1282,7 @@
                 warehouseid:1
             },
             success: function (data) {
-                    $('#avgQty_' + token_number).val(data[0].Qty);
+                $('#avgQty_' + token_number).val(data[0].Qty);
             }
         });
     }
@@ -1351,9 +1298,9 @@
                 warehouseid:1
             },
             success: function (data) {
-                    $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
-                    $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
-                    $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
+                $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
             }
         });
     }
