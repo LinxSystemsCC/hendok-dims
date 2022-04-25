@@ -463,8 +463,18 @@
                     success: function (data) {
                         console.debug(data[0].result);
                         if( data[0].result=="Success"){
-                            $('#dialogcopycontracts').hide();
-                            $('#getContractDetails').click();
+                           // $('#dialogcopycontracts').dialog('close');
+                           // $('#getContractDetails').click();
+                            //contractId
+                            var dialog = $('<p>Sorry <strong style="color:red">Contract ID is'+data[0].contractId+' </strong></p>').dialog({
+                                height: 200, width: 700,
+                                buttons: {
+                                    "OK": function () {
+                                        dialog.dialog('close');
+                                        location.reload();
+                                    }
+                                }
+                            });
 
                         }
 
