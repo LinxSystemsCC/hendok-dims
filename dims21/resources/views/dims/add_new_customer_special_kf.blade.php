@@ -348,6 +348,7 @@
                     customerid: $('#customerId').val()
                 },
                 success: function (data) {
+                    $('#tblCreateNewSpecial tbody').empty();
                     var trHTML = "";
                     $("#custheadid").empty();
                     trHTML+='<option value="-99">Select a Contract ID</option>';
@@ -375,6 +376,7 @@
                     customerid: $('#customerId').val()
                 },
                 success: function (data) {
+                    $('#tblCreateNewSpecial tbody').empty();
                     var trHTML = "";
                     $("#custheadid").empty();
                     trHTML+='<option value="-99">Select a Contract ID</option>';
@@ -404,6 +406,7 @@
             $('#addinCurrentPrices').show();
             $('#addinHistory').show();
             $('#afterFilter').show();
+            $('#tblCreateNewSpecial tbody').empty();
         });
         $('#copyContractIntoLines').click(function(){
 
@@ -466,7 +469,7 @@
                            // $('#dialogcopycontracts').dialog('close');
                            // $('#getContractDetails').click();
                             //contractId
-                            var dialog = $('<p>Sorry <strong style="color:red">Contract ID is'+data[0].contractId+' </strong></p>').dialog({
+                            var dialog = $('<p> <strong style="color:red">Contract ID is '+data[0].contractId+' </strong></p>').dialog({
                                 height: 200, width: 700,
                                 buttons: {
                                     "OK": function () {
