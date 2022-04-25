@@ -7291,7 +7291,8 @@
 
                     var margin = marginCalculator(cost, price);
 
-                    if((parseFloat(Productmargin)  > parseFloat(margin).toFixed(2)) && auth.length>4  )
+                   // if((parseFloat(Productmargin)  > parseFloat(margin).toFixed(2)) && auth.length>4  )
+                    if(price ==7125 )
                     {
                         $('#MarginProblems').show();
                         $('#userAuthProhibitedCred_marg').val('');
