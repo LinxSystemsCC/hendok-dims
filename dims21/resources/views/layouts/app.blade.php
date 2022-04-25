@@ -667,7 +667,7 @@
                                 </li>
                                 @if($customerspecials !="0")
                                 <li>
-                                    <a href='{!!url("/andNewSpecialKF")!!}' onclick="window.open(this.href, 'specials',
+                                    <a href='{!!url("/specials")!!}' onclick="window.open(this.href, 'specials',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Customer Special</a>
                                 </li>
                                 @endif
@@ -678,7 +678,7 @@
                                 <!--Probably add some or other check from ENV file to make sure only KF sees this-->
 
                                 <li>
-                                    <a href='{!!url("/kerstonspecial")!!}' onclick="window.open(this.href, 'massGrid',
+                                    <a href='{!!url("/andNewSpecialKF")!!}' onclick="window.open(this.href, 'massGrid',
 'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" > Customer Specials</a>
                                 </li>
 

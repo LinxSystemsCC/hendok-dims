@@ -24,11 +24,11 @@
                         </select>
                     </div>
                     <div class="form-group col-md-1 itCanHide"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                        <label class="control-label" for="dateFrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract- Date From</label>
+                        <label class="control-label" for="dateFrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Date From</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="dateFrom" style="font-weight: 900;    color: black;font-size: 13px;">
                     </div>
                     <div class="form-group col-md-1 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                        <label class="control-label" for="dateTo"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract- Date To</label>
+                        <label class="control-label" for="dateTo"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Date To</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="dateTo" style="font-weight: 900;    color: black;font-size: 13px;">
 
                     </div>
