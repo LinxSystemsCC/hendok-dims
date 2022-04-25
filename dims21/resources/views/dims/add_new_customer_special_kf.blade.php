@@ -368,7 +368,25 @@
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
+            $.ajax({
+                url: '{!!url("/getContractsPerCustomerID")!!}',
+                type: "POST",
+                data: {
+                    customerid: $('#customerId').val()
+                },
+                success: function (data) {
+                    var trHTML = "";
+                    $("#custheadid").empty();
+                    trHTML+='<option value="-99">Select a Contract ID</option>';
+                    $.each(data, function (key, value) {
 
+                        trHTML +=
+                            '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+' ['+value.DateFrom+' TO '+value.DateFrom+']' +'</option>';
+
+                    });
+                    $("#custheadid").append(trHTML);
+                }
+            });
 
 
         });

@@ -107,7 +107,7 @@
                     <div id="two-columns" class="grid-container" style="display:none;">
                         <button type="button" id="button_row" class="btn-xs btn-success">Add</button>
                         <button type="button" id="copythisorder" class="btn-xs btn-primary" style="">Copy Order</button>
-                        <button type="button" id="excelexportorder" class="btn-xs btn-primary" style="">Expor To Excel</button>
+                        <button type="button" id="excelexportorder" class="btn-xs btn-primary" style="">Export To Excel</button>
 
                         <button type="button" id="edit_row" class="btn-xs btn-success">Edit</button>
 
