@@ -15,6 +15,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+ 
+
 
     <link rel="stylesheet" href="{{ asset('css/jquery-ui2.min.css') }}" type="text/css" />
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
@@ -73,6 +75,13 @@
             getpricelistinfo(ids);
         });
 
+        $('#savetopdf').click(function(){
+            var plist = $('#pricelist').val();
+            if(plist.length > 1){
+                window.open('{!!url("/pdfpricelist")!!}/'+$('#pricelist').val(),"Price List"+$('#pricelist').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
+            }
+
+        });
 
 
 
@@ -144,6 +153,7 @@
 
                         }
                     ] ,
+
                     onRowClick: function (e) {
 
                         console.debug("Rather beeeeeeeeeeeeeeeeeeeee onClick");
