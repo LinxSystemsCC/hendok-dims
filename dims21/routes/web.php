@@ -902,6 +902,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getDuplicateProductsCS',[KerstonSpecialController::class,'getDuplicateProductsCS']);
     Route::post('getCustomerAvgQty',[KerstonSpecialController::class,'getCustomerAvgQty']);
     Route::post('copycontract',[KerstonSpecialController::class,'copycontract']);
+    Route::post('getcontractDates',[KerstonSpecialController::class,'getcontractDates']);
 
 });
 

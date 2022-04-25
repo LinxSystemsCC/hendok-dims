@@ -202,6 +202,14 @@ class KerstonSpecialController extends Controller
 
         return response()->json($getcontracts);
     }
+    public function getcontractDates(Request $request){
+        $contractId = $request->get('contractId');
+        $getcontracts = DB::connection('sqlsrv3')
+        ->select('exec spGetDatesForTheSelectedContract ?',
+        array($contractId));
+
+        return response()->json($getcontracts);
+    }
      function getContractsPerCustomerIDWithDates(Request $request){
         $customerid = $request->get('customerid');
         $dateFrom =  $request->get('datefrom');
