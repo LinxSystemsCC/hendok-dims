@@ -78,16 +78,17 @@
 
             <button class="btn-success btn-xs" id="addLine">Add Line</button>
             <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed table-intel tablesorter">
+                
                 <thead>
-                <tr style="font-size: 12px;">
+                <tr style="font-size: 12px;" >
                     <th>Code</th>
                     <th>Description</th>
                     <th>DtFrom</th>
                     <th>DtTo</th>
                     <th>Price</th>
-                    <th>Average Qty</th>
+                    <th>Qty</th>
                     <th>Cost</th>
-                    <th>Current GP</th>
+                    <th>GP</th>
                     <th>Cst.Crtd</th>
                     <th>Less 10%</th>
                     <th>Pricelist 1</th>
@@ -164,9 +165,14 @@
         background-image:url({{asset('images/bg.gif')}});
         background-repeat: no-repeat;
         background-position: center right;
+        
         cursor: pointer;
     }
-
+    .table thead th {
+         position: sticky;
+          top: 0; 
+          background:white;
+        }
     .tablesorter thead tr .headerSortDown {
         background-image: url({{asset('images/asc.gif')}});
     }
