@@ -36,6 +36,11 @@
                         <label class="control-label" for="submitFiltersOnCreatingCustSpecial"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">.</label>
                         <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;">Submit</button>
                     </div>
+                    <div class="form-group col-md-2">
+                        <label class="control-label" for="deleteall"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">.</label>
+                        <button type="button" id="deleteall" class="btn-xs btn-success" style="padding: 2px 49px;">Delete All</button>
+                    </div>
+
                 </div>
 
 
@@ -56,11 +61,14 @@
                         {{ csrf_field() }}
                         <div class = "form-group" style ="float:right">
                             <input type="file" name="select_file" />
+                            
                             <input type="submit" name="upload"  class="btn-xs btn-primary" value="Upload">
 
                         </div>
                     </form>
                 </div>
+                
+                <button type="button" id="exportexcel" class="btn-xs btn-primary" style = "float:right">Export Excel</button>
             </div>
 
         </fieldset>
@@ -300,7 +308,11 @@
         $('#afterFilter').hide();
         $('#duplicatespecials').hide();
         $('#dialogcopycontracts').hide();
-
+        $('#exportexcel').hide();
+        $('#exportexcel').click(function()
+        {
+            window.location = '{!!url("/export")!!}/'+$('#custheadid').val(); 
+        });
 
         var inputCustAccount = $('#inputCustAcc').flexdatalist({
             minLength: 1,
@@ -396,6 +408,10 @@
 
 
         });
+        $('#deleteall').click(function(){
+            
+            $('#tblCreateNewSpecial tbody').empty();
+        });
         $('#addLine').click(function(){
 
             generateALine2();
@@ -413,6 +429,8 @@
             $('#tblCreateNewSpecial tbody').empty();
         });
         $("#custheadid").change(function(){   // 1st way
+            
+        $('#exportexcel').show();
             var end = this.value;
             $.ajax({
                 url: '{!!url("/getcontractDates")!!}',
@@ -901,7 +919,7 @@
                 // var data = $(this);
                 // var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
 
-                if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && ($(this).closest('tr').find('.prodDescription_').val()).length > 0 ) {
+               // if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && ($(this).closest('tr').find('.prodDescription_').val()).length > 0 ) {
                     productsLinesOnPicking.push({
                         'productCode': $(this).closest('tr').find('.theProductCode_').val(),
                         'price': $(this).closest('tr').find('.prodPrice_').val(),
@@ -913,7 +931,7 @@
                         'customerid': $('#customerId').val(),
                         'contractid': $('#custheadid').val()
                     });
-                }
+               // }
             });
             $.ajax({
                 url: '{!!url("/XmlCreateCustomerSpecialsKFValid")!!}', // createCustomerSpecials
