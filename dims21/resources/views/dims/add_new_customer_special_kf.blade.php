@@ -10,12 +10,12 @@
                     <div class="form-group  col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                         <label class="control-label" for="inputCustAcc"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Account</label>
                         <input type="text" name="custCode" class="form-control input-sm col-xs-1" id="inputCustAcc" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
-                        <input type="hidden" name="customerId" class="form-control input-sm col-xs-1" id="customerId" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
+                        <input type="hidden" name="customerId" class="form-control input-sm col-xs-1" id="customerId" style="height:22px;font-size: 10px;font-weight: 900;    color: black;" required>
                     </div>
 
                     <div class="form-group col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                         <label class="control-label" for="inputCustName"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Customer Name</label>
-                        <input type="text" name="custDescription" class="form-control input-sm col-xs-1" id="inputCustName" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
+                        <input type="text" name="custDescription" class="form-control input-sm col-xs-1" id="inputCustName" style="height:22px;font-size: 10px;font-weight: 900;    color: black;" required>
                     </div>
                     <div class="form-group col-md-2 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                         <label class="control-label" for="custheadid"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Contract ID</label>
@@ -36,10 +36,7 @@
                         <label class="control-label" for="submitFiltersOnCreatingCustSpecial"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">.</label>
                         <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;">Submit</button>
                     </div>
-                    <div class="form-group col-md-2">
-                        <label class="control-label" for="deleteall"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">.</label>
-                        <button type="button" id="deleteall" class="btn-xs btn-success" style="padding: 2px 49px;">Delete All</button>
-                    </div>
+                  
 
                 </div>
 
@@ -56,23 +53,8 @@
                     <button type="button" id="copyContractIntoLines" class="btn-xs btn-primary " style="padding: 2px 19px;">Copy Contract</button>
 
                 </div>
-                <div class="col-md-4">
-                    <form action ="{{url('/importexcel')}}" method="post" enctype="multipart/form-data">
-                        {{ csrf_field() }}
-                        <div class = "form-group" style ="float:right">
-                            <input type="file" name="select_file" />
-
-                            <input type="hidden" name="contractIdfile" id="contractIdfile" required/>
-                            <input type="hidden" name="datefromfile"  id="datefromfile"/>
-                            <input type="hidden" name="datetofile" id="datetofile" />
-                            <input type="hidden" name="customerIdfile" id="customerIdfile" />
-
-
-                            <input type="submit" name="upload"  class="btn-xs btn-primary" value="Upload">
-
-                        </div>
-                    </form>
-                </div>
+                <button type="button" id="importexcel" class="btn-xs btn-primary" style = "float:right">Import Excel</button>
+                
 
                 <button type="button" id="exportexcel" class="btn-xs btn-primary" style = "float:right">Export Excel</button>
             </div>
@@ -83,6 +65,8 @@
         <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
 
             <button class="btn-success btn-xs" id="addLine">Add Line</button>
+    <button type="button" id="deleteall" class="btn-danger btn-xs" style="padding: 2px 49px;float:right;">Delete All</button>
+                    
             <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed table-intel tablesorter">
 
                 <thead>
@@ -164,6 +148,7 @@
             </div>
         </form>
     </div>
+  
 
 @endsection
 <style>
@@ -305,12 +290,32 @@
     });
 
     $(document).ready(function() {
+/*
+            $('#messagevalidatingthecontract').empty();
 
-$('#exportexcel').click(function(){
+            console.debug("customerid-----------"+$('#custheadid').val()+"---------dFrom-----"+dFrom.length+"------------"+dateTo.length);
+            if($('#custheadid').val() == "-99" && dFrom.length < 8 && dateTo.length < 8  )
+*/
+$('#importexcel').click(function(){
+    
 
-    $('#contractIdfile').val($('#custheadid').val());
-    $('#datefromfile').val($('#dateFrom').val());
-    $('#datetofile').val($('#dateTo').val());
+var dFromImporting =$('#dateFrom').val();
+var dFromExporting =$('#dateTo').val();
+    if($("#custheadid").val() == "-99" || dFromImporting.length < 8 || dFromExporting.length < 8){
+        var dialog = $('<p><strong style="color:red">Contract ID Empty or Dates not selected yet</strong></p>').dialog({
+                            height: 200, width: 700,modal: true,containment: false,
+                            buttons: {
+                                "Okay": function () {
+                                    dialog.dialog('close');
+                                }
+                            }
+                        });
+    }else{
+   // window.location = '{!!url("/export")!!}/'+$('#custheadid').val();
+    window.open('{!!url("/dialogtoimportspecials")!!}/' + $('#customerId').val()+"/"+ $('#custheadid').val() + "/" +$('#dateFrom').val()+ "/" + $('#dateFrom').val(), "Contract Id" + $('#custheadid').val(), "location=1,status=1,scrollbars=1, width=500,height=500");
+    $('#importexcel').css('background-color','green');}
+//
+//showDialogWithoutClose('#uploaddocument',400,400);
 });
 
         $('#tblCreateNewSpecial').tablesorter();
@@ -325,10 +330,10 @@ $('#exportexcel').click(function(){
         $('#salesOnOrder').hide();
         $('#salesInvoiced').hide();
         $('#posCashUp').hide();
-        $('#afterFilter').hide();
         $('#duplicatespecials').hide();
         $('#dialogcopycontracts').hide();
         $('#exportexcel').hide();
+        $('#uploaddocument').hide();
         $('#exportexcel').click(function()
         {
             window.location = '{!!url("/export")!!}/'+$('#custheadid').val();
@@ -349,7 +354,7 @@ $('#exportexcel').click(function(){
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
-            $('#customerIdfile').val(data.CustomerId);
+           // $('#customerIdfile').val(data.CustomerId);
 
         });
         var inputCustNumber = $('#inputCustAcc').flexdatalist({
@@ -406,7 +411,7 @@ $('#exportexcel').click(function(){
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
-            $('#customerIdfile').val(data.CustomerId);
+           // $('#customerIdfile').val(data.CustomerId);
             $.ajax({
                 url: '{!!url("/getContractsPerCustomerID")!!}',
                 type: "POST",
@@ -432,7 +437,19 @@ $('#exportexcel').click(function(){
         });
         $('#deleteall').click(function(){
 
-            $('#tblCreateNewSpecial tbody').empty();
+            
+            $.ajax({
+                url: '{!!url("/deletecontractlines")!!}',
+                type: "POST",
+                data: {
+                    contractid: $('#custheadid').val(),
+                   
+                },
+                success: function (data) {
+                    $('#tblCreateNewSpecial tbody').empty();
+                }
+            });
+
         });
         $('#addLine').click(function(){
 
@@ -449,6 +466,25 @@ $('#exportexcel').click(function(){
             $('#addinHistory').show();
             $('#afterFilter').show();
             $('#tblCreateNewSpecial tbody').empty();
+            if($("#custheadid").val() == "-99"){
+                //create
+                $.ajax({
+                url: '{!!url("/createnewcustomercontract")!!}',
+                type: "POST",
+                data: {
+                    customerId: $('#customerId').val(),
+                    dateFrom: $('#dateFrom').val(),
+                    dateTo: $('#dateTo').val()
+                },
+                success: function (data) {
+                        console.log(data[0].result);
+                        $('#custheadid').prepend('<option value="'+data[0].result+'" selected="selected">'+data[0].result+'</option>');
+
+                  
+
+                }
+            });
+            }
         });
         $("#custheadid").change(function(){   // 1st way
 
@@ -941,11 +977,21 @@ $('#exportexcel').click(function(){
         $('#doneCreating').click(function()
         {
             var productsLinesOnPicking = new Array();
+            if ($('#tblCreateNewSpecial > tbody  > tr').length<4){
+                productsLinesOnPicking.push({
+                        'productCode':'',
+                        'price':'',
+                        'dateFrom': '',
+                        'dateTo': '',
+                        'cost_': '',
+                        'gp_': '',
+                        'costCreated_':'',
+                        'customerid': '',
+                        'contractid':''
+                    });
+            }
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-                // var data = $(this);
-                // var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
-
-               // if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && ($(this).closest('tr').find('.prodDescription_').val()).length > 0 ) {
+                
                     productsLinesOnPicking.push({
                         'productCode': $(this).closest('tr').find('.theProductCode_').val(),
                         'price': $(this).closest('tr').find('.prodPrice_').val(),
@@ -957,7 +1003,9 @@ $('#exportexcel').click(function(){
                         'customerid': $('#customerId').val(),
                         'contractid': $('#custheadid').val()
                     });
-               // }
+                    
+
+             
             });
             $.ajax({
                 url: '{!!url("/XmlCreateCustomerSpecialsKFValid")!!}', // createCustomerSpecials

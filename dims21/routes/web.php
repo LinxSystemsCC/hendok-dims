@@ -894,7 +894,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('customerByDateOrContractSpecKF', [KerstonSpecialController::class,'customerByDateOrContractSpecKF']);
     Route::post('getContractsPerCustomerID',[KerstonSpecialController::class,'getContractsPerCustomerID']);
     Route::post('getContractsPerCustomerIDWithDates',[KerstonSpecialController::class,'getContractsPerCustomerIDWithDates']);
-    Route::post('/importexcel',[KerstonSpecialController::class,'importexcel']);
+    Route::post('importexcel',[KerstonSpecialController::class,'importexcel']);
+    Route::get('dialogtoimportspecials/{customerid}/{contractid}/{datefrom}/{dateto}',[KerstonSpecialController::class,'dialogtoimportspecials']);
     Route::get('export/{SpecialHeaderId}',[KerstonSpecialController::class,'export']);
     Route::post('convertContractPriceBulk',[KerstonSpecialController::class,'convertContractPriceBulk']);
     Route::post('getCurrentContractCustomerSpecialsKF',[KerstonSpecialController::class,'getCurrentContractCustomerSpecialsKF']);
@@ -904,6 +905,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('getCustomerAvgQty',[KerstonSpecialController::class,'getCustomerAvgQty']);
     Route::post('copycontract',[KerstonSpecialController::class,'copycontract']);
     Route::post('getcontractDates',[KerstonSpecialController::class,'getcontractDates']);
+    Route::post('createnewcustomercontract', [KerstonSpecialController::class , 'createnewcustomercontract']);
+    Route::post('deletecontractlines',[KerstonSpecialController::class, 'deletecontractlines']);
 
 });
 
