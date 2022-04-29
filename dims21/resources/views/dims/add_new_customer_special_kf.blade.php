@@ -62,6 +62,12 @@
                         <div class = "form-group" style ="float:right">
                             <input type="file" name="select_file" />
 
+                            <input type="hidden" name="contractIdfile" id="contractIdfile" required/>
+                            <input type="hidden" name="datefromfile"  id="datefromfile"/>
+                            <input type="hidden" name="datetofile" id="datetofile" />
+                            <input type="hidden" name="customerIdfile" id="customerIdfile" />
+
+
                             <input type="submit" name="upload"  class="btn-xs btn-primary" value="Upload">
 
                         </div>
@@ -299,6 +305,14 @@
     });
 
     $(document).ready(function() {
+
+$('#exportexcel').click(function(){
+
+    $('#contractIdfile').val($('#custheadid').val());
+    $('#datefromfile').val($('#dateFrom').val());
+    $('#datetofile').val($('#dateTo').val());
+});
+
         $('#tblCreateNewSpecial').tablesorter();
         $('#orderListing').hide();
         $('#addinCurrentPrices').hide();
@@ -335,6 +349,7 @@
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
+            $('#customerIdfile').val(data.CustomerId);
 
         });
         var inputCustNumber = $('#inputCustAcc').flexdatalist({
@@ -391,6 +406,7 @@
             $('#inputCustAcc').val(data.CustomerPastelCode);
             $('#inputCustName').val(data.StoreName);
             $('#customerId').val(data.CustomerId);
+            $('#customerIdfile').val(data.CustomerId);
             $.ajax({
                 url: '{!!url("/getContractsPerCustomerID")!!}',
                 type: "POST",
@@ -438,6 +454,7 @@
 
         $('#exportexcel').show();
             var end = this.value;
+            $('#contractIdfile').val(end);
             $.ajax({
                 url: '{!!url("/getcontractDates")!!}',
                 type: "POST",
@@ -451,6 +468,7 @@
 
                 }
             });
+
         });
         $('#copyContractIntoLines').click(function(){
 

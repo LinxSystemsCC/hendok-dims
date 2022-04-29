@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class KerstonFoodsSpecialExcel extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
-        'productCode', 'productDescription', 'decCost','decPrice','customerCode','dateFrom','dateTo',
+        'productCode','decPrice','strContractRef','contractID',
     ];
 
     /*enable timestamps as well.

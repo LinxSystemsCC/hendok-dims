@@ -31,8 +31,23 @@ class KerstonSpecialController extends Controller
             'select_file'  => 'required|mimes:xls,xlsx'
            ]);
            $filefrompost = $request->file('select_file');
+
+           $datefrom = $request->get('datefromfile');
+           $dateto =$request->get('datetofile');
+           $customerid =$request->get('customerIdfile');
+           $contractid =  $request->get('contractIdfile');
+           $sessionUserId = Auth::user()->UserID;
+           //dd(  $customerid );
+         
+
            $path = $request->file('select_file')->getRealPath();
+           
            $data = Excel::import(new SpecialsImport, $filefrompost);
+           //
+           $convertBulk = DB::connection('sqlsrv3')
+           ->statement('exec spInsertIntotblSpecialsImportIds ?,?',
+               array($sessionUserId, $contractid)
+           );
 }
     public function __construct()
     {
