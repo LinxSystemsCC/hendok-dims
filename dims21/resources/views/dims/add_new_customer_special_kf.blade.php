@@ -61,13 +61,13 @@
                         {{ csrf_field() }}
                         <div class = "form-group" style ="float:right">
                             <input type="file" name="select_file" />
-                            
+
                             <input type="submit" name="upload"  class="btn-xs btn-primary" value="Upload">
 
                         </div>
                     </form>
                 </div>
-                
+
                 <button type="button" id="exportexcel" class="btn-xs btn-primary" style = "float:right">Export Excel</button>
             </div>
 
@@ -78,19 +78,19 @@
 
             <button class="btn-success btn-xs" id="addLine">Add Line</button>
             <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed table-intel tablesorter">
-                
+
                 <thead>
                 <tr style="font-size: 12px;" >
-                    <th>Code</th>
-                    <th>Description</th>
-                    <th>DtFrom</th>
-                    <th>DtTo</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Cost</th>
-                    <th>GP</th>
-                    <th>Cst.Crtd</th>
-                    <th>Less 10%</th>
+                    <th style="background: aquamarine;">Code</th>
+                    <th style="background: aquamarine;">Description</th>
+                    <th style="background: aquamarine;">DtFrom</th>
+                    <th style="background: aquamarine;">DtTo</th>
+                    <th style="background: aquamarine;">Price</th>
+                    <th style="background: aquamarine;">Qty</th>
+                    <th style="background: aquamarine;">Cost</th>
+                    <th style="background: aquamarine;">GP</th>
+                    <th style="background: aquamarine;">Cst.Crtd</th>
+                    <th style="background: aquamarine;">Less 10%</th>
                     <th>Pricelist 1</th>
                     <th>Pricelist 2</th>
                     <th>Pricelist 3</th>
@@ -165,12 +165,12 @@
         background-image:url({{asset('images/bg.gif')}});
         background-repeat: no-repeat;
         background-position: center right;
-        
+
         cursor: pointer;
     }
     .table thead th {
          position: sticky;
-          top: 0; 
+          top: 0;
           background:white;
         }
     .tablesorter thead tr .headerSortDown {
@@ -317,7 +317,7 @@
         $('#exportexcel').hide();
         $('#exportexcel').click(function()
         {
-            window.location = '{!!url("/export")!!}/'+$('#custheadid').val(); 
+            window.location = '{!!url("/export")!!}/'+$('#custheadid').val();
         });
 
         var inputCustAccount = $('#inputCustAcc').flexdatalist({
@@ -415,7 +415,7 @@
 
         });
         $('#deleteall').click(function(){
-            
+
             $('#tblCreateNewSpecial tbody').empty();
         });
         $('#addLine').click(function(){
@@ -435,7 +435,7 @@
             $('#tblCreateNewSpecial tbody').empty();
         });
         $("#custheadid").change(function(){   // 1st way
-            
+
         $('#exportexcel').show();
             var end = this.value;
             $.ajax({
@@ -621,7 +621,7 @@
                             }
                         }
                         var resort  = true;
-                        $('table').trigger('update',[resort]);
+                        $('#tblCreateNewSpecial').trigger('update',[resort]);
                         $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
                         $('input').on('click keyup' ,function(){
                             // $('input').click(function(){
@@ -770,23 +770,23 @@
                         var contractTo = $('#dateTo').val();
                         var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
                         var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
-                            '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
-                            '<td contenteditable="false"  class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
-                            '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+value.Date+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-                            '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+value.DateTo+'" class="dateTo resize-input-inside inputs"></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+roundquick(value.Cost)+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false" class="col-sm-1"><i style="font-size: 0px">'+value.PastelCode+'"</i> <input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
+                            '<td contenteditable="false"  class="col-md-3"><i style="font-size: 0px">'+value.PastelDescription+'"</i> <input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
+                            '<td  contenteditable="false" class="col-md-2"><i style="font-size: 0px">'+value.Date+'"</i> <input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+value.Date+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
+                            '<td contenteditable="false" class="col-md-2"><i style="font-size: 0px">'+value.DateTo+'"</i> <input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+value.DateTo+'" class="dateTo resize-input-inside inputs"></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.avgQty+'"</i> <input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.Cost+'"</i> <input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+roundquick(value.Cost)+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PastelCode+'"</i> <input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PastelCode+'"</i> <input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL1+'"</i> <input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL2+'"</i> <input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL3+'"</i> <input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL4+'"</i> <input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL5+'"</i> <input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL6+'"</i> <input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
                             '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
                         $('#tblCreateNewSpecial tbody')
                             .append( $row )
@@ -800,6 +800,8 @@
                                 $('#prodDescription_' + tokenId).focus();
                             }
                         }
+                        var resort  = true;
+                        $('#tblCreateNewSpecial').trigger('update',[resort]);
                         $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
                         $('input').on('click keyup' ,function(){
                             // $('input').click(function(){
