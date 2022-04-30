@@ -20,14 +20,20 @@ class SpecialsExport implements FromQuery, WithHeadings
         return [
             'Code',
             'Price',
+            'ContractId',
+            'Description',
+            'DateFrom',
+            'DateTo',
+            'CustomerCode',
+            'CustomerName',
         ];
     }
 
     public function query()
     {
       
-        return DB::connection('sqlsrv3')->table("viewTblCustomerSpecialForExport" )->select('Code', 'Price')
-        ->where('SpecialHeaderId', $this->SpecialHeaderId)
+        return DB::connection('sqlsrv3')->table("viewTblCustomerSpecialForExport" )->select('Code', 'Price','ContractId', 'Description', 'DateFrom', 'DateTo','CustomerCode', 'CustomerName')
+        ->where('ContractId', $this->SpecialHeaderId)
         ->orderBy('Code');
     }
 }
