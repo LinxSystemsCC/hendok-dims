@@ -494,7 +494,7 @@ var dFromExporting =$('#dateTo').val();
                 },
                 success: function (data) {
                         console.log(data[0].result);
-                        $('#custheadid').prepend('<option value="'+data[0].result+'" selected="selected">'+data[0].result+'</option>');
+                        $('#custheadid').prepend('<option value="'+data[0].result+'" selected="selected">'+data[0].result+' ['+$('#dateFrom').val()+' TO '+$('#dateTo').val()+']' +'</option>');
 
                         $('#exportexcel').show();
                   
