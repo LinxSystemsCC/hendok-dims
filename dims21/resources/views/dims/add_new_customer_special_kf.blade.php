@@ -33,8 +33,10 @@
 
                     </div>
                     <div class="form-group col-md-2">
-                        <label class="control-label" for="submitFiltersOnCreatingCustSpecial"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">.</label>
+                        <label class="control-label" for="submitFiltersOnCreatingCustSpecial"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;"></label>
                         <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;">Submit</button>
+                        
+    <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete All</button>
                     </div>
                   
 
@@ -65,9 +67,8 @@
         <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
 
             <button class="btn-success btn-xs" id="addLine">Add Line</button>
-    <button type="button" id="deleteall" class="btn-danger btn-xs" style="padding: 2px 49px;float:right;">Delete All</button>
                     
-            <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed table-intel tablesorter">
+            <table id ="tblCreateNewSpecial" class="tablesorter table table-bordered table-condensed table-intel">
 
                 <thead>
                 <tr style="font-size: 12px;" >
@@ -79,7 +80,6 @@
                     <th style="background: aquamarine;">Qty</th>
                     <th style="background: aquamarine;">Cost</th>
                     <th style="background: aquamarine;">GP</th>
-                    <th style="background: aquamarine;">Cst.Crtd</th>
                     <th style="background: aquamarine;">Less 10%</th>
                     <th>Pricelist 1</th>
                     <th>Pricelist 2</th>
@@ -318,7 +318,23 @@ var dFromExporting =$('#dateTo').val();
 //showDialogWithoutClose('#uploaddocument',400,400);
 });
 
-        $('#tblCreateNewSpecial').tablesorter();
+        $('#tblCreateNewSpecial').tablesorter({
+            headers: {
+      5: { sorter: "digits"}, 
+      6: { sorter: "digits"}, 
+      7: { sorter: "digits"}, 
+      8: { sorter: "digits"}, 
+      10: { sorter: "digits"}, 
+      11: { sorter: "digits"}, 
+      12: { sorter: "digits"}, 
+      13: { sorter: "digits"}, 
+      14: { sorter: "digits"}, 
+      15: { sorter: "digits"}, 
+      16: { sorter: "digits"},  
+      17: { sorter: "digits"},  
+      18: { sorter: "digits"} 
+    }
+        });
         $('#orderListing').hide();
         $('#addinCurrentPrices').hide();
         $('#addinHistory').hide();
@@ -480,6 +496,7 @@ var dFromExporting =$('#dateTo').val();
                         console.log(data[0].result);
                         $('#custheadid').prepend('<option value="'+data[0].result+'" selected="selected">'+data[0].result+'</option>');
 
+                        $('#exportexcel').show();
                   
 
                 }
@@ -653,7 +670,6 @@ var dFromExporting =$('#dateTo').val();
                             '<td contenteditable="false"  ><i style="font-size: 0px">'+value.avgQty+'"</i> <input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
                             '<td contenteditable="false" ><i style="font-size: 0px">'+value.Cost+'"</i> <input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+value.Cost+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
                             '<td contenteditable="false"  ><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL1+'"</i> <input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL2+'"</i> <input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
@@ -832,7 +848,6 @@ var dFromExporting =$('#dateTo').val();
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.avgQty+'"</i> <input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.Cost+'"</i> <input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+roundquick(value.Cost)+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PastelCode+'"</i> <input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PastelCode+'"</i> <input type="text" name="costCreated_" id ="costCreated_'+tokenId+' onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL1+'"</i> <input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
                             '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PL2+'"</i> <input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
@@ -977,19 +992,6 @@ var dFromExporting =$('#dateTo').val();
         $('#doneCreating').click(function()
         {
             var productsLinesOnPicking = new Array();
-            if ($('#tblCreateNewSpecial > tbody  > tr').length<4){
-                productsLinesOnPicking.push({
-                        'productCode':'',
-                        'price':'',
-                        'dateFrom': '',
-                        'dateTo': '',
-                        'cost_': '',
-                        'gp_': '',
-                        'costCreated_':'',
-                        'customerid': '',
-                        'contractid':''
-                    });
-            }
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
                 
                     productsLinesOnPicking.push({
@@ -999,7 +1001,6 @@ var dFromExporting =$('#dateTo').val();
                         'dateTo': dateReturn( $(this).closest('tr').find('.dateTo').val()),
                         'cost_': $(this).closest('tr').find('.cost_').val(),
                         'gp_': $(this).closest('tr').find('.gp_').val(),
-                        'costCreated_': $(this).closest('tr').find('.costCreated_').val(),
                         'customerid': $('#customerId').val(),
                         'contractid': $('#custheadid').val()
                     });
@@ -1200,7 +1201,6 @@ var dFromExporting =$('#dateTo').val();
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="less10perc_" id ="less10perc_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL1_" id ="PL1_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
             '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL2_" id ="PL2_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
@@ -1335,10 +1335,6 @@ var dFromExporting =$('#dateTo').val();
     }
 
 
-    function marginCalculator(cost,onCellVal)
-    {
-        return ((cost/onCellVal))*100;
-    }
     function roundquick(val)
     {
         return parseFloat(val).toFixed(2);

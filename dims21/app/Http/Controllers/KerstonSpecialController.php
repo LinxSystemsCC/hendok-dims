@@ -56,8 +56,8 @@ class KerstonSpecialController extends Controller
 }
 public function createnewcustomercontract(Request $request){
     
-    $date = (new \DateTime($request->get('contractDateFrom')))->format('Y-m-d');
-    $dateTo = (new \DateTime($request->get('contractDateTo')))->format('Y-m-d');
+    $date = (new \DateTime($request->get('dateFrom')))->format('Y-m-d');
+    $dateTo = (new \DateTime($request->get('dateTo')))->format('Y-m-d');
     $Customerid = $request->get('customerId');
     $newcontract = DB::connection('sqlsrv3')
            ->select('exec spCreateNewCustomerContractId ?,?,?',
