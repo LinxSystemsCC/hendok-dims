@@ -823,6 +823,7 @@ Route::get('stocksheetforstocktake', [WareHouseManagementController::class,'stoc
 Route::get('stocksheetforstocktakejson', [WareHouseManagementController::class,'stocksheetforstocktakejson']);
 Route::post('stocksheetforstocktakexml', [WareHouseManagementController::class,'stocksheetforstocktakexml']);
 
+Route::get('reprinting',[WareHouseManagementController::class,'reprintingInvoicesPage']);
 Route::get('stockmover', [WareHouseManagementController::class,'stockmover']);
 Route::get('getwarehouseinventorygrid', [WareHouseManagementController::class,'getwarehouseinventorygrid']);
 Route::get('jsonWarehouseGrid', [WareHouseManagementController::class,'jsonWarehouseGrid']);
