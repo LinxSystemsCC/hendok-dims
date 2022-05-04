@@ -2341,7 +2341,7 @@
                         else {
 
                             $('<div id="evil" style="z-index: 60000 !important;"></div>')
-                                .html('<div ><h6><a href={!!url("/pdforder")!!}/'+ data.OrderId+' target="blank">View PDF ('+data.StoreName + ' - ' + data.OrderId + ' )</a><br><a href={!!url("/PDFDelDate")!!}/'+ data.OrderId+' target="blank" style="background: #43bbc8;text-decoration: underline;">DELIVERY NOTE ('+data.StoreName + ' - ' + data.OrderId + ' )</a><br><a href={!!url("/excelorders")!!}/'+ data.OrderId+'  style="text-decoration: underline;">EXCEL Order('+data.StoreName + ' - ' + data.OrderId + ' )</a><br></h6></div>')
+                                .html('<div ><h6><a href={!!url("/pdforder")!!}/'+ data.OrderId+' target="blank">View PDF ('+data.StoreName + ' - ' + data.OrderId + ' )</a><br><a href={!!url("/PDFDelDate")!!}/'+ data.OrderId+' target="blank" style="background: #43bbc8;text-decoration: underline;">DELIVERY NOTE ('+data.StoreName + ' - ' + data.OrderId + ' )</a><br><a href={!!url("/exportorder")!!}/'+ data.OrderId+'  style="text-decoration: underline;">EXCEL Order('+data.StoreName + ' - ' + data.OrderId + ' )</a><br></h6></div>')
                                 .dialog({
 
                                     modal: true,
