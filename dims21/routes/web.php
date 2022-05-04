@@ -538,6 +538,7 @@ Route::get('slack', [LoadingAppAPIs::class,'slack']);
 //SAGE Invoicing
 Route::get('invoicepickings/{ref}', [InvoicingController::class,'invoicepickings']);
 Route::get('processInvoce', [InvoicingController::class,'processInvoce']);
+Route::get('viewAwaitingtoinvoice', [InvoicingController::class,'viewAwaitingtoinvoice']);
 //SAGE Invoicing Ends Here
 
 //PALLADIUMDIMSSTATUS CONTROLLER STARTS HERE !!!

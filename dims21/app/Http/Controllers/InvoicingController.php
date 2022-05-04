@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\DB;
 class InvoicingController extends Controller
 {
     //
+    public function viewAwaitingtoinvoice(){
+        $toinvoice = DB::connection('sqlsrv')
+            ->select("Exec spGetPickingTicketsWaitingToBeInvoiced" );
+        return view('dims/listtoinvoice')
+            ->with('readytoinvoice',$toinvoice);
+    }
     public function invoicepickings($reference){
 
         $userid = Auth::user()->UserID;
