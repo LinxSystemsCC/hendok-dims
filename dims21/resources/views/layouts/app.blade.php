@@ -623,6 +623,10 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Status Picking</a>
                                 </li>
                                 <li>
+                                    <a href='{!!url("/viewAwaitingtoinvoice")!!}' onclick="window.open(this.href, 'viewAwaitingtoinvoice',
+'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Check Routes To Invoice</a>
+                                </li>
+                                <li>
                                     <a href='{!!url("/viewpickingtickets")!!}' onclick="window.open(this.href, 'viewpickingtickets',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Picking Tickets</a>
                                 </li>
