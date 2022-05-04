@@ -28,33 +28,16 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
         return view('stockmover/warehouseinventorygrid');
 
     }
-    public function bininfoGridProducts()
-    {
-        return view('stockmover/productsinbin');
-
-    }
-    public function jsonbininfoGridProducts()
-    {
-        $getProducts= DB::connection('barcoding')->select("Select * from viewWareHouseStockDataGrid");
-        return response()->json($getProducts);
-
-    }
-    public function getbininfo()
-    {
-        return view('stockmover/bininfo');
-
+    public function reprintingInvoicesPage(){
+        $deliverTypes = DB::connection('sqlsrv3')->table('tblOrderTypes')->select('OrderTypeId','OrderType')->get();
+        $getRoutes =  DB::connection('sqlsrv3')->table('tblRoutes')->select('Routeid', 'Route')->where('NotInUse','0')->orderBy('Route', 'asc')->get();
+       
+        return view('dims/reprintinginvoicespage')
+        ->with('orderTypes',$deliverTypes)
+        ->with('routes',$getRoutes);
     }
     public function jsonWarehouseGrid(){
-        $getProducts= DB::connection('barcoding')->select("Select * from viewWareHouseStockDataGrid");
-        return response()->json($getProducts);
-    }
-    public function jsonGetProductsInTheBin(Request $request){
-        $bin = $request->get("bin");
-        $getProducts= DB::connection('barcoding')->select("Exec spGetProductsInTheBin '$bin'");
-        return response()->json($getProducts);
-    }
-    public function jsonbininfoGrid(){
-        $getProducts= DB::connection('barcoding')->select("Select * from tblDimsBinLocations");
+        $getProducts= DB::connection('barcoding')->select("Select * from viewWareHouseStockDataGrid order by productName");
         return response()->json($getProducts);
     }
     public function recordbarcode($productCode)

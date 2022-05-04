@@ -6,11 +6,10 @@ use App\Models\KerstonFoodsSpecialExcel;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class SpecialsImport implements ToCollection,WithHeadingRow
+class SpecialsImport implements ToCollection
 {
     /**
     * @param array $row
@@ -31,11 +30,10 @@ class SpecialsImport implements ToCollection,WithHeadingRow
         foreach ($rows as $row) 
         {
             KerstonFoodsSpecialExcel::create([
-                'productCode'  => $row['code'],
-         'decPrice'   => $row['price'],
+                'productCode'  => $row[0],
+         'decPrice'   => $row[1],
          'strContractRef'   => $ID
             ]);
         }
-        //spInsertIntotblSpecialsImportIds
     }
 }

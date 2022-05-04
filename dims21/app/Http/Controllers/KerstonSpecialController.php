@@ -19,12 +19,13 @@ class KerstonSpecialController extends Controller
        // return Excel::download(new SpecialsExport(), 'specials.xlsx');
         return (new SpecialsExport($contractId))->download('specials.xlsx');
     }
-    public function import()
-    {
-        Excel::import(new SpecialsImport, 'specials.xlsx');
-
-        return redirect('/')->with('success', 'All good!');
-    }
+   public function dialogtoimportspecials($customerId,$contractIdfile,$datefromfile,$datetofile){
+    return view ('dims/importfile')
+    ->with('customerId',$customerId)
+    ->with('contractid',$contractIdfile)
+    ->with('datefrom',$datefromfile)
+    ->with('dateto',$datetofile);
+   }
     public function importexcel(Request $request){
 
         $this->validate($request, [
@@ -48,6 +49,22 @@ class KerstonSpecialController extends Controller
            ->statement('exec spInsertIntotblSpecialsImportIds ?,?',
                array($sessionUserId, $contractid)
            );
+           echo "FILE IMPORTED, PLEASE CLOSE THE DIALOG";
+        
+
+           //return redirect('/andNewSpecialKF')->with('success', 'All good!');
+}
+public function createnewcustomercontract(Request $request){
+    
+    $date = (new \DateTime($request->get('dateFrom')))->format('Y-m-d');
+    $dateTo = (new \DateTime($request->get('dateTo')))->format('Y-m-d');
+    $Customerid = $request->get('customerId');
+    $newcontract = DB::connection('sqlsrv3')
+           ->select('exec spCreateNewCustomerContractId ?,?,?',
+               array($Customerid, $date,$dateTo)
+           );
+           return response()->json($newcontract);
+
 }
     public function __construct()
     {
@@ -224,6 +241,17 @@ class KerstonSpecialController extends Controller
         array($contractId));
 
         return response()->json($getcontracts);
+    }
+    public function deletecontractlines(Request $request){
+        $contractid = $request->get('contractid');
+        DB::connection('sqlsrv3')->table('tblCustomerSpecials')->where('SpecialHeaderId',$contractid)->delete();
+        
+    }
+    public function deleteALLBasedContract(Request $request){
+        $contractid = $request->get('contractid');
+        DB::connection('sqlsrv3')->table('tblCustomerSpecials')->where('SpecialHeaderId',$contractid)->delete();
+        DB::connection('sqlsrv3')->table('tblCustomerSpecialHeader')->where('SpecialHeaderId',$contractid)->delete();
+        
     }
      function getContractsPerCustomerIDWithDates(Request $request){
         $customerid = $request->get('customerid');

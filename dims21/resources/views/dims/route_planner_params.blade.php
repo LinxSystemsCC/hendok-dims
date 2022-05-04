@@ -145,6 +145,9 @@
             <div class="col-lg-2">
                 <button id="doneSorting" class="btn-success btn-md center-block" style="margin-top: 20px;">Finished</button>
             </div>
+            <div class="col-lg-1">
+                <button id="reprinting" class="btn-success btn-md center-block" style="margin-top: 20px;">Reprint</button>
+            </div>
             <div class="col-lg-2">
 
                 <button id="moveSelectedOrders" class="btn-primary btn-md center-block" style="margin-top: 20px;">Move Orders</button>
@@ -311,8 +314,9 @@
         });
 
         $("#unsequenced").tablesorter();
-
-
+        $('#reprinting').click(function(){
+            window.location = '{!!url("/reprinting")!!}';
+        });
         var toAppendOrderTypes = '';
         $.each(JSON.parse(jArrayOrderTypes),function(i,o){
             toAppendOrderTypes += '<option value="'+o.OrderTypeId+'">'+o.OrderType+'</option>';

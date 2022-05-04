@@ -1334,8 +1334,7 @@ class DimsCommon extends Controller
             $innerDateFrom = (new \DateTime($value['dateFrom']))->format('Y-m-d');
             $innerDateTo = (new \DateTime($value['dateTo']))->format('Y-m-d');
           DB::connection('sqlsrv3')
-                ->statement("EXEC spCRUDOverallSpecials ".$customerCode.",'".$value['productCode']."',
-                '".$innerDateFrom."','".$innerDateTo."',".$value['price'].",".$value['cost_'].",".$value['gp_'].",".$id.",".$UserID.",'".$UserName."','".$statement."',".$value['specialType'].",".$value['locations']);
+                ->statement("EXEC spCRUDOverallSpecials ".$customerCode.",'".$value['productCode']."','".$innerDateFrom."','".$innerDateTo."',".$value['price'].",".$value['cost_'].",".$value['gp_'].",".$id.",".$UserID.",'".$UserName."','".$statement."',". 1/*$value['specialType']*/ .",".$value['locations']);
 //
         }
 
