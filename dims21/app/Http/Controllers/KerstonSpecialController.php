@@ -245,6 +245,11 @@ public function createnewcustomercontract(Request $request){
     public function deletecontractlines(Request $request){
         $contractid = $request->get('contractid');
         DB::connection('sqlsrv3')->table('tblCustomerSpecials')->where('SpecialHeaderId',$contractid)->delete();
+        
+    }
+    public function deleteALLBasedContract(Request $request){
+        $contractid = $request->get('contractid');
+        DB::connection('sqlsrv3')->table('tblCustomerSpecials')->where('SpecialHeaderId',$contractid)->delete();
         DB::connection('sqlsrv3')->table('tblCustomerSpecialHeader')->where('SpecialHeaderId',$contractid)->delete();
         
     }

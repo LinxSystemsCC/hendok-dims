@@ -36,7 +36,8 @@
                         <label class="control-label" for="submitFiltersOnCreatingCustSpecial"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;"></label>
                         <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;">Submit</button>
                         
-    <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete All</button>
+    <button type="button" id="deletelines" class="btn-danger btn-xs" style="float:right;">Delete All - Lines</button>
+    <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete All </button>
                     </div>
                   
 
@@ -459,22 +460,63 @@ var dFromExporting =$('#dateTo').val();
 
 
         });
-        $('#deleteall').click(function(){
+        $('#deletelines').click(function(){
+            var dialog = $('<p><strong style="color:red">Are you sure you want to delete all lines?</strong></p>').dialog({
+                            height: 200, width: 700,modal: true,containment: false,
+                            buttons: {
+                                "Yes": function () {
+                                    $.ajax({
+    url: '{!!url("/deletecontractlines")!!}',
+    type: "POST",
+    data: {
+        contractid: $('#custheadid').val(),
+       
+    },
+    success: function (data) {
+        $('#tblCreateNewSpecial tbody').empty();
+    }
+});
+                                    dialog.dialog('close');
+                                },
+                                "No": function(){
+                                    dialog.dialog('close');
+                                }
+                            }
+                        });
+            
+
+
+});
+$('#deleteall').click(function(){
 
             
-            $.ajax({
-                url: '{!!url("/deletecontractlines")!!}',
-                type: "POST",
-                data: {
-                    contractid: $('#custheadid').val(),
-                   
-                },
-                success: function (data) {
-                    $('#tblCreateNewSpecial tbody').empty();
-                }
-            });
+    var dialog = $('<p><strong style="color:red">Are you sure you want to delete the whole contract?</strong></p>').dialog({
+                            height: 200, width: 700,modal: true,containment: false,
+                            buttons: {
+                                "Yes": function () {
+                                    $.ajax({
+    url: '{!!url("/deleteALLBasedContract")!!}',
+    type: "POST",
+    data: {
+        contractid: $('#custheadid').val(),
+       
+    },
+    success: function (data) {
+        $('#tblCreateNewSpecial tbody').empty();
+    }
+});
+                                    dialog.dialog('close');
+                                },
+                                "No": function(){
+                                    dialog.dialog('close');
+                                }
+                            }
+                        });
+            
 
-        });
+
+
+});
         $('#addLine').click(function(){
 
             generateALine2();

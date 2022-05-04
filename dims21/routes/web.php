@@ -908,6 +908,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('getcontractDates',[KerstonSpecialController::class,'getcontractDates']);
     Route::post('createnewcustomercontract', [KerstonSpecialController::class , 'createnewcustomercontract']);
     Route::post('deletecontractlines',[KerstonSpecialController::class, 'deletecontractlines']);
+    Route::post('deleteALLBasedContract',[KerstonSpecialController::class, 'deleteALLBasedContract']);
 
 });
 
