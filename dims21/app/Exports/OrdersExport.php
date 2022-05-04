@@ -33,5 +33,14 @@ class OrdersExport implements FromQuery, WithHeadings
         $returnCustomerAgeAnalysis= DB::connection('sqlsrv3')
             ->select("Exec spOrderIdLines ?",
                 array( $this->orderid));
+        return DB::connection('sqlsrv3')->table("viewOrderLinesExcel" )
+            ->select( 'PastelCode',
+                'PastelDescription',
+                'Qty',
+                'UnitSize',
+                'Price',
+                'Tax')
+            ->where('OrderId', $this->orderid)
+            ->orderBy('PastelDescription');
     }
 }
