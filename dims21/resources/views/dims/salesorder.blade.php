@@ -10589,8 +10589,9 @@ console.debug(data);
                         });
                         calculator();
                         //Douwnload Excel
+                        window.location ='{!!url("/excelorders")!!}/'+$('#orderId').val();
 
-                        window.open('{!!url("/excelorders")!!}/'+$('#orderId').val(),"excelorders", "location=1,status=1,scrollbars=1, width=1200,height=850");
+                       
                     }
 
                 });
