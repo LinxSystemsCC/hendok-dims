@@ -449,6 +449,9 @@ $('#exportexcel').click(function(){
             $('#addinHistory').show();
             $('#afterFilter').show();
             $('#tblCreateNewSpecial tbody').empty();
+
+
+
         });
         $("#custheadid").change(function(){   // 1st way
 
