@@ -28,8 +28,33 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
         return view('stockmover/warehouseinventorygrid');
 
     }
+    public function bininfoGridProducts()
+    {
+        return view('stockmover/productsinbin');
+
+    }
+    public function jsonbininfoGridProducts()
+    {
+        $getProducts= DB::connection('barcoding')->select("Select * from viewWareHouseStockDataGrid");
+        return response()->json($getProducts);
+
+    }
+    public function getbininfo()
+    {
+        return view('stockmover/bininfo');
+
+    }
     public function jsonWarehouseGrid(){
-        $getProducts= DB::connection('barcoding')->select("Select * from viewWareHouseStockDataGrid order by productName");
+        $getProducts= DB::connection('barcoding')->select("Select * from viewWareHouseStockDataGrid");
+        return response()->json($getProducts);
+    }
+    public function jsonGetProductsInTheBin(Request $request){
+        $bin = $request->get("bin");
+        $getProducts= DB::connection('barcoding')->select("Exec spGetProductsInTheBin '$bin'");
+        return response()->json($getProducts);
+    }
+    public function jsonbininfoGrid(){
+        $getProducts= DB::connection('barcoding')->select("Select * from tblDimsBinLocations");
         return response()->json($getProducts);
     }
     public function recordbarcode($productCode)
