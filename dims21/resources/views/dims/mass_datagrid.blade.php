@@ -75,7 +75,7 @@
                 <th>Customer Code</th>
                 <th><div id='column-header-1-sizer'></div>Customer Name</th>
                 <th>Item Code</th>
-                <th ><div id='column-header-1-sizer'></div>Item Name</th>
+                <th><div id='column-header-1-sizer'></div>Item Name</th>
                 <th> Cost</th>
                 <th>Price</th>
                 <th>Date From</th>

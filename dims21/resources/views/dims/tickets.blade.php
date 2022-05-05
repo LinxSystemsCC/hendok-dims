@@ -46,7 +46,7 @@
                             <legend class="well-legend">Transport And Drivers</legend>
                             <input type="hidden" id="ref" value="{{$ref}}">
                             <div class="form-group ">
-                                <label class="control-label" for=  "TruckName" style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Trailor/truck Reg</h4></label>
+                                <label class="control-label" for=  "TruckName" style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Truck</h4></label>
                                 <select id="TruckName" class="form-control input-sm col-s-2" required>
                                     @foreach($truckstodrive as $val)
                                         <option value="{{$val->TruckId}}">{{$val->RegNo}}</option>
@@ -56,6 +56,7 @@
                                     @endforeach
                                 </select>
                             </div>
+
                             <div class="form-group ">
                                 <label class="control-label" for="DriverOne"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Driver One</h4></label>
                                 <select id="DriverOne" class="form-control input-sm col-s-2" required>

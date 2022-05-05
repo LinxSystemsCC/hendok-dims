@@ -15,6 +15,29 @@ class InvoicingController extends Controller
         return view('dims/listtoinvoice')
             ->with('readytoinvoice',$toinvoice);
     }
+    public function assignweighbridgeticket(){
+        $awaitingtobeassigned = DB::connection('sqlsrv')
+            ->select("Exec spAssignTikets" );
+        return view('dims/ticketspage')
+            ->with('awaitingtobeassgined',$awaitingtobeassigned)
+            ->with('assigned',$awaitingtobeassigned);
+    }
+    public function weightticketslist($ref){
+        $tickets = DB::connection('weights')
+            ->select("SELECT top 0 TICKET_NUMBER,TICKET_DATE,TICKET_TIME,'' wigh
+                                    FROM  [WB_Ticket_Trans]
+                             where SECOND_WEIGH_OPERATOR = '' order by TICKET_NUMBER" );
+        return view('dims/savetickets')->with('ref',$ref)
+            ->with('listtickets',$tickets);
+    }
+    public function saveweightticket(Request $request)
+    {
+        $referenceno = $request->get('referenceno');
+        $nickname = $request->get('nickname');
+        DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference', $referenceno)
+            ->update(['strTicket' => $nickname]);
+    }
     public function invoicepickings($reference){
 
         $userid = Auth::user()->UserID;

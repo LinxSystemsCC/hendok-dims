@@ -327,6 +327,7 @@ class TabletLoadingApp extends controller
             ->statement('exec spPickingPlannerCreditLimitEmail ?',array($referenceno));
 
     }
+
     public function updatepickingheader(Request $request){
         $routeId = $request->get('routeId');
         $deliveryDate = $request->get('deliveryDate');
@@ -659,7 +660,7 @@ class TabletLoadingApp extends controller
     }
     public function ticketsdept($ref){
         $tickets = DB::connection('weights')
-            ->select("SELECT TICKET_NUMBER,TICKET_DATE,TICKET_TIME,'' wigh
+            ->select("SELECT top 0 TICKET_NUMBER,TICKET_DATE,TICKET_TIME,'' wigh
                                     FROM  [WB_Ticket_Trans]
                              where SECOND_WEIGH_OPERATOR = '' order by TICKET_NUMBER" );
 
@@ -738,7 +739,6 @@ class TabletLoadingApp extends controller
         );
 
     }
-
     private static function getTabs($tabcount)
     {
         $tabs = '';
