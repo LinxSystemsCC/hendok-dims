@@ -401,6 +401,9 @@ Ref: <input id="ref" >
                         if (e.rowType == 'data' && e.data.isRoofing !="Roofing" && parseInt(e.data.qtyPlan) >  parseInt(e.data.QtyOnHand) ) {
                             e.rowElement.css('background', 'red');
                         }
+                        if (e.rowType == 'data' && e.data.instruct =="WAREHOUSE TRANSFER") {
+                            e.rowElement.css('background', 'green');
+                        }
 
                     },
                     onRowClick: function (e) {
