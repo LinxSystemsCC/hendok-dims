@@ -1313,8 +1313,8 @@ class SalesFormFunctions extends Controller
         $returndata= DB::connection('sqlsrv4')
             ->select("Exec spXMLSplitOrder ?,?,?,?",
                 array($backorderxml,$username,$userid,$orderid));
-//dd($returndata);
-        $outPut['result'] = $returndata[0]->Result;
+dd($returndata);
+        $outPut['Result'] = $returndata[0]->Result;
         return $outPut;
     }
     public function postOrderDetailsAsJsonArray(Request $request)
