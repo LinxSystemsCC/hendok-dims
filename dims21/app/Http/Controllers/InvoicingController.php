@@ -24,7 +24,7 @@ class InvoicingController extends Controller
     }
     public function weightticketslist($ref){
         $tickets = DB::connection('weights')
-            ->select("SELECT top 0 TICKET_NUMBER,TICKET_DATE,TICKET_TIME,'' wigh
+            ->select("SELECT  TICKET_NUMBER,TICKET_DATE,TICKET_TIME,'' wigh
                                     FROM  [WB_Ticket_Trans]
                              where SECOND_WEIGH_OPERATOR = '' order by TICKET_NUMBER" );
         return view('dims/savetickets')->with('ref',$ref)
