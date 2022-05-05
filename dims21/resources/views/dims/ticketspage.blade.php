@@ -48,7 +48,7 @@
             <div class="col-lg-12" >
                 <h3>Already Assigned</h3>
                 @foreach($assigned as $val)
-                    <a href='{!!url("/startassigningtickets")!!}/{{$val->strUnickReference}}'  style="background: green;padding:10px;color: black;font-weight: 900" >{{$val->strPickingNickname}}</a><br><br>
+                    <a href='{!!url("/weightticketslist")!!}/{{$val->strUnickReference}}'  style="background: green;padding:10px;color: black;font-weight: 900" >{{$val->strPickingNickname}}</a><br><br>
                 @endforeach
             </div>
 

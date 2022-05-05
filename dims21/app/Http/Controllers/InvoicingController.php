@@ -18,9 +18,12 @@ class InvoicingController extends Controller
     public function assignweighbridgeticket(){
         $awaitingtobeassigned = DB::connection('sqlsrv')
             ->select("Exec spAssignTikets" );
+
+        $alreadyassigned = DB::connection('sqlsrv')
+            ->select("Exec spAlreadyAssigned" );
         return view('dims/ticketspage')
             ->with('awaitingtobeassgined',$awaitingtobeassigned)
-            ->with('assigned',$awaitingtobeassigned);
+            ->with('assigned',$alreadyassigned);
     }
     public function weightticketslist($ref){
         $tickets = DB::connection('weights')
