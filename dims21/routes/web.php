@@ -540,7 +540,7 @@ Route::get('invoicepickings/{ref}', [InvoicingController::class,'invoicepickings
 Route::get('processInvoce', [InvoicingController::class,'processInvoce']);
 Route::get('viewAwaitingtoinvoice', [InvoicingController::class,'viewAwaitingtoinvoice']);
 Route::get('assignweighbridgeticket', [InvoicingController::class,'assignweighbridgeticket']);
-Route::get('weightticketslist', [InvoicingController::class,'weightticketslist']);
+Route::get('weightticketslist/{ref}', [InvoicingController::class,'weightticketslist']);
 Route::get('saveweightticket', [InvoicingController::class,'saveweightticket']);
 //SAGE Invoicing Ends Here
 
