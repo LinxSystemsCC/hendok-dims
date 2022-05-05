@@ -1310,7 +1310,7 @@ class SalesFormFunctions extends Controller
        // $returndata = DB::connection('sqlsrv3')
         //    ->select("EXEC spXMLSplitOrder '".$backorderxml."','".$username."',".$userid.",".$orderid);
 
-        $returndata= DB::connection('sqlsrv4')
+        $returndata= DB::connection('sqlsrv3')
             ->select("Exec spXMLSplitOrder ?,?,?,?",
                 array($backorderxml,$username,$userid,$orderid));
 dd($returndata);
