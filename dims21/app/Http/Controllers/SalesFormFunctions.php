@@ -1314,7 +1314,8 @@ class SalesFormFunctions extends Controller
             ->select("Exec spXMLSplitOrder ?,?,?,?",
                 array($backorderxml,$username,$userid,$orderid));
 //dd($returndata);
-        return response()->json($returndata);
+        $outPut['result'] = $returndata[0]->Result;
+        return $outPut;
     }
     public function postOrderDetailsAsJsonArray(Request $request)
     {
