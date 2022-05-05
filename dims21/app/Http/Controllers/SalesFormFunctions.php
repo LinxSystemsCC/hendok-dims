@@ -1307,8 +1307,13 @@ class SalesFormFunctions extends Controller
         $username  = Auth::user()->UserName;
 
         $backorderxml = $this->toxml($backorder, "xml", array("result"));
-        $returndata = DB::connection('sqlsrv3')
-            ->select("EXEC spXMLSplitOrder '".$backorderxml."','".$username."',".$userid.",".$orderid);
+       // $returndata = DB::connection('sqlsrv3')
+        //    ->select("EXEC spXMLSplitOrder '".$backorderxml."','".$username."',".$userid.",".$orderid);
+
+        $returndata= DB::connection('sqlsrv3')
+            ->select("Exec spXMLSplitOrder ?,?,?,?",
+                array($backorderxml,$username,$userid,$orderid));
+
         return response()->json($returndata);
     }
     public function postOrderDetailsAsJsonArray(Request $request)
