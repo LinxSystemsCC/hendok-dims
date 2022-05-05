@@ -402,7 +402,7 @@ Ref: <input id="ref" >
                             e.rowElement.css('background', 'red');
                         }
                         if (e.rowType == 'data' && e.data.instruct =="WAREHOUSE TRANSFER") {
-                            e.rowElement.css('background', 'green');
+                            e.rowElement.css('background', 'lightgreen');
                         }
 
                     },
