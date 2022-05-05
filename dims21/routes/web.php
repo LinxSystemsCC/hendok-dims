@@ -236,6 +236,7 @@ Route::get('printcustomerpricingjson/{custcode}/{datefrom}/{dateto}/{datefrom2}/
 Route::post('updateMessage',[DimsCommon::class,'updateMessage'] );
 Route::post('checkifhasmultiaddress',[DimsCommon::class,'checkifhasmultiaddress'] );
 
+
 //DIMS COMMON ENDS HERE HERE!!!!
 
 //SALES FORM FUNCTIONS STARTS HERE!!!
@@ -523,6 +524,7 @@ Route::post('topOrdersOfACustomer',[DimsReports::class,'topOrdersOfACustomer']);
 Route::post('contactDetailsOnOrder', [DimsReports::class,'contactDetailsOnOrder']);
 Route::get('pricelistview', [DimsReports::class,'pricelistview']);
 Route::get('getProductsMappedToThePriceList', [DimsReports::class,'getProductsMappedToThePriceList']);
+Route::get('exportorder/{orderid}',[DimsReports::class,'exportorder'] );
 
 //DIMS REPORTS CONTROLLER ENDS HERE !!!
 

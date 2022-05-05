@@ -7,6 +7,8 @@
  */
 
 namespace App\Http\Controllers;
+use App\Exports\OrdersExport;
+use App\Exports\SpecialsExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -564,6 +566,12 @@ $salesMonthToDate = DB::connection('sqlsrv3')
             ->select("EXEC spPriceListProducts ".$pricelistid);
         return response()->json($returnproductsandPrices);
 
+    }
+    public function exportorder($orderid)
+    {
+
+        // return Excel::download(new SpecialsExport(), 'specials.xlsx');
+        return (new OrdersExport($orderid))->download('order-'.$orderid.'.xlsx');
     }
 
 }
