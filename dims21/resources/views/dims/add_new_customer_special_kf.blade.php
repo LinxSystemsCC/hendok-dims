@@ -37,7 +37,7 @@
                         <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;">Submit</button>
                         
     <button type="button" id="deletelines" class="btn-danger btn-xs" style="float:right;">Delete All - Lines</button>
-    <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete All </button>
+    <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete Contract </button>
                     </div>
                   
 
