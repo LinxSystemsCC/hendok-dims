@@ -542,6 +542,7 @@ Route::get('viewAwaitingtoinvoice', [InvoicingController::class,'viewAwaitingtoi
 Route::get('assignweighbridgeticket', [InvoicingController::class,'assignweighbridgeticket']);
 Route::get('weightticketslist/{ref}', [InvoicingController::class,'weightticketslist']);
 Route::get('saveweightticket', [InvoicingController::class,'saveweightticket']);
+Route::get('whtransfers/{transfer}', [InvoicingController::class,'whtransfers']);
 //SAGE Invoicing Ends Here
 
 //PALLADIUMDIMSSTATUS CONTROLLER STARTS HERE !!!

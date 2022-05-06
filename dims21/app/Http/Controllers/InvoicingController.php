@@ -26,6 +26,7 @@ class InvoicingController extends Controller
             ->with('assigned',$alreadyassigned);
     }
     public function weightticketslist($ref){
+
         $tickets = DB::connection('weights')
             ->select("SELECT  TICKET_NUMBER,TICKET_DATE,TICKET_TIME,'' wigh
                                     FROM  [WB_Ticket_Trans]
@@ -141,4 +142,76 @@ class InvoicingController extends Controller
         echo "*****************************Printer Name Is: ".$PrinterPathInvoice;
 
     }
+    public function whtransfers($reference){
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $returnToInvoices = DB::connection('sqlsrv3')
+            ->select('exec spAutoIndexForTrasfers ?',
+                array($reference)
+            );
+
+        foreach ($returnToInvoices as $innverVal){
+$this->processTransfer($reference,$innverVal->AutoIndex,$innverVal->OrderNum);
+        }
+
+        /*      $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+              try {
+                  //Initialise
+                  $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
+                  $sdkHelper->SetLicense("DE12111039", "4626921");
+                  $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok_Dims;server=HKQL2019,1433');
+
+      /*
+                  $x = $sdkHelper->GetSalesOrder($val->SalesOrderNo);
+                  $lineno = $innverVal->LineNos - 1;
+                  $x->Detail[$lineno]->ToProcess =floatval($innverVal->Toinvoice);
+                  echo "Line Index".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice".$innverVal->Toinvoice;
+                      $reference = $x->Save();
+
+
+            echo "*****************************Processing Invoices******************";
+         //   $this->processInvoce();
+            echo "*****************************Done Processing Invoices******************";
+            echo "*****************************Starting to Invoice Now******************";
+        }catch (Error $err){
+            echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+            echo $err;
+        }*/
+    }
+    public function processTransfer($reference, $indexId,$ordernumebr){
+
+        //spGetPlannedItemsToTransfers
+        $returnToInvoices = DB::connection('sqlsrv3')
+            ->select('exec spGetPlannedItemsToTransfers ?',
+                array($indexId)
+            );
+
+        dd($returnToInvoices);
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://linxsystems.flowgear.net/Sage',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>'<WarehouseTransfers xmlns="http://flowgear.net/Schemas/PastelEvolution/WarehouseTransfers.xsd">
+
+  <Configuration/>
+</WarehouseTransfers>',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Key=d3yYYD57AfWYrsbHRvU6GQC7f-EhjQiw6ZIkKVWjJaeTJlLun4mpzMLnvUo_m4WqOUbsyiz0AOH29WyGkLJlbQ',
+                'Content-Type: application/xml'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
+    }
+
 }
