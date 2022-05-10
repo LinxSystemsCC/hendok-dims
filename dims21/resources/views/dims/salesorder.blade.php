@@ -6495,7 +6495,27 @@
                     bFilter: false,
                     "LengthChange": false,
                     "info":     false,
-                    "bDestroy": true
+                    "bDestroy": true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy',
+                        {
+                            extend: 'csv', className: 'btn-primary',
+                            title: 'Dims User Actions #'+$('#orderId').val()
+                        },
+                        {
+                            extend: 'excel', className: 'btn-primary',
+                            title: 'Dims User Actions #'+$('#orderId').val()
+                        },
+                        {
+                            extend: 'pdf', className: 'btn-primary',
+                            title:  'Dims User Actions #'+$('#orderId').val(),
+                            exportOptions: {
+                                columns: [0,1,5]
+                            }
+                        }
+
+                    ]
 
                 } );
                 //datatableOrderPattern.columns([6,8,9]).visible(false);
