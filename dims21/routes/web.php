@@ -545,6 +545,7 @@ Route::get('saveweightticket', [InvoicingController::class,'saveweightticket']);
 Route::get('whtransfers/{transfer}', [InvoicingController::class,'whtransfers']);
 Route::get('processTransfertest/{transfer}', [InvoicingController::class,'processTransfertest']);
 Route::get('trywarehouse', [InvoicingController::class,'trywarehouse']);
+Route::get('getRemainingBalance/{reference}/{trasferID}/{indexId}', [InvoicingController::class,'getRemainingBalance']);//$reference,$trasferID,$indexId
 //SAGE Invoicing Ends Here
 
 //PALLADIUMDIMSSTATUS CONTROLLER STARTS HERE !!!
