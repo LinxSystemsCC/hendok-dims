@@ -1044,7 +1044,7 @@ $('#deleteall').click(function(){
             $('#tblCreateNewSpecial > tbody  > tr').each(function() {
                 
                     productsLinesOnPicking.push({
-                        'productCode': $(this).closest('tr').find('.theProductCode_').val(),
+                        'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
                         'price': $(this).closest('tr').find('.prodPrice_').val(),
                         'dateFrom':  dateReturn($(this).closest('tr').find('.dateFrom').val()) ,
                         'dateTo': dateReturn( $(this).closest('tr').find('.dateTo').val()),
@@ -1605,6 +1605,14 @@ $('#deleteall').click(function(){
 
 
     }
+    function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
 
 
 </script>
