@@ -521,6 +521,9 @@ $salesMonthToDate = DB::connection('sqlsrv3')
     {
         return view('dims/printwithout');
     }
+    public function getuseractionsBydate(){
+        return view('dims/useractionsbydate');
+    }
     public function getAwaitingStock(){
         return view('dims/awaitingstockreport');
     }
@@ -531,6 +534,16 @@ $salesMonthToDate = DB::connection('sqlsrv3')
 
         $shorloadedJasper=  DB::connection('sqlsrv3')
             ->select("EXEC spGetAwaitingStockData 'AllProducts'");
+        return response()->json($shorloadedJasper);
+    }
+    public function jsonuseractionsbydate(Request $request){
+
+        $from  = (new \DateTime( $request->get('from')))->format('Y-m-d')  ;
+        $to  =(new \DateTime( $request->get('to')))->format('Y-m-d');
+        $shorloadedJasper=  DB::connection('sqlsrv3')
+            ->select('exec spUserActionsByDate ?,?',
+                array($from,$to)
+            );
         return response()->json($shorloadedJasper);
     }
     public function jsonawaitingstockorders(Request $request){

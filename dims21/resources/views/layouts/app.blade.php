@@ -697,12 +697,12 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Group Specials</a>
                                 </li>
                                 @endif
-                              
+
                                 <li>
                                     <a href='{!!url("/overallspecials")!!}' onclick="window.open(this.href, 'overallspecials',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Overall Specials</a>
                                 </li>
-                                
+
                                 @if($console !="0")
                                 <li>
                                     <a href='{!!url("/managementSearch")!!}' onclick="window.open(this.href, 'managementSearch',
@@ -839,6 +839,10 @@
                                 </li>
                                     @endif
                                 <li>
+                                    <a href='{!!url("/getuseractionsBydate")!!}'  onclick="window.open(this.href, 'getuseractionsBydate',
+'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">User Actions</a>
+                                </li>
+                                    <li>
                                     <a href='{!!url("/liveBulkPicking")!!}'  onclick="window.open(this.href, 'liveBulkPicking',
 'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Picking Screen</a>
                                 </li>
