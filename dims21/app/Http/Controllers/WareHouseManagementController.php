@@ -36,6 +36,19 @@ ORDER BY [GROUP 2],[GROUP 3] ,Description_1 ");
         ->with('orderTypes',$deliverTypes)
         ->with('routes',$getRoutes);
     }
+    public function reprintPrintedInvoicesParameters(Request $request){
+        $deldatefr = (new \DateTime($request->get('deldatestart')))->format('Y-m-d');
+        
+        $deldateto = (new \DateTime($request->get('deldateend')))->format('Y-m-d');
+        $routeid = $request->get("routeId");
+        $ordertypeid = $request->get("orderTypeId");
+        
+        $userid = Auth::user()->UserID;
+        DB::connection('sqlsrv3')
+                    ->statement('exec spInsertBatchDocumentsPrintingParams ?,?,?,?,?',
+                        array($deldatefr, $deldateto,$routeid,$ordertypeid,$userid));
+        
+    }
     public function jsonWarehouseGrid(){
         $getProducts= DB::connection('barcoding')->select("Select * from viewWareHouseStockDataGrid order by productName");
         return response()->json($getProducts);

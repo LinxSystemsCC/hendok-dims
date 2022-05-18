@@ -32,6 +32,9 @@
 
                                 </select>
                             </div>
+                            <div class="col-lg-1">
+                <button id="reprinting" class="btn-success btn-md center-block" style="margin-top: 20px;">Reprint</button>
+            </div>
     </div>
     
   
@@ -85,26 +88,25 @@
             changeYear: true, //this option for allowing user to select from year range
             dateFormat: 'dd-mm-yy'
         });
-        $("#custheadid").change(function(){   // 1st way
-
-        $('#exportexcel').show();
-            var end = this.value;
-            $('#contractIdfile').val(end);
+        $('#reprinting').click(function(){
             $.ajax({
-                url: '{!!url("/getcontractDates")!!}',
-                type: "POST",
-                data: {
-                    contractId: end
-                },
-                success: function (data) {
+                        url: '{!!url("/reprintPrintedInvoicesParameters")!!}',
+                        type: "POST",
+                        data: {
+                            deldatestart:$('#dateFrom').val(),
+                            deldateend:$('#dateTo').val(),
+                            routeId:$('#rouTabletLoadingtesonPlanning').val(),
+                            orderTypeId:$('#orderTypesSelectBox').val()
+                        },
+                        success: function (data) {
 
-                    $('#dateFrom').val($.datepicker.formatDate('dd-mm-yy', new Date( data[0].DateFrom)) );
-                    $('#dateTo').val( $.datepicker.formatDate('dd-mm-yy', new Date( data[0].DateTo))  );
+                            location.reload(true);
 
-                }
-            });
-
+                        }
+                    });
         });
+      
+    });
     function showDialogWithoutClose(tag,width,height)
     {
         $( tag ).dialog({height: height, modal: true,
@@ -142,8 +144,5 @@
 
     }
 
-
-    </script>
-<script>
 
 </script>
