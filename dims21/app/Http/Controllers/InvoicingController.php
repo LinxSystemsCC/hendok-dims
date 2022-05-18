@@ -197,7 +197,7 @@ class InvoicingController extends Controller
     public function processTransfer($reference, $indexId,$ordernumebr){
 
         //spGetPlannedItemsToTransfers
-
+        $userid = Auth::user()->UserID;
         $trasferID =-1;
         $returnToInvoices = DB::connection('sqlsrv3')
             ->select('exec spGetPlannedItemsToTranferCheckNegativeInveontory ?,?',
@@ -251,7 +251,7 @@ class InvoicingController extends Controller
                     $WarehouseIBTLine->QuantityIssued = $val->Quantity;
                     $warehouseIBT->Detail->Add($WarehouseIBTLine);
                 }
-                $reference  = $warehouseIBT->IssueStock();
+                $referenceibt  = $warehouseIBT->IssueStock();
                 $trasferID = $warehouseIBT->ID;
 
             }catch (Error $err){
@@ -280,7 +280,21 @@ class InvoicingController extends Controller
                 array($reference,$trasferID,$indexId)
             ); */
 
-        echo "**************************************CHECKING TO SEE IF TRANSFER HAS REMAINING ITEMS********************************************* AutoIndex#".$indexId." TRANSFERID#".$trasferID."<br>";
+        echo "**************************************CHECKING TO SEE IF TRANSFER HAS REMAINING ITEMS********************************************* AutoIndex#".$indexId."<br> TRANSFERID#".$trasferID."<br>";
+        echo "UPDATE PICKING REFERENCE WITH A NEW IBT DEL NOTE <br>";
+        //dd($reference);
+        $checks = DB::connection('sqlsrv3')
+            ->select('exec spUpdatePickingHeaderIfIBT ?,?',
+                array($trasferID,$reference)
+            );
+
+        echo "**********************************PRINT TRIPSHEET**************************************************************************** <br>";
+        $transferremainings = DB::connection('sqlsrv3')
+            ->select('exec spInsertHendokTripsheet ?,?',
+                array($reference,$userid)
+            );
+        echo "**********************************DONE PRINTING TRIPSHEET******************************************************************** <br>";
+        //[spInsertHendokTripsheet]
         $this->getRemainingBalance($reference,$trasferID,$indexId);
 
     }
