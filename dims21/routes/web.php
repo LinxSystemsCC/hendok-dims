@@ -24,6 +24,7 @@ use App\Http\Controllers\TestControllerReg;
 use App\Http\Controllers\WareHouseManagementController;
 use App\Http\Controllers\SalesManBriefcase;
 use App\Http\Controllers\KerstonSpecialController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -73,6 +74,11 @@ Route::get('instocksheet',[RecentRegistered::class,'instocksheet']);
 //Route::post('ItemSearchCreate', 'ItemSearchController@create');
 Route::resource('shop', 'HomeController', ['only' => ['show']]);
 Route::resource('cart', 'CartController');
+Route::resource('cart', 'CartController');
+
+Route::get('dimsgloballandingpage',[HomeController::class, 'dimsgloballandingpage']);
+
+
 
 Route::get('custCode',[SalesFormFunctions::class, 'CustomerCode']);
 Route::get('copyorder/{orderid}',[SalesFormFunctions::class, 'copyorder']);
@@ -481,9 +487,11 @@ Route::post('emailSalesOrder', [EmailController::class,'emailSalesOrder']);
 
 //DIMS REPORTS CONTROLLER STARTS HERE !!!
 Route::get('reports', [DimsReports::class,'reports']);
+Route::get('getuseractionsBydate', [DimsReports::class,'getuseractionsBydate']);
 Route::get('getAwaitingStock', [DimsReports::class,'getAwaitingStock']);
 Route::get('getAwaitingStockbycustomer', [DimsReports::class,'getAwaitingStockbycustomer']);
 Route::get('jsonawaitingstockorders', [DimsReports::class,'jsonawaitingstockorders']);
+Route::get('jsonuseractionsbydate', [DimsReports::class,'jsonuseractionsbydate']);
 Route::get('jsonawaitingstockorderlistbycustomer', [DimsReports::class,'jsonawaitingstockorderlistbycustomer']);
 Route::get('jsonawaitingstock', [DimsReports::class,'jsonawaitingstock']);
 Route::get('LoadLogs/{routingId}',[DimsReports::class,'LoadLogs']);
