@@ -282,7 +282,7 @@ Ref: <input id="ref" >
                         }
                         ,
                         {
-                            width:360,
+                            width:300,
                             dataField: "PastelDescription",
                             caption: "Item Name",
                             headerFilter: {
