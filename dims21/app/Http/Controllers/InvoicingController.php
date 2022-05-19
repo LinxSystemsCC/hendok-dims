@@ -281,11 +281,13 @@ class InvoicingController extends Controller
             ); */
 
         echo "**************************************CHECKING TO SEE IF TRANSFER HAS REMAINING ITEMS********************************************* AutoIndex#".$indexId."<br> TRANSFERID#".$trasferID."<br>";
+
+
         echo "UPDATE PICKING REFERENCE WITH A NEW IBT DEL NOTE <br>";
         //dd($reference);
         $checks = DB::connection('sqlsrv3')
-            ->select('exec spUpdatePickingHeaderIfIBT ?,?',
-                array($trasferID,$reference)
+            ->select('exec spUpdatePickingHeaderIfIBT ?,?,?',
+                array($trasferID,$reference,$userid)
             );
 
         echo "**********************************PRINT TRIPSHEET**************************************************************************** <br>";
