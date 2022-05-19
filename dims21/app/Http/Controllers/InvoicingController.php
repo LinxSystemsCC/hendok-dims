@@ -303,6 +303,8 @@ class InvoicingController extends Controller
 
 
     public function getRemainingBalance($reference,$trasferID,$indexId){
+
+        echo "/////////////////////////////Entering The Remaining Items Method/////////////////////////////////////";
         $transferremainings = DB::connection('sqlsrv3')
             ->select('exec spGetBalanceItemsRemaining ?,?,?',
                 array($reference,$trasferID,$indexId)
