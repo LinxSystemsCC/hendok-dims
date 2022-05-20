@@ -228,6 +228,7 @@ class InvoicingController extends Controller
             try {
                 //Initialise
 
+                //dd($indexId." - ".$reference);
                 $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
                 $sdkHelper->SetLicense("DE12111039", "4626921");
                 $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok Distribution;server=HK-SQL2019,1433');
@@ -353,11 +354,11 @@ class InvoicingController extends Controller
                 }
                 $reference = $salesOrder->Save();
 
-                $transferremainings = DB::connection('sqlsrv3')
-                    ->select('exec spCancelOldTranfer ?',
-                        array($indexId)
-                    );
-                echo "________________________________________________Cancelled Old Transfer________________________________________________ ".$indexId."<br>";
+                 $transferremainings = DB::connection('sqlsrv3')
+                      ->select('exec spCancelOldTranfer ?',
+                          array($indexId)
+                      );
+                  echo "________________________________________________Cancelled Old Transfer________________________________________________ ".$indexId."<br>";
 
             }catch (Error $err){
                 echo "<h3 style='color: darkred'>__________Errors_________</h3>";
