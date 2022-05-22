@@ -1591,8 +1591,14 @@
         <script>
 
             $( document ).on( 'focus', ':input', function(){
+
                 $( this ).attr( 'autocomplete', 'off' );
             });
+            $( document ).on( 'focus', ':input', function(){
+
+                $( this ).attr( 'autocomplete', 'this-is-it' );
+            });
+
             $(document).keydown(function(e) {
                 if (e.keyCode == 27) return false;
             });
@@ -1895,6 +1901,7 @@
         });*/
 
                 $('input,textarea').attr('autocomplete', 'off');
+
                 $('#orederNumber').keyup(updateCount);
                 $('#orederNumber').keydown(updateCount);
                 $('#creditLimitApproved').val('');
@@ -2843,11 +2850,13 @@
                                         $('#hiddenDeliveryAddressId').val('');
                                         $('#tempDelivAddressClosethis').hide();
                                         orderPattern(0);
+
                                     }
                                     else
                                     {
                                         $('#hiddenDeliveryAddressId').val(value.DeliveryAddressID);
                                         orderPattern(value.DeliveryAddressID);
+                                        $('#orderPatternIdTable_filter input').val('');
                                     }
 
                                     customerAndGroupSpecials();
@@ -3270,6 +3279,7 @@
                                 if (data.counter.CustomerId == "1") {
                                     //$('.container').pleaseWait();
                                     orderPattern('0');
+                                    $('#orderPatternIdTable_filter input').val('');
                                     var Address = '';
                                     //countomerSingleAddress ---before
                                     Address += $.trim(data.singleAddress.DAddress1) + ' , ' + $.trim(data.singleAddress.DAddress2) + ' , ' + $.trim(data.singleAddress.DAddress3) + ' , ' + $.trim(data.singleAddress.DAddress4) + ' , ' + $.trim(data.singleAddress.DAddress5);
@@ -3339,6 +3349,7 @@
                                                 }else
                                                 {
                                                     orderPattern($("#deliveryAddressIdOnPopUp").val());
+                                                    $('#orderPatternIdTable_filter input').val('');
                                                     $.ajax({
                                                         url: '{!! url("/changerouteonorder") !!}',
                                                         type: "POST",
@@ -5534,8 +5545,9 @@
                         var $input = $('<button type="button" id="updateaddresses">UPDATE</button> <button type="button" style="float:right;" id="ignoresave">IGNORE</button>');
                         $input.appendTo($("#dynamicaddress"));
                         $('#updateaddresses').click(function () {
+                            var routeidselect = $('#generalRouteForNewDeliveryAddress').val();
 
-                            if($('#generalRouteForNewDeliveryAddress').val() === 'null')
+                            if($('#generalRouteForNewDeliveryAddress').val() === 'null' || routeidselect.length < 1 )
                             {
                                 alert('The RouteID/Route Name is not correct,Please Choose the Route Or Speak to the manager.');
 
@@ -6406,9 +6418,24 @@
                     "info":     false,
                     "ordering": false,
                     "bDestroy": true,
+                    initComplete: function() {
+                        $(this.api().table().container()).find('input').parent().wrap('<form>').parent().attr('autocomplete', 'this-is');
+                    },
+                    autoFill: false,
 
                 } );
                 //  datatableOrderPattern.columns([6]).visible(false);
+                $('#orderPatternIdTable_filter input').attr('autocomplete', 'this-is');
+               // var formid=$(this).parents('td').prev().text().match(/[a-zA-Z]{,4}/);
+                $('#orderPatternIdTable_filter input').attr("id","thiswwwwwwwwwwwwwwwwww");
+                $('#orderPatternIdTable_filter input').prop('readonly', true);
+
+                $( "#thiswwwwwwwwwwwwwwwwww" ).click(function(e) {
+                    e.preventDefault();
+                    $('#thiswwwwwwwwwwwwwwwwww').removeAttr('readonly');
+                    console.debug("this is it*********************______");
+                });
+
 
             }
 
