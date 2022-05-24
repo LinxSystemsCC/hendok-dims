@@ -50,6 +50,15 @@
     </style>
 </head>
 <body style="font-family: Sans-serif">
+                        <?php
+                            if ((Auth::guest()))
+                            {
+
+                            }else{
+                                    $v  =  new \App\Http\Controllers\SalesForm();
+                                    $invoice = $v->getThings(Auth::user()->GroupId,'Can Final Invoice Load');
+                            }
+                        ?>
 <div class="container">
     <div style="display: flex;">
         <div style="width: 10%" id="qrs">
@@ -57,6 +66,11 @@
             <i style="font-size: 7px;">{{$ref}}</i>
         </div>
         <div style="width: 90%">
+            @if($invoice !=0)
+            @foreach($pickingheader as $val)
+                <a href='{!!url("/invoicepickings")!!}/{{$val->strUnickReference}}'  style="background: red;padding:10px;color: black;font-weight: 900" >{{$val->strPickingNickname}}</a><br><br>
+            @endforeach
+            @endif
 
     <table style="font-size: 11px;">
         <tbody>
@@ -64,32 +78,32 @@
             <td  class="col-xs-2">Date Loaded</td>
             <td  class="col-xs-2" style="width: 117px;"> </td>
             <td  class="col-xs-2">Dunnages #</td>
-            <td  class="col-xs-2" style="width: 117px;"></td>
+            <td  class="col-xs-2" style="width: 117px;"> @foreach($pickingheader as $value) {{$value->intDunnages}} @endforeach</td>
             <td  class="col-xs-2">Load Completed</td>
-            <td  class="col-xs-2" style="width: 117px;"></td>
+            <td  class="col-xs-2" style="width: 117px;"> @foreach($pickingheader as $value) {{$value->strLoadComplete}} @endforeach</td>
         </tr>
         <tr>
             <td  class="col-xs-2">Time Loaded</td>
             <td  class="col-xs-2"> </td>
             <td  class="col-xs-2">Straps #</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->intStraps}} @endforeach</td>
             <td  class="col-xs-2">Load Secured</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->strLoadSecured}} @endforeach</td>
         </tr>
         <tr>
             <td  class="col-xs-2">Team Leader</td>
 
             <td  class="col-xs-2"> @foreach($pickingheader as $value) {{$value->UserName}} @endforeach </td>
             <td  class="col-xs-2">Pallets #</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->intPallets}} @endforeach</td>
             <td  class="col-xs-2">Team Leader Signed</td>
             <td  class="col-xs-2"></td>
         </tr>
         <tr>
             <td  class="col-xs-2">Checker Name</td>
-            <td  class="col-xs-2"> </td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->strCheckerName}} @endforeach </td>
             <td  class="col-xs-2">Plastic Corners #</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->intPlasticCorners}} @endforeach</td>
             <td  class="col-xs-2"></td>
             <td  class="col-xs-2"></td>
         </tr>
@@ -97,9 +111,9 @@
             <td  class="col-xs-2">Ticket #</td>
             <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->strTicket}} @endforeach </td>
             <td  class="col-xs-2">Tarps #</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->intTarps}} @endforeach</td>
             <td  class="col-xs-2">Stands #</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->intStans}} @endforeach</td>
         </tr>
         <tr>
             <td  class="col-xs-2">Driver Name</td>
@@ -115,7 +129,7 @@
             <td  class="col-xs-2">Trailer Reg #</td>
             <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->RegNo}} @endforeach</td>
             <td  class="col-xs-2">Trailer No.</td>
-            <td  class="col-xs-2"></td>
+            <td  class="col-xs-2">@foreach($pickingheader as $value) {{$value->strTrailorNo}} @endforeach</td>
         </tr>
 
         </tbody>
@@ -147,9 +161,12 @@
         <tbody >
         <?php $storenames = "";$orderNumber=""; $subtotal=0;$Grandtotal=0;$area = "";$orderdate=""; $istrue = true;$count = 0; ?>
         @foreach($listproducts as $val )
-            <?php   $externalCount = 0;   ?>
+            <?php   $externalCount = 0;        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+            $t=time();
+            $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+            $ID = $t.$randomString;  ?>
             @if($count == 0 )
-                <tr style="background: darkgray;color: white; font-weight: 900;">
+                <tr style="background: darkgray;color: white; font-weight: 900;" id="{{$ID}}">
                     <td>STOP :{{$val->intSequence}}</td>
                     <td> </td>
                     <td></td>
@@ -226,7 +243,9 @@
                     @endif
 
                     @if($orderNumber != $val->OrderNum)
-                        <td>{{$val->OrderNum}}</td>
+                        <td>{{$val->OrderNum}} @if($val->isReadyForInvoicing == 1)
+                              <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}">
+                                @endif</td>
                     @else
                         <td style="">
 
@@ -417,6 +436,37 @@
                     }
                 });
             });
+        });
+
+        $('#orderHeaderPrint').on('click', 'button', function (e) {
+            var $this = $(this);
+            var rowId = $this.closest('tr').attr('id');
+            var SONumber = $this.closest('tr').find('.OrderNumdim').val();
+            var ownerid = $this.closest('tr').find('.ownerid').val();
+            var invoiceid = $this.closest('tr').find('.invoicethis').val();
+            var ref = $this.closest('tr').find('.refid').val();
+
+            console.debug("rowId-*******************"+rowId);
+            console.debug("SONumber-*******************"+SONumber);
+            console.debug("invoiceid-*******************"+invoiceid);
+            console.debug("ownerid-*******************"+ownerid);
+
+            $.ajax({
+                url: '{!!url("/individualInvoicing")!!}',
+                type: "get",
+                data: {
+                    ownerid: ownerid,
+                    SONumber:SONumber,
+                    invoiceid:invoiceid,
+                    ref:ref
+                },
+                success: function (data) {
+
+
+                }
+            });
+
+
         });
 
     });

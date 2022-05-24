@@ -42,6 +42,59 @@ class InvoicingController extends Controller
             ->where('strUnickReference', $referenceno)
             ->update(['strTicket' => $nickname]);
     }
+    public function individualInvoicing(Request $request){
+
+        $ownersId = $request->get('ownerid');
+        $SoNumber = $request->get('SONumber');
+        $invoiceid = $request->get('invoiceid');
+        $ref = $request->get('ref');
+
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+dd();
+        $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+        try {
+            //Initialise
+            $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
+            $sdkHelper->SetLicense("DE12111039", "4626921");
+                switch($ownersId){
+                    case 1:
+                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok_Dims;server=HK-SQL2019,1433');
+                        break;
+                    case 2:
+                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Henroof_Dims;server=HK-SQL2019,1433');
+                        break;
+                    case 3:
+                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhozi_Dims;server=HK-SQL2019,1433');
+                        break;
+                }
+
+               $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+                ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+                    array($ref,$SoNumber,$ownersId)
+                );
+            $x = $sdkHelper->GetSalesOrder($SoNumber);
+            foreach ($returnGetsalesorderNoLines as $innverVal){
+                $lineno = $innverVal->LineNos - 1;
+                $x->Detail[$lineno]->ToProcess =floatval($innverVal->Toinvoice);
+               // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";
+            }
+            $reference = $x->Save();
+            //Now invoice
+            $x->Process();
+          //  echo "************* INV CREATED***".$reference."<br>";
+            $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+                ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
+                    array($userid,$invoiceid,$SoNumber,$ownersId,$userName)
+                );
+            return response()->json($returnGetsalesorderNoLines);
+
+        }catch (Error $err){
+            echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+            return $err;
+        }
+
+    }
     public function invoicepickings($reference){
 
         $userid = Auth::user()->UserID;
