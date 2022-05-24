@@ -66,11 +66,7 @@
             <i style="font-size: 7px;">{{$ref}}</i>
         </div>
         <div style="width: 90%">
-            @if($invoice !=0)
-            @foreach($pickingheader as $val)
-                <a href='{!!url("/invoicepickings")!!}/{{$val->strUnickReference}}'  style="background: red;padding:10px;color: black;font-weight: 900" >{{$val->strPickingNickname}}</a><br><br>
-            @endforeach
-            @endif
+            
 
     <table style="font-size: 11px;">
         <tbody>
