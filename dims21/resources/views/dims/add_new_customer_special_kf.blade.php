@@ -702,10 +702,10 @@ $('#deleteall').click(function(){
                 type: "POST",
                 data: {
                     customercode:$('#inputCustAcc').val(),
-                    customerId: $('#customerId').val()
+                    customerId: $('#customerId').val(),
+                    contractid: $('#custheadid').val()
                 },
                 success: function (data) {
-                    $('#tblCreateNewSpecial tbody').empty();
                     var trHTML = '';
                     $.each(data, function (key, value) {
                         var contractFrom = $('#dateFrom').val();

@@ -181,10 +181,11 @@ public function createnewcustomercontract(Request $request){
     public function getCurrentHistoryCustomerSpecialsKF(Request $request){
         $customerCode = $request->get('customercode');
         $customerid =$request->get('customerId');
+        $contractid = $request->get('contractid');
 
         $GetCustomerSpecail = DB::connection('sqlsrv3')
-        ->select('exec spCustomerSpecialHistoryKF ?,?',
-        array($customerCode,$customerid));
+        ->select('exec spCustomerSpecialHistoryKF ?,?,?',
+        array($customerCode,$customerid,$contractid));
 
         return response()->json($GetCustomerSpecail);
 
