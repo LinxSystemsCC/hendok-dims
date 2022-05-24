@@ -51,7 +51,7 @@ class InvoicingController extends Controller
 
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
-dd();
+//dd();
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
             //Initialise
@@ -87,6 +87,18 @@ dd();
                 ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
                     array($userid,$invoiceid,$SoNumber,$ownersId,$userName)
                 );
+            if($returnGetsalesorderNoLines[0]->result){
+                //$itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2
+                $itemstotransfers = DB::connection('sqlsrv3')
+                    ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+                        array($ref,$SoNumber,$ownersId)
+                    );
+                foreach ($itemstotransfers as $value){
+                    $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode);
+                }
+
+            }
+
             return response()->json($returnGetsalesorderNoLines);
 
         }catch (Error $err){
@@ -247,6 +259,31 @@ dd();
 
 
     }
+    public function warehousetransfer($itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2){
+        $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+        try {
+            //Initialise
+
+            //dd($indexId." - ".$reference);
+            $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
+            $sdkHelper->SetLicense("DE12111039", "4626921");
+            $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok_Dims;server=HK-SQL2019,1433');
+            $warehouseTransfer = new \COM("Pastel.Evolution.WarehouseTransfer");
+
+            $warehouseTransfer->Account =  $sdkHelper->InventoryItem($itemcode);
+            $warehouseTransfer->FromWarehouse =  $sdkHelper->Warehouse($FromWarehouse);//From Warehouse
+            $warehouseTransfer->ToWarehouse =  $sdkHelper->Warehouse($ToWarehouse);//TO Warehouse
+            $warehouseTransfer->Quantity = floatval($Quantity);
+            $warehouseTransfer->Reference = $ref1;
+            $warehouseTransfer->Reference2 = $ref2;
+            $warehouseTransfer->Post();
+
+        }catch (Error $err){
+            echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+            echo $err;
+        }
+    }
+    //IBT
     public function processTransfer($reference, $indexId,$ordernumebr){
 
         //spGetPlannedItemsToTransfers

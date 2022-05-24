@@ -40,7 +40,7 @@
         <div class="form-group row add">
             <div class="col-lg-12" >
                 @foreach($readytoinvoice as $val)
-                    <a href='{!!url("/invoicepickings")!!}/{{$val->strUnickReference}}'  style="background: red;padding:10px;color: black;font-weight: 900" >{{$val->strPickingNickname}}</a><br><br>
+                    <a href='{!!url("/pickingplanlist")!!}/{{$val->strUnickReference}}'  style="background: red;padding:10px;color: black;font-weight: 900" >{{$val->strPickingNickname}}</a><br><br>
                 @endforeach
             </div>
 
