@@ -66,7 +66,7 @@
             <i style="font-size: 7px;">{{$ref}}</i>
         </div>
         <div style="width: 90%">
-            
+
 
     <table style="font-size: 11px;">
         <tbody>
@@ -203,7 +203,10 @@
 
 
                     <td>{{ $val->OrderDate}}</td>
-                    <td>{{ $val->OrderNum}}</td>
+                    <td>{{ $val->OrderNum}} @if($val->isReadyForInvoicing == 1)
+                            <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}">
+                                                <input type="hidden" class="rowids" value="{{$ID}}">
+                        @endif</td>
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
@@ -436,11 +439,12 @@
 
         $('#orderHeaderPrint').on('click', 'button', function (e) {
             var $this = $(this);
-            var rowId = $this.closest('tr').attr('id');
+
             var SONumber = $this.closest('tr').find('.OrderNumdim').val();
             var ownerid = $this.closest('tr').find('.ownerid').val();
             var invoiceid = $this.closest('tr').find('.invoicethis').val();
             var ref = $this.closest('tr').find('.refid').val();
+            var rowId = $this.closest('tr').find('.rowids').val();
 
             console.debug("rowId-*******************"+rowId);
             console.debug("SONumber-*******************"+SONumber);
