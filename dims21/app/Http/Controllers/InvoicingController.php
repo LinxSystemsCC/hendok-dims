@@ -284,8 +284,8 @@ class InvoicingController extends Controller
             $warehouseTransfer = new \COM("Pastel.Evolution.WarehouseTransfer");
 
             $warehouseTransfer->Account =  $sdkHelper->GetStockItem($itemcode);
-            $warehouseTransfer->FromWarehouse =  $sdkHelper->Warehouse($FromWarehouse);//From Warehouse
-            $warehouseTransfer->ToWarehouse =  $sdkHelper->Warehouse($ToWarehouse);//TO Warehouse
+            $warehouseTransfer->FromWarehouse =  $sdkHelper->GetWarehouseByCode($FromWarehouse);//From Warehouse
+            $warehouseTransfer->ToWarehouse =  $sdkHelper->GetWarehouseByCode($ToWarehouse);//TO Warehouse
             $warehouseTransfer->Quantity = floatval($Quantity);
             $warehouseTransfer->Reference = $ref1;
             $warehouseTransfer->Reference2 = $ref2;
