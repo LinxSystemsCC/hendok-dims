@@ -283,7 +283,7 @@ class InvoicingController extends Controller
             $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok_Dims;server=HK-SQL2019,1433');
             $warehouseTransfer = new \COM("Pastel.Evolution.WarehouseTransfer");
 
-            $warehouseTransfer->Account =  $sdkHelper->InventoryItem($itemcode);
+            $warehouseTransfer->Account =  $sdkHelper->GetStockItem($itemcode);
             $warehouseTransfer->FromWarehouse =  $sdkHelper->Warehouse($FromWarehouse);//From Warehouse
             $warehouseTransfer->ToWarehouse =  $sdkHelper->Warehouse($ToWarehouse);//TO Warehouse
             $warehouseTransfer->Quantity = floatval($Quantity);
