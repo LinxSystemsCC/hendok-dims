@@ -113,7 +113,9 @@ class InvoicingController extends Controller
             ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
                 array($ref,$SoNumber,$ownersId)
             );
+        echo "Outside the loop";
         foreach ($itemstotransfers as $value){
+            echo "Inside the loop";
             $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode);
         }
     }
