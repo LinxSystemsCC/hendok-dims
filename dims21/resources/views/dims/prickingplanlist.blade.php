@@ -66,7 +66,13 @@
             <i style="font-size: 7px;">{{$ref}}</i>
         </div>
         <div style="width: 90%">
+            @foreach($pickingheader as $value)
+            //
+            @if($value->isReadyForInvoicing == 1)
 <button  id="driversheet">Print Driver Sheet</button>
+                @endif
+
+            @endforeach
 
     <table style="font-size: 11px;">
         <tbody>
