@@ -95,7 +95,7 @@ class InvoicingController extends Controller
                         array($ref,$SoNumber,$ownersId)
                     );
                 foreach ($itemstotransfers as $value){
-                    $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode,$value->intorderdetailId);
+                    $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
                 }
 
             }
