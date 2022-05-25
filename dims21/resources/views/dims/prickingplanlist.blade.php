@@ -210,7 +210,7 @@
                     <td>{{ $val->OrderDate}}</td>
                     <td>{{ $val->OrderNum}} @if($val->isReadyForInvoicing == 1)
                             <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}">
-                                                <input type="hidden" class="rowids" value="{{$ID}}">
+                                                <input type="hidden" class="rowids" value="{{$ID}}">  <input type="hidden" class="strTicket" value="{{ $val->strTicket}}">
                         @endif</td>
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
@@ -450,28 +450,31 @@
             var invoiceid = $this.closest('tr').find('.invoicethis').val();
             var ref = $this.closest('tr').find('.refid').val();
             var rowId = $this.closest('tr').find('.rowids').val();
+            var strTicket = $this.closest('tr').find('.strTicket').val();
 
             console.debug("rowId-*******************"+rowId);
             console.debug("SONumber-*******************"+SONumber);
             console.debug("invoiceid-*******************"+invoiceid);
             console.debug("ownerid-*******************"+ownerid);
-
-            $.ajax({
-                url: '{!!url("/individualInvoicing")!!}',
-                type: "get",
-                data: {
-                    ownerid: ownerid,
-                    SONumber:SONumber,
-                    invoiceid:invoiceid,
-                    ref:ref
-                },
-                success: function (data) {
+            if(strTicket=="notick"){
+                alert("Weighbridge Ticket Is Not Set");
+            }else{
+                $.ajax({
+                    url: '{!!url("/individualInvoicing")!!}',
+                    type: "get",
+                    data: {
+                        ownerid: ownerid,
+                        SONumber:SONumber,
+                        invoiceid:invoiceid,
+                        ref:ref
+                    },
+                    success: function (data) {
 
                         $('#'+rowId).css('background', '#89CFF0');
                         $('#rtrr'+rowId).css('background', '#89CFF0');
-                }
-            });
-
+                    }
+                });
+            }
 
         });
 
