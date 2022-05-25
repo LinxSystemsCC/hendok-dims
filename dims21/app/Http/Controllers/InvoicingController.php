@@ -77,6 +77,7 @@ class InvoicingController extends Controller
             foreach ($returnGetsalesorderNoLines as $innverVal){
                 $lineno = $innverVal->LineNos - 1;
                 $x->Detail[$lineno]->ToProcess =floatval($innverVal->Toinvoice);
+                //isLineInvoiced
                // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";
             }
             $reference = $x->Save();
@@ -90,11 +91,11 @@ class InvoicingController extends Controller
             if($returnGetsalesorderNoLines[0]->result){
                 //$itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2
                 $itemstotransfers = DB::connection('sqlsrv3')
-                    ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+                    ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
                         array($ref,$SoNumber,$ownersId)
                     );
                 foreach ($itemstotransfers as $value){
-                    $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode);
+                    $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode,$value->intorderdetailId);
                 }
 
             }
@@ -110,13 +111,13 @@ class InvoicingController extends Controller
     //NOT IBT
     public function testWarehouseT($ref,$SoNumber,$ownersId){
         $itemstotransfers = DB::connection('sqlsrv3')
-            ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+            ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
                 array($ref,$SoNumber,$ownersId)
             );
         echo "Outside the loop";
         foreach ($itemstotransfers as $value){
             echo "Inside the loop";
-            $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode);
+            $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode,$value->intorderdetailId);
         }
     }
     public function invoicepickings($reference){
@@ -271,11 +272,11 @@ class InvoicingController extends Controller
 
 
     }
-    public function warehousetransfer($itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2){
+    public function warehousetransfer($itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2,$intorderdetailId){
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
             //Initialise
-            echo "Entering ";
+          //  echo "Entering ";
 
             //dd($indexId." - ".$reference);
             $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
@@ -290,7 +291,11 @@ class InvoicingController extends Controller
             $warehouseTransfer->Reference = $ref1;
             $warehouseTransfer->Reference2 = $ref2;
             $warehouseTransfer->Post();
-            echo "Finished";
+            //echo "Finished";
+            //isTranferedToCentralWH
+            DB::connection('sqlsrv3')->table('tblPickingPlan')
+                ->where('intorderdetailId',$intorderdetailId )
+                ->update(['isTranferedToCentralWH' => 1]);
 
         }catch (Error $err){
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
