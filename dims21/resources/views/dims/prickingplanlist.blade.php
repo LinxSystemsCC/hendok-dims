@@ -195,7 +195,7 @@
                     </tr>
                     <?php $subtotal = 0;$count = 0; ?>
                 @endif
-                <tr>
+                <tr id="rtrr{{$ID}}">
 
                     <td>{{ $val->StoreName}}</td>
                     <td>{{ $val->areas}}</td>
@@ -463,6 +463,7 @@
                 success: function (data) {
 
                         $('#'+rowId).css('background', '#89CFF0');
+                        $('#rtrr'+rowId).css('background', '#89CFF0');
                 }
             });
 
