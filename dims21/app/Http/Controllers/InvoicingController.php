@@ -535,5 +535,26 @@ class InvoicingController extends Controller
             echo $err;
         }
     }
+    public function printtripsheet($ref){
+        //
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $checkifinvoicedbeforetripsheet = DB::connection('sqlsrv3')
+            ->select('exec spCheckIfOrderBeforePrintingTripSheet ?',
+                array($ref)
+            );
+        $isfullyInvoiced = "NO";
+        if (count($checkifinvoicedbeforetripsheet)==0)
+        {
+            $isfullyInvoiced = "YES";
+//[spPrintTruckSheet]
+            $checkifinvoicedbeforetripsheet = DB::connection('sqlsrv3')
+                ->select('exec spPrintTruckSheet ?,?,?',
+                    array($ref,$userid,$userName)
+                );
+        }
+
+        return view('dims/printtrucksheet')->with('linesnotInvoiced',$checkifinvoicedbeforetripsheet)->with('isinvoicednot',$isfullyInvoiced);
+    }
 
 }

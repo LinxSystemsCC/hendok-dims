@@ -66,7 +66,7 @@
             <i style="font-size: 7px;">{{$ref}}</i>
         </div>
         <div style="width: 90%">
-
+<button  id="driversheet">Print Driver Sheet</button>
 
     <table style="font-size: 11px;">
         <tbody>
@@ -405,6 +405,11 @@
                 }
             });
         });
+
+        $('#driversheet').click(function(){
+            window.open('{!!url("/printtripsheet")!!}/' + $('#refno').val(), "tripsheet" + $('#refno').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
+        });
+
         $('#qrs').click(function(){
             alert("Open Info Dialog");
             $('#seqpopup').show();
