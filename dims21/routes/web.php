@@ -537,6 +537,7 @@ Route::get('slack', [LoadingAppAPIs::class,'slack']);
 
 //SAGE Invoicing
 Route::get('invoicepickings/{ref}', [InvoicingController::class,'invoicepickings']);
+Route::get('testWarehouseT/{ref}/{sonumber}/{ownerid}', [InvoicingController::class,'testWarehouseT']);
 Route::get('individualInvoicing', [InvoicingController::class,'individualInvoicing']);
 Route::get('processInvoce', [InvoicingController::class,'processInvoce']);
 Route::get('viewAwaitingtoinvoice', [InvoicingController::class,'viewAwaitingtoinvoice']);

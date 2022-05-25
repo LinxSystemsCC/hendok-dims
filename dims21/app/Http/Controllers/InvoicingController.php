@@ -107,6 +107,16 @@ class InvoicingController extends Controller
         }
 
     }
+    //NOT IBT
+    public function testWarehouseT($ref,$SoNumber,$ownersId){
+        $itemstotransfers = DB::connection('sqlsrv3')
+            ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+                array($ref,$SoNumber,$ownersId)
+            );
+        foreach ($itemstotransfers as $value){
+            $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode);
+        }
+    }
     public function invoicepickings($reference){
 
         $userid = Auth::user()->UserID;
@@ -263,6 +273,7 @@ class InvoicingController extends Controller
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
             //Initialise
+            echo "Entering ";
 
             //dd($indexId." - ".$reference);
             $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
@@ -277,6 +288,7 @@ class InvoicingController extends Controller
             $warehouseTransfer->Reference = $ref1;
             $warehouseTransfer->Reference2 = $ref2;
             $warehouseTransfer->Post();
+            echo "Finished";
 
         }catch (Error $err){
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
