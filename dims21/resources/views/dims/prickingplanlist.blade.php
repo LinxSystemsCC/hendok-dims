@@ -195,7 +195,12 @@
                     </tr>
                     <?php $subtotal = 0;$count = 0; ?>
                 @endif
+
+                @if(  $val->isLineInvoiced == 1)
+                    <tr id="rtrr{{$ID}}" style="background: #0091EA">
+                    @else
                 <tr id="rtrr{{$ID}}">
+                    @endif
 
                     <td>{{ $val->StoreName}}</td>
                     <td>{{ $val->areas}}</td>
