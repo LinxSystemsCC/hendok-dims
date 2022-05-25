@@ -62,10 +62,10 @@ class InvoicingController extends Controller
                         $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok_Dims;server=HK-SQL2019,1433');
                         break;
                     case 2:
-                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Henroof_Dims;server=HK-SQL2019,1433');
+                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Henroof;server=HK-SQL2019,1433');
                         break;
                     case 3:
-                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhozi_Dims;server=HK-SQL2019,1433');
+                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhosi;server=HK-SQL2019,1433');
                         break;
                 }
 
@@ -215,10 +215,10 @@ class InvoicingController extends Controller
                     $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok Distribution;server=HK-SQL2019,1433');
                     break;
                 case 2:
-                    $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Henroof_Dims;server=HK-SQL2019,1433');
+                    $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Henroof;server=HK-SQL2019,1433');
                     break;
                 case 3:
-                    $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhozi_Dims;server=HK-SQL2019,1433');
+                    $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhosi;server=HK-SQL2019,1433');
                     break;
             }
             try {
@@ -281,7 +281,7 @@ class InvoicingController extends Controller
             //dd($indexId." - ".$reference);
             $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
             $sdkHelper->SetLicense("DE12111039", "4626921");
-            $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok_Dims;server=HK-SQL2019,1433');
+            $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok Distribution;server=HK-SQL2019,1433');
             $warehouseTransfer = new \COM("Pastel.Evolution.WarehouseTransfer");
 
             $warehouseTransfer->Account =  $sdkHelper->GetStockItem($itemcode);
@@ -555,6 +555,9 @@ class InvoicingController extends Controller
         }
 
         return view('dims/printtrucksheet')->with('linesnotInvoiced',$checkifinvoicedbeforetripsheet)->with('isinvoicednot',$isfullyInvoiced);
+    }
+    public function reprintInvoice(){
+
     }
 
 }

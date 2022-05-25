@@ -67,7 +67,7 @@
         </div>
         <div style="width: 90%">
             @foreach($pickingheader as $value)
-            //
+
             @if($value->isReadyForInvoicing == 1)
 <button  id="driversheet">Print Driver Sheet</button>
                 @endif
