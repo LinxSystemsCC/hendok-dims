@@ -59,13 +59,13 @@ class InvoicingController extends Controller
             $sdkHelper->SetLicense("DE12111039", "4626921");
                 switch($ownersId){
                     case 1:
-                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok_Dims;server=HK-SQL2019,1433');
+                        $sdkHelper->CreateConnection(env(HENDOK));
                         break;
                     case 2:
-                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Henroof;server=HK-SQL2019,1433');
+                        $sdkHelper->CreateConnection(env(HENROOF));
                         break;
                     case 3:
-                        $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Ukhosi;server=HK-SQL2019,1433');
+                        $sdkHelper->CreateConnection(env(UKHOSI));
                         break;
                 }
 
@@ -82,7 +82,7 @@ class InvoicingController extends Controller
             }
             $reference = $x->Save();
             //Now invoice
-          //  $x->Process();
+            $x->Process();
           //  echo "************* INV CREATED***".$reference."<br>";
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                 ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
@@ -281,7 +281,7 @@ class InvoicingController extends Controller
             //dd($indexId." - ".$reference);
             $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
             $sdkHelper->SetLicense("DE12111039", "4626921");
-            $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok Distribution;server=HK-SQL2019,1433');
+            $sdkHelper->CreateConnection(env(HENDOK));
             $warehouseTransfer = new \COM("Pastel.Evolution.WarehouseTransfer");
 
             $warehouseTransfer->Account =  $sdkHelper->GetStockItem($itemcode);
@@ -301,6 +301,40 @@ class InvoicingController extends Controller
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
+    }
+    //INVENTORY ADJUSTMENTS
+    public function transactionAdj(){
+        $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+        dd($sdkHelper);
+        try {
+            //Initialise
+            //  echo "Entering ";
+
+            //dd($indexId." - ".$reference);
+            $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
+            $sdkHelper->SetLicense("DE12111039", "4626921");
+            $sdkHelper->CreateConnection(env(HENDOK));
+            $InventoryTransaction = new \COM("Pastel.Evolution.InventoryTransaction");
+
+            $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode("ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
+         //   $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemcode);
+            $InventoryTransaction->Operation = InventoryOperation.Increase;//Select the necessary enumerator increase , decrease or cost adjustment
+            $InventoryTransaction->Quantity = 2;
+            $InventoryTransaction->Reference = "F2";
+            $InventoryTransaction->Reference2 = "ref2";
+            $InventoryTransaction->Description = "desc";
+            $InventoryTransaction->Post();
+            //echo "Finished";
+            //isTranferedToCentralWH
+       /*     DB::connection('sqlsrv3')->table('tblPickingPlan')
+                ->where('intorderdetailId',$intorderdetailId )
+                ->update(['isTranferedToCentralWH' => 1]);*/
+
+        }catch (Error $err){
+            echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+            echo $err;
+        }
+
     }
     //IBT
     public function processTransfer($reference, $indexId,$ordernumebr){
