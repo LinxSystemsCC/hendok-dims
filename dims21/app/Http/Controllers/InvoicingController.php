@@ -95,7 +95,9 @@ class InvoicingController extends Controller
                         array($ref,$SoNumber,$ownersId)
                     );
                 foreach ($itemstotransfers as $value){
-                    $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
+                    //If you need to do normal warehouse transfer
+                   // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
+                    $this->transactionAdj($value->ItemCode, env('CPTW'),$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
                 }
 
             }
@@ -303,32 +305,40 @@ class InvoicingController extends Controller
         }
     }
     //INVENTORY ADJUSTMENTS
-    public function transactionAdj(){
+    public function transactionAdj($itemcode,$Warehouse,$Quantity,$ref1,$ref2,$intorderdetailId){
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
-        dd($sdkHelper);
+        //	dd(get_declared_classes());
+
         try {
             //Initialise
             //  echo "Entering ";
 
-            //dd($indexId." - ".$reference);
-            $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
-            $sdkHelper->SetLicense("DE12111039", "4626921");
-            $sdkHelper->CreateConnection(env(HENDOK));
-            $InventoryTransaction = new \COM("Pastel.Evolution.InventoryTransaction");
 
-            $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode("ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
-         //   $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemcode);
-            $InventoryTransaction->Operation = InventoryOperation.Increase;//Select the necessary enumerator increase , decrease or cost adjustment
-            $InventoryTransaction->Quantity = 2;
-            $InventoryTransaction->Reference = "F2";
-            $InventoryTransaction->Reference2 = "ref2";
-            $InventoryTransaction->Description = "desc";
+            //dd($indexId." - ".$reference);
+            $sdkHelper->CreateCommonDBConnection(env('COMMON') );
+            $sdkHelper->SetLicense("DE12111039", "4626921");
+            $sdkHelper->CreateConnection(env('HENDOK'));
+            $InventoryTransaction = new \COM("Pastel.Evolution.InventoryTransaction");
+            // dd($sdkHelper->GetInventoryOperation( "Increase"));
+            //dd();
+
+            $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
+            $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemcode);
+            $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($Warehouse) ;
+            $InventoryTransaction->Operation =0;//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
+            $InventoryTransaction->Quantity = floatval($Quantity);
+
+            $InventoryTransaction->Reference = $ref1;
+            $InventoryTransaction->Reference2 = $ref2;
+            $InventoryTransaction->Description = "Dims Ajustments";
+
             $InventoryTransaction->Post();
+            dd();
             //echo "Finished";
             //isTranferedToCentralWH
-       /*     DB::connection('sqlsrv3')->table('tblPickingPlan')
-                ->where('intorderdetailId',$intorderdetailId )
-                ->update(['isTranferedToCentralWH' => 1]);*/
+            /*     DB::connection('sqlsrv3')->table('tblPickingPlan')
+                     ->where('intorderdetailId',$intorderdetailId )
+                     ->update(['isTranferedToCentralWH' => 1]);*/
 
         }catch (Error $err){
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
