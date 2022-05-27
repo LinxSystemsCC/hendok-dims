@@ -394,7 +394,7 @@ class InvoicingController extends Controller
                 //dd($indexId." - ".$reference);
                 $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
                 $sdkHelper->SetLicense("DE12111039", "4626921");
-                $sdkHelper->CreateConnection(env('HENDKO'));
+                $sdkHelper->CreateConnection(env('HENDOK'));
 
                 $warehouseIBT = new \COM("Pastel.Evolution.WarehouseIBT");
                 $warehouse = new \COM("Pastel.Evolution.Warehouse");
