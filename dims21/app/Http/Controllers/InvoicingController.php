@@ -59,13 +59,13 @@ class InvoicingController extends Controller
             $sdkHelper->SetLicense("DE12111039", "4626921");
                 switch($ownersId){
                     case 1:
-                        $sdkHelper->CreateConnection(env(HENDOK));
+                        $sdkHelper->CreateConnection(env('HENDOK'));
                         break;
                     case 2:
-                        $sdkHelper->CreateConnection(env(HENROOF));
+                        $sdkHelper->CreateConnection(env('HENROOF'));
                         break;
                     case 3:
-                        $sdkHelper->CreateConnection(env(UKHOSI));
+                        $sdkHelper->CreateConnection(env('UKHOSI'));
                         break;
                 }
 
