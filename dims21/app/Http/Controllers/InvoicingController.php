@@ -333,12 +333,12 @@ class InvoicingController extends Controller
             $InventoryTransaction->Description = "Dims Ajustments";
 
             $InventoryTransaction->Post();
-            dd();
+
             //echo "Finished";
             //isTranferedToCentralWH
-            /*     DB::connection('sqlsrv3')->table('tblPickingPlan')
+                 DB::connection('sqlsrv3')->table('tblPickingPlan')
                      ->where('intorderdetailId',$intorderdetailId )
-                     ->update(['isTranferedToCentralWH' => 1]);*/
+                     ->update(['isTranferedToCentralWH' => 1]);
 
         }catch (Error $err){
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
