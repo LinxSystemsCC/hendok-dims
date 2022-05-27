@@ -18,8 +18,8 @@ class OrdersExport implements FromQuery, WithHeadings
     public function headings(): array
     {
         return [
-            'PastelCode',
-            'PastelDescription',
+            'Code',
+            'Description',
             'Qty',
             'UnitSize',
             'Price',
