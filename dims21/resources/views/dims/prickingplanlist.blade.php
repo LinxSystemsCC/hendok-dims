@@ -214,10 +214,13 @@
 
 
                     <td>{{ $val->OrderDate}}</td>
-                    <td>{{ $val->OrderNum}} @if($val->isReadyForInvoicing == 1)
-                            <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}">
-                                                <input type="hidden" class="rowids" value="{{$ID}}">  <input type="hidden" class="strTicket" value="{{ $val->strTicket}}">
-                        @endif</td>
+                    <td>{{$val->OrderNum}} @if($val->isReadyForInvoicing == 1 && $val->ubARIBT == 0)
+                            <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
+                        @endif
+                        @if($val->isReadyForInvoicing == 1 && $val->ubARIBT == 1)
+                            <button style="background: #0BA008;color: white;" class="ibt" value="{{$val->OrderId}}">IBT {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
+                        @endif
+                    </td>
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
                     <td>{{ $val->PastelDescription}}</td>
