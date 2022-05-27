@@ -92,18 +92,24 @@ class InvoicingController extends Controller
                 ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
                     array($userid,$invoiceid,$SoNumber,$ownersId,$userName)
                 );
-            if($returnGetsalesorderNoLines[0]->result){
-                //$itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2
-                $itemstotransfers = DB::connection('sqlsrv3')
-                    ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
-                        array($ref,$SoNumber,$ownersId)
-                    );
-                foreach ($itemstotransfers as $value){
-                    //If you need to do normal warehouse transfer
-                   // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
-                    $this->transactionAdj($value->ItemCode, env('CPTW'),$value->Toinvoice,$refDescription,$SoNumber,$value->intorderdetailId);
-                }
+            $v  =  new \App\Http\Controllers\SalesForm();
+            $isCapeUser = $v->getThings(Auth::user()->GroupId,'isCapeUser');
+            if($isCapeUser =="1") {
+                if ($returnGetsalesorderNoLines[0]->result) {
+                    //$itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2
+                    //isCapeUser
 
+                    $itemstotransfers = DB::connection('sqlsrv3')
+                        ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
+                            array($ref, $SoNumber, $ownersId)
+                        );
+                    foreach ($itemstotransfers as $value) {
+                        //If you need to do normal warehouse transfer
+                        // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
+                        $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId);
+                    }
+
+                }
             }
 
             return response()->json($returnGetsalesorderNoLines);
