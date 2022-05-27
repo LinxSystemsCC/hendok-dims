@@ -51,6 +51,7 @@ class InvoicingController extends Controller
 
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
+        $refDescription = "";
 //dd();
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
@@ -60,12 +61,15 @@ class InvoicingController extends Controller
                 switch($ownersId){
                     case 1:
                         $sdkHelper->CreateConnection(env('HENDOK'));
+                        $refDescription = "Hendok";
                         break;
                     case 2:
                         $sdkHelper->CreateConnection(env('HENROOF'));
+                        $refDescription = "Henroof";
                         break;
                     case 3:
                         $sdkHelper->CreateConnection(env('UKHOSI'));
+                        $refDescription = "Ukhosi";
                         break;
                 }
 
@@ -97,7 +101,7 @@ class InvoicingController extends Controller
                 foreach ($itemstotransfers as $value){
                     //If you need to do normal warehouse transfer
                    // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
-                    $this->transactionAdj($value->ItemCode, env('CPTW'),$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
+                    $this->transactionAdj($value->ItemCode, env('CPTW'),$value->Toinvoice,$refDescription,$SoNumber,$value->intorderdetailId);
                 }
 
             }
