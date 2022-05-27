@@ -50,12 +50,14 @@
                     </tr>
                     </thead>
                     <tbody >
+                    @if($isinvoicednot == "NO")
                     @foreach($linesnotInvoiced as $val)
                         <tr>
                             <td>{{$val->StoreName}}</td>
                             <td>{{$val->SalesOrderNo}}</td>
                         </tr>
                     @endforeach
+                        @endif
                     </tbody>
                 </table>
 
