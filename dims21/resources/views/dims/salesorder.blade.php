@@ -239,7 +239,7 @@
                     </div>
                     <div class=" col-md-12"    style="padding-left: 0px;">
                         <label class="control-label" for="orederNumber"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Order Number</label><br>
-                        <input type="text"   id="orederNumber" maxlength="25" style="font-weight: 900;color: black;"><span id="characters"></span>/25
+                        <input type="text" name="orederNumber"  class="form-control input-sm col-xs-1"  id="orederNumber" maxlength="25" style="font-weight: 900;color: black;" autocomplete="new-password" value="." readonly><span id="characters"></span>/25
                         <button id="advancedorderNumber">Advanced Order No</button>
                         <input type="hidden" name="hiddenDeliveryAddressId" id="hiddenDeliveryAddressId">
                         <input type="hidden" name="address1hidden" id="address1hidden">
@@ -1708,6 +1708,17 @@
                 }]
             ];
             $(document).ready(function() {
+
+                $(document).on('click', '#orederNumber', function(e) {
+                    e.preventDefault();
+                    $("#orederNumber").prop("disabled", false);
+                    $("#orederNumber").removeAttr('disabled');
+                });
+                $('#orederNumber').click(function(){
+
+
+                    $("#orederNumber").removeAttr('readonly');
+                });
 
                 $(function() {
                     var pressed = false;
@@ -7487,6 +7498,7 @@
             $(document).on('click', '#cancelsplit', function(e) {
                 $('#splitOrder').dialog('close');
             });
+
 
 
             $(document).on('keydown', '.inputs', function(e) {
