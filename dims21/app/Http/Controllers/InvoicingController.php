@@ -394,7 +394,7 @@ class InvoicingController extends Controller
                 //dd($indexId." - ".$reference);
                 $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
                 $sdkHelper->SetLicense("DE12111039", "4626921");
-                $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok Distribution;server=HK-SQL2019,1433');
+                $sdkHelper->CreateConnection(env('HENDKO'));
 
                 $warehouseIBT = new \COM("Pastel.Evolution.WarehouseIBT");
                 $warehouse = new \COM("Pastel.Evolution.Warehouse");
@@ -482,7 +482,7 @@ class InvoicingController extends Controller
 
                 $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
                 $sdkHelper->SetLicense("DE12111039", "4626921");
-                $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok Distribution;server=HK-SQL2019,1433');
+                $sdkHelper->CreateConnection(env('HENDOK'));
 
                 $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
                 //  $taxRate = new \COM("Pastel.Evolution.TaxRate");
