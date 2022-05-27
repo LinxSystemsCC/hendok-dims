@@ -39,6 +39,9 @@
     <div class="container" style="width: 100%;">
         <div class="form-group row add">
             <div class="col-lg-12" >
+                @if($isinvoicednot == "YES")
+                    <h2>CHECK YOUR PRINTER</h2>
+                    @endif
                 <table id="orderHeaderPrint" style="font-size: 11px;">
                     <thead>
                     <tr style="    background: black;    color: white;" >

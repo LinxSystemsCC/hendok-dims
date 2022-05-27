@@ -537,6 +537,7 @@ Route::get('slack', [LoadingAppAPIs::class,'slack']);
 
 //SAGE Invoicing
 Route::get('invoicepickings/{ref}', [InvoicingController::class,'invoicepickings']);
+Route::get('printtripsheet/{ref}', [InvoicingController::class,'printtripsheet']);
 Route::get('testWarehouseT/{ref}/{sonumber}/{ownerid}', [InvoicingController::class,'testWarehouseT']);
 Route::get('individualInvoicing', [InvoicingController::class,'individualInvoicing']);
 Route::get('processInvoce', [InvoicingController::class,'processInvoce']);
@@ -547,7 +548,7 @@ Route::get('saveweightticket', [InvoicingController::class,'saveweightticket']);
 Route::get('whtransfers/{transfer}', [InvoicingController::class,'whtransfers']);
 Route::get('processTransfertest/{transfer}', [InvoicingController::class,'processTransfertest']);
 Route::get('trywarehouse', [InvoicingController::class,'trywarehouse']);
-Route::get('transactionAdj', [InvoicingController::class,'transactionAdj']);
+//Route::get('transactionAdj', [InvoicingController::class,'transactionAdj']);
 Route::get('getRemainingBalance/{reference}/{trasferID}/{indexId}', [InvoicingController::class,'getRemainingBalance']);//$reference,$trasferID,$indexId
 //SAGE Invoicing Ends Here
 
