@@ -277,7 +277,7 @@ class InvoicingController extends Controller
             ->select('exec spAutoIndexForTrasfers ?',
                 array($reference)
             );
-
+//this is true
         foreach ($returnToInvoices as $innverVal){
             $this->processTransfer($reference,$innverVal->AutoIndex,$innverVal->OrderNum);
         }
