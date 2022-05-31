@@ -332,6 +332,7 @@ class InvoicingController extends Controller
             // dd($sdkHelper->GetInventoryOperation( "Increase"));
             //dd();
 
+            $ref2 = $this->returnInvoiceNumber($ref2);
             $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
             $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemcode);
             $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($Warehouse) ;
@@ -354,6 +355,15 @@ class InvoicingController extends Controller
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
+
+    }
+    public function returnInvoiceNumber($sonumber){
+        $returnToInvoices = DB::connection('sqlsrv3')
+            ->select('exec spGetOrderNumberInv ?',
+                array($sonumber)
+            );
+        $inv = $returnToInvoices[0]->InvNumber;
+        return response()->json($inv);
 
     }
     //IBT
