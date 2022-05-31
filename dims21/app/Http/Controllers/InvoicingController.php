@@ -89,7 +89,7 @@ class InvoicingController extends Controller
             }
             $reference = $x->Save();
             //Now invoice
- 
+
             $x->Process();
           //  echo "************* INV CREATED***".$reference."<br>";
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
@@ -426,7 +426,7 @@ class InvoicingController extends Controller
                     $WarehouseIBTLine->InventoryItem = $sdkHelper->GetStockItem($val->InventoryItem);
                     $WarehouseIBTLine->Description = $val->InventoryItem;
                     $WarehouseIBTLine->Reference = "".$val->Reference;
-                    $WarehouseIBTLine->QuantityIssued = $val->Quantity;
+                    $WarehouseIBTLine->QuantityIssued = floatval($val->Quantity);
                     $warehouseIBT->Detail->Add($WarehouseIBTLine);
                 }
                 $referenceibt  = $warehouseIBT->IssueStock();
