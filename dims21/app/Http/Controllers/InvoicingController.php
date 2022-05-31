@@ -78,6 +78,9 @@ class InvoicingController extends Controller
                     array($ref,$SoNumber,$ownersId)
                 );
             $x = $sdkHelper->GetSalesOrder($SoNumber);
+           // $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
+            $x->InvoiceDate = date('Y-m-d H:i:s');
+          //  $salesOrder->Save();
             foreach ($returnGetsalesorderNoLines as $innverVal){
                 $lineno = $innverVal->LineNos - 1;
                 $x->Detail[$lineno]->ToProcess =floatval($innverVal->Toinvoice);
@@ -86,6 +89,7 @@ class InvoicingController extends Controller
             }
             $reference = $x->Save();
             //Now invoice
+
             $x->Process();
           //  echo "************* INV CREATED***".$reference."<br>";
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
