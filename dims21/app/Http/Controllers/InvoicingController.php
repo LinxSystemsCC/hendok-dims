@@ -381,7 +381,7 @@ class InvoicingController extends Controller
                 array($invoiceid,$ownerId)
             );
         $inv = $returnToInvoices[0]->InvNumber;
-        return response()->json($inv);
+        return $inv;
 
     }
     //IBT
