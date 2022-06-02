@@ -21,6 +21,7 @@ class OrdersExport implements FromQuery, WithHeadings
             'Code',
             'Description',
             'Qty',
+            'InStock',
             'UnitSize',
             'Price',
             'Tax',
@@ -37,6 +38,7 @@ class OrdersExport implements FromQuery, WithHeadings
             ->select( 'PastelCode',
                 'PastelDescription',
                 'Qty',
+                'QtyInStock',
                 'UnitSize',
                 'Price',
                 'Tax')
