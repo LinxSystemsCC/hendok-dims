@@ -123,7 +123,7 @@ class InvoicingController extends Controller
                     foreach ($itemstotransfers as $value) {
                         //If you need to do normal warehouse transfer
                         // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
-                        $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$invoiceid);
+                        $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$invoiceid,$ownersId);
                     }
 
                 }
@@ -332,7 +332,7 @@ class InvoicingController extends Controller
         }
     }
     //INVENTORY ADJUSTMENTS
-    public function transactionAdj($itemcode,$Warehouse,$Quantity,$ref1,$ref2,$intorderdetailId,$invoiceid){
+    public function transactionAdj($itemcode,$Warehouse,$Quantity,$ref1,$ref2,$intorderdetailId,$invoiceid,$ownersId){
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         //	dd(get_declared_classes());
 
@@ -349,7 +349,7 @@ class InvoicingController extends Controller
             // dd($sdkHelper->GetInventoryOperation( "Increase"));
             //dd();
 
-            $ref2 = $this->returnInvoiceNumber($ref2);
+            $ref2 = $this->returnInvoiceNumber($invoiceid);
             dd( $ref2);
             $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
             $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemcode);
@@ -375,10 +375,10 @@ class InvoicingController extends Controller
         }
 
     }
-    public function returnInvoiceNumber($sonumber){
+    public function returnInvoiceNumber($invoiceid,$ownerId){
         $returnToInvoices = DB::connection('sqlsrv3')
-            ->select('exec spGetOrderNumberInv ?',
-                array($sonumber)
+            ->select('exec spGetOrderNumberInv ?,?',
+                array($invoiceid,$ownerId)
             );
         $inv = $returnToInvoices[0]->InvNumber;
         return response()->json($inv);
@@ -648,7 +648,7 @@ class InvoicingController extends Controller
             foreach ($itemstotransfers as $value) {
                 //If you need to do normal warehouse transfer
                 // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
-                $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$autoIndex);
+                $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$autoIndex,$ownersId);
             }
 
         }catch (Error $err){
