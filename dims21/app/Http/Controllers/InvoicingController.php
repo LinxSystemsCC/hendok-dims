@@ -616,6 +616,38 @@ class InvoicingController extends Controller
             echo $err;
         }
     }
+    public function invManualAdj($ref, $SoNumber, $ownersId){
+
+        $refDescription="";
+        switch($ownersId){
+            case 1:
+
+                $refDescription = "Hendok";
+                break;
+            case 2:
+
+                $refDescription = "Henroof";
+                $mustStockAdjust= 1;
+                break;
+            case 3:
+
+                $refDescription = "Ukhosi";
+                $mustStockAdjust = 1;
+                break;
+        }
+            $itemstotransfers = DB::connection('sqlsrv3')
+                ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
+                    array($ref, $SoNumber, $ownersId)
+                );
+            foreach ($itemstotransfers as $value) {
+                //If you need to do normal warehouse transfer
+                // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
+                $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId);
+            }
+
+
+    }
+
     public function printtripsheet($ref){
         //
         $userid = Auth::user()->UserID;
