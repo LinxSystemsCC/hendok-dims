@@ -92,7 +92,7 @@ class InvoicingController extends Controller
             foreach ($returnGetsalesorderNoLines as $innverVal){
                 $lineno = $innverVal->LineNos - 1;
                 if($isCapeUser =="1"){
-                    $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPTW") ;
+                    $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPT") ;
                 }
 
                 $x->Detail[$lineno]->ToProcess =floatval($innverVal->Toinvoice);
