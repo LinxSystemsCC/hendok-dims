@@ -52,6 +52,7 @@ class InvoicingController extends Controller
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
         $refDescription = "";
+        $mustStockAdjust = 0;
 //dd();
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
@@ -66,10 +67,12 @@ class InvoicingController extends Controller
                     case 2:
                         $sdkHelper->CreateConnection(env('HENROOF'));
                         $refDescription = "Henroof";
+                        $mustStockAdjust= 1;
                         break;
                     case 3:
                         $sdkHelper->CreateConnection(env('UKHOSI'));
                         $refDescription = "Ukhosi";
+                        $mustStockAdjust = 1;
                         break;
                 }
 
@@ -77,29 +80,38 @@ class InvoicingController extends Controller
                 ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
                     array($ref,$SoNumber,$ownersId)
                 );
+            $v  =  new \App\Http\Controllers\SalesForm();
+            $isCapeUser = $v->getThings(Auth::user()->GroupId,'isCapeUser');
             $x = $sdkHelper->GetSalesOrder($SoNumber);
            // $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
             $x->InvoiceDate = date('Y-m-d H:i:s');
-            $x->ulIDSOrdWEIGHBRIDGETICKET = "TEST";
+
+
+           // theSalesOrder.UserDefinedFields.Item("ucIDSOrdXXXXFieldName").Value = "xxxxx"
           //  $salesOrder->Save();
             foreach ($returnGetsalesorderNoLines as $innverVal){
                 $lineno = $innverVal->LineNos - 1;
+                if($isCapeUser =="1"){
+                    $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPTW") ;
+                }
+
                 $x->Detail[$lineno]->ToProcess =floatval($innverVal->Toinvoice);
+
+
                 //isLineInvoiced
                // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";
             }
             $reference = $x->Save();
             //Now invoice
-dd();
+
             $x->Process();
           //  echo "************* INV CREATED***".$reference."<br>";
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                 ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
                     array($userid,$invoiceid,$SoNumber,$ownersId,$userName)
                 );
-            $v  =  new \App\Http\Controllers\SalesForm();
-            $isCapeUser = $v->getThings(Auth::user()->GroupId,'isCapeUser');
-            if($isCapeUser =="1") {
+
+            if($isCapeUser =="1" && $mustStockAdjust == 1) {
                 if ($returnGetsalesorderNoLines[0]->result) {
                     //$itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2
                     //isCapeUser
