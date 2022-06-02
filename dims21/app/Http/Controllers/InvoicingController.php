@@ -619,22 +619,27 @@ class InvoicingController extends Controller
     public function invManualAdj($ref, $SoNumber, $ownersId){
 
         $refDescription="";
-        switch($ownersId){
-            case 1:
+        $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+        try {
+            //Initialise
+            $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
+            $sdkHelper->SetLicense("DE12111039", "4626921");
+            switch ($ownersId) {
+                case 1:
 
-                $refDescription = "Hendok";
-                break;
-            case 2:
+                    $refDescription = "Hendok";
+                    break;
+                case 2:
 
-                $refDescription = "Henroof";
-                $mustStockAdjust= 1;
-                break;
-            case 3:
+                    $refDescription = "Henroof";
+                    $mustStockAdjust = 1;
+                    break;
+                case 3:
 
-                $refDescription = "Ukhosi";
-                $mustStockAdjust = 1;
-                break;
-        }
+                    $refDescription = "Ukhosi";
+                    $mustStockAdjust = 1;
+                    break;
+            }
             $itemstotransfers = DB::connection('sqlsrv3')
                 ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
                     array($ref, $SoNumber, $ownersId)
@@ -645,7 +650,7 @@ class InvoicingController extends Controller
                 $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId);
             }
 
-
+        }
     }
 
     public function printtripsheet($ref){
