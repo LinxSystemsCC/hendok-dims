@@ -350,7 +350,7 @@ class InvoicingController extends Controller
             //dd();
 
             $ref2 = $this->returnInvoiceNumber($invoiceid,$ownersId);
-            dd( $ref2);
+           // dd( $ref2);
             $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
             $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemcode);
             $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($Warehouse) ;
