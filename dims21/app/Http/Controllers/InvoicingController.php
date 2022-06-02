@@ -91,7 +91,7 @@ class InvoicingController extends Controller
           //  $salesOrder->Save();
             foreach ($returnGetsalesorderNoLines as $innverVal){
                 $lineno = $innverVal->LineNos - 1;
-                if($isCapeUser =="1"){
+                if($isCapeUser =="1" && $mustStockAdjust == 0){
                     $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPT") ;
                 }
 
