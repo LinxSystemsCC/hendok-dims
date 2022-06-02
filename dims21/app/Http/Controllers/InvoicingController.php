@@ -650,7 +650,11 @@ class InvoicingController extends Controller
                 $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId);
             }
 
+        }catch (Error $err){
+            echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+            echo $err;
         }
+
     }
 
     public function printtripsheet($ref){
