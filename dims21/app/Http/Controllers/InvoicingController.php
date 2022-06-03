@@ -123,7 +123,8 @@ class InvoicingController extends Controller
                     foreach ($itemstotransfers as $value) {
                         //If you need to do normal warehouse transfer
                         // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
-                        $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$invoiceid,$ownersId);
+                        $dates = date('Y-m-d H:i:s');
+                        $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$invoiceid,$ownersId,$dates);
                     }
 
                 }
@@ -332,7 +333,7 @@ class InvoicingController extends Controller
         }
     }
     //INVENTORY ADJUSTMENTS
-    public function transactionAdj($itemcode,$Warehouse,$Quantity,$ref1,$ref2,$intorderdetailId,$invoiceid,$ownersId){
+    public function transactionAdj($itemcode,$Warehouse,$Quantity,$ref1,$ref2,$intorderdetailId,$invoiceid,$ownersId,$date){
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         //	dd(get_declared_classes());
 
@@ -359,6 +360,7 @@ class InvoicingController extends Controller
 
             $InventoryTransaction->Reference = $ref1;
             $InventoryTransaction->Reference2 = $ref2;
+            $InventoryTransaction->Date =(new \DateTime($date))->format('Y-m-d');
             $InventoryTransaction->Description = "Dims Ajustments";
 
             $InventoryTransaction->Post();
@@ -617,7 +619,7 @@ class InvoicingController extends Controller
             echo $err;
         }
     }
-    public function invManualAdj($ref, $SoNumber, $ownersId,$autoIndex){
+    public function invManualAdj($ref, $SoNumber, $ownersId,$autoIndex,$dates){
 
         $refDescription="";
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
@@ -648,7 +650,7 @@ class InvoicingController extends Controller
             foreach ($itemstotransfers as $value) {
                 //If you need to do normal warehouse transfer
                 // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
-                $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$autoIndex,$ownersId);
+                $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$autoIndex,$ownersId,$dates);
             }
 
         }catch (Error $err){
