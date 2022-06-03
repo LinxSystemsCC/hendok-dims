@@ -335,6 +335,9 @@
                 <button class="planstatus" value="0" style="background: #0BA008;float: right;">Re-Activate This Plan</button>
             @endif
     @endforeach
+    <br>
+    <br>
+    <br>
 
     <input type="hidden"  id="refno" value="{{$ref}}">
     <table id="sequences" style="font-size: 12px;">
