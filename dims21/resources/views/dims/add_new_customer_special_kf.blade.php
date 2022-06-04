@@ -1,6 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
+<html>
+<head>
+    
+<link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
+
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
+     <style>
+        .dx-datagrid{
+            font:10px verdana;
+        }
+
+    </style>
+</head>
     <div class="col-lg-12"  style="background: white;    font-family: 'Helvetica Neue', arial, sans-serif;">
         <h3 style="text-align: center;">Customer Specials</h3>
         <fieldset class="well">
@@ -66,46 +80,12 @@
     </div>
     <div class="col-lg-12" id="afterFilter" style="    font-family: 'Helvetica Neue', arial, sans-serif;">
         <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
+        <div id="gridContainer">
+    
 
-            <button class="btn-success btn-xs" id="addLine">Add Line</button>
+</div>
                     
-            <table id ="tblCreateNewSpecial" class="tablesorter table table-bordered table-condensed table-intel">
-
-                <thead>
-                <tr style="font-size: 12px;" >
-                    <!--<th style="background: aquamarine;">Code</th>
-                    <th style="background: aquamarine;">Description</th>
-                    <th style="background: aquamarine;">DtFrom</th>
-                    <th style="background: aquamarine;">DtTo</th>
-                    <th style="background: aquamarine;">Price</th>
-                    <th style="background: aquamarine;">Qty</th>
-                    <th style="background: aquamarine;">Cost</th>
-                    <th style="background: aquamarine;">GP</th>
-                    <th style="background: aquamarine;">Less 10%</th>
-                    -->
-                    <th>Code</th>
-                    <th >Description</th>
-                    <th >DtFrom</th>
-                    <th >DtTo</th>
-                    <th >Price</th>
-                    <th >Qty</th>
-                    <th >Cost</th>
-                    <th>GP</th>
-                    <th >Less 10%</th>
-                    <th >Pricelist 1</th>
-                    <th >Pricelist 2</th>
-                    <th >Pricelist 3</th>
-                    <th >Pricelist 4</th>
-                    <th >Pricelist 5</th>
-                    <th >Pricelist 6</th>
-                    <th >C.S Price</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody class="clusterize-scroll"></tbody>
-
-            </table>
-
+      
         </div>
         <div class="col-lg-12" style="background: white;">
             <button id="doneCreating" class="btn-xs btn-success">Done</button>
@@ -229,57 +209,14 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
 
-    var jArray = JSON.stringify({!! json_encode($products) !!});
     var jArrayCustomer = JSON.stringify({!! json_encode($customers) !!});
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    var finalDataProduct = $.map(JSON.parse(jArray), function (item) {
-        return {
-            value: item.PastelCode,
-            PastelCode: item.PastelCode,
-            PastelDescription: item.PastelDescription,
-            UnitSize: item.UnitSize,
-            Tax: item.Tax,
-            Cost: parseFloat(item.Cost).toFixed(2),
-            QtyInStock: item.QtyInStock,
-            avgQty: item.avgQty,
-            Margin: item.Margin,
-            Alcohol: item.Alcohol,
-            Available: parseFloat(item.Available).toFixed(2),
-            PriceList1: parseFloat(item.PL1).toFixed(2),
-            PriceList2: parseFloat(item.PL2).toFixed(2),
-            PriceList3: parseFloat(item.PL3).toFixed(2),
-            PriceList4: parseFloat(item.PL4).toFixed(2),
-            PriceList5: parseFloat(item.PL5).toFixed(2),
-            PriceList6: parseFloat(item.PL6).toFixed(2)
-        }
-
-    });
-    var finalDataProductDescription = $.map(JSON.parse(jArray), function (item) {
-        return {
-            value: item.PastelDescription,
-            PastelCode: item.PastelCode,
-            PastelDescription: item.PastelDescription,
-            UnitSize: item.UnitSize,
-            Tax: item.Tax,
-            Cost: parseFloat(item.Cost).toFixed(2),
-            QtyInStock: item.QtyInStock,
-            avgQty: item.avgQty,
-            Margin: item.Margin,
-            Alcohol: item.Alcohol,
-            Available: parseFloat(item.Available).toFixed(2),
-            PriceList1: parseFloat(item.PL1).toFixed(2),
-            PriceList2: parseFloat(item.PL2).toFixed(2),
-            PriceList3: parseFloat(item.PL3).toFixed(2),
-            PriceList4: parseFloat(item.PL4).toFixed(2),
-            PriceList5: parseFloat(item.PL5).toFixed(2),
-            PriceList6: parseFloat(item.PL6).toFixed(2)
-        }
-
-    });
+  
+  
     var finalData =$.map(JSON.parse(jArrayCustomer), function(item) {
 
         return {
@@ -328,22 +265,7 @@ var dFromExporting =$('#dateTo').val();
 //showDialogWithoutClose('#uploaddocument',400,400);
 });
 
-        $("table").tablesorter({
-           headers:{ 
-           0: { sorter: false},
-           4: { sorter: "digit"} , 
-           6: { sorter: "digit"} , 
-           7: { sorter: "digit"} , 
-           8: { sorter: "digit"} , 
-           9: { sorter: "digit"} , 
-           10: { sorter: "digit"} , 
-           11: { sorter: "digit"} , 
-           12: { sorter: "digit"} , 
-           13: { sorter: "digit"} , 
-           14: { sorter:"digit"} , 
-           15: { sorter: "digit"} 
-            } 
-        });
+       
         $('#orderListing').hide();
         $('#addinCurrentPrices').hide();
         $('#addinHistory').hide();
@@ -671,34 +593,14 @@ $('#deleteall').click(function(){
             });
         });
 
-        $('#pricelist2convert').click(function(){
-            $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-
-                var ID = $(this).attr('id');
-                var jID = '#'+ID;
-                var x = ID.indexOf("x");
-                var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
-                $('#prodPrice_'+ get_token_number).val(roundquick($('#PL2_'+get_token_number).val()));
-                $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
-
-            });
-        });
-        $('#pricelist1convert').click(function(){
-            $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-
-                var ID = $(this).attr('id');
-                var jID = '#'+ID;
-                var x = ID.indexOf("x");
-                var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
-                $('#prodPrice_'+ get_token_number).val(roundquick($('#PL1_'+get_token_number).val()));
-                $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
-            });
-        });
+       
+        
         $('#addinHistory').click(function(){
-
-            var theVal = this.value;
+            //ajax this to add in history on the contract, refresh page
+            //and as well this needs to press done before it adds in history
+            PressDone();
             $.ajax({
-                url: '{!!url("/getCurrentHistoryCustomerSpecialsKF")!!}',
+                url: '{!!url("/postCurrentHistoryCustomerSpecialsKF")!!}',//getCurrentHistoryCustomerSpecialsKF
                 type: "POST",
                 data: {
                     customercode:$('#inputCustAcc').val(),
@@ -706,168 +608,53 @@ $('#deleteall').click(function(){
                     contractid: $('#custheadid').val()
                 },
                 success: function (data) {
-                    var trHTML = '';
-                    $.each(data, function (key, value) {
-                        var contractFrom = $('#dateFrom').val();
-                        var contractTo = $('#dateTo').val();
-                        var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
-                        var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
-                            '<td contenteditable="false" class="col-sm-1"> <i style="font-size: 0px">'+value.PastelCode+'"</i> <input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
-                            '<td contenteditable="false"  class="col-md-3"><i style="font-size: 0px">'+value.PastelDescription+'"</i> <input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
-                            '<td  contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+contractFrom+'"</i><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-                            '<td contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+contractTo+'"</i><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside inputs"></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  ><i style="font-size: 0px">'+value.avgQty+'"</i> <input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false" ><i style="font-size: 0px">'+value.Cost+'"</i> <input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+value.Cost+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  ><i style="font-size: 0px">'+parseFloat( marginCalculator(value.Cost,value.PriceLookedUp).toFixed(2))+'"</i> <input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL1+'"</i> <input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL2+'"</i> <input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL3+'"</i> <input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL4+'"</i> <input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL5+'"</i> <input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL6+'"</i> <input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
-                        $('#tblCreateNewSpecial tbody')
-                            .append( $row )
-                            .trigger('addRows', [ $row, false ]);
-                        if(!$('.lst').is(":focus"))
-                        {
-                            $('#prodCode_' + tokenId).focus();
 
-                            if ($('#checkboxDescription').is(':checked')) {
-                                $('#prodDescription_' + tokenId).focus();
-                            }
-                        }
-                        var resort  = true;
-                        $('#tblCreateNewSpecial').trigger('update',[resort]);
-                        $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
-                        $('input').on('click keyup' ,function(){
-                            // $('input').click(function(){
-                            var ID = $(this).attr('id');
-                            var jID = '#'+ID;
-                            var x = ID.indexOf("_");
-                            var get_token_number = ID.substring(x+1,ID.length);
-
-                            if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
-                                var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
-                                    {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
-                                    ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                                $(""+jID+"").mcautocomplete({
-                                    source: finalDataProductDescription,
-                                    columns:columnsD,
-                                    autoFocus: true,
-                                    minlength: 2,
-                                    delay: 0,
-                                    multiple: true,
-                                    multipleSeparator: ",",
-                                    select:function (e, ui) {
-                                        console.log(ui.item);
-                                        var n = ID.indexOf("_");
-                                        var token_number = ID.substring(n + 1, ID.length);
-
-                                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
-                                        {
-                                            $('#prodQty_'+token_number).val('0');
-                                            $('#prodPrice_'+token_number).val('0');
-                                        }
-                                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                                        $('#cost_' + token_number).val(ui.item.Cost);
-                                        $('#prodPrice_' + token_number).val('');
-                                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                                        $('#PL6_' + token_number).val(ui.item.PriceList6);
-
-                                        $.ajaxSetup({
-                                            headers: {
-                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                            }
-                                        });
-                                        productPrice(token_number);
-
-
-                                    }
-                                });
-
-                            }
-
-                            if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
-                                var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
-                                    {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
-                                    ,
-                                    {name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                                $("" + jID + "").mcautocomplete({
-                                    source: finalDataProduct,
-                                    columns:columnsC,
-                                    minlength: 1,
-                                    autoFocus: true,
-                                    delay: 0,
-                                    select:function (e, ui) {
-                                        console.log(ui.item);
-                                        var n = ID.indexOf("_");
-                                        var token_number = ID.substring(n + 1, ID.length);
-                                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
-                                        {
-                                            $('#prodQty_'+token_number).val('0');
-                                            $('#prodPrice_'+token_number).val('0');
-                                        }
-                                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                                        $('#prodPrice_' + token_number).val('');
-                                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                                        $('#cost_' + token_number).val(ui.item.Cost);
-                                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                                        $('#PL6_' + token_number).val(ui.item.PriceList6);
-                                        $.ajaxSetup({
-                                            headers: {
-                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                            }
-                                        });
-
-                                        productPrice(token_number);
-
-                                    }
-
-                                });
-                            }
-                            //calculator();
-
-                        });
-
-                        $(".dateTo,.dateFrom").datepicker({
-                            changeMonth: true,//this option for allowing user to select month
-                            changeYear: true, //this option for allowing user to select from year range
-                            dateFormat: 'dd-mm-yy'
-                        });
-                        $('#tblCreateNewSpecial').on('click', 'button', function (e) {
-                            var $this = $(this);
-                            $this.closest('tr').remove();
-                        });
-                    });
-
+                    location.reload();
                 }
             });
 
         });
+        $('#pricelist2convert').click(function(){
+            $.ajax({
+                url: '{!!url("/convertCurrentContractPricelist")!!}',
+                type: "POST",
+                data: {
+                    contractid: $('#custheadid').val(),
+                    pricelistid: 2
+                },
+                success: function (data) {
+                    var dialog = $('<p> <strong style="color:red">Contract Converted to Pricelist 2 Prices. This page will now reload. </strong></p>').dialog({
+                                height: 200, width: 700,
+                                buttons: {
+                                    "OK": function () {
+                                        dialog.dialog('close');
+                                        location.reload();
+                                    }
+                                }
+                            });
+                }
+            });
+        });
         $('#pricelist1convert').click(function(){
-            $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-
-                var ID = $(this).attr('id');
-                var jID = '#'+ID;
-                var x = ID.indexOf("x");
-                var get_token_number = ID.substring(x+1,ID.length); //gets the numbers successfully...
-                $('#prodPrice_'+ get_token_number).val(roundquick($('#PL1_'+get_token_number).val()));
-                $('#gp_'+get_token_number).val(roundquick(marginCalculator($('#cost_'+ get_token_number).val(),$('#prodPrice_'+ get_token_number).val())));
+           
+            $.ajax({
+                url: '{!!url("/convertCurrentContractPricelist")!!}',
+                type: "POST",
+                data: {
+                    contractid: $('#custheadid').val(),
+                    pricelistid: 1
+                },
+                success: function (data) {
+                    var dialog = $('<p> <strong style="color:red">Contract Converted to Pricelist 1 Prices. This page will now reload. </strong></p>').dialog({
+                                height: 200, width: 700,
+                                buttons: {
+                                    "OK": function () {
+                                        dialog.dialog('close');
+                                        location.reload();
+                                    }
+                                }
+                            });
+                }
             });
         });
         $('#getContractDetails').click(function(){
@@ -882,180 +669,369 @@ $('#deleteall').click(function(){
                     contractid:$('#custheadid').val()
                 },
                 success: function (data) {
-                    var trHTML = '';
-                    $('#tblCreateNewSpecial tbody').empty();
-                    $.each(data, function (key, value) {
-                        var contractFrom = $('#dateFrom').val();
-                        var contractTo = $('#dateTo').val();
-                        var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
-                        var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
-                            '<td contenteditable="false" class="col-sm-1"><i style="font-size: 0px">'+value.PastelCode+'"</i> <input name="theProductCode" id ="prodCode_'+tokenId+'"  value="'+value.PastelCode+'" class="theProductCode_ set_autocomplete inputs"></td>' +
-                            '<td contenteditable="false"  class="col-md-3"><i style="font-size: 0px">'+value.PastelDescription+'"</i> <input name="prodDescription_" id ="prodDescription_'+tokenId+'"value="'+value.PastelDescription+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
-                            '<td  contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+value.Date+'"</i> <input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+value.Date+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-                            '<td contenteditable="false" class="col-md-1"><i style="font-size: 0px">'+value.DateTo+'"</i> <input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+value.DateTo+'" class="dateTo resize-input-inside inputs"></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.avgQty+'"</i> <input type="text" name="avgQty_" id ="avgQty_'+tokenId+'"value="'+value.avgQty+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.Cost+'"</i> <input type="text" name="cost_" id ="cost_'+tokenId+'"value="'+roundquick(value.Cost)+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+parseFloat( marginCalculator(value.Cost,value.PriceLookedUp).toFixed(2))+'"</i> <input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-                            '<td contenteditable="false"  class="col-md-1"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="less10perc_" id ="less10perc_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp*0.9).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL1+'"</i> <input type="text" name="PL1_" id ="PL1_'+tokenId+'"value="'+roundquick(value.PL1)+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL2+'"</i> <input type="text" name="PL2_" id ="PL2_'+tokenId+'"value="'+roundquick(value.PL2)+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL3+'"</i> <input type="text" name="PL3_" id ="PL3_'+tokenId+'"value="'+roundquick(value.PL3)+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL4+'"</i> <input type="text" name="PL4_" id ="PL4_'+tokenId+'"value="'+roundquick(value.PL4)+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL5+'"</i> <input type="text" name="PL5_" id ="PL5_'+tokenId+'"value="'+roundquick(value.PL5)+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PL6+'"</i> <input type="text" name="PL6_" id ="PL6_'+tokenId+'"value="'+roundquick(value.PL6)+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td contenteditable="false"  class="col-md-2"><i style="font-size: 0px">'+value.PriceLookedUp+'"</i> <input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'"value="'+parseFloat(value.PriceLookedUp).toFixed(2)+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                            '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
-                        $('#tblCreateNewSpecial tbody')
-                            .append( $row )
-                            .trigger('addRows', [ $row, false
-                            ]);
-                        if(!$('.lst').is(":focus"))
-                        {
-                            $('#prodCode_' + tokenId).focus();
+                 $.ajax({
+                     url: '{!!url("/getCurrentPricesProductsCustomerSpecialsKF")!!}',
+                type: "POST",
+                data: {
+                    customerID: $('#inputCustAcc').val(),
+                deliveryDate:today
+                },
+                success: function(data_products){
+                 
+                    $("#gridContainer").dxDataGrid({
+       
+       dataSource:data, //as json
+                    
+       
+       showBorders: true,
+       filterRow: { visible: true },
+       allowColumnResizing: true,
+      
+       editing: {
+            mode: "row",
+            refreshMode: "reshape",
+            allowUpdating: true,
+            allowAdding: true,
+      allowDeleting: true,
+       newRowPosition: 'last',
+       },
 
-                            if ($('#checkboxDescription').is(':checked')) {
-                                $('#prodDescription_' + tokenId).focus();
-                            }
-                        }
-                        var resort  = true;
-                        $('#tblCreateNewSpecial').trigger('update',[resort]);
-                        $('#gp_'+ tokenId).val( parseFloat( marginCalculator(value.Cost,$('#prodPrice_'+tokenId).val()).toFixed(2)));
-                        $('input').on('click keyup' ,function(){
-                            // $('input').click(function(){
-                            var ID = $(this).attr('id');
-                            var jID = '#'+ID;
-                            var x = ID.indexOf("_");
-                            var get_token_number = ID.substring(x+1,ID.length);
+       columns: [
+           {
+               dataField: "PastelCode",
+               setCellValue: function(rowData, value) {
+                rowData.PastelCode = value.PastelCode;
+                rowData.PastelDescription = value.PastelDescription;
+                rowData.PriceLookedUp = value.Price;
+                rowData.PL1 = value.PL1;
+                rowData.PL2 = value.PL2;
+                rowData.PL3 = value.PL3;
+                rowData.PL4 = value.PL4;
+                rowData.PL5 = value.PL5;
+                rowData.PL6 = value.PL6;
+                //rowData.Date= $('#dateFrom').val(); //this seems to convert a date like 01-06-2022 dd-mm-yyyy into mm-dd-yyyy? why is it american
+                //rowData.DateTo= $('#dateTo').val();
+                rowData.Cost = value.Cost;
+                rowData.PriceLookedUpCurrent = value.Price
+                rowData.avgQty = value.Qty
+                
+                    
+                },
+               caption: "Code",
+               width: 150,
+               lookup: {
+                     dataSource: data_products,
+                     displayExpr:'PastelCode',
+                     valueExpr:'PastelCode',
+                },
 
-                            if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
-                                var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
-                                    {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
-                                    ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                                $(""+jID+"").mcautocomplete({
-                                    source: finalDataProductDescription,
-                                    columns:columnsD,
-                                    autoFocus: true,
-                                    minlength: 2,
-                                    delay: 0,
-                                    multiple: true,
-                                    multipleSeparator: ",",
-                                    select:function (e, ui) {
-                                        console.log(ui.item);
-                                        var n = ID.indexOf("_");
-                                        var token_number = ID.substring(n + 1, ID.length);
+           },
+           {
+               dataField: "PastelDescription",
+               caption: "Description",
+               width: 250,
+               setCellValue: function(rowData, value) {
+                rowData.PastelCode = value.PastelCode;
+                rowData.PastelDescription = value.PastelDescription;
+                rowData.PriceLookedUp = value.Price;
+                rowData.PL1 = value.PL1;
+                rowData.PL2 = value.PL2;
+                rowData.PL3 = value.PL3;
+                rowData.PL4 = value.PL4;
+                rowData.PL5 = value.PL5;
+                rowData.PL6 = value.PL6;
+               //  rowData.Date= $('#dateFrom').val(); //this seems to convert a date like 01-06-2022 dd-mm-yyyy into mm-dd-yyyy? why is it american
+              //  rowData.DateTo= $('#dateTo').val(); //has to be a way to convert then copy
+                rowData.Cost = value.Cost;
+                rowData.PriceLookedUpCurrent = value.Price;
+                rowData.avgQty = value.Qty;
+                    
+                },
+               lookup: {
+                     dataSource: data_products,
+                     displayExpr:'PastelDescription',
+                     valueExpr:'PastelDescription',
+                },
 
-                                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
-                                        {
-                                            $('#prodQty_'+token_number).val('0');
-                                            $('#prodPrice_'+token_number).val('0');
-                                        }
-                                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                                        $('#cost_' + token_number).val(ui.item.Cost);
-                                        $('#prodPrice_' + token_number).val('');
-                                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                                        $('#PL6_' + token_number).val(ui.item.PriceList6);
+           },{
+               dataField: "Date",
+               dataType: 'date',
+               caption: "DtFrom",
+               width: 115,
+               format:"dd-MM-yyyy"
 
-                                        $.ajaxSetup({
-                                            headers: {
-                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                            }
-                                        });
-                                        productPrice(token_number);
+           },{
+               dataField: "DateTo",
+               dataType: 'date',
+               caption: "DtTo",
+               width: 115,
+               format:"dd-MM-yyyy"
 
+           },{
+               dataField: "PriceLookedUp",
+               caption: "Price",
+               width: 100,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
-                                    }
-                                });
+           },{
+               allowEditing:false,
+               dataField: "avgQty",
+               caption: "Quantity",
+               width: 100,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
-                            }
+           },{
+               allowEditing:false,
+               dataField: "Cost",
+               caption: "Cost",
+               width: 90,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
-                            if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
-                                var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
-                                    {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
-                                    ,
-                                    {name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                                $("" + jID + "").mcautocomplete({
-                                    source: finalDataProduct,
-                                    columns:columnsC,
-                                    minlength: 1,
-                                    autoFocus: true,
-                                    delay: 0,
-                                    select:function (e, ui) {
-                                        console.log(ui.item);
-                                        var n = ID.indexOf("_");
-                                        var token_number = ID.substring(n + 1, ID.length);
-                                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
-                                        {
-                                            $('#prodQty_'+token_number).val('0');
-                                            $('#prodPrice_'+token_number).val('0');
-                                        }
-                                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                                        $('#prodPrice_' + token_number).val('');
-                                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                                        $('#cost_' + token_number).val(ui.item.Cost);
-                                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                                        $('#PL6_' + token_number).val(ui.item.PriceList6);
-                                        $.ajaxSetup({
-                                            headers: {
-                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                            }
-                                        });
+           },{
+               allowEditing:false,
+               calculateCellValue: function(rowData) {
+                return (1-(rowData.Cost/rowData.PriceLookedUp))*100;
+            },
+               caption: "GP",
+               width: 90,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
-                                        productPrice(token_number);
+           },{
+               allowEditing:false,
+               calculateCellValue: function(rowData) {
+                return rowData.PriceLookedUp*0.9;
+            },
+               caption: "Less 10%",
+               width: 95,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
-                                    }
+           },{
+               allowEditing:false,
+               dataField: "PL1",
+               caption: "Price List 1",
+               width: 110,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
-                                });
-                            }
-                            //calculator();
+           },{
+               allowEditing:false,
+               dataField: "PL2",
+               caption: "Price List 2",
+               width: 110,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
-                        });
+           },{
+               allowEditing:false,
+               dataField: "PL3",
+               caption: "Price List 3",
+               width: 110,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
-                        $(".dateTo,.dateFrom").datepicker({
-                            changeMonth: true,//this option for allowing user to select month
-                            changeYear: true, //this option for allowing user to select from year range
-                            dateFormat: 'dd-mm-yy'
-                        });
-                        $('#tblCreateNewSpecial').on('click', 'button', function (e) {
-                            var $this = $(this);
-                            $this.closest('tr').remove();
-                        });
-                    });
+           },{
+               allowEditing:false,
+               dataField: "PL4",
+               caption: "Price List 4",
+               width: 110,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
 
+           },{
+               allowEditing:false,
+               dataField: "PL5",
+               caption: "Price List 5",
+               width: 110,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
+
+           },{
+               allowEditing:false,
+               dataField: "PL6",
+               caption: "Price List 6",
+               width: 110,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
+
+           },{
+               allowEditing:false,
+               dataField: "PriceLookedUpCurrent",
+               caption: "C.S. Price",
+               width: 100,
+               dataType: 'number',
+               format: {
+                type: "fixedPoint",
+                precision: 2
+            }
+
+           },
+       ] ,
+
+       
+       
+            onCellClick:function(e){
+                if (e.columnIndex ==8){
+                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PriceLookedUpCurrent*0.9);
+                        $("#gridContainer").dxDataGrid("saveEditData");
+                   }
+                if (e.columnIndex ==9){
+                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL1);
+                        $("#gridContainer").dxDataGrid("saveEditData");
+                   }
+                if (e.columnIndex ==10){
+                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL2);
+                        $("#gridContainer").dxDataGrid("saveEditData");
+                   }
+                if (e.columnIndex ==11){
+                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL3);
+                        $("#gridContainer").dxDataGrid("saveEditData");
+                   }
+                if (e.columnIndex ==12){
+                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL4);
+                        $("#gridContainer").dxDataGrid("saveEditData");
+                   }
+                if (e.columnIndex ==13){
+                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL5);
+                        $("#gridContainer").dxDataGrid("saveEditData");
+                   }
+                if (e.columnIndex ==14){
+                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL6);
+                        $("#gridContainer").dxDataGrid("saveEditData");
+                   }
+                   if (e.columnIndex ==15){
+                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PriceLookedUpCurrent);
+                        $("#gridContainer").dxDataGrid("saveEditData");
+                   }
+            },
+        
+       onEditorPreparing: function(e){
+        if(e.parentType === "dataRow" && e.dataField === "PastelCode"){
+                e.editorOptions.onValueChanged = function(ev){
+                    let selectedItem = ev.component.option('selectedItem'); 
+                    e.setValue(selectedItem);  
                 }
+            }
+            if(e.parentType === "dataRow" && e.dataField === "PastelDescription"){
+                e.editorOptions.onValueChanged = function(ev){
+                    let selectedItem = ev.component.option('selectedItem'); 
+                    e.setValue(selectedItem);  
+                }
+            }
+        },
+       
+       onEditingStart: function(e) {
+           console.debug("EditingStart");
+           editRowKey = e.key;
+       },
+       onInitNewRow: function(e) {
+           console.debug("InitNewRow");
+           
+       },
+       onRowInserting: function(e) {
+           console.debug("RowInserting");
+       },
+       onRowInserted: function(e) {
+           console.debug("RowInserted");
+       },
+       onRowUpdating: function(e) {
+       },
+       onRowPrepared(e){
+        },
+
+       
+       onRowUpdated: function(e) {
+
+      },
+       onRowRemoving: function(e) {
+           console.debug("RowRemoving");
+       },
+       onRowRemoved: function(e) {
+       }
+       
+
+   });
+                }
+                 })
+
+                   }
             });
 
         });
 
         $('#doneCreating').click(function()
         {
-            var productsLinesOnPicking = new Array();
-            $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-                
+            PressDone();
+
+         });
+
+    
+
+
+    });
+    function marginCalculator(cost,onCellVal)
+    {
+        return (1-(cost/onCellVal))*100;
+    }
+
+    function PressDone()
+    {
+        
+            
+        var productsLinesOnPicking = new Array();
+            var selectedDatasUsers = $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) { 
+                productsLinesOnPickingPrimary= data;
+     });  
+
+            $.each(productsLinesOnPickingPrimary ,function(key,value) {
+                 
                     productsLinesOnPicking.push({
-                        'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
-                        'price': $(this).closest('tr').find('.prodPrice_').val(),
-                        'dateFrom':  dateReturn($(this).closest('tr').find('.dateFrom').val()) ,
-                        'dateTo': dateReturn( $(this).closest('tr').find('.dateTo').val()),
-                        'cost_': $(this).closest('tr').find('.cost_').val(),
-                        'gp_': $(this).closest('tr').find('.gp_').val(),
+                        'productCode': value.PastelCode,
+                        'price': value.PriceLookedUp,
+                        'dateFrom':  value.Date ,
+                        'dateTo':value.DateTo,
+                        'cost_':value.Cost,
+                        'gp_': (1-(value.Cost/value.PriceLookedUp))*100,
                         'customerid': $('#customerId').val(),
                         'contractid': $('#custheadid').val()
                     });
-                    
-
-             
             });
             $.ajax({
                 url: '{!!url("/XmlCreateCustomerSpecialsKFValid")!!}', // createCustomerSpecials
@@ -1189,201 +1165,8 @@ $('#deleteall').click(function(){
 
                 }
             });
-        });
-
-        $(document).on('click', '.PL1_', function(e) {
-            var costing = $(this).closest('tr').find('.cost_').val();
-            $(this).closest('tr').find('.prodPrice_').val($(this).val());
-            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
-        });
-        $(document).on('click', '.PL2_', function(e) {
-
-            var costing = $(this).closest('tr').find('.cost_').val();
-            $(this).closest('tr').find('.prodPrice_').val($(this).val());
-            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
-        });
-        $(document).on('click', '.PL3_', function(e) {
-
-            var costing = $(this).closest('tr').find('.cost_').val();
-            $(this).closest('tr').find('.prodPrice_').val($(this).val());
-            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
-        });
-        $(document).on('click', '.PL4_', function(e) {
-            var costing = $(this).closest('tr').find('.cost_').val();
-            $(this).closest('tr').find('.prodPrice_').val($(this).val());
-            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
-        });
-        $(document).on('click', '.PL5_', function(e) {
-            var costing = $(this).closest('tr').find('.cost_').val();
-            $(this).closest('tr').find('.prodPrice_').val($(this).val());
-            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
-        });
-        $(document).on('click', '.PL6_', function(e) {
-            var costing = $(this).closest('tr').find('.cost_').val();
-            $(this).closest('tr').find('.prodPrice_').val($(this).val());
-            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
-        });
-
-        $(document).on('click', '.less10perc_', function(e) {
-            var costing = $(this).closest('tr').find('.cost_').val();
-            $(this).closest('tr').find('.prodPrice_').val($(this).val());
-            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,$(this).val())).toFixed(2));
-        });
-
-
-    });
-    function marginCalculator(cost,onCellVal)
-    {
-        return (1-(cost/onCellVal))*100;
+       
     }
-    function generateALine2()
-    {
-        var contractFrom = $('#dateFrom').val();
-        var contractTo = $('#dateTo').val();
-        var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
-        var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
-            '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'" class="theProductCode_ set_autocomplete inputs"></td>' +
-            '<td contenteditable="false" class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
-            '<td  contenteditable="false" class="col-md-1"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
-            '<td contenteditable="false" class="col-md-1"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside inputs"></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs lst" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="avgQty_" id ="avgQty_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="avgQty_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="less10perc_" id ="less10perc_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="less10perc_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL1_" id ="PL1_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="PL1_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL2_" id ="PL2_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="PL2_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL3_" id ="PL3_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="PL3_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL4_" id ="PL4_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="PL4_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL5_" id ="PL5_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="PL5_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="PL6_" id ="PL6_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="PL6_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-            '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
-        $('#tblCreateNewSpecial tbody')
-            .append( $row )
-            .trigger('addRows', [ $row, false ]);
-        if(!$('.lst').is(":focus"))
-        {
-            $('#prodCode_' + tokenId).focus();
-
-            if ($('#checkboxDescription').is(':checked')) {
-                $('#prodDescription_' + tokenId).focus();
-            }
-        }
-        $('input').on('click keyup' ,function(){
-            // $('input').click(function(){
-            var ID = $(this).attr('id');
-            var jID = '#'+ID;
-            var x = ID.indexOf("_");
-            var get_token_number = ID.substring(x+1,ID.length);
-
-            if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
-                var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
-                    {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
-                    ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                $(""+jID+"").mcautocomplete({
-                    source: finalDataProductDescription,
-                    columns:columnsD,
-                    autoFocus: true,
-                    minlength: 2,
-                    delay: 0,
-                    multiple: true,
-                    multipleSeparator: ",",
-                    select:function (e, ui) {
-                        console.log(ui.item);
-                        var n = ID.indexOf("_");
-                        var token_number = ID.substring(n + 1, ID.length);
-
-                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
-                        {
-                            $('#prodQty_'+token_number).val('0');
-                            $('#prodPrice_'+token_number).val('0');
-                        }
-                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                        $('#cost_' + token_number).val(ui.item.Cost);
-                        $('#avgQty_' + token_number).val(ui.item.avgQty);
-                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                        $('#PL6_' + token_number).val(ui.item.PriceList6);
-
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            }
-                        });
-                        productPrice(token_number);
-                        $('#gp_' + token_number).val(marginCalculator(ui.item.Cost,$('#prodPrice_'+ token_number).val()));
-                        var placeholderclick = '#PL1_'+ token_number;
-
-                    }
-                });
-
-            }
-
-            if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
-                var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
-                    {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
-                    ,
-                    {name: 'Available', minWidth:'20px',valueField: 'Available'}];
-                $("" + jID + "").mcautocomplete({
-                    source: finalDataProduct,
-                    columns:columnsC,
-                    minlength: 1,
-                    autoFocus: true,
-                    delay: 0,
-                    select:function (e, ui) {
-                        console.log(ui.item);
-                        var n = ID.indexOf("_");
-                        var token_number = ID.substring(n + 1, ID.length);
-                        if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
-                        {
-                            $('#prodQty_'+token_number).val('0');
-                            $('#prodPrice_'+token_number).val('0');
-                        }
-                        $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
-                        $('#prodCode_' + token_number).val(ui.item.PastelCode);
-                        $('#cost_' + token_number).val(ui.item.Cost);
-                        avgQty(token_number);
-                        $('#PL1_' + token_number).val(ui.item.PriceList1);
-                        $('#PL2_' + token_number).val(ui.item.PriceList2);
-                        $('#PL3_' + token_number).val(ui.item.PriceList3);
-                        $('#PL4_' + token_number).val(ui.item.PriceList4);
-                        $('#PL5_' + token_number).val(ui.item.PriceList5);
-                        $('#PL6_' + token_number).val(ui.item.PriceList6);
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            }
-                        });
-
-                        productPrice(token_number);
-                        $('#gp_' + token_number).val(marginCalculator(ui.item.Cost,$('#prodPrice_'+ token_number).val()));
-
-                    }
-
-                });
-            }
-            //calculator();
-
-        });
-
-        $(".dateTo,.dateFrom").datepicker({
-            changeMonth: true,//this option for allowing user to select month
-            changeYear: true, //this option for allowing user to select from year range
-            dateFormat: 'dd-mm-yy'
-        });
-        $('#tblCreateNewSpecial').on('click', 'button', function (e) {
-            var $this = $(this);
-            $this.closest('tr').remove();
-        });
-
-    }
-
-
     function roundquick(val)
     {
         return parseFloat(val).toFixed(2);
