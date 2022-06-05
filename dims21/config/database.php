@@ -80,34 +80,35 @@ return [
 
             'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
-            'database' => 'linxdbDIMSTESTING',
+            'host' => '102.37.0.48',
+            'port' =>  '1492',
+            'database' => 'linxdbdims',
             'username' => 'sa',
-            'password' =>  'Linx_123',
+            'password' =>  'System2016#',
             'prefix' => ''
 
         ],
         'sqlsrv2' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
-            'database' => 'linxdbDIMSTESTING',
+            'host' => '102.37.0.48',
+            'port' =>  '1492',
+            'database' => 'linxdbdims',
             'username' => 'sa',
-            'password' =>  'Linx_123',
+            'password' =>  'System2016#',
             'prefix' => '',
             'pooling'  => false,
         ],
         'sqlsrv3' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
-            'database' => 'linxdbDIMSTESTING',
+            'host' => '102.37.0.48',
+            'port' =>  '1492',
+            'database' => 'linxdbdims',
             'username' => 'sa',
-            'password' =>  'Linx_123',
+            'password' =>  'System2016#',
             'prefix' => '',
             'pooling'  => false,
         ],
+        
         'webstore' => [
             'driver' => 'sqlsrv',
             'host' => '102.133.239.108',
@@ -162,11 +163,11 @@ return [
 
         'sqlsrv4' => [
             'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1433',
-            'database' => 'linxdbDIMSTESTING',
+            'host' => '102.37.0.48',
+            'port' =>  '1492',
+            'database' => 'linxdbdims',
             'username' => 'sa',
-            'password' =>  'Linx_123',
+            'password' =>  'System2016#',
             'prefix' => '',
             'pooling'  => false,
 

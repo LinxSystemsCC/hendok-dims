@@ -147,7 +147,7 @@ public function createnewcustomercontract(Request $request){
         $dateTo = (new \DateTime($request->get('contractDateTo')))->format('Y-m-d');
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
-        $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
+        $orderDetailsxml = $orderDetails;
 
         $returnresults = DB::connection('sqlsrv3')
             ->select("EXEC spXMLCustomerSpecialsKFValidation '".$orderDetailsxml."',".$customerId.",'".$contractid."'");
@@ -166,7 +166,7 @@ public function createnewcustomercontract(Request $request){
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
 
-        $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
+        $orderDetailsxml = $orderDetails;
         $returnresults = DB::connection('sqlsrv3')
             ->select("EXEC spXMLCustomerSpecialsKF '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId);
         $outPut['result'] = $returnresults[0]->Result;
