@@ -1015,24 +1015,25 @@ $('#deleteall').click(function(){
     {
         
             
-        var productsLinesOnPicking = new Array();
+        var productsLinesOnPicking ="<xml>";
             var selectedDatasUsers = $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) { 
                 productsLinesOnPickingPrimary= data;
      });  
-
             $.each(productsLinesOnPickingPrimary ,function(key,value) {
-                 
-                    productsLinesOnPicking.push({
-                        'productCode': value.PastelCode,
-                        'price': value.PriceLookedUp,
-                        'dateFrom':  value.Date ,
-                        'dateTo':value.DateTo,
-                        'cost_':value.Cost,
-                        'gp_': (1-(value.Cost/value.PriceLookedUp))*100,
-                        'customerid': $('#customerId').val(),
-                        'contractid': $('#custheadid').val()
-                    });
+                
+                productsLinesOnPicking= productsLinesOnPicking + "<result>";
+                productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+escapeHtml(value.PastelCode)+"</productCode>";
+                productsLinesOnPicking= productsLinesOnPicking + "<price>"+value.PriceLookedUp+"</price>";
+                productsLinesOnPicking= productsLinesOnPicking + "<dateFrom>"+value.Date+"</dateFrom>";
+                productsLinesOnPicking= productsLinesOnPicking + "<dateTo>"+value.DateTo+"</dateTo>";
+                productsLinesOnPicking= productsLinesOnPicking + "<cost_>"+value.Cost+"</cost_>";
+                productsLinesOnPicking= productsLinesOnPicking + "<gp_>"+(1-(value.Cost/value.PriceLookedUp))*100+"</gp_>";
+                productsLinesOnPicking= productsLinesOnPicking + "<customerid>"+escapeHtml($('#customerId').val())+"</customerid>";
+                productsLinesOnPicking= productsLinesOnPicking + "<contractid>"+escapeHtml($('#custheadid').val())+"</contractid>";
+                productsLinesOnPicking= productsLinesOnPicking+ "</result>";
+                    
             });
+            productsLinesOnPicking= productsLinesOnPicking+"</xml>";
             $.ajax({
                 url: '{!!url("/XmlCreateCustomerSpecialsKFValid")!!}', // createCustomerSpecials
                 type: "POST",
@@ -1045,8 +1046,6 @@ $('#deleteall').click(function(){
                     orderDetails: productsLinesOnPicking
                 },
                 success: function (data) {
-                    console.log("data tag " + data);
-                    console.log("data result tag " +data.result);
                     var duplicateresult = data.result;
                     if (data.result.length ==0) // so if there is nothing  do the following
                     {
@@ -1085,6 +1084,7 @@ $('#deleteall').click(function(){
                                     dialog.dialog('close');
                                 },
                                 "YES": function () {
+
                                     $.ajax({
                                         url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
                                         type: "POST",
@@ -1158,13 +1158,15 @@ $('#deleteall').click(function(){
 
                         });
                         $('#gridduplicatespecials').append(trHTML);
-
+                        
                     }
 
 
 
                 }
             });
+            
+            
        
     }
     function roundquick(val)
@@ -1321,6 +1323,14 @@ $('#deleteall').click(function(){
 
 
     });
+    function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
     function dateReturn(dates)
     {
         //27-02-2019
