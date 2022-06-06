@@ -8,12 +8,7 @@
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
 
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-     <style>
-        .dx-datagrid{
-            font:10px verdana;
-        }
-
-    </style>
+    
 </head>
     <div class="col-lg-12"  style="background: white;    font-family: 'Helvetica Neue', arial, sans-serif;">
         <h3 style="text-align: center;">Customer Specials</h3>
@@ -78,21 +73,18 @@
 
         </fieldset>
     </div>
-    <div class="col-lg-12" id="afterFilter" style="    font-family: 'Helvetica Neue', arial, sans-serif;">
-        <div class="col-lg-12" style="background: white;height: 60%;overflow-y: scroll">
+    <div class="col-lg-12" id="afterFilter">
         <div id="gridContainer">
     
 
 </div>
                     
       
-        </div>
         <div class="col-lg-12" style="background: white;">
             <button id="doneCreating" class="btn-xs btn-success">Done</button>
         </div>
 
 
-    </div>
     <div title="Items having duplicate specials. Press Yes to push the products, No closes the dialog" id="duplicatespecials">
         <h2>These lines have duplicate specials.</h2>
         <form>
@@ -143,58 +135,10 @@
 
 @endsection
 <style>
-    .tablesorter thead tr .header {
-        background-image:url({{asset('images/bg.gif')}});
-        background-repeat: no-repeat;
-        background-position: center right;
-
-    }
-    .table thead th {
-         position: sticky;
-          top: 0;
-          background:white;
-        }
-    .tablesorter thead tr .headerSortDown {
-        background-image: url({{asset('images/asc.gif')}});
-    }
-    .tablesorter thead tr .headerSortDown {
-        background-image: url({{asset('images/desc.gif')}});
-    }
-    .clusterize-scroll{
-        max-height: 600px;
-        overflow: auto;
-    }
-
-    /**
-     * Avoid vertical margins for extra tags
-     * Necessary for correct calculations when rows have nonzero vertical margins
-     */
-    .clusterize-extra-row{
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-    }
-
-    /* By default extra tag .clusterize-keep-parity added to keep parity of rows.
-     * Useful when used :nth-child(even/odd)
-     */
-    .clusterize-extra-row.clusterize-keep-parity{
-        display: none;
-    }
-
-    /* During initialization clusterize adds tabindex to force the browser to keep focus
-     * on the scrolling list, see issue #11
-     * Outline removes default browser's borders for focused elements.
-     */
-    .clusterize-content{
-        outline: 0;
-        counter-reset: clusterize-counter;
-    }
-
-    /* Centering message that appears when no data provided
-     */
-    .clusterize-no-data td{
-        text-align: center;
-    }
+    
+       .dx-datagrid-table{
+           font-size:10px;
+       }
 </style>
 <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
 <script>
@@ -682,13 +626,14 @@ $('#deleteall').click(function(){
        
        dataSource:data, //as json
                     
-       
        showBorders: true,
        filterRow: { visible: true },
        allowColumnResizing: true,
-      
+      paging:{
+        pageSize: 500,
+      },
        editing: {
-            mode: "row",
+            mode: "cell",
             refreshMode: "reshape",
             allowUpdating: true,
             allowAdding: true,
@@ -718,7 +663,7 @@ $('#deleteall').click(function(){
                     
                 },
                caption: "Code",
-               width: 150,
+               width: 125,
                lookup: {
                      dataSource: data_products,
                      displayExpr:'PastelCode',
@@ -729,7 +674,7 @@ $('#deleteall').click(function(){
            {
                dataField: "PastelDescription",
                caption: "Description",
-               width: 250,
+               width: 200,
                setCellValue: function(rowData, value) {
                 rowData.PastelCode = value.PastelCode;
                 rowData.PastelDescription = value.PastelDescription;
@@ -757,20 +702,20 @@ $('#deleteall').click(function(){
                dataField: "Date",
                dataType: 'date',
                caption: "DtFrom",
-               width: 115,
+               width: 80,
                format:"dd-MM-yyyy"
 
            },{
                dataField: "DateTo",
                dataType: 'date',
                caption: "DtTo",
-               width: 115,
+               width: 80,
                format:"dd-MM-yyyy"
 
            },{
                dataField: "PriceLookedUp",
                caption: "Price",
-               width: 100,
+               width: 70,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -781,7 +726,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "avgQty",
                caption: "Quantity",
-               width: 100,
+               width: 70,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -792,7 +737,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "Cost",
                caption: "Cost",
-               width: 90,
+               width: 60,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -805,7 +750,7 @@ $('#deleteall').click(function(){
                 return (1-(rowData.Cost/rowData.PriceLookedUp))*100;
             },
                caption: "GP",
-               width: 90,
+               width: 60,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -818,7 +763,7 @@ $('#deleteall').click(function(){
                 return rowData.PriceLookedUp*0.9;
             },
                caption: "Less 10%",
-               width: 95,
+               width: 60,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -829,7 +774,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "PL1",
                caption: "Price List 1",
-               width: 110,
+               width: 80,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -840,7 +785,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "PL2",
                caption: "Price List 2",
-               width: 110,
+               width:80,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -851,7 +796,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "PL3",
                caption: "Price List 3",
-               width: 110,
+               width: 80,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -862,7 +807,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "PL4",
                caption: "Price List 4",
-               width: 110,
+               width: 80,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -873,7 +818,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "PL5",
                caption: "Price List 5",
-               width: 110,
+               width: 80,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -884,7 +829,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "PL6",
                caption: "Price List 6",
-               width: 110,
+               width: 80,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -895,7 +840,7 @@ $('#deleteall').click(function(){
                allowEditing:false,
                dataField: "PriceLookedUpCurrent",
                caption: "C.S. Price",
-               width: 100,
+               width: 70,
                dataType: 'number',
                format: {
                 type: "fixedPoint",
@@ -962,7 +907,8 @@ $('#deleteall').click(function(){
            editRowKey = e.key;
        },
        onInitNewRow: function(e) {
-           console.debug("InitNewRow");
+         
+           
            
        },
        onRowInserting: function(e) {
@@ -1020,7 +966,12 @@ $('#deleteall').click(function(){
                 productsLinesOnPickingPrimary= data;
      });  
             $.each(productsLinesOnPickingPrimary ,function(key,value) {
-                
+                if (value.Date == undefined){
+                    value.Date= $('#dateFrom').val();
+                }
+                if (value.DateTo == undefined){
+                    value.DateTo= $('#dateTo').val();
+                }
                 productsLinesOnPicking= productsLinesOnPicking + "<result>";
                 productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+escapeHtml(value.PastelCode)+"</productCode>";
                 productsLinesOnPicking= productsLinesOnPicking + "<price>"+value.PriceLookedUp+"</price>";
