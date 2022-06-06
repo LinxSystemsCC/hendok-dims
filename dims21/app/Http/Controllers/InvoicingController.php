@@ -56,7 +56,7 @@ class InvoicingController extends Controller
 //dd();
         $invnum =$this->returnInvoiceNumber($invoiceid,$ownersId);
         if(strlen(trim($invnum) ) > 4){
-
+            dd($userid."-".$invoiceid."-".$SoNumber."".$ownersId."-".$userName) ;
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                 ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
                     array($userid, $invoiceid, $SoNumber, $ownersId, $userName)
@@ -495,12 +495,12 @@ class InvoicingController extends Controller
                 array($trasferID,$reference,$userid)
             );
 
-        echo "**********************************PRINT TRIPSHEET**************************************************************************** <br>";
+        /*echo "**********************************PRINT TRIPSHEET**************************************************************************** <br>";
         $transferremainings = DB::connection('sqlsrv3')
             ->select('exec spInsertHendokTripsheet ?,?',
                 array($reference,$userid)
             );
-        echo "**********************************DONE PRINTING TRIPSHEET******************************************************************** <br>";
+        echo "**********************************DONE PRINTING TRIPSHEET******************************************************************** <br>";*/
         //[spInsertHendokTripsheet]
         $this->getRemainingBalance($reference,$trasferID,$indexId);
 
