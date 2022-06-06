@@ -75,7 +75,7 @@
 
             @endforeach
                 @foreach($pickingheader as $value)
-                    <h5 style="text-align: center">{{$value->strPickingNickname}} ***** {{$value->intAutoPickingHeader}}</h5>
+                    <h5 style="text-align: center">Name:{{$value->strPickingNickname}} ID: {{$value->intAutoPickingHeader}}</h5>
                 @endforeach
 
     <table style="font-size: 11px;">
