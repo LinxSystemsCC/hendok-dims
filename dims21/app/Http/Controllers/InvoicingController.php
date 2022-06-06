@@ -56,7 +56,7 @@ class InvoicingController extends Controller
 //dd();
         $invnum =$this->returnInvoiceNumber($invoiceid,$ownersId);
         if(strlen(trim($invnum) ) > 4){
-            dd($userid."-".$invoiceid."-".$SoNumber."".$ownersId."-".$userName) ;
+            //dd($userid."-".$invoiceid."-".$SoNumber."".$ownersId."-".$userName) ;
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                 ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
                     array($userid, $invoiceid, $SoNumber, $ownersId, $userName)
