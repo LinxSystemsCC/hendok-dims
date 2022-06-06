@@ -65,6 +65,7 @@
     {!! QrCode::size(60)->generate($ref); !!}<br>
             <i style="font-size: 7px;">{{$ref}}</i>
         </div>
+
         <div style="width: 90%">
             @foreach($pickingheader as $value)
 
@@ -73,6 +74,9 @@
                 @endif
 
             @endforeach
+                @foreach($pickingheader as $value)
+                    <h5 style="text-align: center">{{$value->strPickingNickname}} ***** {{$value->intAutoPickingHeader}}</h5>
+                @endforeach
 
     <table style="font-size: 11px;">
         <tbody>
