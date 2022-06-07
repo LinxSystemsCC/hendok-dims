@@ -477,6 +477,7 @@
             var rowId = $this.closest('tr').find('.rowids').val();
             var strTicket = $this.closest('tr').find('.strTicket').val();
             var ubARIBT = $this.closest('tr').find('.ubARIBT').val();
+            var ibt = $this.closest('tr').find('.ibt').val();
 
             console.debug("rowId-*******************"+rowId);
             console.debug("SONumber-*******************"+SONumber);
@@ -487,7 +488,7 @@
                 alert("Weighbridge Ticket Is Not Set");
             }else {
                 if (ubARIBT == 1) {
-                    window.open('{!!url("/whtransfers")!!}/' + $('#refno').val()+"/"+invoiceid, "whtransfers" + $('#refno').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
+                    window.open('{!!url("/whtransfers")!!}/' + $('#refno').val()+"/"+ibt, "whtransfers" + $('#refno').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
                 } else {
                     $.ajax({
                         url: '{!!url("/individualInvoicing")!!}',
