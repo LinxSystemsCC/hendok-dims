@@ -299,19 +299,25 @@ class InvoicingController extends Controller
         }
 
     }
-    public function whtransfers($reference){
+    public function whtransfers($reference,$orderId){
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
-        $returnToInvoices = DB::connection('sqlsrv3')
-            ->select('exec spAutoIndexForTrasfers ?',
+        $returnNegativeItems = DB::connection('sqlsrv3')
+            ->select('exec spNegativeInventory ?',
                 array($reference)
             );
-//this is true
-        foreach ($returnToInvoices as $innverVal){
-            $this->processTransfer($reference,$innverVal->AutoIndex,$innverVal->OrderNum);
+        if(count($returnNegativeItems) > 0){
+            $this->negativeInventory($reference);
+        }else{
+            $returnToInvoices = DB::connection('sqlsrv3')
+                ->select('exec spAutoIndexForTrasfers ?,?',
+                    array($reference,$orderId)
+                );
+
+            foreach ($returnToInvoices as $innverVal){
+                $this->processTransfer($reference,$innverVal->AutoIndex,$innverVal->OrderNum);
+            }
         }
-
-
     }
     public function warehousetransfer($itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2,$intorderdetailId){
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
@@ -381,6 +387,53 @@ class InvoicingController extends Controller
                  DB::connection('sqlsrv3')->table('tblPickingPlan')
                      ->where('intorderdetailId',$intorderdetailId )
                      ->update(['isTranferedToCentralWH' => 1]);
+
+        }catch (Error $err){
+            echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+            echo $err;
+        }
+
+    }
+    //NEGATIVE INVENTORY ITEMS TO ADJUST
+    public function negativeInventory($ref){
+        $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+        //	dd(get_declared_classes());
+
+        try {
+            //Initialise
+            //  echo "Entering ";
+//spNegativeInventory
+
+            //dd($indexId." - ".$reference);
+            $sdkHelper->CreateCommonDBConnection(env('COMMON') );
+            $sdkHelper->SetLicense("DE12111039", "4626921");
+            $sdkHelper->CreateConnection(env('HENDOK'));
+            $InventoryTransaction = new \COM("Pastel.Evolution.InventoryTransaction");
+            // dd($sdkHelper->GetInventoryOperation( "Increase"));
+            //dd();
+            $returnNegativeItems = DB::connection('sqlsrv3')
+                ->select('exec spNegativeInventory ?',
+                    array($ref)
+                );
+
+            foreach($returnNegativeItems as $val){
+                $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
+                $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($val->Code);
+                $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($val->warehouse) ;
+                $InventoryTransaction->Operation =1;//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
+                $InventoryTransaction->Quantity = floatval($val->qty);
+
+                $InventoryTransaction->Reference = $val->OrderNum;
+                $InventoryTransaction->Reference2 = $ref;
+                $InventoryTransaction->Date =(new \DateTime($val->dtmDate))->format('Y-m-d');
+                $InventoryTransaction->Description = "Dims Ajustments Neg Inv";
+
+                $InventoryTransaction->Post();
+            }
+
+            //echo "Finished";
+            //isTranferedToCentralWH
+
 
         }catch (Error $err){
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
