@@ -307,6 +307,13 @@ class InvoicingController extends Controller
                 array($reference)
             );
         if(count($returnNegativeItems) > 0){
+
+            echo "<table><thead><th>Item Code</th><th>Qty Loaded</th><th>In Stock Qty</th><th>Qty Needed</th></thead><tbody>";
+            foreach ($returnNegativeItems as $val){
+                echo "<tr><td>".$val->Code."</td><td>".$val->Toinvoice."</td><td>".$val->QtyInStock."</td><td>".$val->qty."</td></tr>";
+            }
+            echo "</tbody></table>";
+dd("Testing the list @Chris please wait");
             $this->negativeInventory($reference);
         }else{
             $returnToInvoices = DB::connection('sqlsrv3')
@@ -433,6 +440,7 @@ class InvoicingController extends Controller
 
             //echo "Finished";
             //isTranferedToCentralWH
+            echo "DONE ADJUSTING";
 
 
         }catch (Error $err){
