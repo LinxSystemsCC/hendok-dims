@@ -390,7 +390,7 @@ $('#deleteall').click(function(){
         $("#dateFrom,#dateTo").datepicker({
             changeMonth: true,//this option for allowing user to select month
             changeYear: true, //this option for allowing user to select from year range
-            dateFormat: 'dd-mm-yy'
+            dateFormat: 'yy-mm-dd'
         });
         $('#submitFiltersOnCreatingCustSpecial').click(function(){
 
@@ -432,8 +432,8 @@ $('#deleteall').click(function(){
                 },
                 success: function (data) {
 
-                    $('#dateFrom').val($.datepicker.formatDate('dd-mm-yy', new Date( data[0].DateFrom)) );
-                    $('#dateTo').val( $.datepicker.formatDate('dd-mm-yy', new Date( data[0].DateTo))  );
+                    $('#dateFrom').val($.datepicker.formatDate('yy-mm-dd', new Date( data[0].DateFrom)) );
+                    $('#dateTo').val( $.datepicker.formatDate('yy-mm-dd', new Date( data[0].DateTo))  );
 
                 }
             });
