@@ -501,9 +501,11 @@
                         success: function (data) {
 
                             console.debug(data);
+
                             $('#' + rowId).css('background', '#89CFF0');
                             $('#rtrr' + rowId).css('background', '#89CFF0');
                             if(data[0].result =="SUCCESS"){
+                                alert("done");
                                 $this.closest('tr').find('.invnumber').val(data[0].InvNumber);
                             }
 
