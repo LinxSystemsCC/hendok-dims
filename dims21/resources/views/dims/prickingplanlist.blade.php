@@ -219,10 +219,10 @@
 
                     <td>{{ $val->OrderDate}}</td>
                     <td>{{$val->OrderNum}} @if($val->isReadyForInvoicing == 1 && $val->ubARIBT == 0)
-                            <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
+                            <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="text" class="invnumber" value="{{$val->InvNumber}}"> <input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
                         @endif
                         @if($val->isReadyForInvoicing == 1 && $val->ubARIBT == 1)
-                            <button style="background: #0BA008;color: white;" class="ibt" value="{{$val->OrderId}}">IBT {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
+                            <button style="background: #0BA008;color: white;" class="ibt" value="{{$val->OrderId}}">IBT {{ $val->OrderNum}}</button><input type="text" class="invnumber" value="{{$val->InvNumber}}"><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
                         @endif
                     </td>
                     <td>{{ $val->ExtOrderNum}}</td>
@@ -261,10 +261,10 @@
 
                     @if($orderNumber != $val->OrderNum)
                         <td>{{$val->OrderNum}} @if($val->isReadyForInvoicing == 1 && $val->ubARIBT == 0)
-                              <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
+                              <button style="background: #0BA008;color: white;" class="invoicethis" value="{{$val->OrderId}}">Invoice {{ $val->OrderNum}}</button><input type="text" class="invnumber" value="{{$val->InvNumber}}"><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
                                 @endif
                             @if($val->isReadyForInvoicing == 1 && $val->ubARIBT == 1)
-                                <button style="background: #0BA008;color: white;" class="ibt" value="{{$val->OrderId}}">IBT {{ $val->OrderNum}}</button><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
+                                <button style="background: #0BA008;color: white;" class="ibt" value="{{$val->OrderId}}">IBT {{ $val->OrderNum}}</button><input type="text" class="invnumber" value="{{$val->InvNumber}}"><input type="hidden" class="refid" value="{{$val->strUnickReference}}"> <input type="hidden" class="ownerid" value="{{$val->intOwnerID}}"> <input type="hidden" class="OrderNumdim" value="{{$val->OrderNum}}"><input type="hidden" class="ubARIBT" value="{{$val->ubARIBT}}">
                             @endif
                         </td>
                     @else
@@ -487,7 +487,7 @@
                 alert("Weighbridge Ticket Is Not Set");
             }else {
                 if (ubARIBT == 1) {
-                    window.open('{!!url("/whtransfers")!!}/' + $('#refno').val(), "whtransfers" + $('#refno').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
+                    window.open('{!!url("/whtransfers")!!}/' + $('#refno').val()+"/"+invoiceid, "whtransfers" + $('#refno').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
                 } else {
                     $.ajax({
                         url: '{!!url("/individualInvoicing")!!}',
@@ -500,8 +500,13 @@
                         },
                         success: function (data) {
 
+                            console.debug(data);
                             $('#' + rowId).css('background', '#89CFF0');
                             $('#rtrr' + rowId).css('background', '#89CFF0');
+                            if(data[0].result =="SUCCESS"){
+                                $this.closest('tr').find('.invnumber').val(data[0].InvNumber);
+                            }
+
                         }
                     });
                 }
