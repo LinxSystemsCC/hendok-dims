@@ -339,7 +339,7 @@ var dFromExporting =$('#dateTo').val();
        
     },
     success: function (data) {
-        $('#tblCreateNewSpecial tbody').empty();
+        $('.dx-datagrid-table tbody').empty();
     }
 });
                                     dialog.dialog('close');
