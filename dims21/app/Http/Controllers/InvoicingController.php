@@ -313,7 +313,7 @@ class InvoicingController extends Controller
                 echo "<tr><td>".$val->Code."</td><td>".$val->Toinvoice."</td><td>".$val->QtyInStock."</td><td>".$val->qty."</td></tr>";
             }
             echo "</tbody></table>";
-dd("Testing the list @Chris please wait");
+//dd("Testing the list @Chris please wait");
             $this->negativeInventory($reference);
         }else{
             $returnToInvoices = DB::connection('sqlsrv3')
@@ -330,7 +330,7 @@ dd("Testing the list @Chris please wait");
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
             //Initialise
-          //  echo "Entering ";
+            //  echo "Entering ";
 
             //dd($indexId." - ".$reference);
             $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
@@ -375,7 +375,7 @@ dd("Testing the list @Chris please wait");
             //dd();
 
             $ref2 = $this->returnInvoiceNumber($invoiceid,$ownersId);
-           // dd( $ref2);
+            // dd( $ref2);
             $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
             $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemcode);
             $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($Warehouse) ;
@@ -391,9 +391,9 @@ dd("Testing the list @Chris please wait");
 
             //echo "Finished";
             //isTranferedToCentralWH
-                 DB::connection('sqlsrv3')->table('tblPickingPlan')
-                     ->where('intorderdetailId',$intorderdetailId )
-                     ->update(['isTranferedToCentralWH' => 1]);
+            DB::connection('sqlsrv3')->table('tblPickingPlan')
+                ->where('intorderdetailId',$intorderdetailId )
+                ->update(['isTranferedToCentralWH' => 1]);
 
         }catch (Error $err){
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
@@ -440,7 +440,7 @@ dd("Testing the list @Chris please wait");
 
             //echo "Finished";
             //isTranferedToCentralWH
-            echo "DONE ADJUSTING";
+            echo "DONE ADJUSTING ---Please Refresh";
 
 
         }catch (Error $err){
@@ -604,6 +604,9 @@ dd("Testing the list @Chris please wait");
                 //   $salesOrder->ExtOrderNum = $reference; //Will user SONumber
                 //salesOrder->GetWarehouseByCode
                 //  	$orderDetail->salesOrder = ;
+                $ExtOrderNum = "";
+                $DocRepID = 9;
+                $DelMethodID = 2;
                 foreach($transferremainings as $val){
                     $orderDetail = new \COM("Pastel.Evolution.OrderDetail");
                     $orderDetail->InventoryItem  = $sdkHelper->GetStockItem($val->Code);
@@ -612,18 +615,20 @@ dd("Testing the list @Chris please wait");
                     $orderDetail->TaxType =$sdkHelper->GetTaxRate("1");
                     $orderDetail->Warehouse = $sdkHelper->GetWarehouseByCode("Mstr") ;
                     $orderDetail->UnitSellingPrice = floatval($val->fUnitPriceExcl);
+                    $ExtOrderNum = $val->ExtOrderNum;
                     //	$orderDetail->TaxMode = "";
-
-
                     $salesOrder->Detail->Add($orderDetail);
                 }
+                $salesOrder->ExtOrderNum = $ExtOrderNum;
+                $salesOrder->DocRepID = $DocRepID;
+                $salesOrder->DelMethodID = $DelMethodID;
                 $reference = $salesOrder->Save();
 
-                 $transferremainings = DB::connection('sqlsrv3')
-                      ->select('exec spCancelOldTranfer ?',
-                          array($indexId)
-                      );
-                  echo "________________________________________________Cancelled Old Transfer________________________________________________ ".$indexId."<br>";
+                $transferremainings = DB::connection('sqlsrv3')
+                    ->select('exec spCancelOldTranfer ?',
+                        array($indexId)
+                    );
+                echo "________________________________________________Cancelled Old Transfer________________________________________________ ".$indexId."<br>";
 
             }catch (Error $err){
                 echo "<h3 style='color: darkred'>__________Errors_________</h3>";
