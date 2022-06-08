@@ -681,6 +681,10 @@
                                     <a href='{!!url("/andNewSpecialKF")!!}' onclick="window.open(this.href, 'massGrid',
 'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" > Customer Specials</a>
                                 </li>
+                                <li>
+                                    <a href='{!!url("/searchSpecialKF")!!}' onclick="window.open(this.href, 'searchSpecialKF',
+'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" > Search Customer Specials</a>
+                                </li>
 
                                 <li>
                                     <a href='{!!url("/massgridspecialscustomer")!!}' onclick="window.open(this.href, 'massGrid',

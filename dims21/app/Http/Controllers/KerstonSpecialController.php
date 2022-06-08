@@ -262,7 +262,27 @@ public function createnewcustomercontract(Request $request){
         DB::connection('sqlsrv3')->table('tblCustomerSpecialHeader')->where('SpecialHeaderId',$contractid)->delete();
         
     }
-     function getContractsPerCustomerIDWithDates(Request $request){
+    public function searchSpecialKF(){
+        $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )->select('CustomerId','StoreName','CustomerPastelCode')->orderBy('CustomerPastelCode','ASC')->get();
+        $queryProducts =DB::connection('sqlsrv3')->table("viewtblProducts" )->select('ProductId','PastelDescription','PastelCode')->orderBy('PastelCode','ASC')->get();
+        
+        return view('dims/search_customer_special_kf')
+        ->with('customers',$queryCustomers)
+        ->with('products',$queryProducts);
+    }
+    public function getCurrentSpecialsSearch(Request $request){
+        $customers = $request->get('customers');
+        $customers = implode(", ", $customers);
+        $products = $request->get('products');
+        $products = implode(", ", $products);
+
+        $getSpecialsOnParams = DB::connection('sqlsrv3')
+            ->select("EXEC spGetSpecialsFromSearchParams ?,? ",array($customers,$products));
+
+        return response()->json($getSpecialsOnParams);
+    }   
+    
+    function getContractsPerCustomerIDWithDates(Request $request){
         $customerid = $request->get('customerid');
         $dateFrom =  $request->get('datefrom');
         $dateTo =  $request->get('dateto');
@@ -276,7 +296,9 @@ public function createnewcustomercontract(Request $request){
 
 
         return response()->json($getcontracts);
-    }public static function toxml($arr, $root = "xml", $elements = Array())
+    }
+    
+    public static function toxml($arr, $root = "xml", $elements = Array())
     {
         $result = '';
         $result .= "<" . $root . ">\r\n";
