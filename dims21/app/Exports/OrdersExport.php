@@ -43,6 +43,6 @@ class OrdersExport implements FromQuery, WithHeadings
                 'Price',
                 'Tax')
             ->where('OrderId', $this->orderid)
-            ->orderBy('PastelDescription');
+            ->orderBy('OrderDetailId');
     }
 }
