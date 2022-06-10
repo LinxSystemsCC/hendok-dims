@@ -90,10 +90,8 @@ public function createnewcustomercontract(Request $request){
             ->where('StatusId',1)
 
             ->orderBy('CustomerPastelCode','ASC')->get();
-            $queryProducts =DB::connection('sqlsrv3')->table("viewActiveProductWithVatForKFSpecials" )->select('ProductId','PastelCode','PastelDescription','UnitSize','Tax','Cost','QtyInStock','Margin','Alcohol','Available','PurchOrder','PL1','PL2','PL3','PL4','PL5','PL6')->orderBy('PastelDescription','ASC')->distinct()->get();
-
+            
         return view('dims/kerstonspecials')
-                ->with('products',$queryProducts)
                 ->with('customers',$queryCustomers);
     }
     public function customerByDateOrContractSpecKF(Request $request)
@@ -112,10 +110,8 @@ public function createnewcustomercontract(Request $request){
     public function andNewSpecialKF()
     {
         $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute')->orderBy('CustomerPastelCode','ASC')->get();
-        $queryProducts =DB::connection('sqlsrv3')->table("viewActiveProductWithVatForKFSpecials" )->select('ProductId','PastelCode','PastelDescription','UnitSize','Tax','Cost','QtyInStock','Margin','Alcohol','Available','PurchOrder','PL1','PL2','PL3','PL4','PL5','PL6')->orderBy('PastelDescription','ASC')->distinct()->get();
-
+        
         return view('dims/add_new_customer_special_kf')
-                ->with('products',$queryProducts)
                 ->with('customers',$queryCustomers);
     }
     public function getCustomerAvgQty(Request $request){
@@ -127,6 +123,20 @@ public function createnewcustomercontract(Request $request){
         array($customerid,$productcode));
         return response()->json($getAvgQty);
     }
+    public function convertCurrentContractPricelist(Request $request){
+        $contractid = $request ->get('contractid');
+        $pricelistid = $request ->get('pricelistid');
+         DB::connection('sqlsrv3')
+        ->statement('exec spConvertContractPriceListid ?,?',
+        array($contractid,$pricelistid));
+    } 
+    public function getCurrentPricesProductsCustomerSpecialsKF (Request $request){
+        $customerid= $request->get('customerID');
+        $deliverydate= $request->get('deliveryDate');
+        $returnfulldataload = DB::connection('sqlsrv3')
+        ->select('exec spGetFullLoadForCustSpecials ?,?', array($customerid,$deliverydate)  );
+        return response()->json($returnfulldataload);
+    }
     public function XmlCreateCustomerSpecialsKFValid(Request $request)
     {
         $customerCode = $request->get('customerCode');
@@ -137,7 +147,7 @@ public function createnewcustomercontract(Request $request){
         $dateTo = (new \DateTime($request->get('contractDateTo')))->format('Y-m-d');
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
-        $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
+        $orderDetailsxml = $orderDetails;
 
         $returnresults = DB::connection('sqlsrv3')
             ->select("EXEC spXMLCustomerSpecialsKFValidation '".$orderDetailsxml."',".$customerId.",'".$contractid."'");
@@ -156,8 +166,7 @@ public function createnewcustomercontract(Request $request){
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
 
-        $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
-
+        $orderDetailsxml = $orderDetails;
         $returnresults = DB::connection('sqlsrv3')
             ->select("EXEC spXMLCustomerSpecialsKF '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId);
         $outPut['result'] = $returnresults[0]->Result;
@@ -178,16 +187,15 @@ public function createnewcustomercontract(Request $request){
         return view('dims/productduplicate')
         ->with('products',$returnresults);
     }
-    public function getCurrentHistoryCustomerSpecialsKF(Request $request){
+    public function postCurrentHistoryCustomerSpecialsKF(Request $request){
         $customerCode = $request->get('customercode');
         $customerid =$request->get('customerId');
         $contractid = $request->get('contractid');
 
-        $GetCustomerSpecail = DB::connection('sqlsrv3')
-        ->select('exec spCustomerSpecialHistoryKF ?,?,?',
+       DB::connection('sqlsrv3')
+        ->statement('exec spCustomerSpecialHistoryKF ?,?,?',
         array($customerCode,$customerid,$contractid));
 
-        return response()->json($GetCustomerSpecail);
 
     }
     public function copycontract(Request $request){
@@ -254,7 +262,27 @@ public function createnewcustomercontract(Request $request){
         DB::connection('sqlsrv3')->table('tblCustomerSpecialHeader')->where('SpecialHeaderId',$contractid)->delete();
         
     }
-     function getContractsPerCustomerIDWithDates(Request $request){
+    public function searchSpecialKF(){
+        $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )->select('CustomerId','StoreName','CustomerPastelCode')->orderBy('CustomerPastelCode','ASC')->get();
+        $queryProducts =DB::connection('sqlsrv3')->table("viewtblProducts" )->select('ProductId','PastelDescription','PastelCode')->orderBy('PastelCode','ASC')->get();
+        
+        return view('dims/search_customer_special_kf')
+        ->with('customers',$queryCustomers)
+        ->with('products',$queryProducts);
+    }
+    public function getCurrentSpecialsSearch(Request $request){
+        $customers = $request->get('customers');
+        $customers = implode(", ", $customers);
+        $products = $request->get('products');
+        $products = implode(", ", $products);
+
+        $getSpecialsOnParams = DB::connection('sqlsrv3')
+            ->select("EXEC spGetSpecialsFromSearchParams ?,? ",array($customers,$products));
+
+        return response()->json($getSpecialsOnParams);
+    }   
+    
+    function getContractsPerCustomerIDWithDates(Request $request){
         $customerid = $request->get('customerid');
         $dateFrom =  $request->get('datefrom');
         $dateTo =  $request->get('dateto');
@@ -268,7 +296,9 @@ public function createnewcustomercontract(Request $request){
 
 
         return response()->json($getcontracts);
-    }public static function toxml($arr, $root = "xml", $elements = Array())
+    }
+    
+    public static function toxml($arr, $root = "xml", $elements = Array())
     {
         $result = '';
         $result .= "<" . $root . ">\r\n";

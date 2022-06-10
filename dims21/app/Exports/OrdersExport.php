@@ -18,9 +18,10 @@ class OrdersExport implements FromQuery, WithHeadings
     public function headings(): array
     {
         return [
-            'PastelCode',
-            'PastelDescription',
+            'Code',
+            'Description',
             'Qty',
+            'InStock',
             'UnitSize',
             'Price',
             'Tax',
@@ -37,10 +38,11 @@ class OrdersExport implements FromQuery, WithHeadings
             ->select( 'PastelCode',
                 'PastelDescription',
                 'Qty',
+                'QtyInStock',
                 'UnitSize',
                 'Price',
                 'Tax')
             ->where('OrderId', $this->orderid)
-            ->orderBy('PastelDescription');
+            ->orderBy('OrderDetailId');
     }
 }
