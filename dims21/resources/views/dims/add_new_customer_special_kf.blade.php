@@ -80,10 +80,28 @@
 
         </fieldset>
     </div>
+    <div class="col-lg-12">
+        <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed">
+            <thead>
+            <tr style="font-size: 12px;">
+                <td>Code</td>
+                <td>Description</td>
+                <td>Date From</td>
+                <td>Date To</td>
+                <td>Price</td>
+                <td>Cost</td>
+                <td>GP</td>
+                <td>Cost Created</td>
+                <td>C.S Price</td>
+                <td>Actions</td>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
     <div class="col-lg-12" id="afterFilter">
+
         <div id="gridContainer" style="     width:100%;height:62%">
-
-
         </div>
 
 
@@ -162,12 +180,42 @@
         });
 
         var jArrayCustomer = JSON.stringify({!! json_encode($customers) !!});
+        var jArray = JSON.stringify({!! json_encode($products) !!});
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        var finalDataProduct = $.map(JSON.parse(jArray), function (item) {
+            return {
+                value: item.PastelCode,
+                PastelCode: item.PastelCode,
+                PastelDescription: item.PastelDescription,
+                UnitSize: item.UnitSize,
+                Tax: item.Tax,
+                Cost: parseFloat(item.Cost).toFixed(2),
+                QtyInStock: item.QtyInStock,
+                Margin: item.Margin,
+                Alcohol: item.Alcohol,
+                Available: parseFloat(item.Available).toFixed(2)
+            }
 
+        });
+        var finalDataProductDescription = $.map(JSON.parse(jArray), function (item) {
+            return {
+                value: item.PastelDescription,
+                PastelCode: item.PastelCode,
+                PastelDescription: item.PastelDescription,
+                UnitSize: item.UnitSize,
+                Tax: item.Tax,
+                Cost: parseFloat(item.Cost).toFixed(2),
+                QtyInStock: item.QtyInStock,
+                Margin: item.Margin,
+                Alcohol: item.Alcohol,
+                Available: parseFloat(item.Available).toFixed(2)
+            }
+
+        });
 
         var finalData =$.map(JSON.parse(jArrayCustomer), function(item) {
 
@@ -189,6 +237,7 @@
         });
 
         $(document).ready(function() {
+            generateALine2();
             /*
                         $('#messagevalidatingthecontract').empty();
 
@@ -289,7 +338,7 @@
                         customerid: $('#customerId').val()
                     },
                     success: function (data) {
-                        $('#tblCreateNewSpecial tbody').empty();
+                        //$('#tblCreateNewSpecial tbody').empty();
                         var trHTML = "";
                         $("#custheadid").empty();
                         trHTML+='<option value="-99">Select a Contract ID</option>';
@@ -318,7 +367,7 @@
                         customerid: $('#customerId').val()
                     },
                     success: function (data) {
-                        $('#tblCreateNewSpecial tbody').empty();
+                       // $('#tblCreateNewSpecial tbody').empty();
                         var trHTML = "";
                         $("#custheadid").empty();
                         trHTML+='<option value="-99">Select a Contract ID</option>';
@@ -1295,6 +1344,202 @@
 
 
         }
+        function generateALine2()
+        {
+            var contractFrom = $('#dateFrom').val();
+            var contractTo = $('#dateTo').val();
+            var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
+            var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
+                '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'" class="theProductCode_ set_autocomplete inputs"></td>' +
+                '<td contenteditable="false" class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
+                '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
+                '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Save Line</button></td></tr>');
+            $('#tblCreateNewSpecial tbody')
+                .append( $row )
+                .trigger('addRows', [ $row, false ]);
+            if(!$('.lst').is(":focus"))
+            {
+                $('#prodCode_' + tokenId).focus();
+
+                if ($('#checkboxDescription').is(':checked')) {
+                    $('#prodDescription_' + tokenId).focus();
+                }
+            }
+
+
+            $('input').on('click keyup' ,function(){
+                // $('input').click(function(){
+                var ID = $(this).attr('id');
+                var jID = '#'+ID;
+                var x = ID.indexOf("_");
+                var get_token_number = ID.substring(x+1,ID.length);
+
+                if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
+                    var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
+                        {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
+                        ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
+                    $(""+jID+"").mcautocomplete({
+                        source:finalDataProductDescription,
+                        columns:columnsD,
+                        autoFocus: true,
+                        minlength: 2,
+                        delay: 0,
+                        multiple: true,
+                        multipleSeparator: ",",
+                        select:function (e, ui) {
+                            var n = ID.indexOf("_");
+                            var token_number = ID.substring(n + 1, ID.length);
+
+                            if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                            {
+                                $('#prodQty_'+token_number).val('0');
+                                $('#prodPrice_'+token_number).val('0');
+                            }
+                            $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                            $('#prodCode_' + token_number).val(ui.item.PastelCode);
+
+                            $('#taxCode' + token_number).val(ui.item.Tax);
+                            $('#cost_' + token_number).val(ui.item.Cost);
+
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+                            productPrice(token_number);
+
+
+                        }
+                    });
+
+                }
+
+                if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
+                    var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
+                        {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
+                        ,
+                        {name: 'Available', minWidth:'20px',valueField: 'Available'}];
+                    $("" + jID + "").mcautocomplete({
+                        source: finalDataProduct,
+                        /*  source: function(req, response) {
+                              var re = $.ui.autocomplete.escapeRegex(req.term);
+                              var matcher = new RegExp("^" + re, "i");
+                              response($.grep(finalDataProduct, function(item) {
+                                  return matcher.test(item.value);
+                              }));
+                          },*/
+                        columns:columnsC,
+                        minlength: 1,
+                        autoFocus: true,
+                        delay: 0,
+                        select:function (e, ui) {
+
+                            var n = ID.indexOf("_");
+                            var token_number = ID.substring(n + 1, ID.length);
+                            if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                            {
+                                $('#prodQty_'+token_number).val('0');
+                                $('#prodPrice_'+token_number).val('0');
+                            }
+                            $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                            $('#prodCode_' + token_number).val(ui.item.PastelCode);
+                            //checkIfOrderHasMultipleProducts(ui.item.extra,token_number);
+                            //$('#inStock_' + token_number).val(ui.item.QtyInStock);
+                            $('#taxCode' + token_number).val(ui.item.Tax);
+                            $('#cost_' + token_number).val(ui.item.Cost);
+                            // $('#prodQty_' + token_number).attr('title', 'In Stock ' + parseFloat(ui.item.QtyInStock).toFixed(3));
+
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+
+                            productPrice(token_number);
+
+                        }
+
+                    });
+                }
+                //calculator();
+            });
+            $(".dateTo,.dateFrom").datepicker({
+                changeMonth: true,//this option for allowing user to select month
+                changeYear: true, //this option for allowing user to select from year range
+                dateFormat: 'dd-mm-yy'
+            });
+            $('#tblCreateNewSpecial').on('click', 'button', function (e) {
+                var $this = $(this);
+               // $this.closest('tr').remove();
+
+                var productsLinesOnPicking = new Array();
+                $('#tblCreateNewSpecial > tbody  > tr').each(function() {
+                    // var data = $(this);
+                    // var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
+
+                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && ($(this).closest('tr').find('.prodDescription_').val()).length > 0 ) {
+                        productsLinesOnPicking.push({
+                            'productCode': $(this).closest('tr').find('.theProductCode_').val(),
+                            'price': $(this).closest('tr').find('.prodPrice_').val(),
+                            'dateFrom':  dateReturn($(this).closest('tr').find('.dateFrom').val()) ,
+                            'dateTo': dateReturn( $(this).closest('tr').find('.dateTo').val()),
+                            'cost_': $(this).closest('tr').find('.cost_').val(),
+                            'gp_': $(this).closest('tr').find('.gp_').val(),
+                            'costCreated_': $(this).closest('tr').find('.costCreated_').val(),
+                            'customerid': $('#customerId').val(),
+                        });
+                    }
+                });
+                $.ajax({
+                    url: '{!!url("/XmlCreateCustomerSpecials")!!}', // createCustomerSpecials
+                    type: "POST",
+                    data: {
+                        customerCode: $('#inputCustAcc').val(),
+                        customerId: $('#customerId').val(),
+                        contractDateFrom: $('#dateFrom').val(),
+                        contractDateTo: $('#dateTo').val(),
+                        orderDetails: productsLinesOnPicking,
+                        contractId:$('#custheadid').val()
+                    },
+                    success: function (data) {
+
+                        if (data.result !="SUCCESS")
+                        {
+                            var dialog = $('<p>'+data.result+'</p>').dialog({
+                                height: 200, width: 700, modal: true, containment: false,
+                                buttons: {
+                                    "OKAY": function () {
+                                        dialog.dialog('close');
+                                    }
+                                }
+                            });
+                        }/*else{
+                            var dialog = $('<p>Special Line Create</p>').dialog({
+                                height: 200, width: 700, modal: true, containment: false,
+                                buttons: {
+                                    "OKAY": function () {
+                                        location.reload(true);
+                                        dialog.dialog('close');
+                                    }
+                                }
+                            });
+
+                        }*/
+
+
+
+                    }
+                });
+
+            });
+
+        }
         function roundquick(val)
         {
             return parseFloat(val).toFixed(2);
@@ -1424,7 +1669,7 @@
             var prodDescClosest = closesttr.find(".prodDescription_").val();
             var prodPriceClosest = closesttr.find(".prodPrice_").val();
             if ( (code == 34 || code == 13 || code == 39 ) && $.trim(prodClosest.length) > 0 && prodDescClosest.length > 0 &&  prodPriceClosest.length > 0) {
-                generateALine2();
+               // generateALine2();
 
             }
         });
@@ -1434,7 +1679,7 @@
                 var index = $('.inputs').index(this);
 
                 $('.lst').eq(index).focus();
-                generateALine2();
+                //generateALine2();
 
             }
         });

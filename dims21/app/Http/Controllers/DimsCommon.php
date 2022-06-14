@@ -1246,6 +1246,7 @@ class DimsCommon extends Controller
         $customerCode = $request->get('customerCode');
         $customerId = $request->get('customerId');
         $orderDetails = $request->get('orderDetails');
+        $contractId = $request->get('contractId');
         $date = (new \DateTime($request->get('contractDateFrom')))->format('Y-m-d');
         $dateTo = (new \DateTime($request->get('contractDateTo')))->format('Y-m-d');
         $userid = Auth::user()->UserID;
@@ -1254,7 +1255,7 @@ class DimsCommon extends Controller
         $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
 
         $returnresults = DB::connection('sqlsrv3')
-            ->select("EXEC spXMLCustomerSpecials '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId);
+            ->select("EXEC spXMLCustomerSpecials '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId,$contractId);
         $outPut['result'] = $returnresults[0]->Result;
         return $outPut;
 
