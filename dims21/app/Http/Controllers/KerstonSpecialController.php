@@ -39,10 +39,10 @@ class KerstonSpecialController extends Controller
            $contractid =  $request->get('contractIdfile');
            $sessionUserId = Auth::user()->UserID;
            //dd(  $customerid );
-         
+
 
            $path = $request->file('select_file')->getRealPath();
-           
+
            $data = Excel::import(new SpecialsImport, $filefrompost);
            //
            $convertBulk = DB::connection('sqlsrv3')
@@ -50,12 +50,12 @@ class KerstonSpecialController extends Controller
                array($sessionUserId, $contractid)
            );
            echo "FILE IMPORTED, PLEASE CLOSE THE DIALOG";
-        
+
 
            //return redirect('/andNewSpecialKF')->with('success', 'All good!');
 }
 public function createnewcustomercontract(Request $request){
-    
+
     $date = (new \DateTime($request->get('dateFrom')))->format('Y-m-d');
     $dateTo = (new \DateTime($request->get('dateTo')))->format('Y-m-d');
     $Customerid = $request->get('customerId');
@@ -90,7 +90,7 @@ public function createnewcustomercontract(Request $request){
             ->where('StatusId',1)
 
             ->orderBy('CustomerPastelCode','ASC')->get();
-            
+
         return view('dims/kerstonspecials')
                 ->with('customers',$queryCustomers);
     }
@@ -110,9 +110,10 @@ public function createnewcustomercontract(Request $request){
     public function andNewSpecialKF()
     {
         $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute')->orderBy('CustomerPastelCode','ASC')->get();
-        
+        $queryProducts =DB::connection('sqlsrv3')->table("viewActiveProductWithVat" )->select('ProductId','PastelCode','PastelDescription','UnitSize','Tax','Cost','QtyInStock','Margin','Alcohol','Available','PurchOrder')->orderBy('PastelDescription','ASC')->distinct()->get();
+
         return view('dims/add_new_customer_special_kf')
-                ->with('customers',$queryCustomers);
+                ->with('customers',$queryCustomers)->with('products',$queryProducts);
     }
     public function getCustomerAvgQty(Request $request){
 
@@ -129,13 +130,24 @@ public function createnewcustomercontract(Request $request){
          DB::connection('sqlsrv3')
         ->statement('exec spConvertContractPriceListid ?,?',
         array($contractid,$pricelistid));
-    } 
+    }
     public function getCurrentPricesProductsCustomerSpecialsKF (Request $request){
         $customerid= $request->get('customerID');
         $deliverydate= $request->get('deliveryDate');
         $returnfulldataload = DB::connection('sqlsrv3')
         ->select('exec spGetFullLoadForCustSpecials ?,?', array($customerid,$deliverydate)  );
+
+     /*   $returnitemlist= DB::connection('sqlsrv3')
+            ->select('exec spItemLooKupDevXtreme ');
+        $outPut['specials'] = $returnfulldataload;
+        $outPut['items'] = $returnitemlist;*/
         return response()->json($returnfulldataload);
+    }
+    public function spItemLooKupDevXtreme(){
+        $returnitemlist= DB::connection('sqlsrv3')
+            ->select('exec spItemLooKupDevXtreme ');
+        return response()->json($returnitemlist);
+
     }
     public function XmlCreateCustomerSpecialsKFValid(Request $request)
     {
@@ -254,18 +266,18 @@ public function createnewcustomercontract(Request $request){
     public function deletecontractlines(Request $request){
         $contractid = $request->get('contractid');
         DB::connection('sqlsrv3')->table('tblCustomerSpecials')->where('SpecialHeaderId',$contractid)->delete();
-        
+
     }
     public function deleteALLBasedContract(Request $request){
         $contractid = $request->get('contractid');
         DB::connection('sqlsrv3')->table('tblCustomerSpecials')->where('SpecialHeaderId',$contractid)->delete();
         DB::connection('sqlsrv3')->table('tblCustomerSpecialHeader')->where('SpecialHeaderId',$contractid)->delete();
-        
+
     }
     public function searchSpecialKF(){
         $queryCustomers =DB::connection('sqlsrv3')->table("viewtblCustomers" )->select('CustomerId','StoreName','CustomerPastelCode')->orderBy('CustomerPastelCode','ASC')->get();
         $queryProducts =DB::connection('sqlsrv3')->table("viewtblProducts" )->select('ProductId','PastelDescription','PastelCode')->orderBy('PastelCode','ASC')->get();
-        
+
         return view('dims/search_customer_special_kf')
         ->with('customers',$queryCustomers)
         ->with('products',$queryProducts);
@@ -280,8 +292,8 @@ public function createnewcustomercontract(Request $request){
             ->select("EXEC spGetSpecialsFromSearchParams ?,? ",array($customers,$products));
 
         return response()->json($getSpecialsOnParams);
-    }   
-    
+    }
+
     function getContractsPerCustomerIDWithDates(Request $request){
         $customerid = $request->get('customerid');
         $dateFrom =  $request->get('datefrom');
@@ -297,7 +309,7 @@ public function createnewcustomercontract(Request $request){
 
         return response()->json($getcontracts);
     }
-    
+
     public static function toxml($arr, $root = "xml", $elements = Array())
     {
         $result = '';
