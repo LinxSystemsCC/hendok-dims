@@ -853,6 +853,8 @@
 
                                         },{
                                             allowEditing:false,
+                                            allowSorting:true,
+                                            allowFiltering:true,
                                             calculateCellValue: function(rowData) {
                                                 return (1-(rowData.Cost/rowData.PriceLookedUp))*100;
                                             },
@@ -866,6 +868,8 @@
 
                                         },{
                                             allowEditing:false,
+                                            allowSorting:true,
+                                            allowFiltering:true,
                                             calculateCellValue: function(rowData) {
                                                 return rowData.PriceLookedUp*0.9;
                                             },
