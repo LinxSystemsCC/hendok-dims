@@ -18,9 +18,9 @@
 
     </head>
     <div class="col-lg-12"  style="background: white;    font-family: 'Helvetica Neue', arial, sans-serif;">
-        <h3 style="text-align: center;">Customer Specials</h3>
+
         <fieldset class="well">
-            <legend class="well-legend">Add Filters</legend>
+            <legend class="well-legend">Customer Specials</legend>
             <form>
                 <div class="col-md-12">
                     <div class="form-group  col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
@@ -43,17 +43,10 @@
                         <label class="control-label" for="dateFrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Date From</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="dateFrom" style="font-weight: 900;    color: black;font-size: 13px;">
                     </div>
-                    <div class="form-group col-md-1 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <div class="form-group col-md-2 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                         <label class="control-label" for="dateTo"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Date To</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="dateTo" style="font-weight: 900;    color: black;font-size: 13px;">
-
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label class="control-label" for="submitFiltersOnCreatingCustSpecial"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;"></label>
-                        <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;">Submit</button>
-
-                        <button type="button" id="deletelines" class="btn-danger btn-xs" style="float:right;">Delete All - Lines</button>
-                        <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete Contract </button>
+                        <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;margin-top: 5px;float: right;">Submit</button>
                     </div>
 
 
@@ -66,8 +59,6 @@
                 <div class="col-md-8">
 
                     <button type="button" id="addinHistory" class="btn-xs btn-primary" style="padding: 2px 49px;">Get History</button>
-                    <button type="button" id="pricelist1convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 1</button>
-                    <button type="button" id="pricelist2convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 2</button>
                     <button type="button" id="getContractDetails" class="btn-xs btn-primary " style="padding: 2px 19px;">Get Contract Details</button>
                     <button type="button" id="copyContractIntoLines" class="btn-xs btn-primary " style="padding: 2px 19px;">Copy Contract</button>
 
@@ -81,6 +72,7 @@
         </fieldset>
     </div>
     <div class="col-lg-12">
+        <button class="btn-xs btn-primary pull-right" id="addnewline" >Add Line</button>
         <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed">
             <thead>
             <tr style="font-size: 12px;">
@@ -98,6 +90,15 @@
             </thead>
             <tbody></tbody>
         </table>
+
+        <button class="btn-xs btn-success pull-right" id="SaveNewSpecial" >Save New Lines</button>
+        <hr>
+    </div>
+    <div  class="col-lg-12" id="subbuttonmian" style="background: whitesmoke;">
+        <button type="button" id="pricelist1convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 1</button>
+        <button type="button" id="pricelist2convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 2</button>
+        <button type="button" id="deletelines" class="btn-danger btn-xs" style="float:right;">Delete All - Lines</button>
+        <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete Contract </button>
     </div>
     <div class="col-lg-12" id="afterFilter">
 
@@ -172,6 +173,7 @@
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
+        var datagrids="";
 
         today = yyyy  + '-' +mm  + '-' +dd ;
         console.debug(today);
@@ -269,7 +271,7 @@
 
             $('#orderListing').hide();
             $('#addinCurrentPrices').hide();
-            $('#addinHistory').hide();
+          //  $('#addinHistory').hide();
             $('#pricing').hide();
             $('#pricingOnCustomer').hide();
             $('#callList').hide();
@@ -282,6 +284,7 @@
             $('#dialogcopycontracts').hide();
             $('#exportexcel').hide();
             $('#uploaddocument').hide();
+            $('#subbuttonmian').hide();
             $('#exportexcel').click(function()
             {
                 window.location = '{!!url("/export")!!}/'+$('#custheadid').val();
@@ -302,6 +305,8 @@
                 $('#inputCustAcc').val(data.CustomerPastelCode);
                 $('#inputCustName').val(data.StoreName);
                 $('#customerId').val(data.CustomerId);
+                $('#subbuttonmian').show();
+
                 // $('#customerIdfile').val(data.CustomerId);
 
             });
@@ -330,6 +335,7 @@
                 $('#inputCustAcc').val(data.CustomerPastelCode);
                 $('#inputCustName').val(data.StoreName);
                 $('#customerId').val(data.CustomerId);
+                $('#subbuttonmian').show();
                 //start option population here async
                 $.ajax({
                     url: '{!!url("/getContractsPerCustomerID")!!}',
@@ -359,6 +365,7 @@
                 $('#inputCustAcc').val(data.CustomerPastelCode);
                 $('#inputCustName').val(data.StoreName);
                 $('#customerId').val(data.CustomerId);
+                $('#subbuttonmian').show();
                 // $('#customerIdfile').val(data.CustomerId);
                 $.ajax({
                     url: '{!!url("/getContractsPerCustomerID")!!}',
@@ -440,7 +447,7 @@
 
 
             });
-            $('#addLine').click(function(){
+            $('#addnewline').click(function(){
 
                 generateALine2();
             });
@@ -454,7 +461,7 @@
                 $('#addinCurrentPrices').show();
                 $('#addinHistory').show();
                 $('#afterFilter').show();
-                $('#tblCreateNewSpecial tbody').empty();
+                //$('#tblCreateNewSpecial tbody').empty();
                 if($("#custheadid").val() == "-99"){
                     //create
                     $.ajax({
@@ -679,7 +686,7 @@
                             },
                             success: function(data_products){
                                 var added = false;
-                                $("#gridContainer").dxDataGrid({
+                        datagrids = $("#gridContainer").dxDataGrid({
 
                                     dataSource:new DevExpress.data.ArrayStore({
                                         data:data,
@@ -1359,7 +1366,7 @@
                 '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
                 '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
                 '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
-                '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Save Line</button></td></tr>');
+                '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
             $('#tblCreateNewSpecial tbody')
                 .append( $row )
                 .trigger('addRows', [ $row, false ]);
@@ -1474,10 +1481,7 @@
                 changeYear: true, //this option for allowing user to select from year range
                 dateFormat: 'dd-mm-yy'
             });
-            $('#tblCreateNewSpecial').on('click', 'button', function (e) {
-                var $this = $(this);
-               // $this.closest('tr').remove();
-
+            $('#SaveNewSpecial').click(function(){
                 var productsLinesOnPicking = new Array();
                 $('#tblCreateNewSpecial > tbody  > tr').each(function() {
                     // var data = $(this);
@@ -1487,8 +1491,8 @@
                         productsLinesOnPicking.push({
                             'productCode': $(this).closest('tr').find('.theProductCode_').val(),
                             'price': $(this).closest('tr').find('.prodPrice_').val(),
-                            'dateFrom':  dateReturn($(this).closest('tr').find('.dateFrom').val()) ,
-                            'dateTo': dateReturn( $(this).closest('tr').find('.dateTo').val()),
+                            'dateFrom':  dateReturn($('#dateFrom').val()) ,
+                            'dateTo': dateReturn( $('#dateTo').val()),
                             'cost_': $(this).closest('tr').find('.cost_').val(),
                             'gp_': $(this).closest('tr').find('.gp_').val(),
                             'costCreated_': $(this).closest('tr').find('.costCreated_').val(),
@@ -1519,23 +1523,22 @@
                                     }
                                 }
                             });
-                        }/*else{
-                            var dialog = $('<p>Special Line Create</p>').dialog({
-                                height: 200, width: 700, modal: true, containment: false,
-                                buttons: {
-                                    "OKAY": function () {
-                                        location.reload(true);
-                                        dialog.dialog('close');
-                                    }
-                                }
-                            });
+                        }else{
+                            $('#tblCreateNewSpecial tbody').empty();
+                            $('#getContractDetails').click();
 
-                        }*/
+                        }
 
 
 
                     }
                 });
+            });
+            $('#tblCreateNewSpecial').on('click', 'button', function (e) {
+                var $this = $(this);
+                $this.closest('tr').remove();
+
+
 
             });
 
@@ -1669,7 +1672,7 @@
             var prodDescClosest = closesttr.find(".prodDescription_").val();
             var prodPriceClosest = closesttr.find(".prodPrice_").val();
             if ( (code == 34 || code == 13 || code == 39 ) && $.trim(prodClosest.length) > 0 && prodDescClosest.length > 0 &&  prodPriceClosest.length > 0) {
-               // generateALine2();
+                generateALine2();
 
             }
         });
@@ -1679,7 +1682,7 @@
                 var index = $('.inputs').index(this);
 
                 $('.lst').eq(index).focus();
-                //generateALine2();
+                generateALine2();
 
             }
         });
