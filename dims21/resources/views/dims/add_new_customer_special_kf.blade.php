@@ -97,17 +97,16 @@
     <div  class="col-lg-12" id="subbuttonmian" style="background: whitesmoke;">
         <button type="button" id="pricelist1convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 1</button>
         <button type="button" id="pricelist2convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 2</button>
+        <div class="col-lg-12" style="background: white;text-align: center;">
+            <button id="doneCreating" class="btn-xs btn-success">Update Contract Data</button>
+        </div>
+
         <button type="button" id="deletelines" class="btn-danger btn-xs" style="float:right;">Delete All - Lines</button>
         <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete Contract </button>
     </div>
     <div class="col-lg-12" id="afterFilter">
 
         <div id="gridContainer" style="     width:100%;height:62%">
-        </div>
-
-
-        <div class="col-lg-12" style="background: white;">
-            <button id="doneCreating" class="btn-xs btn-success">Done</button>
         </div>
 
 
@@ -1188,13 +1187,19 @@
         function PressDone()
         {
 
+            var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").items();
+            var checkedLines = new Array();
+            console.log( allGridItems);
 
             var productsLinesOnPicking ="<xml>";
-            var selectedDatasUsers = $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) {
+         /*   var selectedDatasUsers = $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) {
                 productsLinesOnPickingPrimary= data;
-            });
-            $.each(productsLinesOnPickingPrimary ,function(key,value) {
-                if (value.Date == undefined || (value.Date).length < 5){
+            });*/
+            console.log( "_________________________");
+            //console.log( productsLinesOnPickingPrimary);
+
+            $.each(allGridItems ,function(key,value) {
+               if (value.Date == undefined || (value.Date).length < 5){
                     value.Date= $('#dateFrom').val();
                 }
                 if (value.DateTo == undefined || (value.DateTo).length < 5){
@@ -1213,6 +1218,8 @@
                     productsLinesOnPicking= productsLinesOnPicking+ "</result>";
 
                 }
+                console.debug("**********"+value.Date);
+
 
             });
             productsLinesOnPicking= productsLinesOnPicking+"</xml>";
