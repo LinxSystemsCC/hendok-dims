@@ -141,6 +141,11 @@ Route::get('getbulkeditingLandingage/{customercode}/{datefrom}/{dateto}', [DimsC
 Route::get('getgroupspecialbulkeditingLandingage/{groupId}/{datefrom}/{dateto}',[DimsCommon::class,'getgroupspecialbulkeditingLandingage']);
 Route::get('groupspecials', [DimsCommon::class,'groupspecials']);
 Route::get('overallspecials',[DimsCommon::class,'overallspecials']);
+Route::get('combospecials',[DimsCommon::class,'combospecials']);
+Route::post('combospecialsjson',[DimsCommon::class,'combospecialsjson']);
+Route::post('xmlSaveComboHeaders',[DimsCommon::class,'xmlSaveComboHeaders']);
+Route::post('xmlSaveComboLines',[DimsCommon::class,'xmlSaveComboLines']);
+Route::post('combospecialsjsonlines',[DimsCommon::class,'combospecialsjsonlines']);
 Route::get('andNewSpecial', [DimsCommon::class,'andNewSpecial']);
 Route::get('customerspecialTemplate', [DimsCommon::class,'customerspecialTemplate']);
 Route::get('checkifcustomerspecial/{date1}/{date2}', [DimsCommon::class,'checkifcustomerspecials']);
@@ -272,6 +277,7 @@ Route::post('jsonOrderDetailsPos',[SalesFormFunctions::class,'postOrderDetailsAs
 Route::post('createbackorderonsplit',[SalesFormFunctions::class,'createbackorderonsplit']);
 Route::post('printPickingSlipPerOrder', [SalesFormFunctions::class,'printPickingSlipPerOrder']);
 Route::post('productsOnOrder', [SalesFormFunctions::class,'productsOnOrder']);
+Route::get('getOnOrder', [SalesFormFunctions::class,'getOnOrder']);
 Route::post('countOnSalesOrder', [SalesFormFunctions::class,'countOnSalesOrder']);
 Route::post('productsOnInvoiced',[SalesFormFunctions::class,'productsOnInvoiced']);
 Route::post('getOrderPattern', [SalesFormFunctions::class,'getCustomerOderpattern']);
@@ -848,6 +854,7 @@ Route::get('jsonbininfoGrid', [WareHouseManagementController::class,'jsonbininfo
 Route::get('jsonGetProductsInTheBin', [WareHouseManagementController::class,'jsonGetProductsInTheBin']);
 Route::get('bininfoGridProducts', [WareHouseManagementController::class,'bininfoGridProducts']);
 Route::get('jsonbininfoGridProducts', [WareHouseManagementController::class,'jsonbininfoGridProducts']);
+Route::get('binlocatons', [WareHouseManagementController::class,'binlocatons']);
 
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
@@ -901,6 +908,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('kerstonspecial', [KerstonSpecialController::class,'kerstonspecial']);
     Route::get('andNewSpecialKF', [KerstonSpecialController::class,'andNewSpecialKF']);
+    Route::get('spItemLooKupDevXtreme', [KerstonSpecialController::class,'spItemLooKupDevXtreme']);
     Route::post('getCurrentPricesProductsCustomerSpecialsKF',[KerstonSpecialController::class,'getCurrentPricesProductsCustomerSpecialsKF']);
     Route::post('convertCurrentContractPricelist',[KerstonSpecialController::class,'convertCurrentContractPricelist']);
     Route::get('validatethecontractId', [KerstonSpecialController::class,'validatethecontractId']);
