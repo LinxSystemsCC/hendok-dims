@@ -3,6 +3,7 @@
 @section('content')
 
     <div class="col-lg-12" id="prodOnOrder" title="Products on Sales Order" style="background: darkgoldenrod">
+        <button class="btn-lg btn-success" id="refresh">Refresh Page</button>
         <form>
             <fieldset class="well" style="    background: #e8e8e8;">
                 <legend class="well-legend">Search</legend>
@@ -113,6 +114,9 @@
     $(document).ready(function() {
 
 
+        $('#refresh').click(function(){
+            location.reload();
+        });
         $('#orderListing').hide();
         $('#addinCurrentPrices').hide();
         //  $('#addinHistory').hide();
