@@ -326,7 +326,7 @@
         function productsOnOrder()
         {
 
-            productsOnOrders = $('#tblOnsalesOrder').DataTable({
+            $('#tblOnsalesOrder').DataTable({
                 "ajax": {
                     url: '{!!url("/productsOnOrder")!!}', "type": "post", data: function (data) {
                         data.productCode = $('#productCodeOnOrder').val();
