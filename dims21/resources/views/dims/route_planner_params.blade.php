@@ -89,6 +89,7 @@
                     <div >
                         <div style="display: inline-block;"><input name="mass" class="form-control input-sm col-xs-1" id="mass" style="color:blue;font-size:15px;font-weight: 900;" ></div>
                         <div style="display: inline-block;"> <input name="ordervaluetot" class="form-control input-sm col-xs-1" id="ordervaluetot" style="color:red;font-size:15px;font-weight: 900;" ></div>
+                         <button name="exportexcel" class="btn-xs btn-primary" id="exportexcel" style="float:right;" >Export to Excel</button>
                     </div>
                 </div>
 
@@ -273,7 +274,9 @@
 <script src="{{ asset('public/js/jquery-2.2.3.min.js') }}"></script>
 
 <script>
-
+//backgroudcolorOffloadedHighNotification is GREEN therefore NOTIFICATION IS THREE
+//lockedbackgroudcolor is LAVENDER therefore it is ON CREDIT HOLD
+//backgroudcolor is RED therefore   it is A BACKORDER
     var jArrayOrderTypes = JSON.stringify({!! json_encode($orderTypes) !!});
     var jArraydelivDates = JSON.stringify({!! json_encode($delivDates) !!});
     var jArraydelivroutes = JSON.stringify({!! json_encode($routes) !!});
@@ -285,6 +288,7 @@
     $(document).ready(function() {
         //$('#routePlanningPopUp').hide();
         $('#orderListing').hide();
+        $('#exportexcel').hide();
         $('#pricing').hide();
         $('#callList').hide();
         $('#copyOrdersBtn').hide();
@@ -466,15 +470,24 @@
 
             $('#afterFiltering').hide();
             $('#doneSorting').show();
+            $('#exportexcel').show();
             $('#updateSorting').hide();
             $('#messageNB').show();
             $('#instantPrint').hide();
-
 
             //console.debug($('#rouTabletLoadingtesonPlanning').val());
             getMultiRoutSelected();
 
             //routesToSequence();
+        });
+        $('#exportexcel').click(function()
+        {
+            /* 
+                OrderType: $('#orderTypesTabletLoadingonPlanning').val(),
+                dateTo: $('#deliveryDatesonPlanning2').val(),
+                status: $('#statusRoutePlanner').val()*/ 
+            window.location = '{!!url("/exportRoutePlanDetails")!!}/'+$('#rouTabletLoadingtesonPlanning').val()+'/'+ $('#deliveryDatesonPlanning').val()+'/'
+            +$('#deliveryDatesonPlanning2').val()+'/'+$('#orderTypesTabletLoadingonPlanning').val()+'/'+$('#statusRoutePlanner').val(); 
         });
         $('#notifypickers').click(function(){
 

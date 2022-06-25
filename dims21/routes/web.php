@@ -533,6 +533,7 @@ Route::post('contactDetailsOnOrder', [DimsReports::class,'contactDetailsOnOrder'
 Route::get('pricelistview', [DimsReports::class,'pricelistview']);
 Route::get('getProductsMappedToThePriceList', [DimsReports::class,'getProductsMappedToThePriceList']);
 Route::get('exportorder/{orderid}',[DimsReports::class,'exportorder'] );
+Route::get('exportRoutePlanDetails/{routeid}/{deliverydatefrom}/{deliverydateto}/{ordertype}/{status}',[DimsReports::class,'exportRoutePlanDetails']);
 
 //DIMS REPORTS CONTROLLER ENDS HERE !!!
 
