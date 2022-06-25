@@ -1,19 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-<html>
-<head>
-    
-<link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
+    <html>
+    <head>
 
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    
-</head>
+        <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
+        <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
+
+        <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
+        <script type="text/javascript" src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/js/signalr.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/devextreme-aspnet-data@2.8.6/js/dx.aspnet.data.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+        <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
+
+    </head>
     <div class="col-lg-12"  style="background: white;    font-family: 'Helvetica Neue', arial, sans-serif;">
-        <h3 style="text-align: center;">Customer Specials</h3>
+
         <fieldset class="well">
-            <legend class="well-legend">Add Filters</legend>
+            <legend class="well-legend">Customer Specials</legend>
             <form>
                 <div class="col-md-12">
                     <div class="form-group  col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
@@ -36,19 +43,12 @@
                         <label class="control-label" for="dateFrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Date From</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="dateFrom" style="font-weight: 900;    color: black;font-size: 13px;">
                     </div>
-                    <div class="form-group col-md-1 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                    <div class="form-group col-md-2 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
                         <label class="control-label" for="dateTo"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Date To</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="dateTo" style="font-weight: 900;    color: black;font-size: 13px;">
+                        <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;margin-top: 5px;float: right;">Submit</button>
+                    </div>
 
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label class="control-label" for="submitFiltersOnCreatingCustSpecial"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;"></label>
-                        <button type="button" id="submitFiltersOnCreatingCustSpecial" class="btn-xs btn-success" style="padding: 2px 49px;">Submit</button>
-                        
-    <button type="button" id="deletelines" class="btn-danger btn-xs" style="float:right;">Delete All - Lines</button>
-    <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete Contract </button>
-                    </div>
-                  
 
                 </div>
 
@@ -59,930 +59,1172 @@
                 <div class="col-md-8">
 
                     <button type="button" id="addinHistory" class="btn-xs btn-primary" style="padding: 2px 49px;">Get History</button>
-                    <button type="button" id="pricelist1convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 1</button>
-                    <button type="button" id="pricelist2convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 2</button>
                     <button type="button" id="getContractDetails" class="btn-xs btn-primary " style="padding: 2px 19px;">Get Contract Details</button>
                     <button type="button" id="copyContractIntoLines" class="btn-xs btn-primary " style="padding: 2px 19px;">Copy Contract</button>
 
                 </div>
                 <button type="button" id="importexcel" class="btn-xs btn-primary" style = "float:right">Import Excel</button>
-                
+
 
                 <button type="button" id="exportexcel" class="btn-xs btn-primary" style = "float:right">Export Excel</button>
             </div>
 
         </fieldset>
     </div>
-    <div class="col-lg-12" id="afterFilter">
-        <div id="gridContainer">
-    
+    <div class="col-lg-12">
+        <button class="btn-xs btn-primary pull-right" id="addnewline" >Add Line</button>
+        <table id ="tblCreateNewSpecial" class="table table-bordered table-condensed">
+            <thead>
+            <tr style="font-size: 12px;">
+                <td>Code</td>
+                <td>Description</td>
+                <td>Date From</td>
+                <td>Date To</td>
+                <td>Price</td>
+                <td>Cost</td>
+                <td>GP</td>
+                <td>Cost Created</td>
+                <td>C.S Price</td>
+                <td>Actions</td>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
-</div>
-                    
-      
-        <div class="col-lg-12" style="background: white;">
-            <button id="doneCreating" class="btn-xs btn-success">Done</button>
+        <button class="btn-xs btn-success pull-right" id="SaveNewSpecial" >Save New Lines</button>
+        <hr>
+    </div>
+    <div  class="col-lg-12" id="subbuttonmian" style="background: whitesmoke;">
+        <button type="button" id="pricelist1convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 1</button>
+        <button type="button" id="pricelist2convert" class="btn-xs btn-primary" style="padding: 2px 25px;">Price List 2</button>
+        <div class="col-lg-12" style="background: white;text-align: center;">
+            <button id="doneCreating" class="btn-xs btn-success">Update Contract Data</button>
+        </div>
+
+        <button type="button" id="deletelines" class="btn-danger btn-xs" style="float:right;">Delete All - Lines</button>
+        <button type="button" id="deleteall" class="btn-danger btn-xs" style="float:right;">Delete Contract </button>
+    </div>
+    <div class="col-lg-12" id="afterFilter">
+
+        <div id="gridContainer" style="     width:100%;height:62%">
         </div>
 
 
-    <div title="Items having duplicate specials. Press Yes to push the products, No closes the dialog" id="duplicatespecials">
-        <h2>These lines have duplicate specials.</h2>
-        <form>
+        <div title="Items having duplicate specials. Press Yes to push the products, No closes the dialog" id="duplicatespecials">
+            <h2>These lines have duplicate specials.</h2>
+            <form>
 
-            <div class="form-group  col-md-12" >
-                <table class="table2 table-bordered  dataTable">
-                    <thead>
-                    <tr>
-                        <td>Item Code</td>
-                        <td>Item Name</td>
-                        <td>Price</td>
-                        <td>Date From</td>
-                        <td>Date To</td>
-                        <td>Contract ID</td>
-                    </tr>
-                    </thead>
-                    <tbody id="gridduplicatespecials">
+                <div class="form-group  col-md-12" >
+                    <table class="table2 table-bordered  dataTable">
+                        <thead>
+                        <tr>
+                            <td>Item Code</td>
+                            <td>Item Name</td>
+                            <td>Price</td>
+                            <td>Date From</td>
+                            <td>Date To</td>
+                            <td>Contract ID</td>
+                        </tr>
+                        </thead>
+                        <tbody id="gridduplicatespecials">
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
-            </div>
-        </form>
-
-    </div>
-    <div title="Copy Contract" id="dialogcopycontracts">
-        <h3>Copy Contract From </h3>
-        <form>
-            <div class="col-md-12">
-                <div class="form-group  col-md-12" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                    <label class="control-label" for="custcodeto"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Enter Contact ID You Want To Copy From</label>
-                    <input class="form-control input-sm col-md-4 auto-complete-off" name="entercontracts" id="entercontracts" style="height:30px;font-size: 10px;"></input>
                 </div>
+            </form>
+
+        </div>
+        <div title="Copy Contract" id="dialogcopycontracts">
+            <h3>Copy Contract From </h3>
+            <form>
                 <div class="col-md-12">
-                    <button type="button" id="validateConTractId" class="btn-warning btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Validate The Contract ID</button>
+                    <div class="form-group  col-md-12" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                        <label class="control-label" for="custcodeto"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Enter Contact ID You Want To Copy From</label>
+                        <input class="form-control input-sm col-md-4 auto-complete-off" name="entercontracts" id="entercontracts" style="height:30px;font-size: 10px;"></input>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" id="validateConTractId" class="btn-warning btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Validate The Contract ID</button>
 
-                </div>
-                <div class="col-md-12" id="messagevalidatingthecontract">
+                    </div>
+                    <div class="col-md-12" id="messagevalidatingthecontract">
 
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" id="finalisecopy" class="btn-success btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Finalise Copying</button>
+                    </div>
                 </div>
-                <div class="col-md-12">
-                    <button type="button" id="finalisecopy" class="btn-success btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Finalise Copying</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-  
 
-@endsection
-<style>
-    
-       .dx-datagrid-table{
-           font-size:10px;
-       }
-</style>
-<script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
-<script>
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
 
-    today = yyyy  + '-' +mm  + '-' +dd ;
-    console.debug(today);
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'off' );
-    });
+    @endsection
+    <style>
 
-    var jArrayCustomer = JSON.stringify({!! json_encode($customers) !!});
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        .dx-datagrid-table{
+            font-size:10px;
         }
-    });
-  
-  
-    var finalData =$.map(JSON.parse(jArrayCustomer), function(item) {
+    </style>
+    <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
+    <script>
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        var datagrids="";
 
-        return {
-            BalanceDue:item.BalanceDue,
-            CustomerPastelCode:item.CustomerPastelCode,
-            StoreName:item.StoreName,
-            UserField5:item.UserField5,
-            CustomerId:item.CustomerId,
-            CreditLimit:item.CreditLimit,
-            Email:item.Email,
-            Routeid:item.Routeid,
-            Discount:item.Discount,
-            OtherImportantNotes:item.OtherImportantNotes,
-            Routeid:item.Routeid,
-            strRoute:item.strRoute
-        }
+        today = yyyy  + '-' +mm  + '-' +dd ;
+        console.debug(today);
+        $( document ).on( 'focus', ':input', function(){
+            $( this ).attr( 'autocomplete', 'off' );
+        });
 
-    });
+        var jArrayCustomer = JSON.stringify({!! json_encode($customers) !!});
+        var jArray = JSON.stringify({!! json_encode($products) !!});
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var finalDataProduct = $.map(JSON.parse(jArray), function (item) {
+            return {
+                value: item.PastelCode,
+                PastelCode: item.PastelCode,
+                PastelDescription: item.PastelDescription,
+                UnitSize: item.UnitSize,
+                Tax: item.Tax,
+                Cost: parseFloat(item.Cost).toFixed(2),
+                QtyInStock: item.QtyInStock,
+                Margin: item.Margin,
+                Alcohol: item.Alcohol,
+                Available: parseFloat(item.Available).toFixed(2)
+            }
 
-    $(document).ready(function() {
-/*
-            $('#messagevalidatingthecontract').empty();
+        });
+        var finalDataProductDescription = $.map(JSON.parse(jArray), function (item) {
+            return {
+                value: item.PastelDescription,
+                PastelCode: item.PastelCode,
+                PastelDescription: item.PastelDescription,
+                UnitSize: item.UnitSize,
+                Tax: item.Tax,
+                Cost: parseFloat(item.Cost).toFixed(2),
+                QtyInStock: item.QtyInStock,
+                Margin: item.Margin,
+                Alcohol: item.Alcohol,
+                Available: parseFloat(item.Available).toFixed(2)
+            }
 
-            console.debug("customerid-----------"+$('#custheadid').val()+"---------dFrom-----"+dFrom.length+"------------"+dateTo.length);
-            if($('#custheadid').val() == "-99" && dFrom.length < 8 && dateTo.length < 8  )
-*/
-$('#importexcel').click(function(){
-    
+        });
 
-var dFromImporting =$('#dateFrom').val();
-var dFromExporting =$('#dateTo').val();
-    if($("#custheadid").val() == "-99" || dFromImporting.length < 8 || dFromExporting.length < 8){
-        var dialog = $('<p><strong style="color:red">Contract ID Empty or Dates not selected yet</strong></p>').dialog({
-                            height: 200, width: 700,modal: true,containment: false,
-                            buttons: {
-                                "Okay": function () {
-                                    dialog.dialog('close');
-                                }
+        var finalData =$.map(JSON.parse(jArrayCustomer), function(item) {
+
+            return {
+                BalanceDue:item.BalanceDue,
+                CustomerPastelCode:item.CustomerPastelCode,
+                StoreName:item.StoreName,
+                UserField5:item.UserField5,
+                CustomerId:item.CustomerId,
+                CreditLimit:item.CreditLimit,
+                Email:item.Email,
+                Routeid:item.Routeid,
+                Discount:item.Discount,
+                OtherImportantNotes:item.OtherImportantNotes,
+                Routeid:item.Routeid,
+                strRoute:item.strRoute
+            }
+
+        });
+
+        $(document).ready(function() {
+            generateALine2();
+            /*
+                        $('#messagevalidatingthecontract').empty();
+
+                        console.debug("customerid-----------"+$('#custheadid').val()+"---------dFrom-----"+dFrom.length+"------------"+dateTo.length);
+                        if($('#custheadid').val() == "-99" && dFrom.length < 8 && dateTo.length < 8  )
+            */
+            $('#importexcel').click(function(){
+
+
+                var dFromImporting =$('#dateFrom').val();
+                var dFromExporting =$('#dateTo').val();
+                if($("#custheadid").val() == "-99" || dFromImporting.length < 8 || dFromExporting.length < 8){
+                    var dialog = $('<p><strong style="color:red">Contract ID Empty or Dates not selected yet</strong></p>').dialog({
+                        height: 200, width: 700,modal: true,containment: false,
+                        buttons: {
+                            "Okay": function () {
+                                dialog.dialog('close');
                             }
-                        });
-    }else{
-   // window.location = '{!!url("/export")!!}/'+$('#custheadid').val();
-    window.open('{!!url("/dialogtoimportspecials")!!}/' + $('#customerId').val()+"/"+ $('#custheadid').val() + "/" +$('#dateFrom').val()+ "/" + $('#dateFrom').val(), "Contract Id" + $('#custheadid').val(), "location=1,status=1,scrollbars=1, width=500,height=500");
-    $('#importexcel').css('background-color','green');}
+                        }
+                    });
+                }else{
+                    // window.location = '{!!url("/export")!!}/'+$('#custheadid').val();
+                    window.open('{!!url("/dialogtoimportspecials")!!}/' + $('#customerId').val()+"/"+ $('#custheadid').val() + "/" +$('#dateFrom').val()+ "/" + $('#dateFrom').val(), "Contract Id" + $('#custheadid').val(), "location=1,status=1,scrollbars=1, width=500,height=500");
+                    $('#importexcel').css('background-color','green');}
 //
 //showDialogWithoutClose('#uploaddocument',400,400);
-});
-
-       
-        $('#orderListing').hide();
-        $('#addinCurrentPrices').hide();
-        $('#addinHistory').hide();
-        $('#pricing').hide();
-        $('#pricingOnCustomer').hide();
-        $('#callList').hide();
-        $('#tabletLoadingApp').hide();
-        $('#copyOrdersBtn').hide();
-        $('#salesOnOrder').hide();
-        $('#salesInvoiced').hide();
-        $('#posCashUp').hide();
-        $('#duplicatespecials').hide();
-        $('#dialogcopycontracts').hide();
-        $('#exportexcel').hide();
-        $('#uploaddocument').hide();
-        $('#exportexcel').click(function()
-        {
-            window.location = '{!!url("/export")!!}/'+$('#custheadid').val();
-        });
-
-        var inputCustAccount = $('#inputCustAcc').flexdatalist({
-            minLength: 1,
-            valueProperty: '*',
-            selectionRequired: true,
-            searchContain:true,
-            focusFirstResult: true,
-            visibleProperties: ["CustomerPastelCode","StoreName"],
-            searchIn: 'CustomerPastelCode',
-            data: finalData
-        });
-        inputCustAccount.on('select:flexdatalist', function (event, data) {
-
-            $('#inputCustAcc').val(data.CustomerPastelCode);
-            $('#inputCustName').val(data.StoreName);
-            $('#customerId').val(data.CustomerId);
-           // $('#customerIdfile').val(data.CustomerId);
-
-        });
-        var inputCustNumber = $('#inputCustAcc').flexdatalist({
-            minLength: 1,
-            valueProperty: '*',
-            selectionRequired: true,
-            searchContain:true,
-            focusFirstResult: true,
-            visibleProperties: ["CustomerPastelCode","StoreName"],
-            searchIn: 'CustomerPastelCode',
-            data: finalData
-        });
-        var inputCustName = $('#inputCustName').flexdatalist({
-            minLength: 1,
-            valueProperty: '*',
-            selectionRequired: true,
-            searchContain:true,
-            focusFirstResult: true,
-            visibleProperties: ["CustomerPastelCode","StoreName"],
-            searchIn: 'StoreName',
-            data: finalData
-        });
-        inputCustNumber.on('select:flexdatalist', function (event, data) {
-
-            $('#inputCustAcc').val(data.CustomerPastelCode);
-            $('#inputCustName').val(data.StoreName);
-            $('#customerId').val(data.CustomerId);
-            //start option population here async
-            $.ajax({
-                url: '{!!url("/getContractsPerCustomerID")!!}',
-                type: "POST",
-                data: {
-                    customerid: $('#customerId').val()
-                },
-                success: function (data) {
-                    $('#tblCreateNewSpecial tbody').empty();
-                    var trHTML = "";
-                    $("#custheadid").empty();
-                    trHTML+='<option value="-99">Select a Contract ID</option>';
-                    $.each(data, function (key, value) {
-
-                        trHTML +=
-                            '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+' ['+value.DateFrom+' TO '+value.DateTo+']' +'</option>';
-
-                    });
-                    $("#custheadid").append(trHTML);
-                }
             });
 
 
-        });
-        inputCustName.on('select:flexdatalist', function (event, data) {
-
-            $('#inputCustAcc').val(data.CustomerPastelCode);
-            $('#inputCustName').val(data.StoreName);
-            $('#customerId').val(data.CustomerId);
-           // $('#customerIdfile').val(data.CustomerId);
-            $.ajax({
-                url: '{!!url("/getContractsPerCustomerID")!!}',
-                type: "POST",
-                data: {
-                    customerid: $('#customerId').val()
-                },
-                success: function (data) {
-                    $('#tblCreateNewSpecial tbody').empty();
-                    var trHTML = "";
-                    $("#custheadid").empty();
-                    trHTML+='<option value="-99">Select a Contract ID</option>';
-                    $.each(data, function (key, value) {
-
-                        trHTML +=
-                            '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+' ['+value.DateFrom+' TO '+value.DateTo+']' +'</option>';
-
-                    });
-                    $("#custheadid").append(trHTML);
-                }
-            });
-
-
-        });
-        $('#deletelines').click(function(){
-            var dialog = $('<p><strong style="color:red">Are you sure you want to delete all lines?</strong></p>').dialog({
-                            height: 200, width: 700,modal: true,containment: false,
-                            buttons: {
-                                "Yes": function () {
-                                    $.ajax({
-    url: '{!!url("/deletecontractlines")!!}',
-    type: "POST",
-    data: {
-        contractid: $('#custheadid').val(),
-       
-    },
-    success: function (data) {
-        $('.dx-datagrid-table tbody').empty();
-    }
-});
-                                    dialog.dialog('close');
-                                },
-                                "No": function(){
-                                    dialog.dialog('close');
-                                }
-                            }
-                        });
-            
-
-
-});
-$('#deleteall').click(function(){
-
-            
-    var dialog = $('<p><strong style="color:red">Are you sure you want to delete the whole contract?</strong></p>').dialog({
-                            height: 200, width: 700,modal: true,containment: false,
-                            buttons: {
-                                "Yes": function () {
-                                    $.ajax({
-    url: '{!!url("/deleteALLBasedContract")!!}',
-    type: "POST",
-    data: {
-        contractid: $('#custheadid').val(),
-       
-    },
-    success: function (data) {
-        $('#tblCreateNewSpecial tbody').empty();
-    }
-});
-                                    dialog.dialog('close');
-                                },
-                                "No": function(){
-                                    dialog.dialog('close');
-                                }
-                            }
-                        });
-            
-
-
-
-});
-        $('#addLine').click(function(){
-
-            generateALine2();
-        });
-        $("#dateFrom,#dateTo").datepicker({
-            changeMonth: true,//this option for allowing user to select month
-            changeYear: true, //this option for allowing user to select from year range
-            dateFormat: 'yy-mm-dd'
-        });
-        $('#submitFiltersOnCreatingCustSpecial').click(function(){
-
-            $('#addinCurrentPrices').show();
-            $('#addinHistory').show();
-            $('#afterFilter').show();
-            $('#tblCreateNewSpecial tbody').empty();
-            if($("#custheadid").val() == "-99"){
-                //create
-                $.ajax({
-                url: '{!!url("/createnewcustomercontract")!!}',
-                type: "POST",
-                data: {
-                    customerId: $('#customerId').val(),
-                    dateFrom: $('#dateFrom').val(),
-                    dateTo: $('#dateTo').val()
-                },
-                success: function (data) {
-                        console.log(data[0].result);
-                        $('#custheadid').prepend('<option value="'+data[0].result+'" selected="selected">'+data[0].result+' ['+$('#dateFrom').val()+' TO '+$('#dateTo').val()+']' +'</option>');
-
-                        $('#exportexcel').show();
-                  
-
-                }
-            });
-            }
-        });
-        $("#custheadid").change(function(){   // 1st way
-
-        $('#exportexcel').show();
-            var end = this.value;
-            $('#contractIdfile').val(end);
-            $.ajax({
-                url: '{!!url("/getcontractDates")!!}',
-                type: "POST",
-                data: {
-                    contractId: end
-                },
-                success: function (data) {
-
-                    $('#dateFrom').val($.datepicker.formatDate('yy-mm-dd', new Date( data[0].DateFrom)) );
-                    $('#dateTo').val( $.datepicker.formatDate('yy-mm-dd', new Date( data[0].DateTo))  );
-
-                }
-            });
-
-        });
-        $('#copyContractIntoLines').click(function(){
-
-            //copy contract
-            var dFrom =$('#dateFrom').val();
-            var dateTo =$('#dateTo').val();
-            $('#messagevalidatingthecontract').empty();
-
-            console.debug("customerid-----------"+$('#custheadid').val()+"---------dFrom-----"+dFrom.length+"------------"+dateTo.length);
-            if($('#custheadid').val() == "-99" && dFrom.length < 8 && dateTo.length < 8  )
+            $('#orderListing').hide();
+            $('#addinCurrentPrices').hide();
+          //  $('#addinHistory').hide();
+            $('#pricing').hide();
+            $('#pricingOnCustomer').hide();
+            $('#callList').hide();
+            $('#tabletLoadingApp').hide();
+            $('#copyOrdersBtn').hide();
+            $('#salesOnOrder').hide();
+            $('#salesInvoiced').hide();
+            $('#posCashUp').hide();
+            $('#duplicatespecials').hide();
+            $('#dialogcopycontracts').hide();
+            $('#exportexcel').hide();
+            $('#uploaddocument').hide();
+            $('#subbuttonmian').hide();
+            $('#exportexcel').click(function()
             {
-                var dialog = $('<p>Sorry <strong style="color:red"> Please put in the dates, or make sure you have selected the contract ID</strong></p>').dialog({
-                    height: 200, width: 700,
-                    buttons: {
-                        "OK": function () {
+                window.location = '{!!url("/export")!!}/'+$('#custheadid').val();
+            });
 
-                            dialog.dialog('close');
-                        }
-                    }
-                });
-            }else{
-                $('#entercontracts').val("");
-                $('#dialogcopycontracts').show();
-                showDialogWithoutClose('#dialogcopycontracts',400,400);
-            }
+            var inputCustAccount = $('#inputCustAcc').flexdatalist({
+                minLength: 1,
+                valueProperty: '*',
+                selectionRequired: true,
+                searchContain:true,
+                focusFirstResult: true,
+                visibleProperties: ["CustomerPastelCode","StoreName"],
+                searchIn: 'CustomerPastelCode',
+                data: finalData
+            });
+            inputCustAccount.on('select:flexdatalist', function (event, data) {
 
-        });
-        $('#finalisecopy').click(function(){
+                $('#inputCustAcc').val(data.CustomerPastelCode);
+                $('#inputCustName').val(data.StoreName);
+                $('#customerId').val(data.CustomerId);
+                $('#subbuttonmian').show();
 
-            //copy contract
-            var contractidtouse = $('#entercontracts').val();
-            //	@contructId as bigint,
+                // $('#customerIdfile').val(data.CustomerId);
 
-            if( contractidtouse.length < 2 )
-            {
-                var dialog = $('<p>Sorry <strong style="color:red">Please Put In The Contract ID You Want To Copy The Data From </strong></p>').dialog({
-                    height: 200, width: 700,
-                    buttons: {
-                        "OK": function () {
+            });
+            var inputCustNumber = $('#inputCustAcc').flexdatalist({
+                minLength: 1,
+                valueProperty: '*',
+                selectionRequired: true,
+                searchContain:true,
+                focusFirstResult: true,
+                visibleProperties: ["CustomerPastelCode","StoreName"],
+                searchIn: 'CustomerPastelCode',
+                data: finalData
+            });
+            var inputCustName = $('#inputCustName').flexdatalist({
+                minLength: 1,
+                valueProperty: '*',
+                selectionRequired: true,
+                searchContain:true,
+                focusFirstResult: true,
+                visibleProperties: ["CustomerPastelCode","StoreName"],
+                searchIn: 'StoreName',
+                data: finalData
+            });
+            inputCustNumber.on('select:flexdatalist', function (event, data) {
 
-                            dialog.dialog('close');
-                        }
-                    }
-                });
-            }else{
+                $('#inputCustAcc').val(data.CustomerPastelCode);
+                $('#inputCustName').val(data.StoreName);
+                $('#customerId').val(data.CustomerId);
+                $('#subbuttonmian').show();
+                //start option population here async
                 $.ajax({
-                    url: '{!!url("/copycontract")!!}',
+                    url: '{!!url("/getContractsPerCustomerID")!!}',
                     type: "POST",
                     data: {
-                        contructId: contractidtouse,
-                        customerIdToCopyTo: $('#customerId').val(),
-                        contractIdToCopyTo: $('#custheadid').val(),
-                        dateFrom: $('#dateFrom').val(),
-                        dateTo: $('#dateTo').val()
+                        customerid: $('#customerId').val()
+                    },
+                    success: function (data) {
+                        //$('#tblCreateNewSpecial tbody').empty();
+                        var trHTML = "";
+                        $("#custheadid").empty();
+                        trHTML+='<option value="-99">Select a Contract ID</option>';
+                        $.each(data, function (key, value) {
 
+                            trHTML +=
+                                '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+' ['+value.DateFrom+' TO '+value.DateTo+']' +'</option>';
+
+                        });
+                        $("#custheadid").append(trHTML);
+                    }
+                });
+
+
+            });
+            inputCustName.on('select:flexdatalist', function (event, data) {
+
+                $('#inputCustAcc').val(data.CustomerPastelCode);
+                $('#inputCustName').val(data.StoreName);
+                $('#customerId').val(data.CustomerId);
+                $('#subbuttonmian').show();
+                // $('#customerIdfile').val(data.CustomerId);
+                $.ajax({
+                    url: '{!!url("/getContractsPerCustomerID")!!}',
+                    type: "POST",
+                    data: {
+                        customerid: $('#customerId').val()
+                    },
+                    success: function (data) {
+                       // $('#tblCreateNewSpecial tbody').empty();
+                        var trHTML = "";
+                        $("#custheadid").empty();
+                        trHTML+='<option value="-99">Select a Contract ID</option>';
+                        $.each(data, function (key, value) {
+
+                            trHTML +=
+                                '<option value="'+value.SpecialHeaderId+'">'+value.SpecialHeaderId+' ['+value.DateFrom+' TO '+value.DateTo+']' +'</option>';
+
+                        });
+                        $("#custheadid").append(trHTML);
+                    }
+                });
+
+
+            });
+            $('#deletelines').click(function(){
+                var dialog = $('<p><strong style="color:red">Are you sure you want to delete all lines?</strong></p>').dialog({
+                    height: 200, width: 700,modal: true,containment: false,
+                    buttons: {
+                        "Yes": function () {
+                            $.ajax({
+                                url: '{!!url("/deletecontractlines")!!}',
+                                type: "POST",
+                                data: {
+                                    contractid: $('#custheadid').val(),
+
+                                },
+                                success: function (data) {
+                                    $('.dx-datagrid-table tbody').empty();
+                                }
+                            });
+                            dialog.dialog('close');
+                        },
+                        "No": function(){
+                            dialog.dialog('close');
+                        }
+                    }
+                });
+
+
+
+            });
+            $('#deleteall').click(function(){
+
+
+                var dialog = $('<p><strong style="color:red">Are you sure you want to delete the whole contract?</strong></p>').dialog({
+                    height: 200, width: 700,modal: true,containment: false,
+                    buttons: {
+                        "Yes": function () {
+                            $.ajax({
+                                url: '{!!url("/deleteALLBasedContract")!!}',
+                                type: "POST",
+                                data: {
+                                    contractid: $('#custheadid').val(),
+
+                                },
+                                success: function (data) {
+                                    $('#tblCreateNewSpecial tbody').empty();
+                                }
+                            });
+                            dialog.dialog('close');
+                        },
+                        "No": function(){
+                            dialog.dialog('close');
+                        }
+                    }
+                });
+
+
+
+
+            });
+            $('#addnewline').click(function(){
+
+                generateALine2();
+            });
+            $("#dateFrom,#dateTo").datepicker({
+                changeMonth: true,//this option for allowing user to select month
+                changeYear: true, //this option for allowing user to select from year range
+                dateFormat: 'yy-mm-dd'
+            });
+            $('#submitFiltersOnCreatingCustSpecial').click(function(){
+
+                $('#addinCurrentPrices').show();
+                $('#addinHistory').show();
+                $('#afterFilter').show();
+                //$('#tblCreateNewSpecial tbody').empty();
+                if($("#custheadid").val() == "-99"){
+                    //create
+                    $.ajax({
+                        url: '{!!url("/createnewcustomercontract")!!}',
+                        type: "POST",
+                        data: {
+                            customerId: $('#customerId').val(),
+                            dateFrom: $('#dateFrom').val(),
+                            dateTo: $('#dateTo').val()
+                        },
+                        success: function (data) {
+                            console.log(data[0].result);
+                            $('#custheadid').prepend('<option value="'+data[0].result+'" selected="selected">'+data[0].result+' ['+$('#dateFrom').val()+' TO '+$('#dateTo').val()+']' +'</option>');
+
+                            $('#exportexcel').show();
+
+
+                        }
+                    });
+                }
+            });
+            $("#custheadid").change(function(){   // 1st way
+
+                $('#exportexcel').show();
+                var end = this.value;
+                $('#contractIdfile').val(end);
+                $.ajax({
+                    url: '{!!url("/getcontractDates")!!}',
+                    type: "POST",
+                    data: {
+                        contractId: end
+                    },
+                    success: function (data) {
+
+                        $('#dateFrom').val($.datepicker.formatDate('yy-mm-dd', new Date( data[0].DateFrom)) );
+                        $('#dateTo').val( $.datepicker.formatDate('yy-mm-dd', new Date( data[0].DateTo))  );
+
+                    }
+                });
+
+            });
+            $('#copyContractIntoLines').click(function(){
+
+                //copy contract
+                var dFrom =$('#dateFrom').val();
+                var dateTo =$('#dateTo').val();
+                $('#messagevalidatingthecontract').empty();
+
+                console.debug("customerid-----------"+$('#custheadid').val()+"---------dFrom-----"+dFrom.length+"------------"+dateTo.length);
+                if($('#custheadid').val() == "-99" && dFrom.length < 8 && dateTo.length < 8  )
+                {
+                    var dialog = $('<p>Sorry <strong style="color:red"> Please put in the dates, or make sure you have selected the contract ID</strong></p>').dialog({
+                        height: 200, width: 700,
+                        buttons: {
+                            "OK": function () {
+
+                                dialog.dialog('close');
+                            }
+                        }
+                    });
+                }else{
+                    $('#entercontracts').val("");
+                    $('#dialogcopycontracts').show();
+                    showDialogWithoutClose('#dialogcopycontracts',400,400);
+                }
+
+            });
+            $('#finalisecopy').click(function(){
+
+                //copy contract
+                var contractidtouse = $('#entercontracts').val();
+                //	@contructId as bigint,
+
+                if( contractidtouse.length < 2 )
+                {
+                    var dialog = $('<p>Sorry <strong style="color:red">Please Put In The Contract ID You Want To Copy The Data From </strong></p>').dialog({
+                        height: 200, width: 700,
+                        buttons: {
+                            "OK": function () {
+
+                                dialog.dialog('close');
+                            }
+                        }
+                    });
+                }else{
+                    $.ajax({
+                        url: '{!!url("/copycontract")!!}',
+                        type: "POST",
+                        data: {
+                            contructId: contractidtouse,
+                            customerIdToCopyTo: $('#customerId').val(),
+                            contractIdToCopyTo: $('#custheadid').val(),
+                            dateFrom: $('#dateFrom').val(),
+                            dateTo: $('#dateTo').val()
+
+                        },
+                        success: function (data) {
+                            console.debug(data[0].result);
+                            if( data[0].result=="Success"){
+                                // $('#dialogcopycontracts').dialog('close');
+                                // $('#getContractDetails').click();
+                                //contractId
+                                var dialog = $('<p> <strong style="color:red">Contract ID is '+data[0].contractId+' </strong></p>').dialog({
+                                    height: 200, width: 700,
+                                    buttons: {
+                                        "OK": function () {
+                                            dialog.dialog('close');
+                                            location.reload();
+                                        }
+                                    }
+                                });
+
+                            }
+
+                        }
+                    });
+                }
+
+
+            });
+            $('#validateConTractId').click(function(){
+
+                //copy contract
+                $.ajax({
+                    url: '{!!url("/validatethecontractId")!!}',
+                    type: "GET",
+                    data: {
+                        entercontracts: $('#entercontracts').val()
                     },
                     success: function (data) {
                         console.debug(data[0].result);
-                        if( data[0].result=="Success"){
-                            // $('#dialogcopycontracts').dialog('close');
-                            // $('#getContractDetails').click();
-                            //contractId
-                            var dialog = $('<p> <strong style="color:red">Contract ID is '+data[0].contractId+' </strong></p>').dialog({
-                                height: 200, width: 700,
-                                buttons: {
-                                    "OK": function () {
-                                        dialog.dialog('close');
-                                        location.reload();
-                                    }
-                                }
-                            });
-
-                        }
+                        //$('#messagevalidatingthecontract').empty();
+                        $('#messagevalidatingthecontract').append( data[0].result );
+                        $('#messagevalidatingthecontract').dialog('close');
 
                     }
                 });
-            }
-
-
-        });
-        $('#validateConTractId').click(function(){
-
-            //copy contract
-            $.ajax({
-                url: '{!!url("/validatethecontractId")!!}',
-                type: "GET",
-                data: {
-                    entercontracts: $('#entercontracts').val()
-                },
-                success: function (data) {
-                    console.debug(data[0].result);
-                    //$('#messagevalidatingthecontract').empty();
-                    $('#messagevalidatingthecontract').append( data[0].result );
-                    $('#messagevalidatingthecontract').dialog('close');
-
-                }
-            });
-        });
-
-       
-        
-        $('#addinHistory').click(function(){
-            //ajax this to add in history on the contract, refresh page
-            //and as well this needs to press done before it adds in history
-            PressDone();
-            $.ajax({
-                url: '{!!url("/postCurrentHistoryCustomerSpecialsKF")!!}',//getCurrentHistoryCustomerSpecialsKF
-                type: "POST",
-                data: {
-                    customercode:$('#inputCustAcc').val(),
-                    customerId: $('#customerId').val(),
-                    contractid: $('#custheadid').val()
-                },
-                success: function (data) {
-
-                    location.reload();
-                }
             });
 
-        });
-        $('#pricelist2convert').click(function(){
-            $.ajax({
-                url: '{!!url("/convertCurrentContractPricelist")!!}',
-                type: "POST",
-                data: {
-                    contractid: $('#custheadid').val(),
-                    pricelistid: 2
-                },
-                success: function (data) {
-                    var dialog = $('<p> <strong style="color:red">Contract Converted to Pricelist 2 Prices. This page will now reload. </strong></p>').dialog({
-                                height: 200, width: 700,
-                                buttons: {
-                                    "OK": function () {
-                                        dialog.dialog('close');
-                                        location.reload();
-                                    }
+
+
+            $('#addinHistory').click(function(){
+                //ajax this to add in history on the contract, refresh page
+                //and as well this needs to press done before it adds in history
+                PressDone();
+                $.ajax({
+                    url: '{!!url("/postCurrentHistoryCustomerSpecialsKF")!!}',//getCurrentHistoryCustomerSpecialsKF
+                    type: "POST",
+                    data: {
+                        customercode:$('#inputCustAcc').val(),
+                        customerId: $('#customerId').val(),
+                        contractid: $('#custheadid').val()
+                    },
+                    success: function (data) {
+
+                        location.reload();
+                    }
+                });
+
+            });
+            $('#pricelist2convert').click(function(){
+                $.ajax({
+                    url: '{!!url("/convertCurrentContractPricelist")!!}',
+                    type: "POST",
+                    data: {
+                        contractid: $('#custheadid').val(),
+                        pricelistid: 2
+                    },
+                    success: function (data) {
+                        var dialog = $('<p> <strong style="color:red">Contract Converted to Pricelist 2 Prices. This page will now reload. </strong></p>').dialog({
+                            height: 200, width: 700,
+                            buttons: {
+                                "OK": function () {
+                                    dialog.dialog('close');
+                                    location.reload();
                                 }
-                            });
-                }
+                            }
+                        });
+                    }
+                });
             });
-        });
-        $('#pricelist1convert').click(function(){
-           
-            $.ajax({
-                url: '{!!url("/convertCurrentContractPricelist")!!}',
-                type: "POST",
-                data: {
-                    contractid: $('#custheadid').val(),
-                    pricelistid: 1
-                },
-                success: function (data) {
-                    var dialog = $('<p> <strong style="color:red">Contract Converted to Pricelist 1 Prices. This page will now reload. </strong></p>').dialog({
-                                height: 200, width: 700,
-                                buttons: {
-                                    "OK": function () {
-                                        dialog.dialog('close');
-                                        location.reload();
-                                    }
+            $('#pricelist1convert').click(function(){
+
+                $.ajax({
+                    url: '{!!url("/convertCurrentContractPricelist")!!}',
+                    type: "POST",
+                    data: {
+                        contractid: $('#custheadid').val(),
+                        pricelistid: 1
+                    },
+                    success: function (data) {
+                        var dialog = $('<p> <strong style="color:red">Contract Converted to Pricelist 1 Prices. This page will now reload. </strong></p>').dialog({
+                            height: 200, width: 700,
+                            buttons: {
+                                "OK": function () {
+                                    dialog.dialog('close');
+                                    location.reload();
                                 }
-                            });
-                }
+                            }
+                        });
+                    }
+                });
             });
-        });
-        $('#getContractDetails').click(function(){
-            $('#addinCurrentPrices').show();
-            $('#addinHistory').show();
-            $('#afterFilter').show();
-            var theVal = this.value;
-            $.ajax({
-                url: '{!!url("/getCurrentContractCustomerSpecialsKF")!!}',
-                type: "POST",
-                data: {
-                    contractid:$('#custheadid').val()
-                },
-                success: function (data) {
-                 $.ajax({
-                     url: '{!!url("/getCurrentPricesProductsCustomerSpecialsKF")!!}',
-                type: "POST",
-                data: {
-                    customerID: $('#inputCustAcc').val(),
-                deliveryDate:today
-                },
-                success: function(data_products){
-                 
-                    $("#gridContainer").dxDataGrid({
-       
-       dataSource:data, //as json
-                    
-       showBorders: true,
-       filterRow: { visible: true },
-       allowColumnResizing: true,
-      paging:{
-        pageSize: 500,
-      },
-       editing: {
-            mode: "cell",
-            refreshMode: "reshape",
-            allowUpdating: true,
-            allowAdding: true,
-      allowDeleting: true,
-       newRowPosition: 'last',
-       },
+            $('#getContractDetails').click(function(){
+                $('#addinCurrentPrices').show();
+                $('#addinHistory').show();
+                $('#afterFilter').show();
+                var theVal = this.value;
+                $.ajax({
+                    url: '{!!url("/getCurrentContractCustomerSpecialsKF")!!}',
+                    type: "POST",
+                    data: {
+                        contractid:$('#custheadid').val()
+                    },
+                    success: function (data) {
+                        $.ajax({
+                            url: '{!!url("/getCurrentPricesProductsCustomerSpecialsKF")!!}',
+                            type: "POST",
+                            data: {
+                                customerID: $('#inputCustAcc').val(),
+                                deliveryDate:today
+                            },
+                            success: function(data_products){
+                                var added = false;
+                        datagrids = $("#gridContainer").dxDataGrid({
 
-       columns: [
-           {
-               dataField: "PastelCode",
-               setCellValue: function(rowData, value) {
-                rowData.PastelCode = value.PastelCode;
-                rowData.PastelDescription = value.PastelDescription;
-                rowData.PriceLookedUp = value.Price;
-                rowData.PL1 = value.PL1;
-                rowData.PL2 = value.PL2;
-                rowData.PL3 = value.PL3;
-                rowData.PL4 = value.PL4;
-                rowData.PL5 = value.PL5;
-                rowData.PL6 = value.PL6;
-                //rowData.Date= $('#dateFrom').val(); //this seems to convert a date like 01-06-2022 dd-mm-yyyy into mm-dd-yyyy? why is it american
-                //rowData.DateTo= $('#dateTo').val();
-                rowData.Cost = value.Cost;
-                rowData.PriceLookedUpCurrent = value.Price
-                rowData.avgQty = value.Qty
-                
-                    
-                },
-               caption: "Code",
-               width: 125,
-               lookup: {
-                     dataSource: data_products,
-                     displayExpr:'PastelCode',
-                     valueExpr:'PastelCode',
-                },
+                                    dataSource:new DevExpress.data.ArrayStore({
+                                        data:data,
+                                        key: 'ProductId',
 
-           },
-           {
-               dataField: "PastelDescription",
-               caption: "Description",
-               width: 200,
-               setCellValue: function(rowData, value) {
-                rowData.PastelCode = value.PastelCode;
-                rowData.PastelDescription = value.PastelDescription;
-                rowData.PriceLookedUp = value.Price;
-                rowData.PL1 = value.PL1;
-                rowData.PL2 = value.PL2;
-                rowData.PL3 = value.PL3;
-                rowData.PL4 = value.PL4;
-                rowData.PL5 = value.PL5;
-                rowData.PL6 = value.PL6;
-               //  rowData.Date= $('#dateFrom').val(); //this seems to convert a date like 01-06-2022 dd-mm-yyyy into mm-dd-yyyy? why is it american
-              //  rowData.DateTo= $('#dateTo').val(); //has to be a way to convert then copy
-                rowData.Cost = value.Cost;
-                rowData.PriceLookedUpCurrent = value.Price;
-                rowData.avgQty = value.Qty;
-                    
-                },
-               lookup: {
-                     dataSource: data_products,
-                     displayExpr:'PastelDescription',
-                     valueExpr:'PastelDescription',
-                },
+                                    }), //as json
+                                    keyboardNavigation: {
+                                        enterKeyAction: 'moveFocus',
+                                        enterKeyDirection: 'row',
+                                        editOnKeyPress: true,
+                                    },
 
-           },{
-               dataField: "Date",
-               dataType: 'date',
-               caption: "DtFrom",
-               width: 80,
-               format:"dd-MM-yyyy"
 
-           },{
-               dataField: "DateTo",
-               dataType: 'date',
-               caption: "DtTo",
-               width: 80,
-               format:"dd-MM-yyyy"
+                                    showBorders: true,
+                                    filterRow: { visible: true },
+                                    allowColumnResizing: true,
+                                    paging:{
+                                        pageSize: 100,
+                                    },
+                                    export: {
+                                        enabled: true,
 
-           },{
-               dataField: "PriceLookedUp",
-               caption: "Price",
-               width: 70,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                    },
+                                    onEditorPreparing(e) {
+                                        if (e.parentType === 'dataRow' && e.dataField === 'Position') {
+                                            e.editorOptions.readOnly = isChief(e.value);
+                                        }
+                                    },
+                                    onExporting(e) {
+                                        var pricelistnamesheet = $('#pricelist option:selected').text();
+                                        const workbook = new ExcelJS.Workbook();
+                                        const worksheet = workbook.addWorksheet('specials');
 
-           },{
-               allowEditing:false,
-               dataField: "avgQty",
-               caption: "Quantity",
-               width: 70,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                        DevExpress.excelExporter.exportDataGrid({
+                                            component: e.component,
+                                            worksheet,
+                                            autoFilterEnabled: true,
+                                        }).then(() => {
+                                            workbook.xlsx.writeBuffer().then((buffer) => {
 
-           },{
-               allowEditing:false,
-               dataField: "Cost",
-               caption: "Cost",
-               width: 60,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }),'specials.xlsx');
+                                            });
+                                        });
+                                        e.cancel = true;
+                                    },
+                                    editing: {
+                                        mode: "batch",
+                                        refreshMode: "reshape",
+                                        allowUpdating: true,
+                                        allowAdding: true,
+                                        allowDeleting: true,
+                                        newRowPosition: 'last',
+                                    },
+                                    showRowLines: true,
 
-           },{
-               allowEditing:false,
-               calculateCellValue: function(rowData) {
-                return (1-(rowData.Cost/rowData.PriceLookedUp))*100;
-            },
-               caption: "GP",
-               width: 60,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                    columns: [
+                                        {
+                                            dataField: "PastelCode",
+                                            setCellValue: function(rowData, value) {
+                                                console.debug("rowData");
+                                                console.debug(rowData);
+                                                rowData.PastelCode = value.PastelCode;
+                                                rowData.PastelDescription = value.PastelDescription;
+                                                rowData.PriceLookedUp = value.Price;
+                                                rowData.PL1 = value.PL1;
+                                                rowData.PL2 = value.PL2;
+                                                rowData.PL3 = value.PL3;
+                                                rowData.PL4 = value.PL4;
+                                                rowData.PL5 = value.PL5;
+                                                rowData.PL6 = value.PL6;
+                                                var Odate = new Date($('#dateFrom').val());
+                                                var newODateFrom = $.datepicker.formatDate('dd-mm-yy', new Date(Odate));
+                                                var OdateTo = new Date($('#dateTo').val());
+                                                var newODateTo = $.datepicker.formatDate('dd-mm-yy', new Date(OdateTo));
+                                                rowData.Date= newODateFrom; //this seems to convert a date like 01-06-2022 dd-mm-yyyy into mm-dd-yyyy? why is it american
+                                                rowData.Date = $.datepicker.formatDate('dd-mm-yy', new Date(rowData.Date));
+                                                rowData.DateTo= newODateTo; //has to be a way to convert then copy
+                                                rowData.DateTo=  $.datepicker.formatDate('dd-mm-yy', new Date(rowData.DateTo));
+                                                rowData.Cost = value.Cost;
+                                                rowData.PriceLookedUpCurrent = value.Price;
+                                                rowData.avgQty = value.Qty;
 
-           },{
-               allowEditing:false,
-               calculateCellValue: function(rowData) {
-                return rowData.PriceLookedUp*0.9;
-            },
-               caption: "Less 10%",
-               width: 60,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
 
-           },{
-               allowEditing:false,
-               dataField: "PL1",
-               caption: "Price List 1",
-               width: 80,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                            },
+                                            caption: "Code",
+                                            width: 150,
+                                            validationRules: [{ type: 'required' }],
+                                            editCellTemplate: dropDownBoxEditorTemplate,
+                                        },
+                                        {
+                                            dataField: "PastelDescription",
+                                            caption: "Description",
+                                            width: 350,
+                                            setCellValue: function(rowData, value) {
+                                                rowData.PastelCode = value.PastelCode;
+                                                rowData.PastelDescription = value.PastelDescription;
+                                                rowData.PriceLookedUp = value.Price;
+                                                rowData.PL1 = value.PL1;
+                                                rowData.PL2 = value.PL2;
+                                                rowData.PL3 = value.PL3;
+                                                rowData.PL4 = value.PL4;
+                                                rowData.PL5 = value.PL5;
+                                                rowData.PL6 = value.PL6;
+                                                var Odate = new Date($('#dateFrom').val());
+                                                var newODateFrom = $.datepicker.formatDate('dd-mm-yy', new Date(Odate));
+                                                var OdateTo = new Date($('#dateTo').val());
+                                                var newODateTo = $.datepicker.formatDate('dd-mm-yy', new Date(OdateTo));
+                                                rowData.Date= newODateFrom; //this seems to convert a date like 01-06-2022 dd-mm-yyyy into mm-dd-yyyy? why is it american
+                                                rowData.Date = $.datepicker.formatDate('dd-mm-yy', new Date(rowData.Date));
+                                                rowData.DateTo= newODateTo; //has to be a way to convert then copy
+                                                rowData.DateTo=  $.datepicker.formatDate('dd-mm-yy', new Date(rowData.DateTo));
+                                                rowData.Cost = value.Cost;
+                                                rowData.PriceLookedUpCurrent = value.Price;
+                                                rowData.avgQty = value.Qty;
 
-           },{
-               allowEditing:false,
-               dataField: "PL2",
-               caption: "Price List 2",
-               width:80,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                            },
+                                            validationRules: [{ type: 'required' }],
+                                            editCellTemplate: dropDownBoxEditorTemplateProdDescription,
 
-           },{
-               allowEditing:false,
-               dataField: "PL3",
-               caption: "Price List 3",
-               width: 80,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                        },{
+                                            dataField: "Date",
+                                            dataType: 'date',
+                                            caption: "DtFrom",
+                                            width: 80,
+                                            format:"dd-MM-yyyy"
 
-           },{
-               allowEditing:false,
-               dataField: "PL4",
-               caption: "Price List 4",
-               width: 80,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                        },{
+                                            dataField: "DateTo",
+                                            dataType: 'date',
+                                            caption: "DtTo",
+                                            width: 80,
+                                            format:"dd-MM-yyyy"
 
-           },{
-               allowEditing:false,
-               dataField: "PL5",
-               caption: "Price List 5",
-               width: 80,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                        },{
+                                            dataField: "PriceLookedUp",
+                                            caption: "Price",
+                                            width: 70,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
 
-           },{
-               allowEditing:false,
-               dataField: "PL6",
-               caption: "Price List 6",
-               width: 80,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "avgQty",
+                                            caption: "Quantity",
+                                            width: 70,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
 
-           },{
-               allowEditing:false,
-               dataField: "PriceLookedUpCurrent",
-               caption: "C.S. Price",
-               width: 70,
-               dataType: 'number',
-               format: {
-                type: "fixedPoint",
-                precision: 2
-            }
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "Cost",
+                                            caption: "Cost",
+                                            width: 60,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
 
-           },
-       ] ,
+                                        },{
+                                            allowEditing:false,
+                                            allowSorting:true,
+                                            allowFiltering:true,
+                                            calculateCellValue: function(rowData) {
+                                                return (1-(rowData.Cost/rowData.PriceLookedUp))*100;
+                                            },
+                                            caption: "GP",
+                                            width: 60,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
 
-       
-       
-            onCellClick:function(e){
-                if (e.columnIndex ==8){
-                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PriceLookedUpCurrent*0.9);
-                        $("#gridContainer").dxDataGrid("saveEditData");
-                   }
-                if (e.columnIndex ==9){
-                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL1);
-                        $("#gridContainer").dxDataGrid("saveEditData");
-                   }
-                if (e.columnIndex ==10){
-                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL2);
-                        $("#gridContainer").dxDataGrid("saveEditData");
-                   }
-                if (e.columnIndex ==11){
-                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL3);
-                        $("#gridContainer").dxDataGrid("saveEditData");
-                   }
-                if (e.columnIndex ==12){
-                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL4);
-                        $("#gridContainer").dxDataGrid("saveEditData");
-                   }
-                if (e.columnIndex ==13){
-                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL5);
-                        $("#gridContainer").dxDataGrid("saveEditData");
-                   }
-                if (e.columnIndex ==14){
-                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PL6);
-                        $("#gridContainer").dxDataGrid("saveEditData");
-                   }
-                   if (e.columnIndex ==15){
-                        $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.key.PriceLookedUpCurrent);
-                        $("#gridContainer").dxDataGrid("saveEditData");
-                   }
-            },
-        
-       onEditorPreparing: function(e){
-        if(e.parentType === "dataRow" && e.dataField === "PastelCode"){
-                e.editorOptions.onValueChanged = function(ev){
-                    let selectedItem = ev.component.option('selectedItem'); 
-                    e.setValue(selectedItem);  
-                }
-            }
-            if(e.parentType === "dataRow" && e.dataField === "PastelDescription"){
-                e.editorOptions.onValueChanged = function(ev){
-                    let selectedItem = ev.component.option('selectedItem'); 
-                    e.setValue(selectedItem);  
-                }
-            }
-        },
-       
-       onEditingStart: function(e) {
-           console.debug("EditingStart");
-           editRowKey = e.key;
-       },
-       onInitNewRow: function(e) {
-         
-           
-           
-       },
-       onRowInserting: function(e) {
-           console.debug("RowInserting");
-       },
-       onRowInserted: function(e) {
-           console.debug("RowInserted");
-       },
-       onRowUpdating: function(e) {
-       },
-       onRowPrepared(e){
-        },
+                                        },{
+                                            allowEditing:false,
+                                            allowSorting:true,
+                                            allowFiltering:true,
+                                            calculateCellValue: function(rowData) {
+                                                return rowData.PriceLookedUp*0.9;
+                                            },
+                                            caption: "Less 10%",
+                                            width: 60,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
 
-       
-       onRowUpdated: function(e) {
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "PL1",
+                                            caption: "Price List 1",
+                                            width: 80,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
 
-      },
-       onRowRemoving: function(e) {
-           console.debug("RowRemoving");
-       },
-       onRowRemoved: function(e) {
-       }
-       
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "PL2",
+                                            caption: "Price List 2",
+                                            width:80,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
 
-   });
-                }
-                 })
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "PL3",
+                                            caption: "Price List 3",
+                                            width: 80,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
 
-                   }
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "PL4",
+                                            caption: "Price List 4",
+                                            width: 80,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
+
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "PL5",
+                                            caption: "Price List 5",
+                                            width: 80,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
+
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "PL6",
+                                            caption: "Price List 6",
+                                            width: 80,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
+
+                                        },{
+                                            allowEditing:false,
+                                            dataField: "PriceLookedUpCurrent",
+                                            caption: "C.S. Price",
+                                            width: 70,
+                                            dataType: 'number',
+                                            format: {
+                                                type: "fixedPoint",
+                                                precision: 2
+                                            }
+
+                                        },
+                                    ] ,
+
+
+
+                                    onCellClick:function(e){
+                                        console.debug("e.columnIndex_________________________________________"+e.columnIndex );
+                                        console.debug("e.key.PriceLookedUpCurrent_________________________________________"+e.value );
+                                        // console.debug(e.row,cells[e.columnIndex]);
+                                        if (e.columnIndex ==8){
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value*0.9);
+                                            // $("#gridContainer").dxDataGrid("saveEditData");
+                                        }
+                                        if (e.columnIndex ==9){
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
+                                            // $("#gridContainer").dxDataGrid("saveEditData");
+
+                                        }
+                                        if (e.columnIndex ==10){
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
+                                            //  $("#gridContainer").dxDataGrid("saveEditData");
+                                        }
+                                        if (e.columnIndex ==11){
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
+                                            //  $("#gridContainer").dxDataGrid("saveEditData");
+                                        }
+                                        if (e.columnIndex ==12){
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
+                                            //  $("#gridContainer").dxDataGrid("saveEditData");
+                                        }
+                                        if (e.columnIndex ==13){
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
+                                            //  $("#gridContainer").dxDataGrid("saveEditData");
+                                        }
+                                        if (e.columnIndex ==14){
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
+                                            //$("#gridContainer").dxDataGrid("saveEditData");
+                                        }
+                                        if (e.columnIndex ==15){
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
+                                            // $("#gridContainer").dxDataGrid("saveEditData");
+                                        }
+                                    },
+
+                                    onEditorPreparing: function(e){
+                                        if(e.parentType === "dataRow" && e.dataField === "PastelCode"){
+                                            e.editorOptions.onValueChanged = function(ev){
+                                                let selectedItem = ev.component.option('selectedItem');
+                                                e.setValue(selectedItem);
+                                            }
+                                        }
+                                        if(e.parentType === "dataRow" && e.dataField === "PastelDescription"){
+                                            e.editorOptions.onValueChanged = function(ev){
+                                                let selectedItem = ev.component.option('selectedItem');
+                                                e.setValue(selectedItem);
+                                            }
+                                        }
+                                    },
+
+                                    onEditingStart: function(e) {
+                                        console.debug("EditingStart");
+                                        editRowKey = e.key;
+                                    },
+                                    onInitNewRow: function(e) {
+
+
+
+                                    },
+                                    onRowInserting: function(e) {
+                                        console.debug("RowInserting");
+                                    },
+                                    onRowInserted: function(e) {
+                                        console.debug("RowInserted");
+                                    },
+                                    onRowUpdating: function(e) {
+                                    },
+                                    onRowPrepared(e){
+                                    },
+
+
+                                    onRowUpdated: function(e) {
+
+                                    },
+                                    onRowRemoving: function(e) {
+                                        console.debug("RowRemoving");
+                                    },
+                                    onRowRemoved: function(e) {
+                                    },
+                                    onContentReady: function(e) {
+                                        if(!added){
+                                            var s = e.component.getDataSource().store();
+                                            for(i =10000;i < 1005; i++ ){
+                                                s.insert({ID: i});
+                                            }
+                                            e.component.refresh();
+                                            added = true;
+                                        }
+                                    },
+
+
+                                });
+                                function dropDownBoxEditorTemplate(cellElement, cellInfo) {
+                                    return $('<div>').dxDropDownBox({
+                                        dataSource:new DevExpress.data.ArrayStore({
+                                            data:data_products,
+                                            key: 'ProductId',
+
+                                        }),
+                                        displayExpr:'PastelCode',
+                                        valueExpr:'PastelCode',
+                                        dropDownOptions: { width: 500 },
+                                        value: cellInfo.value,
+
+                                        headerFilter: {
+                                            visible: true,
+                                        },
+                                        contentTemplate(e) {
+                                            return $('<div>').dxDataGrid({
+                                                dataSource:new DevExpress.data.ArrayStore({
+                                                    data:data_products,
+                                                    key: 'PastelCode',
+
+                                                }),
+                                                remoteOperations: true,
+                                                showBorders: true,
+                                                paging: {
+                                                    enabled: true,
+                                                    pageSize: 15,
+                                                },
+                                                headerFilter: {
+                                                    visible: true,
+                                                },
+                                                searchPanel: {
+                                                    visible: true,
+                                                },
+                                                columns: [{caption:'PastelCode',dataField:'PastelCode',  headerFilter: {allowSearch: true,}}, 'PastelDescription', 'Qty'],
+                                                hoverStateEnabled: true,
+                                                scrolling: { mode: 'virtual' },
+                                                height: 250,
+                                                selection: { mode: 'single' },
+                                                selectedRowKeys: [cellInfo.value],
+                                                focusedRowEnabled: true,
+                                                focusedRowKey: cellInfo.value,
+                                                onSelectionChanged(selectionChangedArgs) {
+                                                    console.debug(selectionChangedArgs);
+                                                    e.component.option('value', selectionChangedArgs.selectedRowsData[0]);
+                                                    cellInfo.setValue(selectionChangedArgs.selectedRowsData[0]);
+                                                    console.debug(selectionChangedArgs.selectedRowsData);
+                                                    if (selectionChangedArgs.selectedRowsData.length > 0) {
+                                                        e.component.close();
+                                                    }
+                                                },
+                                            });
+                                        },
+                                    });
+                                }
+                                function dropDownBoxEditorTemplateProdDescription(cellElement, cellInfo) {
+                                    return $('<div>').dxDropDownBox({
+                                        dataSource: data_products,
+                                        displayExpr:'PastelDescription',
+                                        valueExpr:'PastelDescription',
+                                        dropDownOptions: { width: 500 },
+                                        value: cellInfo.value,
+
+                                        headerFilter: {
+                                            visible: true,
+                                        },
+                                        contentTemplate(e) {
+                                            return $('<div>').dxDataGrid({
+                                                dataSource:new DevExpress.data.ArrayStore({
+                                                    data:data_products,
+                                                    key: 'PastelCode',
+
+                                                }),
+                                                remoteOperations: true,
+                                                showBorders: true,
+                                                paging: {
+                                                    enabled: true,
+                                                    pageSize: 15,
+                                                },
+                                                headerFilter: {
+                                                    visible: true,
+                                                },
+                                                searchPanel: {
+                                                    visible: true,
+                                                },
+                                                columns: ['PastelDescription', 'PastelCode', 'Qty'],
+                                                hoverStateEnabled: true,
+                                                scrolling: { mode: 'virtual' },
+                                                height: 250,
+                                                selection: { mode: 'single' },
+                                                selectedRowKeys: [cellInfo.value],
+                                                focusedRowEnabled: true,
+                                                focusedRowKey: cellInfo.value,
+                                                onSelectionChanged(selectionChangedArgs) {
+                                                    console.debug(selectionChangedArgs);
+                                                    e.component.option('value', selectionChangedArgs.selectedRowsData[0]);
+                                                    cellInfo.setValue(selectionChangedArgs.selectedRowsData[0]);
+                                                    console.debug(selectionChangedArgs.selectedRowsData);
+                                                    if (selectionChangedArgs.selectedRowsData.length > 0) {
+                                                        e.component.close();
+                                                    }
+                                                },
+                                            });
+                                        },
+                                    });
+                                }
+                            }
+                        })
+
+                    }
+                });
+
             });
 
-        });
+            $('#doneCreating').click(function()
+            {
+                PressDone();
 
-        $('#doneCreating').click(function()
+            });
+
+
+
+
+        });
+        function marginCalculator(cost,onCellVal)
         {
-            PressDone();
+            return (1-(cost/onCellVal))*100;
+        }
 
-         });
+        function PressDone()
+        {
 
-    
+            var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").items();
+            var checkedLines = new Array();
+            console.log( allGridItems);
 
-
-    });
-    function marginCalculator(cost,onCellVal)
-    {
-        return (1-(cost/onCellVal))*100;
-    }
-
-    function PressDone()
-    {
-        
-            
-        var productsLinesOnPicking ="<xml>";
-            var selectedDatasUsers = $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) { 
+            var productsLinesOnPicking ="<xml>";
+         /*   var selectedDatasUsers = $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) {
                 productsLinesOnPickingPrimary= data;
-     });  
-            $.each(productsLinesOnPickingPrimary ,function(key,value) {
-                if (value.Date == undefined){
+            });*/
+            console.log( "_________________________");
+            //console.log( productsLinesOnPickingPrimary);
+
+            $.each(allGridItems ,function(key,value) {
+               if (value.Date == undefined || (value.Date).length < 5){
                     value.Date= $('#dateFrom').val();
                 }
-                if (value.DateTo == undefined){
+                if (value.DateTo == undefined || (value.DateTo).length < 5){
                     value.DateTo= $('#dateTo').val();
                 }
-                productsLinesOnPicking= productsLinesOnPicking + "<result>";
-                productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+escapeHtml(value.PastelCode)+"</productCode>";
-                productsLinesOnPicking= productsLinesOnPicking + "<price>"+value.PriceLookedUp+"</price>";
-                productsLinesOnPicking= productsLinesOnPicking + "<dateFrom>"+value.Date+"</dateFrom>";
-                productsLinesOnPicking= productsLinesOnPicking + "<dateTo>"+value.DateTo+"</dateTo>";
-                productsLinesOnPicking= productsLinesOnPicking + "<cost_>"+value.Cost+"</cost_>";
-                productsLinesOnPicking= productsLinesOnPicking + "<gp_>"+(1-(value.Cost/value.PriceLookedUp))*100+"</gp_>";
-                productsLinesOnPicking= productsLinesOnPicking + "<customerid>"+escapeHtml($('#customerId').val())+"</customerid>";
-                productsLinesOnPicking= productsLinesOnPicking + "<contractid>"+escapeHtml($('#custheadid').val())+"</contractid>";
-                productsLinesOnPicking= productsLinesOnPicking+ "</result>";
-                    
+                if((value.PastelCode).length > 1 && value.PriceLookedUp !="NaN"){
+                    productsLinesOnPicking= productsLinesOnPicking + "<result>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+escapeHtml(value.PastelCode)+"</productCode>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<price>"+value.PriceLookedUp+"</price>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateFrom>"+value.Date+"</dateFrom>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateTo>"+value.DateTo+"</dateTo>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<cost_>"+value.Cost+"</cost_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<gp_>"+(1-(value.Cost/value.PriceLookedUp))*100+"</gp_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<customerid>"+escapeHtml($('#customerId').val())+"</customerid>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<contractid>"+escapeHtml($('#custheadid').val())+"</contractid>";
+                    productsLinesOnPicking= productsLinesOnPicking+ "</result>";
+
+                }
+                console.debug("**********"+value.Date);
+
+
             });
             productsLinesOnPicking= productsLinesOnPicking+"</xml>";
             $.ajax({
@@ -1109,254 +1351,446 @@ $('#deleteall').click(function(){
 
                         });
                         $('#gridduplicatespecials').append(trHTML);
-                        
+
                     }
 
 
 
                 }
             });
-            
-            
-       
-    }
-    function roundquick(val)
-    {
-        return parseFloat(val).toFixed(2);
-    }
-    function productPrice(token_number)
-    {
-        $.ajax({
-            url: '{!!url("/getCutomerPriceOnOrderForm")!!}',
-            type: "POST",
-            data: {
-                customerID: $('#inputCustAcc').val(),
-                deliveryDate:today,
-                productCode: $('#prodCode_' + token_number).val(),
-                warehouseid:1
-            },
-            success: function (data) {
-                $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
-                $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
-                $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
-                $('#gp_'+token_number).val(roundquick(marginCalculator(data[0].Cost,data[0].Price)));
-            }
-        });
-    }
-    function avgQty(token_number)
-    {
-        $.ajax({
-            url: '{!!url("/getCustomerAvgQty")!!}',
-            type: "POST",
-            data: {
-                customerID: $('#customerId').val(),
-                deliveryDate:today,
-                productCode: $('#prodCode_' + token_number).val(),
-                warehouseid:1
-            },
-            success: function (data) {
-                $('#avgQty_' + token_number).val(data[0].Qty);
-            }
-        });
-    }
-    function productPriceForHistories(token_number)
-    {
-        $.ajax({
-            url: '{!!url("/getCutomerPriceOnOrderForm")!!}',
-            type: "POST",
-            data: {
-                customerID: $('#inputCustAcc').val(),
-                deliveryDate:today,
-                productCode: $('#prodCode_' + token_number).val(),
-                warehouseid:1
-            },
-            success: function (data) {
-                $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
-                $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
-                $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
-            }
-        });
-    }
-    $(document).on('keydown', '#tblCreateNewSpecial', function(e) {
-        var $table = $(this);
 
-        var $active = $('input:focus,select:focus,li:focus',$table);
-        var $next = null;
-        var focusableQuery = 'input:visible,select:visible,textarea:visible,li:visible';
-        var position = parseInt( $active.closest('td').index()) + 1;
-        var $celltheProductCode_ = $active.closest('td').find(".theProductCode_").val();
 
-        switch(e.keyCode){
-            case 37: // <Left>
-                $next = $active.parent('td').prev().find(focusableQuery);
-                break;
-            case 33: // <Up>
-                c
-                if ($celltheProductCode_.length < 1) {
-                    $next = $active
-                        .closest('tr')
-                        .prev()
-                        .find('td:nth-child(' + position + ')')
-                        .find(focusableQuery)
-                    ;
-                }
-
-                break;
-            case 38: // <Up>
-                if ($celltheProductCode_.length < 1) {
-                    $next = $active
-                        .closest('tr')
-                        .prev()
-                        .find('td:nth-child(' + position + ')')
-                        .find(focusableQuery)
-                    ;
-                }
-                break;
-            case 34: // <Right>
-                $next = $active.closest('td').next().find(focusableQuery);
-                break;
-            case 40: // <Down>
-                if ($celltheProductCode_.length < 1) {
-                    $next = $active
-                        .closest('tr')
-                        .next()
-                        .find('td:nth-child(' + position + ')')
-                        .find(focusableQuery)
-                    ;
-                }
-                console.debug('$celltheProductCode_******** DOWN'+$celltheProductCode_);
-                break;
 
         }
-        if($next && $next.length)
+        function generateALine2()
         {
-            $next.focus();
-        }
-    });
-    $(document).on('keydown', '.inputs', function(e) {
-        var code = (e.keyCode ? e.keyCode : e.which);
-        var testLst = $(this).closest('tr');
-        if ((code == 13 || code == 39)) {
-            var index = $('.inputs').index(this) + 1;
-            $('.inputs').eq(index).focus();
-        }
-        if (code == 37) {
-            var index = $('.inputs').index(this) - 1;
-            $('.inputs').eq(index).focus();
-        }
-        var closesttr =  $(this).closest('tr');
-        var prodClosest = closesttr.find(".theProductCode_").val();
-        var prodDescClosest = closesttr.find(".prodDescription_").val();
-        var prodPriceClosest = closesttr.find(".prodPrice_").val();
-        if ( (code == 34 || code == 13 || code == 39 ) && $.trim(prodClosest.length) > 0 && prodDescClosest.length > 0 &&  prodPriceClosest.length > 0) {
-            generateALine2();
-
-        }
-    });
-    $(document).on('keyup', '.lst', function(e) {
-        var code = (e.keyCode ? e.keyCode : e.which);
-        if (code == 13 || code == 9) {
-            var index = $('.inputs').index(this);
-
-            $('.lst').eq(index).focus();
-            generateALine2();
-
-        }
-    });
-    $(document).on('keyup', '.prodPrice_', function(e) {
-        /*  var key = (e.keyCode ? e.keyCode : e.which);
-         var $isAuth = $(this).closest("tr").find(".title").attr("id");
-         var $priceToken = $(this).closest("tr").find(".prodPrice_").attr("id");*/
-
-        var costing = $(this).closest("tr").find(".cost_").val();
-        var prodPriceVal =  $(this).closest("tr").find(".prodPrice_").val();
-        $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,prodPriceVal)).toFixed(2));
-
-
-    });
-    function escapeHtml(unsafe) {
-                return unsafe
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-            }
-    function dateReturn(dates)
-    {
-        //27-02-2019
-        var datearray = dates.split("-");
-        if (datearray[0].length > 2){
-            var newdateDelivDate = dates;
-        }
-        else {
-            var newdateDelivDate = datearray[2] + '-' + datearray[1] + '-' + datearray[0];
-        }
-
-
-        return newdateDelivDate
-    }
-    function isFloatNumber(item,evt) {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode==46)
-        {
-            var regex = new RegExp(/\./g)
-            var count = $(item).val().match(regex).length;
-            if (count > 1)
+            var contractFrom = $('#dateFrom').val();
+            var contractTo = $('#dateTo').val();
+            var tokenId=Math.floor(Math.pow(10, 9-1) + Math.random() * 9 * Math.pow(10, 9-1));
+            var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
+                '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_'+tokenId+'" class="theProductCode_ set_autocomplete inputs"></td>' +
+                '<td contenteditable="false" class="col-md-3"><input name="prodDescription_" id ="prodDescription_'+tokenId+'" class="prodDescription_ set_autocomplete inputs" tabindex="-1"></td>' +
+                '<td  contenteditable="false" class="col-md-2"><input type="text" name="dateFrom" id ="dateFrom'+tokenId+'" value= "'+contractFrom+'"  title="in stock" class="dateFrom resize-input-inside inputs"></td>' +
+                '<td contenteditable="false" class="col-md-2"><input type="text" name="dateTo"  id ="dateTo'+tokenId+'" value= "'+contractTo+'" class="dateTo resize-input-inside"></td>' +
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="cost_" id ="cost_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="cost_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="gp_" id ="gp_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="gp_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>' +
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="costCreated_" id ="costCreated_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="costCreated_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                '<td contenteditable="false"  class="col-md-1"><input type="text" name="prodPriceB_" id ="prodPriceB_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodPriceB_ resize-input-inside inputs" style="font-weight: 800;width: 100%;" ></td>'+
+                '<td><button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
+            $('#tblCreateNewSpecial tbody')
+                .append( $row )
+                .trigger('addRows', [ $row, false ]);
+            if(!$('.lst').is(":focus"))
             {
+                $('#prodCode_' + tokenId).focus();
+
+                if ($('#checkboxDescription').is(':checked')) {
+                    $('#prodDescription_' + tokenId).focus();
+                }
+            }
+
+
+            $('input').on('click keyup' ,function(){
+                // $('input').click(function(){
+                var ID = $(this).attr('id');
+                var jID = '#'+ID;
+                var x = ID.indexOf("_");
+                var get_token_number = ID.substring(x+1,ID.length);
+
+                if ($(this).hasClass("prodDescription_") && $(this).hasClass("set_autocomplete")) {
+                    var columnsD = [{name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'},
+                        {name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'}
+                        ,{name: 'Available', minWidth:'20px',valueField: 'Available'}];
+                    $(""+jID+"").mcautocomplete({
+                        source:finalDataProductDescription,
+                        columns:columnsD,
+                        autoFocus: true,
+                        minlength: 2,
+                        delay: 0,
+                        multiple: true,
+                        multipleSeparator: ",",
+                        select:function (e, ui) {
+                            var n = ID.indexOf("_");
+                            var token_number = ID.substring(n + 1, ID.length);
+
+                            if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                            {
+                                $('#prodQty_'+token_number).val('0');
+                                $('#prodPrice_'+token_number).val('0');
+                            }
+                            $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                            $('#prodCode_' + token_number).val(ui.item.PastelCode);
+
+                            $('#taxCode' + token_number).val(ui.item.Tax);
+                            $('#cost_' + token_number).val(ui.item.Cost);
+
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+                            productPrice(token_number);
+
+
+                        }
+                    });
+
+                }
+
+                if ($(this).hasClass("theProductCode_") && $(this).hasClass("set_autocomplete")) {
+                    var columnsC = [{name: 'PastelCode', minWidth: '90px',valueField: 'PastelCode'},
+                        {name: 'PastelDescription', minWidth:'230px',valueField: 'PastelDescription'}
+                        ,
+                        {name: 'Available', minWidth:'20px',valueField: 'Available'}];
+                    $("" + jID + "").mcautocomplete({
+                        source: finalDataProduct,
+                        /*  source: function(req, response) {
+                              var re = $.ui.autocomplete.escapeRegex(req.term);
+                              var matcher = new RegExp("^" + re, "i");
+                              response($.grep(finalDataProduct, function(item) {
+                                  return matcher.test(item.value);
+                              }));
+                          },*/
+                        columns:columnsC,
+                        minlength: 1,
+                        autoFocus: true,
+                        delay: 0,
+                        select:function (e, ui) {
+
+                            var n = ID.indexOf("_");
+                            var token_number = ID.substring(n + 1, ID.length);
+                            if(ui.item.PastelCode == "MISC2" || ui.item.PastelDescription == "MISC - NOTE" || ui.item.PastelDescription =="MISC" || ui.item.PastelCode =="misc")
+                            {
+                                $('#prodQty_'+token_number).val('0');
+                                $('#prodPrice_'+token_number).val('0');
+                            }
+                            $('#prodDescription_' + token_number).val(ui.item.PastelDescription);
+                            $('#prodCode_' + token_number).val(ui.item.PastelCode);
+                            //checkIfOrderHasMultipleProducts(ui.item.extra,token_number);
+                            //$('#inStock_' + token_number).val(ui.item.QtyInStock);
+                            $('#taxCode' + token_number).val(ui.item.Tax);
+                            $('#cost_' + token_number).val(ui.item.Cost);
+                            // $('#prodQty_' + token_number).attr('title', 'In Stock ' + parseFloat(ui.item.QtyInStock).toFixed(3));
+
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+
+                            productPrice(token_number);
+
+                        }
+
+                    });
+                }
+                //calculator();
+            });
+            $(".dateTo,.dateFrom").datepicker({
+                changeMonth: true,//this option for allowing user to select month
+                changeYear: true, //this option for allowing user to select from year range
+                dateFormat: 'dd-mm-yy'
+            });
+            $('#SaveNewSpecial').click(function(){
+                var productsLinesOnPicking = new Array();
+                $('#tblCreateNewSpecial > tbody  > tr').each(function() {
+                    // var data = $(this);
+                    // var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
+
+                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && ($(this).closest('tr').find('.prodDescription_').val()).length > 0 ) {
+                        productsLinesOnPicking.push({
+                            'productCode': $(this).closest('tr').find('.theProductCode_').val(),
+                            'price': $(this).closest('tr').find('.prodPrice_').val(),
+                            'dateFrom':  dateReturn($('#dateFrom').val()) ,
+                            'dateTo': dateReturn( $('#dateTo').val()),
+                            'cost_': $(this).closest('tr').find('.cost_').val(),
+                            'gp_': $(this).closest('tr').find('.gp_').val(),
+                            'costCreated_': $(this).closest('tr').find('.costCreated_').val(),
+                            'customerid': $('#customerId').val(),
+                        });
+                    }
+                });
+                $.ajax({
+                    url: '{!!url("/XmlCreateCustomerSpecials")!!}', // createCustomerSpecials
+                    type: "POST",
+                    data: {
+                        customerCode: $('#inputCustAcc').val(),
+                        customerId: $('#customerId').val(),
+                        contractDateFrom: $('#dateFrom').val(),
+                        contractDateTo: $('#dateTo').val(),
+                        orderDetails: productsLinesOnPicking,
+                        contractId:$('#custheadid').val()
+                    },
+                    success: function (data) {
+
+                        if (data.result !="SUCCESS")
+                        {
+                            var dialog = $('<p>'+data.result+'</p>').dialog({
+                                height: 200, width: 700, modal: true, containment: false,
+                                buttons: {
+                                    "OKAY": function () {
+                                        dialog.dialog('close');
+                                    }
+                                }
+                            });
+                        }else{
+                            $('#tblCreateNewSpecial tbody').empty();
+                            $('#getContractDetails').click();
+
+                        }
+
+
+
+                    }
+                });
+            });
+            $('#tblCreateNewSpecial').on('click', 'button', function (e) {
+                var $this = $(this);
+                $this.closest('tr').remove();
+
+
+
+            });
+
+        }
+        function roundquick(val)
+        {
+            return parseFloat(val).toFixed(2);
+        }
+        function productPrice(token_number)
+        {
+            $.ajax({
+                url: '{!!url("/getCutomerPriceOnOrderForm")!!}',
+                type: "POST",
+                data: {
+                    customerID: $('#inputCustAcc').val(),
+                    deliveryDate:today,
+                    productCode: $('#prodCode_' + token_number).val(),
+                    warehouseid:1
+                },
+                success: function (data) {
+                    $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                    $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                    $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
+                    $('#gp_'+token_number).val(roundquick(marginCalculator(data[0].Cost,data[0].Price)));
+                }
+            });
+        }
+        function avgQty(token_number)
+        {
+            $.ajax({
+                url: '{!!url("/getCustomerAvgQty")!!}',
+                type: "POST",
+                data: {
+                    customerID: $('#customerId').val(),
+                    deliveryDate:today,
+                    productCode: $('#prodCode_' + token_number).val(),
+                    warehouseid:1
+                },
+                success: function (data) {
+                    $('#avgQty_' + token_number).val(data[0].Qty);
+                }
+            });
+        }
+        function productPriceForHistories(token_number)
+        {
+            $.ajax({
+                url: '{!!url("/getCutomerPriceOnOrderForm")!!}',
+                type: "POST",
+                data: {
+                    customerID: $('#inputCustAcc').val(),
+                    deliveryDate:today,
+                    productCode: $('#prodCode_' + token_number).val(),
+                    warehouseid:1
+                },
+                success: function (data) {
+                    $('#prodPrice_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                    $('#prodPriceB_' + token_number).val(parseFloat(data[0].Price).toFixed(2));
+                    $('#less10perc_' + token_number).val(parseFloat(data[0].Price*0.9).toFixed(2));
+                }
+            });
+        }
+        $(document).on('keydown', '#tblCreateNewSpecial', function(e) {
+            var $table = $(this);
+
+            var $active = $('input:focus,select:focus,li:focus',$table);
+            var $next = null;
+            var focusableQuery = 'input:visible,select:visible,textarea:visible,li:visible';
+            var position = parseInt( $active.closest('td').index()) + 1;
+            var $celltheProductCode_ = $active.closest('td').find(".theProductCode_").val();
+
+            switch(e.keyCode){
+                case 37: // <Left>
+                    $next = $active.parent('td').prev().find(focusableQuery);
+                    break;
+                case 33: // <Up>
+                    c
+                    if ($celltheProductCode_.length < 1) {
+                        $next = $active
+                            .closest('tr')
+                            .prev()
+                            .find('td:nth-child(' + position + ')')
+                            .find(focusableQuery)
+                        ;
+                    }
+
+                    break;
+                case 38: // <Up>
+                    if ($celltheProductCode_.length < 1) {
+                        $next = $active
+                            .closest('tr')
+                            .prev()
+                            .find('td:nth-child(' + position + ')')
+                            .find(focusableQuery)
+                        ;
+                    }
+                    break;
+                case 34: // <Right>
+                    $next = $active.closest('td').next().find(focusableQuery);
+                    break;
+                case 40: // <Down>
+                    if ($celltheProductCode_.length < 1) {
+                        $next = $active
+                            .closest('tr')
+                            .next()
+                            .find('td:nth-child(' + position + ')')
+                            .find(focusableQuery)
+                        ;
+                    }
+                    console.debug('$celltheProductCode_******** DOWN'+$celltheProductCode_);
+                    break;
+
+            }
+            if($next && $next.length)
+            {
+                $next.focus();
+            }
+        });
+        $(document).on('keydown', '.inputs', function(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            var testLst = $(this).closest('tr');
+            if ((code == 13 || code == 39)) {
+                var index = $('.inputs').index(this) + 1;
+                $('.inputs').eq(index).focus();
+            }
+            if (code == 37) {
+                var index = $('.inputs').index(this) - 1;
+                $('.inputs').eq(index).focus();
+            }
+            var closesttr =  $(this).closest('tr');
+            var prodClosest = closesttr.find(".theProductCode_").val();
+            var prodDescClosest = closesttr.find(".prodDescription_").val();
+            var prodPriceClosest = closesttr.find(".prodPrice_").val();
+            if ( (code == 34 || code == 13 || code == 39 ) && $.trim(prodClosest.length) > 0 && prodDescClosest.length > 0 &&  prodPriceClosest.length > 0) {
+                generateALine2();
+
+            }
+        });
+        $(document).on('keyup', '.lst', function(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13 || code == 9) {
+                var index = $('.inputs').index(this);
+
+                $('.lst').eq(index).focus();
+                generateALine2();
+
+            }
+        });
+        $(document).on('keyup', '.prodPrice_', function(e) {
+            /*  var key = (e.keyCode ? e.keyCode : e.which);
+             var $isAuth = $(this).closest("tr").find(".title").attr("id");
+             var $priceToken = $(this).closest("tr").find(".prodPrice_").attr("id");*/
+
+            var costing = $(this).closest("tr").find(".cost_").val();
+            var prodPriceVal =  $(this).closest("tr").find(".prodPrice_").val();
+            $(this).closest("tr").find(".gp_").val( parseFloat( marginCalculator(costing,prodPriceVal)).toFixed(2));
+
+
+        });
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        function dateReturn(dates)
+        {
+            //27-02-2019
+            var datearray = dates.split("-");
+            if (datearray[0].length > 2){
+                var newdateDelivDate = dates;
+            }
+            else {
+                var newdateDelivDate = datearray[2] + '-' + datearray[1] + '-' + datearray[0];
+            }
+
+
+            return newdateDelivDate
+        }
+        function isFloatNumber(item,evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode==46)
+            {
+                var regex = new RegExp(/\./g)
+                var count = $(item).val().match(regex).length;
+                if (count > 1)
+                {
+                    return false;
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
                 return false;
             }
+            return true;
         }
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
+        function showDialogWithoutClose(tag,width,height)
+        {
+            $( tag ).dialog({height: height, modal: true,
+                width: width,containment: false}).dialogExtend({
+                "closable" : false, // enable/disable close button
+                "maximizable" : false, // enable/disable maximize button
+                "minimizable" : true, // enable/disable minimize button
+                "collapsable" : true, // enable/disable collapse button
+                "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                "titlebar" : false, // false, 'none', 'transparent'
+                "minimizeLocation" : "right", // sets alignment of minimized dialogues
+                "icons" : { // jQuery UI icon class
+                    "close" : "ui-icon-circle-close",
+                    "maximize" : "ui-icon-circle-plus",
+                    "minimize" : "ui-icon-circle-minus",
+                    "collapse" : "ui-icon-triangle-1-s",
+                    "restore" : "ui-icon-bullet"
+                },
+                "load" : function(evt, dlg){ }, // event
+                "beforeCollapse" : function(evt, dlg){ }, // event
+                "beforeMaximize" : function(evt, dlg){ }, // event
+                "beforeMinimize" : function(evt, dlg){ }, // event
+                "beforeRestore" : function(evt, dlg){ }, // event
+                "collapse" : function(evt, dlg){  }, // event
+                "maximize" : function(evt, dlg){ }, // event
+                "minimize" : function(evt, dlg){  }, // event
+                "restore" : function(evt, dlg){  } // event
+            });
+            $('#authorisations').keydown(function(event) {
+                if (event.keyCode == 27) {
+                    return false;
+                }
+            });
+
+
         }
-        return true;
-    }
-    function showDialogWithoutClose(tag,width,height)
-    {
-        $( tag ).dialog({height: height, modal: true,
-            width: width,containment: false}).dialogExtend({
-            "closable" : false, // enable/disable close button
-            "maximizable" : false, // enable/disable maximize button
-            "minimizable" : true, // enable/disable minimize button
-            "collapsable" : true, // enable/disable collapse button
-            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar" : false, // false, 'none', 'transparent'
-            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-            "icons" : { // jQuery UI icon class
-                "close" : "ui-icon-circle-close",
-                "maximize" : "ui-icon-circle-plus",
-                "minimize" : "ui-icon-circle-minus",
-                "collapse" : "ui-icon-triangle-1-s",
-                "restore" : "ui-icon-bullet"
-            },
-            "load" : function(evt, dlg){ }, // event
-            "beforeCollapse" : function(evt, dlg){ }, // event
-            "beforeMaximize" : function(evt, dlg){ }, // event
-            "beforeMinimize" : function(evt, dlg){ }, // event
-            "beforeRestore" : function(evt, dlg){ }, // event
-            "collapse" : function(evt, dlg){  }, // event
-            "maximize" : function(evt, dlg){ }, // event
-            "minimize" : function(evt, dlg){  }, // event
-            "restore" : function(evt, dlg){  } // event
-        });
-        $('#authorisations').keydown(function(event) {
-            if (event.keyCode == 27) {
-                return false;
-            }
-        });
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
 
 
-    }
-    function escapeHtml(unsafe) {
-                return unsafe
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-            }
-
-
-</script>
+    </script>

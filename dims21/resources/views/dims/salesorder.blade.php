@@ -1602,6 +1602,30 @@
             $(document).keydown(function(e) {
                 if (e.keyCode == 27) return false;
             });
+
+            window.onstorage = event => { // same as window.addEventListener('storage', event => {
+                if (event.key == 'onorders') {
+                    console.debug(event.key + ':' + event.newValue + " at " + event.url);
+                    let products = JSON.parse(event.newValue);
+                    console.debug(products);
+              if(products.passedorderid !=null ){
+
+                  if( $('#orderId').val().length < 3){
+                      $('#orderId').val(products.passedorderid );
+                      $("#checkOrders").click();
+                  }else{
+                      localStorage.removeItem('openorder');
+                      localStorage.setItem('openorder', JSON.stringify({openorderid:  $('#orderId').val() }));
+                  }
+
+
+
+              }
+
+
+                }
+                //console.debug(event.key + ':' + event.newValue + " at " + event.url);
+            };
             //var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 
             //alert("isChrome"+isChrome);
@@ -1704,6 +1728,26 @@
                     text: "Open In New Tab",
                     action: function () {
                         window.open('{!!url("/callist")!!}');
+                    }
+                }]
+            ];
+            var dataMenuOnRightClickOnOrder = [
+                [
+                    {
+                    text: "Choose Option",
+                    action: function () {
+
+                    }
+                },{
+                    text: "Open In New Tab",
+                    action: function () {
+                        window.open('{!!url("/getOnOrder")!!}');
+                    }
+                },{
+                    text: "Open In Dialog Mode",
+                    action: function () {
+                        window.open('{!!url("/getOnOrder")!!}', "getOnOrder-Dialog", "location=1,status=1,scrollbars=1, width=1200,height=850");
+
                     }
                 }]
             ];
@@ -2065,6 +2109,7 @@
                     callList();
                 });
                 $("#callList").contextMenu(dataMenuOnRightClick);
+                $("#salesInvoiced").contextMenu(dataMenuOnRightClickOnOrder);
                 $('#changeDeliveryAddressOnNotInvoiced').click(function(){
                     changeDeliveryAddress();
                 });

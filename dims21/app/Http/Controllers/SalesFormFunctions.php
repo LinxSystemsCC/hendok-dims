@@ -841,7 +841,7 @@ class SalesFormFunctions extends Controller
         $userid =Auth::user()->UserID;
         // echo $userid ;
         if(strlen($CustCode)> 0){
-            $CustomerId = DB::connection('sqlsrv3')->table('tblCustomers')->select('CustomerId')->where('CustomerPastelCode',$CustCode)->get();
+            $CustomerId = DB::connection('sqlsrv3')->table('viewtblCustomers')->select('CustomerId')->where('CustomerPastelCode',$CustCode)->get();
             $CustCode = $CustomerId[0]->CustomerId;
         }
 
@@ -930,6 +930,8 @@ class SalesFormFunctions extends Controller
             //dd($isQoutation);
             $GetOrderHeader = DB::connection('sqlsrv3')
                 ->select("EXEC spReturnInvoiceOrderIdData '" . $OrderId . "','" . $InvoiceNumber . "'");
+
+
             $outPut['data'] = $GetOrderHeader;
             $outPut['returns'] = "inserted";
 
@@ -941,6 +943,8 @@ class SalesFormFunctions extends Controller
                 if ($edit == "Yes") {
                     $GetOrderHeader = DB::connection('sqlsrv3')
                         ->select("EXEC spReturnInvoiceOrderIdData '" . $OrderId . "','" . $InvoiceNumber . "'");
+
+                  //  dd($GetOrderHeader);
                     $outPut['data'] = $GetOrderHeader;
                     $outPut['returns'] = "inserted";
                 } else {
@@ -1031,6 +1035,18 @@ class SalesFormFunctions extends Controller
         DB::connection('sqlsrv3')->table('tblBrandOrderInvoice')
             ->where('OrderId', $OrderId)->where('BrandId',$brandid)
             ->update(['OrderNo' => $orderNO]);
+    }
+    public function getOnOrder(){
+        $queryProducts= DB::connection('sqlsrv3')
+            ->select("Select * from viewtblProducts");
+
+        $queryCustomers = DB::connection('sqlsrv3')
+            ->select("Select * from viewtblCustomers");
+
+        return view('dims/getonorder')
+            ->with('products',$queryProducts)
+            ->with('customers',$queryCustomers)
+            ;
     }
     public function onCheckOrderHeaderDetails(Request $request)
     {
