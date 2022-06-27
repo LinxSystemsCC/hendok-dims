@@ -1571,6 +1571,11 @@ class DimsCommon extends Controller
         $userAuthID = Auth::user()->UserID;
 
         $GroupId = Auth::user()->GroupId;
+        if ($RouteID == 1138){
+            DB::connection()->statement("EXEC spTriggerUplift ?,?",array($OrderID,1));
+        } else{
+            DB::connection()->statement("EXEC spTriggerUplift ?,?",array($OrderID,0));
+        }
        // $things = (new SalesForm())->getThings($GroupId,'Allow Call Logger');
 
         $OurderRoute = DB::connection('sqlsrv3')->table('tblOrders')->select('RouteId')->where('OrderId',$OrderID)->get();
