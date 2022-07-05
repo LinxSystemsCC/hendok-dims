@@ -102,7 +102,7 @@ class InvoicingController extends Controller
                 foreach ($returnGetsalesorderNoLines as $innverVal) {
                     $lineno = $innverVal->LineNos - 1;
                     if ($isCapeUser == "1" && $mustStockAdjust == 0) {
-                        $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPT");
+                       // $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPT");
                     }
 
                     $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
@@ -399,6 +399,66 @@ class InvoicingController extends Controller
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
+
+    }
+    //DIMS Manual Adjustment
+    public function getdimsmanuals(){
+        return view('dims/warehouseadj');
+    }
+    public function dimsmanualadjustment(Request $request){
+
+        $itemCode = $request->get('itemCode');
+        $warehousecode = $request->get('warehousecode');
+        $adjmentType = $request->get('adjmentType');
+        $companyname= $request->get('companyname');
+        $invnumber = $request->get('invnumber');
+        $trandate = $request->get('trandate');
+        $Qty = $request->get('Qty');
+        $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+        $result = "Something Went Wrong";
+        //	dd(get_declared_classes());
+
+        try {
+            //Initialise
+            //  echo "Entering ";
+
+
+            //dd($indexId." - ".$reference);
+            $sdkHelper->CreateCommonDBConnection(env('COMMON') );
+            $sdkHelper->SetLicense("DE12111039", "4626921");
+            $sdkHelper->CreateConnection(env('HENDOK'));
+            $InventoryTransaction = new \COM("Pastel.Evolution.InventoryTransaction");
+            // dd($sdkHelper->GetInventoryOperation( "Increase"));
+            //dd();
+
+
+            // dd( $ref2);
+            $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
+            $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemCode);
+            $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($warehousecode) ;
+            $InventoryTransaction->Operation =$adjmentType;//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
+            $InventoryTransaction->Quantity = floatval($Qty);
+
+            $InventoryTransaction->Reference = $companyname;
+            $InventoryTransaction->Reference2 = $invnumber;
+            $InventoryTransaction->Date =(new \DateTime($trandate))->format('Y-m-d');
+            $InventoryTransaction->Description = "Dims Ajustments";
+
+            $InventoryTransaction->Post();
+            $result = "Done";
+
+            //echo "Finished";
+            //isTranferedToCentralWH
+          //  DB::connection('sqlsrv3')->table('tblPickingPlan')
+               // ->where('intorderdetailId',$intorderdetailId )
+            //    ->update(['isTranferedToCentralWH' => 1]);//
+
+        }catch (Error $err){
+            $result = $err;
+          //  echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+            //echo $err;
+        }
+        return $result;
 
     }
     //NEGATIVE INVENTORY ITEMS TO ADJUST

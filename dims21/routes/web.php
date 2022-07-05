@@ -546,9 +546,11 @@ Route::get('viewAwaitingtoinvoice', [InvoicingController::class,'viewAwaitingtoi
 Route::get('assignweighbridgeticket', [InvoicingController::class,'assignweighbridgeticket']);
 Route::get('weightticketslist/{ref}', [InvoicingController::class,'weightticketslist']);
 Route::get('saveweightticket', [InvoicingController::class,'saveweightticket']);
-Route::get('whtransfers/{transfer}', [InvoicingController::class,'whtransfers']);
+Route::get('whtransfers/{transfer}/{orderid}', [InvoicingController::class,'whtransfers']);
 Route::get('processTransfertest/{transfer}', [InvoicingController::class,'processTransfertest']);
 Route::get('trywarehouse', [InvoicingController::class,'trywarehouse']);
+Route::get('getdimsmanuals', [InvoicingController::class,'getdimsmanuals']);
+Route::post('dimsmanualadjustment', [InvoicingController::class,'dimsmanualadjustment']);
 //Route::get('transactionAdj', [InvoicingController::class,'transactionAdj']);
 Route::get('getRemainingBalance/{reference}/{trasferID}/{indexId}', [InvoicingController::class,'getRemainingBalance']);//$reference,$trasferID,$indexId
 //SAGE Invoicing Ends Here
@@ -824,6 +826,7 @@ Route::get('productsOnBackOrders',[OnlineOrdersReconController::class,'productsO
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 Route::get('warehouseitems', [WareHouseController::class,'warehouseInvetoryItems']);
 Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
+Route::get('initiateproductonmachine', [WareHouseController::class,'initiateproductonmachine']);
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 
