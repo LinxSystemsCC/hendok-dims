@@ -26,6 +26,9 @@
         <div class="col-lg-12">
             <div class="col-lg-12" >
                 <div class="col-lg-12">
+                    
+        <a href='{!!url("/invoicesnotprinting")!!}' onclick="window.open(this.href, 'invoicesnotprinting',
+'left=20,top=20,width=500,height=600,toolbar=1,resizable=0'); return false;" style="color:black;font-size: 15px;font-weight:900;background: red;padding: 2px;">Check Why Invoices Not Printing</a>
                     <form>
                         <fieldset class="well">
                             <legend class="well-legend">Create</legend>
