@@ -453,7 +453,7 @@ class InvoicingController extends Controller
             $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
             $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemCode);
             $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($warehousecode) ;
-            $InventoryTransaction->Operation =$adjmentType;//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
+            $InventoryTransaction->Operation =intval($adjmentType);//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
             $InventoryTransaction->Quantity = floatval($Qty);
 
             $InventoryTransaction->Reference = $companyname;
