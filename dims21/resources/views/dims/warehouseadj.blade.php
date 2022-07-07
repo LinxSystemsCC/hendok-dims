@@ -85,13 +85,14 @@
                             <label class="control-label" for="trandate"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Trans Date</label>
                             <input type="date" class="form-control input-sm col-xs-1" id="trandate" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
                         </div>
-                        <div class="form-group col-md-12">
-                            <button class="btn-large btn-success" id="adjust">Adjust</button>
-                        </div>
+
 
                     </fieldset>
 
                 </form>
+                <div class="form-group col-md-12">
+                    <button class="btn-large btn-success" id="adjust">Adjust</button>
+                </div>
             </div>
 
         </div>

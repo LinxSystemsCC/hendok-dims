@@ -440,8 +440,6 @@ class InvoicingController extends Controller
         try {
             //Initialise
             //  echo "Entering ";
-
-
             //dd($indexId." - ".$reference);
             $sdkHelper->CreateCommonDBConnection(env('COMMON') );
             $sdkHelper->SetLicense("DE12111039", "4626921");
