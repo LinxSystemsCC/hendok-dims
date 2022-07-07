@@ -129,7 +129,7 @@
 
         $('#adjust').click(function(){
 
-            alert("test this");
+           // alert("test this");
             $.ajax({
                 url: '{!!url("/dimsmanualadjustment")!!}',
                 type: "POST",
@@ -147,6 +147,7 @@
                 success: function (data) {
                         if(data =="Done"){
                             alert("Success");
+                            location.reload();
                         }else{
                             alert("Something Went Wrong \n"+data);
                         }
