@@ -127,6 +127,8 @@
         });
 
         $('#adjust').click(function(){
+
+            alert("test this");
             $.ajax({
                 url: '{!!url("/dimsmanualadjustment")!!}',
                 type: "POST",
