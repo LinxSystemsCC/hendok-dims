@@ -66,7 +66,7 @@
                             <label class="control-label" for="companyname"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Ref One(Company)</label>
                             <select id="companyname">
                                 <option value=""></option>
-                                <option value="Hendok">Hendok</option>
+                                <option value="Ukhosi">Ukhosi</option>
                                 <option value="Henroof">Henroof</option>
                             </select>
                         </div>
@@ -142,7 +142,11 @@
 
                 },
                 success: function (data) {
-
+                        if(data =="Done"){
+                            alert("Success");
+                        }else{
+                            alert("Something Went Wrong \n"+data);
+                        }
 
                 }
             });

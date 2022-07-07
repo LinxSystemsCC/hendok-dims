@@ -550,6 +550,8 @@ Route::get('whtransfers/{transfer}/{orderid}', [InvoicingController::class,'whtr
 Route::get('processTransfertest/{transfer}', [InvoicingController::class,'processTransfertest']);
 Route::get('trywarehouse', [InvoicingController::class,'trywarehouse']);
 Route::get('getdimsmanuals', [InvoicingController::class,'getdimsmanuals']);
+Route::get('getqrcode', [InvoicingController::class,'getqrcode']);
+Route::get('qrcodeimage/{machine}/{qty}/{item}', [InvoicingController::class,'qrcodeimage']);
 Route::post('dimsmanualadjustment', [InvoicingController::class,'dimsmanualadjustment']);
 //Route::get('transactionAdj', [InvoicingController::class,'transactionAdj']);
 Route::get('getRemainingBalance/{reference}/{trasferID}/{indexId}', [InvoicingController::class,'getRemainingBalance']);//$reference,$trasferID,$indexId

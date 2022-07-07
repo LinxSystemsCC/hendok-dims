@@ -405,6 +405,25 @@ class InvoicingController extends Controller
     public function getdimsmanuals(){
         return view('dims/warehouseadj');
     }
+    public function getqrcode(){
+        return view('warehouse/jobqrcode');
+    }
+    public function qrcodeimage($machine,$qty,$itemcode){
+
+        $username = "Reginald";
+        $userID = "2";
+        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $t=time();
+        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+        $ID = $t.$randomString;
+        return view('warehouse/qrcodeimage')
+            ->with('machine',$machine)
+            ->with(' ',$qty)
+            ->with('username',$username)
+            ->with('1',$userID)
+            ->with('ID',$ID)
+            ->with('item',$itemcode);
+    }
     public function dimsmanualadjustment(Request $request){
 
         $itemCode = $request->get('itemCode');
