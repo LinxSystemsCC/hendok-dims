@@ -590,7 +590,9 @@ Route::post('reprintPickingSlip',[PickingManagementCotroller::class,'reprintPick
 /**********************************************************CRUD****************************************************************/
 
 //DRIVERSCONTROLLER CONTROLLER BEGINS HERE !!!
-Route::get('drivers', [DriversController::class,'readItems']);
+Route::get('driverspage', [DriversController::class,'readItems']);
+Route::get('deliveryaddresspage',[DriversController::class,'deliveryaddresspage']);
+Route::post('updateDeliveryAddressesGrid',[DriversController::class,'updateDeliveryAddressesGrid']);
 Route::get('getRoutingIds', [DriversController::class,'getRoutingIds']);
 Route::get('printDriversCashOff/{ref}', [DriversController::class,'printDriversCashOff']);
 Route::get('creditRequisitionByRoutingId/{routingId}',[DriversController::class,'creditRequisitionByRoutingId']);

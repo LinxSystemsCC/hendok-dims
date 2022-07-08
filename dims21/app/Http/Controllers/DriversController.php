@@ -170,7 +170,30 @@ class DriversController extends Controller
         return view('dims/routes1')->with('locations',$locations)
             ->with('readRoutesItems',$readRoutes)->with('routesfullaccess',$things);
     }
-
+    public function deliveryaddresspage()
+    {
+       $routes=  DB::connection('sqlsrv3')
+            ->select("Select Routeid, Route from tblRoutes");
+        
+       $deliveryaddress=  DB::connection('sqlsrv3')
+       ->select("Select * from viewCustomerDeliveryAddress");
+        return view('dims/deliveryaddresseditor')->with('deliveryaddress',$deliveryaddress)
+        ->with('routes', $routes);
+    }
+public function updateDeliveryAddressesGrid(Request $request){
+    $sessionUserId = Auth::user()->UserID;
+    $userName = Auth::user()->UserName;
+    $deladdID = $request->get('ID');
+    $deladd1 = $request->get('DAddress1');
+    $deladd2 = $request->get('DAddress2');
+    $deladd3 = $request->get('DAddress3');
+    $deladd4 = $request->get('DAddress4');
+    $deladd5 = $request->get('DAddress5');
+    $route = $request->get('Route');
+    DB::connection('sqlsrv3')
+                ->statement("EXEC spDeliveryAddressUpdate ?,?,?,?,?,?,?,?,?",
+                    array($deladdID,$deladd1,$deladd2,$deladd3,$deladd4,$deladd5,$route,$sessionUserId,$userName));
+}
     public function editRoutesItem(Request $request)
     {
         $Routeid = $request->get('Routeid');
