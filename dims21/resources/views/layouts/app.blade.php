@@ -685,6 +685,10 @@
                                     <a href='{!!url("/searchSpecialKF")!!}' onclick="window.open(this.href, 'searchSpecialKF',
 'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" > Search Customer Specials</a>
                                 </li>
+                                <li>
+                                    <a href='{!!url("/stocktakecountspage")!!}'  onclick="window.open(this.href, 'stocktakecountspage',
+'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Take Counts Page</a>
+                                </li>
 <!--
                                 <li>
                                     <a href='{!!url("/massgridspecialscustomer")!!}' onclick="window.open(this.href, 'massGrid',

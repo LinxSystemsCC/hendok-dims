@@ -403,6 +403,14 @@ class DimsCommon extends Controller
         }
 
     }
+    public function stocktakecountspage(){
+        $getAllStockCounts = DB::connection('sqlsrv3')
+        ->select('SELECT * FROM vwStockTakeCountsGrid' );
+        
+        return view('dims/stock_take_counts_grid')
+            ->with('stocks',$getAllStockCounts);
+
+    }
     public function deleteuserOrderLocks()
     {
         $userId =   Auth::user()->UserID;
