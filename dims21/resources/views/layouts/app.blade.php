@@ -689,6 +689,10 @@
                                     <a href='{!!url("/stocktakecountspage")!!}'  onclick="window.open(this.href, 'stocktakecountspage',
 'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Take Counts Page</a>
                                 </li>
+                                <li>
+                                    <a href='{!!url("/grvgridpage")!!}'  onclick="window.open(this.href, 'grvgridpage',
+'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">GRV Grid Page</a>
+                                </li>
 <!--
                                 <li>
                                     <a href='{!!url("/massgridspecialscustomer")!!}' onclick="window.open(this.href, 'massGrid',

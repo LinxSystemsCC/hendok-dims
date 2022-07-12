@@ -93,6 +93,8 @@ Route::get('getCommonRoutes', [DimsCommon::class,'getCommonRoutes']);
 
 Route::get('PointGrid', [DimsCommon::class,'PointGrid']);
 Route::get('stocktakecountspage',[DimsCommon::class,'stocktakecountspage']);
+Route::get('grvgridpage',[DimsCommon::class,'grvgridpage']);
+Route::post('getPoLineGrid',[DimsCommon::class,'getPoLineGrid']);
 Route::get('customerPointsTrends', [DimsCommon::class,'customerPointsTrends']);
 Route::get('cardsList', [DimsCommon::class,'cardsList']);
 Route::get('getCartsGrid', [DimsCommon::class,'getCartsGrid']);

@@ -411,6 +411,19 @@ class DimsCommon extends Controller
             ->with('stocks',$getAllStockCounts);
 
     }
+    public function grvgridpage(){
+        $grvs = DB::connection('sqlsrv3')
+        ->select('exec [spGetPOforVendorGrid]' );
+        
+        return view('dims/grv_post_grid')
+            ->with('grvs',$grvs);
+    }
+    public function getPoLineGrid(Request $request){
+        $ponumber = $request->get('PODOC');
+        $lines = DB::connection('sqlsrv3')
+        ->select('exec spGetPurchaseOrderLines ?',array($ponumber));
+        return response()->json($lines);
+    }
     public function deleteuserOrderLocks()
     {
         $userId =   Auth::user()->UserID;
