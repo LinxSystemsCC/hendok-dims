@@ -703,7 +703,7 @@
                                     filterRow: { visible: true },
                                     allowColumnResizing: true,
                                     paging:{
-                                        pageSize: 100,
+                                        pageSize: 500,
                                     },
                                     export: {
                                         enabled: true,
