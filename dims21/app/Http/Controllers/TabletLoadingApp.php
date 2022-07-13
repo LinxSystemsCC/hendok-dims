@@ -725,6 +725,18 @@ class TabletLoadingApp extends controller
             ->with('sageareas',$sageareas)
             ->with('routes',$routes);
     }
+   /* public function routemapperpage()
+    {
+        $sageareas = DB::connection('sqlsrv')
+            ->select("SELECT* from viewSageAreas" );
+        $routes = DB::connection('sqlsrv')
+            ->select("SELECT* from tblRoutes" );
+
+//viewSageAreas
+        return view('dims/mapareatoroute')
+            ->with('sageareas',$sageareas)
+            ->with('routes',$routes);
+    }*/
     public function jsonreturnroutemappers()
     {
         $routesmapped = DB::connection('sqlsrv')
