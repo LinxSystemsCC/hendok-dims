@@ -2109,7 +2109,7 @@
                     callList();
                 });
                 $("#callList").contextMenu(dataMenuOnRightClick);
-                $("#salesOnOrder").contextMenu(dataMenuOnRightClickOnOrder);
+                $("#salesInvoiced").contextMenu(dataMenuOnRightClickOnOrder);
                 $('#changeDeliveryAddressOnNotInvoiced').click(function(){
                     changeDeliveryAddress();
                 });
