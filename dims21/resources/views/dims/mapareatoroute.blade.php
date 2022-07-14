@@ -116,7 +116,7 @@
                     columns: [
                         // columns: ['Account', 'Name','areaname','RouteName','companyName'],
                         {
-                            width: 90,
+                            width: 200,
                             dataField: "strRouteDescription",
                             caption: "Area Name",
                             headerFilter: {
