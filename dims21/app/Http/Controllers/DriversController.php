@@ -150,10 +150,10 @@ class DriversController extends Controller
         $userAuthID = \Illuminate\Support\Facades\Auth::user()->GroupId;
         $v  =  new \App\Http\Controllers\SalesForm();
         $things = $v->getThings($userAuthID,'Add Routes');
-        if($things != "0") {
+        //if($things != "0") {
             $insertRoutes = DB::connection('sqlsrv3')
                 ->statement("EXEC spCRUDRoutes NULL,'" . $Route . "','Insert'");
-        }
+       // }
         return response()->json($Route);
 
     }
