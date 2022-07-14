@@ -746,9 +746,10 @@ class TabletLoadingApp extends controller
     public function maproutetoareinsert(Request $request){
         $route = $request->get('route');
         $area = $request->get('area');
-        DB::connection('sqlsrv')->table('tblRoutesAreaMappings')->insert(
-            ['strRoute' => $route, 'strRouteDescription' =>$area]
-        );
+
+        $GetProductExtrainfo= DB::connection('sqlsrv3')
+            ->select("EXEC spMapRoutesAndAreasManually '".$route."','".$area."'");
+        return response()->json($GetProductExtrainfo);
 
     }
     private static function getTabs($tabcount)
