@@ -39,6 +39,7 @@ overflow-y: scroll
 <div class="container" style="width: 100%;">
         <div class="form-group row add">
 		   <div class="col-lg-12" >
+               <a href='{!!url("/routemapper")!!}' >View and Map Routes To Area</a><br>
 				<div class="col-lg-4">
 				@if($routesfullaccess !="0")
 					<form>
