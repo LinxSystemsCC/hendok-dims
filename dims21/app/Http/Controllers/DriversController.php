@@ -157,6 +157,9 @@ class DriversController extends Controller
         return response()->json($Route);
 
     }
+    public function maproutes(){
+
+    }
 
     public function readRoutesItems(Request $request)
     {
@@ -169,7 +172,7 @@ class DriversController extends Controller
         $things = $v->getThings($userAuthID,'Add Routes');
 
         return view('dims/routes1')
-            ->with('readRoutesItems',$readRoutes)->with('routesfullaccess',$things);
+            ->with('readRoutesItems',$readRoutes)->with('routesfullaccess',1);
     }
 
     public function editRoutesItem(Request $request)
