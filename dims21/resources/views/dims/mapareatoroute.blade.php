@@ -84,6 +84,7 @@
                     if (data[0].result == "Success") {
 
                             alert("Route Added");
+                            location.reload();
                     }else{
                         alert("Something went wrong, it appears the route is already added.");
                     }
