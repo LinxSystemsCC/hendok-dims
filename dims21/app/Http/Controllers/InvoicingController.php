@@ -114,8 +114,8 @@ class InvoicingController extends Controller
                 }
                 $reference = $x->Save();
                 //Now invoice
-
-                $x->Process();
+dd();
+                //$x->Process();
                 //  echo "************* INV CREATED***".$reference."<br>";
                 $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                     ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
