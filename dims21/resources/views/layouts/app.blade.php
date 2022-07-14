@@ -755,12 +755,12 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Trucks</a>
                                 </li>
 
-                                @if($routes !="0")
+
                                 <li>
                                     <a href='{!!url("/routes1")!!}'  onclick="window.open(this.href, 'routes',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Routes</a>
                                 </li>
-                                @endif
+
 
                                 <li style="display: none;">
                                     <a href='{!!url("/usersCrud")!!}'  onclick="window.open(this.href, 'users',

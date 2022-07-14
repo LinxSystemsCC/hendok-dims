@@ -48,9 +48,9 @@ overflow-y: scroll
                                 <label class="control-label" for=  "Route" style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Route</h4></label>
                                 <input type="text" class="form-control input-sm col-s-2" id="Route" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Route You Want To Add" required>
                               </div>
-                           
-                           
-						   
+
+
+
                         </fieldset>
                     </form><button class=" btn btn-success fa fa-plus-circle" id="add" >ADD</button>
 					@endif
@@ -66,7 +66,7 @@ overflow-y: scroll
 												<tr>
 													<th class="text-center " ><h3>Route ID</h3></th>
 													<th class="text-center "><h3>Route</h3></th>
-																							
+
 												</tr>
 											</thead>
 											<tbody>
@@ -75,22 +75,22 @@ overflow-y: scroll
 													<td class="text-center" >{{$values->Routeid}}</td>
 													<td class="text-center" >{{$values->Route}}</td>
 													</tr>
-												@endforeach	
-											</tbody>											
-											
+												@endforeach
+											</tbody>
+
 											</table>
 										</div>
-									   
-									  
+
+
 									</form>
 								</div>
 							</div>
-					</div>		
-				</div>	
-				
-				
+					</div>
+				</div>
+
+
 			</div>
-			
+
 		</div>
 	 <div id="editRoutes" title="Please Edit Route Information">
          @if($routesfullaccess !="0")
@@ -104,8 +104,8 @@ overflow-y: scroll
 					<input type="text" class="form-control input-sm col-xs-1" id="RouteEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Route You want to add" required>
 					<input type="hidden" class="form-control input-sm col-xs-1" id="RouteidEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Name You want to add" required>
 				  </div>
-				
-			  
+
+
 			</fieldset>
 		</form>
 		<div class="col-lg-4">
@@ -117,14 +117,14 @@ overflow-y: scroll
                 <h3>YOU DON'T HAVE ACCESS TO EDIT ROUTE, PLEASE SPEAK TO YOUR MANAGER</h3>
                 @endif
 		</div>
-        
 
-	    	
-	
-	
+
+
+
+
 	</div>
-</div>	
-	
+</div>
+
 
 
 @endsection
@@ -146,16 +146,17 @@ $(document).ready(function(){
 		$('#dropdown').hide();
 		$('#editRoutes').hide();
 		$('#salesInvoiced').hide();
+		$('#returns').hide();
 		                $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-		
+
 $("#add").click(function()
 {
 
-	
+
 	  $.ajax({
                     url: '{!!url("/addRoutesItem")!!}',
                     type: "POST",
@@ -164,12 +165,12 @@ $("#add").click(function()
                         Route: $('#Route').val(),
                         statement: 'Insert'
                     },
-                    success: function (data) 
+                    success: function (data)
 					{
 						location.reload(true);
                     }
                 });
-	
+
 
 });
 
@@ -185,20 +186,20 @@ $("#add").click(function()
 		 $('#RouteEdit').val(route);
 		 $('#RouteidEdit').val(routeId);
 		 $('#updatemessage').append("You are now editing the information of " + route+"!");
-		 
+
    });
    $('#tableRoutes tbody').on('click', 'button', function (e) {
          $('#deleteRoutes').show();
 		 var $this = $(this);
 		 var row = $this.closest("button");
-		 showDialog('#deleteRoutes',600,600); 
-		 
+		 showDialog('#deleteRoutes',600,600);
+
 });
-   
+
 $("#edit").click(function()
 {
 
-		
+
 	  $.ajax({
                     url: '{!!url("/editRoutesItem")!!}',
                     type: "POST",
@@ -207,25 +208,25 @@ $("#edit").click(function()
                         Route: $('#RouteEdit').val(),
                         statement: 'Update'
                     },
-                    success: function (data) 
+                    success: function (data)
 					{
 						location.reload(true);
-				
+
 
                     }
-					
-					
-			
-            
+
+
+
+
                 });
-	
+
 
 });
 
 $("#delete").click(function()
 {
 
-		
+
 	  $.ajax({
                     url: '{!!url("/deleteRoutesItem")!!}',
                     type: "POST",
@@ -233,19 +234,19 @@ $("#delete").click(function()
                         Routeid: $('#RouteidEdit').val(),
                         statement: 'Delete'
                     },
-                    success: function (data) 
+                    success: function (data)
 					{
 						location.reload(true);
                     }
-					         
+
                 });
-	
+
 
 });
-		
- 
 
-	
+
+
+
 });
   function showDialog(tag,width,height)
     {

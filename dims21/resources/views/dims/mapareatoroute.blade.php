@@ -81,7 +81,12 @@
                     area: $('#area').val()
                 },
                 success: function (data) {
+                    if (data[0].result == "Success") {
 
+                            alert("Route Added");
+                    }else{
+                        alert("Something went wrong, it appears the route is already added.");
+                    }
 
                 }
             });
