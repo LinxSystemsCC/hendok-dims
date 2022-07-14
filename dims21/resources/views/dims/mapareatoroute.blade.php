@@ -46,9 +46,9 @@
                    @endforeach
                </select>
                <br><br>
-               <button id="save" style="width: 200px">Add</button>
-           </form>
 
+           </form>
+           <button id="save" style="width: 200px">Add</button>
        </div>
 
        <div id="gridContainer" style="height: 800px;"/>
