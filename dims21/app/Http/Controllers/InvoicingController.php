@@ -99,11 +99,14 @@ class InvoicingController extends Controller
 
                 // theSalesOrder.UserDefinedFields.Item("ucIDSOrdXXXXFieldName").Value = "xxxxx"
                 //  $salesOrder->Save();
+
+
                 foreach ($returnGetsalesorderNoLines as $innverVal) {
                     $lineno = $innverVal->LineNos - 1;
                     if ($isCapeUser == "1" && $mustStockAdjust == 0) {
                         $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPT");
                         $x->Detail[$lineno]->UnitSellingPrice =floatval($innverVal->Price);
+                        echo "Line--".$sdkHelper->GetWarehouseByCode("CPT");
                     }
 
                     $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
@@ -114,8 +117,8 @@ class InvoicingController extends Controller
                 }
                 $reference = $x->Save();
                 //Now invoice
-dd();
-                //$x->Process();
+
+                $x->Process();
                 //  echo "************* INV CREATED***".$reference."<br>";
                 $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                     ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
@@ -433,6 +436,7 @@ dd();
         $companyname= $request->get('companyname');
         $invnumber = $request->get('invnumber');
         $trandate = $request->get('trandate');
+        $adjustmenttype = $request->get('adjustmenttype');
         $Qty = $request->get('Qty');
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         $result = "Something Went Wrong";
@@ -460,7 +464,12 @@ dd();
             $InventoryTransaction->Reference = $companyname;
             $InventoryTransaction->Reference2 = $invnumber;
             $InventoryTransaction->Date =(new \DateTime($trandate))->format('Y-m-d');
-            $InventoryTransaction->Description = "Dims Ajustments";
+            if($adjustmenttype =="WHT"){
+                $InventoryTransaction->Description = "Dims Warehouse Transfer";
+            }else{
+                $InventoryTransaction->Description = "Dims Ajustments";
+            }
+
 
             $InventoryTransaction->Post();
             $result = "Done";

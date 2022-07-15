@@ -70,6 +70,14 @@
                                 <option value="Henroof">Henroof</option>
                             </select>
                         </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label" for="adjustmenttype"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Adjustment Type</label>
+                            <select id="adjustmenttype">
+                                <option value=""></option>
+                                <option value="ADJ">ADJ (Normal Stock Adjustment)</option>
+                                <option value="WHT">WHT (Warehouse Transfer)</option>
+                            </select>
+                        </div>
 
                         <div class="form-group col-md-12">
                             <label class="control-label" for="invnumber"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Ref Two(Inv Number)</label>
@@ -141,7 +149,8 @@
                     companyname: $('#companyname').val(),
                     invnumber: $('#invnumber').val(),
                     Qty: $('#Qty').val(),
-                    trandate: $('#trandate').val()
+                    trandate: $('#trandate').val(),
+                    adjustmenttype: $('#adjustmenttype').val()
 
                 },
                 success: function (data) {
