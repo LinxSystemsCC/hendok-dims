@@ -81,10 +81,7 @@
             console.debug(event.key + ':' + event.newValue + " at " + event.url);
             let products = JSON.parse(event.newValue);
             console.debug(products);
-            if(products.openorderid.length > 3  ){
-
-                alert("Sorry You have An Order Opened!")
-            }
+         
             /*if(products.passedorderid !=null ){
 
                 if( $('#orderId').val().length < 3){
