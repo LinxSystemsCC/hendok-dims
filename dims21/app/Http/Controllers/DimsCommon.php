@@ -418,6 +418,42 @@ class DimsCommon extends Controller
         return view('dims/grv_post_grid')
             ->with('grvs',$grvs);
     }
+    public function stocktakegrid(){
+
+        return view ('dims/stocktakegrid');
+    }
+    public function savestocktakename(Request $request){
+
+        $stocktakename=$request->get('stocktakename');
+
+         DB::connection('sqlsrv2')->statement("Exec spInsertStocktakeName ?",array($stocktakename));
+
+    }
+    public function getStockTakeName(Request $request){
+        $datefrom= $request->get('datefrom');
+        $dateto = $request->get('dateto');
+        
+        $stocktakes = DB::connection('sqlsrv2')
+        ->select('exec spListStockTakes ?,?',
+            array($datefrom,$dateto));
+    return response()->json($stocktakes);
+    }
+    public function selectStockTake(Request $request){
+        $strStockTakeName= $request->get('strStockTakeName');
+        
+        $stocktakes = DB::connection('sqlsrv2')
+        ->select('exec spGetStockTakeOnName ?',
+            array($strStockTakeName));
+    return response()->json($stocktakes);
+    }
+    public function updateStockTakeOnSelector(Request $request){
+        
+        $status= $request->get('status');
+        $stocktakeid= $request->get('stocktakeid');
+        DB::connection('sqlsrv2')
+        ->statement('exec spUpdateStockTakeStatus ?,?',
+            array($stocktakeid,$status));
+    }
     public function getPoLineGrid(Request $request){
         $ponumber = $request->get('PODOC');
         $lines = DB::connection('sqlsrv3')

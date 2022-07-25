@@ -93,6 +93,11 @@ Route::get('getCommonRoutes', [DimsCommon::class,'getCommonRoutes']);
 
 Route::get('PointGrid', [DimsCommon::class,'PointGrid']);
 Route::get('stocktakecountspage',[DimsCommon::class,'stocktakecountspage']);
+Route::get('getStockTakeName',[DimsCommon::class,'getStockTakeName']);
+Route::get('selectStockTake',[DimsCommon::class,'selectStockTake']);
+Route::post('updateStockTakeOnSelector',[DimsCommon::class,'updateStockTakeOnSelector']);
+Route::get('stocktakegrid',[DimsCommon::class,'stocktakegrid']);
+Route::post('savestocktakename',[DimsCommon::class,'savestocktakename']);
 Route::get('grvgridpage',[DimsCommon::class,'grvgridpage']);
 Route::post('getPoLineGrid',[DimsCommon::class,'getPoLineGrid']);
 Route::get('customerPointsTrends', [DimsCommon::class,'customerPointsTrends']);
