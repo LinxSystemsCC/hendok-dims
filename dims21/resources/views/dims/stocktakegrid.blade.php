@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    
 
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
   <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
 
@@ -16,51 +17,57 @@
     <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
     <!-- DevExtreme library -->
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
- 
+
+
 
 </head>
     <div class="col-lg-12"  style="background: white;">
+        <div class="col-lg-4"  style="background: white;">
         <fieldset class="well">
             <form>
-               
-               
-             
                 Create New Stock Take
 
-                <div class="form-group col-md-4">
+                <div class="form-group">
                                        <label class="control-label" for="stocktakename"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Stock Take Name</label>
                                        <input  type="text" class="form-control input-sm col-xs-1" id="stocktakename" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
                 </div>
-      
-               <button type="button" id="savestocktake" class="btn-xs btn-primary" style="margin-left: 450px;">Save</button>
+<br>
+               <button type="button" id="savestocktake" class="btn-lg btn-success" >Save</button>
                <br>
-               
+
 
             </form>
         </fieldset>
+        </div>
+            <div class="col-lg-8"  style="background: white;border-left: 2px solid black;">
         <div class="form-group">
                 <label class="control-label" for="datefrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">FROM</label>
                 <input type="text" class="form-control input-sm "  id="datefrom" >
-           
+
                 <label class="control-label" for="dateto"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">TO</label>
                 <input type="text" class="form-control input-sm "  id="dateto" >
             </div>
-               
 
-            <button type="button" id="getstocktake" class="btn-xs btn-primary" style="margin-left: 450px;">Get Stock Takes</button>
-    </div>
-    <div class="col-lg-12" id="afterFilter">
-    <div id="gridContainer">
-    
 
+            <button type="button" id="getstocktake" class="btn-lg btn-primary" >Get Stock Takes</button>
+                <hr style="border: 1px solid black;">
+
+        <div class="col-lg-12" id="afterFilter">
+            <div id="gridContainer">
+            </div>
+            <div id="gridContainerLines">
+            </div>
+
+
+        </div>
+            </div>
     </div>
-    
-</div>
-    
+
+
 <style>
-    
+
        .dx-datagrid-table{
            font-size:15px;
        }
@@ -76,7 +83,7 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
-       
+
         $('#orderListing').hide();
         $('#pricing').hide();
         $('#pricingOnCustomer').hide();
@@ -104,7 +111,7 @@
         $('#savestocktake').click(function(){
 
 $.ajax({
-       
+
        url: '{!!url("/saveStockTakeName")!!}',
        type: "POST",
        data: {
@@ -113,14 +120,14 @@ $.ajax({
        success: function (data) {
         location.reload();
        }
-   
+
 });
 
 });
 $('#getstocktake').click(function(){
 
 $.ajax({
-       
+
        url: '{!!url("/getStockTakeName")!!}',
        type: "GET",
        data: {
@@ -130,16 +137,16 @@ $.ajax({
        success: function (data) {
 
         $("#gridContainer").dxDataGrid({
-       
+
        dataSource:data, //as json
-                    
+
        showBorders: true,
        filterRow: { visible: true },
        allowColumnResizing: true,
       paging:{
         pageSize: 50,
             },
-          
+
 
        columns: [
         {
@@ -162,14 +169,14 @@ $.ajax({
                caption: "Is Active",
                width: 125,
 
-            }, 
-                ], 
+            },
+                ],
                 onRowDblClick:function(e){
-                                        
+
                                         // console.debug(e.row,cells[e.columnIndex]);
                                         console.log(e.data.strStockTakeName);
                                         $.ajax({
-       
+
                                             url: '{!!url("/selectStockTake")!!}',
                                             type: "GET",
                                             data: {
@@ -184,7 +191,7 @@ $.ajax({
                                                         dialog.dialog('close');
                                                        // console.log($('#statusselect').val());
                                                         $.ajax({
-                                                            
+
                                                             url: '{!!url("/updateStockTakeOnSelector")!!}',
                                                             type: "POST",
                                                             data: {
@@ -192,25 +199,40 @@ $.ajax({
                                                                 stocktakeid:data[0].intAutoId
                                                             },
                                                             success: function (data) {
-                                                              
+
                                                             },
-                                                        
+
                                                         });
-                                                        
+
                                                     }
                                                 }
                                             });
                                     },
                                 });
-       
+
 
                         },
+            onRowClick:function(e){
+                console.log("***************************"+e.data.strStockTakeName);
+                    $.ajax({
+
+                        url: '{!!url("/getStockTakeNameLines")!!}',
+                        type: "GET",
+                        data: {
+                            datefrom: $('#datefrom').val(),
+                            dateto: $('#dateto').val()
+                        },
+                        success: function (data) {
+
+                        }
+                    });
+                },
        });
-   
+
 }
 
 });
-                    
+
                });
 
             });
@@ -245,8 +267,8 @@ $.ajax({
     }
 
 
-   
 
-  
+
+
 
 </script>
