@@ -446,6 +446,14 @@ class DimsCommon extends Controller
             array($strStockTakeName));
     return response()->json($stocktakes);
     }
+    public function getStockTakeNameLines(Request $request){
+        $strStockTakeName= $request->get('stocktakename');
+        
+        $stocktakes = DB::connection('sqlsrv2')
+        ->select('exec spStockTakeCountsLineblade ?',
+            array($strStockTakeName));
+    return response()->json($stocktakes);
+    }
     public function updateStockTakeOnSelector(Request $request){
         
         $status= $request->get('status');

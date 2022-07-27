@@ -10,6 +10,10 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
   <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
 
@@ -18,6 +22,7 @@
     <!-- DevExtreme library -->
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
 
 
 
@@ -219,10 +224,106 @@ $.ajax({
                         url: '{!!url("/getStockTakeNameLines")!!}',
                         type: "GET",
                         data: {
-                            datefrom: $('#datefrom').val(),
-                            dateto: $('#dateto').val()
+                            stocktakename: e.data.strStockTakeName
                         },
-                        success: function (data) {
+                        success: function (datalines) {
+
+                            $("#gridContainerLines").dxDataGrid({
+
+dataSource:datalines, //as json
+
+showBorders: true,
+filterRow: { visible: true },
+allowColumnResizing: true,
+paging:{
+ pageSize: 50,
+     },
+     export: {
+            enabled: true
+        },
+        onExporting(e) {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Stocktakelines');
+
+      DevExpress.excelExporter.exportDataGrid({
+        component: e.component,
+        worksheet,
+        autoFilterEnabled: true,
+      }).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Stocktakelines.xlsx');
+        });
+      });
+      e.cancel = true;
+    },
+
+
+columns: [
+ {
+        dataField: "intAutoCountId",
+        caption: "ID",
+        width: 50,
+
+     }, {
+        dataField: "strItemCode",
+        caption: "Item Code",
+        width: 300,
+
+     }, {
+        dataField: "intUserId",
+        caption: "User ID",
+        width: 100,
+
+     }, {
+         dataField: "dteDeviceTime",
+        caption: "Device Time",
+        width: 200,
+
+     }, {
+         dataField: "strTransactionType",
+        caption: "Transaction Type",
+        width: 200,
+
+     }, {
+         dataField: "strSubScriber",
+        caption: "Subscriber",
+        width: 250,
+
+     }, {
+         dataField: "mnyQty",
+        caption: "Quantity",
+        width: 100,
+
+     }, {
+         dataField: "strBinLocation",
+        caption: "Bin Location",
+        width: 200,
+
+     }, {
+         dataField: "dteTimeSaved",
+        caption: "Time Saved",
+        width: 200,
+
+     }, {
+         dataField: "strStockTakeName",
+        caption: "Stock Take Name",
+        width: 250,
+
+     }, {
+         dataField: "mnyCarton",
+        caption: "Cartons",
+        width: 80,
+
+     }, {
+         dataField: "PastelDescription",
+        caption: "Item Description",
+        width: 250,
+
+     },
+         ],
+        
+
+});
 
                         }
                     });
