@@ -855,6 +855,8 @@ Route::get('jsonGetProductsInTheBin', [WareHouseManagementController::class,'jso
 Route::get('bininfoGridProducts', [WareHouseManagementController::class,'bininfoGridProducts']);
 Route::get('jsonbininfoGridProducts', [WareHouseManagementController::class,'jsonbininfoGridProducts']);
 Route::get('binlocatons', [WareHouseManagementController::class,'binlocatons']);
+Route::get('seewhatscountedjson', [WareHouseManagementController::class,'seewhatscountedjson']);
+Route::get('seewhatscounted/{stocktakeid}', [WareHouseManagementController::class,'seewhatscounted']);
 
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!

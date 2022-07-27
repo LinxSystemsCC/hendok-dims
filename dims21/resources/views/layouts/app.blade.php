@@ -707,6 +707,10 @@
                                     <a href='{!!url("/overallspecials")!!}' onclick="window.open(this.href, 'overallspecials',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Overall Specials</a>
                                 </li>
+                                <li>
+                                    <a href='{!!url("/combospecials")!!}' onclick="window.open(this.href, 'combospecials',
+'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >POS Combo Specials</a>
+                                </li>
 
                                 @if($console !="0")
                                 <li>

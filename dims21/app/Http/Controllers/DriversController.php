@@ -570,7 +570,7 @@ dbo.fnRouteLoader($routingId) as strLoadedBy,bitCashUpCheckedIt cashdealtwithit
         $tblGLCodes= DB::connection('sqlsrv4')
             ->select('select* from vwGLCode ');
         $returnRefs= DB::connection('sqlsrv4')
-            ->select('select * from vwDriversCashoffTopReferences ');
+            ->select('select * from vwDriversCashoffTopReferences');
 
         return view('dims/driverscashoffpage')->with('tax',$tax)->with('references',$returnRefs)
             ->with('glCode',$tblGLCodes);

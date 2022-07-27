@@ -967,6 +967,43 @@ class DimsCommon extends Controller
                 ->with('overallspecialtypes',$strOverallSpecialType)->with('locations',$locations)
                 ->with('customers',$queryCustomers);
     }
+    public function combospecials(){
+        $queryProducts =DB::connection('sqlsrv3')->table("viewtblProducts" )->select('ProductId','PastelDescription','PastelCode')->orderBy('PastelCode','ASC')->get();
+        return view('dims/poscombospecials')->with('products',$queryProducts);
+    }
+    public function combospecialsjson(Request $request){
+        $datefrom = $request->get('dateFrom');
+        $dateto = $request->get('dateTo');
+        $getResult = DB::connection('sqlsrv4')
+            ->select("EXEC spGetComboSpecialsHeader'" . $datefrom . "','" . $dateto . "'");
+        return response()->json($getResult);
+    }
+    public function xmlSaveComboHeaders(Request $request){
+        $comboheader = $request->get('conmboheaders');
+        //$orderDetailsxml = $this->toxml($comboheader, "xml", array("result"));
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $getResult = DB::connection('sqlsrv4')
+            ->select("EXEC spxmlInsertComboHeaders'" .$comboheader. "','". $userName . "'," . $userid);
+        return response()->json($getResult);
+    }
+    public function xmlSaveComboLines(Request $request){
+        $conmboLines = $request->get('conmboLines');
+        $comboHeaderID = $request->get('comboHeaderID');
+        //$orderDetailsxml = $this->toxml($comboheader, "xml", array("result"));
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $getResult = DB::connection('sqlsrv4')
+            ->select("EXEC spxmlInsertComboLines'" .$conmboLines. "','". $userName . "'," . $userid.",".$comboHeaderID);
+        return response()->json($getResult);
+    }
+    public function combospecialsjsonlines(Request $request){
+        $comboheader = $request->get('combolinesid');
+        $queryCustomers =  DB::connection('sqlsrv3')
+            ->select("EXEC spGetComboLines ".$comboheader);
+
+        return response()->json($queryCustomers);
+    }
     public function groupspecials()
     {
         $queryProducts =DB::connection('sqlsrv3')->table("viewActiveProductWithVat" )->select('ProductId','PastelCode','PastelDescription','UnitSize','Tax','Cost','QtyInStock','Margin','Alcohol','Available','PurchOrder')->orderBy('PastelDescription','ASC')->distinct()->get();
