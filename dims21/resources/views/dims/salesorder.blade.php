@@ -1570,6 +1570,42 @@
 
         </div>
 
+        <div title="Zero Pricing" id="itemseithzeropricing">
+            <h2>These lines have zero pricing, please authorize.</h2>
+            <form>
+
+                <div class="form-group  col-md-12" >
+                    <table class="table2 table-bordered  dataTable">
+                        <thead>
+                        <tr>
+                            <td>Item Code</td>
+                            <td>Item Name</td>
+                            <td>Price</td>
+                            <td>GP</td>
+                        </tr>
+                        </thead>
+                        <tbody id="griditemzeropricing">
+
+                        </tbody>
+                    </table>
+
+                        <div class="form-group  col-md-4" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                            <label class="control-label" for="zeropricingname"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Name</label><br>
+                            <input class="" id="zeropricingname" name="zeropricingname"  style="height:30px;font-size: 10px;"  autocomplete="off" value="-"></input>
+                        </div>
+                        <div class="form-group  col-md-4"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
+                            <label class="control-label" for="zeropricingpassword"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">PassWord</label><br>
+                            <input type="password" name="zeropricingpassword" class="" id="zeropricingpassword" style="height:30px;font-size: 10px;"   autocomplete="off" value="-">
+                        </div><br>
+                        <div>
+                            <button type="button" id="doAuthzeropricing" class="btn-success btn-xs pull-right" style="margin-top: 29px;margin-right: 15px;">Authorise</button>
+                        </div>
+
+                </div>
+            </form>
+
+        </div>
+
 
 
         @include('dims.on_order')
@@ -2022,6 +2058,7 @@
                 $('#addcostdialog').hide();
                 $('#authItemsWithzerocosts').hide();
                 $('#itemoutofstock').hide();
+                $('#itemseithzeropricing').hide();
 
 
                 if(isBlockDeliveryTypeChanges.length > 4) {
@@ -2641,8 +2678,36 @@
                  * Clicking the Finish button
                  * */
                 $('#finishOrder').click(function () {
-                    calculator();
 
+                    var zeropricingdoublecheck = new Array();
+                    $('#table > tbody  > tr').each(function() {
+                        var data = $(this);
+
+                        var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
+                        var comment = $(this).closest('tr').find('.prodComment_').val();
+                        //comment = comment.replace("'","");
+                        console.debug($(this).closest('tr').find('.col2').val());
+                        if (($(this).closest('tr').find('.theProductCode_').val()).length > 0) {
+                            zeropricingdoublecheck.push({
+                                'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
+                                'qty': $(this).closest('tr').find('.prodQty_').val(),
+                                'price': $(this).closest('tr').find('.prodPrice_').val(),
+                                'comment': escapeHtml(comment),
+                                'orderDetailID': orderDetailID,
+                                'customerCode': escapeHtml($('#inputCustAcc').val()),
+                                'prodDisc': $(this).closest('tr').find('.prodDisc_').val(),
+                                'OrderId':$('#orderId').val(),
+                                'hiddenToken':$(this).closest('tr').find('.hiddenToken').val(),
+                                'prodBulk':$(this).closest('tr').find('.prodBulk_').val(),
+                                'warehouse':$(this).closest('tr').find('.col2').val()
+                            });
+
+
+                        }
+
+                    });
+
+                    calculator();
                     // if (parseFloat((parseFloat($('#totalmargin').val()).toFixed(2)) < parseFloat(parseFloat($('#hiddencustomerGp').val()).toFixed(2) )) && ($('#margin_auth').val() != 1) )
                     if ( Math.round($('#totalmargin').val()  ) <  Math.round($('#hiddencustomerGp').val()  )  && ($('#margin_auth').val() != 1) && ($('#invoiceNo').val()).length < 3 && $('#marginandpriceauthbycustomer').val().lenght > 1 )
                     {
