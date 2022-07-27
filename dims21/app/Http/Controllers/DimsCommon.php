@@ -403,6 +403,63 @@ class DimsCommon extends Controller
         }
 
     }
+    public function stocktakecountspage(){
+        $getAllStockCounts = DB::connection('sqlsrv3')
+        ->select('SELECT * FROM vwStockTakeCountsGrid' );
+        
+        return view('dims/stock_take_counts_grid')
+            ->with('stocks',$getAllStockCounts);
+
+    }
+    public function grvgridpage(){
+        $grvs = DB::connection('sqlsrv3')
+        ->select('exec [spGetPOforVendorGrid]' );
+        
+        return view('dims/grv_post_grid')
+            ->with('grvs',$grvs);
+    }
+    public function stocktakegrid(){
+
+        return view ('dims/stocktakegrid');
+    }
+    public function savestocktakename(Request $request){
+
+        $stocktakename=$request->get('stocktakename');
+
+         DB::connection('sqlsrv2')->statement("Exec spInsertStocktakeName ?",array($stocktakename));
+
+    }
+    public function getStockTakeName(Request $request){
+        $datefrom= $request->get('datefrom');
+        $dateto = $request->get('dateto');
+        
+        $stocktakes = DB::connection('sqlsrv2')
+        ->select('exec spListStockTakes ?,?',
+            array($datefrom,$dateto));
+    return response()->json($stocktakes);
+    }
+    public function selectStockTake(Request $request){
+        $strStockTakeName= $request->get('strStockTakeName');
+        
+        $stocktakes = DB::connection('sqlsrv2')
+        ->select('exec spGetStockTakeOnName ?',
+            array($strStockTakeName));
+    return response()->json($stocktakes);
+    }
+    public function updateStockTakeOnSelector(Request $request){
+        
+        $status= $request->get('status');
+        $stocktakeid= $request->get('stocktakeid');
+        DB::connection('sqlsrv2')
+        ->statement('exec spUpdateStockTakeStatus ?,?',
+            array($stocktakeid,$status));
+    }
+    public function getPoLineGrid(Request $request){
+        $ponumber = $request->get('PODOC');
+        $lines = DB::connection('sqlsrv3')
+        ->select('exec spGetPurchaseOrderLines ?',array($ponumber));
+        return response()->json($lines);
+    }
     public function deleteuserOrderLocks()
     {
         $userId =   Auth::user()->UserID;
@@ -1608,6 +1665,11 @@ class DimsCommon extends Controller
         $userAuthID = Auth::user()->UserID;
 
         $GroupId = Auth::user()->GroupId;
+        if ($RouteID == 1138){
+            DB::connection()->statement("EXEC spTriggerUplift ?,?",array($OrderID,1));
+        } else{
+            DB::connection()->statement("EXEC spTriggerUplift ?,?",array($OrderID,0));
+        }
        // $things = (new SalesForm())->getThings($GroupId,'Allow Call Logger');
 
         $OurderRoute = DB::connection('sqlsrv3')->table('tblOrders')->select('RouteId')->where('OrderId',$OrderID)->get();

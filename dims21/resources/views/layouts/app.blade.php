@@ -685,6 +685,18 @@
                                     <a href='{!!url("/searchSpecialKF")!!}' onclick="window.open(this.href, 'searchSpecialKF',
 'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" > Search Customer Specials</a>
                                 </li>
+                                <li>
+                                    <a href='{!!url("/stocktakecountspage")!!}'  onclick="window.open(this.href, 'stocktakecountspage',
+'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Take Counts Page</a>
+                                </li>
+                                <li>
+                                    <a href='{!!url("/stocktakegrid")!!}'  onclick="window.open(this.href, 'stocktakegrid',
+'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Take Grid Page</a>
+                                </li>
+                                <li>
+                                    <a href='{!!url("/grvgridpage")!!}'  onclick="window.open(this.href, 'grvgridpage',
+'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">GRV Grid Page</a>
+                                </li>
 <!--
                                 <li>
                                     <a href='{!!url("/massgridspecialscustomer")!!}' onclick="window.open(this.href, 'massGrid',
@@ -799,12 +811,17 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">C-Panel <span class="caret"></span></a>
                             <ul class="dropdown-menu" >
 
-                                @if($drivers !="0")
+                            @if($drivers !="0")
                                 <li>
-                                    <a href='{!!url("/drivers")!!}'  onclick="window.open(this.href, 'drivers',
+                                    <a href='{!!url("/driverspage")!!}'  onclick="window.open(this.href, 'driverspage',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Drivers</a>
                                 </li>
                                 @endif
+
+                                <li>
+                                    <a href='{!!url("/deliveryaddresspage")!!}'  onclick="window.open(this.href, 'deliveryaddresspage',
+'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Delivery Address Editor</a>
+                                </li>
                                 @if($grid !=0)
                                 <li>
                                     <a href='{!!url("/grid_Users")!!}'  onclick="window.open(this.href, 'users',

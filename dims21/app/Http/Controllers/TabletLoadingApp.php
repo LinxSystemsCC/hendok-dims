@@ -321,7 +321,7 @@ class TabletLoadingApp extends Controller
 
     public function invoicesnotprinting()
     {
-        $notPrinted = DB::connection('sqlsrv3')->select("SELECT * FROM salesinvoiceheader where intflag <>1");
+        $notPrinted = DB::connection('sqlsrv3')->select("SELECT * FROM viewSalesInvoiceHeader where intflag <>1");
         $credits = DB::connection('sqlsrv3')->select("SELECT * FROM viewCreditHeaders where intflag <>1");
         $middleLayerInvoiceVsDims = DB::connection('sqlsrv3')->select("SELECT * FROM viewInvoicesNotGoingThrough Order by DeliveryDate "); //Added for MS
 

@@ -703,7 +703,7 @@
                                     filterRow: { visible: true },
                                     allowColumnResizing: true,
                                     paging:{
-                                        pageSize: 100,
+                                        pageSize: 500,
                                     },
                                     export: {
                                         enabled: true,
@@ -871,7 +871,7 @@
                                             allowSorting:true,
                                             allowFiltering:true,
                                             calculateCellValue: function(rowData) {
-                                                return rowData.PriceLookedUp*0.9;
+                                                return rowData.PriceLookedUpCurrent*0.9;
                                             },
                                             caption: "Less 10%",
                                             width: 60,
@@ -962,43 +962,45 @@
                                     ] ,
 
 
-
+                                  
                                     onCellClick:function(e){
-                                        console.debug("e.columnIndex_________________________________________"+e.columnIndex );
-                                        console.debug("e.key.PriceLookedUpCurrent_________________________________________"+e.value );
                                         // console.debug(e.row,cells[e.columnIndex]);
+                                        console.log(e);
+                                        if (e.columnIndex ==5){
+                                             $("#gridContainer").dxDataGrid("saveEditData");
+                                        }
                                         if (e.columnIndex ==8){
-                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value*0.9);
-                                            // $("#gridContainer").dxDataGrid("saveEditData");
+                                            $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
+                                             $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==9){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                            // $("#gridContainer").dxDataGrid("saveEditData");
+                                             $("#gridContainer").dxDataGrid("saveEditData");
 
                                         }
                                         if (e.columnIndex ==10){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                            //  $("#gridContainer").dxDataGrid("saveEditData");
+                                              $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==11){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                            //  $("#gridContainer").dxDataGrid("saveEditData");
+                                              $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==12){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                            //  $("#gridContainer").dxDataGrid("saveEditData");
+                                              $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==13){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                            //  $("#gridContainer").dxDataGrid("saveEditData");
+                                              $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==14){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                            //$("#gridContainer").dxDataGrid("saveEditData");
+                                            $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==15){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                            // $("#gridContainer").dxDataGrid("saveEditData");
+                                             $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                     },
 
@@ -1194,11 +1196,9 @@
             var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").items();
             var checkedLines = new Array();
             console.log( allGridItems);
-
+         
             var productsLinesOnPicking ="<xml>";
-         /*   var selectedDatasUsers = $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) {
-                productsLinesOnPickingPrimary= data;
-            });*/
+         /*   */
             console.log( "_________________________");
             //console.log( productsLinesOnPickingPrimary);
 

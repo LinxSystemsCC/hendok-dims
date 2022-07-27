@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 use App\Exports\OrdersExport;
 use App\Exports\SpecialsExport;
+use App\Exports\RoutePlanExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -585,6 +586,13 @@ $salesMonthToDate = DB::connection('sqlsrv3')
 
         // return Excel::download(new SpecialsExport(), 'specials.xlsx');
         return (new OrdersExport($orderid))->download('order-'.$orderid.'.xlsx');
+    }
+    public function exportRoutePlanDetails($routeid,$datefrom,$dateto,$ordertype,$status)
+    {
+        $from  = (new \DateTime($datefrom))->format('Y-m-d');
+        $to  =(new \DateTime($dateto))->format('Y-m-d');
+
+        return (new RoutePlanExport($routeid,$datefrom,$dateto,$ordertype,$status))->download('routeplan.xlsx');
     }
 
 }

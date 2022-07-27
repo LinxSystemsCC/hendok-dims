@@ -90,7 +90,16 @@ Route::get('getDimsUsers', [UserFeature::class,'getDimsUsers']);
 
 //DIMS COMMON STARTS HERE!!!!
 Route::get('getCommonRoutes', [DimsCommon::class,'getCommonRoutes']);
+
 Route::get('PointGrid', [DimsCommon::class,'PointGrid']);
+Route::get('stocktakecountspage',[DimsCommon::class,'stocktakecountspage']);
+Route::get('getStockTakeName',[DimsCommon::class,'getStockTakeName']);
+Route::get('selectStockTake',[DimsCommon::class,'selectStockTake']);
+Route::post('updateStockTakeOnSelector',[DimsCommon::class,'updateStockTakeOnSelector']);
+Route::get('stocktakegrid',[DimsCommon::class,'stocktakegrid']);
+Route::post('savestocktakename',[DimsCommon::class,'savestocktakename']);
+Route::get('grvgridpage',[DimsCommon::class,'grvgridpage']);
+Route::post('getPoLineGrid',[DimsCommon::class,'getPoLineGrid']);
 Route::get('customerPointsTrends', [DimsCommon::class,'customerPointsTrends']);
 Route::get('cardsList', [DimsCommon::class,'cardsList']);
 Route::get('getCartsGrid', [DimsCommon::class,'getCartsGrid']);
@@ -539,6 +548,7 @@ Route::post('contactDetailsOnOrder', [DimsReports::class,'contactDetailsOnOrder'
 Route::get('pricelistview', [DimsReports::class,'pricelistview']);
 Route::get('getProductsMappedToThePriceList', [DimsReports::class,'getProductsMappedToThePriceList']);
 Route::get('exportorder/{orderid}',[DimsReports::class,'exportorder'] );
+Route::get('exportRoutePlanDetails/{routeid}/{deliverydatefrom}/{deliverydateto}/{ordertype}/{status}',[DimsReports::class,'exportRoutePlanDetails']);
 
 //DIMS REPORTS CONTROLLER ENDS HERE !!!
 
@@ -589,7 +599,9 @@ Route::post('reprintPickingSlip',[PickingManagementCotroller::class,'reprintPick
 /**********************************************************CRUD****************************************************************/
 
 //DRIVERSCONTROLLER CONTROLLER BEGINS HERE !!!
-Route::get('drivers', [DriversController::class,'readItems']);
+Route::get('driverspage', [DriversController::class,'readItems']);
+Route::get('deliveryaddresspage',[DriversController::class,'deliveryaddresspage']);
+Route::post('updateDeliveryAddressesGrid',[DriversController::class,'updateDeliveryAddressesGrid']);
 Route::get('getRoutingIds', [DriversController::class,'getRoutingIds']);
 Route::get('printDriversCashOff/{ref}', [DriversController::class,'printDriversCashOff']);
 Route::get('creditRequisitionByRoutingId/{routingId}',[DriversController::class,'creditRequisitionByRoutingId']);
