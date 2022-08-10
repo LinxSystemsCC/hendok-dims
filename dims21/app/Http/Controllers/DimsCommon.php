@@ -1317,12 +1317,11 @@ class DimsCommon extends Controller
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
 
-        $orderDetailsxml = $this->toxml($orderDetails, "xml", array("result"));
 
         //dd($orderDetailsxml);
         //echo "EXEC spXMLCustomerSpecials '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId,$contractId;
         $returnresults = DB::connection('sqlsrv3')
-            ->select("EXEC spXMLCustomerSpecials '".$orderDetailsxml."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId.",".$contractId);
+            ->select("EXEC spXMLCustomerSpecials '".$orderDetails."',".$userid.",'".$userName."','".$date."','".$dateTo."',".$customerId.",".$contractId);
         $outPut['result'] = $returnresults[0]->Result;
         return $outPut;
 

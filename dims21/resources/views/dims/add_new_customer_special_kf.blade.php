@@ -1493,24 +1493,26 @@
                 dateFormat: 'dd-mm-yy'
             });
             $('#SaveNewSpecial').click(function(){
-                var productsLinesOnPicking = new Array();
+                var productsLinesOnPicking ="<xml>";
                 $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-                    // var data = $(this);
-                    // var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
 
+                    
                     if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && ($(this).closest('tr').find('.prodDescription_').val()).length > 0 ) {
-                        productsLinesOnPicking.push({
-                            'productCode': $(this).closest('tr').find('.theProductCode_').val(),
-                            'price': $(this).closest('tr').find('.prodPrice_').val(),
-                            'dateFrom':  dateReturn($('#dateFrom').val()) ,
-                            'dateTo': dateReturn( $('#dateTo').val()),
-                            'cost_': $(this).closest('tr').find('.cost_').val(),
-                            'gp_': $(this).closest('tr').find('.gp_').val(),
-                            'costCreated_': $(this).closest('tr').find('.costCreated_').val(),
-                            'customerid': $('#customerId').val(),
-                        });
+                        productsLinesOnPicking= productsLinesOnPicking + "<result>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+ $(this).closest('tr').find('.theProductCode_').val()+"</productCode>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<price>"+$(this).closest('tr').find('.prodPrice_').val()+"</price>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateFrom>"+dateReturn($('#dateFrom').val()) +"</dateFrom>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateTo>"+dateReturn( $('#dateTo').val())+"</dateTo>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<cost_>"+$(this).closest('tr').find('.cost_').val()+"</cost_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<gp_>"+$(this).closest('tr').find('.gp_').val()+"</gp_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<costCreated_>"+ $(this).closest('tr').find('.costCreated_').val()+"</costCreated_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<customerid>"+$(this).closest('tr').find('.costCreated_').val()+"</customerid>";
+                    productsLinesOnPicking= productsLinesOnPicking+ "</result>";
                     }
+
+
                 });
+            productsLinesOnPicking= productsLinesOnPicking+"</xml>";
                 $.ajax({
                     url: '{!!url("/XmlCreateCustomerSpecials")!!}', // createCustomerSpecials
                     type: "POST",
