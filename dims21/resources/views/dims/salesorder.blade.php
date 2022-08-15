@@ -5331,6 +5331,7 @@
                         {"data": "DeliveryDate", "class": "small"},
                         {"data": "CustomerPastelCode", "class": "small"},
                         {"data": "StoreName", "class": "small"},
+                        {"data": "AwaitingStock", "class": "small"},
                         {"data": "Qty", "class": "small",
                             render:function(data, type, row, meta) {
                                 // check to see if this is JSON

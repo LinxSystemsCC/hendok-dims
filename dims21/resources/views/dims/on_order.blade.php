@@ -39,6 +39,7 @@
                 <th class="col-sm-1">Delivery Date</th>
                 <th >Cust Code</th>
                 <th class="col-md-3">Store Name</th>
+                <th>Awaiting Stock</th>
                 <th>Qty</th>
                 <th>In Stock</th>
                 <th>Prod Code</th>
