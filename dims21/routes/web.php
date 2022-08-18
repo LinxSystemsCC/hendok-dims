@@ -12,6 +12,7 @@ use App\Http\Controllers\ApisContoller;
 use App\Http\Controllers\OnlineOrders;
 use App\Http\Controllers\ConsoleManagement;
 use App\Http\Controllers\InvoicingController;
+use App\Http\Controllers\WareHouseController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
 
@@ -829,6 +830,43 @@ Route::get('productsOnBackOrders',[OnlineOrdersReconController::class,'productsO
 Route::get('warehouseitems', [WareHouseController::class,'warehouseInvetoryItems']);
 Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
 Route::get('initiateproductonmachine', [WareHouseController::class,'initiateproductonmachine']);
+Route::get('getPalletsJson', [WareHouseController::class,'getPalletsJson']);
+Route::get('getDeptname', [WareHouseController::class,'getDeptname']);
+Route::get('getMachines', [WareHouseController::class,'getMachines']);
+Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
+Route::get('mapitemsmachinesdept', [WareHouseController::class,'mapdeptitem']);
+Route::get('machines', [WareHouseController::class,'machinespage']);
+Route::get('mapmachinestodept', [WareHouseController::class,'mapmachinestodept']);
+Route::get('getMappedItemstoPalletJson', [WareHouseController::class,'getMappedItemstoPalletJson']);
+Route::get('getMachinesmappedtodept', [WareHouseController::class,'getMachinesmappedtodept']);
+Route::post('getpalletconfforitems', [WareHouseController::class,'getpalletconfforitems']);
+Route::get('getMappedDepartmentsMachinesItemasJson', [WareHouseController::class,'getMappedDepartmentsMachinesItemasJson']);
+Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
+Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
+Route::get('selectedDepartment', [WareHouseController::class,'selectedDepartment']);
+Route::post('selectedPalletConfig', [WareHouseController::class,'selectedPalletConfig']);
+Route::post('savespalletstoitems', [WareHouseController::class,'savespalletstoitems']);
+Route::post('savesmachinedeptitems', [WareHouseController::class,'savesmachinedeptitems']);
+Route::post('savesMachinemaptodept', [WareHouseController::class,'savesMachinemaptodept']);
+Route::post('updateDeptName', [WareHouseController::class,'updateDeptName']);
+Route::post('updateMachineName', [WareHouseController::class,'updateMachineName']);
+Route::post('savespallets', [WareHouseController::class,'savesPalletsPost']);
+Route::post('savesdeptname', [WareHouseController::class,'savesdeptname']);
+Route::post('savesmachines', [WareHouseController::class,'savesmachines']);
+Route::post('removemapping', [WareHouseController::class,'removemapping']);
+Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefromdept']);
+Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
+
+Route::get('createjobs', [WareHouseController::class,'createjobs']);
+Route::get('printpalletsselectdept', [WareHouseController::class,'printpalletsselectdept']);
+Route::get('choosemachine/{department}', [WareHouseController::class,'choosemachine']);
+Route::get('printpalletchoosemachine/{department}', [WareHouseController::class,'printpalletchoosemachine']);
+Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
+Route::get('choosproducttomake/{department}/{machine}', [WareHouseController::class,'choosproducttomake']);
+Route::get('printpalletchoosproducttomake/{department}/{machine}', [WareHouseController::class,'printpalletchoosproducttomake']);
+Route::get('printselectedcriteria/{department}/{machine}/{product}', [WareHouseController::class,'printselectedcriteria']);
+Route::get('goprintfirstqrcode/{department}/{machine}/{product}/{pallet}/{required}', [WareHouseController::class,'goprintfirstqrcode']);
+Route::get('startprintingjob/{department}/{machine}/{product}/{pallet}/{required}/{estimatedpalletd}/{operator}', [WareHouseController::class,'startprintingjob']);
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 
@@ -838,6 +876,7 @@ Route::get('viewBlockedAccount',[CompanyAuthController::class,'viewBlockedAccoun
 Route::get('getSpecificOrdersBlocked/{customerId}', [CompanyAuthController::class,'getSpecificOrdersBlocked']);
 Route::get('getSpecificBlockedOrdersJson/{orderid}',[CompanyAuthController::class,'getSpecificBlockedOrdersJson'] );
 Route::get('getoutstandingorderstoauthjson/{orderid}', [CompanyAuthController::class,'getoutstandingorderstoauthjson']);
+
 
 //COMPANYAUTHCONTROLLER CONTROLLER ENDS HERE !!!
 

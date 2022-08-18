@@ -747,7 +747,7 @@ class TabletLoadingApp extends controller
         $route = $request->get('route');
         $area = $request->get('area');
 
-        $GetProductExtrainfo= DB::connection('sqlsrv3')
+        $GetProductExtrainfo= DB::connection('sqlsrv')
             ->select("EXEC spMapRoutesAndAreasManually '".$route."','".$area."'");
         return response()->json($GetProductExtrainfo);
 

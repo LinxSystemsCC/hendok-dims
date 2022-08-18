@@ -108,9 +108,7 @@ class InvoicingController extends Controller
                         $x->Detail[$lineno]->UnitSellingPrice =floatval($innverVal->Price);
                         echo "Line--".$sdkHelper->GetWarehouseByCode("CPT");
                     }
-
                     $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
-
 
                     //isLineInvoiced
                     // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";

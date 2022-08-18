@@ -109,8 +109,6 @@ Ref: <input id="ref" >
                 var checkedLines = new Array();
                 console.log( allGridItems);
                 allGridItems.forEach((element, index, array) => {
-
-
                     $.each(element.items, function(key, value) {
                         console.log( value);
                         var qty = value.qtyPlan;
@@ -126,8 +124,6 @@ Ref: <input id="ref" >
                         }
                     });
                 });
-
-
 
                 $.ajax({
                     url: '{!!url("/saveplan")!!}',
@@ -167,6 +163,7 @@ Ref: <input id="ref" >
                 console.debug(data);
                 $("#gridContainer").dxDataGrid({
                     dataSource:data.priority,
+
                     showBorders: true,
                     selection: {
                         mode: 'multiple',
