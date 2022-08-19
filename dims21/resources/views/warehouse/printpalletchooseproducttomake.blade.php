@@ -54,7 +54,7 @@
 
 </head>
 <div class="col-lg-12"  style="background: white;">
-    <a href='{!!url("/printpalletchoosemachine")!!}/{{$departmentselected}}' style="float: right;background: black;color: white;padding: 10px"><-Back</a>
+    <a href='{!!url("/printpalletchoosemachine")!!}/{{$departmentselected}}' style="float: right;background: black;color: white;padding: 10px;    width: 100%;text-align: center;    font-size: 28px;"><-Back</a>
     <div class="col-lg-12" >
         @foreach($departments as $val)
             <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3>

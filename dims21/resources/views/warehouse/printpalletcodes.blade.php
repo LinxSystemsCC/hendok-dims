@@ -50,16 +50,16 @@
 
 </head>
 <div class="col-lg-12"  style="background: white;">
-    <a href='{!!url("/createPalletConfig")!!}' style="float: right;background: black;color: white;padding: 10px"><-Back</a>
+    <a href='{!!url("/createPalletConfig")!!}' style="float: right;background: black;color: white;padding: 10px;    width: 100%;text-align: center;    font-size: 28px;"><-Back</a>
     <div class="col-lg-12" style="text-align: center;">
 
         <h1>CHOOSE DEPARTMENT</h1>
 
 
                 @foreach($departments as $val)
-                <div class="form-group" >
-                    <a href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}' style="width: 800px;height: 100px;background: black;font-size: 35px;color: white;padding: 13px 460px;text-decoration: none">{{$val->strDeptName}}</a><br><br>
-                </div>
+
+            <button class="btn-lg btn-success" onclick="location.href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}'" type="button" style="width: 100% !important;font-size: 85px;">
+                {{$val->strDeptName}}</button><br><br>
                 @endforeach
 
 
