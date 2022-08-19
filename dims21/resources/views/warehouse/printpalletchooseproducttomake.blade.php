@@ -68,9 +68,13 @@
 
         <h1>CHOOSE PRODUCT</h1>
             @foreach($products as $val)
-                <div class="form-group" >
-                    <a href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}' style="width: 800px;height: 100px;background: black;font-size: 15px;color: white;padding: 17px 500px;text-decoration: none">{{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ] </a><br><br>
-                </div>
+
+                    <button class="btn-lg btn-success" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}'" type="button" style="width: -webkit-fill-available;font-size: 25px;">
+                        {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
+                <br>
+                <br>
+
+
             @endforeach
 
     </div>

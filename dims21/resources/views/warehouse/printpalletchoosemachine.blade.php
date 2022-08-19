@@ -49,9 +49,13 @@
 
 
 </head>
+<div class="container" style="width:  100%;">
+    <div class="row">
+
+
 <div class="col-lg-12"  style="background: white;">
     <a href='{!!url("/printpalletsselectdept")!!}' style="float: right;background: black;color: white;padding: 10px"><-Back</a>
-    <div class="col-lg-12" style="text-align: center;" >
+    <div class="col" style="text-align: center;" >
 
         @foreach($departments as $val)
         <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3>
@@ -64,17 +68,18 @@
         <h1>CHOOSE MACHINE</h1>
 
                 @foreach($machines as $val)
-                <div class="form-group" >
-                    <a href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}' style="width: 800px;height: 100px;background: black;font-size: 35px;color: white;padding: 13px 460px;text-decoration: none">{{$val->strMachineName}}</a><br><br>
+                <button class="btn-lg btn-success" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: -webkit-fill-available;font-size: 85px;">
+                    {{$val->strMachineName}}</button>
 
-                </div>
+
                 @endforeach
 
 
 
     </div>
 </div>
-
+</div>
+</div>
 
 <style>
 
