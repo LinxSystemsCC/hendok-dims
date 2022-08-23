@@ -93,12 +93,6 @@ Route::get('getCommonRoutes', [DimsCommon::class,'getCommonRoutes']);
 
 Route::get('PointGrid', [DimsCommon::class,'PointGrid']);
 Route::get('stocktakecountspage',[DimsCommon::class,'stocktakecountspage']);
-Route::get('getStockTakeName',[DimsCommon::class,'getStockTakeName']);
-Route::get('selectStockTake',[DimsCommon::class,'selectStockTake']);
-Route::post('updateStockTakeOnSelector',[DimsCommon::class,'updateStockTakeOnSelector']);
-Route::get('stocktakegrid',[DimsCommon::class,'stocktakegrid']);
-Route::post('savestocktakename',[DimsCommon::class,'savestocktakename']);
-Route::get('getStockTakeNameLines',[DimsCommon::class,'getStockTakeNameLines']);
 Route::get('grvgridpage',[DimsCommon::class,'grvgridpage']);
 Route::post('getPoLineGrid',[DimsCommon::class,'getPoLineGrid']);
 Route::get('customerPointsTrends', [DimsCommon::class,'customerPointsTrends']);
@@ -870,7 +864,17 @@ Route::get('jsonbininfoGridProducts', [WareHouseManagementController::class,'jso
 Route::get('binlocatons', [WareHouseManagementController::class,'binlocatons']);
 Route::get('seewhatscountedjson', [WareHouseManagementController::class,'seewhatscountedjson']);
 Route::get('seewhatscounted/{stocktakeid}', [WareHouseManagementController::class,'seewhatscounted']);
+Route::get('qrcodeimage/{binlocation}', [WareHouseManagementController::class,'qrcodeimage']);
+Route::get('getBinLocationsJson', [WareHouseManagementController::class,'getBinLocationsJson']);
+Route::get('binandqrcodes', [WareHouseManagementController::class,'binandqrcodes']);
+Route::post('savenewbin', [WareHouseManagementController::class,'savenewbin']);
 
+Route::get('getStockTakeName',[WareHouseManagementController::class,'getStockTakeName']);
+Route::get('selectStockTake',[WareHouseManagementController::class,'selectStockTake']);
+Route::post('updateStockTakeOnSelector',[WareHouseManagementController::class,'updateStockTakeOnSelector']);
+Route::get('stocktakegrid',[WareHouseManagementController::class,'stocktakegrid']);
+Route::post('savestocktakename',[WareHouseManagementController::class,'savestocktakename']);
+Route::get('getStockTakeNameLines',[WareHouseManagementController::class,'getStockTakeNameLines']);
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 
