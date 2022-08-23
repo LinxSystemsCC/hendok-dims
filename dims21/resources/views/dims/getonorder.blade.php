@@ -42,6 +42,7 @@
                 <th class="col-sm-1">Delivery Date</th>
                 <th >Cust Code</th>
                 <th class="col-md-3">Store Name</th>
+                <th >Awaiting Stock</th>
                 <th>Qty</th>
                 <th>In Stock</th>
                 <th>Prod Code</th>
@@ -340,6 +341,7 @@
                     {"data": "DeliveryDate", "class": "small"},
                     {"data": "CustomerPastelCode", "class": "small"},
                     {"data": "StoreName", "class": "small"},
+                    {"data": "AwaitingStock", "class": "small"},
                     {"data": "Qty", "class": "small",
                         render:function(data, type, row, meta) {
                             // check to see if this is JSON
@@ -353,7 +355,6 @@
                             return parseFloat(jsn).toFixed(2);
 
                         } ,"bSortable": true },
-
                     {"data": "InStock", "class": "small"},
                     {"data": "PastelCode", "class": "small"},
                     {"data": "PastelDescription", "class": "small"},

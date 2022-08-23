@@ -108,6 +108,7 @@
                         <button type="button" id="button_row" class="btn-xs btn-success">Add</button>
                         <button type="button" id="copythisorder" class="btn-xs btn-primary" style="">Copy Order</button>
                         <button type="button" id="excelexportorder" class="btn-xs btn-primary" style="">Export To Excel</button>
+                        <button type="button" id="pdfexportorder" class="btn-xs btn-primary" style="">Export To PDF</button>
 
                         <button type="button" id="edit_row" class="btn-xs btn-success">Edit</button>
 
@@ -3735,9 +3736,19 @@
                     });
                 });//END OF SUBMITFILTER
 
-                $("#excelexportorder").click(function(){
+                $("#pdfexportorder").click(function(){
 
+                  {
+                                           
+                                            if (($('#invoiceNo').val()).length > 3) {
+                                                window.open('{!!url("/pdforder")!!}/'+$('#orderId').val(), "PDF", "location=1,status=1,scrollbars=1, width=1200,height=850");
+//View PDF
+                                            } else {
+                                                window.open('{!!url("/pdforder")!!}/'+$('#orderId').val(), "PDF", "location=1,status=1,scrollbars=1, width=1200,height=850");
+                                            }
 
+                                        }
+                                        saveorderswithoutExtrasPDF();
                 });
 
                 $('#excelexportorder').click(function(){
@@ -5387,6 +5398,7 @@
                         {"data": "DeliveryDate", "class": "small"},
                         {"data": "CustomerPastelCode", "class": "small"},
                         {"data": "StoreName", "class": "small"},
+                        {"data": "AwaitingStock", "class": "small"},
                         {"data": "Qty", "class": "small",
                             render:function(data, type, row, meta) {
                                 // check to see if this is JSON
@@ -10615,90 +10627,176 @@ console.debug(data);
             }
             function saveorderswithoutExtras(){
 
-                var orderlines = new Array();
-                var orderheaders = new Array();
-                $('#table > tbody  > tr').each(function() {
-                    var data = $(this);
+var orderlines = new Array();
+var orderheaders = new Array();
+$('#table > tbody  > tr').each(function() {
+    var data = $(this);
 
-                    var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
-                    var comment = $(this).closest('tr').find('.prodComment_').val();
-                    //comment = comment.replace("'","");
-                    console.debug($(this).closest('tr').find('.col2').val());
-                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0) {
-                        orderlines.push({
-                            'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
-                            'qty': $(this).closest('tr').find('.prodQty_').val(),
-                            'price': $(this).closest('tr').find('.prodPrice_').val(),
-                            'comment': escapeHtml(comment),
-                            'orderDetailID': orderDetailID,
-                            'customerCode': escapeHtml($('#inputCustAcc').val()),
-                            'prodDisc': $(this).closest('tr').find('.prodDisc_').val(),
-                            'OrderId':$('#orderId').val(),
-                            'hiddenToken':$(this).closest('tr').find('.hiddenToken').val(),
-                            'prodBulk':$(this).closest('tr').find('.prodBulk_').val(),
-                            'warehouse':$(this).closest('tr').find('.col2').val()
-                        });
-
-
-                    }
-
-                });
+    var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
+    var comment = $(this).closest('tr').find('.prodComment_').val();
+    //comment = comment.replace("'","");
+    console.debug($(this).closest('tr').find('.col2').val());
+    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0) {
+        orderlines.push({
+            'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
+            'qty': $(this).closest('tr').find('.prodQty_').val(),
+            'price': $(this).closest('tr').find('.prodPrice_').val(),
+            'comment': escapeHtml(comment),
+            'orderDetailID': orderDetailID,
+            'customerCode': escapeHtml($('#inputCustAcc').val()),
+            'prodDisc': $(this).closest('tr').find('.prodDisc_').val(),
+            'OrderId':$('#orderId').val(),
+            'hiddenToken':$(this).closest('tr').find('.hiddenToken').val(),
+            'prodBulk':$(this).closest('tr').find('.prodBulk_').val(),
+            'warehouse':$(this).closest('tr').find('.col2').val()
+        });
 
 
-                orderheaders.push({
-                    'orderDate':dateReturn($("#inputOrderDate").val()),
-                    'orderId': $('#orderId').val(),
-                    'deliveryDate': dateReturn($("#inputDeliveryDate").val()),
-                    'OrderType': $('#orderType').val(),
-                    'notification': $('#notification').val(),
-                    'orderNo': (escapeHtml($('#orederNumber').val())),
-                    'messagebox': (escapeHtml($('#messagebox').val())),
-                    'awaitingStock': $('#awaitingStock').val(),
-                    'customerCode': escapeHtml($('#inputCustAcc').val()),
-                    'DeliveryAddressID': $('#hiddenDeliveryAddressId').val(),
-                    'address1hidden': (escapeHtml($('#address1hidden').val())),
-                    'address2hidden': (escapeHtml($('#address2hidden').val())),
-                    'address3hidden':( escapeHtml($('#address3hidden').val())),
-                    'address4hidden': (escapeHtml($('#address4hidden').val())),
-                    'address5hidden': (escapeHtml($('#address5hidden').val())),
-                    'headerWh': $('#headerWh').val(),
-                    'savetype': "YES"
+    }
 
-                });
+});
 
-                console.debug(orderlines);
-                console.debug(orderheaders);
-                $.ajax({
-                    url: '{!!url("/orderheaderAndOrderLines")!!}',
-                    type: "POST",
-                    data: {
-                        OrderId: $('#orderId').val(),
-                        orderheaders: orderheaders,
-                        orderlines: orderlines,
-                        type: "YES"
+
+orderheaders.push({
+    'orderDate':dateReturn($("#inputOrderDate").val()),
+    'orderId': $('#orderId').val(),
+    'deliveryDate': dateReturn($("#inputDeliveryDate").val()),
+    'OrderType': $('#orderType').val(),
+    'notification': $('#notification').val(),
+    'orderNo': (escapeHtml($('#orederNumber').val())),
+    'messagebox': (escapeHtml($('#messagebox').val())),
+    'awaitingStock': $('#awaitingStock').val(),
+    'customerCode': escapeHtml($('#inputCustAcc').val()),
+    'DeliveryAddressID': $('#hiddenDeliveryAddressId').val(),
+    'address1hidden': (escapeHtml($('#address1hidden').val())),
+    'address2hidden': (escapeHtml($('#address2hidden').val())),
+    'address3hidden':( escapeHtml($('#address3hidden').val())),
+    'address4hidden': (escapeHtml($('#address4hidden').val())),
+    'address5hidden': (escapeHtml($('#address5hidden').val())),
+    'headerWh': $('#headerWh').val(),
+    'savetype': "YES"
+
+});
+
+console.debug(orderlines);
+console.debug(orderheaders);
+$.ajax({
+    url: '{!!url("/orderheaderAndOrderLines")!!}',
+    type: "POST",
+    data: {
+        OrderId: $('#orderId').val(),
+        orderheaders: orderheaders,
+        orderlines: orderlines,
+        type: "YES"
+    },
+    success: function (data) {
+        //data.result
+        var rsult = data.result;
+        if(rsult.toUpperCase() !="SUCCESS" )
+        {
+            var dialog = $('<p><strong style="color:black">'+data.result+'</strong></p>').dialog({
+                height: 200, width: 700, modal: true, containment: false,
+                buttons: {
+                    "Okay": function () {
+                        dialog.dialog('close');
                     },
-                    success: function (data) {
-                        //data.result
-                        var rsult = data.result;
-                        if(rsult.toUpperCase() !="SUCCESS" )
-                        {
-                            var dialog = $('<p><strong style="color:black">'+data.result+'</strong></p>').dialog({
-                                height: 200, width: 700, modal: true, containment: false,
-                                buttons: {
-                                    "Okay": function () {
-                                        dialog.dialog('close');
-                                    },
 
-                                }
-                            });
-                        }else{
+                }
+            });
+        }else{
 
-                            $('#table tbody').empty();
-                            getLineDetailsOly()
-                        }
-                    }
-                });
-            }
+            $('#table tbody').empty();
+            getLineDetailsOly()
+        }
+    }
+});
+}
+function saveorderswithoutExtrasPDF(){
+
+var orderlines = new Array();
+var orderheaders = new Array();
+$('#table > tbody  > tr').each(function() {
+    var data = $(this);
+
+    var orderDetailID = $(this).closest('tr').find('#theOrdersDetailsId').val();
+    var comment = $(this).closest('tr').find('.prodComment_').val();
+    //comment = comment.replace("'","");
+    console.debug($(this).closest('tr').find('.col2').val());
+    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0) {
+        orderlines.push({
+            'productCode': escapeHtml($(this).closest('tr').find('.theProductCode_').val()),
+            'qty': $(this).closest('tr').find('.prodQty_').val(),
+            'price': $(this).closest('tr').find('.prodPrice_').val(),
+            'comment': escapeHtml(comment),
+            'orderDetailID': orderDetailID,
+            'customerCode': escapeHtml($('#inputCustAcc').val()),
+            'prodDisc': $(this).closest('tr').find('.prodDisc_').val(),
+            'OrderId':$('#orderId').val(),
+            'hiddenToken':$(this).closest('tr').find('.hiddenToken').val(),
+            'prodBulk':$(this).closest('tr').find('.prodBulk_').val(),
+            'warehouse':$(this).closest('tr').find('.col2').val()
+        });
+
+
+    }
+
+});
+
+
+orderheaders.push({
+    'orderDate':dateReturn($("#inputOrderDate").val()),
+    'orderId': $('#orderId').val(),
+    'deliveryDate': dateReturn($("#inputDeliveryDate").val()),
+    'OrderType': $('#orderType').val(),
+    'notification': $('#notification').val(),
+    'orderNo': (escapeHtml($('#orederNumber').val())),
+    'messagebox': (escapeHtml($('#messagebox').val())),
+    'awaitingStock': $('#awaitingStock').val(),
+    'customerCode': escapeHtml($('#inputCustAcc').val()),
+    'DeliveryAddressID': $('#hiddenDeliveryAddressId').val(),
+    'address1hidden': (escapeHtml($('#address1hidden').val())),
+    'address2hidden': (escapeHtml($('#address2hidden').val())),
+    'address3hidden':( escapeHtml($('#address3hidden').val())),
+    'address4hidden': (escapeHtml($('#address4hidden').val())),
+    'address5hidden': (escapeHtml($('#address5hidden').val())),
+    'headerWh': $('#headerWh').val(),
+    'savetype': "YES"
+
+});
+
+console.debug(orderlines);
+console.debug(orderheaders);
+$.ajax({
+    url: '{!!url("/orderheaderAndOrderLines")!!}',
+    type: "POST",
+    data: {
+        OrderId: $('#orderId').val(),
+        orderheaders: orderheaders,
+        orderlines: orderlines,
+        type: "YES"
+    },
+    success: function (data) {
+        //data.result
+        var rsult = data.result;
+        if(rsult.toUpperCase() !="SUCCESS" )
+        {
+            var dialog = $('<p><strong style="color:black">'+data.result+'</strong></p>').dialog({
+                height: 200, width: 700, modal: true, containment: false,
+                buttons: {
+                    "Okay": function () {
+                        dialog.dialog('close');
+                    },
+
+                }
+            });
+        }else{
+
+            $('#table tbody').empty();
+            getLineDetailsOlyPDF()
+        }
+    }
+});
+}
             // I need to start Utilizing this
             function getLineDetailsOly(){
                 $.ajax({
@@ -10767,6 +10865,78 @@ console.debug(data);
                         calculator();
                         //Douwnload Excel
                         window.location ='{!!url("/exportorder")!!}/'+$('#orderId').val();
+
+
+                    }
+
+                });
+            }
+            function getLineDetailsOlyPDF(){
+                $.ajax({
+                    url: '{!!url("/onCheckOrderHeaderDetails")!!}',
+                    type: "POST",
+                    data: {orderId: $('#orderId').val()},
+                    success: function (dataDetails) {
+                        InvoiceTotalPriceExcl = 0;
+                        InvoiceTotalPriceInc = 0;
+                        $.each(dataDetails, function (keyDetails, valueDetails) {
+                            var tokenId=new Date().valueOf();
+                            var props = '';
+                            console.debug("------------------------------------------------------"+isAllowedToChangeInv);
+                            if (($('#invoiceNo').val()).length > 2 && isAllowedToChangeInv != 1) {
+                                props = "disabled";
+
+                            }
+                            console.debug("************************************ AUTMUTLIWAREHOUSE"+multiLines);
+                            if (($('#invoiceNo').val()).length > 2)
+                            {
+                                $("#inputDeliveryDate").prop("disabled", true);
+                                $("#inputOrderDate").prop("disabled", true);
+                            }
+                            if (multiLines ==1)
+                            {
+                                var classAnonymouscols="anonymouscols";
+                            }else
+                            {
+                                var classAnonymouscols="anonymouscolsOff";
+                            }
+                            var $row = $('<tr id="new_row_ajax'+tokenId+'" class="fast_remove" style="font-weight: 600;font-size: 11px;">' +
+                                '<td contenteditable="false" class="col-sm-1"><input name="theProductCode" id ="prodCode_' + tokenId + '" class="theProductCode_ set_autocomplete inputs" value="' + valueDetails.PastelCode + '" ' + props + ' ><br><input name="col1" id ="col1'+tokenId+'" class="col1 '+classAnonymouscols+'"  readonly></td>' +
+                                '<td contenteditable="false" class="col-md-4"><input name="prodDescription_" id ="prodDescription_' + tokenId + '" class="prodDescription_ set_autocomplete inputs" value="' + valueDetails.PastelDescription + '" ' + props + ' ><br><input name="col8" id ="col8'+tokenId+'" class="col8 '+classAnonymouscols+'" readonly></td>' +
+                                '<td  style="" contenteditable="false" class="col-md-1"><input type="text" name="prodBulk_"  id ="prodBulk_' + tokenId + '" class="prodBulk_ resize-input-inside"  value="' + valueDetails.UnitCount + '" '+ props + ' readonly><br><input name="col3" id ="col3'+tokenId+'" class="col3 '+classAnonymouscols+'" readonly></td>' +
+                                '<td  contenteditable="false" class="col-md-1"><input type="text" name="prodQty_" id ="prodQty_' + tokenId + '"   onkeypress="return isFloatNumber(this,event)"  class="prodQty_ resize-input-inside inputs" value="' + (parseFloat(valueDetails.Qty)).toFixed(3) + '" ' + props + '><br><input name="col4" id ="col4'+tokenId+'" class="col4 '+classAnonymouscols+'" readonly></td>' +
+                                '<td  contenteditable="false"  class="col-md-1"><input type="text" name="prodPrice_" id ="prodPrice_' + tokenId + '" onkeypress="return isFloatNumber(this,event)" class="prodPrice_ resize-input-inside inputs" value="' + (parseFloat(valueDetails.Price)).toFixed(2) + '" ' + props + '><br><input name="col1" id ="col1'+tokenId+'" class="col1 '+classAnonymouscols+'" readonly></td>' +
+                                '<td  contenteditable="false"  class="col-md-1"><input type="text" name="prodDisc_" id ="prodDisc_' + tokenId + '" onkeypress="return isFloatNumber(this,event)" class="prodDisc_ resize-input-inside inputs" value="' + valueDetails.LineDisc + '" ' + props + ' {{$discountProperty}}><br><input name="col6" id ="col6'+tokenId+'" class="col6 '+classAnonymouscols+'" style="color: brown;" readonly></td>' +
+                                '<td  contenteditable="false"  class="col-md-1"><input  type="text" name="prodUnitSize_" id ="prodUnitSize_' + tokenId + '" class="prodUnitSize_ resize-input-inside inputs" value="' + valueDetails.UnitSize + '" ' + props + ' ></td>' +
+                                '<td contenteditable="false"  class="col-md-1"><input type="text" name="instockReadOnly" id ="instockReadOnly_' + tokenId + '" value="' + valueDetails.QtyInStock + '"  class="instockReadOnly_ resize-input-inside inputs" style="font-weight: 800;width: 80%;color:blue;"><select name="col2" id ="col2'+tokenId+'" class="col2 '+classAnonymouscols+'"><option value="' + valueDetails.ID + '" >"' + valueDetails.Warehouse + '"</option> </select>' +
+                                '<td contenteditable="false"  class="col-md-1"><input type="text" name="additionalcost_" id ="additionalcost_' + tokenId + '" value ="" class="additionalcost_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;">' +
+                                '<td  contenteditable="false" class="col-md-3"><input type="text" name="prodComment_" id ="prodComment_' + tokenId + '" class="prodComment_ resize-input-inside last inputs" title="' + valueDetails.Comment + '"  value="' + valueDetails.Comment + '" ' + props + ' ><br><input name="col9" id ="col9'+tokenId+'" class="col9 '+classAnonymouscols+'" readonly></td>' +
+                                '<td><input type="hidden" id="title_' + tokenId + '" class="title" value="" /><input type="hidden" id="theOrdersDetailsId" value="' + valueDetails.OrderDetailId + '" /><input type="hidden" id ="taxCode' + tokenId + '" value="' + valueDetails.Tax + '" class="taxCodes" />' +
+                                '<input type="hidden" id ="cost_' + tokenId + '" value="' + valueDetails.Cost + '" class="costs" /><input type="hidden" id ="inStock_' + tokenId + '" value="' + valueDetails.QtyInStock + '" class="inStock" style="color:blue !important" /><input type="hidden" value ="' + tokenId + '" class="hiddenToken" />' +
+                                '<input type="hidden" id ="priceholder_' + tokenId + '" value="' + (parseFloat(valueDetails.Price)).toFixed(2) + '" class="priceholder" />' +
+                                '<input type="hidden" id ="alcohol_' + tokenId + '" value="" class="alcohol" /><input type="hidden" id ="margin_' + tokenId + '" value="" class="margin" />' +
+                                '<input type="hidden" id ="soldByWieght' + tokenId + '" value="" class="soldByWieght" />' +
+                                '<input type="hidden" id ="unitWeight' + tokenId + '" value="" class="unitWeight" />' +
+                                '<input type="hidden" id ="strBulkUnit' + tokenId + '" value="" class="strBulkUnit" />' +
+                                '<input type="hidden" id ="prohibited_' + tokenId + '" value="" class="prohibited" />' +
+                                '<input type="hidden" id ="productmarginauth' + tokenId + '" value="1" class="productmarginauth" />' +
+                                '<button type="button" id="deleteaLine" value="' + valueDetails.OrderDetailId + '" class="getOrderDetailLine btn-warning" >Delete</button>' +
+                                '</td></tr>');
+                            $('#table tbody').append($row);
+
+
+                            var txt = valueDetails.Warehouse;//$("#headerWh option:selected").text();
+                            var val = valueDetails.ID;
+                            $("#col2"+tokenId).append("<option value='"+val+"'>" + txt + "</option>");
+                            $.each(wareautocomplete, function (i, item) {
+                                $("#col2"+tokenId).append("<option value='"+item.ID+"'>" + item.Warehouse + "</option>");
+                            });
+                            var Ltot = valueDetails.Qty * valueDetails.Price;
+                            $("#col6"+tokenId).val(Ltot.toFixed(2));
+
+                        });
+                        calculator();
+                        //Douwnload Excel
 
 
                     }
