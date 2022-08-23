@@ -171,7 +171,7 @@ function getPriceForProductDependingOnCustAndDeliveryDate(url,customerCode,deliv
     return price;
 }
 
-function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instock,titles,tax,unitSizes,prohib,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,linediscount,dicountproperty)
+function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instock,titles,tax,unitSizes,prohib,UnitWeight,SoldByWeight,strBulkUnit,ProductMargin,multiLines,linediscount,dicountproperty,weneedauth)
 {
     calculator();
     var myRow = $(tag).find("tr").last();
@@ -204,7 +204,8 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
         '</td>' +
         '<td  contenteditable="false"  class="col-md-1"><input type="text" name="prodDisc_" id ="prodDisc_'+tokenId+'" onkeypress="return isFloatNumber(this,event)" class="prodDisc_ resize-input-inside inputs" value ="'+linediscount+'"  '+dicountproperty+' ><br><input name="col6" id ="col6_'+tokenId+'" class="col6 '+classAnonymouscols+'" style="color: brown;" readonly></td>' +
         '<td  contenteditable="false"  class="col-md-1"><input  type="text" name="prodUnitSize_" id ="prodUnitSize_' + tokenId + '" class="prodUnitSize_ resize-input-inside inputs" value="' +unitSizes + '" ></td>' +
-        '<td contenteditable="false"  class="col-md-1"><input type="text" name="instockReadOnly" id ="instockReadOnly_' + tokenId + '" value ="'+instock+'" class="instockReadOnly_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;"><select name="col2" id ="col2_'+tokenId+'" class="col2 '+classAnonymouscols+'"></select>' +
+        '<td contenteditable="false"  class="col-md-1"><input type="text" name="instockReadOnly" id ="instockReadOnly_' + tokenId + '" value ="'+instock+'" class="instockReadOnly_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;"><select name="col2" id ="col2_'+tokenId+'" class="col2 '+classAnonymouscols+'"></select></td>' +
+        '<td contenteditable="false"  class="col-md-1"><input type="text" name="clcstock" id ="clcstock_' + tokenId + '" value ="'+instock+'" class="clcstock_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;"></td>' +
         '<td contenteditable="false"  class="col-md-1"><input type="text" name="additionalcost_" id ="additionalcost_' + tokenId + '" value ="" class="additionalcost_ resize-input-inside inputs" style="font-weight: 800;font-size:8px !important;color:blue;">' +
         '<td  contenteditable="false" class="col-md-3"><input type="text" name="prodComment_" id ="prodComment_'+tokenId+'" class="prodComment_ resize-input-inside inputs lst"><br><input name="col9" id ="col9_'+tokenId+'" class="col9 '+classAnonymouscols+'" readonly></td>' +
         '<td><input type="hidden" id="title_'+tokenId+'" class="title"  value ="'+titles+'" /><input type="hidden" id="theOrdersDetailsId" value="" /><input type="hidden" id ="taxCode'+tokenId+'" value ="'+tax+'" class="taxCodes" />' +
@@ -217,25 +218,60 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
         '<input type="hidden" id ="prohibited_' + tokenId + '" value ="'+prohib+'" class="prohibited" />' +
         '<button type="button" id="cancelThis" class="btn-danger btn-xs cancel" style="height: 16px;padding: 0px 5px;font-size: 9px;">Cancel</button></td></tr>');
     $(tag).append( $row );
-    $(tag).find('#prodQty_'+tokenId).focus();
-    $(tag).find('#prodQty_'+tokenId).val('1');
-    $(tag).find('#prodQty_'+tokenId).select();
 
-    if($.trim(SoldByWeight) == "1")
-    {
-        $('#table').find('#prodBulk_' + tokenId).focus();
-        $('#prodBulk_' + tokenId).addClass('inputs');
-        $('#prodBulk_' + tokenId).addClass('addgreen');
-        $('#prodBulk_' + tokenId).val(1);
-        $('#prodQty_' + tokenId).val(UnitWeight);
-        $('#prodComment_' + tokenId).val(1 +' '+strBulkUnit );
-       // $('#prodComment_' + tokenId).prop('title', 1 +' '+strBulkUnit );
+    if(weneedauth == 0){
+        $(tag).find('#prodQty_'+tokenId).focus();
+        $(tag).find('#prodQty_'+tokenId).val('1');
+        $(tag).find('#prodQty_'+tokenId).select();
 
+        if($.trim(SoldByWeight) == "1")
+        {
+            $('#table').find('#prodBulk_' + tokenId).focus();
+            $('#prodBulk_' + tokenId).addClass('inputs');
+            $('#prodBulk_' + tokenId).addClass('addgreen');
+            $('#prodBulk_' + tokenId).val(1);
+            $('#prodQty_' + tokenId).val(UnitWeight);
+            $('#prodComment_' + tokenId).val(1 +' '+strBulkUnit );
+            // $('#prodComment_' + tokenId).prop('title', 1 +' '+strBulkUnit );
+
+        }else
+        {
+            $('#prodBulk_' + tokenId).prop('readonly', true);
+            $('#prodBulk_' + tokenId).val(0);
+        }
     }else
     {
-        $('#prodBulk_' + tokenId).prop('readonly', true);
-        $('#prodBulk_' + tokenId).val(0);
+        /*var dialog = $('<p><strong style="color:red">Authorization Needed</strong></p>').dialog({
+            height: 200, width: 700,modal: true,containment: false,
+            buttons: {
+                "Okay": function () {
+                    dialog.dialog('close');
+                    $(tag).find('#prodPrice_'+tokenId).focus();
+                   // $(tag).find('#title_'+tokenId).val('1');
+                }
+            }
+        });*/
+        $(tag).find('#prodPrice_'+tokenId).focus();
+        $(tag).find('#prodQty_'+tokenId).val('1');
+        $(tag).find('#prodPrice_'+tokenId).select();
+
+        if($.trim(SoldByWeight) == "1")
+        {
+            $('#table').find('#prodPrice_' + tokenId).focus();
+            $('#prodBulk_' + tokenId).addClass('inputs');
+            $('#prodBulk_' + tokenId).addClass('addgreen');
+            $('#prodBulk_' + tokenId).val(1);
+            $('#prodQty_' + tokenId).val(UnitWeight);
+            $('#prodComment_' + tokenId).val(1 +' '+strBulkUnit );
+            // $('#prodComment_' + tokenId).prop('title', 1 +' '+strBulkUnit );
+
+        }else
+        {
+            $('#prodBulk_' + tokenId).prop('readonly', true);
+            $('#prodBulk_' + tokenId).val(0);
+        }
     }
+
 
     var txt = $("#headerWh option:selected").text();
     var val = $("#headerWh option:selected").val();
@@ -243,8 +279,8 @@ function readyMadeLineOrderLine(tag,prodDesc,prodCodes,prodQty,price,cost,instoc
     $.each(wareautocomplete, function (i, item) {
         $("#col2_"+tokenId).append("<option value='"+item.ID+"'>" + item.Warehouse + "</option>");
     });
-
-
+   // console.debug("weneedauth************"+weneedauth);
+   // $(tag).find('#prodQty_'+tokenId).focus();
     var Ltot = 1 * price;
     $("#col6_"+tokenId).val(Ltot.toFixed(2))
 }
