@@ -16,12 +16,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
+    <!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
     <!-- DevExtreme library -->
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
 
 
     <style>
@@ -66,24 +74,41 @@
     </div>
     <div class="col-lg-10" >
 
-        <h1>CHOOSE DEPARTMENT</h1>
+        <h1>CHOOSE PRODUCT</h1>
         <fieldset class="well">
             <form>
         <div class="form-group">
-            <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
+            <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Group </label>
             <select  class="form-control input-sm col-xs-1" id="department" required>
                 <option></option>
-                @foreach($departments as $val)
-                    <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                @foreach($prodGroups as $val)
+                    <option value="{{$val->ItemGroup}}">{{$val->ItemGroupDescription}}</option>
                 @endforeach
 
-            </select>
+            </select><br><br>
+
+            <input type='button' value='GO GET CATEGORIES' class="btn-lg btn-primary" id='but_read'><br>
+
         </div>
+                <div class="form-group">
+                    <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+                    <select  class="form-control input-sm col-xs-1" id="productcategory" required>
+                        <option></option>
+                    </select><br><br>
+                    <input type='button' class="btn-lg btn-primary" value='GO CHOOSE PRODUCT' id='getproduct' style="margin-top: 22px;">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
+                    <select  class="form-control input-sm col-xs-1" id="prodname" required>
+                        <option></option>
+                    </select>
+
+                </div>
 
             </form>
         </fieldset>
         <br><br><br>
-        <button class="btn-danger btn-lg" id="savedepartment">DEPARTMENT</button>
+        <button class="btn-danger btn-lg" id="savedepartment" style="width: 100%;">NEXT</button>
     </div>
 </div>
 
@@ -105,11 +130,74 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
+        $("#department").select2();
+
+        $('#but_read').click(function(){
+            var ItemGroupDescription = $('#department option:selected').text();
+            var ItemGroup = $('#department').val();
+            $.ajax({
+
+                url: '{!!url("/getProdCategory")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: ItemGroup
+
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#productcategory").empty();
+                    $.each(data,function(i,o){
+                        toAppend += '<option value="'+o.strProductCategory+'">'+o.strProductCategory+'</option>';
+                    });
+                    $("#productcategory").append(toAppend);
+                    $("#productcategory").select2();
+                    $("#productcategory").change(function () {
+                        $("#prodname").empty();
+
+
+
+                    });
+
+
+
+                }
+
+            });
+
+           // $('#result').html("id : " + userid + ", name : " + username);
+
+        });
+
+        $('#getproduct').click(function(){
+            $.ajax({
+
+                url: '{!!url("/getProdListToPlan")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: $('#department').val(),
+                    strProductCategory: $("#productcategory").val()
+
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#prodname").empty();
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
+                    });
+                    $("#prodname").append(toAppend);
+                    $("#prodname").select2();
+
+                }
+
+            });
+        });
+
 
 
         $('#savedepartment').click(function(){
 
-            window.location.replace('{!!url("/choosemachine")!!}/' +$('#department').val());
+            window.location.replace('{!!url("/choosemachine")!!}/' +$('#prodname').val());
 
         });
 

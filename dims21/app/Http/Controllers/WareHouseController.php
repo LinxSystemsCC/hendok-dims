@@ -56,9 +56,22 @@ class WareHouseController extends Controller
         return view('warehouse/machines');
     }
     public function createjobs(){
-        $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments");
-        return view('warehouse/createjobs')->with('departments',$dept);
+        $prodGroups = DB::connection('sqlsrv2')
+            ->select("select * from viewItemGroups order by ItemGroupDescription");
+        return view('warehouse/createjobs')->with('prodGroups',$prodGroups);
+    }
+    public function getProdCategory(Request $request){
+        $ItemGroup = $request->get("ItemGroup");
+        $prodCategory = DB::connection('sqlsrv2')
+            ->select("select * from viewItemCategory where ItemGroup ='".$ItemGroup."' order by strProductCategory");
+        return response()->json($prodCategory);
+    }
+    public function getProdListToPlan(Request $request){
+        $ItemGroup = $request->get("ItemGroup");
+        $strProductCategory = $request->get("strProductCategory");
+        $prodCategory = DB::connection('sqlsrv2')
+            ->select("select * from viewItemsToPlanJob where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strItemName");
+        return response()->json($prodCategory);
     }
     //For printing pallets
     public function printpalletsselectdept(){
@@ -66,15 +79,19 @@ class WareHouseController extends Controller
             ->select("select * from tblDepartments");
         return view('warehouse/printpalletcodes')->with('departments',$dept);
     }
-    public function choosemachine($deparment){
-        $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments where intAutoID =".$deparment);
+    public function choosemachine($itemCode){
+      /*  $dept = DB::connection('sqlsrv2')
+            ->select("select * from tblDepartments where intAutoID =".$deparment);*/
 
           $machines = DB::connection('sqlsrv2')
-              ->select('exec spGetMachinesByDept ?',
-                  array($deparment)
+              ->select('exec spGetMachineByProduct ?',
+                  array($itemCode)
               );
-        return view('warehouse/choosemachine')->with('departments',$dept)->with('machines',$machines);
+        $palletsjson = DB::connection('sqlsrv2')
+            ->select("EXEC spSelectItemsConfigurations ? ",
+                array($itemCode)
+            );
+        return view('warehouse/choosemachine')->with('machines',$machines)->with('pallets',$palletsjson);
     }
     //
     public function printpalletchoosemachine($deparment){
@@ -87,6 +104,14 @@ class WareHouseController extends Controller
               );
         return view('warehouse/printpalletchoosemachine')->with('departments',$dept)->with('machines',$machines);
     }
+    public function validatepalletsplan(Request $request){
+        $intPalletId = $request->get("intPalletId");
+        $qtyproduce = $request->get("qtyproduce");
+        $palletconf = DB::connection('sqlsrv2')
+            ->select("select * from tblPalletConf where intPalletId = $intPalletId") ;
+
+        return response()->json($palletconf);
+    }
     public function mapmachinestodept(){
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");
@@ -96,18 +121,19 @@ class WareHouseController extends Controller
               );
         return view('warehouse/mapmachinetodept')->with('departments',$dept)->with('machines',$machines);
     }
-    public function choosproducttomake($deparment,$machine){
-        $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments where intAutoID =".$deparment);
+    public function choosproducttomake($qty,$itemcode,$palletid,$machinenid){
+
         $machines = DB::connection('sqlsrv2')
-            ->select('exec spGetMachinesByDept ?',
-                array($deparment)
-            );
+            ->select("select * from tblMachines where intAutoMachineID = ".$machinenid);
+
+        $pallets = DB::connection('sqlsrv2')
+            ->select("select * from tblPalletConf where intPalletId = ".$palletid);
+
+
         $products = DB::connection('sqlsrv2')
-            ->select('exec spGetProdByDeptByMachines ?,?',
-                array($deparment,$machine)
-            );
-        return view('warehouse/chooseproducttomake')->with('departments',$dept)->with('machines',$machines)->with('products',$products);
+            ->select("select * from viewtblProducts where PastelCode = '".$itemcode."'");
+
+        return view('warehouse/chooseproducttomake')->with('pallet',$pallets)->with('machines',$machines)->with('products',$products)->with('qty',$qty);
     }
     //print pallet
     public function printpalletchoosproducttomake($deparment,$machine){
@@ -123,6 +149,14 @@ class WareHouseController extends Controller
             );
     //    dd($products);
         return view('warehouse/printpalletchooseproducttomake')->with('departments',$dept)->with('machines',$machines)->with('products',$products)->with('departmentselected',$deparment);
+    }
+    public function getProductPlannedOnThatMachine(Request $request){
+        $machineid = $request->get("machineId");
+        $productonmachine = DB::connection('sqlsrv2')
+            ->select('exec spGetProductCurrentlyPlannedOnSpecificMachine ? ',
+                array($machineid)
+            );
+        return response()->json($productonmachine);
     }
     public function goprintfirstqrcode($deparment,$machine,$productcode,$palletid,$qty){
         $dept = DB::connection('sqlsrv2')
@@ -140,7 +174,8 @@ class WareHouseController extends Controller
         return view('warehouse/goprintfirstqrcode')->with('departments',$dept)->with('machines',$machines)->with('qty',$qty)
             ->with('products',$products)->with('pallets',$pallets);
     }
-    public function startprintingjob($deparment,$machine,$productcode,$palletid,$qty,$estimatedpallets,$operatornumber){
+
+    public function startprintingjob($qty,$machine,$productcode,$palletid,$start){
        /* $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);
         $machines = DB::connection('sqlsrv2')
@@ -152,11 +187,11 @@ class WareHouseController extends Controller
 
         $products = DB::connection('sqlsrv2')
             ->select("select * from viewtblProducts where PastelCode = '".$productcode."'");*/
-
+        $start = (new \DateTime($start))->format('Y-m-d');
 
         $returnmach = DB::connection('sqlsrv2')
-            ->select('exec spInsertNewJob ?,?,?,?,?,?,?',
-                array($productcode,$machine,$deparment,$palletid,$qty,$operatornumber,$estimatedpallets)
+            ->select('exec spInsertNewJob ?,?,?,?,?,?',
+                array($productcode,$machine,$palletid,$qty,"12345",$start)
             );
         $htmlqrcode = "";
         foreach ($returnmach as $val){

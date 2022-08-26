@@ -68,50 +68,44 @@
             <a href="#">Jobs Data</a>
         </div>
     </div>
-    <div class="col-lg-10" >
-        @foreach($departments as $val)
-            <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3>
-            <input type="hidden" id="deptid" value="{{$val->intAutoID}}">
+    <div class="col-lg-3" >
+        @foreach($products as $val)
+            <h3>PRODUCT: {{$val->PastelDescription}}</h3>
+            <input type="hidden" id="itemcode" value="{{$val->PastelCode}}">
         @endforeach
-        <br><br>
+        <br>
             @foreach($machines as $val)
-                <h3>SELECTED MACHINE: {{$val->strMachineName}}</h3>
-                <input type="hidden" id="machineid" value="{{$val->intMachineID}}">
+                <h3>MACHINE: {{$val->strMachineName}}</h3>
+                <input type="hidden" id="machineid" value="{{$val->intAutoMachineID}}">
             @endforeach
-            <br><br>
-        <h1>CHOOSE PRODUCT</h1>
+            @foreach($pallet as $val)
+
+                <input type="hidden" id="palletid" value="{{$val->intPalletId}}">
+            @endforeach
+            <br>
+            <h3>QUANTITY TO PRODUCE: <input type="hidden" id="toproduce" value="{{$qty}}"> {{$qty}}</h3><br>
+
         <fieldset class="well">
             <form>
-
                 <div class="form-group">
-
-                        <label class="control-label" for="productcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Item</label>
-                        <input  type="text" class="form-control input-sm col-xs-1" id="productcode" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;"><br>
-                        <input  type="text" class="form-control input-sm col-xs-1" id="productdesc" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;" readonly>
+                        <label class="control-label" for="dateselect"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Start Date</label>
+                        <input  type="date" class="form-control input-sm col-xs-1" id="dateselect" style="font-weight: 900;"><br>
                     <br>
-
-                </div>
-
-                <div class="form-group">
-
-                    <label class="control-label" for="pallettype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Type</label>
-                    <select id="pallettype" required>
-
-                    </select>
-
-                </div>
-                <div class="form-group">
-
-                    <label class="control-label" for="qtyrequired"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity Required</label>
-                    <br>
-                    <input type="text" class="form-control input-sm col-md-2-1" id="qtyrequired">
-
-
                 </div>
             </form>
         </fieldset>
         <br><br><br>
-        <button class="btn-primary btn-lg" id="savemachine">NEXT</button>
+        <button class="btn-primary btn-lg" id="savemachine" style="width: 100%">FINISH</button>
+
+    </div>
+    <div class="col-lg-5" >
+        <h5 style="text-align: center;">Currently Planned On @foreach($machines as $val)
+             <strong> {{$val->strMachineName}}</strong>
+
+            @endforeach </h5>
+        <br>
+        <div id="gridContainer" style="width: 900px !important;">
+        </div>
 
     </div>
 </div>
@@ -133,63 +127,82 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
-    var jArray = JSON.stringify({!! json_encode($products) !!});
-    $(document).ready(function() {
-        console.debug(jArray);
-        var finalData =$.map(JSON.parse(jArray), function(item) {
 
-            return {
-                strItemCode:item.strItemCode,
-                PastelDescription:item.PastelDescription
+    $(document).ready(function() {
+
+        $('#savemachine').click(function(){
+
+            window.location.replace('{!!url("/startprintingjob")!!}/' +$('#toproduce').val()+"/"+$('#machineid').val()+"/"+$('#itemcode').val()+"/"+$('#palletid').val()+"/"+$('#dateselect').val());
+        });
+
+        $.ajax({
+            url: '{!!url("/getProductPlannedOnThatMachine")!!}',
+            type: "GET",
+            data: {
+                machineId: $('#machineid').val()
+            },
+            success: function (data) {
+                $("#gridContainer").dxDataGrid({
+                    dataSource:data, //as json
+                    showBorders: true,
+                    filterRow: { visible: true },
+                    allowColumnResizing: true,
+                    paging:{
+                        pageSize: 50,
+                    },
+                    export: {
+                        enabled: true
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('machineplan');
+
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
+
+                    columns: [
+                         {
+                            dataField: "strItemCode",
+                            caption: "Item Code",
+                            width: 60,
+
+                        }, {
+                            dataField: "PastelDescription",
+                            caption: "Item Description",
+                            width: 400,
+
+                        }, {
+                            dataField: "mnyQtyRequired",
+                            caption: "Planned",
+                            width: 90,
+
+                        }, {
+                            dataField: "dteJobCreated",
+                            caption: "Date Create",
+                            width: 125,
+
+                        }, {
+                            dataField: "dteStartDate",
+                            caption: "Start Date",
+                            width: 125,
+
+                        },
+                    ],
+
+                });
 
             }
 
         });
-        var inputProductcode = $('#productcode').flexdatalist({
-            minLength: 1,
-            valueProperty: '*',
-            selectionRequired: true,
-            focusFirstResult: true,
-            searchContain:true,
-            visibleProperties: ["strItemCode","PastelDescription"],
-            searchIn: 'PastelDescription',
-            data: finalData
-        });
-        inputProductcode.on('select:flexdatalist', function (event, data) {
-
-            $('#productcode').val(data.strItemCode);
-            $('#productdesc').val(data.PastelDescription);
-            //
-
-            $.ajax({
-
-                url: '{!!url("/getpalletconfforitems")!!}',
-                type: "POST",
-                data: {
-                    productcode: $('#productcode').val()
-
-                },
-                success: function (data) {
-                    var toAppend = '';
-                    $("#pallettype").empty();
-                    $.each(data,function(i,o){
-
-                        toAppend += '<option value="'+o.intPalletId+'"><table><tr><td style="background: green">'+o.strPalletTypeDescription+' </td><td>| /PALLET '+o.intPalletConf+'</td></tr></table></option>';
-                    });
-                    $("#pallettype").append(toAppend);
-
-                }
-
-            });
-        });
-
-        $('#savemachine').click(function(){
-
-            window.location.replace('{!!url("/goprintfirstqrcode")!!}/' +$('#deptid').val()+"/"+$('#machineid').val()+"/"+$('#productcode').val()+"/"+$('#pallettype').val()+"/"+$('#qtyrequired').val());
-
-        });
-
-
 
     });
 

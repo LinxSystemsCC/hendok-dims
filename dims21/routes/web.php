@@ -840,6 +840,7 @@ Route::get('mapmachinestodept', [WareHouseController::class,'mapmachinestodept']
 Route::get('getMappedItemstoPalletJson', [WareHouseController::class,'getMappedItemstoPalletJson']);
 Route::get('getMachinesmappedtodept', [WareHouseController::class,'getMachinesmappedtodept']);
 Route::post('getpalletconfforitems', [WareHouseController::class,'getpalletconfforitems']);
+Route::post('validatepalletsplan', [WareHouseController::class,'validatepalletsplan']);
 Route::get('getMappedDepartmentsMachinesItemasJson', [WareHouseController::class,'getMappedDepartmentsMachinesItemasJson']);
 Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
 Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
@@ -858,15 +859,18 @@ Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefro
 Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
 
 Route::get('createjobs', [WareHouseController::class,'createjobs']);
+Route::get('getProdCategory', [WareHouseController::class,'getProdCategory']);
+Route::get('getProdListToPlan', [WareHouseController::class,'getProdListToPlan']);
 Route::get('printpalletsselectdept', [WareHouseController::class,'printpalletsselectdept']);
+Route::get('getProductPlannedOnThatMachine', [WareHouseController::class,'getProductPlannedOnThatMachine']);
 Route::get('choosemachine/{department}', [WareHouseController::class,'choosemachine']);
 Route::get('printpalletchoosemachine/{department}', [WareHouseController::class,'printpalletchoosemachine']);
 Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
-Route::get('choosproducttomake/{department}/{machine}', [WareHouseController::class,'choosproducttomake']);
+Route::get('choosproducttomake/{qty}/{itemcode}/{palletid}/{machineid}', [WareHouseController::class,'choosproducttomake']);
 Route::get('printpalletchoosproducttomake/{department}/{machine}', [WareHouseController::class,'printpalletchoosproducttomake']);
 Route::get('printselectedcriteria/{department}/{machine}/{product}', [WareHouseController::class,'printselectedcriteria']);
 Route::get('goprintfirstqrcode/{department}/{machine}/{product}/{pallet}/{required}', [WareHouseController::class,'goprintfirstqrcode']);
-Route::get('startprintingjob/{department}/{machine}/{product}/{pallet}/{required}/{estimatedpalletd}/{operator}', [WareHouseController::class,'startprintingjob']);
+Route::get('startprintingjob/{qty}/{machine}/{product}/{pallet}/{startdate}', [WareHouseController::class,'startprintingjob']);
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 

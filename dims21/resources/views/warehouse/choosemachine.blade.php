@@ -65,10 +65,8 @@
         </div>
     </div>
     <div class="col-lg-10" >
-        @foreach($departments as $val)
-        <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3>
-            <input type="hidden" id="deptid" value="{{$val->intAutoID}}">
-        @endforeach
+      <h3>PRODUCT: {{$machines[0]->strItemName}}</h3>
+        <input type="hidden" id="itemCode" value="{{$machines[0]->strItemCode}}">
     <br><br>
         <h1>CHOOSE MACHINE</h1>
         <fieldset class="well">
@@ -83,13 +81,40 @@
                         @endforeach
 
                     </select>
+                    <br><br><br>
                 </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="intPalletId"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration </label>
+                    <select  class="form-control input-sm col-xs-1" id="intPalletId" required>
+                        <option></option>
+                        @foreach($pallets as $val)
+                            <option value="{{$val->intPalletId}}"><table><tr><td style="background: green">{{$val->strPalletTypeDescription}} </td><td>| /PALLET {{$val->intPalletConf}} </td></tr></table></option>
+                        @endforeach
+
+                    </select>               <br><br><br>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="qtyproduce"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity To Produce</label>
+                    <input type="number" class="form-control input-sm col-lg-2" id="qtyproduce" required />
+
+
+                </div>
+
+                <h5 id="warningplanner" style="color: red;font-weight: bolder"></h5><br>
 
             </form>
         </fieldset>
             <br><br><br>
-            <button class="btn-primary btn-lg" id="savemachine">NEXT</button>
+            <button class="btn-danger btn-lg" id="savemachine" style="width: 100%">NEXT</button>
 
+    </div>
+    <div title="PLANNING WARNING" class="form-group" id="youwantplan">
+        <p>YOUR PLAN DOES NOT CONTAIN FULL PALLETS</p>
+
+        <br>
+        <button class="btn-danger btn-lg" id="sureaboutplan">I AM 100% SURE</button>
     </div>
 </div>
 
@@ -112,16 +137,47 @@
     });
 
     $(document).ready(function() {
+        $('#youwantplan').hide();
 
 
         $('#savemachine').click(function(){
 
-            window.location.replace('{!!url("/choosproducttomake")!!}/' +$('#deptid').val()+"/"+$('#machines').val());
+            $('#warningplanner').empty();
+
+            $.ajax({
+
+                url: '{!!url("/validatepalletsplan")!!}',
+                type: "POST",
+                data: {
+                    qtyproduce: $('#qtyproduce').val(),
+                    intPalletId: $("#intPalletId").val()
+
+                },
+                success: function (data) {
+
+                    console.debug("_________________________"+data[0].intPalletConf);
+                    console.debug("PLAN_________________________"+ parseInt($('#qtyproduce').val())/data[0].intPalletConf);
+                    $('#warningplanner').empty();
+
+                    if($('#qtyproduce').val() % data[0].intPalletConf >0){
+                        $('#youwantplan').show();
+                        showDialog('#youwantplan','45%',400);
+                        $('#warningplanner').append("ARE YOU SURE ABOUT THE QUANTITY YOU WANT TO PLAN? YOUR PLAN IS EQUAL TO "+ parseInt($('#qtyproduce').val())/data[0].intPalletConf)
+                        $('#sureaboutplan').click(function(){
+                            //
+                            window.location.replace('{!!url("/choosproducttomake")!!}/' +$('#qtyproduce').val()+"/"+$('#itemCode').val()+"/"+$('#intPalletId').val()+"/"+$('#machines').val());
+                        });
+
+                    }else{
+                        window.location.replace('{!!url("/choosproducttomake")!!}/' +$('#qtyproduce').val()+"/"+$('#itemCode').val()+"/"+$('#intPalletId').val()+"/"+$('#machines').val());
+
+                    }
+
+                }
+
+            });
 
         });
-
-
-
 
 
     });
