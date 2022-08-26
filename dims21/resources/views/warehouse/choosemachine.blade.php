@@ -65,8 +65,10 @@
         </div>
     </div>
     <div class="col-lg-10" >
+        @foreach($machines as $val)
       <h3>PRODUCT: {{$machines[0]->strItemName}}</h3>
         <input type="hidden" id="itemCode" value="{{$machines[0]->strItemCode}}">
+        @endforeach
     <br><br>
         <h1>CHOOSE MACHINE</h1>
         <fieldset class="well">
