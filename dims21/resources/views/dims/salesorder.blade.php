@@ -207,7 +207,7 @@
 
                             <input type="hidden" name="boozeChecked" id="boozeChecked" class="form-control input-sm col-xs-1" value="">
                     </div>
-                    <input type="checkbox" name="awaitingStock" id="awaitingStock" value="0">Awaiting Stock<br>
+                    <input type="checkbox" name="awaitingStock" id="awaitingStock">Awaiting Stock<br>
                     <input type="checkbox" name="treatAsQuote" id="treatAsQuote" >Treat As Quotation<br>
 
 
@@ -2664,9 +2664,9 @@
                 var GLOBALUNITSIZE = '';
                 var TotalExc = 0;
                 var TotalInc = 0;
-                $('#awaitingStock').on('change',function(){
-                    if($('#awaitingStock').is(':checked')) {
-                        isAwaitingStock(1);
+                $('#awaitingStock').on('change',function(){ // this change function seems fine, it logs messages, it changes the checkbox
+                    if($('#awaitingStock').is(':checked')) { // status and it runs a simple update, this would be the cause as CLICKING isnt the issue
+                        isAwaitingStock(1);                    // its the lack thereof clicking.
                         $('#awaitingStock').val("1");
                     }else
                     {
@@ -2942,10 +2942,14 @@
                                     if(value.AwaitingStock == '1')
                                     {
                                         $('#awaitingStock').prop('checked',true);
+                                        
+                        $('#awaitingStock').val("1");
                                     }
                                     else
                                     {
                                         $('#awaitingStock').prop('checked',false);
+                                        
+                        $('#awaitingStock').val("0");
                                     }
 
                                     $('#orderType').prepend('<option value="'+value.LateOrder+'" selected="selected">'+value.OrderType+'</option>');
