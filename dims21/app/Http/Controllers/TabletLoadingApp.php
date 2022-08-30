@@ -1019,6 +1019,11 @@ and  cast(dteDeliveryDate as date) = cast(tdd.DeliveryDate as date)
         /*$queryCustomers =  DB::connection('sqlsrv3')
             ->select("EXEC spSavePrintedTripSheets" $routingId);*/
     }
+    public function deselectIsPressed()
+    {
+        DB::connection('sqlsrv3')->statement("insert into tblManagementConsol(ConsoleTypeId, Importance, dtm, Message)
+        values(98765,1, GETDATE(), 'DESELECT WAS PRESSED')");
+    }
     public function checkIfRouteFullyLoaded($routeId,$orderType,$deliveryDate)
     {
         $getComponents = DB::connection('sqlsrv3')

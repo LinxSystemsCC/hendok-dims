@@ -373,6 +373,7 @@ Route::post('getRouteData',[TabletLoadingApp::class,'getRouteData']);
 Route::post('sequenceOrdersByMode', [TabletLoadingApp::class,'sequenceOrdersByMode']);
 Route::post('sequenceOrdersByMode',[TabletLoadingApp::class,'sequenceOrdersByMode'] );
 Route::post('resequenceOrders', [TabletLoadingApp::class,'resequenceOrders']);
+Route::post('deselectIsPressed', [TabletLoadingApp::class,'deselectIsPressed']);
 Route::get('truckControlId',[TabletLoadingApp::class,'truckControlId']);
 Route::get('routePlannerPrintPreview/{date}/{dateTo}/{ordertype}/{route}/{status}',[TabletLoadingApp::class,'routePlannerPrintPreview']);
 Route::post('moveTheOrder',[TabletLoadingApp::class,'moveTheOrder']);

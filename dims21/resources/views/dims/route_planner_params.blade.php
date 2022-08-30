@@ -684,6 +684,16 @@
             }
         });
         $('#Deselectselect').on('click',function(){
+
+            $.ajax({
+                    url: '{!!url("/deselectIsPressed")!!}',
+                    type: "POST",
+                    data: {},
+                    success: function (data) {
+                        alert("Deselect was pressed. Logging to database.");
+                    
+                    }
+                });
             $($("input[name='caseProd[]']")).each(function(){
                 $(this).prop('checked',false);
             });
