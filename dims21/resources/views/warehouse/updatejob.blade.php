@@ -67,7 +67,7 @@
     <div class="col-lg-7">
     <input type="hidden" id="jobid" value="{{$id}}">
     <hr>
-    <button type="button" id="statuschange" class="btn btn-primary" data-toggle="modal" data-target="#jobchanges">Change Job Status</button>
+
     <button type="button" id="printlabels" class="btn btn-secondary" data-toggle="modal" data-target="#prinlabels">Print Additional Labels</button>
     <button type="button" id="sequence" class="btn btn-success" data-toggle="modal" data-target="#sequencedialog">Change Sequence</button>
 
@@ -123,7 +123,8 @@
         </div>
     </div>
     <hr>
-    <table class="table table-bordered">
+        <div style="background: #bfbfbf;padding: 20px">
+    <table class="table table-bordered" style="background: #ffffff;">
 @foreach($jobdata as $val)
         <tbody>
         <tr>
@@ -178,8 +179,8 @@
 
         </tr>
         <tr>
-            <td>Start Date</td>
-            <td>  <input type="date" class="form-control" id="startdate"    value="{{$val->dteStartDate}}"> </td>
+            <td>Estimated Start Date</td>
+            <td>  <input type="date" class="form-control" id="startdate"    value="{{$val->dteStartDate}}"> @if ($val->jobStatus !="end") <br><button type="button" id="updatestartdate" class="btn btn-success" >Update</button>@endif </td>
 
         </tr>
         <tr>
@@ -193,8 +194,9 @@
 
         </tr>
         </tbody>
-    @endforeach
+
     </table>
+        </div>
         <hr>
         <h5>Items On The Machine</h5>
         <div id="gridContainer" style="width: 100% !important;">
@@ -202,19 +204,21 @@
     </div>
     <div class="col-lg-5">
         <hr>
+        <button type="button" id="statuschange" class="btn btn-primary pull-right" data-toggle="modal" data-target="#jobchanges">Change Job Status</button>
+        <hr>
         <table class="table table-dark">
 
                 <tbody>
                 <tr>
 
                     <td>Job Start </td>
-                    <td><input type="date" class="form-control" id="updatestartdate"> </td>
-                    <td><button id="btnupdatestartdate" class="btn btn-primary" >Update Start Date</button> </td>
+                    <td><input type="text" class="form-control" id="updatestartdate" value="{{$val->dteLiveStartJobDate}}"> </td>
+
                 </tr>
                 <tr>
                     <td>Job End</td>
-                    <td><input type="date" class="form-control" id="updateenddate"> </td>
-                    <td><button id="btnupdateenddate" class="btn btn-primary" >Update End Date</button> </td>
+                    <td><input type="text" class="form-control" id="updateenddate" value="{{$val->dteJobEnded}}"> </td>
+
 
                 </tr>
 
@@ -222,7 +226,7 @@
         </table>
 
     </div>
-
+    @endforeach
 </div>
 
 
@@ -246,6 +250,46 @@
         $('#modalclear').click(function(){
             $('#palletlabelqty').val("");
             $('#productlabelqtytoprint').val("");
+        });
+
+        $('#savechanges').click(function(){
+            $.ajax({
+                url: '{!!url("/startendjob")!!}',
+                type: "GET",
+                data: {
+
+                    jobid:$('#jobid').val(),
+                    finalisestatus:$('#finalisestatus').val(),
+                },
+                success: function (data) {
+                    if(data[0].results =="SUCCESS"){
+                        location.reload();
+                    }else{
+                        alert(data[0].results);
+                        location.reload();
+                    }
+                }
+
+            });
+        });
+
+
+        $('#updatestartdate').click(function(){
+            $.ajax({
+                url: '{!!url("/updatestartdate")!!}',
+                type: "GET",
+                data: {
+
+                    jobid:$('#jobid').val(),
+                    startdate:$('#startdate').val(),
+                },
+                success: function (data) {
+
+                        location.reload();
+
+                }
+
+            });
         });
 
         $('#finalisepalletprint').click(function(){
@@ -281,36 +325,7 @@
             });
         });
 
-        $('#btnupdatestartdate').click(function(){
-            $.ajax({
-                url: '{!!url("/updatestartdate")!!}',
-                type: "GET",
-                data: {
-                    startdate: $('#updatestartdate').val(),
-                    jobid:$('#jobid').val()
-                },
-                success: function (data) {
-                  alert("Done");
 
-                }
-
-            });
-        });
-        $('#btnupdateenddate').click(function(){
-            $.ajax({
-                url: '{!!url("/endjob")!!}',
-                type: "GET",
-                data: {
-                    endjob: $('#updateenddate').val(),
-                    jobid:$('#jobid').val()
-                },
-                success: function (data) {
-                    alert("Done");
-
-                }
-
-            });
-        });
 
         $.ajax({
             url: '{!!url("/getProductPlannedOnThatMachine")!!}',
@@ -323,6 +338,8 @@
                     dataSource:data, //as json
                     showBorders: true,
                     filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
                     paging:{
                         pageSize: 20,

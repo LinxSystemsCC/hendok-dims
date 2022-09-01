@@ -50,7 +50,8 @@
 
 </head>
 <div class="col-lg-12"  style="background: white;">
-    <a href='{!!url("/createPalletConfig")!!}' style="float: right;background: black;color: white;padding: 10px;    width: 100%;text-align: center;    font-size: 28px;"><-Back</a>
+
+    <a href='{!!url("/createjobs")!!}' style="float: right;background: black;color: white;padding: 10px;    width: 100%;text-align: center;    font-size: 28px;"><-Back</a>
     <div class="col-lg-12" style="text-align: center;">
 
         <h1>CHOOSE DEPARTMENT</h1>

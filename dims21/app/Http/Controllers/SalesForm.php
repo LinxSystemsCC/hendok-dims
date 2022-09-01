@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\DimsCommon;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
@@ -16,7 +17,7 @@ class SalesForm extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function index(Request $request)
     {
@@ -24,6 +25,12 @@ class SalesForm extends Controller
 //viewtblCustomers
 
        $sessionUserId = Auth::user()->UserID;
+       $GroupId= Auth::user()->GroupId;
+
+       //Print Pallet
+           if($this->getThings($GroupId,'Print Pallet')){
+               return redirect('/printpalletsselectdept');
+           }
 
 
            $queryCustomershendocpty =DB::connection('sqlsrv3')->table("viewtblCustomers" )

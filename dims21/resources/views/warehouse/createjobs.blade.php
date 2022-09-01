@@ -74,6 +74,7 @@
             <a href='{!!url("/mapmachinestodept")!!}' >Map Machines To Dept</a>
             <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Machines,Dept & Prod</a>
             <a href='{!!url("/createjobs")!!}'  class="active">Create Jobs</a>
+            <a href='{!!url("/printpalletsselectdept")!!}'  class="active">Print Pallet Labels</a>
             <a href="#">In Progress Jobs</a>
             <a href="#">Jobs Data</a>
         </div>
@@ -374,6 +375,8 @@ $('#prodname').change(function () {
                     dataSource:data, //as json
                     showBorders: true,
                     filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
                     paging:{
                         pageSize: 20,

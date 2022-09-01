@@ -7,6 +7,7 @@
  */
 
 namespace App\Http\Controllers;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -124,6 +125,17 @@ class WareHouseController extends Controller
             );
         return response()->json($palletsjson);
     }
+    public function startendjob(Request $request){
+
+        $jobid= $request->get("jobid");
+        $finalisestatus = $request->get("finalisestatus");
+
+        $JOBSTATUS = DB::connection('sqlsrv2')
+            ->select("EXEC spUpdateStartEndJob ?,? ",
+                array($jobid,$finalisestatus)
+            );
+        return response()->json($JOBSTATUS);
+    }
     public function validatepalletsplan(Request $request){
         $intPalletId = $request->get("intPalletId");
         $qtyproduce = $request->get("qtyproduce");
@@ -193,7 +205,14 @@ class WareHouseController extends Controller
         $startdate = (new \DateTime($startdate))->format('Y-m-d') ;
         $result =  DB::connection('sqlsrv2')->table('tblJobQrcodeAllocation')
             ->where('intJobId',$jobid )
-            ->update(['dteJobEnded' => $startdate ]);
+            ->update(['dteStartDate' => $startdate ]);
+
+        $sessionUserId = Auth::user()->UserID;
+        $UserName = Auth::user()->UserName;
+
+        DB::connection('sqlsrv3')->table('tblManagementConsol')->insert(
+            ['ConsoleTypeId' => 818, 'Importance' => 1,'LoggedBy' => $UserName,'Message' => "Estimated Start Date Changeb by ".$UserName." For Job NO# ".$jobid." To ".$startdate,
+                'UserId' => $sessionUserId,'OrderId' => $jobid,'DocNumber'=>$jobid]);
         return response()->json($result);
     }
     public function getWIP(Request $request){
@@ -263,7 +282,16 @@ class WareHouseController extends Controller
                     array($type,$jobid)
                 );
         }
-
+        $v  =  new \App\Http\Controllers\SalesForm();
+        $GroupId= Auth::user()->GroupId;
+        if($v->getThings($GroupId,'Print Pallet')){
+            Auth::logout();
+            $request->session()->flush();
+            return redirect('/doneprintingpallet');
+        }
+    }
+    public function doneprintingpallet(){
+        return view('warehouse/doneprintingpallet');
     }
 
     public function jobupdateprint($jobid){
@@ -313,7 +341,7 @@ class WareHouseController extends Controller
            $htmlqrcode .="JOB NO :".$val->intJobId.": P".$val->palletJobPrint.":M".$val->strMachineName.":T".$val->dteJobCreated;
         }
 
-        return view('warehouse/palletjoblabel')->with('qrcodeothers',$returnmach)->with('qrcode',$htmlqrcode);
+        return view('warehouse/palletjoblabel')->with('qrcodeothers',$returnmach)->with('qrcode',$htmlqrcode)->with('jobid',$jobId);
     }
     public function mapitemstopallet(){
         $pallets = DB::connection('sqlsrv2')

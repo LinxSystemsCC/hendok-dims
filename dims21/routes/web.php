@@ -858,14 +858,16 @@ Route::post('removemapping', [WareHouseController::class,'removemapping']);
 Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefromdept']);
 Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
 
+Route::get('startendjob', [WareHouseController::class,'startendjob']);
 Route::get('createjobs', [WareHouseController::class,'createjobs']);
 Route::get('getWIP', [WareHouseController::class,'getWIP']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
-Route::get('updatestartdate', [WareHouseController::class,'updatestartdate']);
+
 Route::get('getProductGroupMappedToDept', [WareHouseController::class,'getProductGroupMappedToDept']);
 Route::get('getProdCategory', [WareHouseController::class,'getProdCategory']);
-Route::get('sendLabelToThePrinter', [WareHouseController::class,'sendLabelToThePrinter']);
-Route::get('jobupdateprint/{jobid}', [WareHouseController::class,'jobupdateprint']);
+Route::get('doneprintingpallet', [WareHouseController::class,'doneprintingpallet']);
+
+
 Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
 Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
 Route::get('getPalletForSelectedItem', [WareHouseController::class,'getPalletForSelectedItem']);
@@ -874,7 +876,7 @@ Route::get('printpalletsselectdept', [WareHouseController::class,'printpalletsse
 Route::get('getProductPlannedOnThatMachine', [WareHouseController::class,'getProductPlannedOnThatMachine']);
 Route::get('choosemachine/{department}', [WareHouseController::class,'choosemachine']);
 Route::get('printpalletchoosemachine/{department}', [WareHouseController::class,'printpalletchoosemachine']);
-Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
+
 Route::get('choosproducttomake/{qty}/{itemcode}/{palletid}/{machineid}', [WareHouseController::class,'choosproducttomake']);
 Route::get('printpalletchoosproducttomake/{department}/{machine}', [WareHouseController::class,'printpalletchoosproducttomake']);
 Route::get('printselectedcriteria/{department}/{machine}/{product}', [WareHouseController::class,'printselectedcriteria']);
@@ -926,6 +928,12 @@ Route::group(['middleware' => 'auth'], function() {
 
 
     Route::get('routePlannerExtParam/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'routePlannerExtParam']);
+
+//WAREHOUSE
+    Route::get('updatestartdate', [WareHouseController::class,'updatestartdate']);
+    Route::get('jobupdateprint/{jobid}', [WareHouseController::class,'jobupdateprint']);
+    Route::get('sendLabelToThePrinter', [WareHouseController::class,'sendLabelToThePrinter']);
+    Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!
