@@ -68,8 +68,8 @@
         <h1>CHOOSE MACHINE</h1>
 
                 @foreach($machines as $val)
-                <button class="btn-lg btn-success" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 85px;">
-                    {{$val->strMachineName}}</button>
+                <button class="btn-lg btn-success" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 40px;">
+                    {{$val->strMachineName}}</button><br><br>
 
 
                 @endforeach

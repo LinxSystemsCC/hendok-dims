@@ -64,7 +64,7 @@
 
 
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <button type="button" id="thankyou" class="btn btn-lg btn-secondary col-lg-pull-6"  >THANK YOU</button>
+    <button type="button" id="thankyou" class="btn btn-lg btn-secondary col-lg-pull-6" style="margin-top: 55px;" >THANK YOU</button>
 </div>
 
 <script>
