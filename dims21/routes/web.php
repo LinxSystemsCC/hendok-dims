@@ -859,7 +859,16 @@ Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefro
 Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
 
 Route::get('createjobs', [WareHouseController::class,'createjobs']);
+Route::get('getWIP', [WareHouseController::class,'getWIP']);
+Route::get('endjob', [WareHouseController::class,'endjob']);
+Route::get('updatestartdate', [WareHouseController::class,'updatestartdate']);
+Route::get('getProductGroupMappedToDept', [WareHouseController::class,'getProductGroupMappedToDept']);
 Route::get('getProdCategory', [WareHouseController::class,'getProdCategory']);
+Route::get('sendLabelToThePrinter', [WareHouseController::class,'sendLabelToThePrinter']);
+Route::get('jobupdateprint/{jobid}', [WareHouseController::class,'jobupdateprint']);
+Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
+Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
+Route::get('getPalletForSelectedItem', [WareHouseController::class,'getPalletForSelectedItem']);
 Route::get('getProdListToPlan', [WareHouseController::class,'getProdListToPlan']);
 Route::get('printpalletsselectdept', [WareHouseController::class,'printpalletsselectdept']);
 Route::get('getProductPlannedOnThatMachine', [WareHouseController::class,'getProductPlannedOnThatMachine']);

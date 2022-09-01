@@ -3,12 +3,12 @@
 <head>
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
@@ -16,20 +16,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
-    <!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
     <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+
+
     <!-- DevExtreme library -->
+
+    <!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-
 
 
     <style>
@@ -57,7 +60,10 @@
 
 
 </head>
-<div class="col-lg-12"  style="background: white;">
+<body>
+
+
+<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
     <div class="col-lg-2"  style="background: white;border-right: 2px solid black;">
 
         <div class="vertical-menu">
@@ -73,29 +79,67 @@
         </div>
     </div>
     <div class="col-lg-10" >
-
-        <h1>CHOOSE PRODUCT</h1>
-        <fieldset class="well">
-            <form>
-        <div class="form-group">
-            <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Group </label>
-            <select  class="form-control input-sm col-xs-1" id="department" required>
-                <option></option>
-                @foreach($prodGroups as $val)
-                    <option value="{{$val->ItemGroup}}">{{$val->ItemGroupDescription}}</option>
-                @endforeach
-
-            </select><br><br>
-
-            <input type='button' value='GO GET CATEGORIES' class="btn-lg btn-primary" id='but_read'><br>
-
+        <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createjob">Create New Job</button><br>
+        <div id="gridContainer" style="width: 100% !important;">
         </div>
+
+    </div>
+    <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewjobTitle">Job Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div title="Job Creation" id="createjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createjobTitle">Create A Job</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <label class="control-label" for="departmentheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
+                        <select  class="form-control input-sm col-xs-1 " id="departmentheader" style="width: 100%" required>
+                            <option></option>
+                            @foreach($dept as $val)
+                                <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                            @endforeach
+
+                        </select>
+
+
+                    </div>
+                <div class="input-group mb-3">
+                    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Group </label>
+                    <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
+                        <option></option>
+                        @foreach($prodGroups as $val)
+                            <option value="{{$val->ItemGroup}}">{{$val->ItemGroupDescription}}</option>
+                        @endforeach
+                    </select>
+
+                    <input type='button' value='Confirm Prod Group' class="btn btn-secondary btn-sm" id='but_read'>
+
+                </div>
                 <div class="form-group">
                     <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
                     <select  class="form-control input-sm col-xs-1" id="productcategory" required>
                         <option></option>
-                    </select><br><br>
-                    <input type='button' class="btn-lg btn-primary" value='GO CHOOSE PRODUCT' id='getproduct' style="margin-top: 22px;">
+                    </select>
+                    <input type='button' class="btn btn-secondary btn-sm" value='Confirm Prod Cat' id='getproduct' style="margin-top: 22px;">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
@@ -105,10 +149,38 @@
 
                 </div>
 
-            </form>
-        </fieldset>
+                    <div class="form-group">
+                        <label class="control-label" for="machinename"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine </label>
+                        <select  class="form-control input-sm col-xs-1" id="machinename" required>
+                            <option></option>
+                        </select>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Qty </label>
+                        <input type="number"  class="form-control input-sm col-xs-1" id="qty" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="palletconfig"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Conf </label>
+                        <select  class="form-control input-sm col-xs-1" id="palletconfig" required>
+                            <option></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="startdate"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Start Date </label>
+                        <input type="date" class="form-control input-sm col-xs-1" id="startdate">
+                    </div>
+
+                </div>
         <br><br><br>
-        <button class="btn-danger btn-lg" id="savedepartment" style="width: 100%;">NEXT</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn-danger btn-lg" id="savedepartment" style="width: 100%;">SAVE</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -130,6 +202,54 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
+
+$("#departmentheader").change(function () {
+
+    $.ajax({
+
+        url: '{!!url("/getMachinesforselecteddept")!!}',
+        type: "GET",
+        data: {
+            deptId: $("#departmentheader").val()
+        },
+        success: function (data) {
+            var toAppend = '';
+            $("#machinename").empty();
+            $.each(data,function(i,o){
+
+                toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
+            });
+            $("#machinename").append(toAppend);
+            $("#machinename").select2();
+        }
+    });
+
+});
+
+$('#prodname').change(function () {
+
+    $.ajax({
+
+        url: '{!!url("/getPalletForSelectedItem")!!}',
+        type: "GET",
+        data: {
+            itemCode: $("#prodname").val()
+        },
+        success: function (data) {
+            var toAppend = '';
+            $("#palletconfig").empty();
+            toAppend += '<option></option>';
+            $.each(data,function(i,o){
+
+                toAppend += '<option value="'+o.intPalletId+'"><table><tr><td style="background: green">'+o.strPalletTypeDescription+'</td><td>| /PALLET'+o.intPalletConf+'</option>';
+            });
+            $("#palletconfig").append(toAppend);
+            $("#palletconfig").select2();
+        }
+    });
+});
+
+
         $("#department").select2();
 
         $('#but_read').click(function(){
@@ -141,11 +261,11 @@
                 type: "GET",
                 data: {
                     ItemGroup: ItemGroup
-
                 },
                 success: function (data) {
                     var toAppend = '';
                     $("#productcategory").empty();
+                    toAppend += '<option></option>';
                     $.each(data,function(i,o){
                         toAppend += '<option value="'+o.strProductCategory+'">'+o.strProductCategory+'</option>';
                     });
@@ -192,16 +312,159 @@
 
             });
         });
+        $('#but_deptheader').click(function(){
+            $.ajax({
+
+                url: '{!!url("/getProductGroupMappedToDept")!!}',
+                type: "GET",
+                data: {
+                    deptId: $('#departmentheader').val()
+                },
+                success: function (data) {
+                   /* var toAppend = '';
+                    $("#machinename").empty();
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
+                    });
+                    $("#machinename").append(toAppend);
+                    $("#machinename").select2();*/
+
+                }
+
+            });
+        });
 
 
 
         $('#savedepartment').click(function(){
 
-            window.location.replace('{!!url("/choosemachine")!!}/' +$('#prodname').val());
+            $.ajax({
 
+                url: '{!!url("/insertIntoJobTable")!!}',
+                type: "POST",
+                data: {
+                    deptId: $('#departmentheader').val(),
+                    prodgroup: $('#department').val(),
+                    productcategory: $('#productcategory').val(),
+                    prodname: $('#prodname').val(),
+                    machinename: $('#machinename').val(),
+                    qty: $('#qty').val(),
+                    startdate: $('#startdate').val(),
+                    palletconfig: $('#palletconfig').val()
+                },
+                success: function (data) {
+                    if(data[0].result == "Success"){
+
+                        location.reload();
+                    }
+
+                }
+            });
         });
 
+        $.ajax({
+            url: '{!!url("/getWIP")!!}',
+            type: "GET",
+            data: {
+                machineId: $('#machineid').val()
+            },
+            success: function (data) {
+                $("#gridContainer").dxDataGrid({
+                    dataSource:data, //as json
+                    showBorders: true,
+                    filterRow: { visible: true },
+                    allowColumnResizing: true,
+                    paging:{
+                        pageSize: 20,
+                    },
+                    export: {
+                        enabled: true
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('machineplan');
 
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
+
+                    columns: [
+                        {
+                            dataField: "intJobId",
+                            caption: "JobNo",
+                            width: 60,
+
+                        }, {
+                            dataField: "intJobSequence",
+                            caption: "Job Sequence",
+                            width: 60,
+
+                        }, {
+                            dataField: "strDeptName",
+                            caption: "Department",
+                            width: 90,
+
+                        },
+                        {
+                            dataField: "strMachineName",
+                            caption: "Machine",
+                            width: 90,
+
+                        },
+                        {
+                            dataField: "PastelDescription",
+                            caption: "Product",
+                            width: 400,
+
+                        },
+                        {
+                            dataField: "mnyQtyRequired",
+                            caption: "Qty",
+                            width: 90,dataType:"number"
+
+                        },
+                        {
+                            dataField: "palletQty",
+                            caption: "Pallet Qty",
+                            width: 90,dataType:"number"
+
+                        }
+                        ,
+                        {
+                            dataField: "dteStartDate",
+                            caption: "Start Date",
+                            width: 100,dataType:"date"
+
+                        },
+                        {
+                            dataField: "jobStatus",
+                            caption: "Job Status",
+                            width: 60,
+
+                        },
+                    ],
+                    onRowDblClick:function(e){
+                        console.log(e.data.intJobId);
+                        var intJobId =  e.data.intJobId;
+
+                        window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+
+                    }
+
+                });
+
+            }
+
+        });
 
 
 
@@ -244,3 +507,4 @@
 
 
 </script>
+</body>

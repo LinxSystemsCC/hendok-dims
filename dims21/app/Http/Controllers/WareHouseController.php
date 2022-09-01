@@ -56,9 +56,11 @@ class WareHouseController extends Controller
         return view('warehouse/machines');
     }
     public function createjobs(){
+        $dept = DB::connection('sqlsrv2')
+            ->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')
             ->select("select * from viewItemGroups order by ItemGroupDescription");
-        return view('warehouse/createjobs')->with('prodGroups',$prodGroups);
+        return view('warehouse/createjobs')->with('prodGroups',$prodGroups)->with('dept',$dept);
     }
     public function getProdCategory(Request $request){
         $ItemGroup = $request->get("ItemGroup");
@@ -103,6 +105,24 @@ class WareHouseController extends Controller
                   array($deparment)
               );
         return view('warehouse/printpalletchoosemachine')->with('departments',$dept)->with('machines',$machines);
+    }
+
+    public function getMachinesforselecteddept(Request $request){
+        $deparment = $request->get("deptId");
+        $machines = DB::connection('sqlsrv2')
+            ->select('exec spGetMachinesByDept ?',
+                array($deparment)
+            );
+        return response()->json($machines);
+    }
+    public function getPalletForSelectedItem(Request $request){
+
+        $itemCode = $request->get("itemCode");
+        $palletsjson = DB::connection('sqlsrv2')
+            ->select("EXEC spSelectItemsConfigurations ? ",
+                array($itemCode)
+            );
+        return response()->json($palletsjson);
     }
     public function validatepalletsplan(Request $request){
         $intPalletId = $request->get("intPalletId");
@@ -158,6 +178,31 @@ class WareHouseController extends Controller
             );
         return response()->json($productonmachine);
     }
+    public function endjob(Request $request){
+        $jobid = $request->get("jobid");
+        $endjob = $request->get("endjob");
+        $endjob= (new \DateTime($endjob))->format('Y-m-d H:i:s') ;
+        $result =  DB::connection('sqlsrv2')->table('tblJobQrcodeAllocation')
+            ->where('intJobId',$jobid )
+            ->update(['dteJobEnded' => endjob ]);
+        return response()->json($result);
+    }
+    public function updatestartdate(Request $request){
+        $jobid = $request->get("jobid");
+        $startdate = $request->get("startdate");
+        $startdate = (new \DateTime($startdate))->format('Y-m-d') ;
+        $result =  DB::connection('sqlsrv2')->table('tblJobQrcodeAllocation')
+            ->where('intJobId',$jobid )
+            ->update(['dteJobEnded' => $startdate ]);
+        return response()->json($result);
+    }
+    public function getWIP(Request $request){
+
+        $productonmachine = DB::connection('sqlsrv2')
+            ->select('exec spGetProductCurrentlyPlanned '
+            );
+        return response()->json($productonmachine);
+    }
     public function goprintfirstqrcode($deparment,$machine,$productcode,$palletid,$qty){
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);
@@ -205,6 +250,51 @@ class WareHouseController extends Controller
         }
 
         return view('warehouse/joblabel')->with('qrcodeothers',$returnmach)->with('qrcode',$htmlqrcode);
+    }
+    public function sendLabelToThePrinter(Request $request){
+        $qty = $request->get('qty');
+        $type= $request->get('type');
+        $jobid= $request->get('jobid');
+
+        for($i = 0;$i < $qty ;$i++)
+        {
+             DB::connection('sqlsrv2')
+                ->statement('exec spInserPalletLabelToPrint ?,?',
+                    array($type,$jobid)
+                );
+        }
+
+    }
+
+    public function jobupdateprint($jobid){
+        //
+     /*   $returnmach = DB::connection('sqlsrv2')
+            ->select('exec spInsertNewJob ?,?,?,?,?,?',
+                array($productcode,$machine,$palletid,$qty,"12345",$start)
+            );*/
+        $jobdata = DB::connection('sqlsrv3')
+            ->select('exec spGetProductPlannedDetails ?',
+                array($jobid));
+        return view('warehouse/updatejob')->with("jobdata",$jobdata)->with("id",$jobid);
+    }
+    public function insertIntoJobTable(Request $request){
+        $deptId = $request->get("deptId");
+        $prodgroup = $request->get("prodgroup");
+        $productcategory= $request->get("productcategory");
+        $prodname = $request->get("prodname");
+        $machinename = $request->get("machinename");
+        $qty = $request->get("qty");
+        $palletconfig = $request->get("palletconfig");
+        //$startdate = $request->get("startdate");
+
+        $startdate = (new \DateTime($request->get('startdate')))->format('Y-m-d');
+
+        $returnmach = DB::connection('sqlsrv2')
+            ->select('exec spInsertNewJob ?,?,?,?,?,?,?,?',
+                array($deptId,$prodgroup,$productcategory,$prodname,$machinename,$qty,$startdate,$palletconfig)
+            );
+        return response()->json($returnmach);
+
     }
     //Start Generating The Qr code
     public function startgenratingqrcodeforpallet($jobId){
