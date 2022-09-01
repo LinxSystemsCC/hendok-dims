@@ -642,6 +642,66 @@
                     }
                 });
             });
+            $('#SaveNewSpecial').click(function(){
+                var productsLinesOnPicking ="";
+                var productsLinesOnPicking ="<xml>";
+
+                $('#tblCreateNewSpecial > tbody  > tr').each(function() {
+
+                    
+                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && ($(this).closest('tr').find('.prodDescription_').val()).length > 0 ) {
+                        productsLinesOnPicking= productsLinesOnPicking + "<result>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+ $(this).closest('tr').find('.theProductCode_').val()+"</productCode>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<price>"+$(this).closest('tr').find('.prodPrice_').val()+"</price>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateFrom>"+dateReturn($('#dateFrom').val()) +"</dateFrom>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateTo>"+dateReturn( $('#dateTo').val())+"</dateTo>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<cost_>"+$(this).closest('tr').find('.cost_').val()+"</cost_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<gp_>"+$(this).closest('tr').find('.gp_').val()+"</gp_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<costCreated_>"+ $(this).closest('tr').find('.costCreated_').val()+"</costCreated_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<contractid>"+$('#custheadid').val()+"</contractid>";
+                    productsLinesOnPicking= productsLinesOnPicking+ "</result>";
+                    }
+
+
+                });
+
+            productsLinesOnPicking= productsLinesOnPicking+"</xml>";
+                console.log(productsLinesOnPicking);
+                $.ajax({
+                    url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
+                    type: "POST",
+                    data: {
+                        customerCode: $('#inputCustAcc').val(),
+                        customerId: $('#customerId').val(),
+                        contractDateFrom: $('#dateFrom').val(),
+                        contractDateTo: $('#dateTo').val(),
+                        orderDetails: productsLinesOnPicking
+                    },
+                    success: function (data) {
+
+                        if (data.result !="SUCCESS")
+                        {
+                            var dialog = $('<p>'+data.result+'</p>').dialog({
+                                height: 200, width: 700, modal: true, containment: false,
+                                buttons: {
+                                    "OKAY": function () {
+                                        dialog.dialog('close');
+                                    }
+                                }
+                            });
+                        }else{
+                            $('#tblCreateNewSpecial tbody').empty();
+                            LoadDataGrid();
+
+
+                        }
+
+
+
+                    }
+                });
+
+            });
             $('#pricelist1convert').click(function(){
 
                 $.ajax({
@@ -665,7 +725,28 @@
                 });
             });
             $('#getContractDetails').click(function(){
-                $('#addinCurrentPrices').show();
+
+                LoadDataGrid();
+            });
+
+            $('#doneCreating').click(function()
+            {
+                PressDone();
+
+            });
+
+
+
+
+        });
+        function marginCalculator(cost,onCellVal)
+        {
+            return (1-(cost/onCellVal))*100;
+        }
+
+        function LoadDataGrid(){
+
+            $('#addinCurrentPrices').show();
                 $('#addinHistory').show();
                 $('#afterFilter').show();
                 var theVal = this.value;
@@ -1173,23 +1254,8 @@
                     }
                 });
 
-            });
-
-            $('#doneCreating').click(function()
-            {
-                PressDone();
-
-            });
-
-
-
-
-        });
-        function marginCalculator(cost,onCellVal)
-        {
-            return (1-(cost/onCellVal))*100;
+            
         }
-
         function PressDone()
         {
 
@@ -1492,61 +1558,7 @@
                 changeYear: true, //this option for allowing user to select from year range
                 dateFormat: 'dd-mm-yy'
             });
-            $('#SaveNewSpecial').click(function(){
-                var productsLinesOnPicking ="<xml>";
-                $('#tblCreateNewSpecial > tbody  > tr').each(function() {
-
-                    
-                    if (($(this).closest('tr').find('.theProductCode_').val()).length > 0 && ($(this).closest('tr').find('.prodDescription_').val()).length > 0 ) {
-                        productsLinesOnPicking= productsLinesOnPicking + "<result>";
-                    productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+ $(this).closest('tr').find('.theProductCode_').val()+"</productCode>";
-                    productsLinesOnPicking= productsLinesOnPicking + "<price>"+$(this).closest('tr').find('.prodPrice_').val()+"</price>";
-                    productsLinesOnPicking= productsLinesOnPicking + "<dateFrom>"+dateReturn($('#dateFrom').val()) +"</dateFrom>";
-                    productsLinesOnPicking= productsLinesOnPicking + "<dateTo>"+dateReturn( $('#dateTo').val())+"</dateTo>";
-                    productsLinesOnPicking= productsLinesOnPicking + "<cost_>"+$(this).closest('tr').find('.cost_').val()+"</cost_>";
-                    productsLinesOnPicking= productsLinesOnPicking + "<gp_>"+$(this).closest('tr').find('.gp_').val()+"</gp_>";
-                    productsLinesOnPicking= productsLinesOnPicking + "<costCreated_>"+ $(this).closest('tr').find('.costCreated_').val()+"</costCreated_>";
-                    productsLinesOnPicking= productsLinesOnPicking + "<customerid>"+$(this).closest('tr').find('.costCreated_').val()+"</customerid>";
-                    productsLinesOnPicking= productsLinesOnPicking+ "</result>";
-                    }
-
-
-                });
-            productsLinesOnPicking= productsLinesOnPicking+"</xml>";
-                $.ajax({
-                    url: '{!!url("/XmlCreateCustomerSpecials")!!}', // createCustomerSpecials
-                    type: "POST",
-                    data: {
-                        customerCode: $('#inputCustAcc').val(),
-                        customerId: $('#customerId').val(),
-                        contractDateFrom: $('#dateFrom').val(),
-                        contractDateTo: $('#dateTo').val(),
-                        orderDetails: productsLinesOnPicking,
-                        contractId:$('#custheadid').val()
-                    },
-                    success: function (data) {
-
-                        if (data.result !="SUCCESS")
-                        {
-                            var dialog = $('<p>'+data.result+'</p>').dialog({
-                                height: 200, width: 700, modal: true, containment: false,
-                                buttons: {
-                                    "OKAY": function () {
-                                        dialog.dialog('close');
-                                    }
-                                }
-                            });
-                        }else{
-                            $('#tblCreateNewSpecial tbody').empty();
-                            $('#getContractDetails').click();
-
-                        }
-
-
-
-                    }
-                });
-            });
+           
             $('#tblCreateNewSpecial').on('click', 'button', function (e) {
                 var $this = $(this);
                 $this.closest('tr').remove();
