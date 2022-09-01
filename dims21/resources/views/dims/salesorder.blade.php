@@ -207,7 +207,7 @@
 
                             <input type="hidden" name="boozeChecked" id="boozeChecked" class="form-control input-sm col-xs-1" value="">
                     </div>
-                    <input type="checkbox" name="awaitingStock" id="awaitingStock">Awaiting Stock<br>
+                    <input type="checkbox" name="awaitingStock" id="awaitingStock" value="">Awaiting Stock<br>
                     <input type="checkbox" name="treatAsQuote" id="treatAsQuote" >Treat As Quotation<br>
 
 
@@ -2942,13 +2942,13 @@
                                     if(value.AwaitingStock == '1')
                                     {
                                         $('#awaitingStock').prop('checked',true);
-                                        
+
                         $('#awaitingStock').val("1");
                                     }
                                     else
                                     {
                                         $('#awaitingStock').prop('checked',false);
-                                        
+
                         $('#awaitingStock').val("0");
                                     }
 
@@ -3743,7 +3743,7 @@
                 $("#pdfexportorder").click(function(){
 
                   {
-                                           
+
                                             if (($('#invoiceNo').val()).length > 3) {
                                                 window.open('{!!url("/pdforder")!!}/'+$('#orderId').val(), "PDF", "location=1,status=1,scrollbars=1, width=1200,height=850");
 //View PDF
