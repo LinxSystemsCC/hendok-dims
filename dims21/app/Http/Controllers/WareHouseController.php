@@ -285,10 +285,9 @@ class WareHouseController extends Controller
         $v  =  new \App\Http\Controllers\SalesForm();
         $GroupId= Auth::user()->GroupId;
         if($v->getThings($GroupId,'Print Pallet')){
-            Auth::logout();
-            $request->session()->flush();
-            return redirect('/doneprintingpallet');
         }
+
+        return "Success";
     }
     public function doneprintingpallet(){
         return view('warehouse/doneprintingpallet');

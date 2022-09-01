@@ -96,7 +96,9 @@
                         jobid:$('#jobid').val()
                     },
                     success: function (data) {
-
+                        if(data ="Success"){
+                            window.location = '{!!url("/doneprintingpallet")!!}';
+                        }
 
                     }
 
