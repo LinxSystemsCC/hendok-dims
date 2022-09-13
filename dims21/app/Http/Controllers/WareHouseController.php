@@ -56,6 +56,23 @@ class WareHouseController extends Controller
     public function machinespage(){
         return view('warehouse/machines');
     }
+    public function location(){
+        $LocationTypes = DB::connection('sqlsrv2')
+            ->select("select * from tblLocationTypes");
+
+        return view('warehouse/locations')->with('locationtypes',$LocationTypes);
+    }
+    public function getLocationNamesAndTypes(){
+        $locationname = DB::connection('sqlsrv2')
+            ->select("select * from tblLocationNames inner join tblLocationTypes on tblLocationNames.intLocationTypeId = tblLocationTypes.intLocationTypeId  order by intLocationNameId ");
+
+        $LocationTypes = DB::connection('sqlsrv2')
+            ->select("select * from tblLocationTypes");
+
+        $outPut["locationname"] = $locationname;
+        $outPut["locationtypes"] = $LocationTypes;
+        return response()->json($outPut);
+    }
     public function createjobs(){
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");
@@ -68,6 +85,21 @@ class WareHouseController extends Controller
         $prodCategory = DB::connection('sqlsrv2')
             ->select("select * from viewItemCategory where ItemGroup ='".$ItemGroup."' order by strProductCategory");
         return response()->json($prodCategory);
+    }
+    public function saveLocationType(Request $request){
+        $locationtype = $request->get("locationtype");
+
+        $result = DB::connection('sqlsrv3')->table('tblLocationTypes')->insert(
+            ['strLocationType' => $locationtype]);
+        return response()->json($result);
+    }
+    public function saveLocationName(Request $request){
+        $locationtype = $request->get("locationtypeid");
+        $strLocationName = $request->get("strLocationName");
+
+        $result = DB::connection('sqlsrv3')->table('tblLocationNames')->insert(
+            ['strLocationName' => $strLocationName,'intLocationTypeId' => $locationtype]);
+        return response()->json($result);
     }
     public function getProdListToPlan(Request $request){
         $ItemGroup = $request->get("ItemGroup");

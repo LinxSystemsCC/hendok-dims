@@ -857,9 +857,13 @@ Route::post('savesmachines', [WareHouseController::class,'savesmachines']);
 Route::post('removemapping', [WareHouseController::class,'removemapping']);
 Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefromdept']);
 Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
+Route::post('saveLocationType', [WareHouseController::class,'saveLocationType']);
+Route::post('saveLocationName', [WareHouseController::class,'saveLocationName']);
 
 Route::get('startendjob', [WareHouseController::class,'startendjob']);
 Route::get('createjobs', [WareHouseController::class,'createjobs']);
+Route::get('location', [WareHouseController::class,'location']);
+Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
 Route::get('getWIP', [WareHouseController::class,'getWIP']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
 

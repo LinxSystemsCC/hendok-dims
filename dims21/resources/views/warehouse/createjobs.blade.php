@@ -74,7 +74,8 @@
             <a href='{!!url("/mapmachinestodept")!!}' >Map Machines To Dept</a>
             <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Machines,Dept & Prod</a>
             <a href='{!!url("/createjobs")!!}'  class="active">Create Jobs</a>
-            <a href='{!!url("/printpalletsselectdept")!!}'  class="active">Print Pallet Labels</a>
+            <a href='{!!url("/printpalletsselectdept")!!}'>Print Pallet Labels</a>
+            <a href='{!!url("/location")!!}'  class="active">Locations</a>
             <a href="#">In Progress Jobs</a>
             <a href="#">Jobs Data</a>
         </div>
