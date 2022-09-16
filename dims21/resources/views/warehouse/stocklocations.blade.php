@@ -75,19 +75,33 @@
             <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Machines,Dept & Prod</a>
             <a href='{!!url("/createjobs")!!}'   >Create Jobs</a>
             <a href='{!!url("/printpalletsselectdept")!!}' >Print Pallet Labels</a>
-            <a href='{!!url("/location")!!}'  class="active">Locations</a>
-            <a href='{!!url("/stocklocation")!!}' >Stock</a>
+            <a href='{!!url("/location")!!}' >Locations</a>
+            <a href='{!!url("/stocklocation")!!}'  class="active">Stock</a>
             <a href="#">In Progress Jobs</a>
             <a href="#">Jobs Data</a>
         </div>
     </div>
     <div class="col-lg-10" >
-        <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationtype">New Location Type</button>
-        <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationname">New Location</button>
-        <div id="gridContainer" style="width: 100% !important;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Stock Summary</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Stock Detail</button>
+            </li>
 
-        </div>  <hr>
-        <h5>Location Types</h5> <div id="gridContainetypes" style="width: 100% !important;">
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <h5>Summary</h5>
+                <div id="gridContainer" style="width: 100% !important;"></div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                <h5>Details</h5> <div id="gridContainetypes" style="width: 100% !important;">
+                </div>
+            </div>
+
         </div>
 
 
@@ -149,13 +163,7 @@
                     </div>
                     <div class="input-group mb-3">
                         <label class="control-label" for="locationtype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Type</label>
-                        <select  class="form-control input-sm col-xs-1 " id="locationtype" style="width: 100%" required>
-                            <option></option>
-                            @foreach($locationtypes as $val)
-                                <option value="{{$val->intLocationTypeId}}">{{$val->strLocationType}}</option>
-                            @endforeach
 
-                        </select>
                     </div>
                 </div>
                 <br><br><br>
@@ -186,46 +194,28 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
+    var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+    triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
+
+
+
     $(document).ready(function() {
 
-        $("#savelocationtype").click(function () {
 
-            $.ajax({
 
-                url: '{!!url("/saveLocationType")!!}',
-                type: "POST",
-                data: {
-                    locationtype: $("#strLocationType").val()
-                },
-                success: function (data) {
-                    location.reload();
-                }
-            });
-
-        });
-
-        $("#savelocationame").click(function () {
-
-            $.ajax({
-
-                url: '{!!url("/saveLocationName")!!}',
-                type: "POST",
-                data: {
-                    locationtypeid: $("#locationtype").val(),
-                    strLocationName: $("#strLocationName").val()
-                },
-                success: function (data) {
-                    location.reload();
-                }
-            });
-
-        });
 
 
 
 
         $.ajax({
-            url: '{!!url("/getLocationNamesAndTypes")!!}',
+            url: '{!!url("/getviewGridStockSummary")!!}',
             type: "GET",
             data: {
 
@@ -246,7 +236,7 @@
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('getLocationNamesAndTypes');
+                        const worksheet = workbook.addWorksheet('getviewGridStockSummary');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -254,7 +244,7 @@
                             autoFilterEnabled: true,
                         }).then(() => {
                             workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'getLocationNamesAndTypes.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'getviewGridStockSummary.xlsx');
                             });
                         });
                         e.cancel = true;
@@ -262,19 +252,34 @@
 
                     columns: [
                         {
-                            dataField: "intLocationNameId",
-                            caption: "Location ID",
-                            width: 60,
+                            dataField: "ItemCode",
+                            caption: "Item Code",
+                            width: 150,
 
                         }, {
-                            dataField: "strLocationName",
-                            caption: "Location Name",
-                            width: 260,
+                            dataField: "ItemName",
+                            caption: "Item Name",
+                            width: 360,
 
                         }, {
-                            dataField: "strLocationType",
-                            caption: "Location Type",
-                            width: 200,
+                            dataField: "ItemGroupDescription",
+                            caption: "Item Group",
+                            width: 180,
+
+                        }, {
+                            dataField: "MinLevel",
+                            caption: "Min Level",
+                            width: 80,
+
+                        }, {
+                            dataField: "MinLevel",
+                            caption: "Min Level",
+                            width: 80,
+
+                        }, {
+                            dataField: "QtyInStock",
+                            caption: "Stock On Hand",
+                            width: 80,
 
                         }
                     ],

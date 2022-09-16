@@ -114,6 +114,17 @@ class WareHouseController extends Controller
             ->select("select * from tblDepartments");
         return view('warehouse/printpalletcodes')->with('departments',$dept);
     }
+    public function stocklocation(){
+        /*$dept = DB::connection('sqlsrv2')
+            ->select("select * from tblDepartments");*/
+        return view('warehouse/stocklocations');
+    }
+    public function getviewGridStockSummary(Request $request){
+
+        $gridstock = DB::connection('sqlsrv2')
+            ->select("select * from viewGridStockSummary ");
+        return response()->json($gridstock);
+    }
     public function choosemachine($itemCode){
       /*  $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);*/

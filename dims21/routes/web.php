@@ -866,6 +866,8 @@ Route::get('location', [WareHouseController::class,'location']);
 Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
 Route::get('getWIP', [WareHouseController::class,'getWIP']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
+Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
+Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
 
 Route::get('getProductGroupMappedToDept', [WareHouseController::class,'getProductGroupMappedToDept']);
 Route::get('getProdCategory', [WareHouseController::class,'getProdCategory']);
