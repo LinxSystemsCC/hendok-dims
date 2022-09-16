@@ -119,6 +119,10 @@ class WareHouseController extends Controller
             ->select("select * from tblDepartments");*/
         return view('warehouse/stocklocations');
     }
+    public function printlocationqrcodes($location){
+
+        return view('warehouse/printlocationqrcodes')->with('ID',$location);
+    }
     public function getviewGridStockSummary(Request $request){
 
         $gridstock = DB::connection('sqlsrv2')

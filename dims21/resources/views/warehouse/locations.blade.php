@@ -279,7 +279,8 @@
                         }
                     ],
                     onRowDblClick:function(e){
-
+                        var strLocationName =  e.data.strLocationName;
+                        window.open('{!!url("/printlocationqrcodes")!!}/' +strLocationName, "Location" +strLocationName, "location=1,status=1,scrollbars=1, width=1200,height=850");
 
                     }
 
