@@ -114,6 +114,9 @@ class WareHouseController extends Controller
             ->select("select * from tblDepartments");
         return view('warehouse/printpalletcodes')->with('departments',$dept);
     }
+    public function qrcodetracker(){
+        return view('warehouse/qrcodetracker');
+    }
     public function stocklocation(){
         /*$dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");*/

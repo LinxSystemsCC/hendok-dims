@@ -867,6 +867,7 @@ Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationN
 Route::get('getWIP', [WareHouseController::class,'getWIP']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
 Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
+Route::get('qrcodetracker', [WareHouseController::class,'qrcodetracker']);
 Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
 Route::get('printlocationqrcodes/{location}', [WareHouseController::class,'printlocationqrcodes']);
 
