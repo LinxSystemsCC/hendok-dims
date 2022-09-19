@@ -164,7 +164,7 @@
     var SalesMen = $.map(JSON.parse(jArraySalesMenOnly), function (item) {
         return {
             Name: item.UserName,
-            SalesCode:item.strSalesmanCode
+            SalesCode:item.UserID
         }
 
     });
@@ -185,7 +185,6 @@
             }
             for(var index = 0; index < SalesMen.length;index++){
                 $('#SalesRep').append('<option value="'+SalesMen[index].SalesCode+'">'+SalesMen[index].Name +'</option>');
-
             }
 
     $.ajaxSetup({
@@ -236,23 +235,23 @@
                             $("#gridContainer").dxDataGrid({
                                 export: {
             enabled: true
-        },   onExporting: function(e) { 
-        var workbook = new ExcelJS.Workbook(); 
-        var worksheet = workbook.addWorksheet('Main sheet'); 
-        DevExpress.excelExporter.exportDataGrid({ 
-            worksheet: worksheet, 
+        },   onExporting: function(e) {
+        var workbook = new ExcelJS.Workbook();
+        var worksheet = workbook.addWorksheet('Main sheet');
+        DevExpress.excelExporter.exportDataGrid({
+            worksheet: worksheet,
             component: e.component,
             customizeCell: function(options) {
                 var excelCell = options;
                 excelCell.font = { name: 'Arial', size: 12 };
                 excelCell.alignment = { horizontal: 'left' };
-            } 
+            }
         }).then(function() {
-            workbook.xlsx.writeBuffer().then(function(buffer) { 
-                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx'); 
-            }); 
-        }); 
-        e.cancel = true; 
+            workbook.xlsx.writeBuffer().then(function(buffer) {
+                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
+            });
+        });
+        e.cancel = true;
     },
                                 dataSource:Routes,
                                 showBorders: true,

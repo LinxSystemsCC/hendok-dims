@@ -213,7 +213,7 @@ class DimsCommon extends Controller
         $queryCustomers =DB::connection('sqlsrv3')->table("viewCustomerGrid" )->select('*')->distinct()->get();
         $queryRoutes=DB::connection('sqlsrv3')->table("tblRoutes")->select('Route','RouteId')->distinct()->get();
         $queryGroups=DB::connection('sqlsrv3')->table("tblGroups")->select('GroupId','GroupName')->distinct()->get();
-        $querySalesMen=DB::connection('sqlsrv3')->table("tblDIMSUSERS")->select('UserName', 'strSalesmanCode')->distinct()->get();
+        $querySalesMen=DB::connection('sqlsrv3')->table("tblDIMSUSERS")->select('UserName', 'UserID')->distinct()->get();
                 return view('dims/customergridwithflex')->with('routes',$queryCustomers)->with('routesonly', $queryRoutes)
                 ->with('groups',$queryGroups)->with('salesmen',$querySalesMen);
     }
@@ -406,7 +406,7 @@ class DimsCommon extends Controller
     public function stocktakecountspage(){
         $getAllStockCounts = DB::connection('sqlsrv3')
         ->select('SELECT * FROM vwStockTakeCountsGrid' );
-        
+
         return view('dims/stock_take_counts_grid')
             ->with('stocks',$getAllStockCounts);
 
@@ -414,7 +414,7 @@ class DimsCommon extends Controller
     public function grvgridpage(){
         $grvs = DB::connection('sqlsrv3')
         ->select('exec [spGetPOforVendorGrid]' );
-        
+
         return view('dims/grv_post_grid')
             ->with('grvs',$grvs);
     }
@@ -432,7 +432,7 @@ class DimsCommon extends Controller
     public function getStockTakeName(Request $request){
         $datefrom= $request->get('datefrom');
         $dateto = $request->get('dateto');
-        
+
         $stocktakes = DB::connection('sqlsrv2')
         ->select('exec spListStockTakes ?,?',
             array($datefrom,$dateto));
@@ -440,7 +440,7 @@ class DimsCommon extends Controller
     }
     public function selectStockTake(Request $request){
         $strStockTakeName= $request->get('strStockTakeName');
-        
+
         $stocktakes = DB::connection('sqlsrv2')
         ->select('exec spGetStockTakeOnName ?',
             array($strStockTakeName));
@@ -448,14 +448,14 @@ class DimsCommon extends Controller
     }
     public function getStockTakeNameLines(Request $request){
         $strStockTakeName= $request->get('stocktakename');
-        
+
         $stocktakes = DB::connection('sqlsrv2')
         ->select('exec spStockTakeCountsLineblade ?',
             array($strStockTakeName));
     return response()->json($stocktakes);
     }
     public function updateStockTakeOnSelector(Request $request){
-        
+
         $status= $request->get('status');
         $stocktakeid= $request->get('stocktakeid');
         DB::connection('sqlsrv2')
