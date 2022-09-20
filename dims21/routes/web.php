@@ -869,11 +869,15 @@ Route::get('endjob', [WareHouseController::class,'endjob']);
 Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
 Route::get('qrcodetracker', [WareHouseController::class,'qrcodetracker']);
 Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
+Route::get('binandqrcodes', [WareHouseController::class,'binandqrcodes']);
 Route::get('printlocationqrcodes/{location}', [WareHouseController::class,'printlocationqrcodes']);
 
 Route::get('getProductGroupMappedToDept', [WareHouseController::class,'getProductGroupMappedToDept']);
 Route::get('getProdCategory', [WareHouseController::class,'getProdCategory']);
 Route::get('doneprintingpallet', [WareHouseController::class,'doneprintingpallet']);
+Route::get('getBinLocationsJson', [WareHouseController::class,'getBinLocationsJson']);
+Route::get('qrcodeimage/{binlocation}', [WareHouseController::class,'qrcodeimage']);
+Route::post('savenewbin', [WareHouseController::class,'savenewbin']);
 
 
 Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);

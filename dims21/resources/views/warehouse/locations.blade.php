@@ -82,90 +82,133 @@
         </div>
     </div>
     <div class="col-lg-10" >
-        <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationtype">New Location Type</button>
-        <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationname">New Location</button>
-        <div id="gridContainer" style="width: 100% !important;">
+        <div class="wrapper">
+            <div class="buttonWrapper">
+                <button class="tab-button btn-lg btn btn-secondary  active "  data-id="home">Locations</button>
+                <button class="tab-button btn-lg btn btn-secondary " data-id="about">Bins</button>
 
-        </div>  <hr>
-        <h5>Location Types</h5> <div id="gridContainetypes" style="width: 100% !important;">
-        </div>
-
-
-    </div>
-    <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewjobTitle">Job Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                </div>
             </div>
-        </div>
-    </div>
-
-
-    <div title="Location Type" id="createlocationtype" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationtypeTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createlocationtypeTitle">Create A Location Type</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+            <div class="contentWrapper">
+                <div class="content active" id="home">
+                <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationtype">New Location Type</button>
+                <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationname">New Location</button>
+                <div id="gridContainer" style="width: 100% !important;">
+                </div>  <hr>
+                <h5>Location Types</h5> <div id="gridContainetypes" style="width: 100% !important;">
                 </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="strLocationType"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Description</label>
-                        <input  class="form-control input-sm col-xs-1 " id="strLocationType" style="width: 100%" required>
+                </div>
+                <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="viewjobTitle">Job Data</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <br><br><br>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn-danger btn-lg" id="savelocationtype" style="width: 100%;">SAVE</button>
+
+
+                <div title="Location Type" id="createlocationtype" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationtypeTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createlocationtypeTitle">Create A Location Type</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group mb-3">
+                                    <label class="control-label" for="strLocationType"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Description</label>
+                                    <input  class="form-control input-sm col-xs-1 " id="strLocationType" style="width: 100%" required>
+                                </div>
+                            </div>
+                            <br><br><br>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button class="btn-danger btn-lg" id="savelocationtype" style="width: 100%;">SAVE</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div title="Location Name" id="createlocationname" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationname" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createlocationnameTitle">Create A Location</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group mb-3">
+                                    <label class="control-label" for="strLocationName"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Name</label>
+                                    <input  class="form-control input-sm col-xs-1 " id="strLocationName" style="width: 100%" required>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <label class="control-label" for="locationtype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Type</label>
+                                    <select  class="form-control input-sm col-xs-1 " id="locationtype" style="width: 100%" required>
+                                        <option></option>
+                                        @foreach($locationtypes as $val)
+                                            <option value="{{$val->intLocationTypeId}}">{{$val->strLocationType}}</option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                            </div>
+                            <br><br><br>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button class="btn-danger btn-lg" id="savelocationame" style="width: 100%;">SAVE</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
+            <div class="content" id="about">
+                <div class="col-lg-12">
+                <div class="col-lg-4"  style="background: white;">
+                            <form>
+                                Add New Bin
+                                <br>
+                                <div class="form-group">
+                                    <label class="control-label" for="binname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Bin Name</label>
+                                    <input  type="text" class="form-control input-sm " id="binname" style="height:32px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+                                </div>
 
-    </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="rows"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Rows</label>
+                                    <input type="number" id="rows"  class="form-control input-sm col-xs-1" value="1" required>
 
-    <div title="Location Name" id="createlocationname" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationname" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createlocationnameTitle">Create A Location</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="strLocationName"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Name</label>
-                        <input  class="form-control input-sm col-xs-1 " id="strLocationName" style="width: 100%" required>
-                    </div>
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="locationtype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Type</label>
-                        <select  class="form-control input-sm col-xs-1 " id="locationtype" style="width: 100%" required>
-                            <option></option>
-                            @foreach($locationtypes as $val)
-                                <option value="{{$val->intLocationTypeId}}">{{$val->strLocationType}}</option>
-                            @endforeach
+                                </div>
 
-                        </select>
-                    </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="rows"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Levels</label>
+                                    <input id="levels" type="number"  class="form-control input-sm col-xs-1" value="1" required>
+
+                                </div>
+
+                                <button type="button" id="savebin" class="btn-lg btn-success" >Save</button>
+                                <br>
+                              </form>
                 </div>
-                <br><br><br>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn-danger btn-lg" id="savelocationame" style="width: 100%;">SAVE</button>
+                <div class="col-lg-8"  style="background: white;">
+                        <div id="gridContainerbins">
+                        </div>
                 </div>
+
+                </div>
+
             </div>
-        </div>
-
+            </div>
     </div>
 </div>
 
@@ -175,9 +218,74 @@
     .dx-datagrid-table{
         font-size:15px;
     }
+    .wrapper {
+
+        margin: auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, .1);
+    }
+
+    .buttonWrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    button {
+        letter-spacing: 3px;
+        border: none;
+        padding: 10px;
+        background-color: #bccbe9;
+        color: #232c3d;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+
+    button:hover {
+        background-color: #d5e3ff;
+    }
+
+    button.active {
+        background-color: white;
+    }
+
+    .active {
+        background-color: white;
+    }
+
+
+
+    .content {
+        display: none;
+        padding: 10px 20px;
+    }
+
+    .content.active {
+        display: block;
+    }
 </style>
 
 <script>
+    const tabs = document.querySelector(".wrapper");
+    const tabButton = document.querySelectorAll(".tab-button");
+    const contents = document.querySelectorAll(".content");
+
+    tabs.onclick = e => {
+        const id = e.target.dataset.id;
+        if (id) {
+            tabButton.forEach(btn => {
+                btn.classList.remove("active");
+            });
+            e.target.classList.add("active");
+
+            contents.forEach(content => {
+                content.classList.remove("active");
+            });
+            const element = document.getElementById(id);
+            element.classList.add("active");
+        }
+    }
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -221,6 +329,25 @@
 
         });
 
+        $('#savebin').click(function(){
+
+            $.ajax({
+
+                url: '{!!url("/savenewbin")!!}',
+                type: "POST",
+                data: {
+                    binname: $('#binname').val(),
+                    intRowNumber: $('#rows').val(),
+                    intLevelNumber: $('#levels').val()
+
+                },
+                success: function (data) {
+                    binlists();
+                }
+
+            });
+
+        });
 
 
 
@@ -339,6 +466,76 @@
 
         });
 
+        binlists();
+        function binlists(){
+            $.ajax({
+
+                url: '{!!url("/getBinLocationsJson")!!}',
+                type: "GET",
+                data: {
+
+                },
+                success: function (data) {
+
+                    $("#gridContainerbins").dxDataGrid({
+
+                        dataSource:data, //as json
+
+                        showBorders: true,
+                        filterRow: { visible: true },
+                        allowColumnResizing: true,
+                        paging:{
+                            pageSize: 50,
+                        },
+                        export: {
+                            enabled: true
+                        },
+                        onExporting(e) {
+                            const workbook = new ExcelJS.Workbook();
+                            const worksheet = workbook.addWorksheet('binlocations');
+
+                            DevExpress.excelExporter.exportDataGrid({
+                                component: e.component,
+                                worksheet,
+                                autoFilterEnabled: true,
+                            }).then(() => {
+                                workbook.xlsx.writeBuffer().then((buffer) => {
+                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'binlocations.xlsx');
+                                });
+                            });
+                            e.cancel = true;
+                        },
+
+                        columns: [
+                            {
+                                dataField: "intBinId",
+                                caption: "ID",
+                                width: 50,
+
+                            }, {
+                                dataField: "strBin",
+                                caption: "Bin Name",
+                                width: 300,
+
+                            }
+                        ],
+                        onRowDblClick:function(e){
+
+                            // console.debug(e.row,cells[e.columnIndex]);
+                            var strBin = e.data.strBin;
+                            window.open('{!!url("/qrcodeimage")!!}/' +strBin, "qrcodeimage" + strBin, "location=1,status=1,scrollbars=1, width=1200,height=850");
+
+
+                        },
+                        onRowClick:function(e){
+
+                        },
+                    });
+
+                }
+
+            });
+        }
 
 
     });

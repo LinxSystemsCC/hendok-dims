@@ -59,8 +59,28 @@ class WareHouseController extends Controller
     public function location(){
         $LocationTypes = DB::connection('sqlsrv2')
             ->select("select * from tblLocationTypes");
+        $getBinLevel=DB::connection('sqlsrv2')
+            ->select('Select * from tblBinLevel');
 
-        return view('warehouse/locations')->with('locationtypes',$LocationTypes);
+        $getBinRows=DB::connection('sqlsrv2')
+            ->select('Select * from tblBinRows');
+        return view('warehouse/locations')->with('locationtypes',$LocationTypes)
+            ->with('binrows',$getBinRows)
+            ->with('binlevel',$getBinLevel);
+    }
+    public function qrcodeimage($binlocation){
+        return view('wims/qrcodeimage')->with('ID',$binlocation);
+    }
+    public function savenewbin(Request $request){
+
+        $binname = $request->get("binname");
+        $intRowNumber = $request->get("intRowNumber");
+        $intLevelNumber = $request->get("intLevelNumber");
+        DB::connection('sqlsrv2')->table('tblBinNames')->insert(
+            ['strBin' => $binname,'intRowNumber'=>$intRowNumber ,'intLevelNumber'=>$intLevelNumber]
+        );
+
+
     }
     public function getLocationNamesAndTypes(){
         $locationname = DB::connection('sqlsrv2')
@@ -79,6 +99,11 @@ class WareHouseController extends Controller
         $prodGroups = DB::connection('sqlsrv2')
             ->select("select * from viewItemGroups order by ItemGroupDescription");
         return view('warehouse/createjobs')->with('prodGroups',$prodGroups)->with('dept',$dept);
+    }
+    public function getBinLocationsJson(){
+        $getBins=DB::connection('sqlsrv2')
+            ->select('Select * from tblBinNames');
+        return response()->json($getBins);
     }
     public function getProdCategory(Request $request){
         $ItemGroup = $request->get("ItemGroup");
@@ -120,8 +145,11 @@ class WareHouseController extends Controller
     public function stocklocation(){
         /*$dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");*/
+
         return view('warehouse/stocklocations');
+
     }
+
     public function printlocationqrcodes($location){
 
         return view('warehouse/printlocationqrcodes')->with('ID',$location);
