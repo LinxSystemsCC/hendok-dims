@@ -64,8 +64,12 @@ class WareHouseController extends Controller
 
         $getBinRows=DB::connection('sqlsrv2')
             ->select('Select * from tblBinRows');
+
+        $getLocations=DB::connection('sqlsrv2')
+            ->select('Select * from tblLocationNames order by strLocationName');
         return view('warehouse/locations')->with('locationtypes',$LocationTypes)
             ->with('binrows',$getBinRows)
+            ->with('locations',$getLocations)
             ->with('binlevel',$getBinLevel);
     }
     public function qrcodeimage($binlocation){
@@ -76,8 +80,9 @@ class WareHouseController extends Controller
         $binname = $request->get("binname");
         $intRowNumber = $request->get("intRowNumber");
         $intLevelNumber = $request->get("intLevelNumber");
+        $locations = $request->get("locations");
         DB::connection('sqlsrv2')->table('tblBinNames')->insert(
-            ['strBin' => $binname,'intRowNumber'=>$intRowNumber ,'intLevelNumber'=>$intLevelNumber]
+            ['strBin' => $binname,'intRowNumber'=>$intRowNumber ,'intLevelNumber'=>$intLevelNumber,'intLocationId'=>$locations]
         );
 
 
@@ -102,7 +107,7 @@ class WareHouseController extends Controller
     }
     public function getBinLocationsJson(){
         $getBins=DB::connection('sqlsrv2')
-            ->select('Select * from tblBinNames');
+            ->select('Select * from tblBinNames n inner join tblLocationNames l on n.intBinId = l.intLocationNameId');
         return response()->json($getBins);
     }
     public function getProdCategory(Request $request){

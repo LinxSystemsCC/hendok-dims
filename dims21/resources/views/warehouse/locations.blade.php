@@ -195,6 +195,16 @@
                                     <input id="levels" type="number"  class="form-control input-sm col-xs-1" value="1" required>
 
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="locations"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location</label>
+                                    <select id="locations"  class="form-control input-sm col-xs-1" required>
+                                        @foreach($locations as $val)
+                                            <option value="{{$val->intLocationNameId}}">{{$val->strLocationName}}</option>
+                                        @endforeach
+
+                                    </select>
+
+                                </div>
 
                                 <button type="button" id="savebin" class="btn-lg btn-success" >Save</button>
                                 <br>
@@ -338,6 +348,7 @@
                 data: {
                     binname: $('#binname').val(),
                     intRowNumber: $('#rows').val(),
+                    locations: $('#locations').val(),
                     intLevelNumber: $('#levels').val()
 
                 },
@@ -515,6 +526,11 @@
                             }, {
                                 dataField: "strBin",
                                 caption: "Bin Name",
+                                width: 300,
+
+                            },{
+                                dataField: "strLocationName",
+                                caption: "Location Name",
                                 width: 300,
 
                             }
