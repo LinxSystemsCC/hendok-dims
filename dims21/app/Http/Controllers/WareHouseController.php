@@ -73,7 +73,7 @@ class WareHouseController extends Controller
             ->with('binlevel',$getBinLevel);
     }
     public function qrcodeimage($binlocation){
-        return view('wims/qrcodeimage')->with('ID',$binlocation);
+        return view('warehouse/qrcodeimagebin')->with('ID',$binlocation);
     }
     public function savenewbin(Request $request){
 
