@@ -358,11 +358,16 @@ class WareHouseController extends Controller
         $type= $request->get('type');
         $jobid= $request->get('jobid');
 
+        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $t=time();
+        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+        $ID = $t.$randomString;
+
         for($i = 0;$i < $qty ;$i++)
         {
              DB::connection('sqlsrv2')
-                ->statement('exec spInserPalletLabelToPrint ?,?',
-                    array($type,$jobid)
+                ->statement('exec spInserPalletLabelToPrint ?,?,?',
+                    array($type,$jobid,$ID)
                 );
         }
         $v  =  new \App\Http\Controllers\SalesForm();
