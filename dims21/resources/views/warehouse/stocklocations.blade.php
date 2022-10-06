@@ -233,7 +233,7 @@
             },
             success: function (data) {
                 $("#gridContainer").dxDataGrid({
-                    dataSource:data.locationname, //as json
+                    dataSource:data, //as json
                     showBorders: true,
                     filterRow: { visible: true },
                     filterPanel: { visible: true },
