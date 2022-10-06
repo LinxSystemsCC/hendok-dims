@@ -869,6 +869,7 @@ Route::get('endjob', [WareHouseController::class,'endjob']);
 Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
 Route::get('qrcodetracker', [WareHouseController::class,'qrcodetracker']);
 Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
+Route::get('getviewGridStockDetails', [WareHouseController::class,'getviewGridStockDetails']);
 Route::get('binandqrcodes', [WareHouseController::class,'binandqrcodes']);
 Route::get('printlocationqrcodes/{location}', [WareHouseController::class,'printlocationqrcodes']);
 

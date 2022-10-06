@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>
 
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
@@ -34,7 +35,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
-
+    <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
     <style>
         .vertical-menu {
             width: 200px;
@@ -92,17 +93,26 @@
                 </li>
 
             </ul>
-            <div class="tab-content" id="myTabContent">
-                <div   class="content tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="contentWrapper">
+                <div   class="content  active" id="home"  aria-labelledby="home-tab">
                     <h5>Summary</h5>
-                    <div id="gridContainer" style="width: 100% !important;"></div>
+                        <div id="gridContainer" style="width: 100% !important;"></div>
                 </div>
-                <div class="content tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <h5>Details</h5> <div id="gridContainetypes" style="width: 100% !important;">
-                    </div>
+                <div class="content" id="profile"  aria-labelledby="profile-tab">
+                    <h5>Details</h5>
+
+                        <label class="control-label" for="productcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Item</label>
+                        <input  type="text" class="form-control input-sm col-xs-1" id="productcode" style="height:40px;font-size: 12px;font-family: sans-serif;font-weight: 900;"><br>
+                        <input  type="text" class="form-control input-sm col-xs-1" id="productdesc" style="font-size: 10px;font-family: sans-serif;font-weight: 900;" readonly>
+                    <br>
+                        <button class="btn btn-success" id="searchitem">Search</button>
+
+                        <div id="gridContainetypes" style="width: 100% !important;">
+                        </div>
                 </div>
 
-            </div>
+
+                </div>
         </div>
 
 
@@ -184,6 +194,52 @@
     .dx-datagrid-table{
         font-size:15px;
     }
+    .wrapper {
+
+        margin: auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, .1);
+    }
+
+    .buttonWrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    button {
+        letter-spacing: 3px;
+        border: none;
+        padding: 10px;
+        background-color: #bccbe9;
+        color: #232c3d;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+
+    button:hover {
+        background-color: #d5e3ff;
+    }
+
+    button.active {
+        background-color: white;
+    }
+
+    .active {
+        background-color: white;
+    }
+
+
+
+    .content {
+        display: none;
+        padding: 10px 20px;
+    }
+
+    .content.active {
+        display: block;
+    }
 </style>
 
 <script>
@@ -217,12 +273,35 @@
     });
 
 
-
+    var jArray = JSON.stringify({!! json_encode($products) !!});
     $(document).ready(function() {
 
 
 
+        var finalData =$.map(JSON.parse(jArray), function(item) {
 
+            return {
+                PastelCode:item.PastelCode,
+                PastelDescription:item.PastelDescription
+
+            }
+
+        });
+        var inputProductcode = $('#productcode').flexdatalist({
+            minLength: 1,
+            valueProperty: '*',
+            selectionRequired: true,
+            focusFirstResult: true,
+            searchContain:true,
+            visibleProperties: ["PastelCode","PastelDescription"],
+            searchIn: 'PastelDescription',
+            data: finalData
+        });
+        inputProductcode.on('select:flexdatalist', function (event, data) {
+
+            $('#productcode').val(data.PastelCode);
+            $('#productdesc').val(data.PastelDescription);
+        });
 
 
         $.ajax({
@@ -278,17 +357,17 @@
                             width: 180,
 
                         }, {
-                            dataField: "MinLevel",
-                            caption: "Min Level",
-                            width: 80,
-
-                        }
-                        , {
                             dataField: "mnyPalletQty",
                             caption: "Qty",dataType:"number",format: "#0",
                             width: 80,
 
                         }, {
+                            dataField: "MinLevel",
+                            caption: "Min Level",
+                            width: 80,
+
+                        }
+                     , {
                             dataField: "MaxLevel",
                             caption: "Max Level",
                             width: 80,
@@ -308,57 +387,131 @@
                 });
 
                 //Location Typs
-                $("#gridContainetypes").dxDataGrid({
-                    dataSource:data.locationtypes, //as json
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    allowColumnResizing: true,
-                    paging:{
-                        pageSize: 20,
-                    },
-                    export: {
-                        enabled: true
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('getLocationNamesAndTypes');
 
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'getLocationNamesAndTypes.xlsx');
-                            });
-                        });
-                        e.cancel = true;
-                    },
-
-                    columns: [
-                        {
-                            dataField: "intLocationTypeId",
-                            caption: "Location Type ID",
-                            width: 60,
-
-                        }, {
-                            dataField: "strLocationType",
-                            caption: "Location Type",
-                            width: 200,
-
-                        }
-                    ],
-                    onRowDblClick:function(e){
-
-
-                    }
-
-                });
             }
 
         });
+
+        $('#searchitem').click(function(){
+
+            $.ajax({
+                url: '{!!url("/getviewGridStockDetails")!!}',
+                type: "GET",
+                data: {
+                    ItemCode:$('#productcode').val()
+                },
+                success: function (data) {
+                    $("#gridContainetypes").dxDataGrid({
+                        dataSource: data, //as json
+                        showBorders: true,
+                        filterRow: {visible: true},
+                        filterPanel: {visible: true},
+                        headerFilter: {visible: true},
+                        allowColumnResizing: true,
+                        paging: {
+                            pageSize: 20,
+                        },
+                        export: {
+                            enabled: true
+                        },
+                        onExporting(e) {
+                            const workbook = new ExcelJS.Workbook();
+                            const worksheet = workbook.addWorksheet('getviewGridStockDetails');
+
+                            DevExpress.excelExporter.exportDataGrid({
+                                component: e.component,
+                                worksheet,
+                                autoFilterEnabled: true,
+                            }).then(() => {
+                                workbook.xlsx.writeBuffer().then((buffer) => {
+                                    saveAs(new Blob([buffer], {type: 'application/octet-stream'}), 'getLocationNamesAndTypes.xlsx');
+                                });
+                            });
+                            e.cancel = true;
+                        },
+
+                        columns: [
+
+                            {
+                                dataField: "strErpItemCode",
+                                caption: "Item Code",
+                                width: 150,
+
+                            }, {
+                                dataField: "Description_1",
+                                caption: "Item Name",
+                                width: 360,
+
+                            }, {
+                                dataField: "ItemGroupDescription",
+                                caption: "Item Group",
+                                width: 180,
+
+                            }, {
+                                dataField: "Username",
+                                caption: "User Name",
+                                width: 180,
+
+                            }
+                            , {
+                                dataField: "mnyPalletQty",
+                                caption: "Qty", dataType: "number", format: "#0",
+                                width: 80,
+
+                            }, {
+                                dataField: "MinLevel",
+                                caption: "Min Level",
+                                width: 80,
+
+                            }
+                            , {
+                                dataField: "MaxLevel",
+                                caption: "Max Level",
+                                width: 80,
+
+                            }, {
+                                dataField: "QtyInStock",
+                                caption: "Stock On Hand",
+                                width: 80,
+
+                            }
+                            , {
+                                dataField: "strLocation",
+                                caption: "Location",
+                                width: 80,
+
+                            },
+                            {
+                                dataField: "intJobId",
+                                caption: "Job Id",
+                                width: 80,
+
+                            },
+                            {
+                                dataField: "strMoveType",
+                                caption: "Mov Type",
+                                width: 80,
+
+                            },
+                            {
+                                dataField: "strItem",
+                                caption: "strItem",
+                                width: 80,
+
+                            }
+                        ],
+                        onRowDblClick: function (e) {
+
+
+                        }
+
+                    });
+                }
+            });
+
+        });
+
+
 
 
 

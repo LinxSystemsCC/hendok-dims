@@ -151,7 +151,9 @@ class WareHouseController extends Controller
         /*$dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");*/
 
-        return view('warehouse/stocklocations');
+        $products = DB::connection('sqlsrv2')
+            ->select("select * from viewtblProducts");
+        return view('warehouse/stocklocations')->with('products',$products);
 
     }
 
@@ -163,6 +165,12 @@ class WareHouseController extends Controller
 
         $gridstock = DB::connection('sqlsrv2')
             ->select("select * from viewWareHouseTransferStockQty ");
+        return response()->json($gridstock);
+    }
+    public function getviewGridStockDetails(Request $request){
+        $ItemCode = $request->get("ItemCode");
+        $gridstock = DB::connection('sqlsrv2')
+            ->select("select * from viewLastKnownMovement where  strErpItemCode ='".$ItemCode."'");
         return response()->json($gridstock);
     }
     public function choosemachine($itemCode){
