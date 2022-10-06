@@ -285,7 +285,7 @@
                         }
                         , {
                             dataField: "mnyPalletQty",
-                            caption: "Qty",
+                            caption: "Qty",dataType:"number",format: "#0",
                             width: 80,
 
                         }, {
