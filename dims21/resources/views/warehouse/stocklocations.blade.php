@@ -82,26 +82,27 @@
         </div>
     </div>
     <div class="col-lg-10" >
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Stock Summary</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Stock Detail</button>
-            </li>
+            <div class="wrapper">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="tab-button btn-lg btn   active "  data-id="home">Stock Summary</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="tab-button btn-lg btn " data-id="profile">Stock Detail</button>
+                </li>
 
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <h5>Summary</h5>
-                <div id="gridContainer" style="width: 100% !important;"></div>
-            </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-                <h5>Details</h5> <div id="gridContainetypes" style="width: 100% !important;">
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div   class="content tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h5>Summary</h5>
+                    <div id="gridContainer" style="width: 100% !important;"></div>
                 </div>
-            </div>
+                <div class="content tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <h5>Details</h5> <div id="gridContainetypes" style="width: 100% !important;">
+                    </div>
+                </div>
 
+            </div>
         </div>
 
 
@@ -186,6 +187,26 @@
 </style>
 
 <script>
+
+    const tabs = document.querySelector(".wrapper");
+    const tabButton = document.querySelectorAll(".tab-button");
+    const contents = document.querySelectorAll(".content");
+
+    tabs.onclick = e => {
+        const id = e.target.dataset.id;
+        if (id) {
+            tabButton.forEach(btn => {
+                btn.classList.remove("active");
+            });
+            e.target.classList.add("active");
+
+            contents.forEach(content => {
+                content.classList.remove("active");
+            });
+            const element = document.getElementById(id);
+            element.classList.add("active");
+        }
+    }
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -242,12 +263,12 @@
 
                     columns: [
                         {
-                            dataField: "ItemCode",
+                            dataField: "strErpItemCode",
                             caption: "Item Code",
                             width: 150,
 
                         }, {
-                            dataField: "ItemName",
+                            dataField: "Description_1",
                             caption: "Item Name",
                             width: 360,
 
@@ -262,8 +283,8 @@
                             width: 80,
 
                         }, {
-                            dataField: "MinLevel",
-                            caption: "Min Level",
+                            dataField: "MaxLevel",
+                            caption: "Max Level",
                             width: 80,
 
                         }, {
