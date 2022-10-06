@@ -282,6 +282,12 @@
                             caption: "Min Level",
                             width: 80,
 
+                        }
+                        , {
+                            dataField: "mnyPalletQty",
+                            caption: "Qty",
+                            width: 80,
+
                         }, {
                             dataField: "MaxLevel",
                             caption: "Max Level",
