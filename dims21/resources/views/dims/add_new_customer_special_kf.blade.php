@@ -605,7 +605,162 @@
             $('#addinHistory').click(function(){
                 //ajax this to add in history on the contract, refresh page
                 //and as well this needs to press done before it adds in history
-                PressDone();
+                
+
+            var checkedLines = new Array();
+            var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) {
+                checkedLines= data;
+     });
+            console.log( checkedLines);
+         
+            var productsLinesOnPicking ="<xml>";
+         /*   */
+            console.log( "_________________________");
+            //console.log( productsLinesOnPickingPrimary);
+
+            $.each(checkedLines ,function(key,value) {
+               if (value.Date == undefined || (value.Date).length < 5){
+                    value.Date= $('#dateFrom').val();
+                }
+                if (value.DateTo == undefined || (value.DateTo).length < 5){
+                    value.DateTo= $('#dateTo').val();
+                }
+                if((value.PastelCode).length > 1 && value.PriceLookedUp !="NaN"){
+                    productsLinesOnPicking= productsLinesOnPicking + "<result>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+escapeHtml(value.PastelCode)+"</productCode>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<price>"+value.PriceLookedUp+"</price>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateFrom>"+value.Date+"</dateFrom>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateTo>"+value.DateTo+"</dateTo>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<cost_>"+value.Cost+"</cost_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<gp_>"+(1-(value.Cost/value.PriceLookedUp))*100+"</gp_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<customerid>"+escapeHtml($('#customerId').val())+"</customerid>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<contractid>"+escapeHtml($('#custheadid').val())+"</contractid>";
+                    productsLinesOnPicking= productsLinesOnPicking+ "</result>";
+
+                }
+                console.debug("**********"+value.Date);
+
+
+            });
+            productsLinesOnPicking= productsLinesOnPicking+"</xml>";
+            $.ajax({
+                url: '{!!url("/XmlCreateCustomerSpecialsKFValid")!!}', // createCustomerSpecials
+                type: "POST",
+                data: {
+                    customerCode: $('#inputCustAcc').val(),
+                    customerId: $('#customerId').val(),
+                    contractDateFrom: $('#dateFrom').val(),
+                    contractDateTo: $('#dateTo').val(),
+                    contractid: $('#custheadid').val(),
+                    orderDetails: productsLinesOnPicking
+                },
+                success: function (data) {
+                    var duplicateresult = data.result;
+                    if (data.result.length ==0) // so if there is nothing  do the following
+                    {
+                        $.ajax({
+                            url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
+                            type: "POST",
+                            data: {
+                                customerCode: $('#inputCustAcc').val(),
+                                customerId: $('#customerId').val(),
+                                contractDateFrom: $('#dateFrom').val(),
+                                contractDateTo: $('#dateTo').val(),
+                                contractid: $('#custheadid').val(),
+                                orderDetails: productsLinesOnPicking
+                            },success: function (data) {
+
+                            }
+                        });
+                    }else{// so if there is nothing  do the following
+
+                        var trHTML = "";
+
+                        $('#gridduplicatespecials').empty();
+                        $('#duplicatespecials').show(); //table
+                        var dialog = $("#duplicatespecials").dialog({
+                            height: 800, modal: true, closeOnEscape: true,
+                            width: 800, buttons: {
+                                "NO": function () {
+                                    dialog.dialog('close');
+                                },
+                                "YES": function () {
+
+                                    $.ajax({
+                                        url: '{!!url("/XmlCreateCustomerSpecialsKF")!!}', // createCustomerSpecials
+                                        type: "POST",
+                                        data: {
+                                            customerCode: $('#inputCustAcc').val(),
+                                            customerId: $('#customerId').val(),
+                                            contractDateFrom: $('#dateFrom').val(),
+                                            contractDateTo: $('#dateTo').val(),
+                                            contractid: $('#custheadid').val(),
+                                            orderDetails: productsLinesOnPicking
+                                        },success: function (data) {
+                                    
+                                        }
+                                    });
+
+                                }
+                            },containment: false,
+                        }).dialogExtend({
+                            "closable": true, // enable/disable close button
+                            "maximizable": false, // enable/disable maximize button
+                            "minimizable": true, // enable/disable minimize button
+                            "collapsable": true, // enable/disable collapse button
+                            "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+                            "titlebar": false, // false, 'none', 'transparent'
+                            "minimizeLocation": "right", // sets alignment of minimized dialogues
+                            "icons": { // jQuery UI icon class
+                                "close": "ui-icon-circle-close",
+                                "maximize": "ui-icon-circle-plus",
+                                "minimize": "ui-icon-circle-minus",
+                                "collapse": "ui-icon-triangle-1-s",
+                                "restore": "ui-icon-bullet"
+                            },
+                            "load": function (evt, dlg) {
+                            }, // event
+                            "beforeCollapse": function (evt, dlg) {
+                            }, // event
+                            "beforeMaximize": function (evt, dlg) {
+                            }, // event
+                            "beforeMinimize": function (evt, dlg) {
+                            }, // event
+                            "beforeRestore": function (evt, dlg) {
+                            }, // event
+                            "collapse": function (evt, dlg) {
+                            }, // event
+                            "maximize": function (evt, dlg) {
+                            }, // event
+                            "minimize": function (evt, dlg) {
+                            }, // event
+                            "restore": function (evt, dlg) {
+                            } // event
+                        });
+                        $.each(duplicateresult, function (key, value) {
+                            //p.PastelCode,p.PastelDescription,cs.SpecialHeaderId as [Contract] ,ts.dateFrom, ts.dateTo, CustomerPastelCode, p.PastelCode, p.PastelDescription AS Pdesc, cs.Price
+                            trHTML += '<tr style="font-size: 13px !important;color: black;background: lightgrey;font-weight: normal" >' +
+                                '<td style="">' + value.PastelCode + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.PastelDescription + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.Price + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.dateFrom + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.dateTo + '</td>' +
+                                '<td style="font-size: 13px !important;">' + value.Contract + '</td>' +
+                                '</tr>';
+
+
+                        });
+                        $('#gridduplicatespecials').append(trHTML);
+
+                    }
+
+
+
+                }
+            });
+
+
+
                 $.ajax({
                     url: '{!!url("/postCurrentHistoryCustomerSpecialsKF")!!}',//getCurrentHistoryCustomerSpecialsKF
                     type: "POST",
@@ -1259,16 +1414,18 @@
         function PressDone()
         {
 
-            var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").items();
             var checkedLines = new Array();
-            console.log( allGridItems);
+            var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) {
+                checkedLines= data;
+     });
+            console.log( checkedLines);
          
             var productsLinesOnPicking ="<xml>";
          /*   */
             console.log( "_________________________");
             //console.log( productsLinesOnPickingPrimary);
 
-            $.each(allGridItems ,function(key,value) {
+            $.each(checkedLines ,function(key,value) {
                if (value.Date == undefined || (value.Date).length < 5){
                     value.Date= $('#dateFrom').val();
                 }
