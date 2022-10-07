@@ -116,7 +116,7 @@ class TabletLoadingApp extends controller
 
     public function getRouteDataMultiSelected(Request $request)
     {
-        $GroupID = Auth::user()->GroupID;
+        $GroupID = Auth::user()->GroupId;
         $routeId = $request->get('routeId');
         //dd($routeId);
         $routeId = implode(", ", $routeId);
