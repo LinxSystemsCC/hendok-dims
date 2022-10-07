@@ -359,6 +359,8 @@ $('#prodname').change(function () {
                     if(data[0].result == "Success"){
 
                         location.reload();
+                    }else{
+                        alert(""+data[0].result);
                     }
 
                 }
