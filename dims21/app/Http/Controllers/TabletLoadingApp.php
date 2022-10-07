@@ -116,6 +116,7 @@ class TabletLoadingApp extends controller
 
     public function getRouteDataMultiSelected(Request $request)
     {
+        $GroupID = Auth::user()->GroupID;
         $routeId = $request->get('routeId');
         //dd($routeId);
         $routeId = implode(", ", $routeId);
@@ -128,8 +129,8 @@ class TabletLoadingApp extends controller
         $productId = $request->get('productId');
 
         $priority = DB::connection('sqlsrv3')
-            ->select('exec spGetPriotityCustomerOrders ?,?,?,?,?,?',
-                array($deliveryDate,$deliveryDateTo,$OrderType,$routeId,$status,$productId)
+            ->select('exec spGetPriotityCustomerOrders ?,?,?,?,?,?,?',
+                array($deliveryDate,$deliveryDateTo,$OrderType,$routeId,$status,$productId,$GroupID)
             );
         $allproducts = DB::connection('sqlsrv3')
             ->select('exec spGetAllProductsOnOrderToPlan ?,?,?,?,?,?',
