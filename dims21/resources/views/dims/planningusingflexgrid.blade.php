@@ -112,11 +112,12 @@ Ref: <input id="ref" >
                     $.each(element.items, function(key, value) {
                         console.log( value);
                         var qty = value.qtyPlan;
+                        var newvalue = new Number(value.qtyPlan);
                         if(qty !="0"){
                             console.log("no zero"+ value.qtyPlan);
                             checkedLines.push({
                                 'orderdetail': value.OrderDetailId,
-                                'qty': value.qtyPlan,
+                                'qty': newvalue.toFixed(4),
                                 'pickingtype':'priority',
                                 'ownerId':value.OwnerID,
                                 'referenceNo':$('#ref').val()
