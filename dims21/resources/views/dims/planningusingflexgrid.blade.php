@@ -314,7 +314,7 @@ Ref: <input id="ref" >
                         },
                         {
                             width: 80,
-                            caption: "M X Q",dataField: "mxq",sColor: "Red",format: "#0.####",
+                            caption: "M X Q",dataField: "mxq",sColor: "Red",format: "#0.####",dataType:"number",
                             calculateCellValue: function (rowData) {
                                 return rowData.Mass * rowData.qtyPlan;
                             }
