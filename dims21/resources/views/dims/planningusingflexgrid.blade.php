@@ -296,7 +296,7 @@ Ref: <input id="ref" >
                         }
                         ,{
                             width: 80,
-                            dataField: "mnyQtyRemaining",
+                            dataField: "mnyQtyRemaining",dataType:"number",
                             caption: "Outstanding Quantity",format: "#0.####"
 
                         }
