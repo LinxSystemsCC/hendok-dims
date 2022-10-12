@@ -31,6 +31,9 @@ class SalesForm extends Controller
            if($this->getThings($GroupId,'Print Pallet')){
                return redirect('/printpalletsselectdept');
            }
+           if($this->getThings($GroupId,'Strictly Job Creators')){
+               return redirect('/createjobs');
+           }
 
 
            $queryCustomershendocpty =DB::connection('sqlsrv3')->table("viewtblCustomers" )
