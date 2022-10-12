@@ -107,7 +107,7 @@ class WareHouseController extends Controller
     }
     public function getBinLocationsJson(){
         $getBins=DB::connection('sqlsrv2')
-            ->select('Select * from tblBinNames n inner join tblLocationNames l on n.intBinId = l.intLocationNameId');
+            ->select('Select * from tblBinNames n inner join tblLocationNames l on n.intLocationId = l.intLocationNameId');
         return response()->json($getBins);
     }
     public function getProdCategory(Request $request){
