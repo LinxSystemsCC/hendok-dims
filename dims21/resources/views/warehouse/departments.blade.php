@@ -53,16 +53,7 @@
     <div class="col-lg-2"  style="background: white;border-right: 2px solid black;">
 
         <div class="vertical-menu">
-            <a href='{!!url("/createPalletConfig")!!}'>Pallets Configurations</a>
-            <a href='{!!url("/mapitemstopallet")!!}' >Map Pallet To Items</a>
-            <a href='{!!url("/departmentpage")!!}'  class="active">Departments</a>
-            <a href='{!!url("/machines")!!}'>Machines</a>
-            <a href='{!!url("/mapmachinestodept")!!}'  >Map Machines To Dept</a>
-            <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Machines,Dept & Prod</a>
-            <a href='{!!url("/createjobs")!!}'>Create Jobs</a>
-            <a href='{!!url("/printpalletsselectdept")!!}'>Print Pallet Label</a>
-            <a href="#">In Progress Jobs</a>
-            <a href="#">Jobs Data</a>
+            @include('warehouse.menu')
         </div>
     </div>
     <div class="col-lg-10" >
