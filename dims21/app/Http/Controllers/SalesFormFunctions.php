@@ -856,6 +856,26 @@ class SalesFormFunctions extends Controller
 
         return $output;
     }
+
+    public function getorderlocksdeleterpage(Request $request)
+    {
+        return view('dims/orderlockdeletepage');
+    }
+    public function getOrderLocksForDeletePageData(Request $request){
+
+            $output = DB::connection('sqlsrv3')
+                ->select("EXEC spGetOrderLocksForDeleterPage");
+
+            return response()->json($output);
+    }
+    public function deleteDataForOrderLockPage(Request $request){
+        
+        $userid = Auth::user()->UserID;
+        $OrderId = $request->get('OrderId');
+        DB::connection('sqlsrv3')
+        ->statement("EXEC spDeleteOrderLocksDeleterpage ?,?",array($userid,$OrderId));
+
+    }
     public function getOrderListingOtherTrans(Request $request)
     {
         $OrderId = $request->get('OrderId');

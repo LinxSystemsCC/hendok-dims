@@ -80,11 +80,6 @@ Route::get('dimsgloballandingpage',[HomeController::class, 'dimsgloballandingpag
 
 
 
-Route::get('custCode',[SalesFormFunctions::class, 'CustomerCode']);
-Route::get('copyorder/{orderid}',[SalesFormFunctions::class, 'copyorder']);
-Route::post('insertCopyorder',[SalesFormFunctions::class, 'insertCopyorder']);
-Route::post('checkZeroCostOnOrder',[SalesFormFunctions::class, 'checkZeroCostOnOrder']);
-Route::post('checkstockonorders',[SalesFormFunctions::class, 'checkstockonorders']);
 Route::get('getExportForm', [DimsExportController::class,'getExportForm']);
 Route::get('getDimsUsers', [UserFeature::class,'getDimsUsers']);
 
@@ -255,6 +250,15 @@ Route::post('checkifhasmultiaddress',[DimsCommon::class,'checkifhasmultiaddress'
 //DIMS COMMON ENDS HERE HERE!!!!
 
 //SALES FORM FUNCTIONS STARTS HERE!!!
+
+Route::get('custCode',[SalesFormFunctions::class, 'CustomerCode']);
+Route::get('copyorder/{orderid}',[SalesFormFunctions::class, 'copyorder']);
+Route::post('insertCopyorder',[SalesFormFunctions::class, 'insertCopyorder']);
+Route::post('checkZeroCostOnOrder',[SalesFormFunctions::class, 'checkZeroCostOnOrder']);
+Route::post('checkstockonorders',[SalesFormFunctions::class, 'checkstockonorders']);
+Route::get('getorderlocksdeleterpage',[SalesFormFunctions::class,'getorderlocksdeleterpage']);
+Route::get('getOrderLocksForDeletePageData',[SalesFormFunctions::class,'getOrderLocksForDeletePageData']);
+Route::post('deleteDataForOrderLockPage',[SalesFormFunctions::class,'deleteDataForOrderLockPage']);
 Route::post('custID', [SalesFormFunctions::class,'getCustomerID']);
 Route::get('getAllProductsAndCosts', [SalesFormFunctions::class,'getAllProductsAndCosts']);
 Route::get('getProductCodes',[SalesFormFunctions::class,'getProductCodes']);

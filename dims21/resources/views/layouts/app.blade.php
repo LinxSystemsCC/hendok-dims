@@ -648,7 +648,7 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Order Release Screen</a>
                                 </li>
                                 @endif
-
+                              
                                 <li>
                                     <a href='{!!url("/customerflexgrid")!!}' onclick="window.open(this.href, 'customerflexgrid',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Customers</a>
@@ -832,6 +832,12 @@
                                 <li>
                                     <a href='{!!url("/transfersstatus")!!}'  onclick="window.open(this.href, 'transfersstatus',
 'left=20,top=20,width=1600,height=999,toolbar=1,resizable=0'); return false;">Transfers </a>
+                                </li>
+                                @endif
+                                @if (  Auth::user()->Administrator ==1)
+                                <li>
+                                    <a href='{!!url("/getorderlocksdeleterpage")!!}' onclick="window.open(this.href, 'getorderlocksdeleterpage',
+'left=20,top=20,width=600,height=900,toolbar=1,resizable=0'); return false;">Order Locks Deleter</a>
                                 </li>
                                 @endif
                                 <li>
