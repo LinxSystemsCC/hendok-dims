@@ -269,8 +269,9 @@
 
 
             $('#orderListing').hide();
+            $('#SaveNewSpecial').hide();
             $('#addinCurrentPrices').hide();
-          //  $('#addinHistory').hide();
+            $('#addinHistory').hide();
             $('#pricing').hide();
             $('#pricingOnCustomer').hide();
             $('#callList').hide();
@@ -819,6 +820,40 @@
 
 
                 });
+                var checkedLines = new Array();
+            var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) {
+                checkedLines= data;
+     });
+            console.log( checkedLines);
+         
+         /*   */
+            console.log( "_________________________");
+            //console.log( productsLinesOnPickingPrimary);
+
+            $.each(checkedLines ,function(key,value) {
+               if (value.Date == undefined || (value.Date).length < 5){
+                    value.Date= $('#dateFrom').val();
+                }
+                if (value.DateTo == undefined || (value.DateTo).length < 5){
+                    value.DateTo= $('#dateTo').val();
+                }
+                if((value.PastelCode).length > 1 && value.PriceLookedUp !="NaN"){
+                    productsLinesOnPicking= productsLinesOnPicking + "<result>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<productCode>"+escapeHtml(value.PastelCode)+"</productCode>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<price>"+value.PriceLookedUp+"</price>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateFrom>"+value.Date+"</dateFrom>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<dateTo>"+value.DateTo+"</dateTo>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<cost_>"+value.Cost+"</cost_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<gp_>"+(1-(value.Cost/value.PriceLookedUp))*100+"</gp_>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<customerid>"+escapeHtml($('#customerId').val())+"</customerid>";
+                    productsLinesOnPicking= productsLinesOnPicking + "<contractid>"+escapeHtml($('#custheadid').val())+"</contractid>";
+                    productsLinesOnPicking= productsLinesOnPicking+ "</result>";
+
+                }
+                console.debug("**********"+value.Date);
+
+
+            });
 
             productsLinesOnPicking= productsLinesOnPicking+"</xml>";
                 console.log(productsLinesOnPicking);
@@ -901,6 +936,7 @@
 
         function LoadDataGrid(){
 
+            $('#SaveNewSpecial').show();
             $('#addinCurrentPrices').show();
                 $('#addinHistory').show();
                 $('#afterFilter').show();
