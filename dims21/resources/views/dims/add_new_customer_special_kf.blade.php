@@ -1198,13 +1198,10 @@
                                     ] ,
 
 
-                                  
                                     onCellClick:function(e){
                                         // console.debug(e.row,cells[e.columnIndex]);
                                         console.log(e);
-                                        if (e.columnIndex ==5){
-                                             $("#gridContainer").dxDataGrid("saveEditData");
-                                        }
+                                       
                                         if (e.columnIndex ==8){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
                                              $("#gridContainer").dxDataGrid("saveEditData");
@@ -1414,6 +1411,7 @@
         function PressDone()
         {
 
+            $("#gridContainer").dxDataGrid("saveEditData");
             var checkedLines = new Array();
             var allGridItems =  $("#gridContainer").dxDataGrid("getDataSource").store().load().done(function (data) {
                 checkedLines= data;
