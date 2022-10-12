@@ -1204,36 +1204,28 @@
                                        
                                         if (e.columnIndex ==8){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                             $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==9){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                             $("#gridContainer").dxDataGrid("saveEditData");
 
                                         }
                                         if (e.columnIndex ==10){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                              $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==11){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                              $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==12){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                              $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==13){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                              $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==14){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                            $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                         if (e.columnIndex ==15){
                                             $("#gridContainer").dxDataGrid("cellValue",e.rowIndex,4,e.value);
-                                             $("#gridContainer").dxDataGrid("saveEditData");
                                         }
                                     },
 
