@@ -77,7 +77,7 @@
         <button class="btn btn-lg btn-primary" id="printthislabels">PRINT</button>
     @else
         <h3 style="color: red;font-weight: 900;">You have Produced Required Quantity Of {{$mnyQtyProduced}} / {{$mnyQtyRequired}}.Please speak to your operator</h3><br><br>
-            <a href='{!!url("/printpalletsselectdept")!!}'>Main Menu</a>
+          <p><a href='{!!url("/printpalletsselectdept")!!}' style="text-decoration: underline;">Main Menu</a></p>
 @endif
     </div>
     <br>
