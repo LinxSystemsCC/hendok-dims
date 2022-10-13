@@ -313,6 +313,16 @@ class WareHouseController extends Controller
             );
         return response()->json($productonmachine);
     }
+    public function getWIPjobstarted(Request $request){
+
+        $productonmachine = DB::connection('sqlsrv2')
+            ->select('exec spGetProductInProgress '
+            );
+        return response()->json($productonmachine);
+    }
+    public function getJobStarted(){
+        return view('warehouse/wip');
+    }
     public function goprintfirstqrcode($deparment,$machine,$productcode,$palletid,$qty){
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);
