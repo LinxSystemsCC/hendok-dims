@@ -293,6 +293,7 @@ $('#prodname').change(function () {
                 success: function (data) {
                     var toAppend = '';
                     $("#prodname").empty();
+                    toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
                         toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
