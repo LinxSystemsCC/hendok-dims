@@ -54,7 +54,7 @@
                 </tr>
             </table>
                 <input type="hidden" value="{{$val->Barcode}}" id="hiddenbarcode">
-                <?php $barcode = $val->Barcode;$valqty = $val->Barcode ?>
+                <?php $barcode = $val->Barcode;$valqty = $val->Barcode;$fullfilled=$val->fullfilled;$mnyQtyRequired=$val->mnyQtyRequired;$mnyQtyProduced = $val->mnyQtyProduced ?>
 
                 @endforeach
         </div>
@@ -73,8 +73,10 @@
         <input type="number" id="qty" value="4"> <br>
         <input type="hidden" id="jobid" value="{{$jobid}}" style="width: 100%"> <br>
 
-
+@if($fullfilled !="Finished")
         <button class="btn btn-lg btn-primary" id="printthislabels">PRINT</button>
+    @else
+        <h3>You have Produced Required Quantity Of {{$mnyQtyProduced}} / {{$mnyQtyRequired}}</h3>
 
     </div>
     <br>
