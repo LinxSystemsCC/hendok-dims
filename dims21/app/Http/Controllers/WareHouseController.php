@@ -375,7 +375,7 @@ class WareHouseController extends Controller
         $qty = $request->get('qty');
         $type= $request->get('type');
         $jobid= $request->get('jobid');
-        $isNEW= $request->get('isNEW');
+        $isNEW= $request->get('isnew');
 
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $t=time();
