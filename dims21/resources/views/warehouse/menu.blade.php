@@ -18,7 +18,7 @@ if ((Auth::guest()))
 ?>
 <a href= "{{ route('logout') }}"
    onclick="event.preventDefault();
-                     document.getElementById('logout-form').submit();">
+                     document.getElementById('logout-form').submit();" style="background: #007bff;color: white;">
     Logout
 </a>
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
