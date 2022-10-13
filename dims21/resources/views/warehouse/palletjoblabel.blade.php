@@ -48,6 +48,10 @@
                     <td><strong>PACK</strong></td>
                     <td><h5><strong>{{$val->strPalletTypeDescription}}</strong></h5></td>
                 </tr>
+                <tr>
+                    <td><strong>Number Of Units</strong></td>
+                    <td><h5><strong>{{$val->supposetobeonthepallet}}</strong></h5></td>
+                </tr>
             </table>
                 <input type="hidden" value="{{$val->Barcode}}" id="hiddenbarcode">
                 <?php $barcode = $val->Barcode;$valqty = $val->Barcode ?>
