@@ -378,6 +378,10 @@ class WareHouseController extends Controller
                     array($type,$jobid,$ID)
                 );
         }
+        DB::connection('sqlsrv2')
+            ->statement('exec spUpdateUnitsProduced ?,?',
+                array($type,$jobid)
+            );
         $v  =  new \App\Http\Controllers\SalesForm();
         $GroupId= Auth::user()->GroupId;
         if($v->getThings($GroupId,'Print Pallet')){
