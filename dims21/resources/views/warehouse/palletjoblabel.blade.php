@@ -76,7 +76,7 @@
 @if($fullfilled !="Finished")
         <button class="btn btn-lg btn-primary" id="printthislabels">PRINT</button>
     @else
-        <h3>You have Produced Required Quantity Of {{$mnyQtyProduced}} / {{$mnyQtyRequired}}</h3>
+        <h3 style="color: red;font-weight: 900;">You have Produced Required Quantity Of {{$mnyQtyProduced}} / {{$mnyQtyRequired}}.Please speak to your operator</h3>
 @endif
     </div>
     <br>
