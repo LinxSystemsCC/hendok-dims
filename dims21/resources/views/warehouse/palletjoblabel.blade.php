@@ -100,7 +100,8 @@
                     data: {
                         qty: $('#qty').val(),
                         type:2,
-                        jobid:$('#jobid').val()
+                        jobid:$('#jobid').val(),
+                        isnew:"NEW"
                     },
                     success: function (data) {
                         if(data ="Success"){

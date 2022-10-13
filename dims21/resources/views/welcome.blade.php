@@ -82,10 +82,11 @@
     <div class="content">
         <div class="title m-b-md">
 
-            <img  src="public/images/dimslogo.png" style="height: 100px;">
+            <img  src="public/images/dimslogo.png" style="height: 100px;"><br>
            <strong>Welcome to DIMS</strong>
         </div>
         @if (Auth::check())
+
             <i class="icon-hand-right"></i> <h3><a href="{{ url('/home') }}">Continue</a></h3>
         @else
             <div class="links">

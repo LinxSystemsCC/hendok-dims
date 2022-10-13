@@ -375,6 +375,7 @@ class WareHouseController extends Controller
         $qty = $request->get('qty');
         $type= $request->get('type');
         $jobid= $request->get('jobid');
+        $isNEW= $request->get('isNEW');
 
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $t=time();
@@ -388,10 +389,13 @@ class WareHouseController extends Controller
                     array($type,$jobid,$ID)
                 );
         }
-        DB::connection('sqlsrv2')
-            ->statement('exec spUpdateUnitsProduced ?,?',
-                array($type,$jobid)
-            );
+        if($isNEW != "reprint"){
+            DB::connection('sqlsrv2')
+                ->statement('exec spUpdateUnitsProduced ?,?',
+                    array($type,$jobid)
+                );
+        }
+
         $v  =  new \App\Http\Controllers\SalesForm();
         $GroupId= Auth::user()->GroupId;
         if($v->getThings($GroupId,'Print Pallet')){

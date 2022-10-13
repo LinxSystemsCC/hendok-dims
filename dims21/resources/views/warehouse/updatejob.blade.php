@@ -299,7 +299,8 @@
                 data: {
                     qty: $('#palletlabelqty').val(),
                     type:2,
-                    jobid:$('#jobid').val()
+                    jobid:$('#jobid').val(),
+                    isnew:"reprint"
                 },
                 success: function (data) {
                     $('#palletlabelqty').val('');
@@ -316,7 +317,8 @@
                 data: {
                     qty: $('#productlabelqtytoprint').val(),
                     type:1,
-                    jobid:$('#jobid').val()
+                    jobid:$('#jobid').val(),
+                    isnew:"reprint"
                 },
                 success: function (data) {
                     $('#productlabelqtytoprint').val('');

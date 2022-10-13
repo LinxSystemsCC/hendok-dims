@@ -195,7 +195,7 @@
                         {
                             dataField: "dteLastPrintedUpdated",
                             caption: "Last Update",
-                            width: 100,dataType:"date"
+                            width: 100
 
                         },
 
