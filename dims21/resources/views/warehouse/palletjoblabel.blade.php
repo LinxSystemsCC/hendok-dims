@@ -49,7 +49,7 @@
                     <td><h5><strong>{{$val->strPalletTypeDescription}}</strong></h5></td>
                 </tr>
                 <tr>
-                    <td><strong>Number Of Units</strong></td>
+                    <td><strong>NO. Units</strong></td>
                     <td><h5><strong>{{$val->supposetobeonthepallet}}</strong></h5></td>
                 </tr>
             </table>
