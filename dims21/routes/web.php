@@ -833,17 +833,17 @@ Route::get('initiateproductonmachine', [WareHouseController::class,'initiateprod
 Route::get('getPalletsJson', [WareHouseController::class,'getPalletsJson']);
 Route::get('getDeptname', [WareHouseController::class,'getDeptname']);
 Route::get('getMachines', [WareHouseController::class,'getMachines']);
-Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
-Route::get('mapitemsmachinesdept', [WareHouseController::class,'mapdeptitem']);
-Route::get('machines', [WareHouseController::class,'machinespage']);
-Route::get('mapmachinestodept', [WareHouseController::class,'mapmachinestodept']);
+
+
+
+
 Route::get('getMappedItemstoPalletJson', [WareHouseController::class,'getMappedItemstoPalletJson']);
 Route::get('getMachinesmappedtodept', [WareHouseController::class,'getMachinesmappedtodept']);
 Route::post('getpalletconfforitems', [WareHouseController::class,'getpalletconfforitems']);
 Route::post('validatepalletsplan', [WareHouseController::class,'validatepalletsplan']);
 Route::get('getMappedDepartmentsMachinesItemasJson', [WareHouseController::class,'getMappedDepartmentsMachinesItemasJson']);
-Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
-Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
+
+
 Route::get('selectedDepartment', [WareHouseController::class,'selectedDepartment']);
 Route::post('selectedPalletConfig', [WareHouseController::class,'selectedPalletConfig']);
 Route::post('savespalletstoitems', [WareHouseController::class,'savespalletstoitems']);
@@ -861,12 +861,12 @@ Route::post('saveLocationType', [WareHouseController::class,'saveLocationType'])
 Route::post('saveLocationName', [WareHouseController::class,'saveLocationName']);
 
 Route::get('startendjob', [WareHouseController::class,'startendjob']);
-Route::get('createjobs', [WareHouseController::class,'createjobs']);
-Route::get('location', [WareHouseController::class,'location']);
+
+
 Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
 Route::get('getWIP', [WareHouseController::class,'getWIP']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
-Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
+
 Route::get('qrcodetracker', [WareHouseController::class,'qrcodetracker']);
 Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
 Route::get('getviewGridStockDetails', [WareHouseController::class,'getviewGridStockDetails']);
@@ -885,7 +885,7 @@ Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachine
 Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
 Route::get('getPalletForSelectedItem', [WareHouseController::class,'getPalletForSelectedItem']);
 Route::get('getProdListToPlan', [WareHouseController::class,'getProdListToPlan']);
-Route::get('printpalletsselectdept', [WareHouseController::class,'printpalletsselectdept']);
+
 Route::get('getProductPlannedOnThatMachine', [WareHouseController::class,'getProductPlannedOnThatMachine']);
 Route::get('choosemachine/{department}', [WareHouseController::class,'choosemachine']);
 Route::get('printpalletchoosemachine/{department}', [WareHouseController::class,'printpalletchoosemachine']);
@@ -947,6 +947,17 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('jobupdateprint/{jobid}', [WareHouseController::class,'jobupdateprint']);
     Route::get('sendLabelToThePrinter', [WareHouseController::class,'sendLabelToThePrinter']);
     Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
+    Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
+    Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
+    Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
+    Route::get('machines', [WareHouseController::class,'machinespage']);
+    Route::get('mapmachinestodept', [WareHouseController::class,'mapmachinestodept']);
+    Route::get('mapitemsmachinesdept', [WareHouseController::class,'mapdeptitem']);
+    Route::get('createjobs', [WareHouseController::class,'createjobs']);
+    Route::get('printpalletsselectdept', [WareHouseController::class,'printpalletsselectdept']);
+    Route::get('location', [WareHouseController::class,'location']);
+    Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
+
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!

@@ -16,7 +16,14 @@ if ((Auth::guest()))
     $stocklocation = $v->getThings(Auth::user()->GroupId,'stocklocation');
 }
 ?>
-
+<a href= "{{ route('logout') }}"
+   onclick="event.preventDefault();
+                     document.getElementById('logout-form').submit();">
+    Logout
+</a>
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    {{ csrf_field() }}
+</form>
 @if($createPalletConfig !="0")
 <a href='{!!url("/createPalletConfig")!!}'>Pallets Configurations</a>
 @endif
