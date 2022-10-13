@@ -54,5 +54,7 @@ if ((Auth::guest()))
 @if($stocklocation !="0")
 <a href='{!!url("/stocklocation")!!}' >Stock</a>
 @endif
+@if($getJobStarted !="0")
 <a href='{!!url("/getJobStarted")!!}'>WIP</a>
+@endif
 <a href="#">Jobs Data</a>
