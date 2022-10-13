@@ -14,6 +14,7 @@ if ((Auth::guest()))
     $printpalletsselectdept = $v->getThings(Auth::user()->GroupId,'printpalletsselectdept');
     $location = $v->getThings(Auth::user()->GroupId,'location');
     $stocklocation = $v->getThings(Auth::user()->GroupId,'stocklocation');
+    $getJobStarted = $v->getThings(Auth::user()->GroupId,'getJobStarted');
 }
 ?>
 <a href= "{{ route('logout') }}"
