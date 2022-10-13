@@ -69,10 +69,12 @@
         <h1>CHOOSE PRODUCT</h1>
             @foreach($products as $val)
 
+                @if($val->strJobStatus !="NOT STARTED")
                     <button class="btn-lg btn-success" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}'" type="button" style="width:100% !important;font-size: 25px;">
                         {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
-                <br>
-                <br>
+                    <br>
+                    <br>
+                @endif
 
 
             @endforeach

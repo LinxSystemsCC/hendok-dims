@@ -50,7 +50,7 @@
                 </tr>
                 <tr>
                     <td><strong>NO. Units</strong></td>
-                    <td><h5><strong>{{$val->supposetobeonthepallet}}</strong></h5></td>
+                    <td><h5>...<strong>{{$val->supposetobeonthepallet}}</strong></h5></td>
                 </tr>
             </table>
                 <input type="hidden" value="{{$val->Barcode}}" id="hiddenbarcode">
