@@ -77,7 +77,7 @@
         <button class="btn btn-lg btn-primary" id="printthislabels">PRINT</button>
     @else
         <h3>You have Produced Required Quantity Of {{$mnyQtyProduced}} / {{$mnyQtyRequired}}</h3>
-
+@endif
     </div>
     <br>
 
