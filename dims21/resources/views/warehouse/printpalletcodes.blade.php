@@ -52,7 +52,7 @@
 <div class="col-lg-12"  style="background: white;">
     <a href= "{{ route('logout') }}"
        onclick="event.preventDefault();
-                     document.getElementById('logout-form').submit();" style="background: #007bff;color: white;" style="float: right;background: black;color: white;padding: 10px;    width: 100%;text-align: center;    font-size: 28px;">
+                     document.getElementById('logout-form').submit();" style="    font-size: 41px;background: black;color: white;" >
         Logout
     </a>
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
