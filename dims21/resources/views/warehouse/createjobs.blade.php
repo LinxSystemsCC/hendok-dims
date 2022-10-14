@@ -197,25 +197,7 @@
 
 $("#departmentheader").change(function () {
 
-    $.ajax({
 
-        url: '{!!url("/getMachinesforselecteddept")!!}',
-        type: "GET",
-        data: {
-            deptId: $("#departmentheader").val(),
-            prodname: $("#prodname").val()
-        },
-        success: function (data) {
-            var toAppend = '';
-            $("#machinename").empty();
-            $.each(data,function(i,o){
-
-                toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
-            });
-            $("#machinename").append(toAppend);
-            $("#machinename").select2();
-        }
-    });
 
 });
 
@@ -239,6 +221,26 @@ $('#prodname').change(function () {
             });
             $("#palletconfig").append(toAppend);
             $("#palletconfig").select2();
+        }
+    });
+
+    $.ajax({
+
+        url: '{!!url("/getMachinesforselecteddept")!!}',
+        type: "GET",
+        data: {
+            deptId: $("#departmentheader").val(),
+            prodname: $("#prodname").val()
+        },
+        success: function (data) {
+            var toAppend = '';
+            $("#machinename").empty();
+            $.each(data,function(i,o){
+
+                toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
+            });
+            $("#machinename").append(toAppend);
+            $("#machinename").select2();
         }
     });
 });
