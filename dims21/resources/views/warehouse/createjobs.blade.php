@@ -195,13 +195,7 @@
     });
     $(document).ready(function() {
 
-$("#departmentheader").change(function () {
-
-
-
-});
-
-$('#prodname').change(function () {
+$("#machinename").change(function () {
 
     $.ajax({
 
@@ -223,6 +217,12 @@ $('#prodname').change(function () {
             $("#palletconfig").select2();
         }
     });
+
+});
+
+$('#prodname').change(function () {
+
+
 
     $.ajax({
 
