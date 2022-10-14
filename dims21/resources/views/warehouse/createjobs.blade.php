@@ -225,7 +225,8 @@ $('#prodname').change(function () {
         url: '{!!url("/getPalletForSelectedItem")!!}',
         type: "GET",
         data: {
-            itemCode: $("#prodname").val()
+            itemCode: $("#prodname").val(),
+            intMachine: $("#machinename").val()
         },
         success: function (data) {
             var toAppend = '';
@@ -233,7 +234,7 @@ $('#prodname').change(function () {
             toAppend += '<option></option>';
             $.each(data,function(i,o){
 
-                toAppend += '<option value="'+o.intPalletId+'"><table><tr><td style="background: green">'+o.strPalletTypeDescription+'</td><td>| /PALLET'+o.intPalletConf+'</option>';
+                toAppend += '<option value="'+o.intPalletId+'">'+o.strPalletTypeDescription+'</option>';
             });
             $("#palletconfig").append(toAppend);
             $("#palletconfig").select2();

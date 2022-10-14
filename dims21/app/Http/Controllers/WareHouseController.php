@@ -211,9 +211,10 @@ class WareHouseController extends Controller
     public function getPalletForSelectedItem(Request $request){
 
         $itemCode = $request->get("itemCode");
+        $intMachine = $request->get("intMachine");
         $palletsjson = DB::connection('sqlsrv2')
-            ->select("EXEC spSelectItemsConfigurations ? ",
-                array($itemCode)
+            ->select("EXEC spSelectItemsConfigurations ?,? ",
+                array($itemCode,$intMachine)
             );
         return response()->json($palletsjson);
     }
