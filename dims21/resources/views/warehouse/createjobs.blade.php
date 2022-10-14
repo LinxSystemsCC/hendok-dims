@@ -202,7 +202,8 @@ $("#departmentheader").change(function () {
         url: '{!!url("/getMachinesforselecteddept")!!}',
         type: "GET",
         data: {
-            deptId: $("#departmentheader").val()
+            deptId: $("#departmentheader").val(),
+            prodname: $("#prodname").val()
         },
         success: function (data) {
             var toAppend = '';

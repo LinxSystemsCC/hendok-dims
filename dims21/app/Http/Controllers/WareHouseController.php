@@ -202,9 +202,10 @@ class WareHouseController extends Controller
 
     public function getMachinesforselecteddept(Request $request){
         $deparment = $request->get("deptId");
+        $prodname = $request->get("prodname");
         $machines = DB::connection('sqlsrv2')
-            ->select('exec spGetMachinesByDept ?',
-                array($deparment)
+            ->select('exec spGetMachinesByDept ?,?',
+                array($deparment,$prodname)
             );
         return response()->json($machines);
     }
