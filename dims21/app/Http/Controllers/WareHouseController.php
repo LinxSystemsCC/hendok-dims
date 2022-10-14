@@ -136,7 +136,7 @@ class WareHouseController extends Controller
         $strProductCategory = $request->get("strProductCategory");
         $prodCategory = DB::connection('sqlsrv2')
             //->select("select * from viewItemsToPlanJob where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strItemName");
-            ->select("select i.* from viewItemsToPlanJob i inner join tblMappedDeptMachinesItems mis on mis.strItemCode collate database_default = i.strItemCode  where ItemGroup ='".$ItemGroup."' order by strItemName");
+            ->select("select DISTINCT i.* from viewItemsToPlanJob i inner join tblMappedDeptMachinesItems mis on mis.strItemCode collate database_default = i.strItemCode  where ItemGroup ='".$ItemGroup."' order by strItemName");
         return response()->json($prodCategory);
     }
     //For printing pallets
