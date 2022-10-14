@@ -135,7 +135,8 @@ class WareHouseController extends Controller
         $ItemGroup = $request->get("ItemGroup");
         $strProductCategory = $request->get("strProductCategory");
         $prodCategory = DB::connection('sqlsrv2')
-            ->select("select * from viewItemsToPlanJob where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strItemName");
+            //->select("select * from viewItemsToPlanJob where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strItemName");
+            ->select("select i.* from viewItemsToPlanJob i inner join tblMappedDeptMachinesItems mis on mis.strItemCode collate database_default = i.strItemCode  where ItemGroup ='".$ItemGroup."' order by strItemName");
         return response()->json($prodCategory);
     }
     //For printing pallets
@@ -320,8 +321,23 @@ class WareHouseController extends Controller
             );
         return response()->json($productonmachine);
     }
+    public function getjobsdatajson(Request $request){
+        $datefrom = $request->get("datefrom");
+        $dateto = $request->get("dateto");
+        $datefrom = (new \DateTime($datefrom))->format('Y-m-d');
+        $dateto = (new \DateTime($dateto))->format('Y-m-d');
+
+        $returndata = DB::connection('sqlsrv2')
+            ->select('exec spGetProductInProgressdate ?,?',
+                array($datefrom,$dateto)
+            );
+        return response()->json($returndata);
+    }
     public function getJobStarted(){
         return view('warehouse/wip');
+    }
+    public function getjobsdata(){
+        return view('warehouse/getjobsdata');
     }
     public function goprintfirstqrcode($deparment,$machine,$productcode,$palletid,$qty){
         $dept = DB::connection('sqlsrv2')

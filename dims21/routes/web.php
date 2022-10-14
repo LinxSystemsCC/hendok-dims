@@ -959,6 +959,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('printpalletsselectdept', [WareHouseController::class,'printpalletsselectdept']);
     Route::get('location', [WareHouseController::class,'location']);
     Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
+    Route::get('getjobsdata', [WareHouseController::class,'getjobsdata']);
 
 });
 
