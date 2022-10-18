@@ -73,7 +73,7 @@
     <div class="col-lg-10" >
 
         Date From <input type="date" id="datefrom"> - Date To <input type="date" id="dateto">
-        <button id="">GET</button>
+        <button id="getwipdata">GET</button>
         <div id="gridContainer" style="width: 100% !important;">
         </div>
 
@@ -103,118 +103,120 @@
     });
     $(document).ready(function() {
 
+$('#getwipdata').click(function(){
+    $.ajax({
+        url: '{!!url("/getWIPjobstarted")!!}',
+        type: "GET",
+        data: {
+            machineId: $('#machineid').val()
+        },
+        success: function (data) {
+            $("#gridContainer").dxDataGrid({
+                dataSource:data, //as json
+                showBorders: true,
+                filterRow: { visible: true },
+                filterPanel: { visible: true },
+                headerFilter: { visible: true },
+                allowColumnResizing: true,
+                paging:{
+                    pageSize: 20,
+                },
+                export: {
+                    enabled: true
+                },
+                onExporting(e) {
+                    const workbook = new ExcelJS.Workbook();
+                    const worksheet = workbook.addWorksheet('machineplan');
 
-
-        $.ajax({
-            url: '{!!url("/getWIPjobstarted")!!}',
-            type: "GET",
-            data: {
-                machineId: $('#machineid').val()
-            },
-            success: function (data) {
-                $("#gridContainer").dxDataGrid({
-                    dataSource:data, //as json
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    allowColumnResizing: true,
-                    paging:{
-                        pageSize: 20,
-                    },
-                    export: {
-                        enabled: true
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('machineplan');
-
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
-                            });
+                    DevExpress.excelExporter.exportDataGrid({
+                        component: e.component,
+                        worksheet,
+                        autoFilterEnabled: true,
+                    }).then(() => {
+                        workbook.xlsx.writeBuffer().then((buffer) => {
+                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
                         });
-                        e.cancel = true;
+                    });
+                    e.cancel = true;
+                },
+
+                columns: [
+                    {
+                        dataField: "intJobId",
+                        caption: "JobNo",
+                        width: 60,
+
+                    }, {
+                        dataField: "intJobSequence",
+                        caption: "Job Sequence",
+                        width: 60,
+
+                    }, {
+                        dataField: "strDeptName",
+                        caption: "Department",
+                        width: 90,
+
+                    },
+                    {
+                        dataField: "strMachineName",
+                        caption: "Machine",
+                        width: 90,
+
+                    },
+                    {
+                        dataField: "PastelDescription",
+                        caption: "Product",
+                        width: 400,
+
+                    },
+                    {
+                        dataField: "mnyQtyRequired",
+                        caption: "Planned",
+                        width: 90,dataType:"number"
+
+                    },
+                    {
+                        dataField: "mnyQtyProduced",
+                        caption: "Produced",
+                        width: 90,dataType:"number"
+
+                    },
+                    {
+                        dataField: "palletQtyRequired",
+                        caption: "Est Req Pallet",
+                        width: 90,dataType:"number"
+
+                    },
+                    {
+                        dataField: "palletQtyProduced",
+                        caption: "Est Produced Pallet",
+                        width: 90,dataType:"number"
+                    }
+                    ,
+                    {
+                        dataField: "dteLastPrintedUpdated",
+                        caption: "Last Update",
+                        width: 100
+
                     },
 
-                    columns: [
-                        {
-                            dataField: "intJobId",
-                            caption: "JobNo",
-                            width: 60,
+                ],
+                onRowDblClick:function(e){
+                    console.log(e.data.intJobId);
+                    var intJobId =  e.data.intJobId;
 
-                        }, {
-                            dataField: "intJobSequence",
-                            caption: "Job Sequence",
-                            width: 60,
+                    window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
 
-                        }, {
-                            dataField: "strDeptName",
-                            caption: "Department",
-                            width: 90,
+                }
 
-                        },
-                        {
-                            dataField: "strMachineName",
-                            caption: "Machine",
-                            width: 90,
+            });
 
-                        },
-                        {
-                            dataField: "PastelDescription",
-                            caption: "Product",
-                            width: 400,
+        }
 
-                        },
-                        {
-                            dataField: "mnyQtyRequired",
-                            caption: "Planned",
-                            width: 90,dataType:"number"
+    });
+});
 
-                        },
-                        {
-                            dataField: "mnyQtyProduced",
-                            caption: "Produced",
-                            width: 90,dataType:"number"
 
-                        },
-                        {
-                            dataField: "palletQtyRequired",
-                            caption: "Est Req Pallet",
-                            width: 90,dataType:"number"
-
-                        },
-                        {
-                            dataField: "palletQtyProduced",
-                            caption: "Est Produced Pallet",
-                            width: 90,dataType:"number"
-                        }
-                        ,
-                        {
-                            dataField: "dteLastPrintedUpdated",
-                            caption: "Last Update",
-                            width: 100
-
-                        },
-
-                    ],
-                    onRowDblClick:function(e){
-                        console.log(e.data.intJobId);
-                        var intJobId =  e.data.intJobId;
-
-                        window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
-
-                    }
-
-                });
-
-            }
-
-        });
 
 
 

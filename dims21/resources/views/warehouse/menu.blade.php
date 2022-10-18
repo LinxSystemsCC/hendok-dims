@@ -15,6 +15,7 @@ if ((Auth::guest()))
     $location = $v->getThings(Auth::user()->GroupId,'location');
     $stocklocation = $v->getThings(Auth::user()->GroupId,'stocklocation');
     $getJobStarted = $v->getThings(Auth::user()->GroupId,'getJobStarted');
+    $getjobsdata = $v->getThings(Auth::user()->GroupId,'getjobsdata');
 }
 ?>
 <a href= "{{ route('logout') }}"
@@ -58,4 +59,6 @@ if ((Auth::guest()))
 @if($getJobStarted !="0")
 <a href='{!!url("/getJobStarted")!!}'>WIP</a>
 @endif
-<a href="#">Jobs Data</a>
+@if($getjobsdata !="0")
+<a href='{!!url("/getjobsdata")!!}'>Jobs Data</a>
+@endif
