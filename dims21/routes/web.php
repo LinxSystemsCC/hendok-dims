@@ -868,7 +868,7 @@ Route::get('getWIP', [WareHouseController::class,'getWIP']);
 Route::get('getWIPjobstarted', [WareHouseController::class,'getWIPjobstarted']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
 Route::get('getJobStarted', [WareHouseController::class,'getJobStarted']);
-Route::get('getjobsdatajson/{dfrom}/{dto}', [WareHouseController::class,'getjobsdatajson']);
+Route::get('getjobsdatajson', [WareHouseController::class,'getjobsdatajson']);
 
 Route::get('qrcodetracker', [WareHouseController::class,'qrcodetracker']);
 Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
