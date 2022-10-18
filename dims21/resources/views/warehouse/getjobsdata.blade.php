@@ -105,10 +105,11 @@
 
 $('#getwipdata').click(function(){
     $.ajax({
-        url: '{!!url("/getWIPjobstarted")!!}',
+        url: '{!!url("/getjobsdatajson")!!}',
         type: "GET",
         data: {
-            machineId: $('#machineid').val()
+            datefrom: $('#datefrom').val(),
+            dateto: $('#dateto').val()
         },
         success: function (data) {
             $("#gridContainer").dxDataGrid({
