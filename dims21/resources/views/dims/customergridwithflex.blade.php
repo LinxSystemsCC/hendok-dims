@@ -12,15 +12,9 @@
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/jquery-ui2.min.css') }}" type="text/css" />
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <!-- DevExtreme library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
 
@@ -32,13 +26,18 @@
     </style>
 </head>
 <body style="font-family: Sans-serif">
-<h4>Customers</h4>
-<div style="display: flex">
 
-    <div style="width: 80%" id="gridContainer"></div>
+<table class='border' style = "width:800">
+                <tbody>
 
-<div style="margin-top: 5%">
+<tr>
+                        <td>
+                            <div id="gridContainer"/>
 
+
+                        </td>
+
+<td>
 <label class="control-label" for="customerid"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Customer ID</label>
 <input type = "text" id = "customerid"readonly>
 <br>
@@ -68,6 +67,10 @@
 <br>
 <label class="control-label" for="SalesRep"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Sales Representative</label>
 <select  id = "SalesRep" name = "SalesRep"type = "text">
+<option value = "">None</option>
+</select>
+<label class="control-label" for="Users"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">User</label>
+<select  id = "Users" name = "Users"type = "text">
 <option value = "">None</option>
 </select>
 <br>
@@ -109,10 +112,14 @@
 <br>
 <br>
             <button class="form-control btn-md btn-success" id="update">Update</button>
-</div>
-</div>
-<script>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
+
+<script>
+    
     var jArray = JSON.stringify({!! json_encode($routes) !!});
 
     var Routes = $.map(JSON.parse(jArray), function (item) {
@@ -133,13 +140,14 @@
             SalesAnalysisCode:item.SalesAnalysisCode,
             DeliverySequence:item.DeliverySequence,
             DocPrintOrEmail:item.DocPrintOrEmail,
-            Discount:item.Discount,
+            Discount:item.Discount, 
             CreditLimit:item.CreditLimit,
             UniqueDelivery:item.UniqueDelivery,
             PriorityCustomer:item.PriorityCustomer,
             CustomerOnHold:item.CustomerOnHold,
             MarkupPercentage:item.MarkupPercentage,
-            LocationName:item.locationName
+            LocationName:item.locationName,
+			UserID:item.UserID
         }
 
     });
@@ -160,11 +168,19 @@
         }
 
     });
+	var jArrayUsersOnly = JSON.stringify({!! json_encode($users) !!});
+    var UsersOnly = $.map(JSON.parse(jArrayUsersOnly), function (item) {
+        return {
+            UserID: item.UserID,
+            UserName:item.UserName
+        }
+
+    });
     var jArraySalesMenOnly = JSON.stringify({!! json_encode($salesmen) !!});
     var SalesMen = $.map(JSON.parse(jArraySalesMenOnly), function (item) {
         return {
             Name: item.UserName,
-            SalesCode:item.UserID
+            SalesCode:item.strSalesmanCode
         }
 
     });
@@ -174,19 +190,24 @@
             $( this ).attr( 'autocomplete', 'off' );
         });
         var clickTimer, lastRowClickedId;
-        $(document).ready(function() {
+        $(document).ready(function() {  
             for(var index = 0; index < RoutesOnly.length;index++){
                 $('#route').append('<option value="'+RoutesOnly[index].RouteId+'">'+RoutesOnly[index].Route +'</option>');
-
+          
             }
             for(var index = 0; index < GroupsOnly.length;index++){
                 $('#GroupName').append('<option value="'+GroupsOnly[index].GroupId+'">'+GroupsOnly[index].Group +'</option>');
-
+          
+            }
+			for(var index = 0; index < UsersOnly.length;index++){
+                $('#Users').append('<option value="'+UsersOnly[index].UserID+'">'+UsersOnly[index].UserName +'</option>');
+          
             }
             for(var index = 0; index < SalesMen.length;index++){
                 $('#SalesRep').append('<option value="'+SalesMen[index].SalesCode+'">'+SalesMen[index].Name +'</option>');
+          
             }
-
+           
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -213,7 +234,8 @@
                     uniquedel:$('#UniqueDelivery').val(),
                     priocust:$('#PriorityCustomer').val(),
                     onhold:$('#CustomerOnHold').val(),
-                    markupperc:$('#MarkupPercentage').val()
+                    markupperc:$('#MarkupPercentage').val(),
+					selecteduser:$('#Users').val()
                     },
                     success: function(data){
                         var dialog = $('<p>Data Saved.</p>').dialog({
@@ -229,55 +251,16 @@
                                 });
                     }
                 });
-
+           
         });
 
                             $("#gridContainer").dxDataGrid({
-                                export: {
-            enabled: true
-        },   onExporting: function(e) {
-        var workbook = new ExcelJS.Workbook();
-        var worksheet = workbook.addWorksheet('Main sheet');
-        DevExpress.excelExporter.exportDataGrid({
-            worksheet: worksheet,
-            component: e.component,
-            customizeCell: function(options) {
-                var excelCell = options;
-                excelCell.font = { name: 'Arial', size: 12 };
-                excelCell.alignment = { horizontal: 'left' };
-            }
-        }).then(function() {
-            workbook.xlsx.writeBuffer().then(function(buffer) {
-                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
-            });
-        });
-        e.cancel = true;
-    },
                                 dataSource:Routes,
                                 showBorders: true,
+                                width:1000,
                                 filterRow: { visible: true },scrolling: {
             columnRenderingMode: "virtual"
-        },
-                                export: {
-                                    enabled: true,
-
-                                },
-                                onExporting(e) {
-                                    var pricelistnamesheet = $('#pricelist option:selected').text();
-                                    const workbook = new ExcelJS.Workbook();
-                                    const worksheet = workbook.addWorksheet('customers');
-
-                                    DevExpress.excelExporter.exportDataGrid({
-                                        component: e.component,
-                                        worksheet,
-                                        autoFilterEnabled: true,
-                                    }).then(() => {
-                                        workbook.xlsx.writeBuffer().then((buffer) => {
-                                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }),'customers.xlsx');
-                                        });
-                                    });
-                                    e.cancel = true;
-                                },columnWidth:200,
+        },columnWidth:200,
         columnAutoWidth:true,
                                 columns: [
                                     {
@@ -336,6 +319,10 @@
                                         caption: "Sales Rep"
 
                                     },{
+                                        dataField: "UserID",
+                                        caption: "User ID"
+
+                                    },{
                                         width:0,
                                         dataField: "SalesAnalysisCode",
                                         caption: "Sales Code"
@@ -347,7 +334,7 @@
                                     },{
                                         dataField: "DocPrintOrEmail",
                                         caption: "Receives Email?"
-
+                                        
                                     },{
                                         dataField: "Discount",
                                         caption: "Discount"
@@ -379,9 +366,9 @@
                                     },
 
                                 ] ,
-
+                                
                         onRowClick: function (e) {
-
+                          
                             $('#customerid').val(e.key.CustomerId);
                             $('#CustomerStorename').val(e.key.StoreName);
                             $('#pastelcode').val(e.key.CustomerPastelCode);
@@ -395,6 +382,7 @@
                             $('#DeliverySeq').val(e.key.DeliverySequence);
                             $('#DocPrintOrEmail').val(e.key.DocPrintOrEmail);
                             $('#Discount').val(e.key.Discount);
+							$('#Users').val(e.key.UserID);
                             $('#CreditLimit').val(e.key.CreditLimit);
                             $('#UniqueDelivery').val(e.key.UniqueDelivery);
                             $('#PriorityCustomer').val(e.key.PriorityCustomer);
@@ -403,7 +391,7 @@
 
                         },
 
-
+                            
                                 onInitNewRow: function(e) {
                                     console.debug("InitNewRow");
                                 },
@@ -417,7 +405,7 @@
                                     console.debug("RowUpdating");
                                 }
                         });
-
+                
             });
     </script>
 </div>

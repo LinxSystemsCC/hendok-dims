@@ -213,9 +213,10 @@ class DimsCommon extends Controller
         $queryCustomers =DB::connection('sqlsrv3')->table("viewCustomerGrid" )->select('*')->distinct()->get();
         $queryRoutes=DB::connection('sqlsrv3')->table("tblRoutes")->select('Route','RouteId')->distinct()->get();
         $queryGroups=DB::connection('sqlsrv3')->table("tblGroups")->select('GroupId','GroupName')->distinct()->get();
-        $querySalesMen=DB::connection('sqlsrv3')->table("tblDIMSUSERS")->select('UserName', 'UserID')->distinct()->get();
+        $querySalesMen=DB::connection('sqlsrv3')->table("tblDIMSUSERS")->select('UserName', 'strSalesmanCode')->distinct()->get();
+        $queryUsers=DB::connection('sqlsrv3')->table("tblDIMSUSERS")->select('UserName', 'UserID')->distinct()->get();
                 return view('dims/customergridwithflex')->with('routes',$queryCustomers)->with('routesonly', $queryRoutes)
-                ->with('groups',$queryGroups)->with('salesmen',$querySalesMen);
+                ->with('groups',$queryGroups)->with('salesmen',$querySalesMen)->with('users',$queryUsers);
     }
 
     public function updateCustomerGrid(Request $request){
@@ -235,13 +236,14 @@ class DimsCommon extends Controller
         $priocust = $request->get('priocust');
         $onhold = $request->get('onhold');
         $markupperc = $request->get('markupperc');
-
+		$selecteduser = $request->get('selecteduser');
 
 
         DB::connection('sqlsrv3')
-        ->statement('exec spUpdateCustomerGrid ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+        ->statement('exec spUpdateCustomerGrid ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
         array($Userid,$User,$customerid,$route,$email,$contactperson,$contactno
-    ,$groupname,$salesrep,$deliveryseq,$receivesemail,$uniquedel,$priocust,$onhold,$markupperc));
+    ,$groupname,$salesrep,$deliveryseq,$receivesemail,$uniquedel,$priocust,$onhold,$markupperc,
+	$selecteduser));
 
     }
     public function verifyAuthOnAdmin(Request $request)
