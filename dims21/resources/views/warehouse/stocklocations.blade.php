@@ -91,8 +91,14 @@
                     <h5>Details</h5>
 
                         <label class="control-label" for="productcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Item</label>
-                        <input  type="text" class="form-control input-sm col-xs-1" id="productcode" style="height:40px;font-size: 12px;font-family: sans-serif;font-weight: 900;"><br>
-                        <input  type="text" class="form-control input-sm col-xs-1" id="productdesc" style="font-size: 10px;font-family: sans-serif;font-weight: 900;" readonly>
+                        <select  class="form-control input-sm col-xs-1 " id="productcode" style="width: 100%" required>
+                            <option></option>
+                            @foreach($products as $val)
+                                <option value="{{$val->PastelCode}}">{{$val->PastelCode}}-{{$val->PastelDescription}}</option>
+                            @endforeach
+
+                        </select>
+
                     <br>
                         <button class="btn btn-success" id="searchitem">Search</button>
 
@@ -439,7 +445,7 @@
                             }, {
                                 dataField: "Username",
                                 caption: "User Name",
-                                width: 180,
+                                width: 140,
 
                             }
                             , {
