@@ -338,7 +338,7 @@
                         }, {
                             dataField: "Description_1",
                             caption: "Item Name",
-                            width: 360,
+                            width: 460,
 
                         }, {
                             dataField: "ItemGroupDescription",
@@ -429,7 +429,7 @@
                             }, {
                                 dataField: "Description_1",
                                 caption: "Item Name",
-                                width: 360,
+                                width: 460,
 
                             }, {
                                 dataField: "ItemGroupDescription",
@@ -467,7 +467,7 @@
                             , {
                                 dataField: "strLocation",
                                 caption: "Location",
-                                width: 80,
+                                width: 180,
 
                             },
                             {
