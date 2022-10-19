@@ -153,13 +153,13 @@
                         }, {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 90,
+                            width: 140,
 
                         },
                         {
                             dataField: "strMachineName",
                             caption: "Machine",
-                            width: 90,
+                            width: 140,
 
                         },
                         {

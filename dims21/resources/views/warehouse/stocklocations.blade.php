@@ -265,7 +265,7 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
 
-    
+
     $(document).ready(function() {
         $("#productcode").select2();
         $.ajax({

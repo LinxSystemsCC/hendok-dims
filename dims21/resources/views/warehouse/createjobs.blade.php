@@ -412,13 +412,13 @@ $('#prodname').change(function () {
                         }, {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 90,
+                            width: 150,
 
                         },
                         {
                             dataField: "strMachineName",
                             caption: "Machine",
-                            width: 90,
+                            width: 150,
 
                         },
                         {
