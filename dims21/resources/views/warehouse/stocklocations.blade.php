@@ -260,18 +260,14 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
 
-
-
+    
     $(document).ready(function() {
-
-
-
-
-
+        $("#productcode").select2();
         $.ajax({
             url: '{!!url("/getviewGridStockSummary")!!}',
             type: "GET",
