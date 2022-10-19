@@ -268,36 +268,12 @@
     });
 
 
-    var jArray = JSON.stringify({!! json_encode($products) !!});
+
     $(document).ready(function() {
 
 
 
-        var finalData =$.map(JSON.parse(jArray), function(item) {
-
-            return {
-                PastelCode:item.PastelCode,
-                PastelDescription:item.PastelDescription
-
-            }
-
-        });
-        var inputProductcode = $('#productcode').flexdatalist({
-            minLength: 1,
-            valueProperty: '*',
-            selectionRequired: true,
-            focusFirstResult: true,
-            searchContain:true,
-            visibleProperties: ["PastelCode","PastelDescription"],
-            searchIn: 'PastelDescription',
-            data: finalData
-        });
-        inputProductcode.on('select:flexdatalist', function (event, data) {
-
-            $('#productcode').val(data.PastelCode);
-            $('#productdesc').val(data.PastelDescription);
-        });
-
+        
 
         $.ajax({
             url: '{!!url("/getviewGridStockSummary")!!}',
