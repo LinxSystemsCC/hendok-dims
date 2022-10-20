@@ -75,6 +75,9 @@ class WareHouseController extends Controller
     public function qrcodeimage($binlocation){
         return view('warehouse/qrcodeimagebin')->with('ID',$binlocation);
     }
+    public function qrcodereversepallet(){
+        return view('warehouse/palletreverseqrcode');
+    }
     public function savenewbin(Request $request){
 
         $binname = $request->get("binname");
@@ -265,10 +268,13 @@ class WareHouseController extends Controller
     public function printpalletchoosproducttomake($deparment,$machine){
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);
+
         $machines = DB::connection('sqlsrv2')
+            ->select("select strMachineName,intAutoMachineID intMachineID from tblMachines where intAutoMachineID =".$machine);
+       /* $machines = DB::connection('sqlsrv2')
             ->select('exec spGetMachinesByDept ?',
                 array($deparment)
-            );
+            );*/
         $products = DB::connection('sqlsrv2')
             ->select('exec spGetProductsToPrint ?,?',
                 array($machine,$deparment)

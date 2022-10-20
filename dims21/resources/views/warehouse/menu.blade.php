@@ -45,7 +45,8 @@ if ((Auth::guest()))
 <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Machines,Dept & Prod</a>
 @endif
 @if($createjobs !="0")
-<a href='{!!url("/createjobs")!!}'   >Create Jobs</a>
+<a href='{!!url("/createjobs")!!}'   >Work Orders</a>
+<a href='{!!url("/qrcodereversepallet")!!}'   >Pallet Reversall Code</a>
 @endif
 @if($printpalletsselectdept !="0")
 <a href='{!!url("/printpalletsselectdept")!!}' >Print Pallet Labels</a>
@@ -60,5 +61,5 @@ if ((Auth::guest()))
 <a href='{!!url("/getJobStarted")!!}'>WIP</a>
 @endif
 @if($getjobsdata !="0")
-<a href='{!!url("/getjobsdata")!!}'>Jobs Data</a>
+<a href='{!!url("/getjobsdata")!!}'>Work Orders Data</a>
 @endif

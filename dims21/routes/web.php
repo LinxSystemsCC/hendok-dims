@@ -888,6 +888,7 @@ Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachine
 Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
 Route::get('getPalletForSelectedItem', [WareHouseController::class,'getPalletForSelectedItem']);
 Route::get('getProdListToPlan', [WareHouseController::class,'getProdListToPlan']);
+Route::get('qrcodereversepallet', [WareHouseController::class,'qrcodereversepallet']);
 
 Route::get('getProductPlannedOnThatMachine', [WareHouseController::class,'getProductPlannedOnThatMachine']);
 Route::get('choosemachine/{department}', [WareHouseController::class,'choosemachine']);

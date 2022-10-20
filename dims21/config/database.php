@@ -77,8 +77,8 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
-            'sqlsrv' => [
+//my test
+           'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => '102.37.0.48',
             'port' =>  '62019',
@@ -87,7 +87,19 @@ return [
             'password' =>  'Linx_123',
             'prefix' => ''
 
-        ],
+        ] ,
+        //hendok
+        /*'sqlsrv' => [
+            'driver' => 'sqlsrv',
+            'host' => 'HK-SQL2019',
+            'port' =>  '',
+            'database' => 'linxdbDIMS',
+            'username' => 'dims',
+            'password' =>  '$D1ms_L1nx#',
+            'prefix' => '',
+            'pooling'  => false,
+
+        ],*/
         'sqlsrv2' => [
             'driver' => 'sqlsrv',
             'host' => '102.37.0.48',
@@ -99,6 +111,16 @@ return [
             'pooling'  => false,
         ],
         'sqlsrv3' => [
+            'driver' => 'sqlsrv',
+            'host' => '102.37.0.48',
+            'port' =>  '62019',
+            'database' => 'linxdbDIMS',
+            'username' => 'sa',
+            'password' =>  'Linx_123',
+            'prefix' => '',
+            'pooling'  => false,
+        ],
+        'weights' => [
             'driver' => 'sqlsrv',
             'host' => '102.37.0.48',
             'port' =>  '62019',
@@ -255,16 +277,6 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', '.'),
-            'port' => env('DB_PORT', '1444'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-        ],
     ],
 
     /*

@@ -71,7 +71,7 @@
         </div>
     </div>
     <div class="col-lg-10" >
-        <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createjob">Create New Job</button><br>
+        <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createjob">Create Work Order</button><br>
         <div id="gridContainer" style="width: 100% !important;">
         </div>
 
@@ -80,7 +80,7 @@
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="viewjobTitle">Job Data</h5>
+                    <h5 class="modal-title" id="viewjobTitle">Work Order Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -96,7 +96,7 @@
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createjobTitle">Create A Job</h5>
+                    <h5 class="modal-title" id="createjobTitle">Create A Work Order</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
