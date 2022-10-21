@@ -78,6 +78,9 @@ class WareHouseController extends Controller
     public function qrcodereversepallet(){
         return view('warehouse/palletreverseqrcode');
     }
+    public function qrcodebreakpallet(){
+        return view('warehouse/palletbreak');
+    }
     public function savenewbin(Request $request){
 
         $binname = $request->get("binname");
