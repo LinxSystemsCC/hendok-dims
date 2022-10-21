@@ -462,6 +462,11 @@
                                 caption: "strItem",
                                 width: 80,
 
+                            },{
+                                dataField: "TransactionType",
+                                caption: "TransactionType",
+                                width: 80,
+
                             }
                         ],
                         onRowDblClick: function (e) {
