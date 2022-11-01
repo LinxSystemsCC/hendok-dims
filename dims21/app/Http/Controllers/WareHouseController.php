@@ -447,7 +447,7 @@ class WareHouseController extends Controller
     }
     public function insertIntoJobTable(Request $request){
         $deptId = $request->get("deptId");
-        $prodgroup = $request->get("prodgroup");
+        $prodgroup = "0"; //$request->get("prodgroup");
         $productcategory= $request->get("productcategory");
         $prodname = $request->get("prodname");
         $machinename = $request->get("machinename");
@@ -486,10 +486,11 @@ class WareHouseController extends Controller
     public function mapitemstopallet(){
         $pallets = DB::connection('sqlsrv2')
             ->select("select * from tblPalletConf");
+            
 
         $products = DB::connection('sqlsrv2')
             ->select("select * from viewtblProducts");
-        return view('warehouse/mapitemstopallet')->with('pallets',$pallets)->with('products',$products);
+            return view('warehouse/mapitemstopallet')->with('pallets',$pallets)->with('products',$products);
     }
     public function mapdeptitem(){
         $dept = DB::connection('sqlsrv2')

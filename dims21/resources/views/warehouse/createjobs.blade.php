@@ -115,7 +115,7 @@
 
                     </div>
                 <div class="input-group mb-3">
-                    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Group </label>
+                    <label class="control-label" for="department" onselect="but_read" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
                     <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
                         <option></option>
                         @foreach($prodGroups as $val)
@@ -123,16 +123,17 @@
                         @endforeach
                     </select>
 
-                    <input type='button' value='Confirm Prod Group' class="btn btn-secondary btn-sm" id='but_read'>
+                    <input type='button' value='Confirm Prod Cat' class="btn btn-secondary btn-sm" id='but_read'>
 
                 </div>
-                <div class="form-group">
+                <!--div class="form-group">
                     <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
                     <select  class="form-control input-sm col-xs-1" id="productcategory" required>
                         <option></option>
+                        
                     </select>
                     <input type='button' class="btn btn-secondary btn-sm" value='Confirm Prod Cat' id='getproduct' style="margin-top: 22px;">
-                </div>
+                </div-->
                 <div class="form-group">
                     <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
                     <select  class="form-control input-sm col-xs-1" id="prodname" required>
@@ -233,7 +234,7 @@ $('#prodname').change(function () {
             prodname: $("#prodname").val()
         },
         success: function (data) {
-            var toAppend = '';
+            var toAppend = '<option></option>';
             $("#machinename").empty();
             $.each(data,function(i,o){
 
@@ -241,6 +242,7 @@ $('#prodname').change(function () {
             });
             $("#machinename").append(toAppend);
             $("#machinename").select2();
+            
         }
     });
 });
@@ -248,7 +250,7 @@ $('#prodname').change(function () {
 
         $("#department").select2();
 
-        $('#but_read').click(function(){
+        /*$('#but_read').click(function(){
             var ItemGroupDescription = $('#department option:selected').text();
             var ItemGroup = $('#department').val();
             $.ajax({
@@ -282,9 +284,9 @@ $('#prodname').change(function () {
 
            // $('#result').html("id : " + userid + ", name : " + username);
 
-        });
+        });*/
 
-        $('#getproduct').click(function(){
+        $('#but_read').click(function(){
             $.ajax({
 
                 url: '{!!url("/getProdListToPlan")!!}',
@@ -342,7 +344,7 @@ $('#prodname').change(function () {
                 type: "POST",
                 data: {
                     deptId: $('#departmentheader').val(),
-                    prodgroup: $('#department').val(),
+                    //prodgroup: $('#department').val(),
                     productcategory: $('#productcategory').val(),
                     prodname: $('#prodname').val(),
                     machinename: $('#machinename').val(),
@@ -418,25 +420,25 @@ $('#prodname').change(function () {
                         {
                             dataField: "strMachineName",
                             caption: "Machine",
-                            width: 150,
+                            width: 200,
 
                         },
                         {
                             dataField: "PastelDescription",
                             caption: "Product",
-                            width: 400,
+                            width: 450,
 
                         },
                         {
                             dataField: "mnyQtyRequired",
                             caption: "Qty",
-                            width: 90,dataType:"number"
+                            width: 60,dataType:"number"
 
                         },
                         {
                             dataField: "palletQty",
                             caption: "Pallet Qty",
-                            width: 90,dataType:"number"
+                            width: 60,dataType:"number"
 
                         }
                         ,
@@ -449,7 +451,7 @@ $('#prodname').change(function () {
                         {
                             dataField: "jobStatus",
                             caption: "Job Status",
-                            width: 60,
+                            width: 150,
 
                         },
                     ],
