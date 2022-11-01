@@ -164,6 +164,11 @@ class WareHouseController extends Controller
 
     }
 
+    public function stockdetails($productcode){
+        //dd($productcode);
+        return view('warehouse/stockdetails')->with('productCode',$productcode);
+    }
+
     public function printlocationqrcodes($location){
 
         return view('warehouse/printlocationqrcodes')->with('ID',$location);
