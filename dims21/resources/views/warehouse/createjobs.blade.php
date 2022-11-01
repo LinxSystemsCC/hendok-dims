@@ -123,7 +123,7 @@
                         @endforeach
                     </select>
 
-                    <input type='button' value='Confirm Prod Cat' class="btn btn-secondary btn-sm" id='but_read'>
+                    <!--input type='button' value='Confirm Prod Cat' class="btn btn-secondary btn-sm" id='but_read'-->
 
                 </div>
                 <!--div class="form-group">
@@ -286,7 +286,7 @@ $('#prodname').change(function () {
 
         });*/
 
-        $('#but_read').click(function(){
+        $('#department').change(function(){
             $.ajax({
 
                 url: '{!!url("/getProdListToPlan")!!}',
