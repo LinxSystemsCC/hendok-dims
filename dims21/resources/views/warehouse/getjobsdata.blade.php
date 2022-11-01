@@ -155,21 +155,28 @@ $('#getwipdata').click(function(){
                     }, {
                         dataField: "strDeptName",
                         caption: "Department",
-                        width: 90,
+                        width: 150,
 
                     },
                     {
                         dataField: "strMachineName",
                         caption: "Machine",
-                        width: 90,
+                        width: 200,
 
                     },
                     {
                         dataField: "PastelDescription",
                         caption: "Product",
-                        width: 400,
+                        width: 450,
 
                     },
+                    {
+                        dataField: "jobStatus",
+                        caption: "Product",
+                        width: 150,
+
+                    },
+                    
                     {
                         dataField: "mnyQtyRequired",
                         caption: "Planned",
@@ -179,19 +186,19 @@ $('#getwipdata').click(function(){
                     {
                         dataField: "mnyQtyProduced",
                         caption: "Produced",
-                        width: 90,dataType:"number"
+                        width: 60,dataType:"number"
 
                     },
                     {
                         dataField: "palletQtyRequired",
                         caption: "Est Req Pallet",
-                        width: 90,dataType:"number"
+                        width: 60,dataType:"number"
 
                     },
                     {
                         dataField: "palletQtyProduced",
                         caption: "Est Produced Pallet",
-                        width: 90,dataType:"number"
+                        width: 60,dataType:"number"
                     }
                     ,
                     {
