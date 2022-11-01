@@ -172,7 +172,7 @@ $('#getwipdata').click(function(){
                     },
                     {
                         dataField: "jobStatus",
-                        caption: "Product",
+                        caption: "Status",
                         width: 150,
 
                     },
