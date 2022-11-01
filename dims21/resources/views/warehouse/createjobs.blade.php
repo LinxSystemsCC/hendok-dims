@@ -56,6 +56,10 @@
             background-color: #04AA6D;
             color: white;
         }
+        
+        .workOrders {
+            background-color: #ccc !important;
+        }
     </style>
 
 

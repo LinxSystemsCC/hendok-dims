@@ -45,6 +45,10 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .machines {
+            background-color: #ccc !important;
+        }
     </style>
 
 

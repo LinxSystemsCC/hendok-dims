@@ -48,6 +48,10 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .mapPalletsToItems {
+            background-color: #ccc !important;
+        }
     </style>
 
 
@@ -216,24 +220,24 @@
                         }, {
                             dataField: "strItemCode",
                             caption: "Item Code",
-                            width: 300,
+                            width: 150,
 
                         }, {
                             dataField: "PastelDescription",
                             caption: "Item Name",
-                            width: 190,
+                            width: 450,
 
                         },
                         {
                             dataField: "strPalletTypeDescription",
                             caption: "Pallet Type",
-                            width: 125,
+                            width: 60,
 
                         },
                         {
                             dataField: "intPalletConf",
                             caption: "Pallet Conf",
-                            width: 125,
+                            width: 60,
 
                         }
                     ],

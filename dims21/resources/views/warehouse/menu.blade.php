@@ -27,39 +27,39 @@ if ((Auth::guest()))
     {{ csrf_field() }}
 </form>
 @if($createPalletConfig !="0")
-<a href='{!!url("/createPalletConfig")!!}'>Pallets Configurations</a>
+<a href='{!!url("/createPalletConfig")!!}' class="palletConfig">Pallets Configurations</a>
 @endif
 @if($mapitemstopallet !="0")
-<a href='{!!url("/mapitemstopallet")!!}' >Map Pallet To Items</a>
+<a href='{!!url("/mapitemstopallet")!!}' class="mapPalletsToItems">Map Pallet To Items</a>
 @endif
 @if($departmentpage !="0")
-<a href='{!!url("/departmentpage")!!}'>Departments</a>
+<a href='{!!url("/departmentpage")!!}' class="departments">Departments</a>
 @endif
 @if($machines !="0")
-<a href='{!!url("/machines")!!}'>Machines</a>
+<a href='{!!url("/machines")!!}'class="machines">Machines</a>
 @endif
 @if($mapmachinestodept !="0")
-<a href='{!!url("/mapmachinestodept")!!}' >Map Machines To Dept</a>
+<a href='{!!url("/mapmachinestodept")!!}' class="mapMachineToDept">Map Machines To Dept</a>
 @endif
 @if($bmapitemsmachinesdept !="0")
-<a href='{!!url("/mapitemsmachinesdept")!!}'>Map Machines,Dept & Prod</a>
+<a href='{!!url("/mapitemsmachinesdept")!!}' class="mapMachineDeptProd">Map Machines,Dept & Prod</a>
 @endif
 @if($createjobs !="0")
-<a href='{!!url("/createjobs")!!}'   >Work Orders</a>
-<a href='{!!url("/qrcodereversepallet")!!}'   >Pallet Reversall Code</a>
+<a href='{!!url("/createjobs")!!}' class="workOrders">Work Orders</a>
+<a href='{!!url("/qrcodereversepallet")!!}' class="palletReversal">Pallet Reversall Code</a>
 @endif
 @if($printpalletsselectdept !="0")
-<a href='{!!url("/printpalletsselectdept")!!}' >Print Pallet Labels</a>
+<a href='{!!url("/printpalletsselectdept")!!}' class="paletLabel">Print Pallet Labels</a>
 @endif
 @if($location !="0")
-<a href='{!!url("/location")!!}'  >Locations</a>
+<a href='{!!url("/location")!!}' class="locations">Locations</a>
 @endif
 @if($stocklocation !="0")
-<a href='{!!url("/stocklocation")!!}' >Stock</a>
+<a href='{!!url("/stocklocation")!!}' class="stock">Stock</a>
 @endif
 @if($getJobStarted !="0")
-<a href='{!!url("/getJobStarted")!!}'>WIP</a>
+<a href='{!!url("/getJobStarted")!!}' class="WIP">WIP</a>
 @endif
 @if($getjobsdata !="0")
-<a href='{!!url("/getjobsdata")!!}'>Work Orders Data</a>
+<a href='{!!url("/getjobsdata")!!}' class="WOD">Work Orders Data</a>
 @endif

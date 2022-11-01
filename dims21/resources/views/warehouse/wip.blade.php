@@ -56,6 +56,11 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .WIP {
+            background-color: #ccc !important;
+        }
+
     </style>
 
 

@@ -45,6 +45,10 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .departments {
+            background-color: #ccc !important;
+        }
     </style>
 
 

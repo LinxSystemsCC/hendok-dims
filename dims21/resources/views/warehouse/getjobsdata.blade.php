@@ -56,6 +56,10 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .WOD {
+            background-color: #ccc !important;
+        }
     </style>
 
 

@@ -44,6 +44,10 @@
         .vertical-menu a.active {
             background-color: #04AA6D;
             color: white;
+            
+        }
+        .palletConfig {
+            background-color: #ccc !important;
         }
     </style>
 

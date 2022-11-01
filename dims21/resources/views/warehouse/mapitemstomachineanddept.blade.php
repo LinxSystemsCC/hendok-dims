@@ -48,6 +48,10 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .mapMachineDeptProd {
+            background-color: #ccc !important;
+        }
     </style>
 
 
@@ -229,12 +233,12 @@
                         }, {
                             dataField: "strItemCode",
                             caption: "Item Code",
-                            width: 300,
+                            width: 150,
 
                         }, {
                             dataField: "PastelDescription",
                             caption: "Item Name",
-                            width: 190,
+                            width: 450,
 
                         },
                         {
@@ -246,7 +250,7 @@
                         {
                             dataField: "strMachineName",
                             caption: "Machines",
-                            width: 125,
+                            width: 200,
 
                         },
                         {

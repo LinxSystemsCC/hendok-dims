@@ -54,6 +54,10 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .stock {
+            background-color: #ccc !important;
+        }
     </style>
 
 

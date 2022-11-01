@@ -45,6 +45,10 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .mapMachineToDept {
+            background-color: #ccc !important;
+        }
     </style>
 
 
@@ -194,18 +198,18 @@
                         }, {
                             dataField: "strMachineName",
                             caption: "Machines",
-                            width: 300,
+                            width: 150,
 
                         }, {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 300,
+                            width: 450,
 
                         }
                         , {
                             dataField: "Statuses",
                             caption: "Status",
-                            width: 300,
+                            width: 150,
 
                         }
                         , {
