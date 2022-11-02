@@ -176,7 +176,7 @@ class WareHouseController extends Controller
     public function getviewGridStockSummary(Request $request){
 
         $gridstock = DB::connection('sqlsrv2')
-            ->select("select * from viewWareHouseTransferStockQty ");
+            ->select("select * from  viewWareHouseTransferStockQty orderby dteTimeCreate");
         return response()->json($gridstock);
     }
     public function getviewGridStockDetails(Request $request){
