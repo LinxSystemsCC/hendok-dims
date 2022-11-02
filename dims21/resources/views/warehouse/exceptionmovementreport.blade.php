@@ -226,6 +226,11 @@
                             width: 150,
                         },
                         {
+                            dataField: "UserName",
+                            caption: "User Name",
+                            width: 200,
+                        },
+                        {
                             dataField: "intJobIdOut",
                             caption: "Job Id Out",
                             width: 50,
