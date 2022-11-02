@@ -873,6 +873,9 @@ Route::get('getjobsdatajson', [WareHouseController::class,'getjobsdatajson']);
 Route::get('qrcodetracker', [WareHouseController::class,'qrcodetracker']);
 Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
 Route::get('getviewGridStockDetails', [WareHouseController::class,'getviewGridStockDetails']);
+Route::get('getpalletmovementreport', [WareHouseController::class,'getpalletmovementreport']);
+Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovementreport']);
+
 Route::get('binandqrcodes', [WareHouseController::class,'binandqrcodes']);
 Route::get('printlocationqrcodes/{location}', [WareHouseController::class,'printlocationqrcodes']);
 
@@ -964,6 +967,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
     Route::get('stockdetails/{productCode}', [WareHouseController::class,'stockdetails']);
     Route::get('getjobsdata', [WareHouseController::class,'getjobsdata']);
+    Route::get('exceptionmovementreport', [WareHouseController::class,'exceptionmovementreport']);
 
 });
 

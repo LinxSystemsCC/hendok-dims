@@ -158,8 +158,7 @@ class WareHouseController extends Controller
         /*$dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");*/
 
-        $products = DB::connection('sqlsrv2')
-            ->select("select * from viewtblProducts");
+        $products = DB::connection('sqlsrv2')->select("select * from viewtblProducts");
         return view('warehouse/stocklocations')->with('products',$products);
 
     }
@@ -167,6 +166,10 @@ class WareHouseController extends Controller
     public function stockdetails($productcode){
         //dd($productcode);
         return view('warehouse/stockdetails')->with('productCode',$productcode);
+    }
+
+    public function exceptionmovementreport(){
+        return view('warehouse/exceptionmovementreport');
     }
 
     public function printlocationqrcodes($location){
@@ -179,6 +182,17 @@ class WareHouseController extends Controller
             ->select("select * from  viewWareHouseTransferStockQty");
         return response()->json($gridstock);
     }
+
+    public function getpalletmovementreport(Request $request){
+        $palletReport = DB::connection('sqlsrv2')->select("select * from viewPalletExceptionRpt");
+        return response()->json($palletReport);
+    }
+
+    public function getitemmovementreport(Request $request){
+        /*$itemreport = DB::connection('sqlsrv2')->select("select * from ");
+        return response()->json($itemreport);*/
+    }
+
     public function getviewGridStockDetails(Request $request){
         $ItemCode = $request->get("ItemCode");
         $gridstock = DB::connection('sqlsrv2')

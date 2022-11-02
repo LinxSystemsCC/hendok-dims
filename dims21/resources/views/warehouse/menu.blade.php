@@ -70,14 +70,15 @@ if ((Auth::guest()))
 <a href='{!!url("/getjobsdata")!!}' class="WOD">Work Orders Data</a>
 @endif
 
-
 <a href='{!!url("/qrcodereversepallet")!!}' class="palletReversal">Pallet Reversal Code</a>
-
 
 @endif
 @if($printpalletsselectdept !="0")
 <a href='{!!url("/printpalletsselectdept")!!}' class="paletLabel">Print Pallet Labels</a>
 @endif
+
+<a href='{!!url("/exceptionmovementreport")!!}' class="report">Exception Mvmnt Rpt</a>
+
 
 
 
