@@ -223,7 +223,7 @@
                         {
                             dataField: "strLocation",
                             caption: "Location",
-                            width: 250,
+                            width: 150,
                         },
                         {
                             dataField: "intJobIdOut",
@@ -241,10 +241,17 @@
                             width: 150,
                         },
                         {
-                            dataField: "itemCode",
+                            dataField: "itemCodeOut",
                             caption: "Item Code",
                             width: 150,
                         },
+
+                        {
+                            dataField: "ItemName",
+                            caption: "Item Name",
+                            width: 250,
+                        },
+
                         {
                             dataField: "moveIn",
                             caption: "Move In",
