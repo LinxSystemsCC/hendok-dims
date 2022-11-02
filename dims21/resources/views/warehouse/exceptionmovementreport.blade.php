@@ -249,7 +249,7 @@
                         {
                             dataField: "ItemName",
                             caption: "Item Name",
-                            width: 250,
+                            width: 350,
                         },
 
                         {
