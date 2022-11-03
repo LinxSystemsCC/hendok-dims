@@ -90,7 +90,7 @@
             <hr>
             <div>
                 <h5>Pallet Revesal Report</h5>
-                Date From <input type="date" id="datefrom"> - Date To <input type="date" id="dateto"><button id="getreversaldata">GET</button> 
+                Date From <input type="date" id="datefromreversal"> - Date To <input type="date" id="datetoreversal"><button id="getreversaldata">GET</button> 
                 <div id="gridReversal" style="width: 100% !important;"></div>
             <div>
 
@@ -364,8 +364,8 @@
                 url: '{!!url("/getpalletreversalreport")!!}',
                 type: "GET",
                 data: {
-                    datefrom: $('#datefrom').val(),
-                    dateto: $('#dateto').val()
+                    datefrom: $('#datefromreversal').val(),
+                    dateto: $('#datetoreversal').val()
                 },
                 success: function (data) {
                     $("#gridReversal").dxDataGrid({
