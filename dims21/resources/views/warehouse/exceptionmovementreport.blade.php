@@ -426,12 +426,17 @@
                             caption: "Item Code",
                             width: 150,
                         },
-
                         {
                             dataField: "ItemName",
                             caption: "Item Name",
                             width: 350,
+                        },
+                        {
+                            dataField: "dteTimeCreate",
+                            caption: "Date",
+                            width: 200,
                         }
+
                     ],
                     onRowDblClick:function(e){
                         
