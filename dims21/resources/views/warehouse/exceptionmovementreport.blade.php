@@ -393,7 +393,7 @@
                     columns: [
                         {
                             dataField: "moveOut",
-                            caption: "Move Out",
+                            caption: "Transaction Type",
                             width: 100,
                         },
                         {
@@ -408,7 +408,7 @@
                         },
                         {
                             dataField: "intJobIdOut",
-                            caption: "Job Id Out",
+                            caption: "Job Id",
                             width: 50,
                         },
                         {
@@ -431,34 +431,7 @@
                             dataField: "ItemName",
                             caption: "Item Name",
                             width: 350,
-                        },
-
-                        {
-                            dataField: "moveIn",
-                            caption: "Move In",
-                            width: 150,
-                        },
-                        {
-                            dataField: "intJobIdIn",
-                            caption: "Job ID In",
-                            width: 150,
-                        },
-                        {
-                            dataField: "tokenIn",
-                            caption: "Token In",
-                            width: 150,
-                        },
-                        {
-                            dataField: "palletIn",
-                            caption: "Pallet In",
-                            width: 150,
-                        },
-                        {
-                            dataField: "itemCodeIn",
-                            caption: "Item Code In",
-                            width: 150,
                         }
-
                     ],
                     onRowDblClick:function(e){
                         
