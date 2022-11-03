@@ -184,8 +184,16 @@ class WareHouseController extends Controller
     }
 
     public function getpalletmovementreport(Request $request){
-        $palletReport = DB::connection('sqlsrv2')->select("select * from viewPalletExceptionRpt");
-        return response()->json($palletReport);
+        //$palletReport = DB::connection('sqlsrv2')->select("select * from viewPalletExceptionRpt");
+        //return response()->json($palletReport);
+        $datefrom = $request->get("datefrom");
+        $dateto = $request->get("dateto");
+        $datefrom = (new \DateTime($datefrom))->format('Y-m-d');
+        $dateto = (new \DateTime($dateto))->format('Y-m-d');
+
+        $returndata = DB::connection('sqlsrv2') ->select('exec spPalletExceptionRpt ?,?', array($datefrom,$dateto));
+        return response()->json($returndata);
+        //spPalletExceptionRpt
     }
 
     public function getitemmovementreport(Request $request){
@@ -194,7 +202,12 @@ class WareHouseController extends Controller
     }
 
     public function getpalletreversalreport(Request $request){
-        $reversalreport = DB::connection('sqlsrv2')->select("select * from viewPalletReversalRpt");
+        $datefrom = $request->get("datefrom");
+        $dateto = $request->get("dateto");
+        $datefrom = (new \DateTime($datefrom))->format('Y-m-d');
+        $dateto = (new \DateTime($dateto))->format('Y-m-d');
+
+        $reversalreport = DB::connection('sqlsrv2')->select("select * from viewPalletReversalRpt where dteTimeCreate between '$datefrom' and '$dateto'");
         return response()->json($reversalreport);
     }
 
