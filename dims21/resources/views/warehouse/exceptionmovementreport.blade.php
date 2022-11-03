@@ -81,11 +81,17 @@
                 <h5>Pallet Movement Report</h5> 
                 <div id="gridPallets" style="width: 100% !important;"></div>
             </div>
-            <hr>
-            <div hidden="hidden">
+            <!--hr>
+            <div>
                 <h5>Item Movement Report</h5> 
                 <div id="gridItems" style="width: 100% !important;"></div>
+            <div-->
+            <hr>
             <div>
+                <h5>Pallet Revesal Report</h5> 
+                <div id="gridReversal" style="width: 100% !important;"></div>
+            <div>
+
         </div>
     </div>
 </div>
@@ -347,6 +353,124 @@
 
         });
 
+        $("#palletreversalreport").select2();
+        $.ajax({
+            url: '{!!url("/getpalletreversalreport")!!}',
+            type: "GET",
+            data: {
+
+            },
+            success: function (data) {
+                $("#gridReversal").dxDataGrid({
+                    dataSource:data, //as json
+                    showBorders: true,
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    allowColumnResizing: true,
+                    paging:{
+                        pageSize: 20,
+                    },
+                    export: {
+                        enabled: true
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('palletreversalreport');
+
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'palletreversalreport.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
+
+                    columns: [
+                        {
+                            dataField: "moveOut",
+                            caption: "Move Out",
+                            width: 100,
+                        },
+                        {
+                            dataField: "strLocation",
+                            caption: "Location",
+                            width: 150,
+                        },
+                        {
+                            dataField: "UserName",
+                            caption: "User Name",
+                            width: 200,
+                        },
+                        {
+                            dataField: "intJobIdOut",
+                            caption: "Job Id Out",
+                            width: 50,
+                        },
+                        {
+                            dataField: "tokenOut",
+                            caption: "Token Out",
+                            width: 250,
+                        },
+                        {
+                            dataField: "palletOut",
+                            caption: "Pallet Out",
+                            width: 150,
+                        },
+                        {
+                            dataField: "itemCodeOut",
+                            caption: "Item Code",
+                            width: 150,
+                        },
+
+                        {
+                            dataField: "ItemName",
+                            caption: "Item Name",
+                            width: 350,
+                        },
+
+                        {
+                            dataField: "moveIn",
+                            caption: "Move In",
+                            width: 150,
+                        },
+                        {
+                            dataField: "intJobIdIn",
+                            caption: "Job ID In",
+                            width: 150,
+                        },
+                        {
+                            dataField: "tokenIn",
+                            caption: "Token In",
+                            width: 150,
+                        },
+                        {
+                            dataField: "palletIn",
+                            caption: "Pallet In",
+                            width: 150,
+                        },
+                        {
+                            dataField: "itemCodeIn",
+                            caption: "Item Code In",
+                            width: 150,
+                        }
+
+                    ],
+                    onRowDblClick:function(e){
+                        
+                    }
+
+                });
+
+                //Location Typs
+
+            }
+
+        });
     });
 
 

@@ -193,12 +193,25 @@ class WareHouseController extends Controller
         return response()->json($itemreport);*/
     }
 
-    public function getviewGridStockDetails(Request $request){
+    public function getpalletreversalreport(Request $request){
+        $reversalreport = DB::connection('sqlsrv2')->select("select * from viewPalletReversalRpt");
+        return response()->json($reversalreport);
+    }
+
+    public function getviewGridStockBalance(Request $request){
+        $ItemCode = $request->get("ItemCode");
+        $gridstock = DB::connection('sqlsrv2')
+            ->select("select * from viewBinLocationDetailsBalance where  strErpItemCode ='".$ItemCode."'");
+        return response()->json($gridstock);
+    }
+
+    public function getviewGridStockReport(Request $request){
         $ItemCode = $request->get("ItemCode");
         $gridstock = DB::connection('sqlsrv2')
             ->select("select * from viewLastKnownMovement where  strErpItemCode ='".$ItemCode."' order by dteTimeCreate");
         return response()->json($gridstock);
     }
+
     public function choosemachine($itemCode){
       /*  $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);*/

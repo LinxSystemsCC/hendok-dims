@@ -872,9 +872,12 @@ Route::get('getjobsdatajson', [WareHouseController::class,'getjobsdatajson']);
 
 Route::get('qrcodetracker', [WareHouseController::class,'qrcodetracker']);
 Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
-Route::get('getviewGridStockDetails', [WareHouseController::class,'getviewGridStockDetails']);
+Route::get('getviewGridStockReport', [WareHouseController::class,'getviewGridStockReport']);
+Route::get('getviewGridStockBalance', [WareHouseController::class,'getviewGridStockBalance']);
 Route::get('getpalletmovementreport', [WareHouseController::class,'getpalletmovementreport']);
 Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovementreport']);
+Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
+
 
 Route::get('binandqrcodes', [WareHouseController::class,'binandqrcodes']);
 Route::get('printlocationqrcodes/{location}', [WareHouseController::class,'printlocationqrcodes']);

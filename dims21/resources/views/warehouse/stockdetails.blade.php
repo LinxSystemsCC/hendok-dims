@@ -75,12 +75,22 @@
     <div class="col-lg-10" >
         <div class="contentWrapper">
             <div class="content" id="profile"  aria-labelledby="profile-tab">
-                <h5>Details</h5>
+                <h5>Detail Bin Balance</h5>
                     <input type="hidden" id="productCode" value="{{$productCode}}">
                     
                     
 
-                    <div id="gridContainetypes" style="width: 100% !important;">
+                    <div id="balance" style="width: 100% !important;">
+                    </div>
+            </div>
+            
+            <div class="content" id="profile"  aria-labelledby="profile-tab">
+                <h5>Detail Bin Report</h5>
+                    <input type="hidden" id="productCode" value="{{$productCode}}">
+                    
+                    
+
+                    <div id="report" style="width: 100% !important;">
                     </div>
             </div>
         </div>
@@ -177,13 +187,13 @@
     $(document).ready(function() {
         console.debug($('#productCode').val())
         $.ajax({
-            url: '{!!url("/getviewGridStockDetails")!!}',
+            url: '{!!url("/getviewGridStockBalance")!!}',
             type: "GET",
             data: {
                 ItemCode:$('#productCode').val()
             },
             success: function (data) {
-                $("#gridContainetypes").dxDataGrid({
+                $("#balance").dxDataGrid({
                     dataSource: data, //as json
                     showBorders: true,
                     filterRow: {visible: true},
@@ -213,78 +223,143 @@
                     },
 
                     columns: [
-
                         {
                             dataField: "strErpItemCode",
                             caption: "Item Code",
                             width: 150,
-
                         }, {
                             dataField: "Description_1",
                             caption: "Item Name",
                             width: 460,
-
                         }, {
                             dataField: "ItemGroupDescription",
                             caption: "Item Group",
                             width: 180,
-
                         }, {
                             dataField: "Username",
                             caption: "User Name",
                             width: 140,
+                        }, {
+                            dataField: "PalletQty",
+                            caption: "Qty", dataType: "number", format: "#0",
+                            width: 80,
+                        },{
+                            dataField: "strLocation",
+                            caption: "Location",
+                            width: 80,
+                        },
 
-                        }
-                        , {
+                    ],
+                    onRowDblClick: function (e) {
+
+
+                    }
+
+                });
+            }
+        });
+
+        $.ajax({
+            url: '{!!url("/getviewGridStockReport")!!}',
+            type: "GET",
+            data: {
+                ItemCode:$('#productCode').val()
+            },
+            success: function (data) {
+                $("#report").dxDataGrid({
+                    dataSource: data, //as json
+                    showBorders: true,
+                    filterRow: {visible: true},
+                    filterPanel: {visible: true},
+                    headerFilter: {visible: true},
+                    allowColumnResizing: true,
+                    paging: {
+                        pageSize: 20,
+                    },
+                    export: {
+                        enabled: true
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('getviewGridStockDetails');
+
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], {type: 'application/octet-stream'}), 'getLocationNamesAndTypes.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
+
+                    columns: [
+                        {
+                            dataField: "strErpItemCode",
+                            caption: "Item Code",
+                            width: 150,
+                        }, 
+                        {
+                            dataField: "Description_1",
+                            caption: "Item Name",
+                            width: 460,
+                        }, 
+                        {
+                            dataField: "ItemGroupDescription",
+                            caption: "Item Group",
+                            width: 180,
+                        }, 
+                        {
+                            dataField: "Username",
+                            caption: "User Name",
+                            width: 140,
+                        }, 
+                        {
                             dataField: "mnyPalletQty",
                             caption: "Qty", dataType: "number", format: "#0",
                             width: 80,
-
-                        }, {
+                        }, 
+                        {
                             dataField: "MinLevel",
                             caption: "Min Level",
                             width: 80,
-
-                        }
-                        , {
+                        }, 
+                        {
                             dataField: "MaxLevel",
                             caption: "Max Level",
                             width: 80,
-
-                        }, {
+                        }, 
+                        {
                             dataField: "QtyInStock",
                             caption: "Stock On Hand",
                             width: 80,
-
-                        }
-                        , {
+                        }, 
+                        {
                             dataField: "strLocation",
                             caption: "Location",
                             width: 180,
-
                         },
                         {
                             dataField: "intJobId",
                             caption: "Job Id",
                             width: 80,
-
                         },
                         {
                             dataField: "strMoveType",
                             caption: "Mov Type",
                             width: 80,
-
                         },
                         {
                             dataField: "strItem",
                             caption: "strItem",
                             width: 80,
-
-                        },{
+                        },
+                        {
                             dataField: "TransactionType",
                             caption: "TransactionType",
                             width: 80,
-
                         }
                     ],
                     onRowDblClick: function (e) {
@@ -295,6 +370,7 @@
                 });
             }
         });
+
 
 
     });
