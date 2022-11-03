@@ -186,13 +186,13 @@
 
     $(document).ready(function() {
         $("#palletmovementreport").select2();
-
         $("#getmovementdata").click(function(){
             $.ajax({
                 url: '{!!url("/getpalletmovementreport")!!}',
                 type: "GET",
                 data: {
-
+                    datefrom: $('#datefrom').val(),
+                    dateto: $('#dateto').val()
                 },
                 success: function (data) {
                     $("#gridPallets").dxDataGrid({
@@ -307,7 +307,6 @@
         });
 
         $("#itemmovementreport").select2();
-
         $.ajax({
             url: '{!!url("/getitemmovementreport")!!}',
             type: "GET",
@@ -360,7 +359,6 @@
         });
 
         $("#palletreversalreport").select2();
-
         $("#getreversaldata").click(function(){
             $.ajax({
                 url: '{!!url("/getpalletreversalreport")!!}',
