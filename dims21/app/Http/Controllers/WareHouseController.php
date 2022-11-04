@@ -490,6 +490,7 @@ class WareHouseController extends Controller
                 array($jobid));
         return view('warehouse/updatejob')->with("jobdata",$jobdata)->with("id",$jobid);
     }
+    
     public function insertIntoJobTable(Request $request){
         $deptId = $request->get("deptId");
         $prodgroup = "0"; //$request->get("prodgroup");
