@@ -118,10 +118,13 @@ class WareHouseController extends Controller
     }
     public function getProdCategory(Request $request){
         $ItemGroup = $request->get("ItemGroup");
+        $strProductCategory = $request->get("strProductCategory");
         $prodCategory = DB::connection('sqlsrv2')
-            ->select("select * from viewItemCategory where ItemGroup ='".$ItemGroup."' order by strProductCategory");
+            ->select("select * from viewItemCategory where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strProductCategory");
         return response()->json($prodCategory);
     }
+
+
     public function saveLocationType(Request $request){
         $locationtype = $request->get("locationtype");
 
@@ -137,12 +140,25 @@ class WareHouseController extends Controller
             ['strLocationName' => $strLocationName,'intLocationTypeId' => $locationtype]);
         return response()->json($result);
     }
+
+    public function getDepListToPlan(Request $request){
+        $ItemGroup = $request->get("ItemGroup");
+        //$getUserByEmail = DB::select('SELECT * FROM users WHERE email = ?' , ['useremailaddress@email.com']);
+        $strProductCategory = $request->get("strProductCategory");
+
+        $prodCategory = DB::connection('sqlsrv2')->select("select * from tblProductCategoryAndGroups where strProductGroup ='".$ItemGroup."'");
+        //dd($prodCategory);
+
+        return response()->json($prodCategory);
+    }
+
     public function getProdListToPlan(Request $request){
         $ItemGroup = $request->get("ItemGroup");
+        //dd($ItemGroup);
         $strProductCategory = $request->get("strProductCategory");
         $prodCategory = DB::connection('sqlsrv2')
             //->select("select * from viewItemsToPlanJob where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strItemName");
-            ->select("select DISTINCT i.* from viewItemsToPlanJob i inner join tblMappedDeptMachinesItems mis on mis.strItemCode collate database_default = i.strItemCode  where ItemGroup ='".$ItemGroup."' order by strItemName");
+            ->select("select DISTINCT i.* from viewItemsToPlanJob i inner join tblMappedDeptMachinesItems mis on mis.strItemCode collate database_default = i.strItemCode  where strProductCategory ='".$ItemGroup."' order by strItemName");
         return response()->json($prodCategory);
     }
     //For printing pallets
@@ -490,6 +506,14 @@ class WareHouseController extends Controller
                 array($jobid));
         return view('warehouse/updatejob')->with("jobdata",$jobdata)->with("id",$jobid);
     }
+
+    public function jobcard($jobid){
+        $jobdata = DB::connection('sqlsrv3')
+            ->select('exec spGetProductPlannedDetails ?',
+                array($jobid));
+        return view('warehouse/jobcard')->with("jobdata",$jobdata)->with("id",$jobid);
+    }
+    
     public function insertIntoJobTable(Request $request){
         $deptId = $request->get("deptId");
         $prodgroup = "0"; //$request->get("prodgroup");
