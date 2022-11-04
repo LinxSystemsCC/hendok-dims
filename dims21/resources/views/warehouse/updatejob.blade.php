@@ -70,6 +70,7 @@
 
     <button type="button" id="printlabels" class="btn btn-secondary" data-toggle="modal" data-target="#prinlabels">Print Additional Labels</button>
     <button type="button" id="sequence" class="btn btn-success" data-toggle="modal" data-target="#sequencedialog">Change Sequence</button>
+    <button type="button" id="printjobcard" class="btn btn-info" data-toggle="modal" data-target="#sequencedialog">Print Job Card</button>
 
     <div title="Statuses" id="jobchanges" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="jobchangesTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -304,6 +305,7 @@
             });
         });
 
+
         $('#finalisepalletprint').click(function(){
             $.ajax({
                 url: '{!!url("/sendLabelToThePrinter")!!}',
@@ -433,8 +435,12 @@
 
         });
 
+        $('#printjobcard').click(function(){
+            
+            window.open('{!!url("/jobcard")!!}/' +$('#jobid').val(), "JobP" +$('#jobid').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
+ 
 
-
+        });
     });
 
 

@@ -973,7 +973,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('stockdetails/{productCode}', [WareHouseController::class,'stockdetails']);
     Route::get('getjobsdata', [WareHouseController::class,'getjobsdata']);
     Route::get('exceptionmovementreport', [WareHouseController::class,'exceptionmovementreport']);
-    Route::get('jobcard', [WareHouseController::class,'jobcard']);
+    Route::get('jobcard/{JobID}', [WareHouseController::class,'jobcard']);
 
 });
 

@@ -277,13 +277,9 @@ class WareHouseController extends Controller
         return response()->json($machines);
     }
     public function getPalletForSelectedItem(Request $request){
-
         $itemCode = $request->get("itemCode");
         $intMachine = $request->get("intMachine");
-        $palletsjson = DB::connection('sqlsrv2')
-            ->select("EXEC spSelectItemsConfigurations ?,? ",
-                array($itemCode,$intMachine)
-            );
+        $palletsjson = DB::connection('sqlsrv2') ->select("EXEC spSelectItemsConfigurations ?,? ", array($itemCode,$intMachine));
         return response()->json($palletsjson);
     }
     public function startendjob(Request $request){
@@ -508,9 +504,8 @@ class WareHouseController extends Controller
     }
 
     public function jobcard($jobid){
-        $jobdata = DB::connection('sqlsrv3')
-            ->select('exec spGetProductPlannedDetails ?',
-                array($jobid));
+        $jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?',array($jobid));
+        //dd($jobdata);
         return view('warehouse/jobcard')->with("jobdata",$jobdata)->with("id",$jobid);
     }
     
