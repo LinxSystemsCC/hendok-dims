@@ -212,8 +212,7 @@
                 <tr>
 
                     <td>Job Start </td>
-                    <td><input type="text" class="form-control" id="updatestartform" value="{{$val->dteLiveStartJobDate}}"> </td>
-
+                    <td><input type="text" class="form-control" id="updatestartdate" value="{{$val->dteLiveStartJobDate}}"> </td>
 
                 </tr>
                 <tr>
@@ -253,7 +252,6 @@
             $('#productlabelqtytoprint').val("");
         });
 
-            
         $('#savechanges').click(function(){
             $.ajax({
                 url: '{!!url("/startendjob")!!}',
@@ -275,17 +273,6 @@
             });
         });
 
-        $('#printlabels').prop('disabled', true);
-
-        if ($('#updatestartform').val() != ""){
-            $('#printlabels').prop('disabled', false);
-        }
-
-        /*$('#printlabels').click(function(){
-            if (($('#printlabels').prop('disabled', true) == true)){
-                window.alert("test");
-            }
-        });*/
 
         $('#updatestartdate').click(function(){
             $.ajax({
@@ -296,9 +283,10 @@
                     jobid:$('#jobid').val(),
                     startdate:$('#startdate').val(),
                 },
-
                 success: function (data) {
-                    location.reload();
+
+                        location.reload();
+
                 }
 
             });
@@ -338,6 +326,8 @@
 
             });
         });
+
+
 
         $.ajax({
             url: '{!!url("/getProductPlannedOnThatMachine")!!}',
