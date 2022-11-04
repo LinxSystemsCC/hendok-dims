@@ -6,6 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
+
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
@@ -118,9 +122,9 @@
                     <label class="control-label" for="department" onselect="but_read" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
                     <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
                         <option></option>
-                        @foreach($prodGroups as $val)
+                        {{-- @foreach($prodGroups as $val)
                             <option value="{{$val->ItemGroup}}">{{$val->ItemGroupDescription}}</option>
-                        @endforeach
+                        @endforeach--}}
                     </select>
 
                     <!--input type='button' value='Confirm Prod Cat' class="btn btn-secondary btn-sm" id='but_read'-->
@@ -223,8 +227,6 @@ $("#machinename").change(function () {
 
 $('#prodname').change(function () {
 
-
-
     $.ajax({
 
         url: '{!!url("/getMachinesforselecteddept")!!}',
@@ -286,13 +288,39 @@ $('#prodname').change(function () {
 
         });*/
 
+        $('#departmentheader').change(function(){
+            $.ajax({
+
+                url: '{!!url("/getDepListToPlan")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: $('#departmentheader option:selected').text(),
+                    strProductCategory: $("#productcategory").val()
+
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#department").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.intAutoGroupCategoryId+'">'+o.strProductCategory+'</option>';
+                    });
+                    $("#department").append(toAppend);
+                    $("#department").select2();
+
+                }
+
+            });
+        });
+
         $('#department').change(function(){
             $.ajax({
 
                 url: '{!!url("/getProdListToPlan")!!}',
                 type: "GET",
                 data: {
-                    ItemGroup: $('#department').val(),
+                    ItemGroup: $('#department option:selected').text(),
                     strProductCategory: $("#productcategory").val()
 
                 },
@@ -333,8 +361,6 @@ $('#prodname').change(function () {
 
             });
         });
-
-
 
         $('#savedepartment').click(function(){
 
