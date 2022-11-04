@@ -890,9 +890,11 @@ Route::get('qrcodeimage/{binlocation}', [WareHouseController::class,'qrcodeimage
 Route::post('savenewbin', [WareHouseController::class,'savenewbin']);
 
 
+
 Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
 Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
 Route::get('getPalletForSelectedItem', [WareHouseController::class,'getPalletForSelectedItem']);
+Route::get('getDepListToPlan', [WareHouseController::class,'getDepListToPlan']);
 Route::get('getProdListToPlan', [WareHouseController::class,'getProdListToPlan']);
 Route::get('qrcodereversepallet', [WareHouseController::class,'qrcodereversepallet']);
 Route::get('qrcodebreakpallet', [WareHouseController::class,'qrcodebreakpallet']);
@@ -971,6 +973,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('stockdetails/{productCode}', [WareHouseController::class,'stockdetails']);
     Route::get('getjobsdata', [WareHouseController::class,'getjobsdata']);
     Route::get('exceptionmovementreport', [WareHouseController::class,'exceptionmovementreport']);
+    Route::get('jobcard/{jobid}', [WareHouseController::class,'jobcard']);
 
 });
 
