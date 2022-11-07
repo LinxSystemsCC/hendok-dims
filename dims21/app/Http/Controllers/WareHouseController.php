@@ -305,6 +305,19 @@ class WareHouseController extends Controller
 
         return response()->json($palletconf);
     }
+
+    public function mapdepttoarea(){
+        $area = DB::connection('sqlsrv2')
+            ->select("select * from tblAreas");
+
+          $dept = DB::connection('sqlsrv2')
+              ->select('SELECT * FROM tblDepartments WHERE intAutoID NOT IN  (SELECT intDeptID FROM tblMapDeptToArea) ');
+
+        //dd($area);
+        //dd($dept);
+        return view('warehouse/mapdepttoarea')->with('area',$area)->with('department',$dept);
+    }
+
     public function mapmachinestodept(){
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");
@@ -592,6 +605,12 @@ class WareHouseController extends Controller
             ->select("EXEC spGetPalletsConfig ");
         return response()->json($palletsjson);
     }
+    public function getDeptmappedtoarea(){
+        $palletsjson = DB::connection('sqlsrv2')
+            ->select("EXEC  spGetMappedDeptToArea");
+        return response()->json($palletsjson);
+    }
+    
     public function getMachinesmappedtodept(){
         $palletsjson = DB::connection('sqlsrv2')
             ->select("EXEC spGetMappedMachinesToDept ");
@@ -631,6 +650,18 @@ class WareHouseController extends Controller
             );
         return response()->json($returnmach);
     }
+
+    public function savesDepttoarea(Request $request){
+        $deptid = $request->get("deptid");
+        $areaid = $request->get("areaid");
+        //
+        $returnmach = DB::connection('sqlsrv2')
+            ->select('exec [spMapDeptToArea] ?,?',
+                array($deptid,$areaid)
+            );
+        return response()->json($returnmach);
+    }
+
     public function savesMachinemaptodept(Request $request){
         $machineid = $request->get("machineid");
         $deptid = $request->get("deptid");
