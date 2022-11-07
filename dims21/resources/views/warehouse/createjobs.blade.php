@@ -205,55 +205,54 @@
     });
     $(document).ready(function() {
 
-$("#machinename").change(function () {
+        $("#machinename").change(function () {
 
-    $.ajax({
+            $.ajax({
 
-        url: '{!!url("/getPalletForSelectedItem")!!}',
-        type: "GET",
-        data: {
-            itemCode: $("#prodname").val(),
-            intMachine: $("#machinename").val()
-        },
-        success: function (data) {
-            var toAppend = '';
-            $("#palletconfig").empty();
-            toAppend += '<option></option>';
-            $.each(data,function(i,o){
+                url: '{!!url("/getPalletForSelectedItem")!!}',
+                type: "GET",
+                data: {
+                    itemCode: $("#prodname").val(),
+                    intMachine: $("#machinename").val()
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#palletconfig").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
 
-                toAppend += '<option value="'+o.intPalletId+'">'+o.strPalletTypeDescription+'</option>';
+                        toAppend += '<option value="'+o.intPalletId+'">'+o.strPalletTypeDescription+'</option>';
+                    });
+                    $("#palletconfig").append(toAppend);
+                    $("#palletconfig").select2();
+                }
             });
-            $("#palletconfig").append(toAppend);
-            $("#palletconfig").select2();
-        }
-    });
 
-});
+        });
 
-$('#prodname').change(function () {
+        $('#prodname').change(function () {
 
-    $.ajax({
+            $.ajax({
 
-        url: '{!!url("/getMachinesforselecteddept")!!}',
-        type: "GET",
-        data: {
-            deptId: $("#departmentheader").val(),
-            prodname: $("#prodname").val()
-        },
-        success: function (data) {
-            var toAppend = '<option></option>';
-            $("#machinename").empty();
-            $.each(data,function(i,o){
+                url: '{!!url("/getMachinesforselecteddept")!!}',
+                type: "GET",
+                data: {
+                    deptId: $("#departmentheader").val(),
+                    prodname: $("#prodname").val()
+                },
+                success: function (data) {
+                    var toAppend = '<option></option>';
+                    $("#machinename").empty();
+                    $.each(data,function(i,o){
 
-                toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
+                        toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
+                    });
+                    $("#machinename").append(toAppend);
+                    $("#machinename").select2();
+                    
+                }
             });
-            $("#machinename").append(toAppend);
-            $("#machinename").select2();
-            
-        }
-    });
-});
-
+        });
 
         $("#department").select2();
 
@@ -505,8 +504,6 @@ $('#prodname').change(function () {
         $('#printjobcard').click(function(){  
             window.open('{!!url("/getallactivejobs")!!}', "location=1,status=1,scrollbars=1, width=1200,height=850");
         });
-
-
     });
 
 

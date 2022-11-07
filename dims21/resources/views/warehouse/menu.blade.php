@@ -27,6 +27,8 @@ if ((Auth::guest()))
     {{ csrf_field() }}
 </form>
 
+<a href='{!!url("/areapage")!!}' class="areas">Areas</a> 
+
 @if($departmentpage !="0")
 <a href='{!!url("/departmentpage")!!}' class="departments">Departments</a>
 @endif

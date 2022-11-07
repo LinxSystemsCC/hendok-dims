@@ -50,6 +50,10 @@ class WareHouseController extends Controller
     public function createPalletConfig(){
         return view('warehouse/palletsconf');
     }
+    public function areapage(){
+        return view('warehouse/areas');
+    }
+
     public function departmentpage(){
         return view('warehouse/departments');
     }
@@ -598,6 +602,12 @@ class WareHouseController extends Controller
             ->select("EXEC spGetDepNames ");
         return response()->json($palletsjson);
     }
+
+    public function getAreaname(){
+        $palletsjson = DB::connection('sqlsrv2') ->select("EXEC spGetAreaNames ");
+        return response()->json($palletsjson);
+    }
+
     public function getpalletconfforitems(Request $request){
         $productcode= $request->get("productcode");
         $palletsjson = DB::connection('sqlsrv2')
@@ -641,6 +651,17 @@ class WareHouseController extends Controller
             );
         return response()->json($returnmach);
     }
+
+    public function savesareaname(Request $request){
+        $areaname = $request->get("areaname");
+
+        $returnmach = DB::connection('sqlsrv2')
+            ->select('exec spCreateArea ?',
+                array($areaname)
+            );
+        return response()->json($returnmach);
+    }
+
     public function savesmachines(Request $request){
         $machines = $request->get("machinenames");
 
@@ -685,6 +706,18 @@ class WareHouseController extends Controller
             );
         return response()->json($returnmach);
     }
+
+    public function updateAreaName(Request $request){
+
+        $theAreaname = $request->get("theAreaname");
+        $palletid = $request->get("palletid");
+        $returnmach = DB::connection('sqlsrv2')
+            ->select('exec spUpdateAreas ?,?',
+                array($palletid,$theAreaname)
+            );
+        return response()->json($returnmach);
+    }
+
     public function updateMachineName(Request $request){
 
         $themachinename = $request->get("themachinename");

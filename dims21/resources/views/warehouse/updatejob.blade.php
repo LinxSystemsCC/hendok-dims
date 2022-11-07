@@ -253,8 +253,7 @@
             $('#palletlabelqty').val("");
             $('#productlabelqtytoprint').val("");
         });
-
-            
+   
         $('#savechanges').click(function(){
             $.ajax({
                 url: '{!!url("/startendjob")!!}',

@@ -833,6 +833,7 @@ Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
 Route::get('initiateproductonmachine', [WareHouseController::class,'initiateproductonmachine']);
 Route::get('getPalletsJson', [WareHouseController::class,'getPalletsJson']);
 Route::get('getDeptname', [WareHouseController::class,'getDeptname']);
+Route::get('getAreaname', [WareHouseController::class,'getAreaname']);
 Route::get('getMachines', [WareHouseController::class,'getMachines']);
 
 
@@ -851,9 +852,11 @@ Route::post('savespalletstoitems', [WareHouseController::class,'savespalletstoit
 Route::post('savesmachinedeptitems', [WareHouseController::class,'savesmachinedeptitems']);
 Route::post('savesMachinemaptodept', [WareHouseController::class,'savesMachinemaptodept']);
 Route::post('updateDeptName', [WareHouseController::class,'updateDeptName']);
+Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
 Route::post('updateMachineName', [WareHouseController::class,'updateMachineName']);
 Route::post('savespallets', [WareHouseController::class,'savesPalletsPost']);
 Route::post('savesdeptname', [WareHouseController::class,'savesdeptname']);
+Route::post('savesareaname', [WareHouseController::class,'savesareaname']);
 Route::post('savesmachines', [WareHouseController::class,'savesmachines']);
 Route::post('removemapping', [WareHouseController::class,'removemapping']);
 Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefromdept']);
@@ -963,6 +966,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
+    Route::get('areapage', [WareHouseController::class,'areapage']);
     Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
     Route::get('machines', [WareHouseController::class,'machinespage']);
     Route::get('mapmachinestodept', [WareHouseController::class,'mapmachinestodept']);
