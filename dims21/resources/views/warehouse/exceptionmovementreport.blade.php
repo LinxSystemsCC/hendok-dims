@@ -243,7 +243,7 @@
                             {
                                 dataField: "intJobIdOut",
                                 caption: "Job Id Out",
-                                width: 50,
+                                width: 120,
                             },
                             {
                                 dataField: "tokenOut",
@@ -400,8 +400,8 @@
                         columns: [
                             {
                                 dataField: "moveOut",
-                                caption: "Transaction Type",
-                                width: 100,
+                                caption: "Transaction",
+                                width: 150 ,
                             },
                             {
                                 dataField: "strLocation",
@@ -416,7 +416,7 @@
                             {
                                 dataField: "intJobIdOut",
                                 caption: "Job Id",
-                                width: 50,
+                                width: 90,
                             },
                             {
                                 dataField: "tokenOut",

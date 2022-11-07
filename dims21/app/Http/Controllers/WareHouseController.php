@@ -503,10 +503,16 @@ class WareHouseController extends Controller
         return view('warehouse/updatejob')->with("jobdata",$jobdata)->with("id",$jobid);
     }
 
-    public function jobcard($jobid){
+    public function getjobcard($jobid){
         $jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?',array($jobid));
         //dd($jobdata);
         return view('warehouse/jobcard')->with("jobdata",$jobdata)->with("id",$jobid);
+    }
+
+    public function getallactivejobs(){
+        $jobdata = DB::connection('sqlsrv3')->select('exec spGetFullProductPlannedDetails');
+        //dd($jobdata);
+        return view('warehouse/jobcard')->with("jobdata",$jobdata);
     }
     
     public function insertIntoJobTable(Request $request){

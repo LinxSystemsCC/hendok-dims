@@ -12,6 +12,7 @@ use App\Http\Controllers\ApisContoller;
 use App\Http\Controllers\OnlineOrders;
 use App\Http\Controllers\ConsoleManagement;
 use App\Http\Controllers\InvoicingController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
@@ -973,8 +974,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('stockdetails/{productCode}', [WareHouseController::class,'stockdetails']);
     Route::get('getjobsdata', [WareHouseController::class,'getjobsdata']);
     Route::get('exceptionmovementreport', [WareHouseController::class,'exceptionmovementreport']);
-    Route::get('jobcard/{JobID}', [WareHouseController::class,'jobcard']);
-
+    Route::get('getjobcard/{JobID}', [WareHouseController::class,'getjobcard']);
+    Route::get('getallactivejobs', [WareHouseController::class,'getallactivejobs']);
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!

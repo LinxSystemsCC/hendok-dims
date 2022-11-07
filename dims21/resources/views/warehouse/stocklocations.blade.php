@@ -312,17 +312,17 @@
                         {
                             dataField: "strErpItemCode",
                             caption: "Item Code",
-                            width: 150,
+                            width: 200,
 
                         }, {
                             dataField: "Description_1",
                             caption: "Item Name",
-                            width: 460,
+                            width: 500,
 
                         }, {
                             dataField: "ItemGroupDescription",
                             caption: "Item Group",
-                            width: 180,
+                            width: 200,
 
                         }, {
                             dataField: "mnyPalletQty",
@@ -332,13 +332,13 @@
                         }, {
                             dataField: "MinLevel",
                             caption: "Min Level",
-                            width: 80,
+                            width: 100,
 
                         }
                      , {
                             dataField: "MaxLevel",
                             caption: "Max Level",
-                            width: 80,
+                            width: 100,
 
                         }, {
                             dataField: "QtyInStock",

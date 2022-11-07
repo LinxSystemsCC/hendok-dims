@@ -148,53 +148,53 @@
                         {
                             dataField: "intJobId",
                             caption: "JobNo",
-                            width: 60,
+                            width: 80,
 
                         }, {
                             dataField: "intJobSequence",
-                            caption: "Job Sequence",
-                            width: 60,
+                            caption: "Job Seq",
+                            width: 100,
 
                         }, {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 140,
+                            width: 200,
 
                         },
                         {
                             dataField: "strMachineName",
                             caption: "Machine",
-                            width: 140,
+                            width: 250,
 
                         },
                         {
                             dataField: "PastelDescription",
                             caption: "Product",
-                            width: 400,
+                            width: 500,
 
                         },
                         {
                             dataField: "mnyQtyRequired",
                             caption: "Planned",
-                            width: 90,dataType:"number"
+                            width: 100,dataType:"number"
 
                         },
                         {
                             dataField: "mnyQtyProduced",
                             caption: "Produced",
-                            width: 90,dataType:"number"
+                            width: 100,dataType:"number"
 
                         },
                         {
                             dataField: "palletQtyRequired",
-                            caption: "Est Req Pallet",
-                            width: 90,dataType:"number"
+                            caption: "Est Req",
+                            width: 100,dataType:"number"
 
                         },
                         {
                             dataField: "palletQtyProduced",
-                            caption: "Est Produced Pallet",
-                            width: 90,dataType:"number"
+                            caption: "Est Prod",
+                            width: 100,dataType:"number"
                         }
                         ,
                         {

@@ -435,11 +435,8 @@
 
         });
 
-        $('#printjobcard').click(function(){
-            
-            window.open('{!!url("/jobcard")!!}/' +$('#jobid').val(), "JobP" +$('#jobid').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
- 
-
+        $('#printjobcard').click(function(){  
+            window.open('{!!url("/getjobcard")!!}/' +$('#jobid').val(), "JobP" +$('#jobid').val(), "location=1,status=1,scrollbars=1, width=1200,height=850");
         });
     });
 

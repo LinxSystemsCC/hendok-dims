@@ -113,7 +113,13 @@
                             <td class="col-md-1">QTY REQUIRED:</td>
                             <td class="col-md-2">{{$val->mnyQtyRequired}}</td>
                             <td class="col-md-1">QTY COMPLETE:</td>
-                            <td class="col-md-2">{{$val->mnyQtyProduced}}</td>
+                            <td class="col-md-2">
+                                @if ($val->mnyQtyProduced == null )
+                                    0 
+                                @else
+                                    {{round($val->mnyQtyProduced, 0)}}
+                                @endif
+                            </td>
                         </tr>
                     </tbody>
                 </table>

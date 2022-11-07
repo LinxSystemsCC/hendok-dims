@@ -149,66 +149,66 @@ $('#getwipdata').click(function(){
                     {
                         dataField: "intJobId",
                         caption: "JobNo",
-                        width: 60,
+                        width: 80,
 
                     }, {
                         dataField: "intJobSequence",
-                        caption: "Job Sequence",
-                        width: 60,
+                        caption: "Job Seq",
+                        width: 100,
 
                     }, {
                         dataField: "strDeptName",
                         caption: "Department",
-                        width: 150,
+                        width: 200,
 
                     },
                     {
                         dataField: "strMachineName",
                         caption: "Machine",
-                        width: 200,
+                        width: 250,
 
                     },
                     {
                         dataField: "PastelDescription",
                         caption: "Product",
-                        width: 450,
+                        width: 500,
 
                     },
                     {
                         dataField: "jobStatus",
                         caption: "Status",
-                        width: 150,
+                        width: 100,
 
                     },
                     
                     {
                         dataField: "mnyQtyRequired",
                         caption: "Planned",
-                        width: 90,dataType:"number"
+                        width: 100,dataType:"number"
 
                     },
                     {
                         dataField: "mnyQtyProduced",
                         caption: "Produced",
-                        width: 60,dataType:"number"
+                        width: 100,dataType:"number"
 
                     },
                     {
                         dataField: "palletQtyRequired",
-                        caption: "Est Req Pallet",
-                        width: 60,dataType:"number"
+                        caption: "Est Req",
+                        width: 100,dataType:"number"
 
                     },
                     {
                         dataField: "palletQtyProduced",
-                        caption: "Est Produced Pallet",
-                        width: 60,dataType:"number"
+                        caption: "Est Prod",
+                        width: 100,dataType:"number"
                     }
                     ,
                     {
                         dataField: "dteLastPrintedUpdated",
                         caption: "Last Update",
-                        width: 100
+                        width: 150
 
                     },
 

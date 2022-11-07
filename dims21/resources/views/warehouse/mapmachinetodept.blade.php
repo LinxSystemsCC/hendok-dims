@@ -198,7 +198,7 @@
                         }, {
                             dataField: "strMachineName",
                             caption: "Machines",
-                            width: 150,
+                            width: 250,
 
                         }, {
                             dataField: "strDeptName",

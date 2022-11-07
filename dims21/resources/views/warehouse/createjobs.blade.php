@@ -79,6 +79,9 @@
         <div id="gridContainer" style="width: 100% !important;">
         </div>
 
+        <button type="button" id="printjobcard" class="btn btn-info" data-toggle="modal" data-target="#sequencedialog">Print All Active Jobs</button>
+        
+
     </div>
     <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -94,6 +97,8 @@
             </div>
         </div>
     </div>
+
+    
 
 
     <div title="Job Creation" id="createjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
@@ -430,29 +435,29 @@ $('#prodname').change(function () {
                         {
                             dataField: "intJobId",
                             caption: "JobNo",
-                            width: 60,
+                            width: 80,
 
                         }, {
                             dataField: "intJobSequence",
-                            caption: "Job Sequence",
-                            width: 60,
+                            caption: "Job Seq",
+                            width: 100,
 
                         }, {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 150,
+                            width: 250,
 
                         },
                         {
                             dataField: "strMachineName",
                             caption: "Machine",
-                            width: 200,
+                            width: 300,
 
                         },
                         {
                             dataField: "PastelDescription",
                             caption: "Product",
-                            width: 450,
+                            width: 600,
 
                         },
                         {
@@ -464,7 +469,7 @@ $('#prodname').change(function () {
                         {
                             dataField: "palletQty",
                             caption: "Pallet Qty",
-                            width: 60,dataType:"number"
+                            width: 100,dataType:"number"
 
                         }
                         ,
@@ -481,6 +486,8 @@ $('#prodname').change(function () {
 
                         },
                     ],
+
+                    
                     onRowDblClick:function(e){
                         console.log(e.data.intJobId);
                         var intJobId =  e.data.intJobId;
@@ -495,6 +502,9 @@ $('#prodname').change(function () {
 
         });
 
+        $('#printjobcard').click(function(){  
+            window.open('{!!url("/getallactivejobs")!!}', "location=1,status=1,scrollbars=1, width=1200,height=850");
+        });
 
 
     });
