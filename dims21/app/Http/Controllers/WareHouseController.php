@@ -306,16 +306,16 @@ class WareHouseController extends Controller
         return response()->json($palletconf);
     }
 
-    public function mapdepttoarea(){
+    public function mapmachinetoarea(){
         $area = DB::connection('sqlsrv2')
             ->select("select * from tblAreas");
 
-          $dept = DB::connection('sqlsrv2')
-              ->select('SELECT * FROM tblDepartments WHERE intAutoID NOT IN  (SELECT intDeptID FROM tblMapDeptToArea) ');
+          $machine = DB::connection('sqlsrv2')
+              ->select('SELECT * FROM tblMachines WHERE intAutoMachineID NOT IN  (SELECT intMachineID FROM tblMapMachineToArea) ');
 
         //dd($area);
-        //dd($dept);
-        return view('warehouse/mapdepttoarea')->with('area',$area)->with('department',$dept);
+        //dd($machine);
+        return view('warehouse/mapmachinetoarea')->with('area',$area)->with('machine',$machine);
     }
 
     public function mapmachinestodept(){
@@ -605,9 +605,9 @@ class WareHouseController extends Controller
             ->select("EXEC spGetPalletsConfig ");
         return response()->json($palletsjson);
     }
-    public function getDeptmappedtoarea(){
+    public function getMachinemappedtoarea(){
         $palletsjson = DB::connection('sqlsrv2')
-            ->select("EXEC  spGetMappedDeptToArea");
+            ->select("EXEC  spGetMappedMachineToArea");
         return response()->json($palletsjson);
     }
     
@@ -651,13 +651,13 @@ class WareHouseController extends Controller
         return response()->json($returnmach);
     }
 
-    public function savesDepttoarea(Request $request){
-        $deptid = $request->get("deptid");
+    public function savesMachinetoarea(Request $request){
+        $machineid = $request->get("machineid");
         $areaid = $request->get("areaid");
         //
         $returnmach = DB::connection('sqlsrv2')
-            ->select('exec [spMapDeptToArea] ?,?',
-                array($deptid,$areaid)
+            ->select('exec [spMapMachineToArea] ?,?',
+                array($machineid,$areaid)
             );
         return response()->json($returnmach);
     }

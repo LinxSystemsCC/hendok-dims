@@ -46,7 +46,7 @@
             color: white;
         }
 
-        .mapDeptToArea {
+        .mapMachineToArea {
             background-color: #ccc !important;
         }
     </style>
@@ -66,7 +66,7 @@
                 <h4>Set-Up</h4>
                 <fieldset class="well">
                     <form>
-                        Map Dept To Area
+                        Map Machine To Area
                         <div class="form-group">
                             <label class="control-label" for="area"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Area </label>
                             <select  class="form-control input-sm col-xs-1" id="area" required>
@@ -78,17 +78,17 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-                            <select  class="form-control input-sm col-xs-1" id="department" required>
+                            <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine </label>
+                            <select  class="form-control input-sm col-xs-1" id="machine" required>
                                 <option></option>
-                                @foreach($department as $val)
-                                    <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                                @foreach($machine as $val)
+                                    <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
                                 @endforeach
 
                             </select>
                         </div>
                         <br>
-                        <button type="button" id="savedept" class="btn-lg btn-success" >Save</button>
+                        <button type="button" id="savemachine" class="btn-lg btn-success" >Save</button>
                         <br>
 
 
@@ -131,14 +131,14 @@
     $(document).ready(function() {
 
 
-        $('#savedept').click(function(){
+        $('#savemachine').click(function(){
 
             $.ajax({
 
-                url: '{!!url("/savesDepttoarea")!!}',
+                url: '{!!url("/savesMachinetoarea")!!}',
                 type: "POST",
                 data: {
-                    deptid: $('#department').val(),
+                    machineid: $('#machine').val(),
                     areaid: $('#area').val()
 
                 },
@@ -153,7 +153,7 @@
 
         $.ajax({
 
-            url: '{!!url("/getDeptmappedtoarea")!!}',
+            url: '{!!url("/getMachinemappedtoarea")!!}',
             type: "GET",
             data: {
 
@@ -175,7 +175,7 @@
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('Departments');
+                        const worksheet = workbook.addWorksheet('Machines');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -183,7 +183,7 @@
                             autoFilterEnabled: true,
                         }).then(() => {
                             workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Departments.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Machines.xlsx');
                             });
                         });
                         e.cancel = true;
@@ -191,13 +191,13 @@
 
                     columns: [
                         {
-                            dataField: "intAutoMappedDeptArea",
+                            dataField: "intAutoMappedMachineArea",
                             caption: "ID",
                             width: 50,
 
                         }, {
-                            dataField: "strDeptName",
-                            caption: "Department",
+                            dataField: "strMachineName",
+                            caption: "Machine",
                             width: 250,
 
                         }, {

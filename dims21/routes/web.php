@@ -840,7 +840,7 @@ Route::get('getMachines', [WareHouseController::class,'getMachines']);
 
 
 Route::get('getMappedItemstoPalletJson', [WareHouseController::class,'getMappedItemstoPalletJson']);
-Route::get('getDeptmappedtoarea', [WareHouseController::class,'getDeptmappedtoarea']);
+Route::get('getMachinemappedtoarea', [WareHouseController::class,'getMachinemappedtoarea']);
 Route::get('getMachinesmappedtodept', [WareHouseController::class,'getMachinesmappedtodept']);
 Route::post('getpalletconfforitems', [WareHouseController::class,'getpalletconfforitems']);
 Route::post('validatepalletsplan', [WareHouseController::class,'validatepalletsplan']);
@@ -851,7 +851,7 @@ Route::get('selectedDepartment', [WareHouseController::class,'selectedDepartment
 Route::post('selectedPalletConfig', [WareHouseController::class,'selectedPalletConfig']);
 Route::post('savespalletstoitems', [WareHouseController::class,'savespalletstoitems']);
 Route::post('savesmachinedeptitems', [WareHouseController::class,'savesmachinedeptitems']);
-Route::post('savesDepttoarea', [WareHouseController::class,'savesDepttoarea']);
+Route::post('savesMachinetoarea', [WareHouseController::class,'savesMachinetoarea']);
 Route::post('savesMachinemaptodept', [WareHouseController::class,'savesMachinemaptodept']);
 Route::post('updateDeptName', [WareHouseController::class,'updateDeptName']);
 Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
@@ -971,7 +971,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('areapage', [WareHouseController::class,'areapage']);
     Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
     Route::get('machines', [WareHouseController::class,'machinespage']);
-    Route::get('mapdepttoarea', [WareHouseController::class,'mapdepttoarea']);
+    Route::get('mapmachinetoarea', [WareHouseController::class,'mapmachinetoarea']);
     Route::get('mapmachinestodept', [WareHouseController::class,'mapmachinestodept']);
     Route::get('mapitemsmachinesdept', [WareHouseController::class,'mapdeptitem']);
     Route::get('createjobs', [WareHouseController::class,'createjobs']);

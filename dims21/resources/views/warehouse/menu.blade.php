@@ -41,7 +41,7 @@ if ((Auth::guest()))
 <a href='{!!url("/createPalletConfig")!!}' class="palletConfig">Pallets Configurations</a>
 @endif
 
-<a href='{!!url("/mapdepttoarea")!!}' class="mapDeptToArea">Map Dept To Area</a> 
+<a href='{!!url("/mapmachinetoarea")!!}' class="mapMachineToArea">Map Machine To Area</a> 
 
 @if($mapmachinestodept !="0")
 <a href='{!!url("/mapmachinestodept")!!}' class="mapMachineToDept">Map Machines To Dept</a>
