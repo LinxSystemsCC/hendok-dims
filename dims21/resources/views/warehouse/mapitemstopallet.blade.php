@@ -190,7 +190,7 @@
                     filterRow: { visible: true },
                     allowColumnResizing: true,
                     paging:{
-                        pageSize: 50,
+                        pageSize: 25,
                     },
                     export: {
                         enabled: true

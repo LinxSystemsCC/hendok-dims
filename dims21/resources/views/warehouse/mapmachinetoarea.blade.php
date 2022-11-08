@@ -207,7 +207,7 @@
 
                         }
                         , {
-                            dataField: "dteCreated",
+                            dataField: "dteCreate",
                             caption: "Date Time",
                             width: 125,
 
