@@ -66,7 +66,6 @@
 </head>
 <body>
 
-
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
     <div class="col-lg-2"  style="background: white;border-right: 2px solid black;">
 
@@ -502,7 +501,7 @@
         });
 
         $('#printjobcard').click(function(){  
-            window.open('{!!url("/getallactivejobs")!!}', "location=1,status=1,scrollbars=1, width=1200,height=850");
+            window.open('{!!url("/getallactivejobs")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
         });
     });
 

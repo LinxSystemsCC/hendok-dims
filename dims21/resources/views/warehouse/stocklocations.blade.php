@@ -351,7 +351,7 @@
                         console.log(e.data.intJobId);
                         var productCode =  e.data.strErpItemCode;
 
-                        window.open('{!!url("/stockdetails")!!}/'+ productCode, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        window.open('{!!url("/stockdetails")!!}/'+ productCode, "_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
                     }
 
                 });
