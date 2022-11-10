@@ -73,6 +73,8 @@
         </div>
     </div>
     <div class="col-lg-10" >
+        <!--a href='{!!url("/stocklocation")!!}' class="stock">Back</a-->
+        <br>
         <div class="contentWrapper">
             <div class="content" id="profile"  aria-labelledby="profile-tab">
                 <h5>Detail Bin Balance</h5>
@@ -83,7 +85,7 @@
                     <div id="balance" style="width: 100% !important;">
                     </div>
             </div>
-            
+            <br>
             <div class="content" id="profile"  aria-labelledby="profile-tab">
                 <h5>Detail Bin Report</h5>
                     <input type="hidden" id="productCode" value="{{$productCode}}">

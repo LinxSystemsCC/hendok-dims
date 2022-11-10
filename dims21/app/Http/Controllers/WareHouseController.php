@@ -15,7 +15,38 @@ use Illuminate\Support\Facades\Auth;
 
 class WareHouseController extends Controller
 {
+    public function createuserpage(){
+        $groups = DB::connection('sqlsrv2')->select("select * from tblDIMSGROUPS");
+        return view('warehouse/createuser')->with('groups',$groups);    
+    }
 
+    public function createuser(Request $request){
+        $username =  $request->get("username");
+        $email =  $request->get("email");
+        $password =  $request->get("password");
+        $groupID =  $request->get("groupID");
+        $pincode =  $request->get("pincode");
+        $tabletuser =  $request->get("tabletuser");
+        $encrypted = bcrypt($password);
+
+        $returnuser = DB::connection('sqlsrv2')
+            ->select('exec spCreateUsers ?,?,?,?,?,?,?',array($username, $email, $password ,$groupID ,$pincode ,$tabletuser ,$encrypted)
+            );
+        return response()->json($returnuser);
+    }
+
+    public function getusers(){
+        $users = DB::connection('sqlsrv2') ->select("EXEC spGetUsers ");
+        return response()->json($users);
+    }
+
+
+    public function creategrouppage(){
+        $groups = DB::connection('sqlsrv2')
+            ->select("select * from tblDIMSGroups");
+        return view('warehouse/creategroup')->with('groups',$groups);
+    }
+    
     public function warehouseInvetoryItems()
     {
 
@@ -373,7 +404,7 @@ class WareHouseController extends Controller
         $endjob= (new \DateTime($endjob))->format('Y-m-d H:i:s') ;
         $result =  DB::connection('sqlsrv2')->table('tblJobQrcodeAllocation')
             ->where('intJobId',$jobid )
-            ->update(['dteJobEnded' => endjob ]);
+            ->update(['dteJobEnded' => $endjob ]);
         return response()->json($result);
     }
     public function updatestartdate(Request $request){
@@ -424,6 +455,9 @@ class WareHouseController extends Controller
     public function getjobsdata(){
         return view('warehouse/getjobsdata');
     }
+
+    
+
     public function goprintfirstqrcode($deparment,$machine,$productcode,$palletid,$qty){
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);
@@ -640,6 +674,17 @@ class WareHouseController extends Controller
             ->select("EXEC spGetMachines ");
         return response()->json($palletsjson);
     }
+
+    public function getgroupname(){
+        $groupsjson = DB::connection('sqlsrv2') ->select("EXEC spGetGroupNames ");
+        return response()->json($groupsjson);
+    }
+
+    public function getgroupsetting(){
+        $groupsettingsjson = DB::connection('sqlsrv2') ->select("EXEC spGetGroupSettings ");
+        return response()->json($groupsettingsjson);
+    }
+
     public function savesPalletsPost(Request $request){
         $palletquantity = $request->get("palletquantity");
         $pallettypedesc = $request->get("pallettypedesc");
@@ -726,6 +771,34 @@ class WareHouseController extends Controller
             );
         return response()->json($returnmach);
     }
+
+    public function savesgroupname(Request $request){
+        $groupname = $request->get("groupname");
+
+        //
+        $returnmach = DB::connection('sqlsrv2')
+            ->select('exec spCreateGroupName ?',array($groupname)
+            );
+        return response()->json($returnmach);
+    }
+
+    public function savessettingname(Request $request){
+
+        $groupID = $request->get("groupID");
+        $settingname = $request->get("settingname");
+        $value = 1;
+
+        //dd($groupID);
+        //dd($settingname);
+
+        //
+        $returnmach = DB::connection('sqlsrv2')
+            ->select('exec spCreateGroupSetting ?,?,?',array($groupID, $settingname, $value)
+            );
+        return response()->json($returnmach);
+    }
+
+    
     public function updateDeptName(Request $request){
 
         $thedeptname = $request->get("thedeptname");
@@ -760,6 +833,19 @@ class WareHouseController extends Controller
             );
         return response()->json($returnmach);
     }
+
+    public function updateupdategroupname(Request $request){
+
+        $thegroupname = $request->get("thegroupname");
+        $GroupID= $request->get("GroupID");
+        //
+        $returnmach = DB::connection('sqlsrv2')
+            ->select('exec spUpdateMachines ?,?',
+                array($GroupID,$thegroupname)
+            );
+        return response()->json($returnmach);
+    }
+
     public function removemapping(Request $request){
 
         $mappingId = $request->get("mappingId");

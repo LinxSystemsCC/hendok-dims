@@ -290,9 +290,9 @@ class UsersController extends Controller
             ->select("select  GroupId,GroupName
 						from tblDIMSGROUPS ");
 
-        $getGroupGrid = DB::connection('sqlsrv3')
-            ->select("select *
-						from viewGroupsGrid  order by GroupName");
+        $getGroupGrid = DB::connection('sqlsrv3');
+            //->select("select *
+						//from viewGroupsGrid  order by GroupName");
         //dd($getGroup);
         $getUsers = DB::connection('sqlsrv3')
             ->select("select  UserID,UserName,Password,

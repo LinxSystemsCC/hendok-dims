@@ -16,6 +16,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -835,6 +836,9 @@ Route::get('getPalletsJson', [WareHouseController::class,'getPalletsJson']);
 Route::get('getDeptname', [WareHouseController::class,'getDeptname']);
 Route::get('getAreaname', [WareHouseController::class,'getAreaname']);
 Route::get('getMachines', [WareHouseController::class,'getMachines']);
+Route::get('getgroupname', [WareHouseController::class,'getgroupname']);
+Route::get('getgroupsetting', [WareHouseController::class,'getgroupsetting']);
+Route::get('getusers', [WareHouseController::class,'getusers']);
 
 
 
@@ -856,10 +860,13 @@ Route::post('savesMachinemaptodept', [WareHouseController::class,'savesMachinema
 Route::post('updateDeptName', [WareHouseController::class,'updateDeptName']);
 Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
 Route::post('updateMachineName', [WareHouseController::class,'updateMachineName']);
+Route::post('updategroupname', [WareHouseController::class,'updategroupname']);
 Route::post('savespallets', [WareHouseController::class,'savesPalletsPost']);
 Route::post('savesdeptname', [WareHouseController::class,'savesdeptname']);
 Route::post('savesareaname', [WareHouseController::class,'savesareaname']);
 Route::post('savesmachines', [WareHouseController::class,'savesmachines']);
+Route::post('savesgroupname', [WareHouseController::class,'savesgroupname']);
+Route::post('savessettingname', [WareHouseController::class,'savessettingname']);
 Route::post('removemapping', [WareHouseController::class,'removemapping']);
 Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefromdept']);
 Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
@@ -875,6 +882,10 @@ Route::get('getWIPjobstarted', [WareHouseController::class,'getWIPjobstarted']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
 Route::get('getJobStarted', [WareHouseController::class,'getJobStarted']);
 Route::get('getjobsdatajson', [WareHouseController::class,'getjobsdatajson']);
+Route::get('createuserpage', [WareHouseController::class,'createuserpage']);
+Route::post('createuser', [WareHouseController::class,'createuser']);
+
+Route::get('creategrouppage', [WareHouseController::class,'creategrouppage']);
 
 Route::get('qrcodetracker', [WareHouseController::class,'qrcodetracker']);
 Route::get('getviewGridStockSummary', [WareHouseController::class,'getviewGridStockSummary']);
