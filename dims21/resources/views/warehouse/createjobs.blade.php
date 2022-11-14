@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
@@ -21,10 +16,7 @@
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
-
-
     <!-- Select2 JS -->
-
 
     <!-- DevExtreme library -->
 
@@ -36,30 +28,29 @@
 
 
     <style>
-        .vertical-menu {
-            width: 200px;
+        .body {
+            min-height: 100vh;
         }
-
-        .vertical-menu a {
-            background-color: #eee;
-            color: black;
-            display: block;
-            padding: 12px;
-            text-decoration: none;
-        }
-
-        .vertical-menu a:hover {
-            background-color: #ccc;
-        }
-
-        .vertical-menu a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-        
         .workOrders {
             background-color: #ccc !important;
         }
+
+        .col-lg-12 {
+            padding: 0px;
+            min-height: 100vh;
+        }
+
+        .col-lg-10 {
+            padding: 10px;
+        }
+
+        .col-lg-2 {
+            width: 200px;
+            min-height: 100vh;
+            padding: 0px;
+            margin: 0px;
+        }
+
     </style>
 
 
@@ -67,19 +58,21 @@
 <body>
 
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;border-right: 2px solid black;">
+    <div class="col-lg-2"  style="background: white;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
     <div class="col-lg-10" >
-        <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createjob">Create Work Order</button><br>
+        <div class="d-flex">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">Create Work Order</button>
+            
+            <button type="button" id="printjobcard" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Print All Active Jobs</button>
+
+        </div>
         <div id="gridContainer" style="width: 100% !important;">
         </div>
-
-        <button type="button" id="printjobcard" class="btn btn-info" data-toggle="modal" data-target="#sequencedialog">Print All Active Jobs</button>
-        
 
     </div>
     <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">

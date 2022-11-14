@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 
@@ -25,36 +24,35 @@
 
 
     <style>
-        .vertical-menu {
-            width: 200px;
+        .body {
+            min-height: 100vh;
         }
-
-        .vertical-menu a {
-            background-color: #eee;
-            color: black;
-            display: block;
-            padding: 12px;
-            text-decoration: none;
-        }
-
-        .vertical-menu a:hover {
-            background-color: #ccc;
-        }
-
-        .vertical-menu a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
         .areas {
             background-color: #ccc !important;
         }
+
+        .col-lg-12 {
+            padding: 0px;
+            min-height: 100vh;
+        }
+
+        .col-lg-10 {
+            padding: 10px;
+        }
+
+        .col-lg-2 {
+            width: 200px;
+            min-height: 100vh;
+            padding: 0px;
+            margin: 0px;
+        }
+
     </style>
 
 
 </head>
-<div class="col-lg-12"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;border-right: 2px solid black;">
+<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
+    <div class="col-lg-2"  style="background: white;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')
@@ -63,10 +61,9 @@
     <div class="col-lg-10" >
         <div class="col-lg-12" >
             <div class="col-lg-4"  style="background: white;">
-                <h4>Set-Up</h4>
                 <fieldset class="well">
                     <form>
-                        Create Area
+                        <h4>Create Area</h4>
                         <div class="form-group">
                             <label class="control-label" for="areaname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Area Name </label>
                             <input  type="text" class="form-control input-sm col-xs-1" id="areaname" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
@@ -80,7 +77,7 @@
                 </fieldset>
             </div>
             <div class="col-lg-8"  style="background: white;">
-                <h4>Data Grid</h4>
+                <h4>Existing Areas</h4>
 
 
                 <div class="col-lg-12" id="afterFilter">

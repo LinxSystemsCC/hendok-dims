@@ -34,30 +34,29 @@
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
     <style>
-        .vertical-menu {
-            width: 200px;
+        .body {
+            min-height: 100vh;
         }
-
-        .vertical-menu a {
-            background-color: #eee;
-            color: black;
-            display: block;
-            padding: 12px;
-            text-decoration: none;
-        }
-
-        .vertical-menu a:hover {
-            background-color: #ccc;
-        }
-
-        .vertical-menu a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
         .stock {
             background-color: #ccc !important;
         }
+
+        .col-lg-12 {
+            padding: 0px;
+            min-height: 100vh;
+        }
+
+        .col-lg-10 {
+            padding: 10px;
+        }
+
+        .col-lg-2 {
+            width: 200px;
+            min-height: 100vh;
+            padding: 0px;
+            margin: 0px;
+        }
+
     </style>
 
 
@@ -66,7 +65,7 @@
 
 
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;border-right: 2px solid black;">
+    <div class="col-lg-2"  style="background: white;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')
