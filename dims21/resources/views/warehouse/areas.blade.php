@@ -260,10 +260,4 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
-
-
-
-
-
-
 </script>

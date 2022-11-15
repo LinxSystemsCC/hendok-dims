@@ -643,7 +643,7 @@
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Authorise Picking</a>
                                 </li>
                                 <li>
-                                    <a href='{!!url("/createPalletConfig")!!}' onclick="window.open(this.href, 'getPickingAuth',
+                                    <a href='{!!url("/dashboard")!!}' onclick="window.open(this.href, 'getPickingAuth',
 'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Job Module</a>
                                 </li>
 

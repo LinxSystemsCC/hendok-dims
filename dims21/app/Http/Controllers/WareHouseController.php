@@ -85,6 +85,10 @@ class WareHouseController extends Controller
         return view('warehouse/areas');
     }
 
+    public function dashboard(){
+        return view('warehouse/dashboard');
+    }
+
     public function departmentpage(){
         return view('warehouse/departments');
     }

@@ -980,6 +980,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::get('areapage', [WareHouseController::class,'areapage']);
+    Route::get('dashboard', [WareHouseController::class,'dashboard']);
     Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
     Route::get('machines', [WareHouseController::class,'machinespage']);
     Route::get('mapmachinetoarea', [WareHouseController::class,'mapmachinetoarea']);
