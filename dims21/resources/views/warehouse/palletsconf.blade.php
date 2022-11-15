@@ -7,15 +7,16 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-  <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
 
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
@@ -23,35 +24,12 @@
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-
-    <style>
-        .body {
-            min-height: 100vh;
-        }
-        .palletConfig {
-            background-color: #ccc !important;
-        }
-
-        .col-lg-12 {
-            padding: 0px;
-            min-height: 100vh;
-        }
-
-        .col-lg-10 {
-            padding: 10px;
-        }
-
-        .col-lg-2 {
-            width: 200px;
-            min-height: 100vh;
-            padding: 0px;
-            margin: 0px;
-        }
-
-    </style>
-
-
 </head>
+<div style="display: flex; justify-content: space-around; background-color: black;">
+    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
+    <h3 style="flex-grow: 1;">Create Pallet Configurations</h3>
+    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
+</div>
     <div class="col-lg-12"  style="background: white;">
         <div class="col-lg-2"  style="background: white;">
 
@@ -134,127 +112,136 @@
 
             });
 
-});
+        });
 
 
-$.ajax({
+        $.ajax({
 
-       url: '{!!url("/getPalletsJson")!!}',
-       type: "GET",
-       data: {
-           datefrom: $('#datefrom').val(),
-           dateto: $('#dateto').val()
-       },
-       success: function (data) {
-
-        $("#gridContainer").dxDataGrid({
-
-       dataSource:data, //as json
-
-       showBorders: true,
-       filterRow: { visible: true },
-       allowColumnResizing: true,
-      paging:{
-        pageSize: 50,
+            url: '{!!url("/getPalletsJson")!!}',
+            type: "GET",
+            data: {
+                datefrom: $('#datefrom').val(),
+                dateto: $('#dateto').val()
             },
-            export: {
-                enabled: true
-            },
-            onExporting(e) {
-                const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('PalletConf');
+            success: function (data) {
 
-                DevExpress.excelExporter.exportDataGrid({
-                    component: e.component,
-                    worksheet,
-                    autoFilterEnabled: true,
-                }).then(() => {
-                    workbook.xlsx.writeBuffer().then((buffer) => {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'PalletConf.xlsx');
-                    });
-                });
-                e.cancel = true;
-            },
+                $("#gridContainer").dxDataGrid({
 
-       columns: [
-        {
-               dataField: "intPalletId",
-               caption: "ID",
-               width: 50,
+            dataSource:data, //as json
 
-            }, {
-               dataField: "strPalletTypeDescription",
-               caption: "Pallet Type",
-               width: 300,
+            showBorders: true,
+            filterRow: { visible: true },
+            allowColumnResizing: true,
+            paging:{
+                pageSize: 50,
+                    },
+                    export: {
+                        enabled: true
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('PalletConf');
 
-            }, {
-               dataField: "intPalletConf",
-               caption: "Pallet Conf",
-               width: 190,
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'PalletConf.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
 
-            }, {
-                dataField: "dteTime",
-                caption: "Date Time",
-                width: 200,
+            columns: [
+                {
+                    dataField: "intPalletId",
+                    caption: "ID",
+                    width: 50,
 
-            },
-       ],
-                onRowDblClick:function(e){
+                    }, {
+                    dataField: "strPalletTypeDescription",
+                    caption: "Pallet Type",
+                    width: 300,
 
-                                        // console.debug(e.row,cells[e.columnIndex]);
-                                        console.log(e.data.intPalletId);
-                                        var palletid =  e.data.intPalletId;
-                                        var strPalletTypeDescription =  e.data.strPalletTypeDescription;
-                                        var intPalletConf =  e.data.intPalletConf;
-                                        $.ajax({
+                    }, {
+                    dataField: "intPalletConf",
+                    caption: "Pallet Conf",
+                    width: 190,
 
-                                            // this is delete
-                                            url: '{!!url("/selectedPalletConfig")!!}',
-                                            type: "GET",
-                                            data: {
-                                                intPalletId: e.data.intPalletId
+                    }, {
+                        dataField: "dteTime",
+                        caption: "Date Time",
+                        width: 200,
+
+                    },
+            ],
+                        onRowDblClick:function(e){
+
+                                                // console.debug(e.row,cells[e.columnIndex]);
+                                                console.log(e.data.intPalletId);
+                                                var palletid =  e.data.intPalletId;
+                                                var strPalletTypeDescription =  e.data.strPalletTypeDescription;
+                                                var intPalletConf =  e.data.intPalletConf;
+                                                $.ajax({
+
+                                                    // this is delete
+                                                    url: '{!!url("/selectedPalletConfig")!!}',
+                                                    type: "GET",
+                                                    data: {
+                                                        intPalletId: e.data.intPalletId
+                                                    },
+                                                    success: function (data) {
+                                                        //data[0].sendto
+                                                        var dialog = $('<p><label>Pallet Type</label><br><input id="pallettype" value="'+strPalletTypeDescription+'"><br><label>Pallet Configuration</label><br><input id="palletconf" value="'+intPalletConf+'"></p>').dialog({
+                                                        height: 300, width: 700,modal: true,containment: false,
+                                                        buttons: {
+                                                            "Update": function () {
+                                                                dialog.dialog('close');
+                                                            // console.log($('#statusselect').val());
+                                                                $.ajax({
+
+                                                                    url: '{!!url("/updatePalletConf")!!}',
+                                                                    type: "POST",
+                                                                    data: {
+                                                                        pallettype: $('#pallettype').val(),
+                                                                        palletconf: $('#palletconf').val(),
+                                                                        palletid:palletid
+                                                                    },
+                                                                    success: function (data) {
+
+                                                                    },
+
+                                                                });
+
+                                                            }
+                                                        }
+                                                    });
                                             },
-                                            success: function (data) {
-                                                //data[0].sendto
-                                                var dialog = $('<p><label>Pallet Type</label><br><input id="pallettype" value="'+strPalletTypeDescription+'"><br><label>Pallet Configuration</label><br><input id="palletconf" value="'+intPalletConf+'"></p>').dialog({
-                                                height: 300, width: 700,modal: true,containment: false,
-                                                buttons: {
-                                                    "Update": function () {
-                                                        dialog.dialog('close');
-                                                       // console.log($('#statusselect').val());
-                                                        $.ajax({
+                                        });
 
-                                                            url: '{!!url("/updatePalletConf")!!}',
-                                                            type: "POST",
-                                                            data: {
-                                                                pallettype: $('#pallettype').val(),
-                                                                palletconf: $('#palletconf').val(),
-                                                                palletid:palletid
-                                                            },
-                                                            success: function (data) {
 
-                                                            },
-
-                                                        });
-
-                                                    }
-                                                }
-                                            });
-                                    },
-                                });
-
+                                },
+                    onRowClick:function(e){
 
                         },
-            onRowClick:function(e){
+            });
 
-                },
-       });
+            }
 
-}
+        });
 
-});
-
-
+        $('.sidebar ul li a').click(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+        
+        $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+        });
     });
 
 

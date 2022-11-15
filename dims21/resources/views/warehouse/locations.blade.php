@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
 <head>
 
@@ -6,25 +6,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-
-
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
 
     <!-- Select2 JS -->
-
 
     <!-- DevExtreme library -->
 
@@ -34,183 +30,160 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
-
-    <style>
-        .body {
-            min-height: 100vh;
-        }
-        .locations {
-            background-color: #ccc !important;
-        }
-
-        .col-lg-12 {
-            padding: 0px;
-            min-height: 100vh;
-        }
-
-        .col-lg-10 {
-            padding: 10px;
-        }
-
-        .col-lg-2 {
-            width: 200px;
-            min-height: 100vh;
-            padding: 0px;
-            margin: 0px;
-        }
-
-    </style>
-
-
 </head>
+<div style="display: flex; justify-content: space-around; background-color: black;">
+    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
+    <h3 style="flex-grow: 1;">Locations, Location Types & Bins</h3>
+    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
+</div>
 <body>
-
-
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;">
+    <div class="col-lg-2" style="background: white; width:200 !important;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="col-lg-10" >
-        <div class="wrapper">
-            <div class="buttonWrapper">
-                <button class="tab-button btn-lg btn btn-secondary  active "  data-id="home">Locations</button>
-                <button class="tab-button btn-lg btn btn-secondary " data-id="about">Bins</button>
+    <div class="d-flex" style="display: inline-flex">
+        <div class="col-lg-10" >
+            <div class="wrapper">
+                <div class="buttonWrapper">
+                    <button class="tab-button btn-lg btn btn-secondary  active "  data-id="home">Locations</button>
+                    <button class="tab-button btn-lg btn btn-secondary " data-id="about">Bins</button>
 
-            </div>
-            <div class="contentWrapper">
-                <div class="content active" id="home">
-                <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationtype">New Location Type</button>
-                <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationname">New Location</button>
-                <div id="gridContainer" style="width: 100% !important;">
-                </div>  <hr>
-                <h5>Location Types</h5> <div id="gridContainetypes" style="width: 100% !important;">
                 </div>
-                </div>
-                <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="viewjobTitle">Job Data</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                            </div>
-                        </div>
+                <div class="contentWrapper">
+                    <div class="content active" id="home">
+                    <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationtype">New Location Type</button>
+                    <button type="button" class="btn-lg btn btn-primary pull-right" data-toggle="modal" data-target="#createlocationname">New Location</button>
+                    <div id="gridContainer" style="width: 100% !important;">
+                    </div>  <hr>
+                    <h5>Location Types</h5> <div id="gridContainetypes" style="width: 100% !important;">
                     </div>
-                </div>
-
-
-                <div title="Location Type" id="createlocationtype" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationtypeTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="createlocationtypeTitle">Create A Location Type</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="input-group mb-3">
-                                    <label class="control-label" for="strLocationType"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Description</label>
-                                    <input  class="form-control input-sm col-xs-1 " id="strLocationType" style="width: 100%" required>
+                    </div>
+                    <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewjobTitle">Job Data</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                            </div>
-                            <br><br><br>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button class="btn-danger btn-lg" id="savelocationtype" style="width: 100%;">SAVE</button>
+                                <div class="modal-body">
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                </div>
 
-                <div title="Location Name" id="createlocationname" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationname" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="createlocationnameTitle">Create A Location</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="input-group mb-3">
-                                    <label class="control-label" for="strLocationName"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Name</label>
-                                    <input  class="form-control input-sm col-xs-1 " id="strLocationName" style="width: 100%" required>
+                    <div title="Location Type" id="createlocationtype" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationtypeTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createlocationtypeTitle">Create A Location Type</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                                <div class="input-group mb-3">
-                                    <label class="control-label" for="locationtype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Type</label>
-                                    <select  class="form-control input-sm col-xs-1 " id="locationtype" style="width: 100%" required>
-                                        <option></option>
-                                        @foreach($locationtypes as $val)
-                                            <option value="{{$val->intLocationTypeId}}">{{$val->strLocationType}}</option>
-                                        @endforeach
-
-                                    </select>
+                                <div class="modal-body">
+                                    <div class="input-group mb-3">
+                                        <label class="control-label" for="strLocationType"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Description</label>
+                                        <input  class="form-control input-sm col-xs-1 " id="strLocationType" style="width: 100%" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <br><br><br>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button class="btn-danger btn-lg" id="savelocationame" style="width: 100%;">SAVE</button>
+                                <br><br><br>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button class="btn-danger btn-lg" id="savelocationtype" style="width: 100%;">SAVE</button>
+                                </div>
                             </div>
                         </div>
+
+                    </div>
+
+                    <div title="Location Name" id="createlocationname" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationname" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createlocationnameTitle">Create A Location</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="input-group mb-3">
+                                        <label class="control-label" for="strLocationName"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Name</label>
+                                        <input  class="form-control input-sm col-xs-1 " id="strLocationName" style="width: 100%" required>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <label class="control-label" for="locationtype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Type</label>
+                                        <select  class="form-control input-sm col-xs-1 " id="locationtype" style="width: 100%" required>
+                                            <option></option>
+                                            @foreach($locationtypes as $val)
+                                                <option value="{{$val->intLocationTypeId}}">{{$val->strLocationType}}</option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <br><br><br>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button class="btn-danger btn-lg" id="savelocationame" style="width: 100%;">SAVE</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="content" id="about">
+                    <div class="col-lg-12">
+                    <div class="col-lg-4"  style="background: white;">
+                                <form>
+                                    Add New Bin
+                                    <br>
+                                    <div class="form-group">
+                                        <label class="control-label" for="binname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Bin Name</label>
+                                        <input  type="text" class="form-control input-sm " id="binname" style="height:32px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="rows"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Rows</label>
+                                        <input type="number" id="rows"  class="form-control input-sm col-xs-1" value="1" required>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="rows"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Levels</label>
+                                        <input id="levels" type="number"  class="form-control input-sm col-xs-1" value="1" required>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="locations"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location</label>
+                                        <select id="locations"  class="form-control input-sm col-xs-1" required>
+                                            @foreach($locations as $val)
+                                                <option value="{{$val->intLocationNameId}}">{{$val->strLocationName}}</option>
+                                            @endforeach
+
+                                        </select>
+
+                                    </div>
+
+                                    <button type="button" id="savebin" class="btn-lg btn-success" >Save</button>
+                                    <br>
+                                </form>
+                    </div>
+                    <div class="col-lg-8"  style="background: white;">
+                            <div id="gridContainerbins">
+                            </div>
+                    </div>
+
                     </div>
 
                 </div>
-            </div>
-            <div class="content" id="about">
-                <div class="col-lg-12">
-                <div class="col-lg-4"  style="background: white;">
-                            <form>
-                                Add New Bin
-                                <br>
-                                <div class="form-group">
-                                    <label class="control-label" for="binname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Bin Name</label>
-                                    <input  type="text" class="form-control input-sm " id="binname" style="height:32px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="control-label" for="rows"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Rows</label>
-                                    <input type="number" id="rows"  class="form-control input-sm col-xs-1" value="1" required>
-
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="control-label" for="rows"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Levels</label>
-                                    <input id="levels" type="number"  class="form-control input-sm col-xs-1" value="1" required>
-
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="locations"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location</label>
-                                    <select id="locations"  class="form-control input-sm col-xs-1" required>
-                                        @foreach($locations as $val)
-                                            <option value="{{$val->intLocationNameId}}">{{$val->strLocationName}}</option>
-                                        @endforeach
-
-                                    </select>
-
-                                </div>
-
-                                <button type="button" id="savebin" class="btn-lg btn-success" >Save</button>
-                                <br>
-                              </form>
                 </div>
-                <div class="col-lg-8"  style="background: white;">
-                        <div id="gridContainerbins">
-                        </div>
-                </div>
-
-                </div>
-
-            </div>
-            </div>
+        </div>
     </div>
 </div>
 
@@ -221,7 +194,7 @@
         font-size:15px;
     }
     .wrapper {
-
+        min-height:50vh;
         margin: auto;
         background-color: white;
         border-radius: 10px;
@@ -251,12 +224,6 @@
     button.active {
         background-color: white;
     }
-
-    .active {
-        background-color: white;
-    }
-
-
 
     .content {
         display: none;
@@ -351,8 +318,6 @@
             });
 
         });
-
-
 
         $.ajax({
             url: '{!!url("/getLocationNamesAndTypes")!!}',
@@ -467,6 +432,17 @@
                 });
             }
 
+        });
+
+        $('.sidebar ul li a').click(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+        
+        $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
         });
 
         binlists();

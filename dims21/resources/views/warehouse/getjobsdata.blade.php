@@ -5,11 +5,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
@@ -17,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
 
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
@@ -33,39 +29,15 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-
-
-    <style>
-        .body {
-            min-height: 100vh;
-        }
-        .WOD {
-            background-color: #ccc !important;
-        }
-
-        .col-lg-12 {
-            padding: 0px;
-            min-height: 100vh;
-        }
-
-        .col-lg-10 {
-            padding: 10px;
-        }
-
-        .col-lg-2 {
-            width: 200px;
-            min-height: 100vh;
-            padding: 0px;
-            margin: 0px;
-        }
-
-    </style>
-
-
 </head>
+
+<div style="display: flex; justify-content: space-around; background-color: black;">
+    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
+    <h3 style="flex-grow: 1;">Work Orders Data</h3>
+    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
+</div>
+
 <body>
-
-
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
     <div class="col-lg-2"  style="background: white;">
 
@@ -74,7 +46,7 @@
         </div>
     </div>
     <div class="col-lg-10" >
-
+        
         Date From <input type="date" id="datefrom"> - Date To <input type="date" id="dateto">
         <button id="getwipdata">GET</button>
         <div id="gridContainer" style="width: 100% !important;">
@@ -106,128 +78,137 @@
     });
     $(document).ready(function() {
 
-$('#getwipdata').click(function(){
-    $.ajax({
-        url: '{!!url("/getjobsdatajson")!!}',
-        type: "GET",
-        data: {
-            datefrom: $('#datefrom').val(),
-            dateto: $('#dateto').val()
-        },
-        success: function (data) {
-            $("#gridContainer").dxDataGrid({
-                dataSource:data, //as json
-                showBorders: true,
-                filterRow: { visible: true },
-                filterPanel: { visible: true },
-                headerFilter: { visible: true },
-                allowColumnResizing: true,
-                paging:{
-                    pageSize: 20,
+        $('#getwipdata').click(function(){
+            $.ajax({
+                url: '{!!url("/getjobsdatajson")!!}',
+                type: "GET",
+                data: {
+                    datefrom: $('#datefrom').val(),
+                    dateto: $('#dateto').val()
                 },
-                export: {
-                    enabled: true
-                },
-                onExporting(e) {
-                    const workbook = new ExcelJS.Workbook();
-                    const worksheet = workbook.addWorksheet('machineplan');
+                success: function (data) {
+                    $("#gridContainer").dxDataGrid({
+                        dataSource:data, //as json
+                        showBorders: true,
+                        filterRow: { visible: true },
+                        filterPanel: { visible: true },
+                        headerFilter: { visible: true },
+                        allowColumnResizing: true,
+                        paging:{
+                            pageSize: 20,
+                        },
+                        export: {
+                            enabled: true
+                        },
+                        onExporting(e) {
+                            const workbook = new ExcelJS.Workbook();
+                            const worksheet = workbook.addWorksheet('machineplan');
 
-                    DevExpress.excelExporter.exportDataGrid({
-                        component: e.component,
-                        worksheet,
-                        autoFilterEnabled: true,
-                    }).then(() => {
-                        workbook.xlsx.writeBuffer().then((buffer) => {
-                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
-                        });
+                            DevExpress.excelExporter.exportDataGrid({
+                                component: e.component,
+                                worksheet,
+                                autoFilterEnabled: true,
+                            }).then(() => {
+                                workbook.xlsx.writeBuffer().then((buffer) => {
+                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
+                                });
+                            });
+                            e.cancel = true;
+                        },
+
+                        columns: [
+                            {
+                                dataField: "intJobId",
+                                caption: "JobNo",
+                                width: 80,
+
+                            }, {
+                                dataField: "intJobSequence",
+                                caption: "Job Seq",
+                                width: 100,
+
+                            }, {
+                                dataField: "strDeptName",
+                                caption: "Department",
+                                width: 200,
+
+                            },
+                            {
+                                dataField: "strMachineName",
+                                caption: "Machine",
+                                width: 250,
+
+                            },
+                            {
+                                dataField: "PastelDescription",
+                                caption: "Product",
+                                width: 500,
+
+                            },
+                            {
+                                dataField: "jobStatus",
+                                caption: "Status",
+                                width: 100,
+
+                            },
+                            
+                            {
+                                dataField: "mnyQtyRequired",
+                                caption: "Planned",
+                                width: 100,dataType:"number"
+
+                            },
+                            {
+                                dataField: "mnyQtyProduced",
+                                caption: "Produced",
+                                width: 100,dataType:"number"
+
+                            },
+                            {
+                                dataField: "palletQtyRequired",
+                                caption: "Est Req",
+                                width: 100,dataType:"number"
+
+                            },
+                            {
+                                dataField: "palletQtyProduced",
+                                caption: "Est Prod",
+                                width: 100,dataType:"number"
+                            }
+                            ,
+                            {
+                                dataField: "dteLastPrintedUpdated",
+                                caption: "Last Update",
+                                width: 150
+
+                            },
+
+                        ],
+                        onRowDblClick:function(e){
+                            console.log(e.data.intJobId);
+                            var intJobId =  e.data.intJobId;
+
+                            window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+
+                        }
+
                     });
-                    e.cancel = true;
-                },
-
-                columns: [
-                    {
-                        dataField: "intJobId",
-                        caption: "JobNo",
-                        width: 80,
-
-                    }, {
-                        dataField: "intJobSequence",
-                        caption: "Job Seq",
-                        width: 100,
-
-                    }, {
-                        dataField: "strDeptName",
-                        caption: "Department",
-                        width: 200,
-
-                    },
-                    {
-                        dataField: "strMachineName",
-                        caption: "Machine",
-                        width: 250,
-
-                    },
-                    {
-                        dataField: "PastelDescription",
-                        caption: "Product",
-                        width: 500,
-
-                    },
-                    {
-                        dataField: "jobStatus",
-                        caption: "Status",
-                        width: 100,
-
-                    },
-                    
-                    {
-                        dataField: "mnyQtyRequired",
-                        caption: "Planned",
-                        width: 100,dataType:"number"
-
-                    },
-                    {
-                        dataField: "mnyQtyProduced",
-                        caption: "Produced",
-                        width: 100,dataType:"number"
-
-                    },
-                    {
-                        dataField: "palletQtyRequired",
-                        caption: "Est Req",
-                        width: 100,dataType:"number"
-
-                    },
-                    {
-                        dataField: "palletQtyProduced",
-                        caption: "Est Prod",
-                        width: 100,dataType:"number"
-                    }
-                    ,
-                    {
-                        dataField: "dteLastPrintedUpdated",
-                        caption: "Last Update",
-                        width: 150
-
-                    },
-
-                ],
-                onRowDblClick:function(e){
-                    console.log(e.data.intJobId);
-                    var intJobId =  e.data.intJobId;
-
-                    window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
 
                 }
 
             });
+        });
 
-        }
-
-    });
-});
-
-
+        $('.sidebar ul li a').click(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+        
+        $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+        });
 
 
 

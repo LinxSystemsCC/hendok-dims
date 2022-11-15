@@ -13,8 +13,10 @@
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
 
     <!-- Select2 JS -->
 
@@ -26,46 +28,25 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
-
-    <style>
-        .body {
-            min-height: 100vh;
-        }
-        .workOrders {
-            background-color: #ccc !important;
-        }
-
-        .col-lg-12 {
-            padding: 0px;
-            min-height: 100vh;
-        }
-
-        .col-lg-10 {
-            padding: 10px;
-        }
-
-        .col-lg-2 {
-            width: 200px;
-            min-height: 100vh;
-            padding: 0px;
-            margin: 0px;
-        }
-
-    </style>
-
-
 </head>
-<body>
+<div style="display: flex; justify-content: space-around; background-color: black;">
+    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
+    <h3 style="flex-grow: 1;">Work Orders</h3>
+    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
+</div>
 
+<body>
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;">
+    <div class="col-lg-2" style="background: white;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
+    
+    
     <div class="col-lg-10" >
-        <div class="d-flex">
+        <div class="col-lg-10">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">Create Work Order</button>
             
             <button type="button" id="printjobcard" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Print All Active Jobs</button>
@@ -75,6 +56,8 @@
         </div>
 
     </div>
+   
+    
     <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -495,6 +478,17 @@
 
         $('#printjobcard').click(function(){  
             window.open('{!!url("/getallactivejobs")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
+        });
+        
+        $('.sidebar ul li a').click(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+        
+        $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
         });
     });
 

@@ -6,10 +6,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
@@ -17,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
 
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
@@ -34,38 +31,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
-
-    <style>
-        .body {
-            min-height: 100vh;
-        }
-        .WIP {
-            background-color: #ccc !important;
-        }
-
-        .col-lg-12 {
-            padding: 0px;
-            min-height: 100vh;
-        }
-
-        .col-lg-10 {
-            padding: 10px;
-        }
-
-        .col-lg-2 {
-            width: 200px;
-            min-height: 100vh;
-            padding: 0px;
-            margin: 0px;
-        }
-
-    </style>
-
-
 </head>
+<div style="display: flex; justify-content: space-around; background-color: black;">
+    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
+    <h3 style="flex-grow: 1;">Work In Progress</h3>
+    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
+</div>
+
 <body>
-
-
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
     <div class="col-lg-2"  style="background: white;">
 
@@ -74,7 +47,6 @@
         </div>
     </div>
     <div class="col-lg-10" >
-
         <div id="gridContainer" style="width: 100% !important;">
         </div>
 
@@ -103,9 +75,6 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
-
-
-
         $.ajax({
             url: '{!!url("/getWIPjobstarted")!!}',
             type: "GET",
@@ -217,7 +186,16 @@
 
         });
 
-
+        $('.sidebar ul li a').click(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+        
+        $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+        });
 
     });
 

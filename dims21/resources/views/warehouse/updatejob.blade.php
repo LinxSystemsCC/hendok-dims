@@ -68,7 +68,7 @@
     <input type="hidden" id="jobid" value="{{$id}}">
     <hr>
 
-    <button type="button" id="printlabels" class="btn btn-secondary" data-toggle="modal" data-target="#prinlabels">Print Additional Labels</button>
+    <button type="button" id="printlabels" class="btn btn-secondary" data-toggle="modal" data-target="#prinlabels">Print Labels</button>
     <button type="button" id="sequence" class="btn btn-success" data-toggle="modal" data-target="#sequencedialog">Change Sequence</button>
     <button type="button" id="printjobcard" class="btn btn-info" data-toggle="modal" data-target="#sequencedialog">Print Job Card</button>
 

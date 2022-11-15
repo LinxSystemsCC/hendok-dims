@@ -26,197 +26,153 @@ if ((Auth::guest()))
 }
 ?>
 
-<style>
-	.vertical-menu {
-		padding: 0px;
-	}
+<nav class="sidebar">
+	<ul class="main_side">
+        <li>
+			<a href="#" id="1">Add Components <span class="fas fa-caret-down"></span>
+			</a>
+			<ul class="item-show-1">
+				<li>
+					@if($areaspage !="0") 
+                    <a href='{!!url("/areapage")!!}' class="areas">Areas</a> 
+                    @endif 
+				</li>
+				<li>
+					@if($departmentpage !="0") 
+                    <a href='{!!url("/departmentpage")!!}' class="departments">Departments</a> 
+                    @endif 
+				</li>
+                <li>
+                    @if($machines !="0") 
+                    <a href='{!!url("/machines")!!}' class="machines">Machines</a>
+                    @endif 
+                </li>
+                <li>
+                    @if($createPalletConfig !="0") 
+                    <a href='{!!url("/createPalletConfig")!!}' class="palletConfig">Pallet Configurations</a>
+                    @endif 
+                </li>
+                <li>
+                    @if($location !="0")
+                    <a href='{!!url("/location")!!}' class="locations">Locations</a>
+                    @endif
+                </li>
+			</ul>
+		</li>
 
-	.vertical-menu a {
-		background-color: #eee;
-		color: black;
-		display: block;
-		padding: 12px;
-		text-decoration: none;
-		font-size: 13px;
-	}
+		<li>
+			<a href="#" id="2">Map Components <span class="fas fa-caret-down"></span>
+			</a>
+			<ul class="item-show-2">
+				<li>
+					@if($mapmachinestoarea !="0") 
+                    <a href='{!!url("/mapmachinetoarea")!!}' class="mapMachineToArea">Map Machine To Area</a> 
+                    @endif 
+				</li>
+				<li>
+					@if($mapmachinestodept !="0")
+                    <a href='{!!url("/mapmachinestodept")!!}' class="mapMachineToDept">Map Machines To Department</a> 
+                    @endif 
+				</li>
+                <li>
+					@if($mapitemsmachinesdept !="0") 
+                    <a href='{!!url("/mapitemsmachinesdept")!!}' class="mapMachineDeptProd">Map Machines, Deptartment & Product</a>
+                    @endif 
+				</li>
+				<li>
+					@if($mapitemstopallet !="0")
+                    <a href='{!!url("/mapitemstopallet")!!}' class="mapPalletsToItems">Map Pallet To Items</a> 
+                    @endif
+				</li>
+			</ul>
+		</li>
 
-	.vertical-menu a:hover {
-		background-color: #ccc;
-	}
+        <li>
+			<a href="#" id="3">Job Data <span class="fas fa-caret-down"></span>
+			</a>
+			<ul class="item-show-3">
+				<li>
+					@if($createjobs !="0")
+                    <a href='{!!url("/createjobs")!!}' class="workOrders">Work Orders</a>
+                    @endif
+				</li>
+				<li>
+					@if($getJobStarted !="0")
+                    <a href='{!!url("/getJobStarted")!!}' class="WIP">Work In Progress</a>
+                    @endif
+				</li>
+                <li>
+                    @if($getjobsdata !="0")
+                    <a href='{!!url("/getjobsdata")!!}' class="WOD">Work Orders Data</a>
+                    @endif
+                </li>
+			</ul>
+		</li>
 
-	.vertical-menu a.active {
-		background-color: #04AA6D;
-		color: white;
-	}
+        <li>
+			<a href="#" id="4">Stock <span class="fas fa-caret-down"></span>
+			</a>
+			<ul class="item-show-4">
+				<li>
+					@if($stocklocation !="0")
+                    <a href='{!!url("/stocklocation")!!}' class="stock">Stock Location</a>
+                    @endif
+				</li>
+				<li>
+					@if($exceptionmvmntrpt !="0")
+                    <a href='{!!url("/exceptionmovementreport")!!}' class="report">Exception Movement Report</a>
+                    @endif
+				</li>
+			</ul>
+		</li>
 
-	.card-body {
-		padding: 0px;
-	}
+        <li>
+			<a href="#" id="5">Users <span class="fas fa-caret-down"></span>
+			</a>
+			<ul class="item-show-5">
+				<li>
+					@if($creategroup !="0")
+                    <a href='{!!url("/creategrouppage")!!}' class="creategroup">Create Groups</a>
+                    @endif
+				</li>
+				<li>
+					@if($createuser !="0")
+                    <a href='{!!url("/createuserpage")!!}' class="createuser">Create Users</a>
+                    @endif
+				</li>
+			</ul>
+		</li>
 
-    .btn{
-        text-decoration: none;
-    }
+        <li>
+			<a href="#" id="6">Miscellaneous <span class="fas fa-caret-down"></span>
+			</a>
+			<ul class="item-show-6">
+				<li>
+					@if($palletreversal !="0")
+                    <a href='{!!url("/qrcodereversepallet")!!}' class="palletReversal">Pallet Reversal Code</a>
+                    @endif
+				</li>
+				<li>
+					@if($printpalletsselectdept !="0")
+                    <a href='{!!url("/printpalletsselectdept")!!}' class="paletLabel">Print Pallet Labels</a>
+                    @endif
+				</li>
+			</ul>
+		</li>
 
-    .mb-0{
-        margin: 0px;
-    }
-    
-    .card{
-        
-        margin-bottom: 1px;
-    }
-</style>
+        <li style="position:absolute; bottom:0; width:95%;">
+            <a href= "{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> Logout
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+            </form>
+            <img  src="{{url('/images/logo-02.png')}}" style="height: 70px; width: 95%; padding:12px;">
+        </li>
 
-<div>
-    <a href= "{{ route('logout') }}"
-    onclick="event.preventDefault();document.getElementById('logout-form').submit();" style="background: #007bff;color: white; border-color:rgb(190, 190, 190)"> Logout
-    </a>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        {{ csrf_field() }}
-    </form>
+        <li>
+            
+        </li>
 
-    <!-- Add Components -->
-	<div class="card">
-		
-        <h5 class="mb-0">
-            <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="background-color:rgb(190, 190, 190)"> Add Components </a>
-        </h5>
-		
-		<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
-			<div class="card-body"> 
-                @if($areaspage !="0") 
-                <a href='{!!url("/areapage")!!}' class="areas">Areas</a> 
-                @endif 
-                
-                @if($departmentpage !="0") 
-                <a href='{!!url("/departmentpage")!!}' class="departments">Departments</a> 
-                @endif 
-                
-                @if($machines !="0") 
-                <a href='{!!url("/machines")!!}' class="machines">Machines</a>
-                @endif 
-                
-                @if($createPalletConfig !="0") 
-                <a href='{!!url("/createPalletConfig")!!}' class="palletConfig">Pallets Configurations</a>
-                @endif 
 
-                @if($location !="0")
-                <a href='{!!url("/location")!!}' class="locations">Locations</a>
-                @endif
-            </div>
-		</div>
-	</div>
-
-    <!-- Map Components -->
-	<div class="card">
-
-			<h5 class="mb-0">
-				<a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  style="background-color:rgb(190, 190, 190)"> Map Components </a>
-			</h5>
-		
-		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
-			<div class="card-body"> 
-                @if($mapmachinestoarea !="0") 
-                <a href='{!!url("/mapmachinetoarea")!!}' class="mapMachineToArea">Map Machine To Area</a> 
-                @endif 
-                
-                @if($mapmachinestodept !="0")
-                <a href='{!!url("/mapmachinestodept")!!}' class="mapMachineToDept">Map Machines To Dept</a> 
-                @endif 
-                
-                @if($mapitemsmachinesdept !="0") 
-                <a href='{!!url("/mapitemsmachinesdept")!!}' class="mapMachineDeptProd">Map Machines,Dept & Prod</a>
-                @endif 
-                
-                @if($mapitemstopallet !="0")
-                <a href='{!!url("/mapitemstopallet")!!}' class="mapPalletsToItems">Map Pallet To Items</a> 
-                @endif 
-            </div>
-		</div>
-	</div>
-
-    <!-- Job Data -->
-	<div class="card">
-		
-			<h5 class="mb-0">
-				<a data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"  style="background-color:rgb(190, 190, 190)"> Job Data </a>
-			</h5>
-		
-		<div id="collapseThree" class="collapse" aria-labelledby="headingThree">
-			<div class="card-body">
-                @if($createjobs !="0")
-                <a href='{!!url("/createjobs")!!}' class="workOrders">Work Orders</a>
-                @endif
-
-                @if($getJobStarted !="0")
-                <a href='{!!url("/getJobStarted")!!}' class="WIP">WIP</a>
-                @endif
-
-                @if($getjobsdata !="0")
-                <a href='{!!url("/getjobsdata")!!}' class="WOD">Work Orders Data</a>
-                @endif
-            </div>
-		</div>
-	</div>
-
-    <!-- Stock -->
-    <div class="card">
-		
-			<h5 class="mb-0">
-				<a data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"  style="background-color:rgb(190, 190, 190)"> Stock </a>
-			</h5>
-		
-		<div id="collapseFour" class="collapse" aria-labelledby="headingFour">
-			<div class="card-body">
-                @if($stocklocation !="0")
-                <a href='{!!url("/stocklocation")!!}' class="stock">Stock Location</a>
-                @endif
-                
-                @if($exceptionmvmntrpt !="0")
-                <a href='{!!url("/exceptionmovementreport")!!}' class="report">Exception Mvmnt Rpt</a>
-                @endif
-
-            </div>
-		</div>
-	</div>
-
-    <!-- Users -->
-    <div class="card">
-		
-			<h5 class="mb-0">
-				<a data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive"  style="background-color:rgb(190, 190, 190)"> Users </a>
-			</h5>
-		
-		<div id="collapseFive" class="collapse" aria-labelledby="headingFive">
-			<div class="card-body">
-                @if($creategroup !="0")
-                <a href='{!!url("/creategrouppage")!!}' class="creategroup">Create Groups</a>
-                @endif
-
-                @if($createuser !="0")
-                <a href='{!!url("/createuserpage")!!}' class="createuser">Create Users</a>
-                @endif
-            </div>
-		</div>
-	</div>
-
-    <!-- Miscellaneous -->
-    <div class="card">
-		
-			<h5 class="mb-0">
-				<a data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix"  style="background-color:rgb(190, 190, 190)"> Miscellaneous </a>
-			</h5>
-		
-		<div id="collapseSix" class="collapse" aria-labelledby="headingSix">
-			<div class="card-body">
-                @if($palletreversal !="0")
-                <a href='{!!url("/qrcodereversepallet")!!}' class="palletReversal">Pallet Reversal Code</a>
-                @endif
-
-                @if($printpalletsselectdept !="0")
-                <a href='{!!url("/printpalletsselectdept")!!}' class="paletLabel">Print Pallet Labels</a>
-                @endif
-            </div>
-		</div>
-	</div>
-</div>
+	</ul>
+</nav>
