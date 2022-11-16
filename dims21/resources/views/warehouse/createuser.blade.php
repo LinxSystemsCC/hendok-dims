@@ -25,11 +25,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </head>
-<div style="display: flex; justify-content: space-around; background-color: black;">
-    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
-    <h3 style="flex-grow: 1;">Create Users</h3>
-    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
-</div>
 
 <div class="col-lg-12"  style="background: white;">
     <div class="col-lg-2"  style="background: white;">
@@ -39,6 +34,7 @@
         </div>
     </div>
     <div class="col-lg-10" >
+        <h3 style="flex-grow: 1; padding-left: 15px;">Create Users</h3>
         <div class="col-lg-12" >
             <div class="col-lg-4"  style="background: white;">
                 <h4> </h4>
@@ -104,7 +100,7 @@
                 </fieldset>
             </div>
             <div class="col-lg-8"  style="background: white;">
-                <h4>Data Grid</h4>
+                <h4>Existing User Names</h4>
 
 
                 <div class="col-lg-12" id="afterFilter">
@@ -178,7 +174,7 @@
                     filterRow: { visible: true },
                     allowColumnResizing: true,
                     paging:{
-                        pageSize: 15,
+                        pageSize: 10,
                     },
                     export: {
                         enabled: true

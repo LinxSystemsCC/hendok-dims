@@ -31,11 +31,6 @@
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
 </head>
-<div style="display: flex; justify-content: space-around; background-color: black;">
-    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
-    <h3 style="flex-grow: 1;">Locations, Location Types & Bins</h3>
-    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
-</div>
 <body>
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
     <div class="col-lg-2" style="background: white; width:200 !important;">
@@ -46,6 +41,7 @@
     </div>
     <div class="d-flex" style="display: inline-flex">
         <div class="col-lg-10" >
+            <h3 style="flex-grow: 1;">Locations, Location Types & Bins</h3>
             <div class="wrapper">
                 <div class="buttonWrapper">
                     <button class="tab-button btn-lg btn btn-secondary  active "  data-id="home">Locations</button>

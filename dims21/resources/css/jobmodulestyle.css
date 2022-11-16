@@ -13,7 +13,7 @@ body{
 .sidebar{
   position: relative;
   width: auto;
-  height: 90vh;
+  height: 100vh;
   background: #242424;
 }
 .sidebar .text{
@@ -27,18 +27,14 @@ body{
 }
 nav ul{
   background: #242424;
-  height: 100%;
   width: 100%;
   list-style: none;
       padding-left: 10px;
 }
 nav ul li{
   line-height: 50px;
-  border-top: 1px solid rgba(255, 255, 255, 0);
 }
-nav ul li:last-child{
-  border-bottom: 1px solid rgba(255, 255, 255, 0);
-}
+
 nav ul li a{
   position: relative;
   color: white;
@@ -50,14 +46,13 @@ nav ul li a{
   width: 100%;
   border-left: 3px solid transparent;
 }
-nav ul li.active a{
+/*nav ul li.active a{
   color: #e83f2f;
-    background: #242424;
-    border-left-color: #e83f2f;
-}
+  background: #242424;
+}*/
+
 nav ul li a:hover{
   background: #242424;
-  
 }
 
 .feat-show{
@@ -123,15 +118,16 @@ nav ul li a span.rotate{
 .col-lg-2 {
   padding: 0px;
   margin: 0px;
-  width: 250px;
+  width: 220px;
   flex: 0 0 auto;
+  height: 100vh;
 }
 
 h3{
-  text-align: center;
-  background-color: black;
-  color: white;
-  padding: 35px;
-  margin: 0px;
-  height: 10vh;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJbecmNE.woff2) format('woff2');
+  padding-left: 15px;
 }

@@ -23,7 +23,7 @@
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <title>Dims Job Module</title>
+    <title>Dashboard</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -103,7 +103,6 @@
 
                 <img  src="public/images/dimslogo.png" style="height: 100px;"><br>
             <strong>Welcome to DIMS</strong><br>
-            <h1>Job Module Dashboard</h1>
             </div>
         </div>
     </div>

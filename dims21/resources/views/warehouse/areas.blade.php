@@ -24,11 +24,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </head>
-<div style="display: flex; justify-content: space-around; background-color: black;">
-    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
-    <h3 style="flex-grow: 1;">Create Areas</h3>
-    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
-</div>
+
 
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
     <div class="col-lg-2" style="background: white;">
@@ -38,36 +34,41 @@
         </div>
     </div>
     
+    
     <div class="col-lg-10" >
-        <div class="col-lg-12" >
-            <div class="col-lg-4"  style="background: white;">
-                <fieldset class="well">
-                    <form>
-                        <h4>Create Area</h4>
-                        <div class="form-group">
-                            <label class="control-label" for="areaname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Area Name </label>
-                            <input  type="text" class="form-control input-sm col-xs-1" id="areaname" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+        <h3 style="flex-grow: 1;">Create Areas</h3>
+        <div>
+            <div class="col-lg-12" >
+                <div class="col-lg-4"  style="background: white;">
+                    <fieldset class="well">
+                        <form>
+                            <h4>Create Area</h4>
+                            <div class="form-group">
+                                <label class="control-label" for="areaname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Area Name </label>
+                                <input  type="text" class="form-control input-sm col-xs-1" id="areaname" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+                            </div>
+                            <br>
+                            <button type="button" id="savesareaname" class="btn-lg btn-success" >Save</button>
+                            <br>
+    
+    
+                        </form>
+                    </fieldset>
+                </div>
+                <div class="col-lg-8"  style="background: white;">
+                    <h4>Existing Areas</h4>
+    
+    
+                    <div class="col-lg-12" id="afterFilter">
+                        <div id="gridContainer">
                         </div>
-                        <br>
-                        <button type="button" id="savesareaname" class="btn-lg btn-success" >Save</button>
-                        <br>
-
-
-                    </form>
-                </fieldset>
-            </div>
-            <div class="col-lg-8"  style="background: white;">
-                <h4>Existing Areas</h4>
-
-
-                <div class="col-lg-12" id="afterFilter">
-                    <div id="gridContainer">
+    
+    
                     </div>
-
-
                 </div>
             </div>
         </div>
+        
     </div>
 </div>
 
