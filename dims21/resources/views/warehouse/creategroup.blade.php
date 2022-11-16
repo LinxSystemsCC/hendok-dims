@@ -25,11 +25,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </head>
-<div style="display: flex; justify-content: space-around; background-color: black;">
-    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
-    <h3 style="flex-grow: 1;">Create Groups & Group Settings</h3>
-    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
-</div>
 
 <div class="col-lg-12"  style="background: white;">
     <div class="col-lg-2"  style="background: white;">
@@ -37,101 +32,108 @@
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="col-lg-10" style="display: inline-flex" >
-        <!-- For adding Group Name -->
-        <div class="col-lg-12" >
-            <div style="background: white;">
-                <h4></h4>
-                <fieldset class="well">
-                    <form>
-                        Create Group
-                        <div class="form-group">
-                            <label class="control-label" for="groupname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group Name </label>
-                            <input  type="text" class="form-control input-sm col-xs-1" id="groupname" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                        </div>
-                        <br>
-                        <button type="button" id="savesgroupname" class="btn-lg btn-success" >Save</button>
-                        <br>
-
-
-                    </form>
-                </fieldset>
-            </div>
-            <div class="col-lg-12"  style="background: white;">
-                <h4>Data Grid</h4>
-
-
-                <div class="col-lg-12" id="afterFilter" >
-                    <div id="gridContainer" >
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-        <!-- For adding Settings to Groups -->
-        <div class="col-lg-12" >
-            <div  style="background: white;">
-                <h4></h4>
-                <fieldset class="well">
-                    <form>
-                        Create Group Setting
-                        <div class="form-group">
-                            <label class="control-label" for="group"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
-                            <select  class="form-control input-sm col-xs-1" id="group" required>
-                                <option></option>
-                                @foreach($groups as $group)
-                                    <option value="{{$group->GroupId}}">{{$group->GroupName}}</option>
-                                @endforeach
-                            </select>
-
-
+    
+        
+    
+    <div class="col-lg-10">
+        <h3 style="flex-grow: 1;">Create Groups & Group Settings</h3>
+        <div style="display: inline-flex;">
+            <!-- For adding Group Name -->
+            <div class="col-lg-12" >
+                <div style="background: white; padding: 5px;">
+                    <h4></h4>
+                    <fieldset class="well">
+                        <form>
+                            Create Group
+                            <div class="form-group">
+                                <label class="control-label" for="groupname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group Name </label>
+                                <input  type="text" class="form-control input-sm col-xs-1" id="groupname" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+                            </div>
                             <br>
-                            
-                            <label class="control-label" for="settingname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Setting Name </label>
-                            <select  class="form-control input-sm col-xs-1" id="settingname" required>
-                                <option></option>
-                                <option>areaspage</option>
-                                <option>departmentpage</option>
-                                <option>machines</option>
-                                <option>createPalletConfig</option>
-                                <option>mapmachinetoarea</option>
-                                <option>mapmachinestodept</option>
-                                <option>mapitemsmachinesdept</option>
-                                <option>mapitemstopallet</option>
-                                <option>location</option>
-                                <option>createjobs</option>
-                                <option>getJobStarted</option>
-                                <option>stocklocation</option>
-                                <option>getjobsdata</option>
-                                <option>palletreversal</option>
-                                <option>printpalletsselectdept</option>
-                                <option>exceptionmovementreport</option>
-                                <option>creategroup</option>
-                                <option>createuser</option>
+                            <button type="button" id="savesgroupname" class="btn-lg btn-success" >Save</button>
+                            <br>
 
-                            </select>
+
+                        </form>
+                    </fieldset>
+                </div>
+                <div class="col-lg-12"  style="background: white;">
+                    <h4>Existing Group Names</h4>
+
+
+                    <div class="col-lg-12" id="afterFilter" >
+                        <div id="gridContainer" >
                         </div>
-                        <br>
-                        <button type="button" id="savessettingname" class="btn-lg btn-success" >Save</button>
-                        <br>
 
 
-                    </form>
-                </fieldset>
-            </div>
-            <div class="col-lg-8"  style="background: white;">
-                <h4>Data Grid</h4>
-
-
-                <div class="col-lg-12" id="afterFilter">
-                    <div id="gridContainer1" style="min-width: 50vh">
                     </div>
+                </div>
+            </div>
+            <!-- For adding Settings to Groups -->
+            <div class="col-lg-12" >
+                <div  style="background: white; padding: 5px;">
+                    <h4></h4>
+                    <fieldset class="well">
+                        <form>
+                            Create Group Setting
+                            <div class="form-group">
+                                <label class="control-label" for="group"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
+                                <select  class="form-control input-sm col-xs-1" id="group" required>
+                                    <option></option>
+                                    @foreach($groups as $group)
+                                        <option value="{{$group->GroupId}}">{{$group->GroupName}}</option>
+                                    @endforeach
+                                </select>
 
 
+                                <br>
+                                
+                                <label class="control-label" for="settingname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Setting Name </label>
+                                <select  class="form-control input-sm col-xs-1" id="settingname" required>
+                                    <option></option>
+                                    <option>areaspage</option>
+                                    <option>departmentpage</option>
+                                    <option>machines</option>
+                                    <option>createPalletConfig</option>
+                                    <option>mapmachinetoarea</option>
+                                    <option>mapmachinestodept</option>
+                                    <option>mapitemsmachinesdept</option>
+                                    <option>mapitemstopallet</option>
+                                    <option>location</option>
+                                    <option>createjobs</option>
+                                    <option>getJobStarted</option>
+                                    <option>stocklocation</option>
+                                    <option>getjobsdata</option>
+                                    <option>palletreversal</option>
+                                    <option>printpalletsselectdept</option>
+                                    <option>exceptionmovementreport</option>
+                                    <option>creategroup</option>
+                                    <option>createuser</option>
+
+                                </select>
+                            </div>
+                            <br>
+                            <button type="button" id="savessettingname" class="btn-lg btn-success" >Save</button>
+                            <br>
+
+
+                        </form>
+                    </fieldset>
+                </div>
+                <div class="col-lg-8"  style="background: white;">
+                    <h4>Existing Group Settings</h4>
+
+
+                    <div class="col-lg-12" id="afterFilter">
+                        <div id="gridContainer1" style="min-width: 50vh">
+                        </div>
+
+
+                    </div>
                 </div>
             </div>
         </div>
+        
     </div>
 </div>
 
@@ -191,7 +193,7 @@
                     filterRow: { visible: true },
                     allowColumnResizing: true,
                     paging:{
-                        pageSize: 10,
+                        pageSize: 3,
                     },
                     export: {
                         enabled: true
@@ -312,7 +314,7 @@
                     filterRow: { visible: true },
                     allowColumnResizing: true,
                     paging:{
-                        pageSize: 10,
+                        pageSize: 4,
                     },
                     export: {
                         enabled: true
