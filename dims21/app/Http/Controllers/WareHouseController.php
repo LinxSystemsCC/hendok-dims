@@ -17,7 +17,7 @@ class WareHouseController extends Controller
 {
     public function createuserpage(){
         $groups = DB::connection('sqlsrv2')->select("select * from tblDIMSGROUPS");
-        return view('warehouse/createuser')->with('groups',$groups);    
+        return view('warehouse/createuser')->with('groups',$groups);
     }
 
     public function createuser(Request $request){
@@ -46,7 +46,7 @@ class WareHouseController extends Controller
             ->select("select * from tblDIMSGroups");
         return view('warehouse/creategroup')->with('groups',$groups);
     }
-    
+
     public function warehouseInvetoryItems()
     {
 
@@ -305,6 +305,12 @@ class WareHouseController extends Controller
               );
         return view('warehouse/printpalletchoosemachine')->with('departments',$dept)->with('machines',$machines);
     }
+    public function wmaxlanding(){
+        $customers = DB::connection('wmax')
+            ->select("select * from tblCustomers ");
+
+        return view('warehouse/wmax')->with('customers',$customers);
+    }
 
     public function getMachinesforselecteddept(Request $request){
         $deparment = $request->get("deptId");
@@ -460,7 +466,7 @@ class WareHouseController extends Controller
         return view('warehouse/getjobsdata');
     }
 
-    
+
 
     public function goprintfirstqrcode($deparment,$machine,$productcode,$palletid,$qty){
         $dept = DB::connection('sqlsrv2')
@@ -569,7 +575,7 @@ class WareHouseController extends Controller
         //dd($jobdata);
         return view('warehouse/jobcard')->with("jobdata",$jobdata);
     }
-    
+
     public function insertIntoJobTable(Request $request){
         $deptId = $request->get("deptId");
         $prodgroup = "0"; //$request->get("prodgroup");
@@ -611,7 +617,7 @@ class WareHouseController extends Controller
     public function mapitemstopallet(){
         $pallets = DB::connection('sqlsrv2')
             ->select("select * from tblPalletConf");
-            
+
 
         $products = DB::connection('sqlsrv2')
             ->select("select * from viewtblProducts");
@@ -648,7 +654,7 @@ class WareHouseController extends Controller
             ->select("EXEC  spGetMappedMachineToArea");
         return response()->json($palletsjson);
     }
-    
+
     public function getMachinesmappedtodept(){
         $palletsjson = DB::connection('sqlsrv2')
             ->select("EXEC spGetMappedMachinesToDept ");
@@ -802,7 +808,7 @@ class WareHouseController extends Controller
         return response()->json($returnmach);
     }
 
-    
+
     public function updateDeptName(Request $request){
 
         $thedeptname = $request->get("thedeptname");

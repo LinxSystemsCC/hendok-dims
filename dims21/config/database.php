@@ -130,6 +130,16 @@ return [
             'prefix' => '',
             'pooling'  => false,
         ],
+        'wmax' => [
+            'driver' => 'sqlsrv',
+            'host' => '102.37.0.48',
+            'port' =>  '62019',
+            'database' => 'WMax',
+            'username' => 'sa',
+            'password' =>  'Linx_123',
+            'prefix' => '',
+            'pooling'  => false,
+        ],
         'webstore' => [
             'driver' => 'sqlsrv',
             'host' => '102.133.239.108',

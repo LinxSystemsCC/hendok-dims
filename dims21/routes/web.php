@@ -894,6 +894,7 @@ Route::get('getviewGridStockBalance', [WareHouseController::class,'getviewGridSt
 Route::get('getpalletmovementreport', [WareHouseController::class,'getpalletmovementreport']);
 Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovementreport']);
 Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
+Route::get('wmaxlanding', [WareHouseController::class,'wmaxlanding']);
 
 
 Route::get('binandqrcodes', [WareHouseController::class,'binandqrcodes']);
