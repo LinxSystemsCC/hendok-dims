@@ -84,11 +84,6 @@
 
 
 </head>
-<div style="display: flex; justify-content: space-around; background-color: black;">
-    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
-    <h3 style="flex-grow: 1;">Dashboard</h3>
-    <!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
-</div>
 
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
     <div class="col-lg-2" style="background: white;">

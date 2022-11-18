@@ -227,42 +227,13 @@
                         },
                     ],
                     onRowDblClick:function(e){
+                        console.log(e.data.intJobId);
+                        var intUserID =  e.data.UserID;
 
-                        // console.debug(e.row,cells[e.columnIndex]);
-                        console.log(e.data.intAutoID);
-                        var palletid =  e.data.intAutoID;
-                        var strPalletTypeDescription =  e.data.struserName;
+                        window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID, "location=1,status=1,scrollbars=1, width=1200,height=850");
 
-                        //data[0].sendto
-                        /*var dialog = $('<p><label>Area Name</label><br><input id="theusername" value="'+strPalletTypeDescription+'"><br></p>').dialog({
-                            height: 300, width: 700,modal: true,containment: false,
-                            buttons: {
-                                "Update": function () {
-
-                                    $.ajax({
-
-                                        url: '{!!url("/updateuserName")!!}',
-                                        type: "POST",
-                                        data: {
-                                            theusername: $('#theusername').val(),
-                                            palletid:palletid
-                                        },
-                                        success: function (data) {
-                                            location.reload();
-                                        },
-
-                                    });
-
-                                }
-                            }
-                        });*/
-
-
-
-                    },
-                    onRowClick:function(e){
-
-                    },
+                    }
+                    
                 });
 
             }

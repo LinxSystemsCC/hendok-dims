@@ -4,7 +4,7 @@ if ((Auth::guest()))
 
 }else{
     $v  =  new \App\Http\Controllers\SalesForm();
-    $areaspage = $v->getThings(Auth::user()->GroupId,'areaspage');
+    /*$areaspage = $v->getThings(Auth::user()->GroupId,'areaspage');
     $departmentpage = $v->getThings(Auth::user()->GroupId,'departmentpage');
     $machines = $v->getThings(Auth::user()->GroupId,'machines');
     $createPalletConfig = $v->getThings(Auth::user()->GroupId,'createPalletConfig');
@@ -21,36 +21,143 @@ if ((Auth::guest()))
     $printpalletsselectdept = $v->getThings(Auth::user()->GroupId,'printpalletsselectdept');
     $exceptionmvmntrpt = $v->getThings(Auth::user()->GroupId,'exceptionmovementreport');
     $creategroup = $v->getThings(Auth::user()->GroupId,'creategroup');
-    $createuser = $v->getThings(Auth::user()->GroupId,'createuser');
+    $createuser = $v->getThings(Auth::user()->GroupId,'createuser');*/
 
-}
+    //--------------------------First Level Options---------------------------------
+    $workorders = $v->getThingsUserPermissions(Auth::user()->UserID,'Work Orders');
+    $dispatch = $v->getThingsUserPermissions(Auth::user()->UserID,'Dispatch');
+    $stockcontrol = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock Control');
+    $inventory = $v->getThingsUserPermissions(Auth::user()->UserID,'Inventory');
+    $setup = $v->getThingsUserPermissions(Auth::user()->UserID,'Setup');
+    $sales = $v->getThingsUserPermissions(Auth::user()->UserID,'Sales');
+
+    
+    //--------------------------Second Level Options--------------------------------
+    //Work Order Options
+    $barbed = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Wire');
+    $galv = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Wire');
+
+    //Dispatch Options
+    $loadplanning = $v->getThingsUserPermissions(Auth::user()->UserID,'Load Planning');
+    $pickingslips = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Slips');
+    $settlement = $v->getThingsUserPermissions(Auth::user()->UserID,'Settlement');
+    $authorisation = $v->getThingsUserPermissions(Auth::user()->UserID,'Authorisation');
+
+    //Stock Controll Options
+
+    //Inventory Options
+    $stockonhand = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock On Hand');
+    $stockcount = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock Count');
+
+    //Setup Options
+    $usergroups = $v->getThingsUserPermissions(Auth::user()->UserID,'Users/Groups');
+    $setupdispatch = $v->getThingsUserPermissions(Auth::user()->UserID,'Setup Dispatch');
+    $setupworkorders = $v->getThingsUserPermissions(Auth::user()->UserID,'Setup Work Orders');
+
+    //Sales Options
+
+    //--------------------------Third Level Options--------------------------------
+    //Work Order - Barbed Wire
+    $barbedcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Create Work Order');
+    $barbedWIP = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed WIP');
+    $barbedWOD = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed WOD');
+
+    //Work Order - Galv
+    $galvcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv Create Work Order');
+
+    //Dispatch - Load Planning
+    $pickingplanner = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Planner');
+    $routestoinvoice = $v->getThingsUserPermissions(Auth::user()->UserID,'Routes To Invoice');
+
+    //Dispatch - Picking Slips
+    $pickingstatus = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Status');
+    $pickingtickets = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Tickets');
+    $assignweighttickets = $v->getThingsUserPermissions(Auth::user()->UserID,'Assign Weight Tickets');
+    $authorisepicking = $v->getThingsUserPermissions(Auth::user()->UserID,'Authorise Picking');
+
+    //Inventory - Stock On Hand
+    $stocklocation = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock Location');
+
+    //Inventory - Stock Count
+    $exceptionreport = $v->getThingsUserPermissions(Auth::user()->UserID,'Exception Movement Report');
+
+    //Setup - Users/Groups
+    $creategroups = $v->getThingsUserPermissions(Auth::user()->UserID,'Create Groups');
+    $createusers = $v->getThingsUserPermissions(Auth::user()->UserID,'Create Users');
+
+    //Setup - Dispatch
+    $drivers = $v->getThingsUserPermissions(Auth::user()->UserID,'Drivers');
+    $trucks = $v->getThingsUserPermissions(Auth::user()->UserID,'Trucks');
+    $routes = $v->getThingsUserPermissions(Auth::user()->UserID,'Routes');
+
+    //Setup - Work Orders
+    $areas = $v->getThingsUserPermissions(Auth::user()->UserID,'Areas');
+    $departments = $v->getThingsUserPermissions(Auth::user()->UserID,'Departments');
+    $machines = $v->getThingsUserPermissions(Auth::user()->UserID,'Machines');
+    $palletconfig = $v->getThingsUserPermissions(Auth::user()->UserID,'Pallet Configurations');
+    $locations = $v->getThingsUserPermissions(Auth::user()->UserID,'Locations');
+    $mm2a = $v->getThingsUserPermissions(Auth::user()->UserID,'Map Machine To Area');
+    $mm2d = $v->getThingsUserPermissions(Auth::user()->UserID,'Map Machine To Department');
+    $mmdp = $v->getThingsUserPermissions(Auth::user()->UserID,'Map Machines Dept & Product');
+    $mp2i = $v->getThingsUserPermissions(Auth::user()->UserID,'Map Pallet To Item');
+    $galvcustomers = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv Customers');
+    $galvscales = $v->getThingsUserPermissions(Auth::user()->UserID,'Scales');
+    
+}   
 ?>
 
 <nav class="sidebar">
     <!-- logo --> 
-    <img  src="{{url('/images/HendokLogoTransparent.png')}}" style="height: 70px; width: 100%; padding: 15px 35px 0px 20px;">
-
+    <a href = "{{url('/dashboard')}}">
+        <img src="{{url('/images/HendokLogoTransparent.png')}}" style="height: 70px; width: 100%; padding: 15px 35px 0px 20px;">
+    </a>
+    
 	<ul class="main_side">
         <!-- Work Orders -->
         <li>
 			<!-- Fisrt Category -->
+            @if($workorders !="0")
             <a href="#" id="1">Work Orders<span class="caret pull-down"></span>
+            @endif
 			</a>
 			<ul class="item-show-1">
-				<li>
-                    @if($createjobs !="0")
-                    <a href='{!!url("/createjobs")!!}'>Create Work Orders</a>
-                    @endif
-                </li>
                 <li>
-                    @if($getJobStarted !="0")
-                    <a href='{!!url("/getJobStarted")!!}'>Work In Progress</a>
+                    <!-- Second Category -->
+                    @if($barbed !="0")
+                    <a href="#" id="1a">Barbed Wire<span class="caret pull-down"></span>
+                    </a>
                     @endif
-                </li>
-                <li>
-                    @if($getjobsdata !="0")
-                    <a href='{!!url("/getjobsdata")!!}'>Work Orders Data</a>
+                    <ul class="item-show-1a">
+                        <!-- Item Links -->
+                        <li>
+                            @if($barbedcreateworkorder !="0")
+                            <a href='{!!url("/createjobs")!!}'>Create Work Orders</a>
+                            @endif
+                        </li>
+                        <li>
+                            @if($barbedWIP !="0")
+                            <a href='{!!url("/getJobStarted")!!}'>Work In Progress</a>
+                            @endif
+                        </li>
+                        <li>
+                            @if($barbedWOD !="0")
+                            <a href='{!!url("/getjobsdata")!!}'>Work Orders Data</a>
+                            @endif
+                        </li>
+                    </ul>
+                    @if($galv !="0")
+                    <a href="#" id="1b">Galv<span class="caret pull-down"></span>
+                    </a>
                     @endif
+                    <ul class="item-show-1b">
+                        <!-- Item Links -->
+                        <li>
+                            @if($galvcreateworkorder !="0")
+                            <a href='{!!url("/wmaxlanding")!!}'>Create Work Orders</a>
+                            @endif
+                        </li>
+                    </ul>
+
                 </li>
 			</ul>
 		</li>
@@ -58,61 +165,64 @@ if ((Auth::guest()))
         <!-- Dispatch -->
         <li>
 			<!-- Fisrt Category -->
+            @if($dispatch !="0")
             <a href="#" id="2">Dispatch<span class="caret pull-down"></span>
 			</a>
+            @endif
 			<ul class="item-show-2">
 				<li>
                     <!-- Second Category -->
+                    @if($loadplanning !="0")
                     <a href="#" id="2a">Load Planning<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-2a">
                         <!-- Item Links -->
                         <li>
-                            @if("1" !="0")
-                            <a href='{!!url("/viewpickingtickets")!!}'>Picking Tickets</a>
-                            @endif
-                        </li>
-                        <li>
-                            @if("1" !="0")
+                            @if($pickingplanner !="0")
                             <a href='{!!url("/routeplanner")!!}'>Picking Planner</a>
                             @endif
                         </li>
                         <li>
-                            @if("1" !="0")
+                            @if($routestoinvoice !="0")
                             <a href='{!!url("/viewAwaitingtoinvoice")!!}'>Routes To Invoice</a>
                             @endif
                         </li>
 
                     </ul>
 
+                    @if($pickingslips !="0")
                     <a href="#" id="2b">Picking Slips<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-2b">
                         <!-- Item Links -->
                         <li>
-                            @if("1" !="0")
+                            @if($pickingstatus !="0")
                             <a href='{!!url("/liveBulkPicking")!!}'>Picking Status</a>
                             @endif
                         </li>
                         <li>
-                            @if("1" !="0")
+                            @if($pickingtickets !="0")
                             <a href='{!!url("/viewpickingtickets")!!}'>Picking Tickets</a>
                             @endif
                         </li>
                         <li>
-                            @if("1" !="0")
+                            @if($assignweighttickets !="0")
                             <a href='{!!url("/assignweighbridgeticket")!!}'>Assign Weight Tickets</a>
                             @endif
                         </li>
                         <li>
-                            @if("1" !="0")
+                            @if($authorisepicking !="0")
                             <a href='{!!url("/getPickingAuth")!!}'>Authorise Picking</a>
                             @endif
                         </li>
                     </ul>
 
+                    @if($settlement !="0")
                     <a href="#" id="2c">Settlement<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-2c">
                         <!-- Item Links -->
                         <li>
@@ -120,8 +230,10 @@ if ((Auth::guest()))
                         </li>
                     </ul>
 
+                    @if($authorisation !="0")
                     <a href="#" id="2d">Authorisation<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-2d">
                         <!-- Item Links -->
                         <li>
@@ -135,8 +247,10 @@ if ((Auth::guest()))
         <!-- Stock Control -->
         <li>
 			<!-- Fisrt Category -->
+            @if($stockcontrol !="0")
             <a href="#" id="3">Stock Control<span class="caret pull-down"></span>
 			</a>
+            @endif
 			<ul class="item-show-3">
 				<li>
                     <!-- Second Category -->
@@ -170,13 +284,17 @@ if ((Auth::guest()))
         <!-- Inventory -->
         <li>
 			<!-- Fisrt Category -->
+            @if($inventory !="0")
             <a href="#" id="4">Inventory<span class="caret pull-down"></span>
 			</a>
+            @endif
 			<ul class="item-show-4">
 				<li>
                     <!-- Second Category -->
+                    @if($stockonhand !="0")
                     <a href="#" id="4a">Stock on Hand<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-4a">
                         <!-- Item Links -->
                         <li>
@@ -186,12 +304,14 @@ if ((Auth::guest()))
                         </li>
                     </ul>
 
+                    @if($stockcount !="0")
                     <a href="#" id="4b">Stock Count<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-4b">
                         <!-- Item Links -->
                         <li>
-                            @if($exceptionmvmntrpt !="0")
+                            @if($exceptionreport !="0")
                             <a href='{!!url("/exceptionmovementreport")!!}'>Exception Movement Report</a>
                             @endif
                         <li>
@@ -203,59 +323,67 @@ if ((Auth::guest()))
         <!-- Setup -->
         <li>
 			<!-- Fisrt Category -->
+            @if($setup !="0")
             <a href="#" id="5">Setup<span class="caret pull-down"></span>
 			</a>
+            @endif
 			<ul class="item-show-5">
 				<li>
                     <!-- Second Category -->
+                    @if($usergroups !="0")
                     <a href="#" id="5a">Users/Groups<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-5a">
                         <!-- Item Links -->
                         <li>
-                            @if($creategroup !="0")
+                            @if($creategroups !="0")
                             <a href='{!!url("/creategrouppage")!!}'>Create Groups</a>
                             @endif
                         </li>
                         <li>
-                            @if($createuser !="0")
+                            @if($createusers !="0")
                             <a href='{!!url("/createuserpage")!!}'>Create Users</a>
                             @endif
                         </li>
                     </ul>
 
+                    @if($setupdispatch !="0")
                     <a href="#" id="5b">Dispatch<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-5b">
                         <!-- Item Links -->
                         <li>
-                            @if("1" !="0")
+                            @if($drivers !="0")
                             <a href='{!!url("/drivers")!!}'>Drivers</a>
                             @endif
                         </li>
                         <li>
-                            @if("1" !="0")
+                            @if($trucks !="0")
                             <a href='{!!url("/trucks")!!}'>Trucks</a>
                             @endif
                         </li>
                         <li>
-                            @if("1" !="0")
+                            @if($routes !="0")
                             <a href='{!!url("/routes1")!!}'>Routes</a>
                             @endif
                         </li>
                     </ul>
 
-                    <a href="#" id="5c">Stock<span class="caret pull-down"></span>
+                    @if($setupworkorders !="0")
+                    <a href="#" id="5c">Work Orders<span class="caret pull-down"></span>
                     </a>
+                    @endif
                     <ul class="item-show-5c">
                         <!-- Item Links -->
                         <li>
-                            @if($areaspage !="0") 
+                            @if($areas !="0") 
                             <a href='{!!url("/areapage")!!}'>Areas</a> 
                             @endif 
                         </li>
                         <li>
-                            @if($departmentpage !="0") 
+                            @if($departments !="0") 
                             <a href='{!!url("/departmentpage")!!}'>Departments</a> 
                             @endif 
                         </li>
@@ -265,34 +393,44 @@ if ((Auth::guest()))
                             @endif 
                         </li>
                         <li>
-                            @if($createPalletConfig !="0") 
+                            @if($palletconfig !="0") 
                             <a href='{!!url("/createPalletConfig")!!}'>Pallet Configurations</a>
                             @endif 
                         </li>
                         <li>
-                            @if($location !="0")
+                            @if($locations !="0")
                             <a href='{!!url("/location")!!}'>Locations</a>
                             @endif
                         </li>
                         
                         <li>
-                            @if($mapmachinestoarea !="0") 
+                            @if($mm2a !="0") 
                             <a href='{!!url("/mapmachinetoarea")!!}'>Map Machine To Area</a> 
                             @endif 
                         </li>
                         <li>
-                            @if($mapmachinestodept !="0")
+                            @if($mm2d !="0")
                             <a href='{!!url("/mapmachinestodept")!!}'>Map Machines To Department</a> 
                             @endif 
                         </li>
                         <li>
-                            @if($mapitemsmachinesdept !="0") 
+                            @if($mmdp !="0") 
                             <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Machines, Deptartment & Product</a>
                             @endif 
                         </li>
                         <li>
-                            @if($mapitemstopallet !="0")
+                            @if($mp2i !="0")
                             <a href='{!!url("/mapitemstopallet")!!}'>Map Pallet To Items</a> 
+                            @endif
+                        </li>
+                        <li>
+                            @if($galvcustomers !="0")
+                            <a href='{!!url("/galvcustomer")!!}'>Galv Customers</a> 
+                            @endif
+                        </li>
+                        <li>
+                            @if($galvscales !="0")
+                            <a href='{!!url("/galvscale")!!}'>Scales</a> 
                             @endif
                         </li>
                     </ul>
@@ -301,10 +439,12 @@ if ((Auth::guest()))
 		</li>
 
         <!-- Sales -->
-        <li>
+        <li class="disabled">
 			<!-- Fisrt Category -->
-            <a href="#" id="6">Sales<span class="caret pull-down"></span>
+            @if($sales !="0")
+            <a href="#" id="6">Sales<span class="caret"></span>
 			</a>
+            @endif
 			<ul class="item-show-6">
 				<li>
                     <!-- Second Category -->
@@ -324,70 +464,26 @@ if ((Auth::guest()))
 		</li>
 
         <!-- Print Labels & Reverse Pallets -->
-        <li>
-            @if($palletreversal !="0")
-            <a href='{!!url("/qrcodereversepallet")!!}'>Pallet Reversal Code</a>
-            @endif
-        </li>
-        <li>
-            @if($printpalletsselectdept !="0")
+        
+        <li class="disabled">
+            @if("1" !="0")
             <a href='{!!url("/printpalletsselectdept")!!}'>Print Pallet Labels</a>
             @endif
         </li>
-
-        <!-- Logout -->
-        <li>
-            <a href= "{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> Logout
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                {{ csrf_field() }}
-            </form>
-            <img  src="{{url('/images/logo-02.png')}}" style="height: 70px; width: 95%; padding:12px;">
-        </li>
-    
     </ul>
 </nav>
-
-<!--
-		<li>
-			<a href="#" id="2">Map Components <span class="caret pull-down"></span>
-			</a>
-			<ul class="item-show-2">
-
-			</ul>
-		</li>
-
-        <li>
-			<a href="#" id="3">Job Data <span class="fas fa-caret-down"></span>
-			</a>
-			<ul class="item-show-3">
-
-			</ul>
-		</li>
-
-        <li>
-			<a href="#" id="4">Stock <span class="fas fa-caret-down"></span>
-			</a>
-			<ul class="item-show-4">
-
-				</li>
-			</ul>
-		</li>
-
-        <li>
-			<a href="#" id="5">Users <span class="fas fa-caret-down"></span>
-			</a>
-			<ul class="item-show-5">
-
-			</ul>
-		</li>
-
-        <li>
-			<a href="#" id="6">Miscellaneous <span class="fas fa-caret-down"></span>
-			</a>
-			<ul class="item-show-6">
-
-				</li>
-			</ul>
-		</li>
--->
+<!-- Logout -->
+<nav class="sidebar" style="height: 20vh !important">
+    <div style="position: absolute; bottom: 0; background-color: #242424;">
+        <ul>
+            <li>
+                <a href= "{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> Logout
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+                <img  src="{{url('/images/logo-02.png')}}" style="height: 70px; width: 95%; padding:12px;">
+            </li>
+        </ul>
+    </div>
+</nav>

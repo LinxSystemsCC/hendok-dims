@@ -835,6 +835,8 @@ Route::get('initiateproductonmachine', [WareHouseController::class,'initiateprod
 Route::get('getPalletsJson', [WareHouseController::class,'getPalletsJson']);
 Route::get('getDeptname', [WareHouseController::class,'getDeptname']);
 Route::get('getAreaname', [WareHouseController::class,'getAreaname']);
+Route::get('getCustomername', [WareHouseController::class,'getCustomername']);
+Route::get('getScales', [WareHouseController::class,'getScales']);
 Route::get('getMachines', [WareHouseController::class,'getMachines']);
 Route::get('getgroupname', [WareHouseController::class,'getgroupname']);
 Route::get('getgroupsetting', [WareHouseController::class,'getgroupsetting']);
@@ -859,11 +861,15 @@ Route::post('savesMachinetoarea', [WareHouseController::class,'savesMachinetoare
 Route::post('savesMachinemaptodept', [WareHouseController::class,'savesMachinemaptodept']);
 Route::post('updateDeptName', [WareHouseController::class,'updateDeptName']);
 Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
+Route::post('deleteCustomerName', [WareHouseController::class,'deleteCustomerName']);
+Route::post('deleteScale', [WareHouseController::class,'deleteScale']);
 Route::post('updateMachineName', [WareHouseController::class,'updateMachineName']);
 Route::post('updategroupname', [WareHouseController::class,'updategroupname']);
 Route::post('savespallets', [WareHouseController::class,'savesPalletsPost']);
 Route::post('savesdeptname', [WareHouseController::class,'savesdeptname']);
 Route::post('savesareaname', [WareHouseController::class,'savesareaname']);
+Route::post('savescustomername', [WareHouseController::class,'savescustomername']);
+Route::post('savesscale', [WareHouseController::class,'savesscale']);
 Route::post('savesmachines', [WareHouseController::class,'savesmachines']);
 Route::post('savesgroupname', [WareHouseController::class,'savesgroupname']);
 Route::post('savessettingname', [WareHouseController::class,'savessettingname']);
@@ -872,6 +878,7 @@ Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefro
 Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
 Route::post('saveLocationType', [WareHouseController::class,'saveLocationType']);
 Route::post('saveLocationName', [WareHouseController::class,'saveLocationName']);
+Route::post('savepermissions', [WareHouseController::class,'savepermissions']);
 
 Route::get('startendjob', [WareHouseController::class,'startendjob']);
 
@@ -981,6 +988,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::get('areapage', [WareHouseController::class,'areapage']);
+    Route::get('userpermissions/{userid}', [WareHouseController::class,'userpermissions']);
     Route::get('dashboard', [WareHouseController::class,'dashboard']);
     Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
     Route::get('machines', [WareHouseController::class,'machinespage']);
@@ -996,6 +1004,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('exceptionmovementreport', [WareHouseController::class,'exceptionmovementreport']);
     Route::get('getjobcard/{JobID}', [WareHouseController::class,'getjobcard']);
     Route::get('getallactivejobs', [WareHouseController::class,'getallactivejobs']);
+    Route::get('galvcustomer', [WareHouseController::class,'galvcustomer']);
+    Route::get('galvscale', [WareHouseController::class,'galvscale']);
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!

@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <!-- For adding Settings to Groups -->
+            <!-- For adding Settings to Groups >
             <div class="col-lg-12" >
                 <div  style="background: white; padding: 5px;">
                     <h4></h4>
@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div-->
         
     </div>
 </div>
