@@ -895,6 +895,10 @@ Route::get('getpalletmovementreport', [WareHouseController::class,'getpalletmove
 Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovementreport']);
 Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
 Route::get('wmaxlanding', [WareHouseController::class,'wmaxlanding']);
+Route::get('wmaxgetcustomerproduct', [WareHouseController::class,'wmaxgetcustomerproduct']);
+Route::get('wmaxgetproductwiresize', [WareHouseController::class,'wmaxgetproductwiresize']);
+Route::get('wmaxdepartmentgalv', [WareHouseController::class,'wmaxdepartmentgalv']);
+Route::get('wmaxdepartmentmachinesgalv', [WareHouseController::class,'wmaxdepartmentmachinesgalv']);
 
 
 Route::get('binandqrcodes', [WareHouseController::class,'binandqrcodes']);
@@ -911,6 +915,7 @@ Route::post('savenewbin', [WareHouseController::class,'savenewbin']);
 
 Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
 Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
+Route::post('insertIntoJobTableGalv', [WareHouseController::class,'insertIntoJobTableGalv']);
 Route::get('getPalletForSelectedItem', [WareHouseController::class,'getPalletForSelectedItem']);
 Route::get('getDepListToPlan', [WareHouseController::class,'getDepListToPlan']);
 Route::get('getProdListToPlan', [WareHouseController::class,'getProdListToPlan']);
