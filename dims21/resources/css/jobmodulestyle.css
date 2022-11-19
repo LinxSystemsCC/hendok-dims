@@ -10,12 +10,15 @@ body{
   background-color: #eee;
 }
 
-.sidebar{
+.sidebar {
   position: relative;
   width: auto;
-  height: 100vh;
+  height: 80vh;
   background: #242424;
+  overflow: auto;
+  scrollbar-width: none;
 }
+
 .sidebar .text{
   color: white;
   font-size: 19px;
@@ -108,19 +111,19 @@ nav ul li a span.rotate{
 }
 
 .col-lg-12 {
-  padding: 0px; 
+  padding: 0px !important; 
 }
 
 .col-lg-10 {
-  padding: 10px;
+  padding: 10px !important;
 }
 
 .col-lg-2 {
-  padding: 0px;
-  margin: 0px;
-  width: 220px;
-  flex: 0 0 auto;
-  height: 100vh;
+  padding: 0px !important;
+  margin: 0px !important;
+  width: 220px !important;
+  flex: 0 0 auto !important;
+  height: 100vh !important;
 }
 
 h3{
@@ -130,4 +133,21 @@ h3{
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJbecmNE.woff2) format('woff2');
   padding-left: 15px;
+}
+
+.disabled {
+  pointer-events:none;
+  opacity:0.6;         
+}
+
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid\9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
 }

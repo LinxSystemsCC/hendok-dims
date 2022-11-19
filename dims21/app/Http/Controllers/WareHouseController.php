@@ -85,6 +85,29 @@ class WareHouseController extends Controller
         return view('warehouse/areas');
     }
 
+    public function userpermissions($userid){
+        $permissions = DB::connection('sqlsrv3')->select("select * from viewUserPermissions Where UserID =".$userid ."and allowView <> 0");
+        
+        $tableCols = DB::connection('sqlsrv3')->select("select max(countHeirarchy) as tableCols From tblDIMSSystemOptions");
+        $tableCols = $tableCols[0]->tableCols;
+        //dd($tableCols);
+
+        if (count($permissions) == 0)
+            DB::connection('sqlsrv3')->statement('exec spInsertUserPermissions ?', array($userid));
+        
+        //dd($userid);
+        //dd($permissions);
+        return view('warehouse/userpermissions')->with("id",$userid)->with("permissions",$permissions)->with("tableCols", $tableCols);
+    }
+    
+    public function galvcustomer(){
+        return view('warehouse/galvcustomers');
+    }
+
+    public function galvscale(){
+        return view('warehouse/galvscales');
+    }
+
     public function dashboard(){
         return view('warehouse/dashboard');
     }
@@ -178,6 +201,20 @@ class WareHouseController extends Controller
         $result = DB::connection('sqlsrv3')->table('tblLocationNames')->insert(
             ['strLocationName' => $strLocationName,'intLocationTypeId' => $locationtype]);
         return response()->json($result);
+    }
+
+    public function savepermissions(Request $request){
+        $UserID = $request->get("UserID");
+        $permissions = $request->get("CheckBoxes");
+        //dd($UserID);
+        //dd($permissions);
+        DB::connection('sqlsrv2')->statement("update tblDIMSUserPermissions set Selected = 0 where UserID = ".$UserID);
+
+        foreach ($permissions as $permission)
+            //dump($permission);
+            $returndata = DB::connection('sqlsrv2') ->statement('exec spUpdateUserPermissions ?,?', array($UserID,$permission));
+
+        return response()->json($returndata);
     }
 
     public function getDepListToPlan(Request $request){
@@ -726,6 +763,18 @@ where intDeptID =".$deptId);
         return response()->json($palletsjson);
     }
 
+    public function getCustomername(){
+        $customernames = DB::connection('wmax') ->select("select * from tblCustomers");
+        //dd($customernames);
+        return response()->json($customernames);
+    }
+
+    public function getScales(){
+        $scaleNames = DB::connection('wmax') ->select("select * from tblWeighStands");
+        //dd($scaleNames);
+        return response()->json($scaleNames);
+    }
+
     public function getpalletconfforitems(Request $request){
         $productcode= $request->get("productcode");
         $palletsjson = DB::connection('sqlsrv2')
@@ -800,6 +849,24 @@ where intDeptID =".$deptId);
             ->select('exec spCreateArea ?',
                 array($areaname)
             );
+        return response()->json($returnmach);
+    }
+
+    public function savescustomername(Request $request){
+        $customername = $request->get("customername");
+        //dd($customername);
+
+        $returnmach = DB::connection('wmax')->select('exec spSaveCustomer ?',array($customername));
+        return response()->json($returnmach);
+    }
+
+    public function savesscale(Request $request){
+        $scalename = $request->get("scalename");
+        $scalemass = $request->get("scalemass");
+        $wsb = $request->get("wsb");
+        //dd($scalename,$scalemass,$wsb);
+
+        $returnmach = DB::connection('wmax')->select('exec spSaveScale ?,?,?',array($scalename,$scalemass, $wsb));
         return response()->json($returnmach);
     }
 
@@ -884,6 +951,22 @@ where intDeptID =".$deptId);
             ->select('exec spUpdateAreas ?,?',
                 array($palletid,$theAreaname)
             );
+        return response()->json($returnmach);
+    }
+
+    public function deleteCustomerName(Request $request){
+        //$theCustomername = $request->get("theCustomername");
+        $CustomerID = $request->get("CustomerID");
+        //dd($theCustomername);
+        //dd($CustomerID);
+        $returnmach = DB::connection('wmax') ->select('exec spDeleteCustomer ?', array($CustomerID));
+        return response()->json($returnmach);
+    }
+
+    public function deleteScale(Request $request){
+        $ScaleId = $request->get("ScaleId");
+        //dd($ScaleId);
+        $returnmach = DB::connection('wmax') ->select('exec spDeleteScale ?', array($ScaleId));
         return response()->json($returnmach);
     }
 

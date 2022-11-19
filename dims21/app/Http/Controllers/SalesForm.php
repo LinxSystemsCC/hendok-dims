@@ -207,6 +207,21 @@ class SalesForm extends Controller
         }
         return $things;
     }
+
+    public function getThingsUserPermissions($UserID,$thing)
+    {
+        $things = 0;
+
+        //$GroupId = Auth::user()->GroupId;
+        $returnTrueOrFalse = DB::connection('sqlsrv3')
+            ->select("select [dbo].[fnGetUserPermissionsThings](".$UserID.",'".$thing."',0) as things");
+        foreach ($returnTrueOrFalse as $val)
+        {
+            $things =  $val->things;
+        }
+        return $things;
+    }
+
     public function hasAccessToEdit($orderid)
     {
         $canEditOrder = "Yes";
