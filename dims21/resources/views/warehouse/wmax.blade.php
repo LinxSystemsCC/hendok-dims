@@ -29,11 +29,6 @@
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 
 </head>
-<div style="display: flex; justify-content: space-around; background-color: black;">
-    <img  src="{{url('/images/HendokLogoBlack.jpg')}}" style="height: 70px; border: solid 3px black; margin:auto; padding-left: 20px;">
-    <h3 style="flex-grow: 1;">Work Orders</h3>
-<!--img  src="{{url('/images/logo-02.png')}}" style="height: 70px; border: solid 3px black;"-->
-</div>
 
 <body>
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
@@ -474,8 +469,8 @@
 
         });
 
-        $('#printjobcard').click(function(){
-            window.open('{!!url("/getallactivejobs")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
+        $('#qcphase1').click(function(){
+            window.open('{!!url("/qc1")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
         });
 
         $('.sidebar ul li a').click(function(){

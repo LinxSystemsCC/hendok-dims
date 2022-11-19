@@ -841,7 +841,7 @@ Route::get('getMachines', [WareHouseController::class,'getMachines']);
 Route::get('getgroupname', [WareHouseController::class,'getgroupname']);
 Route::get('getgroupsetting', [WareHouseController::class,'getgroupsetting']);
 Route::get('getusers', [WareHouseController::class,'getusers']);
-
+Route::get('getqc1', [WareHouseController::class,'getqc1']);
 
 
 
@@ -1006,6 +1006,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getallactivejobs', [WareHouseController::class,'getallactivejobs']);
     Route::get('galvcustomer', [WareHouseController::class,'galvcustomer']);
     Route::get('galvscale', [WareHouseController::class,'galvscale']);
+    Route::get('qc1', [WareHouseController::class,'qc1']);
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!

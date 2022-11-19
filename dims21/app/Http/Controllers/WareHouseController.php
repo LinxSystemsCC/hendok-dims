@@ -40,6 +40,11 @@ class WareHouseController extends Controller
         return response()->json($users);
     }
 
+    public function getqc1(){
+        $qc1 = DB::connection('wmax') ->select("select * from viewNewJobs1");
+        return response()->json($qc1);
+    }
+
 
     public function creategrouppage(){
         $groups = DB::connection('sqlsrv2')
@@ -106,6 +111,10 @@ class WareHouseController extends Controller
 
     public function galvscale(){
         return view('warehouse/galvscales');
+    }
+
+    public function qc1(){
+        return view('warehouse/qc1');
     }
 
     public function dashboard(){
