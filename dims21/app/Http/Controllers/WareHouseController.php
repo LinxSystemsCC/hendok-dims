@@ -354,8 +354,34 @@ class WareHouseController extends Controller
     public function wmaxlanding(){
         $customers = DB::connection('wmax')
             ->select("select * from tblCustomers ");
-
-        return view('warehouse/wmax')->with('customers',$customers);
+        $dept = DB::connection('sqlsrv2')
+            ->select("select * from tblDepartments");
+        return view('warehouse/wmax')->with('customers',$customers)->with('dept',$dept);
+    }
+    public function wmaxgetcustomerproduct(Request $request){
+        $cust = $request->get("customers");
+        $productlist = DB::connection('wmax')
+            ->select("select * from tblProducts where CustomerName ='".$cust."'");
+        return response()->json($productlist);
+    }
+    public function wmaxgetproductwiresize(Request $request){
+        $ProductID = $request->get("productId");
+        $productlistsize = DB::connection('wmax')
+            ->select("select * from tblProducts where ProductID =".$ProductID);
+        return response()->json($productlistsize);
+    }
+    public function wmaxdepartmentgalv(){
+        $dept = DB::connection('sqlsrv2')
+            ->select("select * from tblDepartments");
+        return response()->json($dept);
+    }
+public function wmaxdepartmentmachinesgalv(Request $request){
+    $deptId = $request->get("deptId");
+        $machines = DB::connection('sqlsrv2')
+            ->select("select intAutoMachineID,strMachineName from tblMapMachineToDept d
+inner join tblMachines m on m.intAutoMachineID = d.intMachineID
+where intDeptID =".$deptId);
+        return response()->json($machines);
     }
 
     public function getMachinesforselecteddept(Request $request){
@@ -637,6 +663,35 @@ class WareHouseController extends Controller
         $returnmach = DB::connection('sqlsrv2')
             ->select('exec spInsertNewJob ?,?,?,?,?,?,?,?',
                 array($deptId,$prodgroup,$productcategory,$prodname,$machinename,$qty,$startdate,$palletconfig)
+            );
+        return response()->json($returnmach);
+
+    }
+    public function insertIntoJobTableGalv(Request $request){
+
+        /*
+       @custId AS bigint,
+	@productID bigint,
+	@wiresize nvarchar(25),
+	@deptId as bigint,
+	@machinenId bigint,
+	@qty money,
+	@reference as nvarchar(25)
+         */
+
+        $prodname = $request->get("prodname");
+
+        $wiresize = $request->get("wiresize");
+        $department= $request->get("department");
+        $machinename = $request->get("machinename");
+        $qty = $request->get("qty");
+        $reference = $request->get("reference");
+        $customers = $request->get("customers");
+        $UserName = Auth::user()->UserName;
+
+        $returnmach = DB::connection('sqlsrv2')
+            ->select('exec spInsertNewJobGalv ?,?,?,?,?,?,?,?',
+                array($customers,$prodname,$wiresize,$department,$machinename,$qty,$reference,$UserName)
             );
         return response()->json($returnmach);
 

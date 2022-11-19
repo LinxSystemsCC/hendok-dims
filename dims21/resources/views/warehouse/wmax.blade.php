@@ -93,22 +93,14 @@
                         <select  class="form-control input-sm col-xs-1 " id="customers" style="width: 100%" required>
                             <option></option>
                             @foreach($customers as $val)
-                                <option value="{{$val->CustomerID}}">{{$val->CustomerName}}</option>
+                                <option value="{{$val->CustomerName}}">{{$val->CustomerName}}</option>
                             @endforeach
 
                         </select>
 
 
                     </div>
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="department" onselect="but_read" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
-                        <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
-                            <option></option>
 
-                        </select>
-
-
-                    </div>
 
                     <div class="form-group">
                         <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
@@ -116,6 +108,22 @@
                             <option></option>
                         </select>
 
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="wiresize"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size </label>
+                        <select  class="form-control input-sm col-xs-1" id="wiresize" required>
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
+                        <select  class="form-control input-sm col-xs-1" id="department" required>
+                            <option></option>
+                            @foreach($dept as $val)
+                                <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                                @endforeach
+
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -126,19 +134,14 @@
 
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Qty </label>
+                        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Mass Required </label>
                         <input type="number"  class="form-control input-sm col-xs-1" id="qty" required>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label" for="palletconfig"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Conf </label>
-                        <select  class="form-control input-sm col-xs-1" id="palletconfig" required>
-                            <option></option>
-                        </select>
-                    </div>
+
 
                     <div class="form-group">
-                        <label class="control-label" for="startdate"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Start Date </label>
-                        <input type="date" class="form-control input-sm col-xs-1" id="startdate">
+                        <label class="control-label" for="startdate"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">References </label>
+                        <input type="reference" class="form-control input-sm col-xs-1" id="reference">
                     </div>
 
                 </div>
@@ -173,26 +176,25 @@
     $(document).ready(function() {
 
         $("#customers").select2();
-        $("#machinename").change(function () {
+        $("#customers").change(function () {
 
             $.ajax({
 
-                url: '{!!url("/getPalletForSelectedItem")!!}',
+                url: '{!!url("/wmaxgetcustomerproduct")!!}',
                 type: "GET",
                 data: {
-                    itemCode: $("#prodname").val(),
-                    intMachine: $("#machinename").val()
+                    customers: $("#customers").val()
                 },
                 success: function (data) {
                     var toAppend = '';
-                    $("#palletconfig").empty();
+                    $("#prodname").empty();
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.intPalletId+'">'+o.strPalletTypeDescription+'</option>';
+                        toAppend += '<option value="'+o.ProductID+'">'+o.ProductName+'</option>';
                     });
-                    $("#palletconfig").append(toAppend);
-                    $("#palletconfig").select2();
+                    $("#prodname").append(toAppend);
+                    $("#prodname").select2();
                 }
             });
 
@@ -202,110 +204,48 @@
 
             $.ajax({
 
-                url: '{!!url("/getMachinesforselecteddept")!!}',
+                url: '{!!url("/wmaxgetproductwiresize")!!}',
                 type: "GET",
                 data: {
-                    deptId: $("#departmentheader").val(),
-                    prodname: $("#prodname").val()
+                    productId: $("#prodname").val()
                 },
                 success: function (data) {
-                    var toAppend = '<option></option>';
-                    $("#machinename").empty();
+                    var toAppend = '';
+                    $("#wiresize").empty();
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
+                        toAppend += '<option value="'+o.WireSize+'">'+o.WireSize+'</option>';
                     });
-                    $("#machinename").append(toAppend);
-                    $("#machinename").select2();
+                    $("#wiresize").append(toAppend);
+                    $("#wiresize").select2();
 
                 }
             });
         });
 
-        $("#department").select2();
-
-        /*$('#but_read').click(function(){
-            var ItemGroupDescription = $('#department option:selected').text();
-            var ItemGroup = $('#department').val();
-            $.ajax({
-
-                url: '{!!url("/getProdCategory")!!}',
-                type: "GET",
-                data: {
-                    ItemGroup: ItemGroup
-                },
-                success: function (data) {
-                    var toAppend = '';
-                    $("#productcategory").empty();
-                    toAppend += '<option></option>';
-                    $.each(data,function(i,o){
-                        toAppend += '<option value="'+o.strProductCategory+'">'+o.strProductCategory+'</option>';
-                    });
-                    $("#productcategory").append(toAppend);
-                    $("#productcategory").select2();
-                    $("#productcategory").change(function () {
-                        $("#prodname").empty();
 
 
-
-                    });
-
-
-
-                }
-
-            });
-
-           // $('#result').html("id : " + userid + ", name : " + username);
-
-        });*/
-
-        $('#departmentheader').change(function(){
-            $.ajax({
-
-                url: '{!!url("/getDepListToPlan")!!}',
-                type: "GET",
-                data: {
-                    ItemGroup: $('#departmentheader option:selected').text(),
-                    strProductCategory: $("#productcategory").val()
-
-                },
-                success: function (data) {
-                    var toAppend = '';
-                    $("#department").empty();
-                    toAppend += '<option></option>';
-                    $.each(data,function(i,o){
-
-                        toAppend += '<option value="'+o.intAutoGroupCategoryId+'">'+o.strProductCategory+'</option>';
-                    });
-                    $("#department").append(toAppend);
-                    $("#department").select2();
-
-                }
-
-            });
-        });
 
         $('#department').change(function(){
             $.ajax({
 
-                url: '{!!url("/getProdListToPlan")!!}',
+                url: '{!!url("/wmaxdepartmentmachinesgalv")!!}',
                 type: "GET",
                 data: {
-                    ItemGroup: $('#department option:selected').text(),
-                    strProductCategory: $("#productcategory").val()
+                    deptId: $('#department').val(),
+
 
                 },
                 success: function (data) {
                     var toAppend = '';
-                    $("#prodname").empty();
+                    $("#machinename").empty();
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
+                        toAppend += '<option value="'+o.intAutoMachineID+'">'+o.strMachineName+'</option>';
                     });
-                    $("#prodname").append(toAppend);
-                    $("#prodname").select2();
+                    $("#machinename").append(toAppend);
+                    $("#machinename").select2();
 
                 }
 
@@ -338,17 +278,16 @@
 
             $.ajax({
 
-                url: '{!!url("/insertIntoJobTable")!!}',
+                url: '{!!url("/insertIntoJobTableGalv")!!}',
                 type: "POST",
                 data: {
-                    deptId: $('#departmentheader').val(),
-                    //prodgroup: $('#department').val(),
-                    productcategory: $('#productcategory').val(),
                     prodname: $('#prodname').val(),
+                    wiresize: $('#wiresize').val(),
+                    department: $('#department').val(),
                     machinename: $('#machinename').val(),
                     qty: $('#qty').val(),
-                    startdate: $('#startdate').val(),
-                    palletconfig: $('#palletconfig').val()
+                    customers: $('#customers').val(),
+                    reference: $('#reference').val()
                 },
                 success: function (data) {
                     if(data[0].result == "Success"){
