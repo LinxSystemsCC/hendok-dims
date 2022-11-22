@@ -182,6 +182,14 @@ class WareHouseController extends Controller
             ->select("select * from viewItemGroups order by ItemGroupDescription");
         return view('warehouse/createjobs')->with('prodGroups',$prodGroups)->with('dept',$dept);
     }
+    public function roofworkorders(){
+        $dept = DB::connection('sqlsrv2')
+            ->select("select * from tblDepartments");
+        $prodGroups = DB::connection('sqlsrv2')
+            ->select("select * from viewItemGroups order by ItemGroupDescription");
+        return view('warehouse/createjobs')->with('prodGroups',$prodGroups)->with('dept',$dept);
+    }
+
     public function getBinLocationsJson(){
         $getBins=DB::connection('sqlsrv2')
             ->select('Select * from tblBinNames n inner join tblLocationNames l on n.intLocationId = l.intLocationNameId');
@@ -231,7 +239,7 @@ class WareHouseController extends Controller
         //$getUserByEmail = DB::select('SELECT * FROM users WHERE email = ?' , ['useremailaddress@email.com']);
         $strProductCategory = $request->get("strProductCategory");
 
-        $prodCategory = DB::connection('sqlsrv2')->select("select * from tblProductCategoryAndGroups where strProductGroup ='".$ItemGroup."'");
+        $prodCategory = DB::connection('sqlsrv2')->select("exec spGetDeptCategoryGroup ?", array($ItemGroup));
         //dd($prodCategory);
 
         return response()->json($prodCategory);
@@ -244,8 +252,60 @@ class WareHouseController extends Controller
         $prodCategory = DB::connection('sqlsrv2')
             //->select("select * from viewItemsToPlanJob where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strItemName");
             ->select("select DISTINCT i.* from viewItemsToPlanJob i inner join tblMappedDeptMachinesItems mis on mis.strItemCode collate database_default = i.strItemCode  where strProductCategory ='".$ItemGroup."' order by strItemName");
+
+        dd($prodCategory);
         return response()->json($prodCategory);
     }
+
+    public function getqc1comments(Request $request){
+        $comments = DB::connection('wmax')->select("select * from tblQCPhase1Remarks");
+        //dd($comments);
+
+        return response()->json($comments);
+    }
+
+    public function passqc1(Request $request){
+        $Reference = $request->get("Reference");
+        $CustomerName = $request->get("CustomerName");
+        $ProductName = $request->get("ProductName");
+        $DepartmentName = $request->get("DepartmentName");
+        $MachineName = $request->get("MachineName");
+        $JobNo = $request->get("JobNo");
+        $WireSize = $request->get("WireSize");
+        $MassRequired = $request->get("MassRequired");
+        $testNo = $request->get("testNo");
+        $zincTested = $request->get("zincTested");
+        $mpaTested = $request->get("mpaTested");
+        $castNo = $request->get("castNo");
+        $wireSizeTested = $request->get("wireSizeTested");
+        $comment1 = $request->get("comment1");
+        $massProduced = $request->get("massProduced");
+        $zincInitialMass = $request->get("zincInitialMass");
+        $zincStripMass = $request->get("zincStripMass");
+        $zincStripSize = $request->get("zincStripSize");
+        $operator = Auth::user()->UserName;
+        $comment2 = $request->get("comment2");
+        $comment3 = $request->get("comment3");
+
+        //dd($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $castNo, $wireSizeTested ,$comment1 ,$massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3);
+        
+        $passQC1 = DB::connection('sqlsrv2')->statement('exec spInsertIntoPicking ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', array($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $castNo, $wireSizeTested ,$comment1 ,$massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3));
+        
+        return response()->json($passQC1);
+    }
+
+    public function failqc1(Request $request){
+        //dd('QC 1 Failed');
+
+        return response()->json();
+    }
+
+    public function calczinc(Request $request){
+        //dd('Calculating Zinc');
+
+        return response()->json();
+    }
+
     //For printing pallets
     public function printpalletsselectdept(){
         $dept = DB::connection('sqlsrv2')
@@ -510,6 +570,12 @@ where intDeptID =".$deptId);
         $productonmachine = DB::connection('sqlsrv2')
             ->select('exec spGetProductCurrentlyPlanned '
             );
+        return response()->json($productonmachine);
+    }
+
+    public function getGalvWIP(Request $request){
+
+        $productonmachine = DB::connection('wmax')->select("select * from tblNewJobs Where Completed <> 'Y'");
         return response()->json($productonmachine);
     }
     public function getWIPjobstarted(Request $request){
