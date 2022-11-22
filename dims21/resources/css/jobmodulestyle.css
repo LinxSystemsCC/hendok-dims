@@ -32,7 +32,7 @@ nav ul{
   background: #242424;
   width: 100%;
   list-style: none;
-      padding-left: 10px;
+  padding-left: 10px;
 }
 nav ul li{
   line-height: 50px;
@@ -112,11 +112,13 @@ nav ul li a span.rotate{
 
 .col-lg-12 {
   padding: 0px !important; 
+  display: flex;
 }
 
 .col-lg-10 {
   padding: 10px !important;
-  /*width: 80vh !important;*/
+    flex: 1 1 auto !important;
+    max-width: fit-content !important;
 }
 
 .col-lg-2 {

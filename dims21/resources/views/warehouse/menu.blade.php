@@ -35,7 +35,8 @@ if ((Auth::guest()))
     //--------------------------Second Level Options--------------------------------
     //Work Order Options
     $barbed = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Wire');
-    $galv = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Wire');
+    $galv = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv');
+    $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
 
     //Dispatch Options
     $loadplanning = $v->getThingsUserPermissions(Auth::user()->UserID,'Load Planning');
@@ -64,6 +65,9 @@ if ((Auth::guest()))
 
     //Work Order - Galv
     $galvcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv Create Work Order');
+
+    //Work Orders Roofing
+    $roofcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Create Work Order');
 
     //Dispatch - Load Planning
     $pickingplanner = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Planner');
@@ -154,6 +158,18 @@ if ((Auth::guest()))
                         <li>
                             @if($galvcreateworkorder !="0")
                             <a href='{!!url("/wmaxlanding")!!}'>Create Work Orders</a>
+                            @endif
+                        </li>
+                    </ul>
+                    @if($roof !="0")
+                    <a href="#" id="1c">Roofing<span class="caret pull-down"></span>
+                    </a>
+                    @endif
+                    <ul class="item-show-1c">
+                        <!-- Item Links -->
+                        <li>
+                            @if($roofcreateworkorder !="0")
+                            <a href='{!!url("/roofworkorders")!!}'>Create Work Orders</a>
                             @endif
                         </li>
                     </ul>

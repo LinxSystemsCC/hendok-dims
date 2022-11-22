@@ -169,15 +169,19 @@
                 $("#gridContainer").dxDataGrid({
 
                     dataSource:data, //as json
-
+                    hoverStateEnabled: true,
                     showBorders: true,
                     filterRow: { visible: true },
                     allowColumnResizing: true,
+                    columnAutoWidth: true,
                     paging:{
                         pageSize: 10,
                     },
                     export: {
                         enabled: true
+                    },
+                    selection: {
+                        mode: 'single',
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
@@ -199,30 +203,30 @@
                         {
                             dataField: "UserID",
                             caption: "ID",
-                            width: 50,
+                            //width: 50,
 
                         }, {
                             dataField: "UserName",
                             caption: "Username",
-                            width: 200,
+                            //width: 200,
 
                         }
                         , {
                             dataField: "Email",
                             caption: "Email",
-                            width: 350,
+                            //width: 350,
 
                         },
                         {
                             dataField: "GroupId",
                             caption: "Group ID",
-                            width: 50,
+                            //width: 50,
 
                         },
                         {
                             dataField: "TabletUser",
                             caption: "Tablet User",
-                            width: 50,
+                            //width: 50,
 
                         },
                     ],
@@ -230,7 +234,7 @@
                         console.log(e.data.intJobId);
                         var intUserID =  e.data.UserID;
 
-                        window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID, "location=1,status=1,scrollbars=1, width=600,height=850");
 
                     }
                     

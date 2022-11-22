@@ -51,6 +51,7 @@
 
         .position-ref {
             position: relative;
+            width: 100%;
         }
 
         .top-right {

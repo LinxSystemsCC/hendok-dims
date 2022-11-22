@@ -1,14 +1,3 @@
-<?php
-if ((Auth::guest()))
-{
-
-}else{
-    $v  =  new \App\Http\Controllers\SalesForm();
-}
-$qc1 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 1');
-$qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +5,9 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
@@ -24,10 +16,9 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-
     <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
+    
 
     <!-- Select2 JS -->
 
@@ -49,34 +40,23 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
             @include('warehouse.menu')
         </div>
     </div>
-
-
+    
+    
     <div class="col-lg-10" >
-        <div class="col-lg-10">
+        <h3 style="flex-grow: 1;">Work Orders</h3>
+        
+        <div>
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">Create Work Order</button>
-
-            @if($qc1 !="0")
-            <button type="button" id="qcphase1" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">QC Phase 1 </button>
-            @endif
-
-            @if($qc2 !="0")
-            <button type="button" id="qcphase2" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">QC Phase 2</button>
-            @endif
-
-            <button type="button" id="weigh" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Weigh</button>
-            <button type="button" id="print" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Print</button>
-            {{-- <button type="button" id="scrapweigh" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Scrap Weighing</button> --}}
-            <button type="button" id="regrade" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Regrade</button>
-            <button type="button" id="stockchange" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Stock Change</button>
-            <button type="button" id="retest" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Re-Test</button>
+            
+            <button type="button" id="printjobcard" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Print All Active Jobs</button>
 
         </div>
         <div id="gridContainer" style="width: 100% !important;">
         </div>
 
     </div>
-
-
+   
+    
     <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -92,6 +72,9 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
         </div>
     </div>
 
+    
+
+
     <div title="Job Creation" id="createjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -103,42 +86,44 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <label class="control-label" for="customers"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
-                        <select  class="form-control input-sm col-xs-1 " id="customers" style="width: 100%" required>
+                        <label class="control-label" for="departmentheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
+                        <select  class="form-control input-sm col-xs-1 " id="departmentheader" style="width: 100%" required>
                             <option></option>
-                            @foreach($customers as $val)
-                                <option value="{{$val->CustomerName}}">{{$val->CustomerName}}</option>
+                            @foreach($dept as $val)
+                                <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
                             @endforeach
 
                         </select>
 
 
                     </div>
+                <div class="input-group mb-3">
+                    <label class="control-label" for="department" onselect="but_read" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+                    <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
+                        <option></option>
+                        {{-- @foreach($prodGroups as $val)
+                            <option value="{{$val->ItemGroup}}">{{$val->ItemGroupDescription}}</option>
+                        @endforeach--}}
+                    </select>
 
+                    <!--input type='button' value='Confirm Prod Cat' class="btn btn-secondary btn-sm" id='but_read'-->
 
-                    <div class="form-group">
-                        <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
-                        <select  class="form-control input-sm col-xs-1" id="prodname" required>
-                            <option></option>
-                        </select>
+                </div>
+                <!--div class="form-group">
+                    <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+                    <select  class="form-control input-sm col-xs-1" id="productcategory" required>
+                        <option></option>
+                        
+                    </select>
+                    <input type='button' class="btn btn-secondary btn-sm" value='Confirm Prod Cat' id='getproduct' style="margin-top: 22px;">
+                </div-->
+                <div class="form-group">
+                    <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
+                    <select  class="form-control input-sm col-xs-1" id="prodname" required>
+                        <option></option>
+                    </select>
 
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="wiresize"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size </label>
-                        <select  class="form-control input-sm col-xs-1" id="wiresize" required>
-                            <option></option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-                        <select  class="form-control input-sm col-xs-1" id="department" required>
-                            <option></option>
-                            @foreach($dept as $val)
-                                <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
-                                @endforeach
-
-                        </select>
-                    </div>
+                </div>
 
                     <div class="form-group">
                         <label class="control-label" for="machinename"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine </label>
@@ -148,21 +133,26 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
 
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Mass Required </label>
+                        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Qty </label>
                         <input type="number"  class="form-control input-sm col-xs-1" id="qty" required>
                     </div>
-
+                    <div class="form-group">
+                        <label class="control-label" for="palletconfig"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Conf </label>
+                        <select  class="form-control input-sm col-xs-1" id="palletconfig" required>
+                            <option></option>
+                        </select>
+                    </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="startdate"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">References </label>
-                        <input type="reference" maxlength="15" class="form-control input-sm col-xs-1" id="reference">
+                        <label class="control-label" for="startdate"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Start Date </label>
+                        <input type="date" class="form-control input-sm col-xs-1" id="startdate">
                     </div>
 
                 </div>
-                <br><br><br>
+        <br><br><br>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn btn-danger" id="savedepartment" style="width: 100%;">SAVE</button>
+                        <button class="btn-danger btn-lg" id="savedepartment" style="width: 100%;">SAVE</button>
                 </div>
             </div>
         </div>
@@ -184,39 +174,31 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
-
     $(document).ready(function() {
-        
-        var max_length = 15;
-        $('#reference').keyup(function () {
-            var len = max_length - $(this).val().length;
-        });
 
-        $("#customers").select2();
-
-        $("#customers").change(function () {
+        $("#machinename").change(function () {
 
             $.ajax({
 
-                url: '{!!url("/wmaxgetcustomerproduct")!!}',
+                url: '{!!url("/getPalletForSelectedItem")!!}',
                 type: "GET",
                 data: {
-                    customers: $("#customers").val()
+                    itemCode: $("#prodname").val(),
+                    intMachine: $("#machinename").val()
                 },
                 success: function (data) {
                     var toAppend = '';
-                    $("#prodname").empty();
+                    $("#palletconfig").empty();
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.ProductID+'">'+o.ProductName+'</option>';
+                        toAppend += '<option value="'+o.intPalletId+'">'+o.strPalletTypeDescription+'</option>';
                     });
-                    $("#prodname").append(toAppend);
-                    $("#prodname").select2();
+                    $("#palletconfig").append(toAppend);
+                    $("#palletconfig").select2();
                 }
             });
 
@@ -226,52 +208,115 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
 
             $.ajax({
 
-                url: '{!!url("/wmaxgetproductwiresize")!!}',
+                url: '{!!url("/getMachinesforselecteddept")!!}',
                 type: "GET",
                 data: {
-                    productId: $("#prodname").val()
+                    deptId: $("#departmentheader").val(),
+                    prodname: $("#prodname").val()
+                },
+                success: function (data) {
+                    var toAppend = '<option></option>';
+                    $("#machinename").empty();
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
+                    });
+                    $("#machinename").append(toAppend);
+                    $("#machinename").select2();
+                    
+                }
+            });
+        });
+
+        $("#department").select2();
+
+        /*$('#but_read').click(function(){
+            var ItemGroupDescription = $('#department option:selected').text();
+            var ItemGroup = $('#department').val();
+            $.ajax({
+
+                url: '{!!url("/getProdCategory")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: ItemGroup
                 },
                 success: function (data) {
                     var toAppend = '';
-                    $("#wiresize").empty();
+                    $("#productcategory").empty();
+                    toAppend += '<option></option>';
                     $.each(data,function(i,o){
-
-                        toAppend += '<option value="'+o.WireSize+'">'+o.WireSize+'</option>';
+                        toAppend += '<option value="'+o.strProductCategory+'">'+o.strProductCategory+'</option>';
                     });
-                    
-                    $("#wiresize").append(toAppend);
-                    $("#wiresize").select2();
+                    $("#productcategory").append(toAppend);
+                    $("#productcategory").select2();
+                    $("#productcategory").change(function () {
+                        $("#prodname").empty();
+
+
+
+                    });
+
+
 
                 }
+
+            });
+
+           // $('#result').html("id : " + userid + ", name : " + username);
+
+        });*/
+
+        $('#departmentheader').change(function(){
+            $.ajax({
+
+                url: '{!!url("/getDepListToPlan")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: $('#departmentheader option:selected').text(),
+                    strProductCategory: $("#productcategory").val()
+
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#department").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.intAutoGroupCategoryId+'">'+o.strProductCategory+'</option>';
+                    });
+                    $("#department").append(toAppend);
+                    $("#department").select2();
+
+                }
+
             });
         });
 
         $('#department').change(function(){
             $.ajax({
 
-                url: '{!!url("/wmaxdepartmentmachinesgalv")!!}',
+                url: '{!!url("/getProdListToPlan")!!}',
                 type: "GET",
                 data: {
-                    deptId: $('#department').val(),
-
+                    ItemGroup: $('#department option:selected').text(),
+                    strProductCategory: $("#productcategory").val()
 
                 },
                 success: function (data) {
                     var toAppend = '';
-                    $("#machinename").empty();
+                    $("#prodname").empty();
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.intAutoMachineID+'">'+o.strMachineName+'</option>';
+                        toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
                     });
-                    $("#machinename").append(toAppend);
-                    $("#machinename").select2();
+                    $("#prodname").append(toAppend);
+                    $("#prodname").select2();
 
                 }
 
             });
         });
-
         $('#but_deptheader').click(function(){
             $.ajax({
 
@@ -281,14 +326,14 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
                     deptId: $('#departmentheader').val()
                 },
                 success: function (data) {
-                    /* var toAppend = '';
-                     $("#machinename").empty();
-                     $.each(data,function(i,o){
+                   /* var toAppend = '';
+                    $("#machinename").empty();
+                    $.each(data,function(i,o){
 
-                         toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
-                     });
-                     $("#machinename").append(toAppend);
-                     $("#machinename").select2();*/
+                        toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
+                    });
+                    $("#machinename").append(toAppend);
+                    $("#machinename").select2();*/
 
                 }
 
@@ -296,27 +341,21 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
         });
 
         $('#savedepartment').click(function(){
-            var textbox = $('#reference').val();
-            length = textbox.length;
-            //console.debug(length)
-            if (length <2) {
-                alert("The entered input should be 2 or more than 2 characters");
-                return false;
-            } else{
-                $.ajax({
 
-                url: '{!!url("/insertIntoJobTableGalv")!!}',
+            $.ajax({
+
+                url: '{!!url("/insertIntoJobTable")!!}',
                 type: "POST",
                 data: {
+                    deptId: $('#departmentheader').val(),
+                    //prodgroup: $('#department').val(),
+                    productcategory: $('#productcategory').val(),
                     prodname: $('#prodname').val(),
-                    wiresize: $('#wiresize').val(),
-                    department: $('#department').val(),
                     machinename: $('#machinename').val(),
                     qty: $('#qty').val(),
-                    customers: $('#customers').val(),
-                    reference: $('#reference').val()
+                    startdate: $('#startdate').val(),
+                    palletconfig: $('#palletconfig').val()
                 },
-
                 success: function (data) {
                     if(data[0].result == "Success"){
 
@@ -327,14 +366,10 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
 
                 }
             });
-            }
-            
-            
-
         });
 
         $.ajax({
-            url: '{!!url("/getGalvWIP")!!}',
+            url: '{!!url("/getWIP")!!}',
             type: "GET",
             data: {
                 machineId: $('#machineid').val()
@@ -350,7 +385,7 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
                     allowColumnResizing: true,
                     columnAutoWidth: true,
                     paging:{
-                        pageSize: 14,
+                        pageSize: 20,
                     },
                     export: {
                         enabled: true
@@ -376,54 +411,61 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
 
                     columns: [
                         {
-                            dataField: "JobNo",
-                            caption: "Job No.",
+                            dataField: "intJobId",
+                            caption: "JobNo",
                             //width: 80,
 
                         }, {
-                            dataField: "CustomerName",
-                            caption: "Customer Name",
+                            dataField: "intJobSequence",
+                            caption: "Job Seq",
                             //width: 100,
 
-                        }, 
-                        {
-                            dataField: "DepartmentName",
+                        }, {
+                            dataField: "strDeptName",
                             caption: "Department",
                             //width: 250,
 
                         },
                         {
-                            dataField: "MachineName",
+                            dataField: "strMachineName",
                             caption: "Machine",
                             //width: 300,
 
                         },
                         {
-                            dataField: "ProductName",
+                            dataField: "PastelDescription",
                             caption: "Product",
                             //width: 600,
 
                         },
                         {
-                            dataField: "MassRequired",
-                            caption: "Mass Required",
+                            dataField: "mnyQtyRequired",
+                            caption: "Qty",
                             //width: 60,dataType:"number"
 
                         },
                         {
-                            dataField: "TestDateTime",
-                            caption: "Test Date",
+                            dataField: "palletQty",
+                            caption: "Pallet Qty",
+                            //width: 100,dataType:"number"
+
+                        }
+                        ,
+                        {
+                            dataField: "dteStartDate",
+                            caption: "Start Date",
                             //width: 100,dataType:"date"
 
                         },
                         {
-                            dataField: "Reference",
-                            caption: "Reference",
+                            dataField: "jobStatus",
+                            caption: "Job Status",
                             //width: 150,
 
                         },
                     ],
 
+                    
                     onRowDblClick:function(e){
                         console.log(e.data.intJobId);
                         var intJobId =  e.data.intJobId;
@@ -433,25 +475,22 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
                     }
 
                 });
-            },
+
+            }
 
         });
 
-        $('#qcphase1').click(function(){
-            window.open('{!!url("/qc1")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
+        $('#printjobcard').click(function(){  
+            window.open('{!!url("/getallactivejobs")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
         });
-
-        $('#qcphase2').click(function(){
-            window.open('{!!url("/qc2")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
-        });
-
+        
         $('.sidebar ul li a').click(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
             $('nav ul li #'+id+' span').toggleClass("rotate");
-
+            
         });
-
+        
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
@@ -487,11 +526,5 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
             "restore" : function(evt, dlg){  } // event
         });
     }
-
-
-
-
-
-
 </script>
 </body>

@@ -81,15 +81,20 @@
                 $("#gridContainer").dxDataGrid({
                     dataSource:data, //as json
                     showBorders: true,
+                    hoverStateEnabled: true,
                     filterRow: { visible: true },
                     filterPanel: { visible: true },
                     headerFilter: { visible: true },
                     allowColumnResizing: true,
+                    columnAutoWidth: true,
                     paging:{
                         pageSize: 20,
                     },
                     export: {
                         enabled: true
+                    },
+                    selection: {
+                        mode: 'single',
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
@@ -111,59 +116,59 @@
                         {
                             dataField: "intJobId",
                             caption: "JobNo",
-                            width: 80,
+                            //width: 80,
 
                         }, {
                             dataField: "intJobSequence",
                             caption: "Job Seq",
-                            width: 100,
+                            //width: 100,
 
                         }, {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 200,
+                            //width: 200,
 
                         },
                         {
                             dataField: "strMachineName",
                             caption: "Machine",
-                            width: 250,
+                            //width: 250,
 
                         },
                         {
                             dataField: "PastelDescription",
                             caption: "Product",
-                            width: 500,
+                            //width: 500,
 
                         },
                         {
                             dataField: "mnyQtyRequired",
                             caption: "Planned",
-                            width: 100,dataType:"number"
+                            //width: 100,dataType:"number"
 
                         },
                         {
                             dataField: "mnyQtyProduced",
                             caption: "Produced",
-                            width: 100,dataType:"number"
+                            //width: 100,dataType:"number"
 
                         },
                         {
                             dataField: "palletQtyRequired",
                             caption: "Est Req",
-                            width: 100,dataType:"number"
+                            //width: 100,dataType:"number"
 
                         },
                         {
                             dataField: "palletQtyProduced",
                             caption: "Est Prod",
-                            width: 100,dataType:"number"
+                            //width: 100,dataType:"number"
                         }
                         ,
                         {
                             dataField: "dteLastPrintedUpdated",
                             caption: "Last Update",
-                            width: 100
+                            //width: 100
 
                         },
 

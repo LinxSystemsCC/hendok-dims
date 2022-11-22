@@ -33,10 +33,11 @@ if ((Auth::guest()))
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </head>
-<div class="col-lg-12" style="background: white; height: 100vh;">
+<div class="col-lg-12" style="background: white;">
     <input type="hidden" id= "userID" value="{{ $id }}">
     <h3 style="flex-grow: 1;">User {{ $id }} Permissions</h3>
-    <div class="col-lg-4" style="height: 80vh; overflow: overlay;" >
+    <input id="toggleall" type="checkbox" value="Toggle All"> <label for="toggleall">Toggle All</label>
+    <div class="col-lg-12" style="height: 80vh; overflow: overlay;" >
         <table class="table" id="userPermissionsTable">
             <tbody>
                 <?php $count=1;?>
@@ -47,14 +48,16 @@ if ((Auth::guest()))
                     @foreach (explode('-', $permission->FullDesc) as $desc)
                         <td class="row{{ $randomString }}_{{ $count }}">
                             @if ($v->getThingsUserPermissions( $id , $desc) != "1")
-                                <input id="row{{ $randomString }}_{{ $count }}" type="checkbox" value="{{$desc}}">{{ $desc }}
-
+                                <input id="row{{ $randomString }}_{{ $count }}" type="checkbox" value="{{$desc}}">
+                                <label for ="row{{ $randomString }}_{{ $count }}">
+                                    {{ $desc }}
+                                </label>
                             @else
-                                <input id="row{{ $randomString }}_{{ $count }}" type="checkbox" value="{{$desc}}" checked>{{ $desc }}
-
+                                <input id="row{{ $randomString }}_{{ $count }}" type="checkbox" value="{{$desc}}" checked>
+                                <label for ="row{{ $randomString }}_{{ $count }}">
+                                    {{ $desc }}
+                                </label>
                             @endif         
-                            
-                            
                         </td>
                             
                         <?php $count++;?> 
@@ -87,6 +90,10 @@ if ((Auth::guest()))
     });
 
     $(document).ready(function() {
+        $("#toggleall").click(function(){
+            $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+        });
+
         $('#userPermissionsTable').on('click', 'tr td', function () {
             //console.log($(this).attr("class"));
             //console.log($(this).text());
@@ -110,10 +117,9 @@ if ((Auth::guest()))
                 }
             }
 
-            
-            
-
-            
+            // if (rowNum = 1){
+            //     $('#'+rowName+"_1").css('background-color', '#eee');
+            // }
 
             //console.debug(rowNum);
             //console.debug(rowName);

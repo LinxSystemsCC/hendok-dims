@@ -39,7 +39,7 @@
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="d-flex" style="display: inline-flex">
+    <div class="d-flex" style="display: inline-flex; width: 100%;">
         <div class="col-lg-10" >
             <h3 style="flex-grow: 1;">Locations, Location Types & Bins</h3>
             <div class="wrapper">

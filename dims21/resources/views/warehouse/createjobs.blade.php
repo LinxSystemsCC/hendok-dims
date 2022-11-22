@@ -378,15 +378,20 @@
                 $("#gridContainer").dxDataGrid({
                     dataSource:data, //as json
                     showBorders: true,
+                    hoverStateEnabled: true,
                     filterRow: { visible: true },
                     filterPanel: { visible: true },
                     headerFilter: { visible: true },
                     allowColumnResizing: true,
+                    columnAutoWidth: true,
                     paging:{
                         pageSize: 20,
                     },
                     export: {
                         enabled: true
+                    },
+                    selection: {
+                        mode: 'single',
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
@@ -408,54 +413,54 @@
                         {
                             dataField: "intJobId",
                             caption: "JobNo",
-                            width: 80,
+                            //width: 80,
 
                         }, {
                             dataField: "intJobSequence",
                             caption: "Job Seq",
-                            width: 100,
+                            //width: 100,
 
                         }, {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 250,
+                            //width: 250,
 
                         },
                         {
                             dataField: "strMachineName",
                             caption: "Machine",
-                            width: 300,
+                            //width: 300,
 
                         },
                         {
                             dataField: "PastelDescription",
                             caption: "Product",
-                            width: 600,
+                            //width: 600,
 
                         },
                         {
                             dataField: "mnyQtyRequired",
                             caption: "Qty",
-                            width: 60,dataType:"number"
+                            //width: 60,dataType:"number"
 
                         },
                         {
                             dataField: "palletQty",
                             caption: "Pallet Qty",
-                            width: 100,dataType:"number"
+                            //width: 100,dataType:"number"
 
                         }
                         ,
                         {
                             dataField: "dteStartDate",
                             caption: "Start Date",
-                            width: 100,dataType:"date"
+                            //width: 100,dataType:"date"
 
                         },
                         {
                             dataField: "jobStatus",
                             caption: "Job Status",
-                            width: 150,
+                            //width: 150,
 
                         },
                     ],

@@ -70,7 +70,7 @@
 </style>
 <div class="col-lg-12 bd-highlight"  style="background: white; height:100vh; padding: 10px !important;">
     <div class="col-lg-10">
-        <h3 style="flex-grow: 1;">QC Phase 1</h3>
+        <h3 style="flex-grow: 1;">QC Phase 2</h3>
 
         <div class="tablearea" >
         <div id="gridContainer" style="max-width: 100% !important; height: 100%;">
@@ -82,7 +82,7 @@
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="qc1TestTitle"></h5>
+                    <h5 class="modal-title" id="qc2TestTitle"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -213,7 +213,7 @@
 
         $.ajax({
 
-            url: '{!!url("/getqc1")!!}',
+            url: '{!!url("/getqc2")!!}',
             type: "GET",
             data: {
         
@@ -240,7 +240,7 @@
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('qc1');
+                        const worksheet = workbook.addWorksheet('qc2');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -248,7 +248,7 @@
                             autoFilterEnabled: true,
                         }).then(() => {
                             workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'qc1.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'qc2.xlsx');
                             });
                         });
                         e.cancel = true;
@@ -309,7 +309,7 @@
                         var mach = selectedRowsData[0].MachineName;
                         var title = dept + ", " + mach;
 
-                        $('#qc1TestTitle').text(title);
+                        $('#qc2TestTitle').text(title);
                     },
 
                     onRowClick:function(e){
@@ -324,7 +324,7 @@
         // Update Comments Lists
         $.ajax({
 
-            url: '{!!url("/getqc1comments")!!}',
+            url: '{!!url("/getqc2comments")!!}',
             type: "GET",
             data: {
     
@@ -363,7 +363,7 @@
 
             $.ajax({
                 
-                url: '{!!url("/passqc1")!!}',
+                url: '{!!url("/passqc2")!!}',
                 type: "POST",
                 data: {
                     Reference: selectedRowsData[0].Reference,
@@ -401,7 +401,7 @@
         $('#testfail').click(function(){
             $.ajax({
 
-                url: '{!!url("/failqc1")!!}',
+                url: '{!!url("/failqc2")!!}',
                 type: "POST",
                 data: {
                     

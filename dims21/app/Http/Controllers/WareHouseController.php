@@ -45,6 +45,10 @@ class WareHouseController extends Controller
         return response()->json($qc1);
     }
 
+    public function getqc2(){
+        $qc2 = DB::connection('wmax') ->select("select * from viewQCPhase1");
+        return response()->json($qc2);
+    }
 
     public function creategrouppage(){
         $groups = DB::connection('sqlsrv2')
@@ -115,6 +119,10 @@ class WareHouseController extends Controller
 
     public function qc1(){
         return view('warehouse/qc1');
+    }
+
+    public function qc2(){
+        return view('warehouse/qc2');
     }
 
     public function dashboard(){
@@ -264,6 +272,13 @@ class WareHouseController extends Controller
         return response()->json($comments);
     }
 
+    public function getqc2comments(Request $request){
+        $comments = DB::connection('wmax')->select("select * from tblQCPhase2Remarks");
+        //dd($comments);
+
+        return response()->json($comments);
+    }
+
     public function passqc1(Request $request){
         $Reference = $request->get("Reference");
         $CustomerName = $request->get("CustomerName");
@@ -295,13 +310,43 @@ class WareHouseController extends Controller
     }
 
     public function failqc1(Request $request){
-        //dd('QC 1 Failed');
+        dd('QC 1 Failed');
 
         return response()->json();
     }
 
-    public function calczinc(Request $request){
-        //dd('Calculating Zinc');
+    public function passqc2(Request $request){
+        // $Reference = $request->get("Reference");
+        // $CustomerName = $request->get("CustomerName");
+        // $ProductName = $request->get("ProductName");
+        // $DepartmentName = $request->get("DepartmentName");
+        // $MachineName = $request->get("MachineName");
+        // $JobNo = $request->get("JobNo");
+        // $WireSize = $request->get("WireSize");
+        // $MassRequired = $request->get("MassRequired");
+        // $testNo = $request->get("testNo");
+        // $zincTested = $request->get("zincTested");
+        // $mpaTested = $request->get("mpaTested");
+        // $castNo = $request->get("castNo");
+        // $wireSizeTested = $request->get("wireSizeTested");
+        // $comment1 = $request->get("comment1");
+        // $massProduced = $request->get("massProduced");
+        // $zincInitialMass = $request->get("zincInitialMass");
+        // $zincStripMass = $request->get("zincStripMass");
+        // $zincStripSize = $request->get("zincStripSize");
+        // $operator = Auth::user()->UserName;
+        // $comment2 = $request->get("comment2");
+        // $comment3 = $request->get("comment3");
+
+        //dd($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $castNo, $wireSizeTested ,$comment1 ,$massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3);
+        
+        // $passQC2 = DB::connection('sqlsrv2')->statement('exec spInsertIntoPicking ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', array($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $castNo, $wireSizeTested ,$comment1 ,$massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3));
+        dd("Passed QC 2");
+        // return response()->json($passQC2);
+    }
+
+    public function failqc2(Request $request){
+        dd('QC 2 Failed');
 
         return response()->json();
     }
