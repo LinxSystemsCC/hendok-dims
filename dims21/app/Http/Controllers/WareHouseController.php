@@ -253,7 +253,7 @@ class WareHouseController extends Controller
             //->select("select * from viewItemsToPlanJob where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strItemName");
             ->select("select DISTINCT i.* from viewItemsToPlanJob i inner join tblMappedDeptMachinesItems mis on mis.strItemCode collate database_default = i.strItemCode  where strProductCategory ='".$ItemGroup."' order by strItemName");
 
-        dd($prodCategory);
+        //dd($prodCategory);
         return response()->json($prodCategory);
     }
 
