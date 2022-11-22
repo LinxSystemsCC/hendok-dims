@@ -5,8 +5,15 @@ if ((Auth::guest()))
 }else{
     $v  =  new \App\Http\Controllers\SalesForm();
 }
+$nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
 $qc1 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 1');
 $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
+$weight = $v->getThingsUserPermissions(Auth::user()->UserID,'Weight');
+$print = $v->getThingsUserPermissions(Auth::user()->UserID,'Print');
+$regrade = $v->getThingsUserPermissions(Auth::user()->UserID,'Regrade');
+$sc = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock Change');
+$retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
+
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +60,9 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
 
     <div class="col-lg-10" >
         <div class="col-lg-10">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">Create Work Order</button>
+            @if($nwo !="0")
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">New Work Order</button>
+            @endif
 
             @if($qc1 !="0")
             <button type="button" id="qcphase1" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">QC Phase 1 </button>
@@ -63,12 +72,27 @@ $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
             <button type="button" id="qcphase2" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">QC Phase 2</button>
             @endif
 
+            @if($weight !="0")
             <button type="button" id="weigh" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Weigh</button>
+            @endif
+            
+            @if($print !="0")
             <button type="button" id="print" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Print</button>
+            @endif
+
             {{-- <button type="button" id="scrapweigh" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Scrap Weighing</button> --}}
+
+            @if($regrade !="0")
             <button type="button" id="regrade" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Regrade</button>
+            @endif
+
+            @if($sc !="0")
             <button type="button" id="stockchange" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Stock Change</button>
+            @endif
+
+            @if($retest !="0")
             <button type="button" id="retest" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Re-Test</button>
+            @endif
 
         </div>
         <div id="gridContainer" style="width: 100% !important;">

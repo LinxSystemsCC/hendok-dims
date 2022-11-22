@@ -12,7 +12,7 @@ if ((Auth::guest()))
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -32,13 +32,27 @@ if ((Auth::guest()))
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+    <style>
+        .header{
+            position:sticky;
+            top: 0 ;
+        }
+    </style>
+
 </head>
 <div class="col-lg-12" style="background: white;">
     <input type="hidden" id= "userID" value="{{ $id }}">
-    <h3 style="flex-grow: 1;">User {{ $id }} Permissions</h3>
-    <input id="toggleall" type="checkbox" value="Toggle All"> <label for="toggleall">Toggle All</label>
+    <h3 style="flex-grow: 1; border-bottom: 1px solid black; padding-left: 15px;">User {{ $id }} Permissions</h3>
+    <input id="toggleall" type="checkbox" value="Toggle All" style="margin-left: 20px;"> <label for="toggleall">Toggle All</label>
     <div class="col-lg-12" style="height: 80vh; overflow: overlay;" >
-        <table class="table" id="userPermissionsTable">
+        
+        <table class="table table-borderless table-hover" id="userPermissionsTable" style="background-color: rgb(216, 216, 216);">
+            <thead class="thead-dark">
+                <th class="header" scope="col">Main Tree</th>
+                <th class="header" scope="col">First Branch</th>
+                <th class="header" scope="col">Second Branch</th>
+                <th class="header" scope="col">Page Components</th>
+            </thead>
             <tbody>
                 <?php $count=1;?>
                 @foreach ($permissions as $permission)
@@ -68,7 +82,7 @@ if ((Auth::guest()))
         </table>
         
     </div>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;" id="saveUserPermissions">Save</button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-left:15px; margin-top:10px;" id="saveUserPermissions">Save</button>
    
 </div>
 
