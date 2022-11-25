@@ -41,12 +41,11 @@
         </div>
     </div>
     
-    
     <div class="col-lg-10" >
         <h3 style="flex-grow: 1;">Work Orders</h3>
         
         <div>
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">Create Work Order</button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">New Work Order</button>
             
             <button type="button" id="printjobcard" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Print All Active Jobs</button>
 
@@ -56,7 +55,6 @@
 
     </div>
    
-    
     <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -71,9 +69,6 @@
             </div>
         </div>
     </div>
-
-    
-
 
     <div title="Job Creation" id="createjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -94,8 +89,6 @@
                             @endforeach
 
                         </select>
-
-
                     </div>
                 <div class="input-group mb-3">
                     <label class="control-label" for="department" onselect="but_read" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
@@ -183,7 +176,7 @@
 
             $.ajax({
 
-                url: '{!!url("/getPalletForSelectedItem")!!}',
+                url: '{!!url("/")!!}',
                 type: "GET",
                 data: {
                     itemCode: $("#prodname").val(),
@@ -208,7 +201,7 @@
 
             $.ajax({
 
-                url: '{!!url("/getMachinesforselecteddept")!!}',
+                url: '{!!url("/")!!}',
                 type: "GET",
                 data: {
                     deptId: $("#departmentheader").val(),
@@ -230,46 +223,10 @@
 
         $("#department").select2();
 
-        /*$('#but_read').click(function(){
-            var ItemGroupDescription = $('#department option:selected').text();
-            var ItemGroup = $('#department').val();
-            $.ajax({
-
-                url: '{!!url("/getProdCategory")!!}',
-                type: "GET",
-                data: {
-                    ItemGroup: ItemGroup
-                },
-                success: function (data) {
-                    var toAppend = '';
-                    $("#productcategory").empty();
-                    toAppend += '<option></option>';
-                    $.each(data,function(i,o){
-                        toAppend += '<option value="'+o.strProductCategory+'">'+o.strProductCategory+'</option>';
-                    });
-                    $("#productcategory").append(toAppend);
-                    $("#productcategory").select2();
-                    $("#productcategory").change(function () {
-                        $("#prodname").empty();
-
-
-
-                    });
-
-
-
-                }
-
-            });
-
-           // $('#result').html("id : " + userid + ", name : " + username);
-
-        });*/
-
         $('#departmentheader').change(function(){
             $.ajax({
 
-                url: '{!!url("/getDepListToPlan")!!}',
+                url: '{!!url("/")!!}',
                 type: "GET",
                 data: {
                     ItemGroup: $('#departmentheader option:selected').text(),
@@ -295,7 +252,7 @@
         $('#department').change(function(){
             $.ajax({
 
-                url: '{!!url("/getProdListToPlan")!!}',
+                url: '{!!url("/")!!}',
                 type: "GET",
                 data: {
                     ItemGroup: $('#department option:selected').text(),
@@ -320,7 +277,7 @@
         $('#but_deptheader').click(function(){
             $.ajax({
 
-                url: '{!!url("/getProductGroupMappedToDept")!!}',
+                url: '{!!url("/")!!}',
                 type: "GET",
                 data: {
                     deptId: $('#departmentheader').val()
@@ -344,7 +301,7 @@
 
             $.ajax({
 
-                url: '{!!url("/insertIntoJobTable")!!}',
+                url: '{!!url("/")!!}',
                 type: "POST",
                 data: {
                     deptId: $('#departmentheader').val(),
@@ -369,7 +326,7 @@
         });
 
         $.ajax({
-            url: '{!!url("/getWIP")!!}',
+            url: '{!!url("/")!!}',
             type: "GET",
             data: {
                 machineId: $('#machineid').val()
@@ -470,7 +427,7 @@
                         console.log(e.data.intJobId);
                         var intJobId =  e.data.intJobId;
 
-                        window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        window.open('{!!url("/")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
 
                     }
 
@@ -481,7 +438,7 @@
         });
 
         $('#printjobcard').click(function(){  
-            window.open('{!!url("/getallactivejobs")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
+            window.open('{!!url("/")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
         });
         
         $('.sidebar ul li a').click(function(){

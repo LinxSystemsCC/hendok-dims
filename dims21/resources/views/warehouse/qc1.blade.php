@@ -145,13 +145,27 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="control-label" for="coating"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Coating Uniformity</label>
+
+                        <select  class="form-control input-sm col-xs-1" id="coating" required>
+                            <option>
+                                PASS
+                            </option>
+
+                            <option>
+                                FAIL
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label class="control-label" for="CastNo"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Cast Number</label>
                         <input type="number"  class="form-control input-sm col-xs-1" id="CastNo" required>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label" for="test"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Test Number</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="test" required>
+                        <input type="number"  class="form-control input-sm col-xs-1" id="test" required disabled>
                     </div>
 
                     <div class="form-group">
@@ -297,9 +311,14 @@
                             dataField: "MassRequired",
                             caption: "Required",
                             //width:100,
+                        },{
+                            dataField: "count",
+                            caption: "Count",
+                            visible: false,
+                            //width:100,
                         },
-                    ],
 
+                    ],
 
                     onRowDblClick:function(e){
                         $('#createjob').modal('toggle');
@@ -308,8 +327,10 @@
                         var dept = selectedRowsData[0].DepartmentName;
                         var mach = selectedRowsData[0].MachineName;
                         var title = dept + ", " + mach;
+                        var count = selectedRowsData[0].count;
 
                         $('#qc1TestTitle').text(title);
+                        $('#test').val(count);
                     },
 
                     onRowClick:function(e){
@@ -351,19 +372,9 @@
             var dataGrid = $("#gridContainer").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
-            // if ((selectedRowsData.lenght) < 1){
-            //     alert("No Data Selected0");
-            //     console.debug("no item selected");
-            //     console.log(selectedRowsData.lenght);
-            // }
-                
-            console.debug(selectedRowsData);
-            console.debug(selectedRowsData[0]);
-            //console.debug(reference);
-
             $.ajax({
                 
-                url: '{!!url("/passqc1")!!}',
+                url: '{!!url("/qc1pf")!!}',
                 type: "POST",
                 data: {
                     Reference: selectedRowsData[0].Reference,
@@ -379,6 +390,11 @@
                     mpaTested: $("#mpa").val(),
                     castNo: $("#CastNo").val(),
                     wireSizeTested: $("#wiresize").val(),
+                    stressTest: $("#stresstest").val(),
+                    elongBreakTest: $("#elongation").val(),
+                    torsionTest: $("#torsion").val(),
+                    wrapTest: $("#wraptest").val(), 
+                    coating: $("#coating option:selected").text(), 
                     comment1: $("#comment1 option:selected").text(),
                     massProduced: selectedRowsData[0].MassProduced,
                     zincInitialMass: $("#initmass").val(),
@@ -386,11 +402,12 @@
                     zincStripSize: $("#stripsize").val(),
                     comment2: $("#comment2 option:selected").text(),
                     comment3: $("#comment3 option:selected").text(),
+                    testpf: "P",
 
 
                 },
                 success: function (data) {
-
+                    location.reload();
                 }
 
             });
@@ -399,15 +416,55 @@
         });
 
         $('#testfail').click(function(){
-            $.ajax({
+            var dataGrid = $("#gridContainer").dxDataGrid("instance");
+            var selectedRowsData = dataGrid.getSelectedRowsData();
 
-                url: '{!!url("/failqc1")!!}',
+            // if ((selectedRowsData.lenght) < 1){
+            //     alert("No Data Selected0");
+            //     console.debug("no item selected");
+            //     console.log(selectedRowsData.lenght);
+            // }
+                
+            console.debug(selectedRowsData);
+            console.debug(selectedRowsData[0]);
+            //console.debug(reference);
+
+            $.ajax({
+                
+                url: '{!!url("/qc1pf")!!}',
                 type: "POST",
                 data: {
-                    
+                    Reference: selectedRowsData[0].Reference,
+                    CustomerName: selectedRowsData[0].CustomerName,
+                    ProductName: selectedRowsData[0].ProductName,
+                    DepartmentName: selectedRowsData[0].DepartmentName,
+                    MachineName: selectedRowsData[0].MachineName,
+                    JobNo: selectedRowsData[0].JobNo,
+                    WireSize: selectedRowsData[0].WireSize,
+                    MassRequired: selectedRowsData[0].MassRequired,
+                    testNo: $("#test").val(),
+                    zincTested: $("#zinc").val(),
+                    mpaTested: $("#mpa").val(),
+                    castNo: $("#CastNo").val(),
+                    wireSizeTested: $("#wiresize").val(),
+                    stressTest: $("#stresstest").val(),
+                    elongBreakTest: $("#elongation").val(),
+                    torsionTest: $("#torsion").val(),
+                    wrapTest: $("#wraptest").val(), 
+                    coating: $("#coating option:selected").text(), 
+                    comment1: $("#comment1 option:selected").text(),
+                    massProduced: selectedRowsData[0].MassProduced,
+                    zincInitialMass: $("#initmass").val(),
+                    zincStripMass: $("#stripmass").val(),
+                    zincStripSize: $("#stripsize").val(),
+                    comment2: $("#comment2 option:selected").text(),
+                    comment3: $("#comment3 option:selected").text(),
+                    testpf: "F",
+
+
                 },
                 success: function (data) {
-
+                    location.reload();
                 }
 
             });

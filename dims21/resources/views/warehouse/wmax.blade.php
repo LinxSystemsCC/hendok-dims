@@ -100,7 +100,6 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
     </div>
 
-
     <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -138,7 +137,6 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
 
                     </div>
-
 
                     <div class="form-group">
                         <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
@@ -467,6 +465,26 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
         $('#qcphase2').click(function(){
             window.open('{!!url("/qc2")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
+        });
+
+        $('#weigh').click(function(){
+            window.open('{!!url("/wmaxweigh")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
+        });
+
+        $('#scrap').click(function(){
+            window.open('{!!url("/wmaxscrap")!!}',"_blank","location=1,status=1,scrollbars=1, width=850,height=850");
+        });
+
+        $('#regrade').click(function(){
+            window.open('{!!url("/wmaxregrade")!!}',"_blank","location=1,status=1,scrollbars=1, width=1200,height=850");
+        });
+
+        $('#stockchange').click(function(){
+            window.open('{!!url("/wmaxstockchange")!!}',"_blank","location=1,status=1,scrollbars=1, width=400,height=700");
+        });
+
+        $('#retest').click(function(){
+            window.open('{!!url("/wmaxretest")!!}',"_blank","location=1,status=1,scrollbars=1, width=650,height=1000");
         });
 
         $('.sidebar ul li a').click(function(){

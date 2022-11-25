@@ -843,7 +843,12 @@ Route::get('getgroupsetting', [WareHouseController::class,'getgroupsetting']);
 Route::get('getusers', [WareHouseController::class,'getusers']);
 Route::get('getqc1', [WareHouseController::class,'getqc1']);
 Route::get('getqc2', [WareHouseController::class,'getqc2']);
-
+Route::get('getweigh', [WareHouseController::class,'getweigh']);
+Route::get('getscales', [WareHouseController::class,'getscales']);
+Route::get('getregrade', [WareHouseController::class,'getregrade']);
+Route::get('getticketno', [WareHouseController::class,'getticketno']);
+Route::get('getmasswmax', [WareHouseController::class,'getmasswmax']);
+Route::get('getSEno', [WareHouseController::class,'getSEno']);
 
 Route::get('getMappedItemstoPalletJson', [WareHouseController::class,'getMappedItemstoPalletJson']);
 Route::get('getMachinemappedtoarea', [WareHouseController::class,'getMachinemappedtoarea']);
@@ -944,12 +949,11 @@ Route::get('startprintingjob/{qty}/{machine}/{product}/{pallet}/{startdate}', [W
 Route::get('getqc1comments', [WareHouseController::class,'getqc1comments']);
 Route::get('getqc2comments', [WareHouseController::class,'getqc2comments']);
 
-Route::post('passqc1', [WareHouseController::class,'passqc1']);
-Route::post('failqc1', [WareHouseController::class,'failqc1']);
-Route::post('passqc2', [WareHouseController::class,'passqc2']);
-Route::post('failqc2', [WareHouseController::class,'failqc2']);
-
-Route::get('calczinc', [WareHouseController::class,'calczinc']);
+Route::post('qc1pf', [WareHouseController::class,'qc1pf']);
+Route::post('qc2pf', [WareHouseController::class,'qc2pf']);
+Route::post('acceptweigh', [WareHouseController::class,'acceptweigh']);
+Route::post('holdweigh', [WareHouseController::class,'holdweigh']);
+Route::post('savestockchangewmax', [WareHouseController::class,'savestockchangewmax']);
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 
@@ -1026,6 +1030,11 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('galvscale', [WareHouseController::class,'galvscale']);
     Route::get('qc1', [WareHouseController::class,'qc1']);
     Route::get('qc2', [WareHouseController::class,'qc2']);
+    Route::get('wmaxweigh', [WareHouseController::class,'wmaxweigh']);
+    Route::get('wmaxscrap', [WareHouseController::class,'wmaxscrap']);
+    Route::get('wmaxregrade', [WareHouseController::class,'wmaxregrade']);
+    Route::get('wmaxstockchange', [WareHouseController::class,'wmaxstockchange']);
+    Route::get('wmaxretest', [WareHouseController::class,'wmaxretest']);
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!
