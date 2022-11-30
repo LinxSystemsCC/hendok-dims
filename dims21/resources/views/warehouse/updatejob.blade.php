@@ -109,6 +109,7 @@
                     <label>Product Label</label><br>
                     <input type="number" id="productlabelqtytoprint" class="form-control"><br>
                     <button class="btn btn-secondary"  id="finaliselabelprint" >Print Product Label</button>
+                    <button class="btn btn-secondary"  id="printpalletqty" >Print Pallet Quantity</button>
                     <h4 id="errorprint"></h4>
                     <hr>
                     <label style="color: red">Pallet Label</label><br>

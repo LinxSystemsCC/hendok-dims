@@ -481,7 +481,7 @@ if ((Auth::guest()))
 
         <!-- Print Labels & Reverse Pallets -->
         
-        <li class="disabled">
+        <li>
             @if("1" !="0")
             <a href='{!!url("/printpalletsselectdept")!!}'>Print Pallet Labels</a>
             @endif
