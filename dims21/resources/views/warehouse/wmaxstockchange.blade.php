@@ -139,7 +139,7 @@
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.ProductID+'">'+o.ProductName+'</option>';
+                        toAppend += '<option value="'+o.ProductName+'">'+o.ProductName+'</option>';
                     });
                     $("#prodname").append(toAppend);
                     $("#prodname").select2();
@@ -163,7 +163,7 @@
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.ProductID+'">'+o.ProductName+'</option>';
+                        toAppend += '<option value="'+o.ProductName+'">'+o.ProductName+'</option>';
                     });
                     $("#newprodname").append(toAppend);
                     $("#newprodname").select2();
@@ -231,7 +231,11 @@
                 url: '{!!url("/savestockchangewmax")!!}',
                 type: "POST",
                 data: {
-
+                    ticketNo : $('#ticketNo option:selected').val(),
+                    mass : $('#mass').val(),
+                    newcustname : $('#newcustomers option:selected').val(),
+                    newprodname : $('#newprodname option:selected').val(),
+                    SENo : $('#SECode').val(),
                 },
                 success: function (data) {
                     location.reload();

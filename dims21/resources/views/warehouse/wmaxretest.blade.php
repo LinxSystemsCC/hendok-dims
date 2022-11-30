@@ -72,25 +72,25 @@
             {{-- Zinc Spec --}}
             <div class="form-group">
                 <label class="control-label" for="zincspec"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Zinc</label>
-                <input type="number" class="form-control input-sm col-xs-1" id="zincspec" required disabled>
+                <input type="text" class="form-control input-sm col-xs-1" id="zincspec" required disabled>
             </div>
 
             {{-- MPA Spec --}}
             <div class="form-group">
                 <label class="control-label" for="mpaspec"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Spec</label>
-                <input type="number" class="form-control input-sm col-xs-1" id="mpaspec" required disabled>
+                <input type="text" class="form-control input-sm col-xs-1" id="mpaspec" required disabled>
             </div>
 
             {{-- Blank --}}
             <div class="form-group">
                 <label class="control-label" for="blank"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;"></label>
-                <input type="number" class="form-control input-sm col-xs-1" id="blank" required disabled style="visibility: hidden;">
+                <input type="text" class="form-control input-sm col-xs-1" id="blank" required disabled style="visibility: hidden;">
             </div>
 
             {{-- Wire Size Spec --}}
             <div class="form-group">
                 <label class="control-label" for="wirespec"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size Spec</label>
-                <input type="number" class="form-control input-sm col-xs-1" id="wirespec" required disabled>
+                <input type="text" class="form-control input-sm col-xs-1" id="wirespec" required disabled>
             </div>
 
         </div>
@@ -131,11 +131,11 @@
 
             {{-- Tensile Ticket--}}
             <div class="form-group">
-                <label class="control-label" for="ticket"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tensile Ticket No</label>
-                <input type="number" class="form-control input-sm col-xs-1" id="ticket" required>
+                <label class="control-label" for="tensileticket"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tensile Ticket No</label>
+                <input type="number" class="form-control input-sm col-xs-1" id="tensileticket" required>
             </div>
             
-            {{-- MPA Tested --}}
+            {{-- Wire Size --}}
             <div class="form-group">
                 <label class="control-label" for="wiresize"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Actual Wire Size</label>
                 <input type="number" class="form-control input-sm col-xs-1" id="wiresize" required>
@@ -158,11 +158,13 @@
         </select>
     </div>
 
+    {{-- Gross Mass --}}
     <div class="form-group">
         <label class="control-label" for="mass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Mass</label>
         <input type="number" class="form-control input-sm col-xs-1" id="mass" required>
     </div>
 
+    {{-- Final Mass --}}
     <div class="form-group">
         <label class="control-label" for="final"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Final Mass</label>
         <input type="number" class="form-control input-sm col-xs-1" id="final" required disabled>
@@ -192,8 +194,16 @@
 
     $(document).ready(function() {
         
-        //$("#customers").select2();
-        //$("#newcustomers").select2();
+        $("#tare").change(function() {
+            //console.debug($('#tare').val());
+            finalweight = ($("#mass").val()-$('#tare').val());
+            $('#final').val(finalweight);
+        });
+        
+        $("#mass").change(function() {
+            finalweight = ($("#mass").val()-$('#tare').val());
+            $('#final').val(finalweight);
+        });
 
         $("#customers").change(function () {
 
@@ -219,89 +229,89 @@
 
         });
 
-        $("#newcustomers").change(function () {
+        //Get Scales
+        $.ajax({
+
+            url: '{!!url("/getscales")!!}',
+            type: "GET",
+            data: {
+
+            },
+            success: function (data) {
+                // $("#tare").select2({ data:result });
+                // console.log(data.length);
+                // console.log(data);
+
+                for (let i = 0; i < data.length; i++) {
+                    // console.log(data[i].StandName);
+                    name = data[i].StandName;
+                    mass = data[i].StandMass;
+
+                    $('#tare').append(`<option value="${mass}">${name}</option>`);
+                }
+
+
+            }
+        });
+
+        $("#customers").change(function () {
 
             $.ajax({
 
                 url: '{!!url("/wmaxgetcustomerproduct")!!}',
                 type: "GET",
                 data: {
-                    customers: $("#newcustomers").val()
+                    customers: $("#customers").val()
                 },
                 success: function (data) {
                     var toAppend = '';
-                    $("#newprodname").empty();
+                    $("#prodname").empty();
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
                         toAppend += '<option value="'+o.ProductID+'">'+o.ProductName+'</option>';
                     });
-                    $("#newprodname").append(toAppend);
-                    $("#newprodname").select2();
+                    $("#prodname").append(toAppend);
+                    $("#prodname").select2();
                 }
             });
+
         });
+
 
         $("#prodname").change(function () {
             $.ajax({
 
-                url: '{!!url("/getticketno")!!}',
+                url: '{!!url("/getretest")!!}',
                 type: "GET",
                 data: {
                     customer: $("#customers").val(),
                     product: $("#prodname option:selected").text(),
                 },
                 success: function (data) {
-                    var toAppend = '';
-                    $("#ticketNo").empty();
-                    toAppend += '<option></option>';
-                    $.each(data,function(i,o){
-
-                        toAppend += '<option value="'+o.TicketNo+'">'+o.TicketNo+'</option>';
-                    });
-                    $("#ticketNo").append(toAppend);
-                    $("#ticketNo").select2();
-                }
-            });
-        });
-        
-        $("#ticketNo").change(function () {
-            $.ajax({
-
-                url: '{!!url("/getmasswmax")!!}',
-                type: "GET",
-                data: {
-                    ticket: $("#ticketNo option:selected").text(),
-                },
-                success: function (data) {
-                    mass = data[0].Weight;
-                    $('#mass').val(mass);
-                }
-            });
-        });
-
-        $("#newprodname").change(function () {
-            $.ajax({
-
-                url: '{!!url("/getSEno")!!}',
-                type: "GET",
-                data: {
-                    customer: $("#newcustomers").val(),
-                    product: $("#newprodname option:selected").text(),
-                },
-                success: function (data) {
-                    SECode = data[0].SECode;
-                    console.debug(SECode);
-                    $('#SECode').val(SECode);
+                    $('#zincspec').val(data[0].ZincSpec);
+                    $('#mpaspec').val(data[0].MPATolerance);
+                    $('#wirespec').val(data[0].SizeTolerance);
+                    $('#SECode').val(data[0].SECode);
                 }
             });
         });
 
         $('#save').click(function(){
             $.ajax({
-                url: '{!!url("/savestockchangewmax")!!}',
+                url: '{!!url("/saveretest")!!}',
                 type: "POST",
                 data: {
+                    custname  : $('#customers option:selected').val(),
+                    prodname  : $('#prodname option:selected').val(),
+                    zincTested  : $('#zinctested').val(),
+                    MPATested  : $('#mpatested').val(),
+                    tensileTicket  : $('#tensileticket').val(),
+                    wireSize  : $('#wiresize').val(),
+                    remark  : $('#remark').val(),
+                    taremass  : $('#tare option:selected').val(),
+                    grossmass  : $('#mass').val(),
+                    finalmass  : $('#final').val(),
 
                 },
                 success: function (data) {

@@ -849,6 +849,7 @@ Route::get('getregrade', [WareHouseController::class,'getregrade']);
 Route::get('getticketno', [WareHouseController::class,'getticketno']);
 Route::get('getmasswmax', [WareHouseController::class,'getmasswmax']);
 Route::get('getSEno', [WareHouseController::class,'getSEno']);
+Route::get('getretest', [WareHouseController::class,'getretest']);
 
 Route::get('getMappedItemstoPalletJson', [WareHouseController::class,'getMappedItemstoPalletJson']);
 Route::get('getMachinemappedtoarea', [WareHouseController::class,'getMachinemappedtoarea']);
@@ -951,9 +952,10 @@ Route::get('getqc2comments', [WareHouseController::class,'getqc2comments']);
 
 Route::post('qc1pf', [WareHouseController::class,'qc1pf']);
 Route::post('qc2pf', [WareHouseController::class,'qc2pf']);
-Route::post('acceptweigh', [WareHouseController::class,'acceptweigh']);
-Route::post('holdweigh', [WareHouseController::class,'holdweigh']);
+Route::post('acceptholdweigh', [WareHouseController::class,'acceptholdweigh']);
 Route::post('savestockchangewmax', [WareHouseController::class,'savestockchangewmax']);
+Route::post('saveretest', [WareHouseController::class,'saveretest']);
+Route::post('regradeproduct', [WareHouseController::class,'regradeproduct']);
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 
@@ -1025,6 +1027,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getjobsdata', [WareHouseController::class,'getjobsdata']);
     Route::get('exceptionmovementreport', [WareHouseController::class,'exceptionmovementreport']);
     Route::get('getjobcard/{JobID}', [WareHouseController::class,'getjobcard']);
+    Route::get('getgalvlabel/{JobNo}/{CustName}', [WareHouseController::class,'getgalvlabel']);
     Route::get('getallactivejobs', [WareHouseController::class,'getallactivejobs']);
     Route::get('galvcustomer', [WareHouseController::class,'galvcustomer']);
     Route::get('galvscale', [WareHouseController::class,'galvscale']);
@@ -1035,6 +1038,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('wmaxregrade', [WareHouseController::class,'wmaxregrade']);
     Route::get('wmaxstockchange', [WareHouseController::class,'wmaxstockchange']);
     Route::get('wmaxretest', [WareHouseController::class,'wmaxretest']);
+
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!

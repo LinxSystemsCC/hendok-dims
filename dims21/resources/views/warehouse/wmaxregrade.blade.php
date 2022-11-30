@@ -104,9 +104,6 @@
                         <label class="control-label" for="product"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Regrade to Product</label>
                         <select  class="form-control input-sm col-xs-1" id="product" required>
                             <option></option>
-                            @foreach($products as $val)
-                                <option value="{{$val->ProductName}}">{{$val->ProductName}}</option>
-                            @endforeach
                         </select>
                     </div>
 
@@ -142,16 +139,27 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
-
-        $("#tare").change(function() {
-            //console.debug($('#tare').val());
-            finalweight = ($("#mass").val()-$('#tare').val());
-            $('#final').val(finalweight);
-        });
         
-        $("#mass").change(function() {
-            finalweight = ($("#mass").val()-$('#tare').val());
-            $('#final').val(finalweight);
+        $("#customer").change(function () {
+            $.ajax({
+
+                url: '{!!url("/wmaxgetcustomerproduct")!!}',
+                type: "GET",
+                data: {
+                    customers: $("#customer").val()
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#product").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.ProductID+'">'+o.ProductName+'</option>';
+                    });
+                    $("#product").append(toAppend);
+                    $("#product").select2();
+                }
+            });
         });
 
         //GetWeigh
@@ -200,6 +208,10 @@
 
                     columns: [
                         {
+                            dataField: "Reference",
+                            caption: "Reference",
+                            //width:100,
+                        },{
                             dataField: "TicketNo",
                             caption: "TicketNo",
                             //width:100,
@@ -235,7 +247,11 @@
                         },
                         {
                             dataField: "ActualWireSize",
-                            caption: "Wire Test",
+                            caption: "Wire Test", 
+                            dataType: "number",  
+                            alignment: "left",
+                            type:"fixedPoint",  
+                            precision:2,
                             //width:100,
                         },
                         {
@@ -314,62 +330,40 @@
             }
         });
 
-        $('#accept').click(function(){
+        $('#regrade').click(function(){
             var dataGrid = $("#gridContainer").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
-                        
-            var jobnum = selectedRowsData[0].JobNo;
-            var sequm = selectedRowsData[0].JobNo;//change
-            var custnum = selectedRowsData[0].JobNo;//change
-            var dept = selectedRowsData[0].DepartmentName;
+
             var ref = selectedRowsData[0].Reference;
-            var machine = selectedRowsData[0].MachineName;
+            var custnum = selectedRowsData[0].Customer;
             var prod = selectedRowsData[0].ProductName;
-            var SEno = selectedRowsData[0].JobNo;//change
-            var zinc = selectedRowsData[0].JobNo;//change
-            var tensile = selectedRowsData[0].JobNo;//change
-            var mpa = selectedRowsData[0].JobNo;//change
+            var dept = selectedRowsData[0].Department;
+            var machine = selectedRowsData[0].Machine;
+            var jobnum = selectedRowsData[0].JobNo;
+            var zinc = selectedRowsData[0].TestedZinc;
+            var mpa = selectedRowsData[0].TreatedMPA;
             var wire = selectedRowsData[0].WireSize;
-            var castno = selectedRowsData[0].JobNo;//change
+            var sequm = selectedRowsData[0].SequenceNo;
+            var tensile = selectedRowsData[0].TicketNo;
 
             $.ajax({
                 
-                url: '{!!url("/acceptweigh")!!}',
+                url: '{!!url("/regradeproduct")!!}',
                 type: "POST",
                 data: {
                     jobnum:jobnum,
                     sequm:sequm,
                     custnum:custnum,
+                    custnumfrom:$('#customer option:selected').val(),
                     dept:dept,
                     ref:ref,
                     machine:machine,
                     prod:prod,
-                    SEno:SEno,
+                    prodfrom:$('#product option:selected').val(),
                     zinc:zinc,
                     tensile:tensile,
                     mpa:mpa,
                     wire:wire,
-                    castno:castno,
-                },
-                success: function (data) {
-                    location.reload();
-                }
-
-            });
-            
-                
-        });
-
-        $('#hold').click(function(){
-            var dataGrid = $("#gridContainer").dxDataGrid("instance");
-            var selectedRowsData = dataGrid.getSelectedRowsData();
-
-            $.ajax({
-                
-                url: '{!!url("/holdweigh")!!}',
-                type: "POST",
-                data: {
-
                 },
                 success: function (data) {
                     location.reload();

@@ -179,7 +179,7 @@
                             </div>
                         </div>
                 
-                        <div class="form-group"  style="width: 50%;">
+                        {{-- <div class="form-group"  style="width: 50%;">
                             <div class="d-flex" style="padding: 10px;">
                                 <label class="control-label" for="SEno"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">
                                     SE No
@@ -188,7 +188,7 @@
                                     
                                 </label>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     {{-- Row 5 --}}
@@ -433,7 +433,6 @@
                         var ref = selectedRowsData[0].Reference;
                         var machine = selectedRowsData[0].MachineName;
                         var prod = selectedRowsData[0].ProductName;
-                        var SEno = "TBC"//selectedRowsData[0].JobNo;//change
                         var zinc = selectedRowsData[0].Zinc;
                         var tensile = selectedRowsData[0].TensileTicket;
                         var mpa = selectedRowsData[0].MPA;
@@ -447,7 +446,7 @@
                         $('#ref').text(": "+ ref);
                         $('#machine').text(": "+ machine);
                         $('#prod').text(": "+ prod);
-                        $('#SEno').text(": "+ SEno);
+                        //$('#SEno').text(": "+ SEno);
                         $('#zinc').text(": "+ zinc);
                         $('#tensile').text(": "+ tensile);
                         $('#mpa').text(": "+ mpa);
@@ -494,37 +493,40 @@
             var selectedRowsData = dataGrid.getSelectedRowsData();
                         
             var jobnum = selectedRowsData[0].JobNo;
-            var sequm = selectedRowsData[0].JobNo;//change
-            var custnum = selectedRowsData[0].JobNo;//change
+            var sequm = selectedRowsData[0].SeqNo;
+            var custnum = selectedRowsData[0].CustomerName;
             var dept = selectedRowsData[0].DepartmentName;
             var ref = selectedRowsData[0].Reference;
             var machine = selectedRowsData[0].MachineName;
             var prod = selectedRowsData[0].ProductName;
-            var SEno = selectedRowsData[0].JobNo;//change
-            var zinc = selectedRowsData[0].JobNo;//change
-            var tensile = selectedRowsData[0].JobNo;//change
-            var mpa = selectedRowsData[0].JobNo;//change
+            //var SEno = "TBC"//selectedRowsData[0].JobNo;//change
+            var zinc = selectedRowsData[0].Zinc;
+            var tensile = selectedRowsData[0].TensileTicket;
+            var mpa = selectedRowsData[0].MPA;
             var wire = selectedRowsData[0].WireSize;
-            var castno = selectedRowsData[0].JobNo;//change
+            var castno = selectedRowsData[0].CastNo;
 
             $.ajax({
                 
-                url: '{!!url("/acceptweigh")!!}',
+                url: '{!!url("/acceptholdweigh")!!}',
                 type: "POST",
                 data: {
-                    jobnum:jobnum,
-                    sequm:sequm,
-                    custnum:custnum,
-                    dept:dept,
                     ref:ref,
-                    machine:machine,
+                    custnum:custnum,
                     prod:prod,
-                    SEno:SEno,
+                    dept:dept,
+                    machine:machine,
+                    jobnum:jobnum,
                     zinc:zinc,
-                    tensile:tensile,
                     mpa:mpa,
-                    wire:wire,
                     castno:castno,
+                    wire:wire,
+                    sequm:sequm,
+                    tensile:tensile,
+                    netmass: $('#final').val(),
+                    GrossMass: $("#mass").val(),
+                    taremass: $('#tare option:selected').val(),
+                    buttonMethod: 'ACCEPT',
                 },
                 success: function (data) {
                     location.reload();
@@ -539,12 +541,41 @@
             var dataGrid = $("#gridContainer").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
+            var jobnum = selectedRowsData[0].JobNo;
+            var sequm = selectedRowsData[0].SeqNo;
+            var custnum = selectedRowsData[0].CustomerName;
+            var dept = selectedRowsData[0].DepartmentName;
+            var ref = selectedRowsData[0].Reference;
+            var machine = selectedRowsData[0].MachineName;
+            var prod = selectedRowsData[0].ProductName;
+            //var SEno = "TBC"//selectedRowsData[0].JobNo;//change
+            var zinc = selectedRowsData[0].Zinc;
+            var tensile = selectedRowsData[0].TensileTicket;
+            var mpa = selectedRowsData[0].MPA;
+            var wire = selectedRowsData[0].WireSize;
+            var castno = selectedRowsData[0].CastNo;
+
             $.ajax({
                 
-                url: '{!!url("/holdweigh")!!}',
+                url: '{!!url("/acceptholdweigh")!!}',
                 type: "POST",
                 data: {
-
+                    ref:ref,
+                    custnum:custnum,
+                    prod:prod,
+                    dept:dept,
+                    machine:machine,
+                    jobnum:jobnum,
+                    zinc:zinc,
+                    mpa:mpa,
+                    castno:castno,
+                    wire:wire,
+                    sequm:sequm,
+                    tensile:tensile,
+                    netmass: $('#final').val(),
+                    GrossMass: $("#mass").val(),
+                    taremass: $('#tare option:selected').val(),
+                    buttonMethod: 'HOLD',
                 },
                 success: function (data) {
                     location.reload();

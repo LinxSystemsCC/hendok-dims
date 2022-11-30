@@ -297,6 +297,10 @@
                         },{
                             dataField: "WireSize",
                             caption: "Wire Size",
+                            dataType: "number", 
+                            alignment: "left",
+                            type:"fixedPoint",  
+                            precision:2,
                             //width:200,
                         },{
                             dataField: "MaxTDT",
@@ -390,7 +394,7 @@
                     JobNo: selectedRowsData[0].JobNo,
                     WireSize: selectedRowsData[0].WireSize,
                     MassRequired: selectedRowsData[0].MassRequired,
-                    testNo: $("#seq").val(),
+                    seqNo: $("#seq").val(),
                     zincTested: $("#zinc").val(),
                     mpaTested: $("#mpa").val(),
                     tensile: $("#ticket").val(),
@@ -408,7 +412,7 @@
                     zincStripSize: $("#stripsize").val(),
                     comment2: $("#comment2 option:selected").text(),
                     comment3: $("#comment3 option:selected").text(),
-                    testpf: "P",
+                    buttonMethod: "PASS",
                 },
                 success: function (data) {
                     location.reload();
@@ -436,7 +440,7 @@
                     JobNo: selectedRowsData[0].JobNo,
                     WireSize: selectedRowsData[0].WireSize,
                     MassRequired: selectedRowsData[0].MassRequired,
-                    testNo: $("#seq").val(),
+                    seqNo: $("#seq").val(),
                     zincTested: $("#zinc").val(),
                     mpaTested: $("#mpa").val(),
                     tensile: $("#ticket").val(),
@@ -454,7 +458,7 @@
                     zincStripSize: $("#stripsize").val(),
                     comment2: $("#comment2 option:selected").text(),
                     comment3: $("#comment3 option:selected").text(),
-                    testpf: "F",
+                    buttonMethod: "FAIL",
                 },
                 success: function (data) {
                     location.reload();

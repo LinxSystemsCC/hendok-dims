@@ -292,6 +292,10 @@
                         },{
                             dataField: "WireSize",
                             caption: "Wire Size",
+                            dataType: "number", 
+                            alignment: "left",
+                            type:"fixedPoint",  
+                            precision:2,
                             //width:200,
                         },{
                             dataField: "MaxTDT",

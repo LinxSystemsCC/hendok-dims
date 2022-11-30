@@ -85,6 +85,14 @@ class WareHouseController extends Controller
         return response()->json($secode);
     }
 
+    public function getretest(Request $request){
+        $customer = $request->get('customer');
+        $product = $request->get('product');
+        $info = DB::connection('wmax') ->select("select * from tblProducts where CustomerName = '" .$customer . "' and ProductName = '".$product."'");
+        //dd($info);
+        return response()->json($info);
+    }
+
     public function creategrouppage(){
         $groups = DB::connection('sqlsrv2')
             ->select("select * from tblDIMSGroups");
@@ -374,7 +382,10 @@ class WareHouseController extends Controller
 
         //dd($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $castNo, $wireSizeTested ,$comment1 ,$massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3);
         
-        $testQC1 = DB::connection('sqlsrv2')->statement('exec spInsertIntoPicking ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', array($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $castNo, $wireSizeTested , $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1 ,$testpf, $massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3));
+        $testQC1 = DB::connection('sqlsrv2')->statement('exec spInsertIntoPicking ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
+        array(
+            $Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $testNo, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $testpf, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3
+        )); 
 
         return response()->json($testQC1);
     }
@@ -387,20 +398,17 @@ class WareHouseController extends Controller
         $MachineName = $request->get("MachineName");
         $JobNo = $request->get("JobNo");
         $WireSize = $request->get("WireSize");
+        $MassRequired = $request->get("MassRequired");
+        $zincTested = $request->get("zincTested");
+        $mpaTested = $request->get("mpaTested");
+        $castNo = $request->get("castNo");
+        $wireSizeTested = $request->get("wireSizeTested");
         $stressTest = $request->get("stressTest");
         $elongBreakTest = $request->get("elongBreakTest");
         $torsionTest = $request->get("torsionTest");
         $wrapTest = $request->get("wrapTest");
         $coating = $request->get("coating");
-        $MassRequired = $request->get("MassRequired");
-        $testNo = $request->get("testNo");
-        $zincTested = $request->get("zincTested");
-        $mpaTested = $request->get("mpaTested");
-        $tensile = $request->get("tensile");
-        $castNo = $request->get("castNo");
-        $wireSizeTested = $request->get("wireSizeTested");
         $comment1 = $request->get("comment1");
-        $testpf = $request->get("testpf");
         $massProduced = $request->get("massProduced");
         $zincInitialMass = $request->get("zincInitialMass");
         $zincStripMass = $request->get("zincStripMass");
@@ -408,39 +416,120 @@ class WareHouseController extends Controller
         $operator = Auth::user()->UserName;
         $comment2 = $request->get("comment2");
         $comment3 = $request->get("comment3");
-
-        dd($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $tensile, $castNo, $wireSizeTested , $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1 ,$testpf, $massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3);
+        $seqNo = $request->get("seqNo");
+        $tensile = $request->get("tensile");
+        $buttonMethod = $request->get("buttonMethod");
+        $weight = '';
+        $grossMass = 0;
+        $tareMass = 0;
         
-        $testQC2 = DB::connection('sqlsrv2')->statement('exec tbc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', array($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $tensile, $castNo, $wireSizeTested , $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1 ,$testpf, $massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3));
+        //dd($Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3, $seqNo, $tensile, $buttonMethod, $weight, $grossMass, $tareMass);
+
+        $testQC2 = DB::connection('sqlsrv2')->select('exec spPassOrFailQCPhase2 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
+        array(
+            $Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3, $seqNo, $tensile, $buttonMethod, $weight, $grossMass, $tareMass
+        ));
 
         return response()->json($testQC2);
-    }
+    }//31 Variables
 
-    public function acceptweigh(Request $request){
-        $jobnum = $request->get("jobnum");
-        $sequm = $request->get("sequm");
-        $custnum = $request->get("custnum");
-        $dept = $request->get("dept");
+    public function acceptholdweigh(Request $request){
         $ref = $request->get("ref");
-        $machine = $request->get("machine");
+        $custnum = $request->get("custnum");
         $prod = $request->get("prod");
-        $SEno = $request->get("SEno");
+        $dept = $request->get("dept");
+        $machine = $request->get("machine");
+        $jobnum = $request->get("jobnum");
+        $massProduced = 0;
         $zinc = $request->get("zinc");
+        $mpa = $request->get("mpa");
+        $castno = $request->get("castno");
+        $wire = $request->get("wire");
+        $passFail = 'P';
+        $operator = Auth::user()->UserName;
+        $sequm = $request->get("sequm");
         $tensile = $request->get("tensile");
+        $netmass = $request->get("netmass");
+        $GrossMass = $request->get("GrossMass");;
+        $taremass = $request->get("taremass");;
+        $buttonMethod = $request->get("buttonMethod");;
+        
+        //dd($ref, $custnum, $prod, $dept, $machine, $jobnum, $massProduced,$zinc, $mpa, $castno, $wire, $passFail, $operator,$sequm, $tensile, $netmass, $GrossMass, $taremass, $buttonMethod);
+
+        $weigh = DB::connection('sqlsrv2')->select('exec spWeighAcceptHold ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
+        array(
+            $ref, $custnum, $prod, $dept, $machine, $jobnum, $massProduced, $zinc, $mpa, $castno, $wire, $passFail, $operator, $sequm, $tensile, $netmass, $GrossMass, $taremass, $buttonMethod  
+        ));
+
+        return response()->json($weigh);
+
+    }//19 Variables
+
+    public function regradeproduct(Request $request){
+        $ref = $request->get("ref");
+        $custnum = $request->get("custnum");
+        $prod = $request->get("prod");
+        $dept = $request->get("dept");
+        $machine = $request->get("machine");
+        $jobnum = $request->get("jobnum");
+        $zinc = $request->get("zinc");
         $mpa = $request->get("mpa");
         $wire = $request->get("wire");
-        $castno = $request->get("castno");
+        $operator = Auth::user()->UserName;
+        $sequm = $request->get("sequm");
+        $tensile = $request->get("tensile");
+        $custnumfrom = $request->get("custnumfrom");
+        $prodfrom = $request->get("prodfrom");
 
-        dd($jobnum, );
-    }
 
-    public function holdweigh(Request $request){
-        dd("weigh hold");
-    }
+        //dd($ref, $custnum, $prod, $dept, $machine, $jobnum, $zinc, $mpa, $wire, $operator, $sequm, $tensile, $custnumfrom, $prodfrom);
+
+        $regrade = DB::connection('sqlsrv2')->select('exec spRegrades ?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
+        array(
+            $ref, $custnum, $prod, $dept, $machine, $jobnum, $zinc, $mpa, $wire, $operator, $sequm, $tensile, $custnumfrom, $prodfrom
+        ));
+
+        return response()->json($regrade);
+    }//12 Variables
 
     public function savestockchangewmax(Request $request){
-        dd("stock change saved");
-    }
+        $newcustname = $request->get("newcustname");
+        $newprodname = $request->get("newprodname");;
+        $mass = $request->get("mass");
+        $operator = Auth::user()->UserName;
+        $ticketNo = $request->get("ticketNo");
+        $SENo = $request->get("SENo");
+
+        //dd($newcustname, $newprodname, $mass, $operator, $ticketNo, $SENo);
+
+        $change = DB::connection('sqlsrv2')->select('exec spStockChange ?,?,?,?,?,?', 
+        array($newcustname, $newprodname, $mass, $operator, $ticketNo, $SENo));
+
+        return response()->json($change);
+    }//6 Variables
+
+    public function saveretest(Request $request){
+        $custname = $request->get("custname");
+        $prodname = $request->get("prodname");
+        $zincTested = $request->get("zincTested");
+        $MPATested = $request->get("MPATested");
+        $wireSize = $request->get("wireSize");
+        $remark = $request->get("remark");
+        $operator = Auth::user()->UserName;
+        $tensileTicket = $request->get("tensileTicket");
+        $grossmass = $request->get("grossmass");
+        $taremass = $request->get("taremass");
+        $finalmass = $request->get("finalmass");
+        
+        //dd($custname, $prodname, $zincTested, $MPATested, $wireSize, $remark, $operator, $tensileTicket, $grossmass, $taremass, $finalmass);
+
+        $retest = DB::connection('sqlsrv2')->select('exec Retest ?,?,?,?,?,?,?,?,?,?,?', 
+        array(
+            $custname, $prodname, $zincTested, $MPATested, $wireSize, $remark, $operator, $tensileTicket, $grossmass, $taremass, $finalmass
+        ));
+
+        return response()->json($retest);
+    }//11 Variables
 
     //For printing pallets
     public function printpalletsselectdept(){
@@ -848,6 +937,12 @@ where intDeptID =".$deptId);
         $jobdata = DB::connection('sqlsrv3')->select('exec spGetFullProductPlannedDetails');
         //dd($jobdata);
         return view('warehouse/jobcard')->with("jobdata",$jobdata);
+    }
+
+    public function getgalvlabel($jobNo,$customer){
+        //$jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?',array($jobid));
+        //dd($jobdata);
+        return view('warehouse/galvlabel')->with("id",$jobNo)->with("id",$customer);
     }
 
     public function insertIntoJobTable(Request $request){
