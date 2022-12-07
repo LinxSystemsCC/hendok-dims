@@ -115,19 +115,16 @@ class WareHouseController extends Controller
     public function joblabelassign(){
         $userid =  Auth::user()->UserID;
 
-              $returnmach = DB::connection('sqlsrv3')
-            ->select('exec spGetWarehousemachines ?',
-                array($userid)
-            );
+        $returnmach = DB::connection('sqlsrv3')
+        ->select('exec spGetWarehousemachines ?',
+            array($userid)
+        );
         return view('warehouse/jobqrcode');
     }
     public function initiateproductonmachine(){
         $userid =  Auth::user()->UserID;
 
-        $returnmach = DB::connection('sqlsrv3')
-            ->select('exec spGetProductByWarehouseDept ?',
-                array($userid)
-            );
+        $returnmach = DB::connection('sqlsrv3')->select('exec spGetProductByWarehouseDept ?',array($userid));
         return view('warehouse/initiateproducts');
     }
     public function createPalletConfig(){
@@ -135,6 +132,40 @@ class WareHouseController extends Controller
     }
     public function areapage(){
         return view('warehouse/areas');
+    }
+
+    public function genericproductlabels(){
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
+        $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
+
+        return view('warehouse/genericproductlabels')->with('prodGroups',$prodGroups)->with('dept',$dept);
+    }
+
+    public function printgenericlabel(Request $request){
+        $department = $request->get("department");
+        $category = $request->get("category");
+        $product = $request->get("product");
+        $qty = $request->get("qty");
+
+        //dd($product,$category,$department,$qty);
+
+        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertPrintForGenericLabels ?,?,?,?', array($product,$category,$department,$qty));
+        
+        return response()->json($returndata);
+    }
+
+    public function printgalvlabel(Request $request){
+        $ticketno = $request->get("ticketno");
+        $qty = $request->get("qty");
+        $type = 4;
+
+        //dd($ticketno,$qty,$type);
+
+        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertFinalGalvLabelJobToPrint ?,?,?', array($ticketno,$qty,$type));
+        
+        return response()->json($returndata);
+
+
     }
 
     public function userpermissions($userid){
@@ -154,6 +185,18 @@ class WareHouseController extends Controller
     
     public function galvcustomer(){
         return view('warehouse/galvcustomers');
+    }
+
+    public function galvcreateprodspec(){
+        $customers = DB::connection('wmax')->select("select * from tblCustomers");
+        $products = DB::connection('wmax')->select("select * from tblProducts");
+        return view('warehouse/galvcreateprodspec')->with('customers',$customers);
+    }
+
+    public function galveditprodspec(){
+        $customers = DB::connection('wmax')->select("select * from tblCustomers");
+        $products = DB::connection('wmax')->select("select * from tblProducts");
+        return view('warehouse/galveditprodspec')->with('customers',$customers);
     }
 
     public function galvscale(){
@@ -359,17 +402,17 @@ class WareHouseController extends Controller
         $MachineName = $request->get("MachineName");
         $JobNo = $request->get("JobNo");
         $WireSize = $request->get("WireSize");
-        $stressTest = $request->get("stressTest");
-        $elongBreakTest = $request->get("elongBreakTest");
-        $torsionTest = $request->get("torsionTest");
-        $wrapTest = $request->get("wrapTest");
-        $coating = $request->get("coating");
         $MassRequired = $request->get("MassRequired");
         $testNo = $request->get("testNo");
         $zincTested = $request->get("zincTested");
         $mpaTested = $request->get("mpaTested");
         $castNo = $request->get("castNo");
         $wireSizeTested = $request->get("wireSizeTested");
+        $stressTest = $request->get("stressTest");
+        $elongBreakTest = $request->get("elongBreakTest");
+        $torsionTest = $request->get("torsionTest");
+        $wrapTest = $request->get("wrapTest");
+        $coating = $request->get("coating");
         $comment1 = $request->get("comment1");
         $testpf = $request->get("testpf");
         $massProduced = $request->get("massProduced");
@@ -380,9 +423,9 @@ class WareHouseController extends Controller
         $comment2 = $request->get("comment2");
         $comment3 = $request->get("comment3");
 
-        //dd($Reference, $CustomerName, $ProductName,$DepartmentName,$MachineName,$JobNo,$WireSize,$MassRequired,$testNo,$zincTested, $mpaTested, $castNo, $wireSizeTested ,$comment1 ,$massProduced ,$zincInitialMass ,$zincStripMass ,$zincStripSize ,$operator, $comment2, $comment3);
-        
-        $testQC1 = DB::connection('sqlsrv2')->statement('exec spInsertIntoPicking ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
+        //dd($Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $testNo, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $testpf, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3);
+
+        $testQC1 = DB::connection('sqlsrv2')->select('exec spInsertIntoPicking ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
         array(
             $Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $testNo, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $testpf, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3
         )); 
@@ -431,7 +474,7 @@ class WareHouseController extends Controller
         ));
 
         return response()->json($testQC2);
-    }//31 Variables
+    }
 
     public function acceptholdweigh(Request $request){
         $ref = $request->get("ref");
@@ -463,7 +506,7 @@ class WareHouseController extends Controller
 
         return response()->json($weigh);
 
-    }//19 Variables
+    }
 
     public function regradeproduct(Request $request){
         $ref = $request->get("ref");
@@ -490,7 +533,7 @@ class WareHouseController extends Controller
         ));
 
         return response()->json($regrade);
-    }//12 Variables
+    }
 
     public function savestockchangewmax(Request $request){
         $newcustname = $request->get("newcustname");
@@ -506,7 +549,7 @@ class WareHouseController extends Controller
         array($newcustname, $newprodname, $mass, $operator, $ticketNo, $SENo));
 
         return response()->json($change);
-    }//6 Variables
+    }
 
     public function saveretest(Request $request){
         $custname = $request->get("custname");
@@ -529,7 +572,117 @@ class WareHouseController extends Controller
         ));
 
         return response()->json($retest);
-    }//11 Variables
+    }
+
+    public function addproductspec(Request $request){
+        $cutomername = $request->get("cutomername");
+        $productname = $request->get("productname");
+        $productapplication = $request->get("productapplication");
+        $roddiameter = $request->get("roddiameter");
+        $rodgrade = $request->get("rodgrade");
+        $rodtreatment = $request->get("rodtreatment");
+        $diametergalvwire = $request->get("diametergalvwire");
+        $diametertolerancemin = $request->get("diametertolerancemin");
+        $diametertolerancemax = $request->get("diametertolerancemax");
+
+        $diametertolerance = "{$diametertolerancemin} - {$diametertolerancemax}";
+
+        $tensilestrenghtmin = $request->get("tensilestrenghtmin");
+        $tensilestrenghtmax = $request->get("tensilestrenghtmax");
+
+        $tensilestrenght = "{$tensilestrenghtmin} - {$tensilestrenghtmax}";
+
+        $stresstest = $request->get("stresstest");
+        $elongation = $request->get("elongation");
+        $leadbathdip = $request->get("leadbathdip");
+        $zinccoatingtype = $request->get("zinccoatingtype");
+        $zinccoatingmin = $request->get("zinccoatingmin");
+        $zinccoatingmax = $request->get("zinccoatingmax");
+
+        $zinccoating = "{$zinccoatingmin} - {$zinccoatingmax}";
+
+        $coatinguniformity = $request->get("coatinguniformity");
+        $coatingadhesion = $request->get("coatingadhesion");
+        $speed = $request->get("speed");
+        $mmcenitrosetting = $request->get("mmcenitrosetting");
+        $nitrodiesize = $request->get("nitrodiesize");
+        $labelling = $request->get("labelling");
+        $maxwelds = $request->get("maxwelds");
+        $packagingrequirements = $request->get("packagingrequirements");
+        $specialinstructions = $request->get("specialinstructions");
+        $diametertolerancestrict = $request->get("diametertolerancestrict");
+        $tensilestrenghtstrict = $request->get("tensilestrenghtstrict");
+        $stressteststrict = $request->get("stressteststrict");
+        $elongationstrict = $request->get("elongationstrict");
+        $zinccoatingstrict = $request->get("zinccoatingstrict");
+        $maxweldsstrict = $request->get("maxweldsstrict");
+        
+        //dd($cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict);
+        
+        
+            
+        $add = DB::connection('sqlsrv2')->select('exec spAddgalvproduct ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
+        array(
+            $cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict
+        ));
+
+        return response()->json($add);
+    }
+
+    public function editproductspec(Request $request){
+        $cutomername = $request->get("cutomername");
+        $productname = $request->get("productname");
+        $productapplication = $request->get("productapplication");
+        $roddiameter = $request->get("roddiameter");
+        $rodgrade = $request->get("rodgrade");
+        $rodtreatment = $request->get("rodtreatment");
+        $diametergalvwire = $request->get("diametergalvwire");
+        $diametertolerancemin = $request->get("diametertolerancemin");
+        $diametertolerancemax = $request->get("diametertolerancemax");
+
+        $diametertolerance = "{$diametertolerancemin} - {$diametertolerancemax}";
+
+        $tensilestrenghtmin = $request->get("tensilestrenghtmin");
+        $tensilestrenghtmax = $request->get("tensilestrenghtmax");
+
+        $tensilestrenght = "{$tensilestrenghtmin} - {$tensilestrenghtmax}";
+
+        $stresstest = $request->get("stresstest");
+        $elongation = $request->get("elongation");
+        $leadbathdip = $request->get("leadbathdip");
+        $zinccoatingtype = $request->get("zinccoatingtype");
+        $zinccoatingmin = $request->get("zinccoatingmin");
+        $zinccoatingmax = $request->get("zinccoatingmax");
+
+        $zinccoating = "{$zinccoatingmin} - {$zinccoatingmax}";
+
+        $coatinguniformity = $request->get("coatinguniformity");
+        $coatingadhesion = $request->get("coatingadhesion");
+        $speed = $request->get("speed");
+        $mmcenitrosetting = $request->get("mmcenitrosetting");
+        $nitrodiesize = $request->get("nitrodiesize");
+        $labelling = $request->get("labelling");
+        $maxwelds = $request->get("maxwelds");
+        $packagingrequirements = $request->get("packagingrequirements");
+        $specialinstructions = $request->get("specialinstructions");
+        $diametertolerancestrict = $request->get("diametertolerancestrict");
+        $tensilestrenghtstrict = $request->get("tensilestrenghtstrict");
+        $stressteststrict = $request->get("stressteststrict");
+        $elongationstrict = $request->get("elongationstrict");
+        $zinccoatingstrict = $request->get("zinccoatingstrict");
+        $maxweldsstrict = $request->get("maxweldsstrict");
+        
+        //dd($cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict);
+        
+        
+            
+        $edit = DB::connection('sqlsrv2')->select('exec spEditgalvproduct ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
+        array(
+            $cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict
+        ));
+
+        return response()->json($edit);
+    }
 
     //For printing pallets
     public function printpalletsselectdept(){
@@ -612,13 +765,13 @@ class WareHouseController extends Controller
     }
 
     public function choosemachine($itemCode){
-      /*  $dept = DB::connection('sqlsrv2')
+        /*  $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);*/
 
-          $machines = DB::connection('sqlsrv2')
-              ->select('exec spGetMachineByProduct ?',
-                  array($itemCode)
-              );
+        $machines = DB::connection('sqlsrv2')
+            ->select('exec spGetMachineByProduct ?',
+                array($itemCode)
+            );
         $palletsjson = DB::connection('sqlsrv2')
             ->select("EXEC spSelectItemsConfigurations ? ",
                 array($itemCode)
@@ -630,10 +783,10 @@ class WareHouseController extends Controller
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =".$deparment);
 
-          $machines = DB::connection('sqlsrv2')
-              ->select('exec spGetMachinesByDept ?',
-                  array($deparment)
-              );
+        $machines = DB::connection('sqlsrv2')
+            ->select('exec spGetMachinesByDept ?',
+                array($deparment)
+            );
         return view('warehouse/printpalletchoosemachine')->with('departments',$dept)->with('machines',$machines);
     }
     public function wmaxlanding(){
@@ -648,6 +801,16 @@ class WareHouseController extends Controller
         $productlist = DB::connection('wmax')
             ->select("select * from tblProducts where CustomerName ='".$cust."'");
         return response()->json($productlist);
+    }
+
+    public function wmaxgetproductinfo(Request $request){
+        $customer = $request->get("customer");
+        $product = $request->get("product");
+        //dd($customer, $product);
+
+        $productinfo = DB::connection('wmax')
+            ->select("select * from tblProducts where CustomerName ='".$customer."' and ProductName ='".$product."'");
+        return response()->json($productinfo);
     }
     public function wmaxgetproductwiresize(Request $request){
         $ProductID = $request->get("productId");
@@ -939,10 +1102,16 @@ where intDeptID =".$deptId);
         return view('warehouse/jobcard')->with("jobdata",$jobdata);
     }
 
-    public function getgalvlabel($jobNo,$customer){
-        //$jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?',array($jobid));
+    public function getgalvcreateproductspecsheet(){
+        //$jobdata = DB::connection('sqlsrv3')->select('exec spGetFullProductPlannedDetails');
         //dd($jobdata);
-        return view('warehouse/galvlabel')->with("id",$jobNo)->with("id",$customer);
+        return view('warehouse/galvproductspecsheet');
+    }
+
+    public function getgalvlabel($customer,$product,$ticketno){
+        $jobdata = DB::connection('wmax')->select("select * from tblCompletedJobs where Customer ='".$customer."' and ProductName ='".$product."' and TicketNo = '".$ticketno."'");
+        //dd($jobdata);
+        return view('warehouse/galvlabel')->with("id",$customer)->with("id",$product)->with("ticketno",$ticketno)->with("jobdata",$jobdata);
     }
 
     public function insertIntoJobTable(Request $request){
@@ -964,18 +1133,8 @@ where intDeptID =".$deptId);
         return response()->json($returnmach);
 
     }
+
     public function insertIntoJobTableGalv(Request $request){
-
-        /*
-       @custId AS bigint,
-	@productID bigint,
-	@wiresize nvarchar(25),
-	@deptId as bigint,
-	@machinenId bigint,
-	@qty money,
-	@reference as nvarchar(25)
-         */
-
         $prodname = $request->get("prodname");
 
         $wiresize = $request->get("wiresize");
@@ -993,6 +1152,7 @@ where intDeptID =".$deptId);
         return response()->json($returnmach);
 
     }
+    
     //Start Generating The Qr code
     public function startgenratingqrcodeforpallet($jobId){
         $returnmach = DB::connection('sqlsrv2')

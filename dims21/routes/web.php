@@ -885,7 +885,8 @@ Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemap
 Route::post('saveLocationType', [WareHouseController::class,'saveLocationType']);
 Route::post('saveLocationName', [WareHouseController::class,'saveLocationName']);
 Route::post('savepermissions', [WareHouseController::class,'savepermissions']);
-
+Route::post('printgenericlabel', [WareHouseController::class,'printgenericlabel']);
+Route::post('printgalvlabel', [WareHouseController::class,'printgalvlabel']);
 Route::get('startendjob', [WareHouseController::class,'startendjob']);
 
 
@@ -910,6 +911,7 @@ Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovement
 Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
 Route::get('wmaxlanding', [WareHouseController::class,'wmaxlanding']);
 Route::get('wmaxgetcustomerproduct', [WareHouseController::class,'wmaxgetcustomerproduct']);
+Route::get('wmaxgetproductinfo', [WareHouseController::class,'wmaxgetproductinfo']);
 Route::get('wmaxgetproductwiresize', [WareHouseController::class,'wmaxgetproductwiresize']);
 Route::get('wmaxdepartmentgalv', [WareHouseController::class,'wmaxdepartmentgalv']);
 Route::get('wmaxdepartmentmachinesgalv', [WareHouseController::class,'wmaxdepartmentmachinesgalv']);
@@ -956,6 +958,8 @@ Route::post('acceptholdweigh', [WareHouseController::class,'acceptholdweigh']);
 Route::post('savestockchangewmax', [WareHouseController::class,'savestockchangewmax']);
 Route::post('saveretest', [WareHouseController::class,'saveretest']);
 Route::post('regradeproduct', [WareHouseController::class,'regradeproduct']);
+Route::post('addproductspec', [WareHouseController::class,'addproductspec']);
+Route::post('editproductspec', [WareHouseController::class,'editproductspec']);
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 
@@ -1011,6 +1015,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::get('areapage', [WareHouseController::class,'areapage']);
+    Route::get('genericproductlabels', [WareHouseController::class,'genericproductlabels']);
     Route::get('userpermissions/{userid}', [WareHouseController::class,'userpermissions']);
     Route::get('dashboard', [WareHouseController::class,'dashboard']);
     Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
@@ -1027,9 +1032,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getjobsdata', [WareHouseController::class,'getjobsdata']);
     Route::get('exceptionmovementreport', [WareHouseController::class,'exceptionmovementreport']);
     Route::get('getjobcard/{JobID}', [WareHouseController::class,'getjobcard']);
-    Route::get('getgalvlabel/{JobNo}/{CustName}', [WareHouseController::class,'getgalvlabel']);
+    Route::get('getgalvlabel/{JobNo}/{CustName}/{TicketNo}', [WareHouseController::class,'getgalvlabel']);
     Route::get('getallactivejobs', [WareHouseController::class,'getallactivejobs']);
+    Route::get('getgalvproductspecsheet', [WareHouseController::class,'getgalvproductspecsheet']);
     Route::get('galvcustomer', [WareHouseController::class,'galvcustomer']);
+    Route::get('galvcreateprodspec', [WareHouseController::class,'galvcreateprodspec']);
+    Route::get('galveditprodspec', [WareHouseController::class,'galveditprodspec']);
     Route::get('galvscale', [WareHouseController::class,'galvscale']);
     Route::get('qc1', [WareHouseController::class,'qc1']);
     Route::get('qc2', [WareHouseController::class,'qc2']);

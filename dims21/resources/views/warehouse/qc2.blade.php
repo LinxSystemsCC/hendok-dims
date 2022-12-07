@@ -415,7 +415,19 @@
                     buttonMethod: "PASS",
                 },
                 success: function (data) {
-                    location.reload();
+                    console.debug(data[0]);
+                    if (data[0].Result != "Success"){
+                        alert(data[0].Result);
+                    }
+                    else{
+                        if (data[0].Warnings != "Warning:"){
+                            alert(data[0].Warnings);
+                            location.reload();
+                        }
+                        else{
+                            location.reload();
+                        }
+                    }
                 }
 
             });
@@ -461,7 +473,19 @@
                     buttonMethod: "FAIL",
                 },
                 success: function (data) {
-                    location.reload();
+                    console.debug(data[0]);
+                    if (data[0].Result != "Success"){
+                        alert(data[0].Result);
+                    }
+                    else{
+                        if (data[0].Warnings != "Warning:"){
+                            alert(data[0].Warnings);
+                            location.reload();
+                        }
+                        else{
+                            location.reload();
+                        }
+                    }
                 }
 
             });

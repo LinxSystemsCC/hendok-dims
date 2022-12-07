@@ -31,76 +31,75 @@
 </head>
 
 <body>
-<div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; padding: 20px !important;">
+    <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; padding: 20px !important;">
 
-    <h3>Stock Change</h3>
+        <h3>Stock Change</h3>
 
-    {{-- Initial customer --}}
-    <div>
-        <div class="form-group">
-            <label class="control-label" for="customers"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
-            <select  class="form-control input-sm col-xs-1 " id="customers" style="width: 100%" required>
-                <option></option>
-                @foreach($customers as $val)
-                    <option value="{{$val->CustomerName}}">{{$val->CustomerName}}</option>
-                @endforeach
-            </select>
+        {{-- Initial customer --}}
+        <div>
+            <div class="form-group">
+                <label class="control-label" for="customers"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
+                <select  class="form-control input-sm col-xs-1 " id="customers" style="width: 100%" required>
+                    <option></option>
+                    @foreach($customers as $val)
+                        <option value="{{$val->CustomerName}}">{{$val->CustomerName}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Initial Product --}}
+            <div class="form-group">
+                <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
+                <select  class="form-control input-sm col-xs-1" id="prodname" style="width: 100%" required>
+                    <option></option>
+                </select>
+            </div>
+
+            {{-- Ticket Number --}}
+            <div class="form-group">
+                <label class="control-label" for="ticketNo"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Ticket Number </label>
+                <select  class="form-control input-sm col-xs-1" id="ticketNo" style="width: 100%" required>
+                    <option></option>
+                </select>
+            </div>
+
+            {{-- Mass --}}
+            <div class="form-group">
+                <label class="control-label" for="mass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Mass</label>
+                <input type="number" class="form-control input-sm col-xs-1" id="mass" required disabled>
+            </div>
+
+            {{-- New Customer --}}
+            <div class="form-group">
+                <label class="control-label" for="newcustomers"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">New Customer</label>
+                <select  class="form-control input-sm col-xs-1 " id="newcustomers" style="width: 100%" required>
+                    <option></option>
+                    @foreach($customers as $val)
+                        <option value="{{$val->CustomerName}}">{{$val->CustomerName}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- New Product Name --}}
+            <div class="form-group">
+                <label class="control-label" for="newprodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">New Product Name </label>
+                <select  class="form-control input-sm col-xs-1" id="newprodname" style="width: 100%" required>
+                    <option></option>
+                </select>
+            </div>
+
+            {{-- SE Code --}}
+            <div class="form-group">
+                <label class="control-label" for="SECode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">SE no.</label>
+                <input type="text" class="form-control input-sm col-xs-1" id="SECode" required disabled>
+            </div>
+
+            <button class="btn btn-success" id="save" style="width: 100%;">SAVE</button>
+
         </div>
-
-        {{-- Initial Product --}}
-        <div class="form-group">
-            <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
-            <select  class="form-control input-sm col-xs-1" id="prodname" style="width: 100%" required>
-                <option></option>
-            </select>
-        </div>
-
-        {{-- Ticket Number --}}
-        <div class="form-group">
-            <label class="control-label" for="ticketNo"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Ticket Number </label>
-            <select  class="form-control input-sm col-xs-1" id="ticketNo" style="width: 100%" required>
-                <option></option>
-            </select>
-        </div>
-
-        {{-- Mass --}}
-        <div class="form-group">
-            <label class="control-label" for="mass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Mass</label>
-            <input type="number" class="form-control input-sm col-xs-1" id="mass" required disabled>
-        </div>
-
-        {{-- New Customer --}}
-        <div class="form-group">
-            <label class="control-label" for="newcustomers"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">New Customer</label>
-            <select  class="form-control input-sm col-xs-1 " id="newcustomers" style="width: 100%" required>
-                <option></option>
-                @foreach($customers as $val)
-                    <option value="{{$val->CustomerName}}">{{$val->CustomerName}}</option>
-                @endforeach
-            </select>
-        </div>
-
-        {{-- New Product Name --}}
-        <div class="form-group">
-            <label class="control-label" for="newprodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">New Product Name </label>
-            <select  class="form-control input-sm col-xs-1" id="newprodname" style="width: 100%" required>
-                <option></option>
-            </select>
-        </div>
-
-        {{-- SE Code --}}
-        <div class="form-group">
-            <label class="control-label" for="SECode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">SE no.</label>
-            <input type="text" class="form-control input-sm col-xs-1" id="SECode" required disabled>
-        </div>
-
-        <button class="btn btn-success" id="save" style="width: 100%;">SAVE</button>
 
     </div>
-
-</div>
-
-
+</body>
 <style>
 
     .dx-datagrid-table{

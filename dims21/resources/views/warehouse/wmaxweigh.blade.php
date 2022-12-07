@@ -425,7 +425,24 @@
                         $('#createjob').modal('toggle');
                         var dataGrid = $("#gridContainer").dxDataGrid("instance");
                         var selectedRowsData = dataGrid.getSelectedRowsData();
+
+                        $("#accept").prop('disabled', true);
+                        $("#hold").prop('disabled', true);
+
+                        var passfailed = selectedRowsData[0].PassedFailed;
+                        //console.debug(passfailed);
                         
+                        
+                        if (passfailed == 'P'){
+                            $("#accept").prop('disabled', false);
+                            $("#hold").prop('disabled', true);
+                        }
+                        if (passfailed == 'F'){
+                            $("#hold").prop('disabled', false);
+                            $("#accept").prop('disabled', true);
+                        }
+
+
                         var jobnum = selectedRowsData[0].JobNo;
                         var sequm = selectedRowsData[0].SeqNo;
                         var custnum = selectedRowsData[0].CustomerName;
@@ -529,7 +546,16 @@
                     buttonMethod: 'ACCEPT',
                 },
                 success: function (data) {
-                    location.reload();
+                    //location.reload();
+                    
+                    if (data[0].Result = "Success"){
+                        var customer =  data[0].CustomerName;
+                        var product =  data[0].ProductName;
+                        var ticket =  data[0].TicketNo;
+
+                        window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket, "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                    }
+                    
                 }
 
             });
@@ -578,6 +604,13 @@
                     buttonMethod: 'HOLD',
                 },
                 success: function (data) {
+                    if (data[0].Result = "Success"){
+                        var customer =  data[0].CustomerName;
+                        var product =  data[0].ProductName;
+                        var ticket =  data[0].TicketNo;
+                        
+                        window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket, "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                    }
                     location.reload();
                 }
 

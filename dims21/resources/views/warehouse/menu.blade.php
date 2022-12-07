@@ -30,6 +30,8 @@ if ((Auth::guest()))
     $inventory = $v->getThingsUserPermissions(Auth::user()->UserID,'Inventory');
     $setup = $v->getThingsUserPermissions(Auth::user()->UserID,'Setup');
     $sales = $v->getThingsUserPermissions(Auth::user()->UserID,'Sales');
+    $ppl = $v->getThingsUserPermissions(Auth::user()->UserID,'Print Pallet Labels');
+    $gpl = $v->getThingsUserPermissions(Auth::user()->UserID,'Generic Product Labels');
 
     
     //--------------------------Second Level Options--------------------------------
@@ -449,6 +451,16 @@ if ((Auth::guest()))
                             <a href='{!!url("/galvscale")!!}'>Scales</a> 
                             @endif
                         </li>
+                        <li>
+                            @if("1" !="0")
+                            <a href='{!!url("/galvcreateprodspec")!!}'>Create Galv Product Spec</a> 
+                            @endif
+                        </li>
+                        <li>
+                            @if("1" !="0")
+                            <a href='{!!url("/galveditprodspec")!!}'>Edit Galv Product Spec</a> 
+                            @endif
+                        </li>
                     </ul>
                 </li>
 			</ul>
@@ -482,8 +494,16 @@ if ((Auth::guest()))
         <!-- Print Labels & Reverse Pallets -->
         
         <li>
-            @if("1" !="0")
+            @if($ppl !="0")
             <a href='{!!url("/printpalletsselectdept")!!}'>Print Pallet Labels</a>
+            @endif
+        </li>
+
+        <!-- Print Generic Product Labels -->
+        
+        <li>
+            @if($gpl !="0")
+            <a href='{!!url("/genericproductlabels")!!}'>Product Label Printing</a>
             @endif
         </li>
     </ul>

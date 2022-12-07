@@ -258,11 +258,12 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
                     $("#wiresize").empty();
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.WireSize+'">'+o.WireSize+'</option>';
+                        toAppend += '<option value="'+ parseFloat(o.WireSize).toFixed(2)+'">'+parseFloat(o.WireSize).toFixed(2)+'</option>';
                     });
                     
                     $("#wiresize").append(toAppend);
                     $("#wiresize").select2();
+                    
 
                 }
             });
