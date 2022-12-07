@@ -1322,7 +1322,7 @@ where intDeptID =".$deptId);
         $customername = $request->get("customername");
         //dd($customername);
 
-        $returnmach = DB::connection('wmax')->select('exec spSaveCustomer ?',array($customername));
+        $returnmach = DB::connection('sqlsrv2')->select('exec spSaveCustomer ?',array($customername));
         return response()->json($returnmach);
     }
 
@@ -1332,7 +1332,7 @@ where intDeptID =".$deptId);
         $wsb = $request->get("wsb");
         //dd($scalename,$scalemass,$wsb);
 
-        $returnmach = DB::connection('wmax')->select('exec spSaveScale ?,?,?',array($scalename,$scalemass, $wsb));
+        $returnmach = DB::connection('sqlsrv2')->select('exec spSaveScale ?,?,?',array($scalename,$scalemass, $wsb));
         return response()->json($returnmach);
     }
 
