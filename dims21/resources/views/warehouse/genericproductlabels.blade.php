@@ -143,7 +143,7 @@
                 data: {
                     department: $('#department option:selected').val(),
                     category: $('#category option:selected').text(),
-                    product: $('#prodname option:selected').text(),
+                    product: $('#prodname option:selected').val(),
                     qty: $('#qty').val()
                 },
                 success: function (data) {
