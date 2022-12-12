@@ -135,7 +135,7 @@
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('Areas');
+                        const worksheet = workbook.addWorksheet('GalvCustomers');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -143,7 +143,7 @@
                             autoFilterEnabled: true,
                         }).then(() => {
                             workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Areas.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'GalvCustomers.xlsx');
                             });
                         });
                         e.cancel = true;

@@ -3,9 +3,11 @@
 <head>
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -45,40 +47,72 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .btn {
+            margin-bottom: 20px !important;
+        }
     </style>
 
 
 </head>
-<div class="container" style="width:  100%;">
-    <div class="row">
 
+{{-- <div class="col-lg-12"  style="background: rgb(141, 141, 141);">
 
-<div class="col-lg-12"  style="background: white;">
-    <a href='{!!url("/printpalletsselectdept")!!}' style="float: right;background: black;color: white;padding: 10px;    width: 100%;text-align: center;    font-size: 28px;"><-Back</a>
-    <div class="col" style="text-align: center;" >
-
-        @foreach($departments as $val)
-        <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3>
-
-            <?php
-                $intId = $val->intAutoID;
-            ?>
-        @endforeach
-
-        <h1>CHOOSE MACHINE</h1>
-
-                @foreach($machines as $val)
-                <button class="btn-lg btn-success" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 40px;">
-                    {{$val->strMachineName}}</button><br><br>
-
-
-                @endforeach
-
-
+    <div style="padding-bottom: 20px; width: 100%;text-align:center; position:relative; margin: auto;">
+        <span style="font-size: 65px; font-weight:700;">DEPARTMENT</span>
+        
+        <a class="btn btn-dark" href= '{!!url("/printpalletsselectdept")!!}' style=" font-size: 41px; position:absolute; left:10px; right: 0px;
+        top: 15px;" ><i class="bi bi-arrow-return-left"></i></a>
 
     </div>
-</div>
-</div>
+
+    @foreach($departments as $val)
+    <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3>
+
+        <?php
+            $intId = $val->intAutoID;
+        ?>
+    @endforeach
+
+    <h1>CHOOSE MACHINE</h1>
+
+    @foreach($machines as $val)
+    <button class="btn btn-dark" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 40px;">
+        {{$val->strMachineName}}</button><br><br>
+    @endforeach
+
+
+</div> --}}
+
+<div class="col-lg-12"  style="background: rgb(141, 141, 141); padding:20px; height:100vh;">
+    <div style="padding-bottom: 20px; width: 100%;text-align:center; position:relative; margin: auto;">
+        @foreach($departments as $val)
+        {{-- <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3> --}}
+
+        <?php
+            $intId = $val->intAutoID;
+        ?>
+    @endforeach
+        <span style="font-size: 50px; font-weight:700; text-transform:uppercase;">{{$val->strDeptName}} MACHINES</span>
+
+        <a class="btn btn-dark" href= '{!!url("/printpalletsselectdept")!!}' style=" font-size: 30px; position:absolute; left: 0px; top: 15px;" >
+        <i class="bi bi-arrow-return-left"></i>
+        </a>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+    </div>
+
+    
+    
+    @foreach($machines as $val)
+    @if ($val->intDeptID == $deparment)
+        <button class="btn btn-dark" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 40px;">{{$val->strMachineName}}
+        </button>
+    @endif
+    
+
+    
+    @endforeach
 </div>
 
 <style>

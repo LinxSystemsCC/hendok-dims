@@ -1,3 +1,16 @@
+<?php
+if ((Auth::guest()))
+{
+
+}else{
+    $v  =  new \App\Http\Controllers\SalesForm();
+}
+$barbed = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Wire');
+$galv = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv');
+$roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,7 +18,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -45,35 +60,36 @@
             background-color: #04AA6D;
             color: white;
         }
+
+        .btn {
+            margin-bottom: 20px !important;
+        }
     </style>
 
 
 </head>
-<div class="col-lg-12"  style="background: white;">
-    <a href= "{{ route('logout') }}"
-       onclick="event.preventDefault();
-                     document.getElementById('logout-form').submit();" style="    font-size: 41px;background: black;color: white;" >
-        Logout
-    </a>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        {{ csrf_field() }}
-    </form>
-    <a href='{!!url("/createjobs")!!}' style="float: right;background: black;color: white;padding: 10px;    width: 100%;text-align: center;    font-size: 28px;display: none;"><-Back</a>
-    <div class="col-lg-12" style="text-align: center;">
 
-        <h1>CHOOSE DEPARTMENT</h1>
+<div class="col-lg-12"  style="background: rgb(141, 141, 141); padding:20px; min-height: 100vh; min-width: 100%;">
+    <div style="padding-bottom: 20px; width: 100%;text-align:center; position:relative; margin: auto;">
+        <span style="font-size: 65px; font-weight:700;">PICK DEPARTMENT</span>
 
+        <a class="btn btn-dark" href= "{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style=" font-size: 41px; position:absolute; left: 0px;
+        top: 15px;" >
+        <i class="bi bi-door-open"></i>
+        </a>
 
-                @foreach($departments as $val)
-
-            <button class="btn-lg btn-success" onclick="location.href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}'" type="button" style="width: 100% !important;font-size: 85px;">
-                {{$val->strDeptName}}</button><br><br>
-                @endforeach
-
-
-
-
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
     </div>
+    
+    @foreach($departments as $val)
+
+    <button class="btn btn-dark" onclick="location.href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}'" type="button" style="width: 100% !important;font-size: 85px;">{{$val->strDeptName}}
+    </button>
+
+    @endforeach
+
+    
+
 </div>
 
 

@@ -130,7 +130,6 @@
                         <select  class="form-control input-sm col-xs-1" id="machinename" required>
                             <option></option>
                         </select>
-
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Qty </label>

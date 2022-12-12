@@ -868,6 +868,7 @@ Route::post('savesMachinemaptodept', [WareHouseController::class,'savesMachinema
 Route::post('updateDeptName', [WareHouseController::class,'updateDeptName']);
 Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
 Route::post('deleteCustomerName', [WareHouseController::class,'deleteCustomerName']);
+Route::post('deletesalesorders', [WareHouseController::class,'deletesalesorders']);
 Route::post('deleteScale', [WareHouseController::class,'deleteScale']);
 Route::post('updateMachineName', [WareHouseController::class,'updateMachineName']);
 Route::post('updategroupname', [WareHouseController::class,'updategroupname']);
@@ -892,11 +893,14 @@ Route::get('startendjob', [WareHouseController::class,'startendjob']);
 
 Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
 Route::get('getWIP', [WareHouseController::class,'getWIP']);
+Route::get('getRoofWIP', [WareHouseController::class,'getRoofWIP']);
 Route::get('getGalvWIP', [WareHouseController::class,'getGalvWIP']);
+Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
 Route::get('getWIPjobstarted', [WareHouseController::class,'getWIPjobstarted']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
 Route::get('getJobStarted', [WareHouseController::class,'getJobStarted']);
 Route::get('getjobsdatajson', [WareHouseController::class,'getjobsdatajson']);
+Route::get('getgenericlabelprintscreen', [WareHouseController::class,'getgenericlabelprintscreen']);
 Route::get('createuserpage', [WareHouseController::class,'createuserpage']);
 Route::post('createuser', [WareHouseController::class,'createuser']);
 
@@ -932,10 +936,13 @@ Route::post('savenewbin', [WareHouseController::class,'savenewbin']);
 Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
 Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
 Route::post('insertIntoJobTableGalv', [WareHouseController::class,'insertIntoJobTableGalv']);
+Route::post('insertPrePlannedSO', [WareHouseController::class,'insertPrePlannedSO']);
+Route::post('insertRoofWorkOrder', [WareHouseController::class,'insertRoofWorkOrder']);
 Route::get('getPalletForSelectedItem', [WareHouseController::class,'getPalletForSelectedItem']);
 Route::get('getDepListToPlan', [WareHouseController::class,'getDepListToPlan']);
 
 Route::get('getProdListToPlan', [WareHouseController::class,'getProdListToPlan']);
+Route::get('getsalesorderstoplan', [WareHouseController::class,'getsalesorderstoplan']);
 Route::get('qrcodereversepallet', [WareHouseController::class,'qrcodereversepallet']);
 Route::get('qrcodebreakpallet', [WareHouseController::class,'qrcodebreakpallet']);
 
@@ -1010,6 +1017,7 @@ Route::group(['middleware' => 'auth'], function() {
 //WAREHOUSE
     Route::get('updatestartdate', [WareHouseController::class,'updatestartdate']);
     Route::get('jobupdateprint/{jobid}', [WareHouseController::class,'jobupdateprint']);
+    Route::get('getsalesorders', [WareHouseController::class,'getsalesorders']);
     Route::get('sendLabelToThePrinter', [WareHouseController::class,'sendLabelToThePrinter']);
     Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);

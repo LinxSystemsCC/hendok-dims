@@ -175,29 +175,29 @@
                         var palletid =  e.data.intAutoID;
                         var strPalletTypeDescription =  e.data.strAreaName;
 
-                                //data[0].sendto
-                                var dialog = $('<p><label>Area Name</label><br><input id="theAreaname" value="'+strPalletTypeDescription+'"><br></p>').dialog({
-                                    height: 300, width: 700,modal: true,containment: false,
-                                    buttons: {
-                                        "Update": function () {
+                        //data[0].sendto
+                        var dialog = $('<p><label>Area Name</label><br><input id="theAreaname" value="'+strPalletTypeDescription+'"><br></p>').dialog({
+                            height: 300, width: 700,modal: true,containment: false,
+                            buttons: {
+                                "Update": function () {
 
-                                            $.ajax({
+                                    $.ajax({
 
-                                                url: '{!!url("/updateAreaName")!!}',
-                                                type: "POST",
-                                                data: {
-                                                    theAreaname: $('#theAreaname').val(),
-                                                    palletid:palletid
-                                                },
-                                                success: function (data) {
-                                                    location.reload();
-                                                },
+                                        url: '{!!url("/updateAreaName")!!}',
+                                        type: "POST",
+                                        data: {
+                                            theAreaname: $('#theAreaname').val(),
+                                            palletid:palletid
+                                        },
+                                        success: function (data) {
+                                            location.reload();
+                                        },
 
-                                            });
+                                    });
 
-                                        }
-                                    }
-                                });
+                                }
+                            }
+                        });
 
 
 

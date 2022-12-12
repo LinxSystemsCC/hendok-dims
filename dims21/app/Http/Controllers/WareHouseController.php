@@ -373,11 +373,16 @@ class WareHouseController extends Controller
         //dd($ItemGroup);
         $strProductCategory = $request->get("strProductCategory");
         $prodCategory = DB::connection('sqlsrv2')
-            //->select("select * from viewItemsToPlanJob where ItemGroup ='".$ItemGroup."' and strProductCategory='".$strProductCategory."' order by strItemName");
-            ->select("select DISTINCT i.* from viewItemsToPlanJob i inner join tblMappedDeptMachinesItems mis on mis.strItemCode collate database_default = i.strItemCode  where strProductCategory ='".$ItemGroup."' order by strItemName");
-
+            ->select("select * from viewItemsToPlanJob where strProductCategory ='".$ItemGroup."' order by strItemName");
         //dd($prodCategory);
         return response()->json($prodCategory);
+    }
+
+    public function getsalesorderstoplan(Request $request){
+        $productname = $request->get("productname");
+        $salesorders = DB::connection('sqlsrv2')->select("select * from [viewRoofingOrderLines] rl inner join tblRoofingSONumToPlan rp on rp.strSONum = rl.idInvoiceLines where Description_1 ='".$productname."'");
+        //dd($salesorders);
+        return response()->json($salesorders);
     }
 
     public function getqc1comments(Request $request){
@@ -787,7 +792,11 @@ class WareHouseController extends Controller
             ->select('exec spGetMachinesByDept ?',
                 array($deparment)
             );
-        return view('warehouse/printpalletchoosemachine')->with('departments',$dept)->with('machines',$machines);
+        
+        //dd($machines);
+        //dd($deparment);
+
+        return view('warehouse/printpalletchoosemachine')->with('departments',$dept)->with('machines',$machines)->with('deparment',$deparment);
     }
     public function wmaxlanding(){
         $customers = DB::connection('wmax')
@@ -961,11 +970,28 @@ where intDeptID =".$deptId);
         return response()->json($productonmachine);
     }
 
+    public function getRoofWIP(Request $request){
+
+        $wip = DB::connection('sqlsrv2')->select('exec spGetRoofWIP');
+        return response()->json($wip);
+    }
+
     public function getGalvWIP(Request $request){
 
         $productonmachine = DB::connection('wmax')->select("select distinct * from tblNewJobs Where Completed <> 'Y'");
         return response()->json($productonmachine);
     }
+
+    public function getroofingWIP(Request $request){
+        $datefrom = $request->get("datefrom");
+        $dateto = $request->get("dateto");
+        $datefrom = (new \DateTime($datefrom))->format('Y-m-d');
+        $dateto = (new \DateTime($dateto))->format('Y-m-d');
+
+        $getdata = DB::connection('sqlsrv2')->select('exec spGetRoofinSoNumByDate ?,?',array($datefrom,$dateto));
+        return response()->json($getdata);
+    }
+
     public function getWIPjobstarted(Request $request){
 
         $productonmachine = DB::connection('sqlsrv2')
@@ -981,6 +1007,19 @@ where intDeptID =".$deptId);
 
         $returndata = DB::connection('sqlsrv2')
             ->select('exec spGetProductInProgressdate ?,?',
+                array($datefrom,$dateto)
+            );
+        return response()->json($returndata);
+    }
+
+    public function getgenericlabelprintscreen(Request $request){
+        $datefrom = $request->get("datefrom");
+        $dateto = $request->get("dateto");
+        $datefrom = (new \DateTime($datefrom))->format('Y-m-d');
+        $dateto = (new \DateTime($dateto))->format('Y-m-d');
+
+        $returndata = DB::connection('sqlsrv2')
+            ->select('exec spReturnGenericLabelPrintScreen ?,?',
                 array($datefrom,$dateto)
             );
         return response()->json($returndata);
@@ -1055,7 +1094,7 @@ where intDeptID =".$deptId);
 
         for($i = 0;$i < $qty ;$i++)
         {
-             DB::connection('sqlsrv2')
+            DB::connection('sqlsrv2')
                 ->statement('exec spInserPalletLabelToPrint ?,?,?',
                     array($type,$jobid,$ID)
                 );
@@ -1088,6 +1127,22 @@ where intDeptID =".$deptId);
             ->select('exec spGetProductPlannedDetails ?',
                 array($jobid));
         return view('warehouse/updatejob')->with("jobdata",$jobdata)->with("id",$jobid);
+    }
+    public function deletesalesorders(Request $request){
+        $reference = $request->get("reference");
+        $userID = Auth::user()->UserID;
+        $userName =  Auth::user()->UserName;
+
+        //dd($reference, $userID, $userName);
+
+        $jobdata = DB::connection('sqlsrv3')->select("exec spDeleteRoofingRef ?,?,?", array($reference, $userID, $userName));
+        return response()->json($jobdata);
+    }
+
+    public function getsalesorders(Request $request){
+        $reference = $request->get("reference");
+        $salesorders = DB::connection('sqlsrv3')->select("select * from tblRoofingSONumToPlan where strReference ='".$reference."'");
+        return response()->json($salesorders);
     }
 
     public function getjobcard($jobid){
@@ -1152,6 +1207,35 @@ where intDeptID =".$deptId);
         return response()->json($returnmach);
 
     }
+
+    public function insertPrePlannedSO(Request $request){
+        $salesorders = $request->get("salesorders");
+        $operator = Auth::user()->UserID;
+        $reference = $request->get("reference");
+
+        if (is_array($salesorders)) {
+            $orderlinesxml = $this->toxml($salesorders, "xml", array("result"));
+            $data = DB::connection('sqlsrv2')
+                ->select('exec spXMLInsertRoofinSoNumToPlan ?,?,?',array($orderlinesxml,$operator,$reference));
+        }
+
+        return response()->json($data);
+    }
+
+    public function insertRoofWorkOrder(Request $request){
+        $workOrders = $request->get("workOrders");
+        $userName = Auth::user()->UserName;
+        $userID = Auth::user()->UserID;
+
+        if (is_array($workOrders)) {
+            $orderlinesxml = $this->toxml($workOrders, "xml", array("result"));
+
+            //dd($orderlinesrxml);
+            $data = DB::connection('sqlsrv2')->select('exec spInsertRoofingWorkOrder ?,?,?',array($orderlinesxml,$userName,$userID));
+        }
+
+        return response()->json($data);
+    }
     
     //Start Generating The Qr code
     public function startgenratingqrcodeforpallet($jobId){
@@ -1160,17 +1244,30 @@ where intDeptID =".$deptId);
                 array($jobId)
             );
         $htmlqrcode = "";
+        $dept = 0;
         foreach ($returnmach as $val){
-           /*$htmlqrcode .="Item Code :".$val->strItemCode."<br>";
-           $htmlqrcode .="Required :".$val->mnyQtyRequired."<br>";
-           $htmlqrcode .="Machine  :".$val->strMachineName."<br>";
-           $htmlqrcode .="Department  :".$val->strDeptName."<br>";
-           $htmlqrcode .="Time Created  :".$val->dteJobCreated."<br>";
-           $htmlqrcode .="By:".$val->strOperator."<br>";*/
-           $htmlqrcode .="JOB NO :".$val->intJobId.": P".$val->palletJobPrint.":M".$val->strMachineName.":T".$val->dteJobCreated;
+            /*$htmlqrcode .="Item Code :".$val->strItemCode."<br>";
+            $htmlqrcode .="Required :".$val->mnyQtyRequired."<br>";
+            $htmlqrcode .="Machine  :".$val->strMachineName."<br>";
+            $htmlqrcode .="Department  :".$val->strDeptName."<br>";
+            $htmlqrcode .="Time Created  :".$val->dteJobCreated."<br>";
+            $htmlqrcode .="By:".$val->strOperator."<br>";*/
+            $htmlqrcode .="JOB NO :".$val->intJobId.": P".$val->palletJobPrint.":M".$val->strMachineName.":T".$val->dteJobCreated;
+            $dept = $val->strDeptName;
         }
 
-        return view('warehouse/palletjoblabel')->with('qrcodeothers',$returnmach)->with('qrcode',$htmlqrcode)->with('jobid',$jobId);
+        switch($dept){
+            case('Roofing'):
+                return view('warehouse/roofingjoblabel')->with('qrcodeothers',$returnmach)->with('qrcode',$htmlqrcode)->with('jobid',$jobId);
+ 
+                break;
+
+            default:
+                return view('warehouse/palletjoblabel')->with('qrcodeothers',$returnmach)->with('qrcode',$htmlqrcode)->with('jobid',$jobId);
+        }
+
+
+        
     }
     public function mapitemstopallet(){
         $pallets = DB::connection('sqlsrv2')
@@ -1425,14 +1522,14 @@ where intDeptID =".$deptId);
         $CustomerID = $request->get("CustomerID");
         //dd($theCustomername);
         //dd($CustomerID);
-        $returnmach = DB::connection('wmax') ->select('exec spDeleteCustomer ?', array($CustomerID));
+        $returnmach = DB::connection('sqlsrv2') ->select('exec spDeleteCustomer ?', array($CustomerID));
         return response()->json($returnmach);
     }
 
     public function deleteScale(Request $request){
         $ScaleId = $request->get("ScaleId");
         //dd($ScaleId);
-        $returnmach = DB::connection('wmax') ->select('exec spDeleteScale ?', array($ScaleId));
+        $returnmach = DB::connection('sqlsrv2') ->select('exec spDeleteScale ?', array($ScaleId));
         return response()->json($returnmach);
     }
 
@@ -1486,5 +1583,45 @@ where intDeptID =".$deptId);
             ->update(['intStatus' => 2]);
     }
 
+    private static function getTabs($tabcount)
+{
+    $tabs = '';
+    for($i = 0; $i < $tabcount; $i++)
+    {
+        $tabs .= "\t";
+    }
+    return $tabs;
+}
+
+private static function asxml($arr, $elements = Array(), $tabcount = 0)
+{
+    $result = '';
+    $tabs = self::getTabs($tabcount);
+    foreach($arr as $key => $val)
+    {
+        $element = isset($elements[0]) ? $elements[0] : $key;
+        $result .= $tabs;
+        $result .= "<" . $element . ">";
+        if(!is_array($val))
+            $result .= $val;
+        else
+        {
+            $result .= "\r\n";
+            $result .= self::asxml($val, array_slice($elements, 1, true), $tabcount+1);
+            $result .= $tabs;
+        }
+        $result .= "</" . $element . ">\r\n";
+    }
+    return $result;
+}
+
+public static function toxml($arr, $root = "xml", $elements = Array())
+{
+    $result = '';
+    $result .= "<" . $root . ">\r\n";
+    $result .= self::asxml($arr, $elements, 1);
+    $result .= "</" . $root . ">\r\n";
+    return $result;
+}
 
 }

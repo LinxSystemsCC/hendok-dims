@@ -5,7 +5,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -53,33 +55,39 @@
 
 
 </head>
-<div class="col-lg-12"  style="background: white;">
-    <a href='{!!url("/printpalletchoosemachine")!!}/{{$departmentselected}}' style="float: right;background: black;color: white;padding: 10px;    width: 100%;text-align: center;    font-size: 28px;"><-Back</a>
-    <div class="col-lg-12" >
-        @foreach($departments as $val)
-            <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3>
-            <input type="hidden" id="deptid" value="{{$val->intAutoID}}">
-        @endforeach
+<div class="col-lg-12"  style="background:rgb(141, 141, 141); padding:20px; min-height: 100vh; min-width: 100%;">
+    
+    <div style="display: flex;">
+        <a class="btn btn-dark" href='{!!url("/printpalletchoosemachine")!!}/{{$departmentselected}}' style=" font-size: 30px; left: 0px; top: 15px; height:auto;" >
+            <i class="bi bi-arrow-return-left"></i>
+        </a>
+        
+        <div style="padding-left: 20px;">
+            @foreach($departments as $val)
+                <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3>
+                <input type="hidden" id="deptid" value="{{$val->intAutoID}}">
+            @endforeach
 
             @foreach($machines as $val)
                 <h3>SELECTED MACHINE: {{$val->strMachineName}}</h3>
                 <input type="hidden" id="machineid" value="{{$val->intMachineID}}">
             @endforeach
-
-        <h1>CHOOSE PRODUCT</h1>
-            @foreach($products as $val)
-
-                @if($val->strJobStatus !="NOT STARTED")
-                    <button class="btn-lg btn-success" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}'" type="button" style="width:100% !important;font-size: 25px;">
-                        {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
-                    <br>
-                    <br>
-                @endif
-
-
-            @endforeach
-
+        </div>
     </div>
+    <br>
+    <br>
+    <br>
+
+    <h1>CHOOSE PRODUCT</h1>
+    @foreach($products as $val)
+        @if($val->strJobStatus !="NOT STARTED")
+            <button class="btn btn-dark" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}'" type="button" style="width:100% !important;font-size: 25px;">
+                {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
+            <br>
+            <br>
+        @endif
+    @endforeach
+
 </div>
 
 

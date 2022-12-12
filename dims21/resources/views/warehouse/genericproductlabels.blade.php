@@ -23,6 +23,15 @@
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+    <style>
+        h3{
+            margin: 0px !important;
+            margin-bottom: 10px !important;
+            padding-left: 0px !important;
+            font-weight: 700;
+        }
+    </style>
+
 </head>
 
 
@@ -34,9 +43,9 @@
         </div>
     </div>
     
-    <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; padding: 20px !important;">
+    <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; width: 30%;padding: 20px !important;">
 
-        <h3>Product Label Printing</h3>
+        <h3>PRODUCT LABEL PRINTING</h3>
 
         {{-- Department --}}
         <div>
@@ -74,11 +83,34 @@
             </div>
 
             <br>
+            <br>
 
-            <button class="btn btn-success" id="print" style="width: 100%;">PRINT</button>
+            <button class="btn btn-success" id="print" style="width: 100%; margin-right: 10px;">PRINT</button>
+            
+            <br>
+            <br>
+            <h3>LABEL PRINTING REPORT</h3>
+            {{-- Date from --}}
+            <div class="form-group">
+                <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date From </label>
+                <input type="date" id="datefrom" style="float: right; width: 70%;">
+            </div>
+
+            {{-- Date To --}}
+            <div class="form-group">
+                <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
+                <input type="date" id="dateto" style="float: right; width: 70%;">
+            </div>
+            
+            <button class="btn btn-info" id="report" style="width: 100%;">REPORT</button>
+            
 
         </div>
-
+        
+    </div>
+    <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; width: 100%;padding: 20px !important;">
+        <h3 id="gridHeading"></h3>
+        <div id="gridContainer" style="width: 100% !important;">
     </div>
 </div>
 
@@ -120,6 +152,99 @@
 
             });
 
+        });
+
+        $('#report').click(function(){
+            var datefrom =  $('#datefrom').val();
+            var dateto = $('#dateto').val();
+            $('#gridHeading').text("PRINTING REPORT FROM: "+datefrom + " TO: "+dateto);
+            $.ajax({
+                url: '{!!url("/getgenericlabelprintscreen")!!}',
+                type: "GET",
+                data: {
+                    datefrom: $('#datefrom').val(),
+                    dateto: $('#dateto').val()
+                },
+                success: function (data) {
+                    $("#gridContainer").dxDataGrid({
+                        dataSource:data, //as json
+                        showBorders: true,
+                        hoverStateEnabled: true,
+                        filterRow: { visible: true },
+                        filterPanel: { visible: true },
+                        headerFilter: { visible: true },
+                        allowColumnResizing: true,
+                        columnAutoWidth: true,
+                        paging:{
+                            pageSize: 20,
+                        },
+                        export: {
+                            enabled: true
+                        },
+                        selection: {
+                            mode: 'single',
+                        },
+                        onExporting(e) {
+                            const workbook = new ExcelJS.Workbook();
+                            const worksheet = workbook.addWorksheet('printReport');
+
+                            DevExpress.excelExporter.exportDataGrid({
+                                component: e.component,
+                                worksheet,
+                                autoFilterEnabled: true,
+                            }).then(() => {
+                                workbook.xlsx.writeBuffer().then((buffer) => {
+                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'printReport.xlsx');
+                                });
+                            });
+                            e.cancel = true;
+                        },
+
+                        columns: [
+                            {
+                                dataField: "intJobId",
+                                caption: "JobNo",
+                                //width: 80,
+
+                            }, {
+                                dataField: "Code",
+                                caption: "Code",
+                                //width: 100,
+
+                            }, {
+                                dataField: "Description_1",
+                                caption: "Description",
+                                //width: 200,
+
+                            },
+                            {
+                                dataField: "mnyQtyRequired",
+                                caption: "Qty Required",
+                                //width: 250,
+
+                            },
+                            {
+                                dataField: "dteStartDate",
+                                caption: "Date",
+                                //width: 500,
+
+                            },
+                            
+
+                        ],
+                        onRowDblClick:function(e){
+                            // console.log(e.data.intJobId);
+                            // var intJobId =  e.data.intJobId;
+
+                            // window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+
+                        }
+
+                    });
+
+                }
+
+            });
         });
 
         $('#department').change(function(){
