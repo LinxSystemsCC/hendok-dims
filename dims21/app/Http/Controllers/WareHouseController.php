@@ -146,10 +146,11 @@ class WareHouseController extends Controller
         $category = $request->get("category");
         $product = $request->get("product");
         $qty = $request->get("qty");
+        $operator = Auth::user()->UserName;
 
         //dd($product,$category,$department,$qty);
 
-        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertPrintForGenericLabels ?,?,?,?', array($product,$category,$department,$qty));
+        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertPrintForGenericLabels ?,?,?,?,?', array($product,$category,$department,$qty,$operator));
         
         return response()->json($returndata);
     }
@@ -918,10 +919,10 @@ where intDeptID =".$deptId);
 
         $machines = DB::connection('sqlsrv2')
             ->select("select strMachineName,intAutoMachineID intMachineID from tblMachines where intAutoMachineID =".$machine);
-       /* $machines = DB::connection('sqlsrv2')
+        /* $machines = DB::connection('sqlsrv2')
             ->select('exec spGetMachinesByDept ?',
                 array($deparment)
-            );*/
+            );*/ 
         $products = DB::connection('sqlsrv2')
             ->select('exec spGetProductsToPrint ?,?',
                 array($machine,$deparment)
