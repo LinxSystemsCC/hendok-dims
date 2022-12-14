@@ -176,9 +176,10 @@ class WareHouseController extends Controller
         $tableCols = $tableCols[0]->tableCols;
         //dd($tableCols);
 
-        if (count($permissions) == 0)
-            DB::connection('sqlsrv3')->statement('exec spInsertUserPermissions ?', array($userid));
-        
+        // if (count($permissions) == 0)
+        //     DB::connection('sqlsrv3')->statement('exec spInsertUserPermissions ?', array($userid));
+        DB::connection('sqlsrv3')->statement('exec spCheckUserPermissions ?', array($userid));
+
         //dd($userid);
         //dd($permissions);
         return view('warehouse/userpermissions')->with("id",$userid)->with("permissions",$permissions)->with("tableCols", $tableCols);
