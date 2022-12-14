@@ -170,15 +170,16 @@ class WareHouseController extends Controller
     }
 
     public function userpermissions($userid){
-        $permissions = DB::connection('sqlsrv3')->select("select * from viewUserPermissions Where UserID =".$userid ." and allowView <> 0");
+        $permissions = DB::connection('sqlsrv2')->select("select * from viewUserPermissions Where UserID =".$userid ." and allowView <> 0");
         
-        $tableCols = DB::connection('sqlsrv3')->select("select max(countHeirarchy) as tableCols From tblDIMSSystemOptions");
+        $tableCols = DB::connection('sqlsrv2')->select("select max(countHeirarchy) as tableCols From tblDIMSSystemOptions");
         $tableCols = $tableCols[0]->tableCols;
         //dd($tableCols);
 
-        // if (count($permissions) == 0)
-        //     DB::connection('sqlsrv3')->statement('exec spInsertUserPermissions ?', array($userid));
-        DB::connection('sqlsrv3')->statement('exec spCheckUserPermissions ?', array($userid));
+        if (count($permissions) == 0)
+            DB::connection('sqlsrv2')->statement('exec spInsertUserPermissions ?', array($userid));
+
+        //DB::connection('sqlsrv2')->statement('exec spCheckUserPermissions ?', array($userid));
 
         //dd($userid);
         //dd($permissions);
