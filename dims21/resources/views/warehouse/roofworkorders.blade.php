@@ -128,7 +128,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="control-label" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sales Orders</label>
+                        <label class="control-label" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice Orders</label>
                         <textarea  type="text" rows="20" class="form-control input-sm col-xs-1" id="salesorders" required></textarea>
 
                     </div>

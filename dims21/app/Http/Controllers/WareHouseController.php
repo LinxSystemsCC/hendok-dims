@@ -179,7 +179,7 @@ class WareHouseController extends Controller
         if (count($permissions) == 0)
             DB::connection('sqlsrv2')->statement('exec spInsertUserPermissions ?', array($userid));
 
-        //DB::connection('sqlsrv2')->statement('exec spCheckUserPermissions ?', array($userid));
+        DB::connection('sqlsrv2')->statement('exec spCheckUserPermissions ?', array($userid));
 
         //dd($userid);
         //dd($permissions);
