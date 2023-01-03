@@ -1305,7 +1305,7 @@ where intDeptID =".$deptId);
         $labelID = $request->get("labelID");
         $statement = "UPDATE";
         $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$labelID,$statement)); 
-        return response()->json($return); //TODO updateSavedLabels
+        return response()->json($return);
     }
 
     public function deleteSavedLabels(Request $request){
@@ -1314,7 +1314,7 @@ where intDeptID =".$deptId);
         $statement = "DELETE";
         //dd($labelname,$labelID);
         $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$labelID,$statement)); 
-        return response()->json($return); //TODO updateSavedLabels
+        return response()->json($return);
     }
     
     public function mapLabelToProdCat(Request $request){
@@ -1585,14 +1585,14 @@ where intDeptID =".$deptId);
     public function updateLabelMapping(Request $request){
         $departmentName = $request->get("departmentName");
         $printerName = $request->get("printerName");
-        $return = DB::connection('sqlsrv2')->select('exec spUpdatePrinterMapping ?,?',array($departmentName,$printerName)); //TODO updateLabelMapping
+        $return = DB::connection('sqlsrv2')->select('exec spUpdatePrinterMapping ?,?',array($departmentName,$printerName));
         return response()->json($return);
     }
 
     public function deleteLabelMapping(Request $request){
         $departmentName = $request->get("departmentName");
         $printerName = $request->get("printerName");
-        $return = DB::connection('sqlsrv2')->select('exec spDeletePrinterMapping ?,?',array($departmentName,$printerName)); //TODO deleteLabelMapping
+        $return = DB::connection('sqlsrv2')->select('exec spDeletePrinterMapping ?,?',array($departmentName,$printerName));
         return response()->json($return);
     }
 
