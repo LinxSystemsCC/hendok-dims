@@ -126,7 +126,7 @@ if ((Auth::guest()))
             //console.debug(checked);
 
             if (checked == true){
-                for (let index = 1; index <= rowNum; index++) {
+                for (let index = 1; index <= rowNum.lenght; index++) {
                     $('#'+rowName+"_"+index).prop('checked', true);
                 }
             }

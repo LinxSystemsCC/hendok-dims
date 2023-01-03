@@ -420,7 +420,11 @@ if ((Auth::guest()))
                             <a href='{!!url("/location")!!}'>Locations</a>
                             @endif
                         </li>
-                        
+                        <li>
+                            {{-- @if($locations !="0") --}}
+                            <a href='{!!url("/labelspage")!!}'>Labels</a> <!-- TODO add userpermission for labels -->
+                            {{-- @endif --}}
+                        </li>
                         <li>
                             @if($mm2a !="0") 
                             <a href='{!!url("/mapmachinetoarea")!!}'>Map Machine To Area</a> 
@@ -440,6 +444,11 @@ if ((Auth::guest()))
                             @if($mp2i !="0")
                             <a href='{!!url("/mapitemstopallet")!!}'>Map Pallet To Items</a> 
                             @endif
+                        </li>
+                        <li>
+                            {{-- @if($mp2i !="0") --}}
+                            <a href='{!!url("/labelmapping")!!}'>Map Label to Product Category</a> <!-- TODO add userpermission for labelmapping -->
+                            {{-- @endif --}}
                         </li>
                         <li>
                             @if($galvcustomers !="0")

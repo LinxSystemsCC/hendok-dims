@@ -835,6 +835,8 @@ Route::get('initiateproductonmachine', [WareHouseController::class,'initiateprod
 Route::get('getPalletsJson', [WareHouseController::class,'getPalletsJson']);
 Route::get('getDeptname', [WareHouseController::class,'getDeptname']);
 Route::get('getAreaname', [WareHouseController::class,'getAreaname']);
+Route::get('getLabels', [WareHouseController::class,'getLabels']);
+Route::get('getMappedLabels', [WareHouseController::class,'getMappedLabels']);
 Route::get('getCustomername', [WareHouseController::class,'getCustomername']);
 Route::get('getScales', [WareHouseController::class,'getScales']);
 Route::get('getMachines', [WareHouseController::class,'getMachines']);
@@ -1022,7 +1024,14 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
+    Route::post('saveLabels', [WareHouseController::class,'saveLabels']);  
+    Route::post('updateSavedLabels', [WareHouseController::class,'updateSavedLabels']);  
+    Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);  
+    Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']); 
+    Route::post('deleteMappedLabels', [WareHouseController::class,'deleteMappedLabels']);    
     Route::get('areapage', [WareHouseController::class,'areapage']);
+    Route::get('labelspage', [WareHouseController::class,'labelspage']);
+    Route::get('labelmapping', [WareHouseController::class,'labelmapping']);
     Route::get('genericproductlabels', [WareHouseController::class,'genericproductlabels']);
     Route::get('userpermissions/{userid}', [WareHouseController::class,'userpermissions']);
     Route::get('dashboard', [WareHouseController::class,'dashboard']);

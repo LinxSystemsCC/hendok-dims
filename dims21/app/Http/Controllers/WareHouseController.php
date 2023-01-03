@@ -134,6 +134,16 @@ class WareHouseController extends Controller
         return view('warehouse/areas');
     }
 
+    public function labelspage(){
+        return view('warehouse/labels');
+    }
+
+    public function labelmapping(){
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
+        $label = DB::connection('sqlsrv2')->select("select * from tblPrinterLabels");
+        return view('warehouse/labelmapping')->with('dept',$dept)->with('label',$label);
+    }
+
     public function genericproductlabels(){
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
@@ -1281,6 +1291,54 @@ where intDeptID =".$deptId);
             ->select("select * from viewtblProducts");
             return view('warehouse/mapitemstopallet')->with('pallets',$pallets)->with('products',$products);
     }
+
+    public function saveLabels(Request $request){
+        $labelname = $request->get("labelname");
+        $labelID = $request->get("labelID");
+        $statement = "INSERT";
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$labelID,$statement)); 
+        return response()->json($return);
+    }
+
+    public function updateSavedLabels(Request $request){
+        $labelname = $request->get("labelname");
+        $labelID = $request->get("labelID");
+        $statement = "UPDATE";
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$labelID,$statement)); 
+        return response()->json($return); //TODO updateSavedLabels
+    }
+
+    public function deleteSavedLabels(Request $request){
+        $labelname = $request->get("labelname");
+        $labelID = $request->get("labelID");
+        $statement = "DELETE";
+        //dd($labelname,$labelID);
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$labelID,$statement)); 
+        return response()->json($return); //TODO updateSavedLabels
+    }
+    
+    public function mapLabelToProdCat(Request $request){
+        $productcategory = $request->get("productcategory");
+        $labelname = $request->get("labelname");
+        $intAutoLinkedCatLabelId = 0;
+        $statement = "INSERT";
+
+        $return = DB::connection('sqlsrv2') ->select("EXEC spMapProdCatToLabelType ?,?,?,?",array($productcategory,$labelname,$intAutoLinkedCatLabelId,$statement));
+        return response()->json($return);
+    }
+
+    public function deleteMappedLabels(Request $request){
+        $productcategory = '';
+        $labelname = '';
+        $intAutoLinkedCatLabelId = $request->get("labelid");
+        $statement = "DELETE";
+        //dd($productcategory,$labelname);
+
+        $return = DB::connection('sqlsrv2') ->select("EXEC spMapProdCatToLabelType ?,?,?,?",array($productcategory,$labelname,$intAutoLinkedCatLabelId,$statement));
+        return response()->json($return);
+    }
+
+
     public function mapdeptitem(){
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");
@@ -1325,8 +1383,23 @@ where intDeptID =".$deptId);
     }
 
     public function getAreaname(){
-        $palletsjson = DB::connection('sqlsrv2') ->select("EXEC spGetAreaNames ");
+        $palletsjson = DB::connection('sqlsrv2') ->select("EXEC spGetAreaNames");
         return response()->json($palletsjson);
+    }
+    
+    public function getMappedLabels(){
+        $strProdCat = "test";
+        $labelType = 0;
+        $intAutoLinkedCatLabelId = 0;
+        $statement = "SELECT";
+
+        $mappedlabels = DB::connection('sqlsrv2') ->select("EXEC spMapProdCatToLabelType ?,?,?,?",array($strProdCat,$labelType,$intAutoLinkedCatLabelId,$statement));
+        return response()->json($mappedlabels);
+    }
+
+    public function getLabels(){
+        $labels = DB::connection('sqlsrv2') ->select("Select * from tblPrinterLabels");
+        return response()->json($labels);
     }
 
     public function getCustomername(){
@@ -1509,7 +1582,21 @@ where intDeptID =".$deptId);
         return response()->json($returnmach);
     }
 
-    public function updateAreaName(Request $request){
+    public function updateLabelMapping(Request $request){
+        $departmentName = $request->get("departmentName");
+        $printerName = $request->get("printerName");
+        $return = DB::connection('sqlsrv2')->select('exec spUpdatePrinterMapping ?,?',array($departmentName,$printerName)); //TODO updateLabelMapping
+        return response()->json($return);
+    }
+
+    public function deleteLabelMapping(Request $request){
+        $departmentName = $request->get("departmentName");
+        $printerName = $request->get("printerName");
+        $return = DB::connection('sqlsrv2')->select('exec spDeletePrinterMapping ?,?',array($departmentName,$printerName)); //TODO deleteLabelMapping
+        return response()->json($return);
+    }
+
+    public function update(Request $request){
 
         $theAreaname = $request->get("theAreaname");
         $palletid = $request->get("palletid");

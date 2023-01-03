@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 
@@ -26,62 +25,72 @@
 
 </head>
 
-<div class="col-lg-12"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;">
+
+<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
+    <div class="col-lg-2" style="background: white;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
+    
+    
     <div class="col-lg-10" >
-        <h3 style="flex-grow: 1;">Map Machine To Area</h3>
-        <div class="col-lg-12" >
-            
-            <div class="col-lg-4"  style="background: white;">
-                <h4>Set-Up</h4>
-                <fieldset class="well">
-                    <form>
-                        Map Machine To Area
-                        <div class="form-group">
-                            <label class="control-label" for="area"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Area </label>
-                            <select  class="form-control input-sm col-xs-1" id="area" required>
-                                <option></option>
-                                @foreach($area as $val)
-                                    <option value="{{$val->intAutoID}}">{{$val->strAreaName}}</option>
-                                @endforeach
-                            </select>
+        <h3 style="flex-grow: 1;">Map label to Product Category</h3>
+        <div>
+            <div class="col-lg-12" >
+                <div class="col-lg-4"  style="background: white;">
+                    <fieldset class="well">
+                        <form>
+                            <h4>Mapping</h4>
+                            <div class="form-group">
+                                <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
+                                <select  class="form-control input-sm col-xs-1" id="department" required>
+                                    <option></option>
+                                    @foreach($dept as $val)
+                                        <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+                                <select  class="form-control input-sm col-xs-1" id="productcategory" required>
+
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="labelname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Label Type </label>
+                                <select  class="form-control input-sm col-xs-1" id="labelname" required>
+                                    <option></option>
+                                    @foreach($label as $val)
+                                        <option value="{{$val->intLabelTypeID}}">{{$val->strLabelName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <br>
+                            <button type="button" id="mapLabelToProdCat" class="btn-lg btn-success" >Map</button>
+                            <br>
+    
+    
+                        </form>
+                    </fieldset>
+                </div>
+                <div class="col-lg-8"  style="background: white;">
+                    <h4>Existing Mappings</h4>
+    
+    
+                    <div class="col-lg-12" id="afterFilter">
+                        <div id="gridContainer">
                         </div>
-                        <div class="form-group">
-                            <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine </label>
-                            <select  class="form-control input-sm col-xs-1" id="machine" required>
-                                <option></option>
-                                @foreach($machine as $val)
-                                    <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
-                        <br>
-                        <button type="button" id="savemachine" class="btn-lg btn-success" >Save</button>
-                        <br>
-
-
-                    </form>
-                </fieldset>
-                <hr>
-
-
-            </div>
-            <div class="col-lg-8"  style="background: white;">
-                <h4>Data Grid</h4>
-                <div class="col-lg-12" id="afterFilter">
-                    <div id="gridContainer">
+    
+    
                     </div>
-
-
                 </div>
             </div>
         </div>
+        
     </div>
 </div>
 
@@ -104,17 +113,15 @@
     });
     $(document).ready(function() {
 
-
-        $('#savemachine').click(function(){
+        $('#mapLabelToProdCat').click(function(){
 
             $.ajax({
 
-                url: '{!!url("/savesMachinetoarea")!!}',
+                url: '{!!url("/mapLabelToProdCat")!!}',
                 type: "POST",
                 data: {
-                    machineid: $('#machine').val(),
-                    areaid: $('#area').val()
-
+                    productcategory: $('#productcategory').val(), 
+                    labelname: $('#labelname').val() 
                 },
                 success: function (data) {
                     location.reload();
@@ -124,10 +131,9 @@
 
         });
 
-
         $.ajax({
 
-            url: '{!!url("/getMachinemappedtoarea")!!}',
+            url: '{!!url("/getMappedLabels")!!}',
             type: "GET",
             data: {
 
@@ -135,12 +141,14 @@
             success: function (data) {
 
                 $("#gridContainer").dxDataGrid({
-
                     dataSource:data, //as json
-
                     showBorders: true,
+                    hoverStateEnabled: true,
                     filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
+                    columnAutoWidth: true,
                     paging:{
                         pageSize: 50,
                     },
@@ -149,7 +157,7 @@
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('Machines');
+                        const worksheet = workbook.addWorksheet('PrinterMapping');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -157,7 +165,7 @@
                             autoFilterEnabled: true,
                         }).then(() => {
                             workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Machines.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'PrinterMapping.xlsx');
                             });
                         });
                         e.cancel = true;
@@ -165,45 +173,43 @@
 
                     columns: [
                         {
-                            dataField: "intAutoMappedMachineArea",
-                            caption: "ID",
-                            width: 50,
-
-                        }, {
-                            dataField: "strMachineName",
-                            caption: "Machine",
-                            width: 250,
-
-                        }, {
-                            dataField: "strAreaName",
-                            caption: "Area",
-                            width: 250,
-
-                        }
-                        , {
-                            dataField: "dteCreate",
-                            caption: "Date Time",
-                            width: 125,
-
+                            dataField: "intAutoLinkedCatLabelId",
+                            caption: "Auto ID",
+                        },{
+                            dataField: "strLabelName",
+                            caption: "Label",
+                        },{
+                            dataField: "strProductCategory",
+                            caption: "Product Category",
+                        },{
+                            dataField: "intLabelTypeID",
+                            caption: "label ID",
+                        },{
+                            dataField: "dteCreated",
+                            caption: "Date Created",
                         },
                     ],
                     onRowDblClick:function(e){
 
                         // console.debug(e.row,cells[e.columnIndex]);
-                        console.log(e.data.intAutoMappedMachineDept);
-                        var palletid =  e.data.intAutoMappedMachineDept;
-                        var dialog = $('<p>Un Mapped</p>').dialog({
+                        //console.log(e.data.intAutoID);
+                        var labelid =  e.data.intAutoLinkedCatLabelId;
+
+                        //data[0].sendto
+
+
+
+                        $('<p>Are you sure you would like to delete the following mapping?</p>').dialog({
                             height: 300, width: 700,modal: true,containment: false,
                             buttons: {
-                                "Update": function () {
 
-                                    // console.log($('#statusselect').val());
+                                "Delete": function () {
                                     $.ajax({
 
-                                        url: '{!!url("/unmapmachinefromdept")!!}',
+                                        url: '{!!url("/deleteMappedLabels")!!}',
                                         type: "POST",
                                         data: {
-                                            mappingId:palletid
+                                            labelid: labelid
                                         },
                                         success: function (data) {
                                             location.reload();
@@ -211,11 +217,11 @@
 
                                     });
 
-                                }
+                                    
+                                },
                             }
+                                    
                         });
-
-
 
                     },
                     onRowClick:function(e){
@@ -225,6 +231,39 @@
 
             }
 
+        });
+
+        $('#department').change(function(){
+            $.ajax({
+
+                url: '{!!url("/getDepListToPlan")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: $('#department option:selected').text(),
+                    strProductCategory: $("#productcategory").val()
+
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#productcategory").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.strProductCategory+'">'+o.strProductCategory+'</option>';
+                    });
+                    $("#productcategory").append(toAppend);
+                    $("#productcategory").select2();
+
+                }
+
+            });
+        });
+        
+        $('.sidebar ul li a').on(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
         });
 
         $('.sidebar ul li a').click(function(){
@@ -270,10 +309,4 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
-
-
-
-
-
-
 </script>

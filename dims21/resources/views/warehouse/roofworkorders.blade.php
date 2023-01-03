@@ -101,7 +101,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
 
     </div>
-   
+    
     <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">

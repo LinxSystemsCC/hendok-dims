@@ -151,7 +151,7 @@
         <br><br><br>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn-danger btn-lg" id="savedepartment" style="width: 100%;">SAVE</button>
+                    <button class="btn-danger btn-lg" id="savedepartment" style="width: 100%;">SAVE</button>
                 </div>
             </div>
         </div>
@@ -316,6 +316,7 @@
 
             });
         });
+
         $('#but_deptheader').click(function(){
             $.ajax({
 
