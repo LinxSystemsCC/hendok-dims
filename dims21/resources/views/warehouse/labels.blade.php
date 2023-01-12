@@ -48,9 +48,15 @@
                                 <input type="text"  class="form-control input-sm col-xs-1" id="labelname" required>
                             </div>
                             <br>
+
                             <div class="form-group">
-                                <label class="control-label" for="labelID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Label ID </label>
-                                <input type="number"  class="form-control input-sm col-xs-1" id="labelID" required>
+                                <label class="control-label" for="labelID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Printer</label>
+                                <select  class="form-control input-sm col-xs-1" id="labelID" required>
+                                    <option></option>
+                                    @foreach($printers as $printer)
+                                        <option value="{{$printer->intLabelType}}">{{$printer->strPrinterName}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <br>
                             <button class="btn-success btn-lg" id="saveLabels" style="width: 100%;">SAVE</button>

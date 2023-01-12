@@ -1,14 +1,12 @@
 <?php
 if ((Auth::guest()))
 {
-
 }else{
     $v  =  new \App\Http\Controllers\SalesForm();
 }
 $nwor = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order Roof');
 $ppso = $v->getThingsUserPermissions(Auth::user()->UserID,'Pre Planning SO');
 $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
-
 ?>
 
 <!DOCTYPE html>

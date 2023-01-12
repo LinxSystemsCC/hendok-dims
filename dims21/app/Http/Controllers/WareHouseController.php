@@ -135,7 +135,8 @@ class WareHouseController extends Controller
     }
 
     public function labelspage(){
-        return view('warehouse/labels');
+        $printers = DB::connection('sqlsrv2')->select("select * from tblPrintersList");
+        return view('warehouse/labels')->with("printers", $printers);
     }
 
     public function labelmapping(){
@@ -1546,7 +1547,6 @@ where intDeptID =".$deptId);
     public function savesgroupname(Request $request){
         $groupname = $request->get("groupname");
 
-        //
         $returnmach = DB::connection('sqlsrv2')
             ->select('exec spCreateGroupName ?',array($groupname)
             );
@@ -1574,7 +1574,6 @@ where intDeptID =".$deptId);
 
         $thedeptname = $request->get("thedeptname");
         $palletid = $request->get("palletid");
-        //
         $returnmach = DB::connection('sqlsrv2')
             ->select('exec spUpdateDepartments ?,?',
                 array($palletid,$thedeptname)
