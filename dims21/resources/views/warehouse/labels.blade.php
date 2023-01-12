@@ -50,11 +50,11 @@
                             <br>
 
                             <div class="form-group">
-                                <label class="control-label" for="labelID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Printer</label>
-                                <select  class="form-control input-sm col-xs-1" id="labelID" required>
+                                <label class="control-label" for="printerID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Printer</label>
+                                <select  class="form-control input-sm col-xs-1" id="printerID" required>
                                     <option></option>
                                     @foreach($printers as $printer)
-                                        <option value="{{$printer->intLabelType}}">{{$printer->strPrinterName}}</option>
+                                        <option value="{{$printer->ID}}">{{$printer->strPrinter}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -107,7 +107,7 @@
                 type: "POST",
                 data: {
                     labelname: $('#labelname').val(),
-                    labelID: $('#labelID').val(),
+                    printerID: $('#printerID').val(),
                 },
                 success: function (data) {
                     location.reload();

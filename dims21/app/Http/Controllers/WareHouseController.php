@@ -135,7 +135,7 @@ class WareHouseController extends Controller
     }
 
     public function labelspage(){
-        $printers = DB::connection('sqlsrv2')->select("select distinct strPrinterName, intLabelType from tblPrintersList");
+        $printers = DB::connection('sqlsrv2')->select("select * from tblPrinters");
         return view('warehouse/labels')->with("printers", $printers);
     }
 
@@ -1295,9 +1295,10 @@ where intDeptID =".$deptId);
 
     public function saveLabels(Request $request){
         $labelname = $request->get("labelname");
-        $labelID = $request->get("labelID");
+        $printerID = $request->get("printerID");
         $statement = "INSERT";
-        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$labelID,$statement)); 
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$printerID,$statement)); 
+        dd($return);
         return response()->json($return);
     }
 
