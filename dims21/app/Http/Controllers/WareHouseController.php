@@ -135,7 +135,7 @@ class WareHouseController extends Controller
     }
 
     public function labelspage(){
-        $printers = DB::connection('sqlsrv2')->select("select DISTINCT strPrinterName from tblPrintersList");
+        $printers = DB::connection('sqlsrv2')->select("select distinct strPrinterName, intLabelType from tblPrintersList");
         return view('warehouse/labels')->with("printers", $printers);
     }
 
