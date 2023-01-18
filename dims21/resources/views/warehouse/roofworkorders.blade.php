@@ -839,9 +839,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         pageSize: 20,
                                     },editing: {
                                         mode: 'row',
-                                        allowUpdating: true,
+                                        // allowUpdating: true,
                                         // allowAdding: true,
-                                        allowDeleting: true,
+                                        // allowDeleting: true,
                                         useIcons: true,
                                     },
                                     selection: {
@@ -851,27 +851,31 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     columns: [{ 
                                             type: "buttons" 
                                         },{
-                                            dataField: "intDetailId",
+                                            dataField: "intRoofingHeader",
                                             caption: "ID",
-                                            allowEditing: false,
                                         }, {
-                                            dataField: "itemCode",
-                                            caption: "Item Code",
-                                            allowEditing: false,
+                                            dataField: "strSONum",
+                                            caption: "SO Number",
                                         }, {
-                                            dataField: "itemName",
+                                            dataField: "StoreName",
+                                            caption: "Store Name",
+                                        }, {
+                                            dataField: "Code",
+                                            caption: "Code",
+                                        }, {
+                                            dataField: "ItemName",
                                             caption: "Item Name",
-                                            allowEditing: false,
                                         }, {
-                                            dataField: "Quantity",
+                                            dataField: "intMachineId",
+                                            caption: "Machine Id",
+                                        },
+                                        {
+                                            dataField: "intQty",
                                             caption: "Qty",
-                                        }, {
-                                            dataField: "Price",
-                                            caption: "Price",
-                                            allowEditing: false,
-                                        }, {
-                                            dataField: "strComment",
-                                            caption: "comment",
+                                        },
+                                        {
+                                            dataField: "UniqueID",
+                                            caption: "Unique ID",
                                         },
                                     ],
                                     onSaved(data){
