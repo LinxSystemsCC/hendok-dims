@@ -232,7 +232,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         
                 </div>
                 <br>
-                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="saveWorkOrder" aria-label="Save">
+                </div>
             </div>
         </div>
 
@@ -458,37 +460,16 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 
         });
 
-        $('#saveorder').click(function(){
-            //console.debug('saving this');
+        $('#saveWorkOrder').click(function(){
+            var linesgrid = $("#linesgrid").dxDataGrid("instance");
+            var dataSource = linesgrid.getDataSource();
 
-            var orders = [];
-            
-            $("input[type=checkbox]:checked").each(function() {
-                orders.push($(this).val());
-            });
-
-            var workOrders = [];
-            $.each(orders, function(index, value){
-                //console.debug(value);
-                workOrders.push({
-                    'department': $('#department option:selected').text() ,
-                    'productcategory' :$('#productcategory option:selected').text() ,
-                    'prodname': $('#prodname option:selected').val() ,
-                    'soNum': $("#soNum_"+value).val(),
-                    'qty': $("#Qty_"+value).val(),
-                    'orderLineId': value,
-                    'machine': $('#machinename option:selected').text()
-                });
-            });
-
-            //console.debug(orders);
-            //console.debug(workOrders);
-
+            console.log(dataSource);
             $.ajax({
                 url: '{!!url("/insertRoofWorkOrder")!!}',
                 type: "POST",
                 data: {
-                    workOrders: workOrders,
+                    workOrders: dataSource._items,
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
@@ -749,7 +730,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             success: function (data) {
                 //console.debug(data);
                 
-                $("#headergrid").dxDataGrid({
+                const headergrid = $("#headergrid").dxDataGrid({
                     dataSource:data, //as json
                     showBorders: true,
                     hoverStateEnabled: true,
@@ -823,7 +804,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             success: function (data) {
                                 //console.debug(data);
                                 
-                                const orderlines = $("#linesgrid").dxDataGrid({
+                                const linesgrid =  $("#linesgrid").dxDataGrid({
                                     dataSource:data, //as json
                                     showBorders: true,
                                     hoverStateEnabled: true,
@@ -839,7 +820,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         pageSize: 20,
                                     },editing: {
                                         mode: 'row',
-                                        // allowUpdating: true,
+                                        allowUpdating: true,
                                         // allowAdding: true,
                                         // allowDeleting: true,
                                         useIcons: true,
@@ -848,11 +829,13 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         mode: 'single',
                                     },
 
-                                    columns: [{ 
-                                            type: "buttons" 
+                                    columns: [{
+                                            dataField: "UniqueID",
+                                            caption: "Unique ID",
                                         },{
                                             dataField: "intRoofingHeader",
                                             caption: "ID",
+                                            visible: false,
                                         }, {
                                             dataField: "strSONum",
                                             caption: "SO Number",
@@ -862,6 +845,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         }, {
                                             dataField: "Code",
                                             caption: "Code",
+                                            visble: false,
                                         }, {
                                             dataField: "ItemName",
                                             caption: "Item Name",
@@ -873,10 +857,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                             dataField: "intQty",
                                             caption: "Qty",
                                         },
-                                        {
-                                            dataField: "UniqueID",
-                                            caption: "Unique ID",
-                                        },
+                                        
                                     ],
                                     onSaved(data){
                                         var orderheader = $("#orderheader").dxDataGrid("instance");
@@ -886,22 +867,22 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         data = data.changes[0]["key"];
                                         // console.debug(type);
                                         // console.debug(data);
-                                        $.ajax({
-                                            url: '{!!url("/updateDeleteOrderLines")!!}',
-                                            type: "POST",
-                                            data: {
-                                                ID: headerID,
-                                                intDetailId: data["intDetailId"],
-                                                Price: data["Price"],
-                                                Quantity: data["Quantity"],
-                                                comment: data["strComment"],
-                                                statement: type,
-                                            },
-                                            success: function (data) {
-                                                //location.reload();
-                                                orderheader.selectRows(row);
-                                            }
-                                        });
+                                        // $.ajax({
+                                        //     url: '{!!url("/updateDeleteOrderLines")!!}',
+                                        //     type: "POST",
+                                        //     data: {
+                                        //         ID: headerID,
+                                        //         intDetailId: data["intDetailId"],
+                                        //         Price: data["Price"],
+                                        //         Quantity: data["Quantity"],
+                                        //         comment: data["strComment"],
+                                        //         statement: type,
+                                        //     },
+                                        //     success: function (data) {
+                                        //         //location.reload();
+                                        //         orderheader.selectRows(row);
+                                        //     }
+                                        // });
                                     },
                                     
                                 });
