@@ -1159,6 +1159,19 @@ where intDeptID =".$deptId);
         return response()->json($salesorders);
     }
 
+    public function getroofingheaders(Request $request){
+        $datefrom = $request->get("datefrom");
+        $dateto = $request->get("dateto");
+        $headers = DB::connection('sqlsrv3')->select("exec spRoofingPlannedHeaders ?,?", array($datefrom,$dateto));
+        return response()->json($headers);
+    }
+
+    public function getroofinglines(Request $request){
+        $ID = $request->get("ID");
+        $lines = DB::connection('sqlsrv3')->select("exec spRoofingPlannedLines ?", array($ID));
+        return response()->json($lines);
+    }
+
     public function getjobcard($jobid){
         $jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?',array($jobid));
         //dd($jobdata);

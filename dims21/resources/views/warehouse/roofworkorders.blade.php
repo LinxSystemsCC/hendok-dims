@@ -170,6 +170,21 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     </button>
                 </div>
                 <div class="modal-body">
+                    {{-- Date from --}}
+                    <label class="control-label" for="datefromheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date From </label>
+                    <input type="date" id="datefromheader">
+
+                    {{-- Date To --}}
+                    <label class="control-label" for="datetoheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
+                    <input type="date" id="datetoheader">
+                    <button class="btn btn-info" id="getheaders">GET</button>
+                    
+                    <div id="headergrid" style="width: 100% !important; height:50%;">
+                    </div>
+
+                    <div id="linesgrid" style="width: 100% !important; height:50%;">
+                    </div>
+
                     {{-- <div class="input-group mb-3">
                         <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
                         <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
@@ -246,6 +261,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     $(document).ready(function() {
         $('#PPSO').hide();
         $('#SOLabel').hide();
+        var date = (new Date()).toISOString().slice(0, 10);
+		$('#datefrom').val(date);
+		$('#dateto').val(date);
+        $('#datefromheader').val(date);
+		$('#datetoheader').val(date);
         
 
         $.ajax({
@@ -360,6 +380,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
         });
 
+        headersFunction();
+        
+        $('#getheaders').click(function(){
+            headersFunction();
+        });
 
         $('#save').click(function(){
             if (($("#reference").val()).length < 1)
@@ -712,6 +737,177 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             $(this).addClass("active").siblings().removeClass("active");
         });
     });
+
+    function headersFunction(){
+        $.ajax({
+            url: '{!!url("/getroofingheaders")!!}',
+            type: "GET",
+            data: {
+                datefrom: $('#datefromheader').val(),
+                dateto: $('#datetoheader').val()
+            },
+            success: function (data) {
+                //console.debug(data);
+                
+                $("#headergrid").dxDataGrid({
+                    dataSource:data, //as json
+                    showBorders: true,
+                    hoverStateEnabled: true,
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    noDataText: 'No Sales Orders between the date range specified',
+                    scrolling: {
+                        mode: 'infinite',
+                    },
+                    paging:{
+                        pageSize: 20,
+                    },
+                    editing:{
+                        mode: 'form',
+                        // allowUpdating: true,
+                        // allowAdding: true,
+                        allowDeleting: true,
+                        useIcons: true,
+                    },
+                    selection: {
+                        mode: 'single',
+                    },
+
+                    columns: [
+                        { 
+                            type: "buttons" 
+                        },{
+                            dataField: "intRoofingHeader",
+                            caption: "ID",
+                        }, {
+                            dataField: "strReference",
+                            caption: "Reference",
+                        }, 
+                        {
+                            dataField: "UserName",
+                            caption: "User Name",
+                        }, 
+                        {
+                            dataField: "dateTimeCreated",
+                            caption: "Time Created",
+                        }, 
+                    ],
+                    // onSaved(data){
+                    //     data = data.changes[0]["key"];
+                    //     console.debug(data)
+                    //     $.ajax({
+                    //         url: '{!!url("/deleteOrder")!!}',
+                    //         type: "POST",
+                    //         data: {
+                    //             ID: data["ID"],
+                    //         },
+                    //         success: function (data) {
+                                
+                    //         }
+                    //     });
+                    // }, //TODO fix this update method
+
+                    onRowClick:function(e){
+                        $('#linesgrid').show();
+                        var headerID = e.data.intRoofingHeader
+
+                        $.ajax({
+                            url: '{!!url("/getroofinglines")!!}',
+                            type: "GET",
+                            data: {
+                                ID : headerID,
+                            },
+                            success: function (data) {
+                                //console.debug(data);
+                                
+                                const orderlines = $("#linesgrid").dxDataGrid({
+                                    dataSource:data, //as json
+                                    showBorders: true,
+                                    hoverStateEnabled: true,
+                                    filterRow: { visible: true },
+                                    filterPanel: { visible: true },
+                                    headerFilter: { visible: true },
+                                    allowColumnResizing: true,
+                                    columnAutoWidth: true,
+                                    scrolling: {
+                                        mode: 'infinite',
+                                    },
+                                    paging:{
+                                        pageSize: 20,
+                                    },editing: {
+                                        mode: 'row',
+                                        allowUpdating: true,
+                                        // allowAdding: true,
+                                        allowDeleting: true,
+                                        useIcons: true,
+                                    },
+                                    selection: {
+                                        mode: 'single',
+                                    },
+
+                                    columns: [{ 
+                                            type: "buttons" 
+                                        },{
+                                            dataField: "intDetailId",
+                                            caption: "ID",
+                                            allowEditing: false,
+                                        }, {
+                                            dataField: "itemCode",
+                                            caption: "Item Code",
+                                            allowEditing: false,
+                                        }, {
+                                            dataField: "itemName",
+                                            caption: "Item Name",
+                                            allowEditing: false,
+                                        }, {
+                                            dataField: "Quantity",
+                                            caption: "Qty",
+                                        }, {
+                                            dataField: "Price",
+                                            caption: "Price",
+                                            allowEditing: false,
+                                        }, {
+                                            dataField: "strComment",
+                                            caption: "comment",
+                                        },
+                                    ],
+                                    onSaved(data){
+                                        var orderheader = $("#orderheader").dxDataGrid("instance");
+                                        var row = orderheader.getSelectedRowKeys();
+                                        //console.debug(data);
+                                        var type = data.changes[0]["type"];
+                                        data = data.changes[0]["key"];
+                                        // console.debug(type);
+                                        // console.debug(data);
+                                        $.ajax({
+                                            url: '{!!url("/updateDeleteOrderLines")!!}',
+                                            type: "POST",
+                                            data: {
+                                                ID: headerID,
+                                                intDetailId: data["intDetailId"],
+                                                Price: data["Price"],
+                                                Quantity: data["Quantity"],
+                                                comment: data["strComment"],
+                                                statement: type,
+                                            },
+                                            success: function (data) {
+                                                //location.reload();
+                                                orderheader.selectRows(row);
+                                            }
+                                        });
+                                    },
+                                    
+                                });
+                            }
+                        });
+                    },
+                });
+            }
+        });
+    };
 
     function escapeHtml(unsafe) {
     return unsafe
