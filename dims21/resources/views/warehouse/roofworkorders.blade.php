@@ -116,7 +116,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     </div>
 
     <div title="Pre Planning SO" id="preplanningso" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="preplanningso" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="preplanningsoTitle">Pre Planning SO</h5>
@@ -125,11 +125,23 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice Orders</label>
-                        <textarea  type="text" rows="20" class="form-control input-sm col-xs-1" id="salesorders" required></textarea>
+                    <div class="d-inline-flex w-100">
+                        <div class="form-group col-4">
+                            <label class="control-label" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sales Orders</label>
+                            <textarea  type="text" rows="20" class="form-control input-sm col-xs-1" id="salesorders" required></textarea>
+                        </div>
+                        
+                        <div class="form-group col-4">
+                            <label class="control-label" for="invoiceorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice Orders</label>
+                            <textarea  type="text" rows="20" class="form-control input-sm col-xs-1" id="invoiceorders" required></textarea>
+                        </div>
 
+                        <div class="form-group col-4">
+                            <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Company</label>
+                            <textarea  type="text" rows="20" class="form-control input-sm col-xs-1" id="company" required></textarea>
+                        </div>
                     </div>
+                        
     
                     <div class="form-group">
                         <label class="control-label" for="reference"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reference </label>
@@ -149,16 +161,16 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     </div>
 
     <div title="Job Creation" id="createjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createjobTitle">Create A Work Order</h5>
+                    <h5 class="modal-title" id="createjobTitle">Create A Roofing Work Order</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="input-group mb-3">
+                    {{-- <div class="input-group mb-3">
                         <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
                         <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
                             <option></option>
@@ -185,6 +197,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         </select>
 
                     </div>
+
                     <div class="form-group">
                         <label class="control-label" id="SOLabel" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sales Orders </label><br>
                         <div id="SOList">
@@ -198,14 +211,13 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         <select  class="form-control input-sm col-xs-1" id="machinename" required>
                             <option></option>
                         </select>
-                    </div>
+                    </div> --}}
+
+                    <div id="gridContainerWO" class="w-100"></div>
                         
                 </div>
-        <br><br><br>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn-danger btn-lg" id="saveorder" style="width: 100%;">SAVE</button>
-                </div>
+                <br>
+                
             </div>
         </div>
 
@@ -348,31 +360,65 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
         });
 
+
         $('#save').click(function(){
             if (($("#reference").val()).length < 1)
                 alert("The Reference needs to be inserted");
             else{
-                const orders = $("#salesorders").val();
-                const order = orders.split("\n");
+                const salorders = $("#salesorders").val();
+                const invorders = $("#invoiceorders").val();
+                const comp = $("#company").val();
+
+                const salesorders = salorders.split("\n");
+                const invoiceorders = invorders.split("\n");
+                const company = comp.split("\n");
                 
                 var SOnumbers = new Array();
+                var IOnumbers = new Array();
+                var CompName = new Array();
+                
+
+                linesignored = 0;
+
+                for (let i = 0; i < salesorders.length; i++)
+                    if (salesorders[i] == ''){
+                        salesorders+= 1;
+                    }else{
+                        SOnumbers.push(escapeHtml(salesorders[i]));
+                    }
+                
                 var linesignored = 0;
 
-                for (let i = 0; i < order.length; i++)
-                    if (order[i] == ''){
+                for (let i = 0; i < invoiceorders.length; i++)
+                    if (invoiceorders[i] == ''){
                         linesignored+= 1;
                     }else{
-                        SOnumbers.push({'SOnumber':escapeHtml(order[i])});
+                        IOnumbers.push(escapeHtml(invoiceorders[i]));
                     }
 
-                //console.log(SOnumbers);
-                //console.log(linesignored+' Lines have been ignored');
+
+                linesignored = 0;
+
+                for (let i = 0; i < company.length; i++)
+                    if (company[i] == ''){
+                        company+= 1;
+                    }else{
+                        CompName.push(escapeHtml(company[i]));
+                    }
+
+                var orderlines = new Array();
+                
+                for (let i = 0; i < salesorders.length; i++)
+                    orderlines.push({'SOnumbers': SOnumbers[i],'IOnumbers': IOnumbers[i],'CompanyName': CompName[i]});
+
+                // console.log(orderlines);
+                // console.log(IOnumbers);
 
                 $.ajax({
                     url: '{!!url("/insertPrePlannedSO")!!}',
                     type: "POST",
                     data: {
-                        salesorders: SOnumbers,
+                        orderlines: orderlines,
                         reference: $("#reference").val()
                     },
                     success: function (data) {

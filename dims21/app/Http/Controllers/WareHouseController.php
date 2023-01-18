@@ -1223,15 +1223,19 @@ where intDeptID =".$deptId);
     }
 
     public function insertPrePlannedSO(Request $request){
-        $salesorders = $request->get("salesorders");
+        $orderlines = $request->get("orderlines");
         $operator = Auth::user()->UserID;
         $reference = $request->get("reference");
 
-        if (is_array($salesorders)) {
-            $orderlinesxml = $this->toxml($salesorders, "xml", array("result"));
-            $data = DB::connection('sqlsrv2')
-                ->select('exec spXMLInsertRoofinSoNumToPlan ?,?,?',array($orderlinesxml,$operator,$reference));
+        if (is_array($orderlines)) {
+            $orderlinesxml = $this->toxml($orderlines, "xml", array("result"));
         }
+
+        //dd($orderlinesxml);
+
+        $data = DB::connection('sqlsrv2')->select('exec spXMLInsertRoofinSoNumToPlan ?,?,?',array($orderlinesxml,$operator,$reference));
+
+
 
         return response()->json($data);
     }
