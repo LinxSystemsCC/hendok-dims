@@ -473,7 +473,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
-                        location.reload();
+                        //location.reload();
                     }else{
                         alert(""+data[0].Result);
                     }
