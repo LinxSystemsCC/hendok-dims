@@ -464,15 +464,30 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
         $('#saveWorkOrder').click(function(){
             var linesgrid = $("#linesgrid").dxDataGrid("instance");
+            var allGridItems =  $("#linesgrid").dxDataGrid("getDataSource").items();
+            var checkedLines = new Array();
             var dataSource = linesgrid.getDataSource();
 
-            console.log(dataSource);
+            // console.debug(allGridItems);
+
+            allGridItems.forEach((element, index, value) => {
+                // console.debug(element);
+                checkedLines.push({
+                    'UniqueID': element["UniqueID"],
+                    'strSONum': element["strSONum"],
+                    'intAutoMachineID':element["strMachineName"],
+                    'ProdName': escapeHtml(element["Code"]),
+                    'intQty':element["intQty"],
+                    'Dept': 'Roofing',
+                });
+            });
+
+            console.log(checkedLines);
             $.ajax({
                 url: '{!!url("/insertRoofWorkOrder")!!}',
                 type: "POST",
                 data: {
-                    workOrders: dataSource._items,
-                    reference: $("#reference").val(),
+                    workOrders: checkedLines,
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){

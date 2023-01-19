@@ -326,7 +326,7 @@ class WareHouseController extends Controller
 
         $machines = DB::connection('sqlsrv2')->select("select * from viewRoofingMachines");
         // $machines = json_encode($machines);
-        //dd($machines);
+        // dd($machines);
 
         return view('warehouse/roofworkorders')->with('machines', $machines);
     }
@@ -1262,11 +1262,12 @@ where intDeptID =".$deptId);
         $workOrders = $request->get("workOrders");
         $userName = Auth::user()->UserName;
         $userID = Auth::user()->UserID;
+        // dd($workOrders);
 
         if (is_array($workOrders)) {
             $orderlinesxml = $this->toxml($workOrders, "xml", array("result"));
 
-            //dd($orderlinesrxml);
+            // dd($orderlinesxml);
             $data = DB::connection('sqlsrv2')->select('exec spInsertRoofingWorkOrder ?,?,?',array($orderlinesxml,$userName,$userID));
         }
 
@@ -1696,44 +1697,44 @@ where intDeptID =".$deptId);
     }
 
     private static function getTabs($tabcount)
-{
-    $tabs = '';
-    for($i = 0; $i < $tabcount; $i++)
     {
-        $tabs .= "\t";
-    }
-    return $tabs;
-}
-
-private static function asxml($arr, $elements = Array(), $tabcount = 0)
-{
-    $result = '';
-    $tabs = self::getTabs($tabcount);
-    foreach($arr as $key => $val)
-    {
-        $element = isset($elements[0]) ? $elements[0] : $key;
-        $result .= $tabs;
-        $result .= "<" . $element . ">";
-        if(!is_array($val))
-            $result .= $val;
-        else
+        $tabs = '';
+        for($i = 0; $i < $tabcount; $i++)
         {
-            $result .= "\r\n";
-            $result .= self::asxml($val, array_slice($elements, 1, true), $tabcount+1);
-            $result .= $tabs;
+            $tabs .= "\t";
         }
-        $result .= "</" . $element . ">\r\n";
+        return $tabs;
     }
-    return $result;
-}
 
-public static function toxml($arr, $root = "xml", $elements = Array())
-{
-    $result = '';
-    $result .= "<" . $root . ">\r\n";
-    $result .= self::asxml($arr, $elements, 1);
-    $result .= "</" . $root . ">\r\n";
-    return $result;
-}
+    private static function asxml($arr, $elements = Array(), $tabcount = 0)
+    {
+        $result = '';
+        $tabs = self::getTabs($tabcount);
+        foreach($arr as $key => $val)
+        {
+            $element = isset($elements[0]) ? $elements[0] : $key;
+            $result .= $tabs;
+            $result .= "<" . $element . ">";
+            if(!is_array($val))
+                $result .= $val;
+            else
+            {
+                $result .= "\r\n";
+                $result .= self::asxml($val, array_slice($elements, 1, true), $tabcount+1);
+                $result .= $tabs;
+            }
+            $result .= "</" . $element . ">\r\n";
+        }
+        return $result;
+    }
+
+    public static function toxml($arr, $root = "xml", $elements = Array())
+    {
+        $result = '';
+        $result .= "<" . $root . ">\r\n";
+        $result .= self::asxml($arr, $elements, 1);
+        $result .= "</" . $root . ">\r\n";
+        return $result;
+    }
 
 }
