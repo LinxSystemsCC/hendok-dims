@@ -161,10 +161,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     </div>
 
     <div title="Job Creation" id="createjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-xl" role="document" style="min-width: 90% !important; max-width: 90% !important">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createjobTitle">Create A Roofing Work Order</h5>
+                    <h5 class="modal-title" id="createjobTitle">New Roofing Work Order</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -178,6 +178,8 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     <label class="control-label" for="datetoheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
                     <input type="date" id="datetoheader">
                     <button class="btn btn-info" id="getheaders">GET</button>
+
+                    <br><br>
                     
                     <div id="headergrid" style="width: 100% !important; height:50%;">
                     </div>
@@ -233,7 +235,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 </div>
                 <br>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="saveWorkOrder" aria-label="Save">
+                    <button type="button" class="btn btn-success" id="saveWorkOrder" aria-label="Save">Save</button>
                 </div>
             </div>
         </div>
@@ -470,6 +472,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 type: "POST",
                 data: {
                     workOrders: dataSource._items,
+                    reference: $("#reference").val(),
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
@@ -531,53 +534,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                 }
 
-            });
-        });
-
-        $('#prodname').change(function(){
-            $('#SOLabel').show();
-            $.ajax({
-
-                url: '{!!url("/getsalesorderstoplan")!!}',
-                type: "GET",
-                data: {
-                    productname: $('#prodname option:selected').text(),
-                },
-                success: function (data) {
-                    var salesorder = '';
-
-                    $("#SOList").empty();
-                    $.each(data,function(i,o){
-                        //console.debug(data[o]);
-                        salesorder += '<div>';
-                        salesorder +='<input id="SO_sheck" style="padding-right: 10px;" type="checkbox" value="'+o.idInvoiceLines+'">'+o.OrderNum;
-                        salesorder +='<input id="soNum_'+o.idInvoiceLines+'" type="hidden" style="float: right; width: 20%;" value="'+o.OrderNum+'">'
-                        salesorder +='<input id="Qty_'+o.idInvoiceLines+'" type="number" style="float: right; width: 20%;">';
-                        salesorder +='<label for ="SO_qty" style="float: right; padding-right:10px;">Qty</label>';
-                        salesorder += '<div><br>';
-                    });
-                    $("#SOList").append(salesorder);
-                    
-                }
-            });
-
-            $.ajax({
-                url: '{!!url("/getMachinesforselecteddept")!!}',
-                type: "GET",
-                data: {
-                    deptId: $("#departmentheader").val(),
-                    prodname: $("#prodname").val()
-                },
-                success: function (data) {
-                    var toAppend = '<option></option>';
-                    $("#machinename").empty();
-                    $.each(data,function(i,o){
-
-                        toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
-                    });
-                    $("#machinename").append(toAppend);
-                    $("#machinename").select2();
-                }
             });
         });
 
@@ -750,7 +706,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         mode: 'form',
                         // allowUpdating: true,
                         // allowAdding: true,
-                        allowDeleting: true,
+                        // allowDeleting: true,
                         useIcons: true,
                     },
                     selection: {
@@ -758,9 +714,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     },
 
                     columns: [
-                        { 
-                            type: "buttons" 
-                        },{
+                        {
                             dataField: "intRoofingHeader",
                             caption: "ID",
                         }, {
@@ -793,7 +747,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                     onRowClick:function(e){
                         $('#linesgrid').show();
-                        var headerID = e.data.intRoofingHeader
+                        var headerID = e.data.intRoofingHeader;
+                        var machineslist = ({!! json_encode($machines) !!});
+
+                        console.debug(machineslist);
 
                         $.ajax({
                             url: '{!!url("/getroofinglines")!!}',
@@ -802,7 +759,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                 ID : headerID,
                             },
                             success: function (data) {
-                                //console.debug(data);
+                                // console.debug(data);
                                 
                                 const linesgrid =  $("#linesgrid").dxDataGrid({
                                     dataSource:data, //as json
@@ -832,26 +789,38 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     columns: [{
                                             dataField: "UniqueID",
                                             caption: "Unique ID",
+                                            allowEditing : false,
                                         },{
                                             dataField: "intRoofingHeader",
                                             caption: "ID",
                                             visible: false,
+                                            allowEditing : false,
                                         }, {
                                             dataField: "strSONum",
                                             caption: "SO Number",
+                                            allowEditing : false,
                                         }, {
                                             dataField: "StoreName",
                                             caption: "Store Name",
+                                            allowEditing : false,
                                         }, {
                                             dataField: "Code",
                                             caption: "Code",
                                             visble: false,
+                                            allowEditing : false,
                                         }, {
                                             dataField: "ItemName",
                                             caption: "Item Name",
-                                        }, {
-                                            dataField: "intMachineId",
-                                            caption: "Machine Id",
+                                            allowEditing : false,
+                                        },
+                                        {
+                                            dataField: "strMachineName",
+                                            caption: "Machine Name",
+                                            lookup: {
+                                                dataSource: machineslist,
+                                                valueExpr: "intAutoMachineID",
+                                                displayExpr: "strMachineName",
+                                            }
                                         },
                                         {
                                             dataField: "intQty",

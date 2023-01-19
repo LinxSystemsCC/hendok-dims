@@ -323,7 +323,12 @@ class WareHouseController extends Controller
             ->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')
             ->select("select * from viewItemGroups order by ItemGroupDescription");
-        return view('warehouse/roofworkorders')->with('prodGroups',$prodGroups)->with('dept',$dept);
+
+        $machines = DB::connection('sqlsrv2')->select("select * from viewRoofingMachines");
+        // $machines = json_encode($machines);
+        //dd($machines);
+
+        return view('warehouse/roofworkorders')->with('machines', $machines);
     }
 
     public function getBinLocationsJson(){
