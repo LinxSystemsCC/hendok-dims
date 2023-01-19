@@ -479,6 +479,8 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     'ProdName': escapeHtml(element["Code"]),
                     'intQty':element["intQty"],
                     'Dept': 'Roofing',
+                    'strReference': element["strReference"],
+                    'intOrderLineID': element["intOrderLineID"],
                 });
             });
 
@@ -801,7 +803,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         mode: 'single',
                                     },
 
-                                    columns: [{
+                                    columns: [
+                                        
+                                        {
+                                            dataField: "strReference",
+                                            caption: "Reference",
+                                            visible: false,
+                                            allowEditing : false,
+                                        },{
                                             dataField: "UniqueID",
                                             caption: "Unique ID",
                                             allowEditing : false,
@@ -813,6 +822,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         }, {
                                             dataField: "strSONum",
                                             caption: "SO Number",
+                                            allowEditing : false,
+                                        },{
+                                            dataField: "intOrderLineID",
+                                            caption: "Order Line ID",
                                             allowEditing : false,
                                         }, {
                                             dataField: "StoreName",
