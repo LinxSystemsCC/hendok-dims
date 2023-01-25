@@ -133,7 +133,6 @@
     });
     $(document).ready(function() {
 
-
         $('#print').click(function(){
 
             $.ajax({

@@ -123,9 +123,9 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($workorders !="0")
-            <a href="#" id="1">Work Orders<span class="caret pull-down"></span>
+            <a href="#" id="1">Work Orders<span class="caret pull-down"></span></a>
             @endif
-			</a>
+			
 			<ul class="item-show-1">
                 <li>
                     <!-- Second Category -->
