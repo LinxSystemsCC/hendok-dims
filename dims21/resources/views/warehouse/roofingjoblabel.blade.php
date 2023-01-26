@@ -35,7 +35,7 @@
             <table>
                 <tr>
                     <td><strong>ID</strong></td>
-                    <td id='id'><h5><strong>{{$val->intJobId}}</strong></h5></td>
+                    <td ><h5><strong id='jobId'>{{$val->intJobId}}</strong></h5></td>
                 </tr>
                 <tr>
                     <td><strong>Customer</strong></td>
@@ -89,7 +89,7 @@
                     url: '{!!url("/sendRoofingLabelToThePrinter")!!}',
                     type: "GET",
                     data: {
-                        id: $('#id').val(),
+                        jobId: $('#jobId').val(),
                     },
                     success: function (data) {
                         if(data ="Success"){

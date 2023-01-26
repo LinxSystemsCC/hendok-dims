@@ -1143,14 +1143,14 @@ where intDeptID =".$deptId);
 
     public function sendRoofingLabelToThePrinter(Request $request){
         $deptname = 'Roofing';
-        $order  = $request->get('id');;
+        $jobId  = $request->get('jobId');;
         $operator  = Auth::user()->UserName;
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $t=time();
         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
         $ID = $t.$randomString;
 
-        $print = DB::connection('sqlsrv2')->statement('exec spInsertPrintRoofingLabels ?,?,?,?',array($deptname,$order,$operator,$ID));
+        $print = DB::connection('sqlsrv2')->statement('exec spInsertPrintRoofingLabels ?,?,?,?',array($deptname,$jobId,$operator,$ID));
         
         return response()->json($print);
     }
