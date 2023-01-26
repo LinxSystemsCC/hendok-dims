@@ -35,7 +35,8 @@
             <table>
                 <tr>
                     <td><strong>ID</strong></td>
-                    <td ><h5><strong id='jobId'>{{$val->intJobId}}</strong></h5></td>
+                    <td ><h5><strong>{{$val->intJobId}}</strong></h5></td>
+                    <input type='hidden' id ='jobId' value="{{$val->intJobId}}">
                 </tr>
                 <tr>
                     <td><strong>Customer</strong></td>
