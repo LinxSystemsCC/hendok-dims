@@ -314,7 +314,7 @@
                     var barcode = data[0]["BarCode"];
                     console.debug(barcode);
 
-                    if (barcode == null || barcode == NULL){
+                    if (barcode == null){
                         $('#barcode').val("0000000000000");
                     }else{
                         $('#barcode').val(barcode);
