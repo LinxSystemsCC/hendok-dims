@@ -30,6 +30,12 @@
             padding-left: 0px !important;
             font-weight: 700;
         }
+        select.input-sm, .input-sm {
+            height: 40px;
+            line-height: 30px;
+            font-size: 16px;
+            font-weight: 900;
+        }
     </style>
 
 </head>
