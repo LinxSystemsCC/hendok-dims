@@ -1140,6 +1140,21 @@ where intDeptID =".$deptId);
 
         return "Success";
     }
+
+    public function sendRoofingLabelToThePrinter(Request $request){
+        $deptname = 'Roofing';
+        $SONum  = $request->get('SONum');;
+        $operator  = Auth::user()->UserName;
+        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $t=time();
+        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+        $ID = $t.$randomString;
+
+        $print = DB::connection('sqlsrv2')->statement('exec spInserPalletLabelToPrint ?,?,?',array($deptname,$SONum,$operator,$ID));
+        
+        return response()->json($print);
+    }
+
     public function doneprintingpallet(){
         return view('warehouse/doneprintingpallet');
     }

@@ -35,7 +35,7 @@
             <table>
                 <tr>
                     <td><strong>SO No</strong></td>
-                    <td><h5><strong>{{$val->strRef}}</strong></h5></td>
+                    <td id='soNum'><h5><strong>{{$val->strSONum}}</strong></h5></td>
                 </tr>
                 <tr>
                     <td><strong>Customer</strong></td>
@@ -86,13 +86,10 @@
         $('#printthislabels').click(function(){
 
                 $.ajax({
-                    url: '{!!url("/sendLabelToThePrinter")!!}',
+                    url: '{!!url("/sendRoofingLabelToThePrinter")!!}',
                     type: "GET",
                     data: {
-                        qty: $('#qty').val(),
-                        type:2,
-                        jobid:$('#jobid').val(),
-                        isnew:"NEW"
+                        SONum: $('#soNum').val(),
                     },
                     success: function (data) {
                         if(data ="Success"){
