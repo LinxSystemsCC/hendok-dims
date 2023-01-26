@@ -262,10 +262,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
+
+    var batchID = 0;
+    var batchReference = 0;
+
     $(document).ready(function() {
-        var batchID = 0;
-        var batchReference = 0;
-        
         $('#PPSO').hide();
         $('#SOLabel').hide();
         var date = (new Date()).toISOString().slice(0, 10);
