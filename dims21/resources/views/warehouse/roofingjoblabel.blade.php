@@ -34,8 +34,8 @@
             @foreach($qrcodeothers as $val)
             <table>
                 <tr>
-                    <td><strong>SO No</strong></td>
-                    <td id='soNum'><h5><strong>{{$val->intJobId}}</strong></h5></td>
+                    <td><strong>ID</strong></td>
+                    <td id='id'><h5><strong>{{$val->intJobId}}</strong></h5></td>
                 </tr>
                 <tr>
                     <td><strong>Customer</strong></td>
@@ -89,7 +89,7 @@
                     url: '{!!url("/sendRoofingLabelToThePrinter")!!}',
                     type: "GET",
                     data: {
-                        SONum: $('#soNum').val(),
+                        id: $('#id').val(),
                     },
                     success: function (data) {
                         if(data ="Success"){
