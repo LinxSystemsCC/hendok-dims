@@ -328,11 +328,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             caption: "Job Seq",
                             //width: 100,
 
-                        }, {
-                            dataField: "strDeptName",
-                            caption: "Department",
-                            //width: 250,
-
                         },
                         {
                             dataField: "strMachineName",
@@ -353,22 +348,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                         },
                         {
-                            dataField: "palletQty",
-                            caption: "Pallet Qty",
-                            //width: 100,dataType:"number"
-
-                        }
-                        ,
-                        {
                             dataField: "dteStartDate",
                             caption: "Start Date",
                             //width: 100,dataType:"date"
-
-                        },
-                        {
-                            dataField: "jobStatus",
-                            caption: "Job Status",
-                            //width: 150,
 
                         },
                     ],
