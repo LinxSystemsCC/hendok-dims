@@ -152,16 +152,24 @@ class WareHouseController extends Controller
         return view('warehouse/genericproductlabels')->with('prodGroups',$prodGroups)->with('dept',$dept);
     }
 
+    public function getProductBarcode(Request $request){
+        $productCode = $request->get("productCode");
+        $barcode = DB::connection('sqlsrv2')->select("select BarCode from viewtblProducts where PastelCode = '$productCode'");
+        // dd($barcode);
+        return response()->json($barcode);
+    }
+
     public function printgenericlabel(Request $request){
         $department = $request->get("department");
         $category = $request->get("category");
         $product = $request->get("product");
         $qty = $request->get("qty");
+        $barcode = $request->get("barcode");
         $operator = Auth::user()->UserName;
 
         //dd($product,$category,$department,$qty);
 
-        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertPrintForGenericLabels ?,?,?,?,?', array($product,$category,$department,$qty,$operator));
+        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertPrintForGenericLabels ?,?,?,?,?,?', array($product,$category,$department,$qty,$operator, $barcode));
         
         return response()->json($returndata);
     }
@@ -1137,16 +1145,11 @@ where intDeptID =".$deptId);
     }
 
     public function jobupdateprint($jobid){
-        //
-     /*   $returnmach = DB::connection('sqlsrv2')
-            ->select('exec spInsertNewJob ?,?,?,?,?,?',
-                array($productcode,$machine,$palletid,$qty,"12345",$start)
-            );*/
-        $jobdata = DB::connection('sqlsrv3')
-            ->select('exec spGetProductPlannedDetails ?',
-                array($jobid));
+        /*$returnmach = DB::connection('sqlsrv2')->select('exec spInsertNewJob ?,?,?,?,?,?',array($productcode,$machine,$palletid,$qty,"12345",$start));*/
+        $jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?',array($jobid));
         return view('warehouse/updatejob')->with("jobdata",$jobdata)->with("id",$jobid);
     }
+
     public function deletesalesorders(Request $request){
         $reference = $request->get("reference");
         $userID = Auth::user()->UserID;
@@ -1258,8 +1261,10 @@ where intDeptID =".$deptId);
         return response()->json($data);
     }
 
-    public function insertRoofWorkOrder(Request $request){
+    public function updateRoofLines(Request $request){
         $workOrders = $request->get("workOrders");
+        $batchID= $request->get("batchID");
+        $batchReference= $request->get("batchReference");
         $userName = Auth::user()->UserName;
         $userID = Auth::user()->UserID;
         // dd($workOrders);
@@ -1268,7 +1273,7 @@ where intDeptID =".$deptId);
             $orderlinesxml = $this->toxml($workOrders, "xml", array("result"));
 
             // dd($orderlinesxml);
-            $data = DB::connection('sqlsrv2')->select('exec spInsertRoofingWorkOrder ?,?,?',array($orderlinesxml,$userName,$userID));
+            $data = DB::connection('sqlsrv2')->select('exec spUpdateRoofLines ?,?,?,?,?',array($orderlinesxml,$userName,$userID, $batchID, $batchReference));
         }
 
         return response()->json($data);

@@ -263,6 +263,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
+        var batchID = 0;
+        var batchReference = 0;
+        
         $('#PPSO').hide();
         $('#SOLabel').hide();
         var date = (new Date()).toISOString().slice(0, 10);
@@ -469,9 +472,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             var dataSource = linesgrid.getDataSource();
 
             // console.debug(allGridItems);
+            var seq = 0;
 
             allGridItems.forEach((element, index, value) => {
                 // console.debug(element);
+                seq += 1;
                 checkedLines.push({
                     'UniqueID': element["UniqueID"],
                     'strSONum': element["strSONum"],
@@ -481,15 +486,18 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     'Dept': 'Roofing',
                     'strReference': element["strReference"],
                     'intOrderLineID': element["intOrderLineID"],
+                    'jobSeq' : seq,
                 });
             });
 
-            console.log(checkedLines);
+            console.debug(checkedLines);
             $.ajax({
-                url: '{!!url("/insertRoofWorkOrder")!!}',
+                url: '{!!url("/updateRoofLines")!!}',
                 type: "POST",
                 data: {
                     workOrders: checkedLines,
+                    batchID: batchID,
+                    batchReference: batchReference,
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
@@ -765,6 +773,8 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     onRowClick:function(e){
                         $('#linesgrid').show();
                         var headerID = e.data.intRoofingHeader;
+                        batchID = headerID;
+                        batchReference = e.data.strReference;
                         var machineslist = ({!! json_encode($machines) !!});
 
                         console.debug(machineslist);
@@ -787,8 +797,22 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     headerFilter: { visible: true },
                                     allowColumnResizing: true,
                                     columnAutoWidth: true,
+                                    keyExpr: 'UniqueID',
                                     scrolling: {
                                         mode: 'infinite',
+                                    },
+                                    rowDragging: {
+                                        allowReordering: true,
+                                        onReorder(e) {
+                                            const visibleRows = e.component.getVisibleRows();
+                                            const toIndex = data.findIndex((item) => item.UniqueID === visibleRows[e.toIndex].data.UniqueID);
+                                            const fromIndex = data.findIndex((item) => item.UniqueID === e.itemData.UniqueID);
+
+                                            data.splice(fromIndex, 1);
+                                            data.splice(toIndex, 0, e.itemData);
+
+                                            e.component.refresh();
+                                        },
                                     },
                                     paging:{
                                         pageSize: 20,
@@ -840,6 +864,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                             dataField: "ItemName",
                                             caption: "Item Name",
                                             allowEditing : false,
+                                        },{
+                                            dataField: "intSequence",
+                                            caption: "Seq",
+                                            // visible: false,
+                                            // allowEditing : false,
                                         },
                                         {
                                             dataField: "strMachineName",

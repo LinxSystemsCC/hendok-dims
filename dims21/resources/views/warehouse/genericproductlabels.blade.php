@@ -82,6 +82,12 @@
                 <input  class="form-control input-sm col-xs-1" id="qty" style="width: 100%" required>
             </div>
 
+            {{-- Barcode --}}
+            <div class="form-group">
+                <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
+                <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%" required>
+            </div>
+
             <br>
             <br>
 
@@ -143,7 +149,8 @@
                     department: $('#department option:selected').val(),
                     category: $('#category option:selected').text(),
                     product: $('#prodname option:selected').val(),
-                    qty: $('#qty').val()
+                    qty: $('#qty').val(),
+                    barcode: $('#barcode').val()
                 },
                 success: function (data) {
                     location.reload();
@@ -264,7 +271,6 @@
                         toAppend += '<option value="'+o.intAutoGroupCategoryId+'">'+o.strProductCategory+'</option>';
                     });
                     $("#category").append(toAppend);
-                    $("#category").select2();
 
                 }
 
@@ -289,13 +295,37 @@
                         toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
                     });
                     $("#prodname").append(toAppend);
-                    $("#prodname").select2();
 
                 }
 
             });
         });
-        
+
+        $('#prodname').change(function(){
+            $.ajax({
+
+                url: '{!!url("/getProductBarcode")!!}',
+                type: "GET",
+                data: {
+                    productCode: $('#prodname option:selected').val(),
+
+                },
+                success: function (data) {
+                    var barcode = data[0]["BarCode"];
+                    console.debug(barcode);
+
+                    if (barcode == null || barcode == NULL){
+                        $('#barcode').val("0000000000000");
+                    }else{
+                        $('#barcode').val(barcode);
+                    }
+                    
+
+                }
+
+            });
+        });
+
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");

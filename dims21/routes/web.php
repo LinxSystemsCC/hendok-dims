@@ -1035,6 +1035,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('labelspage', [WareHouseController::class,'labelspage']);
     Route::get('labelmapping', [WareHouseController::class,'labelmapping']);
     Route::get('genericproductlabels', [WareHouseController::class,'genericproductlabels']);
+    Route::get('getProductBarcode', [WareHouseController::class,'getProductBarcode']);
     Route::get('userpermissions/{userid}', [WareHouseController::class,'userpermissions']);
     Route::get('dashboard', [WareHouseController::class,'dashboard']);
     Route::get('departmentpage', [WareHouseController::class,'departmentpage']);
