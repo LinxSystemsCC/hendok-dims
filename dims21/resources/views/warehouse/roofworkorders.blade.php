@@ -854,7 +854,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                             // allowEditing : false,
                                         },
                                         {
-                                            dataField: "intMachineID",
+                                            dataField: "intMachineId",
                                             caption: "Machine Name",
                                             lookup: {
                                                 dataSource: machineslist,
