@@ -939,7 +939,7 @@ Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachine
 Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
 Route::post('insertIntoJobTableGalv', [WareHouseController::class,'insertIntoJobTableGalv']);
 Route::post('insertPrePlannedSO', [WareHouseController::class,'insertPrePlannedSO']);
-Route::post('insertRoofWorkOrder', [WareHouseController::class,'insertRoofWorkOrder']);
+Route::post('updateRoofLines', [WareHouseController::class,'updateRoofLines']);
 Route::get('getPalletForSelectedItem', [WareHouseController::class,'getPalletForSelectedItem']);
 Route::get('getDepListToPlan', [WareHouseController::class,'getDepListToPlan']);
 
