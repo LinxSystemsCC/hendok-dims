@@ -1023,7 +1023,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getroofingheaders', [WareHouseController::class,'getroofingheaders']);
     Route::get('getroofinglines', [WareHouseController::class,'getroofinglines']);
     Route::get('sendLabelToThePrinter', [WareHouseController::class,'sendLabelToThePrinter']);
-    Route::get('startgenratingqrcodeforpallet/{jpbid}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
+    Route::get('startgenratingqrcodeforpallet/{jpbid}/{isroofing}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::post('saveLabels', [WareHouseController::class,'saveLabels']);  

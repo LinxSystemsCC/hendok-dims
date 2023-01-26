@@ -80,11 +80,18 @@
 
     <h1>CHOOSE PRODUCT</h1>
     @foreach($products as $val)
-        @if($val->strJobStatus !="NOT STARTED")
-            <button class="btn btn-dark" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}'" type="button" style="width:100% !important;font-size: 25px;">
+        @if($val->intJobId == 0)
+            <button class="btn btn-dark" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" type="button" style="width:100% !important;font-size: 25px;">
                 {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
             <br>
             <br>
+        @else
+            @if($val->strJobStatus !="NOT STARTED")
+                <button class="btn btn-dark" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}/None'" type="button" style="width:100% !important;font-size: 25px;">
+                    {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
+                <br>
+                <br>
+            @endif
         @endif
     @endforeach
 

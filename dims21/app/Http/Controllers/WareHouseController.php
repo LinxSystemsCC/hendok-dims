@@ -1280,10 +1280,10 @@ where intDeptID =".$deptId);
     }
     
     //Start Generating The Qr code
-    public function startgenratingqrcodeforpallet($jobId){
+    public function startgenratingqrcodeforpallet($jobId, $isroofing = "None"){
         $returnmach = DB::connection('sqlsrv2')
-            ->select('exec spInsertNewPalletPrint ?',
-                array($jobId)
+            ->select('exec spInsertNewPalletPrint ?,?',
+                array($jobId, $isroofing)
             );
         $htmlqrcode = "";
         $dept = 0;
