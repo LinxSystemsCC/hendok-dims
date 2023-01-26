@@ -35,7 +35,7 @@
             <table>
                 <tr>
                     <td><strong>SO No</strong></td>
-                    <td id='soNum'><h5><strong>{{$val->intRoofSOID}}</strong></h5></td>
+                    <td id='soNum'><h5><strong>{{$val->intJobId}}</strong></h5></td>
                 </tr>
                 <tr>
                     <td><strong>Customer</strong></td>
