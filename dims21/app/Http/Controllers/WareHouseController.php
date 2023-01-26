@@ -1298,6 +1298,7 @@ where intDeptID =".$deptId);
             $dept = $val->strDeptName;
         }
 
+
         switch($dept){
             case('Roofing'):
                 return view('warehouse/roofingjoblabel')->with('qrcodeothers',$returnmach)->with('qrcode',$htmlqrcode)->with('jobid',$jobId);

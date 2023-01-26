@@ -96,7 +96,7 @@
                     },
                     success: function (data) {
                         if(data ="Success"){
-                            window.location = '{!!url("/doneprintingpallet")!!}';
+                            //window.location = '{!!url("/doneprintingpallet")!!}';
                         }
 
                     }
