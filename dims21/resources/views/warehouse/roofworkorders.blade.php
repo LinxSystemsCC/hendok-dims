@@ -463,7 +463,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 checkedLines.push({
                     'UniqueID': element["UniqueID"],
                     'strSONum': element["strSONum"],
-                    'intAutoMachineID':element["strMachineName"],
+                    'intAutoMachineID':element["intMachineId"],
                     'ProdName': escapeHtml(element["Code"]),
                     'intQty':element["intQty"],
                     'Dept': 'Roofing',
