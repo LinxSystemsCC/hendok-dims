@@ -455,7 +455,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
 
             allGridItems.forEach((element, index, value) => {
-                // console.debug(element);
+                console.debug(element);
                 checkedLines.push({
                     'UniqueID': element["UniqueID"],
                     'strSONum': element["strSONum"],
