@@ -777,13 +777,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     allowColumnResizing: true,
                                     columnAutoWidth: true,
                                     keyExpr: 'UniqueID',
-                                    scrolling: {
-                                        mode: 'infinite',
-                                    },
-
-                                    paging:{
-                                        pageSize: 20,
-                                    },editing: {
+                                    editing: {
                                         mode: 'batch',
                                         allowUpdating: true,
                                         // allowAdding: true,
