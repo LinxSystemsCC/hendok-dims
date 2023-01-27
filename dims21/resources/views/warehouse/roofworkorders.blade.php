@@ -357,7 +357,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                     
                     onRowDblClick:function(e){
-                        console.log(e.data.intJobId);
+                        //console.log(e.data.intJobId);
                         var intJobId =  e.data.intJobId;
 
                         window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
@@ -453,9 +453,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             var allGridItems = datagrid.getDataSource().items() 
             var checkedLines = new Array();
 
+            //console.debug(allGridItems);
 
             allGridItems.forEach((element, index, value) => {
-                console.debug(element);
+                // console.debug(element);
                 checkedLines.push({
                     'UniqueID': element["UniqueID"],
                     'strSONum': element["strSONum"],
@@ -616,7 +617,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             },
                             success: function (data) {
                                 //location.reload();
-                                console.debug(data[0]);
+                                //console.debug(data[0]);
                                 table += '<table class="table table-responsive table-hover table-bordered" id="list_table_json">';
                                 table += '<thead>';
                                 table += '<tr>';
@@ -755,7 +756,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         batchReference = e.data.strReference;
                         var machineslist = ({!! json_encode($machines) !!});
 
-                        console.debug(machineslist);
+                        //console.debug(machineslist);
 
                         $.ajax({
                             url: '{!!url("/getroofinglines")!!}',
