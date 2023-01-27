@@ -451,7 +451,8 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         $('#saveWorkOrder').click(function(){
             
             // var allGridItems =  $("#linesgrid").dxDataGrid("instance").items();
-            var allGridItems = $("#linesgrid").getDataSource().items() 
+            var datagrid =  $("#linesgrid").dxDataGrid("instance")
+            var allGridItems = datagrid.getDataSource().items() 
             var checkedLines = new Array();
 
             console.debug(allGridItems);
