@@ -59,7 +59,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         
         <div>
             @if($nwor !="0")
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">New Work Order</button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">Update Work Order</button>
             @endif
             
             @if($ppso !="0")
@@ -164,7 +164,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         <div class="modal-dialog modal-xl" role="document" style="min-width: 90% !important; max-width: 90% !important">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createjobTitle">New Roofing Work Order</h5>
+                    <h5 class="modal-title" id="createjobTitle">Update Roofing Work Order</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
