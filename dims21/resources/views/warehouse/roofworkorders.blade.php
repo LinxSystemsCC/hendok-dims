@@ -53,76 +53,26 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             @include('warehouse.menu')
         </div>
     </div>
-    
+
     <div class="col-lg-10"  style="width:100%; max-width:100% !important">
-        <h3 style="flex-grow: 1;">Work Orders</h3>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="PPSOTab" aria-current="page">Pre Plan SO's</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="BSOPTab">Batch SO Processing</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="BSTab" >Batch Sequencing</a>
+            </li>
+        </ul>
         
-        <div>
-            @if($nwor !="0")
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">Update Work Order</button>
-            @endif
-            
-            @if($ppso !="0")
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#preplanningso" style="margin-right:10px;">Pre Planning SO</button>
-            @endif
-            
-            @if($print !="0")
-            <button type="button" id="printjobcard" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Print All Active Jobs</button>
-            @endif
+        <div class="tab-content p-3">
+            {{-- Pre Planned Sales Orders Page --}}
+            <div class="tab-pane fade show active" id="PPSOPage" role="tabpanel">
 
-            @if($ppso !="0")
-            <div style="float:right;">
-                {{-- Date from --}}
-                <label class="control-label" for="datefrom"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date From </label>
-                <input type="date" id="datefrom">
-
-                {{-- Date To --}}
-                <label class="control-label" for="dateto"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
-                <input type="date" id="dateto">
-                <button class="btn btn-info" id="get">GET</button>
-            </div>
-            @endif
-
-        </div>
-        
-        <div id="gridContainerWO" style="width: 100% !important;">
-        </div>
-
-        <br>
-        <br>
-
-        @if($ppso !="0")
-        <h3 id="PPSO" style="flex-grow: 1;">Pre Planned Sales Orders</h3>
-        <div id="gridContainerPPSO" style="width: 100% !important;">
-        </div>
-        @endif
-
-
-    </div>
-    
-    <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewjobTitle">Work Order Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div title="Pre Planning SO" id="preplanningso" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="preplanningso" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="preplanningsoTitle">Pre Planning SO</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="d-inline-flex w-100">
@@ -148,106 +98,62 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         <input type="text"  class="form-control input-sm col-xs-1" id="reference" required>
                     </div>
 
+                    <button class="btn-danger btn-lg" id="savePPSO" style="width: 100%;">SAVE</button>
+
                 </div>
 
                 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
-                        <button class="btn-danger btn-lg" id="save" style="width: 100%;">SAVE</button>
+            </div>
+
+            {{--  Batch Sales Order Processing Page --}}
+            <div class="tab-pane fade" id="BSOPPage" role="tabpanel">
+                {{-- Date from --}}
+                <label class="control-label" for="datefromheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date From </label>
+                <input type="date" id="datefromheader">
+
+                {{-- Date To --}}
+                <label class="control-label" for="datetoheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
+                <input type="date" id="datetoheader">
+                <button class="btn btn-info" id="getheaders">GET</button>
+
+                <br><br>
+                
+                <div id="headergrid" style="width: 100% !important; height:50%;">
+                </div>
+
+                <div id="linesgrid" style="width: 100% !important; height:50%;">
+                </div>
+
+                <button type="button" class="btn btn-success" id="saveBSOP" aria-label="Save">Save</button>
+            </div>
+
+            {{--  Batch Sequencing Page --}}
+            <div class="tab-pane fade" id="BSPage" role="tabpanel">
+                
+                <div class="form-group">
+                    <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
+                    <select  class="form-control input-sm col-xs-1" id="machine" required>
+                        <option></option>
+                        @foreach($machines as $val)
+                            <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
+                        @endforeach
+
+                    </select>
+                </div>
+
+                <div id="sequencegrid" style="width: 100% !important; height:50%;">
                 </div>
             </div>
+
+
         </div>
-
+        
     </div>
-
-    <div title="Job Creation" id="createjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document" style="min-width: 90% !important; max-width: 90% !important">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createjobTitle">Update Roofing Work Order</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {{-- Date from --}}
-                    <label class="control-label" for="datefromheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date From </label>
-                    <input type="date" id="datefromheader">
-
-                    {{-- Date To --}}
-                    <label class="control-label" for="datetoheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
-                    <input type="date" id="datetoheader">
-                    <button class="btn btn-info" id="getheaders">GET</button>
-
-                    <br><br>
-                    
-                    <div id="headergrid" style="width: 100% !important; height:50%;">
-                    </div>
-
-                    <div id="linesgrid" style="width: 100% !important; height:50%;">
-                    </div>
-
-                    {{-- <div class="input-group mb-3">
-                        <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
-                        <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
-                            <option></option>
-                            @foreach($dept as $val)
-                                <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
-                            @endforeach
-
-                        </select>
-
-
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="productcategory" onselect="but_read" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
-                        <select  class="form-control input-sm col-xs-1 " id="productcategory" style="width: 100%" required>
-                            <option></option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
-                        <select  class="form-control input-sm col-xs-1" id="prodname" required>
-                            <option></option>
-                        </select>
-
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" id="SOLabel" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sales Orders </label><br>
-                        <div id="SOList">
-                            
-                        </div>
-                        
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="machinename"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine </label>
-                        <select  class="form-control input-sm col-xs-1" id="machinename" required>
-                            <option></option>
-                        </select>
-                    </div> --}}
-
-                    <div id="gridContainerWO" class="w-100"></div>
-                        
-                </div>
-                <br>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="saveWorkOrder" aria-label="Save">Save</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
 
 </div>
 
 
 <style>
-
     .dx-datagrid-table{
         font-size:15px;
     }
@@ -267,107 +173,88 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     var batchReference = 0;
 
     $(document).ready(function() {
-        $('#PPSO').hide();
-        $('#SOLabel').hide();
         var date = (new Date()).toISOString().slice(0, 10);
 		$('#datefrom').val(date);
 		$('#dateto').val(date);
         $('#datefromheader').val(date);
 		$('#datetoheader').val(date);
         
-
-        $.ajax({
-            url: '{!!url("/getRoofWIP")!!}',
-            type: "GET",
-            data: {
-                machineId: $('#machineid').val()
-            },
-            success: function (data) {
-                $("#gridContainerWO").dxDataGrid({
-                    dataSource:data, //as json
-                    showBorders: true,
-                    hoverStateEnabled: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    allowColumnResizing: true,
-                    columnAutoWidth: true,
-                    paging:{
-                        pageSize: 20,
-                    },
-                    export: {
-                        enabled: true
-                    },
-                    selection: {
-                        mode: 'single',
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('machineplan');
-
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
-                            });
-                        });
-                        e.cancel = true;
-                    },
-
-                    columns: [
-                        {
-                            dataField: "intJobId",
-                            caption: "JobNo",
-                            //width: 80,
-
-                        }, {
-                            dataField: "intJobSequence",
-                            caption: "Job Seq",
-                            //width: 100,
-
+        $('#machine').change(function(){
+            $.ajax({
+                url: '{!!url("/getRoofWIP")!!}',
+                type: "GET",
+                data: {
+                    machineId: $('#machine').val()
+                },
+                success: function (data) {
+                    $("#sequencegrid").dxDataGrid({
+                        dataSource:data, //as json
+                        showBorders: true,
+                        hoverStateEnabled: true,
+                        filterRow: { visible: true },
+                        filterPanel: { visible: true },
+                        headerFilter: { visible: true },
+                        allowColumnResizing: true,
+                        columnAutoWidth: true,
+                        paging:{
+                            pageSize: 20,
                         },
-                        {
-                            dataField: "strMachineName",
-                            caption: "Machine",
-                            //width: 300,
-
+                        selection: {
+                            mode: 'single',
                         },
-                        {
-                            dataField: "PastelDescription",
-                            caption: "Product",
-                            //width: 600,
 
-                        },
-                        {
-                            dataField: "mnyQtyRequired",
-                            caption: "Qty",
-                            //width: 60,dataType:"number"
+                        columns: [
+                            {
+                                dataField: "intJobId",
+                                caption: "JobNo",
+                                //width: 80,
 
-                        },
-                        {
-                            dataField: "dteStartDate",
-                            caption: "Start Date",
-                            //width: 100,dataType:"date"
+                            }, {
+                                dataField: "intJobSequence",
+                                caption: "Job Seq",
+                                //width: 100,
 
-                        },
-                    ],
+                            },
+                            {
+                                dataField: "strMachineName",
+                                caption: "Machine",
+                                //width: 300,
 
-                    
-                    onRowDblClick:function(e){
-                        //console.log(e.data.intJobId);
-                        var intJobId =  e.data.intJobId;
+                            },
+                            {
+                                dataField: "PastelDescription",
+                                caption: "Product",
+                                //width: 600,
 
-                        window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                            },
+                            {
+                                dataField: "mnyQtyRequired",
+                                caption: "Qty",
+                                //width: 60,dataType:"number"
 
-                    }
+                            },
+                            {
+                                dataField: "dteStartDate",
+                                caption: "Start Date",
+                                //width: 100,dataType:"date"
 
-                });
+                            },
+                        ],
 
-            }
+                        
+                        // onRowDblClick:function(e){
+                        //     //console.log(e.data.intJobId);
+                        //     var intJobId =  e.data.intJobId;
 
+                        //     window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+
+                        // }
+
+                    });
+
+                }
+
+            });
         });
 
         headersFunction();
@@ -376,7 +263,39 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             headersFunction();
         });
 
-        $('#save').click(function(){
+        $('#PPSOTab').click(function(){
+            $('#PPSOPage').addClass("show active");
+            $('#BSOPPage').removeClass("show active");
+            $('#BSPage').removeClass("show active");
+
+            $('#PPSOTab').addClass("active");
+            $('#BSOPTab').removeClass("active");
+            $('#BSTab').removeClass("active");
+        });
+
+        $('#BSOPTab').click(function(){
+            $('#PPSOPage').removeClass("show active");
+            $('#BSOPPage').addClass("show active");
+            $('#BSPage').removeClass("show active");
+
+            $('#PPSOTab').removeClass("active");
+            $('#BSOPTab').addClass("active");
+            $('#BSTab').removeClass("active");
+        });
+
+        $('#BSTab').click(function(){
+            $('#PPSOPage').removeClass("show active");
+            $('#BSOPPage').removeClass("show active");
+            $('#BSPage').addClass("show active");
+
+            $('#PPSOTab').removeClass("active");
+            $('#BSOPTab').removeClass("active");
+            $('#BSTab').addClass("active");
+        });
+
+        
+
+        $('#savePPSO').click(function(){
             if (($("#reference").val()).length < 1)
                 alert("The Reference needs to be inserted");
             else{
@@ -448,17 +367,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 
         });
 
-        $('#saveWorkOrder').click(function(){
-            // var datagrid =  $("#linesgrid").dxDataGrid("instance");
-            // var allGridItems = datagrid.getDataSource().items();
-
+        $('#saveBSOP').click(function(){
             var allGridItems =  $("#linesgrid").dxDataGrid("getDataSource").items();
             var checkedLines = new Array();
 
-            // console.debug(allGridItems);
-
             allGridItems.forEach((element, index, value) => {
-                // console.debug(element);
                 checkedLines.push({
                     'UniqueID': element["UniqueID"],
                     'strSONum': element["strSONum"],
@@ -471,7 +384,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 });
             });
 
-            // console.debug(checkedLines);
             $.ajax({
                 url: '{!!url("/updateRoofLines")!!}',
                 type: "POST",
@@ -482,7 +394,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
-                        // location.reload();
+                        location.reload();
                     }else{
                         alert(""+data[0].Result);
                     }
@@ -491,183 +403,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
         });
 
-        $('#department').change(function(){
-            $.ajax({
-
-                url: '{!!url("/getDepListToPlan")!!}',
-                type: "GET",
-                data: {
-                    ItemGroup: $('#department option:selected').text(),
-                    strProductCategory: $("#productcategory").val()
-
-                },
-                success: function (data) {
-                    var toAppend = '';
-                    $("#productcategory").empty();
-                    toAppend += '<option></option>';
-                    $.each(data,function(i,o){
-
-                        toAppend += '<option value="'+o.intAutoGroupCategoryId+'">'+o.strProductCategory+'</option>';
-                    });
-                    $("#productcategory").append(toAppend);
-                    $("#productcategory").select2();
-
-                }
-
-            });
-        });
-
-        $('#productcategory').change(function(){
-            $.ajax({
-
-                url: '{!!url("/getProdListToPlan")!!}',
-                type: "GET",
-                data: {
-                    ItemGroup: $('#productcategory option:selected').text(),
-                    strProductCategory: $("#productcategory").val()
-
-                },
-                success: function (data) {
-                    var toAppend = '';
-                    $("#prodname").empty();
-                    toAppend += '<option></option>';
-                    $.each(data,function(i,o){
-
-                        toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
-                    });
-                    $("#prodname").append(toAppend);
-                    $("#prodname").select2();
-
-                }
-
-            });
-        });
-
-        $('#get').click(function(){
-            $('#PPSO').show();
-            
-            $.ajax({
-                url: '{!!url("/getroofingWIP")!!}',
-                type: "GET",
-                data: {
-                    datefrom: $('#datefrom').val(),
-                    dateto: $('#dateto').val()
-                },
-                success: function (data) {
-                    
-                    $("#gridContainerPPSO").dxDataGrid({
-                        dataSource:data, //as json
-                        showBorders: true,
-                        hoverStateEnabled: true,
-                        filterRow: { visible: true },
-                        filterPanel: { visible: true },
-                        headerFilter: { visible: true },
-                        allowColumnResizing: true,
-                        columnAutoWidth: true,
-                        paging:{
-                            pageSize: 20,
-                        },
-                        export: {
-                            enabled: true
-                        },
-                        selection: {
-                            mode: 'single',
-                        },
-                        onExporting(e) {
-                            const workbook = new ExcelJS.Workbook();
-                            const worksheet = workbook.addWorksheet('machineplan');
-
-                            DevExpress.excelExporter.exportDataGrid({
-                                component: e.component,
-                                worksheet,
-                                autoFilterEnabled: true,
-                            }).then(() => {
-                                workbook.xlsx.writeBuffer().then((buffer) => {
-                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
-                                });
-                            });
-                            e.cancel = true;
-                        },
-
-                        columns: [
-                            {
-                                dataField: "strReference",
-                                caption: "Reference",
-                                //width: 80,
-                            }, {
-                                dataField: "UserName",
-                                caption: "User",
-                                //width: 100,
-                            }, {
-                                dataField: "dtmCreated",
-                                caption: "Date",
-                                //width: 200,
-                            },
-                        ],
-
-                        onRowDblClick:function(e){
-                        //console.log(e.data.strReference);
-                        var reference =  e.data.strReference;
-                        var ref = '<p><label>Reference</label><br><input id="theReference" value="'+reference+'" disabled><br></p>';
-                        var table = '';
-                        $.ajax({
-
-                            url: '{!!url("/getsalesorders")!!}',
-                            type: "GET",
-                            data: {
-                                reference: reference,
-                            },
-                            success: function (data) {
-                                //location.reload();
-                                //console.debug(data[0]);
-                                table += '<table class="table table-responsive table-hover table-bordered" id="list_table_json">';
-                                table += '<thead>';
-                                table += '<tr>';
-                                table += '<th id="header">Reference: '+reference+'</th>';           
-                                table += '</tr>';
-                                table += '</thead>';
-                                table += '<tbody>';
-                                $.each(data, function(index, value){
-                                    table += '<tr>';
-                                    table += '<td>'+value.strSONum+'</td>';
-                                    table += '<tr>';
-                                });
-                                table += '</tbody>';
-                                table += '</table>';
-
-                                var dialog = $(table).dialog({
-                                    height: 700, width: 700,modal: true,containment: false,
-                                    buttons: {
-                                        "Delete": function () {
-
-                                            $.ajax({
-
-                                                url: '{!!url("/deletesalesorders")!!}',
-                                                type: "POST",
-                                                data: {
-                                                    reference: reference,
-                                                },
-                                                success: function (data) {
-                                                    location.reload();
-                                                },
-
-                                            });
-
-                                        }
-                                    }
-                                });
-                            },
-                        });
-
-                        }
-
-                });
-
-                }
-
-            });//Update this to get roofing work orders!  
-
-        });
 
         $('.sidebar ul li a').click(function(){
             var id = $(this).attr('id');

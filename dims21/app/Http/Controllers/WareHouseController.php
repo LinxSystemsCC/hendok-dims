@@ -998,8 +998,8 @@ where intDeptID =".$deptId);
     }
 
     public function getRoofWIP(Request $request){
-
-        $wip = DB::connection('sqlsrv2')->select('exec spGetRoofWIP');
+        $machineId = $request->get("machineId");
+        $wip = DB::connection('sqlsrv2')->select('exec spGetRoofWIP ?' ,array($machineId));
         return response()->json($wip);
     }
 
