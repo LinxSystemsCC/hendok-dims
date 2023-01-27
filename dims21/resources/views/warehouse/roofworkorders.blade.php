@@ -454,7 +454,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             var checkedLines = new Array();
             var dataSource = linesgrid.getDataSource();
 
-            // console.debug(allGridItems);
+            console.debug(allGridItems);
             var seq = 0;
 
             allGridItems.forEach((element, index, value) => {
