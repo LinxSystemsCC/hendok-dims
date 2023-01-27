@@ -484,7 +484,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
-                        //location.reload();
+                        location.reload();
                     }else{
                         alert(""+data[0].Result);
                     }
@@ -859,22 +859,22 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         data = data.changes[0]["key"];
                                         // console.debug(type);
                                         // console.debug(data);
-                                        $.ajax({
-                                            url: '{!!url("/updateDeleteOrderLines")!!}',
-                                            type: "POST",
-                                            data: {
-                                                ID: headerID,
-                                                intDetailId: data["intDetailId"],
-                                                Price: data["Price"],
-                                                Quantity: data["Quantity"],
-                                                comment: data["strComment"],
-                                                statement: type,
-                                            },
-                                            success: function (data) {
-                                                location.reload();
-                                                orderheader.selectRows(row);
-                                            }
-                                        });
+                                        // $.ajax({
+                                        //     url: '{!!url("/updateDeleteOrderLines")!!}',
+                                        //     type: "POST",
+                                        //     data: {
+                                        //         ID: headerID,
+                                        //         intDetailId: data["intDetailId"],
+                                        //         Price: data["Price"],
+                                        //         Quantity: data["Quantity"],
+                                        //         comment: data["strComment"],
+                                        //         statement: type,
+                                        //     },
+                                        //     success: function (data) {
+                                        //         location.reload();
+                                        //         orderheader.selectRows(row);
+                                        //     }
+                                        // });
                                     },
                                     
                                 });
