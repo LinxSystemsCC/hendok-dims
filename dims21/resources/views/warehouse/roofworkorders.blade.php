@@ -784,23 +784,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     scrolling: {
                                         mode: 'infinite',
                                     },
-                                    rowDragging: {
-                                        allowReordering: true,
-                                        onReorder(e) {
-                                            const visibleRows = e.component.getVisibleRows();
-                                            const toIndex = data.findIndex((item) => item.UniqueID === visibleRows[e.toIndex].data.UniqueID);
-                                            const fromIndex = data.findIndex((item) => item.UniqueID === e.itemData.UniqueID);
 
-                                            data.splice(fromIndex, 1);
-                                            data.splice(toIndex, 0, e.itemData);
-
-                                            e.component.refresh();
-                                        },
-                                    },
                                     paging:{
                                         pageSize: 20,
                                     },editing: {
-                                        mode: 'row',
+                                        mode: 'batch',
                                         allowUpdating: true,
                                         // allowAdding: true,
                                         // allowDeleting: true,
@@ -847,11 +835,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                             dataField: "ItemName",
                                             caption: "Item Name",
                                             allowEditing : false,
-                                        },{
-                                            dataField: "intSequence",
-                                            caption: "Seq",
-                                            // visible: false,
-                                            // allowEditing : false,
                                         },
                                         {
                                             dataField: "intMachineId",
@@ -876,22 +859,22 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         data = data.changes[0]["key"];
                                         // console.debug(type);
                                         // console.debug(data);
-                                        // $.ajax({
-                                        //     url: '{!!url("/updateDeleteOrderLines")!!}',
-                                        //     type: "POST",
-                                        //     data: {
-                                        //         ID: headerID,
-                                        //         intDetailId: data["intDetailId"],
-                                        //         Price: data["Price"],
-                                        //         Quantity: data["Quantity"],
-                                        //         comment: data["strComment"],
-                                        //         statement: type,
-                                        //     },
-                                        //     success: function (data) {
-                                        //         //location.reload();
-                                        //         orderheader.selectRows(row);
-                                        //     }
-                                        // });
+                                        $.ajax({
+                                            url: '{!!url("/updateDeleteOrderLines")!!}',
+                                            type: "POST",
+                                            data: {
+                                                ID: headerID,
+                                                intDetailId: data["intDetailId"],
+                                                Price: data["Price"],
+                                                Quantity: data["Quantity"],
+                                                comment: data["strComment"],
+                                                statement: type,
+                                            },
+                                            success: function (data) {
+                                                location.reload();
+                                                orderheader.selectRows(row);
+                                            }
+                                        });
                                     },
                                     
                                 });

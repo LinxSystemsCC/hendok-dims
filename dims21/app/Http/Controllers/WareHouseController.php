@@ -1143,7 +1143,7 @@ where intDeptID =".$deptId);
 
     public function sendRoofingLabelToThePrinter(Request $request){
         $deptname = 'Roofing';
-        $jobId  = $request->get('jobId');;
+        $jobId  = $request->get('jobId');
         $operator  = Auth::user()->UserName;
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $t=time();
