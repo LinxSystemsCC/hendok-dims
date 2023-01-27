@@ -791,7 +791,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     },
                                     paging: {
                                         enabled: false
-                                    }
+                                    },
 
                                     columns: [
                                         
