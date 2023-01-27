@@ -455,7 +455,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             var allGridItems =  $("#linesgrid").dxDataGrid("getDataSource").items();
             var checkedLines = new Array();
 
-            console.debug(allGridItems);
+            // console.debug(allGridItems);
 
             allGridItems.forEach((element, index, value) => {
                 // console.debug(element);
@@ -471,23 +471,23 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 });
             });
 
-            console.debug(checkedLines);
-            // $.ajax({
-            //     url: '{!!url("/updateRoofLines")!!}',
-            //     type: "POST",
-            //     data: {
-            //         workOrders: checkedLines,
-            //         batchID: batchID,
-            //         batchReference: batchReference,
-            //     },
-            //     success: function (data) {
-            //         if(data[0].Result == "Success"){
-            //             // location.reload();
-            //         }else{
-            //             alert(""+data[0].Result);
-            //         }
-            //     }
-            // });
+            // console.debug(checkedLines);
+            $.ajax({
+                url: '{!!url("/updateRoofLines")!!}',
+                type: "POST",
+                data: {
+                    workOrders: checkedLines,
+                    batchID: batchID,
+                    batchReference: batchReference,
+                },
+                success: function (data) {
+                    if(data[0].Result == "Success"){
+                        // location.reload();
+                    }else{
+                        alert(""+data[0].Result);
+                    }
+                }
+            });
 
         });
 
