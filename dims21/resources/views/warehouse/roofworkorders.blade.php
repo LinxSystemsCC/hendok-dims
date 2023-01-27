@@ -449,10 +449,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         });
 
         $('#saveWorkOrder').click(function(){
-            var linesgrid = $("#linesgrid").dxDataGrid("instance");
-            var allGridItems =  $("#linesgrid").dxDataGrid("getDataSource").items();
+            
+            var allGridItems =  $("#linesgrid").dxDataGrid("instance").items();
             var checkedLines = new Array();
-            var dataSource = linesgrid.getDataSource();
 
             console.debug(allGridItems);
             var seq = 0;
