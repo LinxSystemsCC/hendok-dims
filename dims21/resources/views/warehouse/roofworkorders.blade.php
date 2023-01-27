@@ -384,8 +384,8 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 const invorders = $("#invoiceorders").val();
                 const comp = $("#company").val();
 
-                const salesorders = salorders.split("\n");
-                const invoiceorders = invorders.split("\n");
+                var salesorders = salorders.split("\n");
+                var invoiceorders = invorders.split("\n");
                 const company = comp.split("\n");
                 
                 var SOnumbers = new Array();
