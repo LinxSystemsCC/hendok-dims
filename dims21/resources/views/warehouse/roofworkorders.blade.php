@@ -122,7 +122,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 </div>
 
                 <div id="linesgrid" style="width: 100% !important; height:50%;">
+                    
                 </div>
+
+                <button type="button" class="btn btn-success" id="saveBSOP" aria-label="Save">Save</button>
 
             </div>
 
