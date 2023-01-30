@@ -998,8 +998,7 @@ where intDeptID =".$deptId);
     }
 
     public function getRoofWIP(Request $request){
-        $machineId = $request->get("machineId");
-        $wip = DB::connection('sqlsrv2')->select('exec spGetRoofWIP ?' ,array($machineId));
+        $wip = DB::connection('sqlsrv2')->select('exec spGetRoofWIP ');
         return response()->json($wip);
     }
 
@@ -1289,6 +1288,19 @@ where intDeptID =".$deptId);
 
             // dd($orderlinesxml);
             $data = DB::connection('sqlsrv2')->select('exec spUpdateRoofLines ?,?,?,?,?',array($orderlinesxml,$userName,$userID, $batchID, $batchReference));
+        }
+
+        return response()->json($data);
+    }
+
+    public function updateRoofLinesSequence(Request $request){
+        $workOrders = $request->get("workOrders");
+
+        if (is_array($workOrders)) {
+            $orderlinesxml = $this->toxml($workOrders, "xml", array("result"));
+
+            // dd($orderlinesxml);
+            $data = DB::connection('sqlsrv2')->select('exec spUpdateRoofLinesSequence ?',array($orderlinesxml));
         }
 
         return response()->json($data);

@@ -124,13 +124,13 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 <div id="linesgrid" style="width: 100% !important; height:50%;">
                 </div>
 
-                <button type="button" class="btn btn-success" id="saveBSOP" aria-label="Save">Save</button>
+                <button type="button" class="btn btn-success" id="saveBSOP" aria-label="Save">Update Order</button>
             </div>
 
             {{--  Batch Sequencing Page --}}
             <div class="tab-pane fade" id="BSPage" role="tabpanel">
                 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
                     <select  class="form-control input-sm col-xs-1" id="machine" required>
                         <option></option>
@@ -139,10 +139,12 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         @endforeach
 
                     </select>
+                </div> --}}
+
+                <div id="sequencegrid" style="width: 100% !important; height:50%; padding-bottom: 10px;">
                 </div>
 
-                <div id="sequencegrid" style="width: 100% !important; height:50%;">
-                </div>
+                <button type="button" class="btn btn-success" id="updateBS" aria-label="Save">Update Sequence</button>
             </div>
 
 
@@ -179,82 +181,80 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         $('#datefromheader').val(date);
 		$('#datetoheader').val(date);
         
-        $('#machine').change(function(){
-            $.ajax({
-                url: '{!!url("/getRoofWIP")!!}',
-                type: "GET",
-                data: {
-                    machineId: $('#machine').val()
-                },
-                success: function (data) {
-                    $("#sequencegrid").dxDataGrid({
-                        dataSource:data, //as json
-                        showBorders: true,
-                        hoverStateEnabled: true,
-                        filterRow: { visible: true },
-                        filterPanel: { visible: true },
-                        headerFilter: { visible: true },
-                        allowColumnResizing: true,
-                        columnAutoWidth: true,
-                        paging:{
-                            pageSize: 20,
+        $.ajax({
+            url: '{!!url("/getRoofWIP")!!}',
+            type: "GET",
+            data: {
+            },
+            success: function (data) {
+
+                $("#sequencegrid").dxDataGrid({
+                    dataSource:data, //as json
+                    showBorders: true,
+                    hoverStateEnabled: true,
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    rowDragging: {
+                        allowReordering: true,
+                        showDragIcons: false,
+                        onReorder(e) {
+                            const visibleRows = e.component.getVisibleRows();
+                            const toIndex = data.findIndex((item) => item.UniqueId === visibleRows[e.toIndex].data.UniqueId);
+                            const fromIndex = data.findIndex((item) => item.UniqueId === e.itemData.UniqueId);
+
+                            data.splice(fromIndex, 1);
+                            data.splice(toIndex, 0, e.itemData);
+
+                            e.component.refresh();
                         },
-                        selection: {
-                            mode: 'single',
+                    },
+                    paging:{
+                        pageSize: 20,
+                    },
+                    selection: {
+                        mode: 'single',
+                    },
+
+                    columns: [
+                        {
+                            dataField: "UniqueId",
+                            caption: 'ID', 
+                            visible: false,
                         },
+                        {
+                            dataField: "strReference",
+                            caption: "Reference",
+                            //width: 80,
+                        },
+                        {
+                            dataField: "strMachineName",
+                            caption: "Machine",
+                            //width: 300,
 
-                        columns: [
-                            {
-                                dataField: "intJobId",
-                                caption: "JobNo",
-                                //width: 80,
+                        },
+                        {
+                            dataField: "intSequence",
+                            caption: "Sequence",
+                            //width: 600,
 
-                            }, {
-                                dataField: "intJobSequence",
-                                caption: "Job Seq",
-                                //width: 100,
+                        }
+                    ],
 
-                            },
-                            {
-                                dataField: "strMachineName",
-                                caption: "Machine",
-                                //width: 300,
+                    
+                    // onRowDblClick:function(e){
+                    //     //console.log(e.data.intJobId);
+                    //     var intJobId =  e.data.intJobId;
 
-                            },
-                            {
-                                dataField: "PastelDescription",
-                                caption: "Product",
-                                //width: 600,
+                    //     window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
 
-                            },
-                            {
-                                dataField: "mnyQtyRequired",
-                                caption: "Qty",
-                                //width: 60,dataType:"number"
+                    // }
 
-                            },
-                            {
-                                dataField: "dteStartDate",
-                                caption: "Start Date",
-                                //width: 100,dataType:"date"
+                }).dxDataGrid('instance');
+            }
 
-                            },
-                        ],
-
-                        
-                        // onRowDblClick:function(e){
-                        //     //console.log(e.data.intJobId);
-                        //     var intJobId =  e.data.intJobId;
-
-                        //     window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
-
-                        // }
-
-                    });
-
-                }
-
-            });
         });
 
         headersFunction();
@@ -293,7 +293,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             $('#BSTab').addClass("active");
         });
 
-        
 
         $('#savePPSO').click(function(){
             if (($("#reference").val()).length < 1)
@@ -391,6 +390,40 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     workOrders: checkedLines,
                     batchID: batchID,
                     batchReference: batchReference,
+                },
+                success: function (data) {
+                    if(data[0].Result == "Success"){
+                        location.reload();
+                    }else{
+                        alert(""+data[0].Result);
+                    }
+                }
+            });
+
+        });
+
+        $('#updateBS').click(function(){
+            var allGridItems =  $("#sequencegrid").dxDataGrid("getDataSource").items();
+            var checkedLines = new Array();
+
+            var seq = 0;
+
+            allGridItems.forEach((element, index, value) => {
+                seq += 1;
+                checkedLines.push({
+                    'strReference':element["strReference"],
+                    'strMachineName':element["strMachineName"],
+                    'jobSeq' : seq,
+                });
+            });
+
+            // console.debug(checkedLines);
+
+            $.ajax({
+                url: '{!!url("/updateRoofLinesSequence")!!}',
+                type: "POST",
+                data: {
+                    workOrders: checkedLines,
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
@@ -654,5 +687,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             "restore" : function(evt, dlg){  } // event
         });
     }
+
+    //devexpress datagrid with row dragging and dropping in jquery 
+
+
+
 </script>
 </body>
