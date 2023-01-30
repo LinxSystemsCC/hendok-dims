@@ -63,7 +63,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 <a class="nav-link" id="BSOPTab">Batch SO Processing</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="BSTab" >Batch Sequencing</a>
+                <a class="nav-link" id="BSTab" >Batch Progression</a>
             </li>
         </ul>
         
