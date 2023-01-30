@@ -1020,6 +1020,9 @@ Route::group(['middleware' => 'auth'], function() {
 //WAREHOUSE
     Route::get('updatestartdate', [WareHouseController::class,'updatestartdate']);
     Route::get('jobupdateprint/{jobid}', [WareHouseController::class,'jobupdateprint']);
+    Route::get('roofingSOUpdate/{reference}/{machine}', [WareHouseController::class,'roofingSOUpdate']);
+    Route::get('getRoofingSOtoUpdate', [WareHouseController::class,'getRoofingSOtoUpdate']);
+    Route::get('changeRoofingSOStatus', [WareHouseController::class,'changeRoofingSOStatus']);
     Route::get('getsalesorders', [WareHouseController::class,'getsalesorders']);
     Route::get('getroofingheaders', [WareHouseController::class,'getroofingheaders']);
     Route::get('getroofinglines', [WareHouseController::class,'getroofinglines']);

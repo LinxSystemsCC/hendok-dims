@@ -1164,6 +1164,28 @@ where intDeptID =".$deptId);
         return view('warehouse/updatejob')->with("jobdata",$jobdata)->with("id",$jobid);
     }
 
+    public function roofingSOUpdate($reference,$machine){
+        return view('warehouse/updateroofingjob')->with("reference",$reference)->with("machine",$machine);
+    }
+
+    public function getRoofingSOtoUpdate(Request $request){
+        $reference = $request->get("reference");
+        $machine = $request->get("machine");
+        // dd($reference, $machine);
+        $jobdata = DB::connection('sqlsrv3')->select('exec spGetRoofingSOHeader ?,?',array($reference, $machine));
+        // dd($jobdata);
+        return response()->json($jobdata);
+    }
+
+    public function changeRoofingSOStatus(Request $request){
+        $salesorder = $request->get("salesorder");
+        $invoiceorder = $request->get("invoiceorder");
+        $status = $request->get("status");
+
+        $data = DB::connection('sqlsrv3')->select('exec spUpdateRoofingSOStatus ?,?,?',array($salesorder, $invoiceorder, $status));
+        return response()->json($data);
+    }
+
     public function deletesalesorders(Request $request){
         $reference = $request->get("reference");
         $userID = Auth::user()->UserID;

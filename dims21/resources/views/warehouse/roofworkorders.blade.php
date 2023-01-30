@@ -154,7 +154,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
 </div>
 
-
 <style>
     .dx-datagrid-table{
         font-size:15px;
@@ -239,18 +238,18 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             dataField: "intSequence",
                             caption: "Sequence",
                             //width: 600,
-
                         }
                     ],
 
                     
-                    // onRowDblClick:function(e){
-                    //     //console.log(e.data.intJobId);
-                    //     var intJobId =  e.data.intJobId;
+                    onRowDblClick:function(e){
+                        //console.log(e.data.intJobId);
+                        var strReference =  e.data.strReference;
+                        var strMachineName = e.data.strMachineName;
 
-                    //     window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        window.open('{!!url("/roofingSOUpdate")!!}/'+strReference+'/'+strMachineName,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
 
-                    // }
+                    }
 
                 }).dxDataGrid('instance');
             }
@@ -658,39 +657,33 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         .replace(/'/g, "&#039;");
 }
 
-    function showDialog(tag,width,height)
-    {
-        $( tag ).dialog({height: height, modal: false,
-            width: width,containment: false}).dialogExtend({
-            "closable" : true, // enable/disable close button
-            "maximizable" : false, // enable/disable maximize button
-            "minimizable" : true, // enable/disable minimize button
-            "collapsable" : true, // enable/disable collapse button
-            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar" : false, // false, 'none', 'transparent'
-            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-            "icons" : { // jQuery UI icon class
+function showDialog(tag,width,height){
+    $( tag ).dialog({height: height, modal: false,
+        width: width,containment: false}).dialogExtend({
+        "closable" : true, // enable/disable close button
+        "maximizable" : false, // enable/disable maximize button
+        "minimizable" : true, // enable/disable minimize button
+        "collapsable" : true, // enable/disable collapse button
+        "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+        "titlebar" : false, // false, 'none', 'transparent'
+        "minimizeLocation" : "right", // sets alignment of minimized dialogues
+        "icons" : { // jQuery UI icon class
 
-                "maximize" : "ui-icon-circle-plus",
-                "minimize" : "ui-icon-circle-minus",
-                "collapse" : "ui-icon-triangle-1-s",
-                "restore" : "ui-icon-bullet"
-            },
-            "load" : function(evt, dlg){ }, // event
-            "beforeCollapse" : function(evt, dlg){ }, // event
-            "beforeMaximize" : function(evt, dlg){ }, // event
-            "beforeMinimize" : function(evt, dlg){ }, // event
-            "beforeRestore" : function(evt, dlg){ }, // event
-            "collapse" : function(evt, dlg){  }, // event
-            "maximize" : function(evt, dlg){ }, // event
-            "minimize" : function(evt, dlg){  }, // event
-            "restore" : function(evt, dlg){  } // event
-        });
-    }
-
-    //devexpress datagrid with row dragging and dropping in jquery 
-
-
-
+            "maximize" : "ui-icon-circle-plus",
+            "minimize" : "ui-icon-circle-minus",
+            "collapse" : "ui-icon-triangle-1-s",
+            "restore" : "ui-icon-bullet"
+        },
+        "load" : function(evt, dlg){ }, // event
+        "beforeCollapse" : function(evt, dlg){ }, // event
+        "beforeMaximize" : function(evt, dlg){ }, // event
+        "beforeMinimize" : function(evt, dlg){ }, // event
+        "beforeRestore" : function(evt, dlg){ }, // event
+        "collapse" : function(evt, dlg){  }, // event
+        "maximize" : function(evt, dlg){ }, // event
+        "minimize" : function(evt, dlg){  }, // event
+        "restore" : function(evt, dlg){  } // event
+    });
+}
 </script>
 </body>
