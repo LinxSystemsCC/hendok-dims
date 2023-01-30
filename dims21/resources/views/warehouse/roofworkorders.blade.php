@@ -124,7 +124,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 <div id="linesgrid" style="width: 100% !important; height:50%;">
                 </div>
 
-                <button type="button" class="btn btn-success" id="saveBSOP" aria-label="Save">Update Order</button>
             </div>
 
             {{--  Batch Sequencing Page --}}
@@ -141,10 +140,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     </select>
                 </div> --}}
 
-                <div id="sequencegrid" style="width: 100% !important; height:50%; padding-bottom: 10px;">
+                <div id="sequencegrid" style="width: 50% !important; height:50%; padding-bottom: 10px;">
                 </div>
 
-                <button type="button" class="btn btn-success" id="updateBS" aria-label="Save">Update Sequence</button>
+                {{-- <button type="button" class="btn btn-success" id="updateBS" aria-label="Save">Update Sequence</button> --}}
             </div>
 
 
@@ -196,20 +195,20 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     headerFilter: { visible: true },
                     allowColumnResizing: true,
                     columnAutoWidth: true,
-                    rowDragging: {
-                        allowReordering: true,
-                        showDragIcons: false,
-                        onReorder(e) {
-                            const visibleRows = e.component.getVisibleRows();
-                            const toIndex = data.findIndex((item) => item.UniqueId === visibleRows[e.toIndex].data.UniqueId);
-                            const fromIndex = data.findIndex((item) => item.UniqueId === e.itemData.UniqueId);
+                    // rowDragging: {
+                    //     allowReordering: true,
+                    //     showDragIcons: false,
+                    //     onReorder(e) {
+                    //         const visibleRows = e.component.getVisibleRows();
+                    //         const toIndex = data.findIndex((item) => item.UniqueId === visibleRows[e.toIndex].data.UniqueId);
+                    //         const fromIndex = data.findIndex((item) => item.UniqueId === e.itemData.UniqueId);
 
-                            data.splice(fromIndex, 1);
-                            data.splice(toIndex, 0, e.itemData);
+                    //         data.splice(fromIndex, 1);
+                    //         data.splice(toIndex, 0, e.itemData);
 
-                            e.component.refresh();
-                        },
-                    },
+                    //         e.component.refresh();
+                    //     },
+                    // },
                     paging:{
                         pageSize: 20,
                     },
@@ -233,11 +232,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             caption: "Machine",
                             //width: 300,
 
-                        },
-                        {
-                            dataField: "intSequence",
-                            caption: "Sequence",
-                            //width: 600,
                         }
                     ],
 

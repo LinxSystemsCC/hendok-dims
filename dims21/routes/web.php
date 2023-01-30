@@ -1071,7 +1071,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('wmaxregrade', [WareHouseController::class,'wmaxregrade']);
     Route::get('wmaxstockchange', [WareHouseController::class,'wmaxstockchange']);
     Route::get('wmaxretest', [WareHouseController::class,'wmaxretest']);
-
+    Route::get('pickersandloadersdashboard', [WareHouseController::class,'pickersandloadersdashboard']);
+    Route::get('getpickersandloadersdashboard', [WareHouseController::class,'getpickersandloadersdashboard']);
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!

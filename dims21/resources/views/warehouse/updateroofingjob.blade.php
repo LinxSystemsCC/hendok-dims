@@ -34,7 +34,18 @@
 </head>
 
 <body>
-    <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
+    <div class="col-lg-12 bd-highlight"  style="background: white;">
+        <div class="col-lg-12 py-2 d-inline-flex">
+            <button type="button" id="printlabels" class="btn btn-secondary mx-1" data-toggle="modal" data-target="#prinlabels">Print Labels</button>
+
+            <button type="button" id="updateSeq" class="btn btn-success mx-1" data-toggle="modal" data-target="#sequencedialog">Update Sequence</button>
+            
+            {{-- <button type="button" id="printjobcard" class="btn btn-info mx-1" data-toggle="modal" data-target="#sequencedialog">Print Job Card</button> --}}
+            
+            <button type="button" id="statuschange" class="btn btn-primary mx-1" data-toggle="modal" data-target="#jobchanges">Change Job Status</button>
+        </div>
+            
+        
         <div id="jobgrid" style="width: 100% !important; height:50%; padding-bottom: 10px;">
         </div>
 
@@ -91,8 +102,8 @@
                 url: '{!!url("/changeRoofingSOStatus")!!}',
                 type: "GET",
                 data: {
-                    salesorder: salesorder,
-                    invoiceorder: invoiceorder,
+                    reference: '{!! $reference !!}',
+                    machine: '{!! $machine !!}',
                     status:$('#setstatus').val(),
                 },
                 success: function (data) {
@@ -103,10 +114,40 @@
                         location.reload();
                     }
                 }
-
             });
-       
-       
+        });
+
+        $('#updateSeq').click(function(){
+            var allGridItems =  $("#jobgrid").dxDataGrid("getDataSource").items();
+            var checkedLines = new Array();
+
+            var seq = 0;
+
+            allGridItems.forEach((element, index, value) => {
+                seq += 1;
+                checkedLines.push({
+                    'intRoofSOID':element["intRoofSOID"],
+                    'jobSeq' : seq,
+                });
+            });
+
+            // console.debug(checkedLines);
+
+            $.ajax({
+                url: '{!!url("/updateRoofLinesSequence")!!}',
+                type: "POST",
+                data: {
+                    workOrders: checkedLines,
+                },
+                success: function (data) {
+                    if(data[0].Result == "Success"){
+                        location.reload();
+                    }else{
+                        alert(""+data[0].Result);
+                    }
+                }
+            });
+
         });
 
         var reference = '{!! $reference !!}';
@@ -137,8 +178,27 @@
                     selection: {
                         mode: 'single',
                     },
+                    rowDragging: {
+                        allowReordering: true,
+                        showDragIcons: false,
+                        onReorder(e) {
+                            const visibleRows = e.component.getVisibleRows();
+                            const toIndex = data.findIndex((item) => item.intRoofSOID === visibleRows[e.toIndex].data.intRoofSOID);
+                            const fromIndex = data.findIndex((item) => item.intRoofSOID === e.itemData.intRoofSOID);
+
+                            data.splice(fromIndex, 1);
+                            data.splice(toIndex, 0, e.itemData);
+
+                            e.component.refresh();
+                        },
+                    },
 
                     columns: [
+                        {
+                            dataField: "intRoofSOID",
+                            caption: 'ID', 
+                            // visible: false,
+                        },
                         {
                             dataField: "intOrderLineId",
                             caption: 'Order Line ID', 
@@ -147,6 +207,10 @@
                         {
                             dataField: "strSONum",
                             caption: 'SO Number', 
+                            // visible: false,
+                        },{
+                            dataField: "intSequence",
+                            caption: 'Seq', 
                             // visible: false,
                         },
                         {

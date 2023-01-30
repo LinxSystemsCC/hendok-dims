@@ -1178,11 +1178,11 @@ where intDeptID =".$deptId);
     }
 
     public function changeRoofingSOStatus(Request $request){
-        $salesorder = $request->get("salesorder");
-        $invoiceorder = $request->get("invoiceorder");
+        $reference = $request->get("reference");
+        $machine = $request->get("machine");
         $status = $request->get("status");
 
-        $data = DB::connection('sqlsrv3')->select('exec spUpdateRoofingSOStatus ?,?,?',array($salesorder, $invoiceorder, $status));
+        $data = DB::connection('sqlsrv3')->select('exec spUpdateRoofingSOStatus ?,?,?',array($reference, $machine, $status));
         return response()->json($data);
     }
 
@@ -1749,6 +1749,15 @@ where intDeptID =".$deptId);
         DB::connection('sqlsrv2')->table('tblMappedDeptMachinesItems')
             ->where('intAutoMappedDeptMachItemID',$mappingId )
             ->update(['intStatus' => 2]);
+    }
+
+    public function pickersandloadersdashboard(){
+        return view('warehouse/pickersandloadersdashboard');
+    }
+
+    public function getpickersandloadersdashboard(){
+        $data = DB::connection('sqlsrv2')->select('exec spGetPickersAndLoadersDashboard');
+        return response()->json($data);
     }
 
     private static function getTabs($tabcount)
