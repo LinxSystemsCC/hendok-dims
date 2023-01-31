@@ -90,7 +90,10 @@
                     url: '{!!url("/sendRoofingLabelToThePrinter")!!}',
                     type: "GET",
                     data: {
-                        jobId: $('#jobId').val(),
+                        qty: $('#qty').val(),
+                        type:2,
+                        jobid:$('#jobid').val(),
+                        isnew:"NEW"
                     },
                     success: function (data) {
                         if(data ="Success"){
