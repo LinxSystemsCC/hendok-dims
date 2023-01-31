@@ -65,7 +65,7 @@
     </div>
     <div class="col-lg-12"  style="background: white;display:flex;text-align: center;margin-left: 105px; margin-top: 5px;">
         <input type="number" id="qty" value="1"> <br>
-        <input type="hidden" id="jobid" value="{{$jobid}}" style="width: 100%"> <br>
+        <input type="hidden" id="jobId" value="{{$jobid}}" style="width: 100%"> <br>
 
 @if($fullfilled !="Finished")
         <button class="btn btn-lg btn-primary" id="printthislabels">PRINT</button>
@@ -92,12 +92,12 @@
                     data: {
                         qty: $('#qty').val(),
                         type:2,
-                        jobid:$('#jobid').val(),
+                        jobId:$('#jobId').val(),
                         isnew:"NEW"
                     },
                     success: function (data) {
                         if(data ="Success"){
-                            //window.location = '{!!url("/doneprintingpallet")!!}';
+                            window.location = '{!!url("/doneprintingpallet")!!}';
                         }
 
                     }
