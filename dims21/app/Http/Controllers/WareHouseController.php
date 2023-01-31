@@ -1142,6 +1142,7 @@ where intDeptID =".$deptId);
 
     public function sendRoofingLabelToThePrinter(Request $request){
         $deptname = 'Roofing';
+        $qty = $request->get('qty');
         $jobId  = $request->get('jobId');
         $operator  = Auth::user()->UserName;
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
@@ -1149,8 +1150,8 @@ where intDeptID =".$deptId);
         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
         $ID = $t.$randomString;
 
-        $print = DB::connection('sqlsrv2')->statement('exec spInsertPrintRoofingLabels ?,?,?,?',array($deptname,$jobId,$operator,$ID));
-        
+        $print = DB::connection('sqlsrv2')->statement('exec spInsertPrintRoofingLabels ?,?,?,?,?',array($deptname,$jobId,$operator,$ID,$qty));
+
         return response()->json($print);
     }
 
@@ -1756,7 +1757,8 @@ where intDeptID =".$deptId);
     }
 
     public function getpickersandloadersdashboard(){
-        $data = DB::connection('sqlsrv2')->select('exec spGetPickersAndLoadersDashboard');
+        $data = DB::connection('sqlsrv2')->select('select * from viewPickingAndLoadingDashboard');
+        // dd($data);
         return response()->json($data);
     }
 
