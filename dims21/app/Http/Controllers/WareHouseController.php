@@ -1150,6 +1150,8 @@ where intDeptID =".$deptId);
         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
         $ID = $t.$randomString;
 
+        dd($deptname,$qty, $jobId, $operator);
+
         $print = DB::connection('sqlsrv2')->statement('exec spInsertPrintRoofingLabels ?,?,?,?,?',array($deptname,$jobId,$operator,$ID,$qty));
 
         return response()->json($print);
