@@ -222,6 +222,10 @@
                             dataField: "strCustomerName",
                             caption: "Customer",
                             //width: 80,
+                        },{
+                            dataField: "strRawMaterial",
+                            caption: "Raw Material",
+                            //width: 600,
                         },
                         {
                             dataField: "strProductCode",
