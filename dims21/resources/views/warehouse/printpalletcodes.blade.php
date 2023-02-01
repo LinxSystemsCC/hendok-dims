@@ -83,7 +83,7 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
     
     @foreach($departments as $val)
 
-    <button class="btn btn-success" onclick="location.href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}'" type="button" style="width: 100% !important;font-size: 85px;">{{$val->strDeptName}}
+    <button class="btn btn-danger" onclick="location.href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}'" type="button" style="width: 100% !important;font-size: 85px;">{{$val->strDeptName}}
     </button>
 
     @endforeach

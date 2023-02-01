@@ -106,7 +106,7 @@
     
     @foreach($machines as $val)
     @if ($val->intDeptID == $deparment)
-        <button class="btn btn-success" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 40px;">{{$val->strMachineName}}
+        <button class="btn btn-danger" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 40px;">{{$val->strMachineName}}
         </button>
     @endif
     
