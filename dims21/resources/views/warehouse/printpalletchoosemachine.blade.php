@@ -84,7 +84,7 @@
 
 </div> --}}
 
-<div class="col-lg-12"  style="background: rgb(141, 141, 141); padding:20px; height:100vh;">
+<div class="col-lg-12"  style="padding:20px; height:100vh;">
     <div style="padding-bottom: 20px; width: 100%;text-align:center; position:relative; margin: auto;">
         @foreach($departments as $val)
         {{-- <h3>SELECTED DEPARTMENT: {{$val->strDeptName}}</h3> --}}
@@ -106,7 +106,7 @@
     
     @foreach($machines as $val)
     @if ($val->intDeptID == $deparment)
-        <button class="btn btn-dark" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 40px;">{{$val->strMachineName}}
+        <button class="btn btn-success" onclick="location.href='{!!url("/printpalletchoosproducttomake")!!}/{{$intId}}/{{$val->intMachineID}}'" type="button" style="width: 100% !important;font-size: 40px;">{{$val->strMachineName}}
         </button>
     @endif
     

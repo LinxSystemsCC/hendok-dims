@@ -55,7 +55,7 @@
 
 
 </head>
-<div class="col-lg-12"  style="background:rgb(141, 141, 141); padding:20px; min-height: 100vh; min-width: 100%;">
+<div class="col-lg-12"  style="padding:20px; min-height: 100vh; min-width: 100%;">
     
     <div style="display: flex;">
         <a class="btn btn-dark" href='{!!url("/printpalletchoosemachine")!!}/{{$departmentselected}}' style=" font-size: 30px; left: 0px; top: 15px; height:auto;" >
@@ -81,13 +81,13 @@
     <h1>CHOOSE PRODUCT</h1>
     @foreach($products as $val)
         @if($val->intJobId == 0)
-            <button class="btn btn-dark" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" type="button" style="width:100% !important;font-size: 25px;">
+            <button class="btn btn-success" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" type="button" style="width:100% !important;font-size: 25px;">
                 {{$val->PastelDescription}} {{$val->productionstat}}</button>
             <br>
             <br>
         @else
             @if($val->strJobStatus !="NOT STARTED")
-                <button class="btn btn-dark" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}/None'" type="button" style="width:100% !important;font-size: 25px;">
+                <button class="btn btn-success" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}/None'" type="button" style="width:100% !important;font-size: 25px;">
                     {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
                 <br>
                 <br>

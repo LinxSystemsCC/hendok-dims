@@ -69,7 +69,7 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
 
 </head>
 
-<div class="col-lg-12"  style="background: rgb(141, 141, 141); padding:20px; min-height: 100vh; min-width: 100%;">
+<div class="col-lg-12"  style="padding:20px; min-height: 100vh; min-width: 100%;">
     <div style="padding-bottom: 20px; width: 100%;text-align:center; position:relative; margin: auto;">
         <span style="font-size: 65px; font-weight:700;">PICK DEPARTMENT</span>
 
@@ -83,7 +83,7 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
     
     @foreach($departments as $val)
 
-    <button class="btn btn-dark" onclick="location.href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}'" type="button" style="width: 100% !important;font-size: 85px;">{{$val->strDeptName}}
+    <button class="btn btn-success" onclick="location.href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}'" type="button" style="width: 100% !important;font-size: 85px;">{{$val->strDeptName}}
     </button>
 
     @endforeach
