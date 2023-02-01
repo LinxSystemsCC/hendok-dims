@@ -121,7 +121,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 <div id="headergrid" style="width: 100% !important; height:50%;">
                 </div>
 
-                <div id="linesgrid" style="width: 100% !important; height:50%;">
+                <div id="linesgrid" class="py-3" style="width: 100% !important; height:50%;">
                     
                 </div>
 
@@ -181,6 +181,43 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 		$('#dateto').val(date);
         $('#datefromheader').val(date);
 		$('#datetoheader').val(date);
+
+        if (localStorage.getItem("PPSO") == 'active') {
+            localStorage.setItem('PPSO', 'done');
+            $('#PPSOPage').addClass("show active");
+            $('#BSOPPage').removeClass("show active");
+            $('#BSPage').removeClass("show active");
+
+            $('#PPSOTab').addClass("active");
+            $('#BSOPTab').removeClass("active");
+            $('#BSTab').removeClass("active");
+        }
+
+        if (localStorage.getItem("BSOP") == 'active') {
+            localStorage.setItem('BSOP', 'done');
+            $('#PPSOPage').removeClass("show active");
+            $('#BSOPPage').addClass("show active");
+            $('#BSPage').removeClass("show active");
+
+            $('#PPSOTab').removeClass("active");
+            $('#BSOPTab').addClass("active");
+            $('#BSTab').removeClass("active");
+        }
+
+        if (localStorage.getItem("BS") == 'active') {
+            localStorage.setItem('BS', 'done');
+            $('#PPSOPage').removeClass("show active");
+            $('#BSOPPage').removeClass("show active");
+            $('#BSPage').addClass("show active");
+
+            $('#PPSOTab').removeClass("active");
+            $('#BSOPTab').removeClass("active");
+            $('#BSTab').addClass("active");
+        }
+        
+        // localStorage.setItem('PPSO', '');
+        // localStorage.setItem('PPSO', '');
+        // localStorage.setItem('PPSO', '');
         
         $.ajax({
             url: '{!!url("/getRoofWIP")!!}',
@@ -353,6 +390,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     success: function (data) {
                         if(data[0].Result == "Success"){
                             location.reload();
+                            localStorage.setItem('PPSO', 'active');
                         }else{
                             alert(""+data[0].Result);
                         }
@@ -390,6 +428,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 success: function (data) {
                     if(data[0].Result == "Success"){
                         location.reload();
+                        localStorage.setItem('BSOP', 'active');
                     }else{
                         alert(""+data[0].Result);
                     }
@@ -424,6 +463,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 success: function (data) {
                     if(data[0].Result == "Success"){
                         location.reload();
+                        localStorage.setItem('BS', 'active');
                     }else{
                         alert(""+data[0].Result);
                     }
@@ -500,20 +540,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             caption: "Time Created",
                         }, 
                     ],
-                    // onSaved(data){
-                    //     data = data.changes[0]["key"];
-                    //     console.debug(data)
-                    //     $.ajax({
-                    //         url: '{!!url("/deleteOrder")!!}',
-                    //         type: "POST",
-                    //         data: {
-                    //             ID: data["ID"],
-                    //         },
-                    //         success: function (data) {
-                                
-                    //         }
-                    //     });
-                    // }, //TODO fix this update method
 
                     onRowClick:function(e){
                         $('#linesgrid').show();
@@ -616,24 +642,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         //console.debug(data);
                                         var type = data.changes[0]["type"];
                                         data = data.changes[0]["key"];
-                                        // console.debug(type);
-                                        // console.debug(data);
-                                        // $.ajax({
-                                        //     url: '{!!url("/updateDeleteOrderLines")!!}',
-                                        //     type: "POST",
-                                        //     data: {
-                                        //         ID: headerID,
-                                        //         intDetailId: data["intDetailId"],
-                                        //         Price: data["Price"],
-                                        //         Quantity: data["Quantity"],
-                                        //         comment: data["strComment"],
-                                        //         statement: type,
-                                        //     },
-                                        //     success: function (data) {
-                                        //         location.reload();
-                                        //         orderheader.selectRows(row);
-                                        //     }
-                                        // });
                                     },
                                     
                                 });
@@ -644,6 +652,8 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             }
         });
     };
+
+    //TODO remove ended sales orders from the Batch Processing List
 
     function escapeHtml(unsafe) {
     return unsafe

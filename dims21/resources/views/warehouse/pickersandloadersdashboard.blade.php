@@ -12,6 +12,12 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 		<link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
 
+		<style>
+			td{
+				font-weight: 600;
+			}
+		</style>
+
 	</head>
 	<body>
 		<div class="col-md-12 ms-sm-auto col-lg-12" style="padding:0px !important;">
@@ -23,19 +29,15 @@
 				<table class="table table-dark table-lg" id="datatable">
 					<thead>
 						<tr>
-							<th scope="col">ID</th>
-							<th scope="col">AREAS</th>
-							<th scope="col">ORDER/ROUTE TYPE</th>
-							<th scope="col">DRIVER</th>
-							<th scope="col">ASSISTANT</th>
-							<th scope="col">TRUCK</th>
-							<th scope="col">STATUS</th>
-							<th scope="col">STOPS</th>
-							<th scope="col">STOPS DEL</th>
-							<th scope="col">RETURNS</th>
-							<th scope="col">LOADING BAY</th>
-							<th scope="col">TIME SPENT</th>
-							<th scope="col">AMOUNT</th>
+							<th scope="col">REF</th>
+							<th scope="col">CREATED</th>
+							<th scope="col">ROUTE</th>
+							<th scope="col">BAY</th>
+							<th scope="col">PICKER</th>
+							<th scope="col">LOADER</th>
+							<th scope="col">LEADER</th>
+							<th scope="col">STAGED</th>
+							<th scope="col">LOADED</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -80,8 +82,6 @@
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5vAgb-nawregIa5gRRG34wnabasN3blk"></script>
-
 <script>
     $.ajaxSetup({
         headers: {
@@ -95,44 +95,41 @@
     $(document).ready(function() {
 		getDashboard();
 
-		function getDashboard(){
-			$.ajax({
-				url: '{!!url("/getpickersandloadersdashboard")!!}',
-				type: "GET",
-				data: {
-
-				},
-				success: function(data) {
-					//console.log(data);
-					var row = '';
-
-					//location.reload();
-					$.each(JSON.parse(data), function(index, item){
-						if ((item.doneBusy) == "done"){
-							row += '<tr id="row" class = "table bg-success">';
-						}else{
-							row += '<tr id="row" class = "table bg-danger">';
-						}
-						row += '<td id="RouteID">'+item.DeliveryDateRoutingID+'</td>';
-						row += '<td id="Route">'+item.Route+'</td>';
-						row += '<td id="OrderType">'+item.OrderType+'</td>';
-						row += '<td id="DriverName">'+item.DriverName+'</td>';
-						row += '<td id="Assistant">'+item.ASSIS+'</td>';
-						row += '<td id="TruckName">'+item.TruckName+'</td>';
-						row += '<td id="Status">'+item.doneBusy+'</td>';
-						row += '<td id="Stops">'+item.NoOfStops+'</td>';
-						row += '<td id="StopsDelv">'+item.stopsDelv+'</td>';
-						row += '<td id="Returns">'+item.cReq+'</td>';
-						row += '<td id="LoadingBay">'+item.strDoorName+'</td>';
-						row += '<td id="TravelTime">'+item.Travelling+'</td>';
-						row += '<td id="Amount">'+item.routeAmaount+'</td>';
-						row += '</tr>';
-					}); 
-
-					$('#datatable').append(row);
-				},
-			});
-		};
-
 	});
+
+	function getDashboard(){
+		$.ajax({
+			url: '{!!url("/getpickersandloadersdashboard")!!}',
+			type: "GET",
+			data: {
+
+			},
+			success: function(data) {
+				//console.log(data);
+				var row = '';
+
+				//location.reload();
+				$.each((data), function(index, item){
+					if ((item.isStaged) == 1){
+						row += '<tr id="row" class = "table bg-warning">';
+					}else if ((item.isLoaded) == 1){
+						row += '<tr id="row" class = "table bg-success">';
+					}else{
+						row += '<tr id="row" class = "table bg-danger">';
+					}
+					row += '<td id="Reference">'+item.strUnickReference+'</td>';
+					row += '<td id="dtmCreated">'+item.dtmCreated+'</td>';
+					row += '<td id="strRoute">'+item.strRoute+'</td>';
+					row += '<td id="strStagingBay">'+item.strStagingBay+'</td>';
+					row += '<td id="strPicker">'+item.strPicker+'</td>';
+					row += '<td id="strLoader">'+item.strLoader+'</td>';
+					row += '<td id="strTeamLeader">'+item.strTeamLeader+'</td>';
+					row += '<td id="isStaged">'+item.isStaged+'</td>';
+					row += '<td id="isLoaded">'+item.isLoaded+'</td>';
+				}); 
+
+				$('#datatable').append(row);
+			},
+		});
+	};
 </script>
