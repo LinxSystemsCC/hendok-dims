@@ -79,8 +79,8 @@
     <br>
 
     <h1>CHOOSE PRODUCT</h1>
+    <h2 id='batchRef'>REFERENCE: NONE</h2>
     @foreach($products as $val)
-    <h2>REFERENCE: {{$val->strReference}}</h2>
         @if($val->intJobId == 0)
             <button class="btn btn-danger" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" type="button" style="width:100% !important;font-size: 25px;">
                 {{$val->PastelDescription}} {{$val->productionstat}}</button>
@@ -116,8 +116,11 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     var jArray = JSON.stringify({!! json_encode($products) !!});
+    var Reference = {!! json_encode($products) !!};
     $(document).ready(function() {
-        console.debug(jArray);
+        // console.debug(Reference[0]['strReference']);
+        var BatchRef = Reference[0]['strReference'];
+        $('#batchRef').text('BATCH REFERENCE: '+BatchRef);
         var finalData =$.map(JSON.parse(jArray), function(item) {
 
             return {
