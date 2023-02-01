@@ -82,7 +82,7 @@
     @foreach($products as $val)
         @if($val->intJobId == 0)
             <button class="btn btn-dark" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" type="button" style="width:100% !important;font-size: 25px;">
-                {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
+                {{$val->PastelDescription}} {{$val->productionstat}}</button>
             <br>
             <br>
         @else
