@@ -154,8 +154,37 @@ class WareHouseController extends Controller
     public function warehousepalletlabels(){
     
 
-        $machines = DB::connection('sqlsrv2')->select("select * from viewRoofingMachines");
-        return view('warehouse/warehousepalletlabels')->with('machines', $machines);
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments"); 
+        $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
+        $pallets = DB::connection('sqlsrv2')->select("select * from tblPalletConf");
+        return view('warehouse/warehousepalletlabels')
+        ->with('prodGroups',$prodGroups)
+        ->with('pallets',$pallets)
+        ->with('dept',$dept);
+    }
+
+    public function getproductbyjobid(Request $request){
+    
+        $jobid = $request->get('jobid');
+        $returndata = DB::connection('sqlsrv2') ->select('exec spGetProductInformationBasedJobID ?', array($jobid));
+        
+        return response()->json($returndata);
+
+    }
+
+    public function printgenericpalletlabel(Request $request){
+        $dept=$request->get('dept');
+        $prodcat=$request->get('prodcat');
+        $prodname=$request->get('prodname');
+        $palletconfid=$request->get('palletconfid');
+        $qty=$request->get('qty');
+        $weight=$request->get('weight');
+        $barcode=$request->get('barcode');
+        $operator=Auth::user()->UserName;
+        $returndata = DB::connection('sqlsrv2') ->select('exec spInsertPrintForPalletLabels ?,?,?,?,?,?,?,?', array($dept,$prodcat,$prodname,$palletconfid,$qty,$weight,$barcode,$operator));
+        
+        return response()->json($returndata);
+
     }
 
     public function getProductBarcode(Request $request){

@@ -69,105 +69,146 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             {{-- Barcode Scan Page --}}
             <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; width: 30%;padding: 20px !important;">
 
-<h3>PRODUCT LABEL PRINTING</h3>
+                <h3>PALLET LABEL PRINTING</h3>
+                {{--Input of Job ID--}}
+                <div class="form-group">
+                    <label class="control-label" for="jobid"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Job ID </label>
+                    <input  class="form-control input-sm col-xs-1" id="jobid" style="width: 100%" >
+                </div>
 
-{{-- Department --}}
-<div>
-    <div class="form-group">
-    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-        <input  class="form-control input-sm col-xs-1" id="department" style="width: 100%" required>
-    </div>
-    </div>
+                {{-- Department --}}
+                <div class="form-group">
+                    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
+                    <input  class="form-control input-sm col-xs-1" id="department" style="width: 100%" readonly>
+                </div>
 
-    {{-- Product --}}
-    <div class="form-group">
-    <label class="control-label" for="product"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product </label>
-        <input  class="form-control input-sm col-xs-1" id="product" style="width: 100%" required>
-    </div>
+                {{-- Product Category --}}
+                <div class="form-group">
+                    <label class="control-label" for="category"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+                    <input  class="form-control input-sm col-xs-1" id="category" style="width: 100%" readonly>
+                </div>
 
-    {{-- Quantity --}}
-    <div class="form-group">
-        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
-        <input  class="form-control input-sm col-xs-1" id="qty" style="width: 100%" required>
-    </div>
+                {{-- Product --}}
+                <div class="form-group">
+                    <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
+                    <input class="form-control input-sm col-xs-1" id="prodname" style="width: 100%" readonly>
+                </div>
 
-    {{-- Weight --}}
-    <div class="form-group">
-        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
-        <input  class="form-control input-sm col-xs-1" id="weight" style="width: 100%" required>
-    </div>
+                {{-- Pallets --}}
+                <div class="form-group">
+                    <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
+                    <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
+                        <option></option>
+                                @foreach($pallets as $val)
+                                    <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
+                                @endforeach
+                        
+                    </select>
+                </div>
 
-    {{-- Barcode --}}
-    <div class="form-group">
-        <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
-        <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%" required>
-    </div>
+                {{-- Quantity --}}
+                <div class="form-group">
+                    <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
+                    <input  class="form-control input-sm col-xs-1" id="qty" style="width: 100%"type="number">
+                </div>
 
-    <br>
-    <br>
+                {{-- Weight --}}
+                <div class="form-group">
+                    <label class="control-label" for="weight"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
+                    <input  class="form-control input-sm col-xs-1" id="weight" style="width: 100%"type="number">
+                </div>
 
-    <button class="btn btn-success" id="print" style="width: 100%; margin-right: 10px;">PRINT</button>
+                {{-- Barcode --}}
+                <div class="form-group">
+                    <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
+                    <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%"type="number">
+                </div>
+
+                <br>
+                <br>
+
+                <button class="btn btn-success" id="print" style="width: 100%; margin-right: 10px;">PRINT</button>
+
     
-    
 
-</div>
-
-</div>
+            </div>
             </div>
 
-            <div class="tab-content p-3">
+        </div>
+
+        <div class="tab-content p-3">
             <div class="tabcontent tab-pane" id="barcodelesspage" role="tabpanel">
-            {{-- Barcode Scan Page --}}
-            <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; width: 30%;padding: 20px !important;">
+                {{-- Barcode Scan Page --}}
+                <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; width: 30%;padding: 20px !important;">
 
-            <h3>PRODUCT LABEL PRINTING NO BARCODEx</h3>
-            {{-- Department --}}
-<div>
-    <div class="form-group">
-    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-        <input  class="form-control input-sm col-xs-1" id="department" style="width: 100%" required>
-    </div>
-    </div>
+                    <h3>PRODUCT LABEL PRINTING NO BARCODE</h3>
 
-    {{-- Product --}}
-    <div class="form-group">
-    <label class="control-label" for="product"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product </label>
-        <input  class="form-control input-sm col-xs-1" id="product" style="width: 100%" required>
-    </div>
+                    {{-- Department --}}
+                    <div class="form-group">
+                        <label class="control-label" for="departmentbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
+                        <select  class="form-control input-sm col-xs-1 " id="departmentbarcodeless" style="width: 100%" >
+                            <option></option>
+                                    @foreach($dept as $val)
+                                        <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                                    @endforeach
+                            
+                        </select>
+                    </div>
 
-    {{-- Quantity --}}
-    <div class="form-group">
-        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
-        <input  class="form-control input-sm col-xs-1" id="qty" style="width: 100%" required>
-    </div>
+                        {{-- Product Category --}}
+                    <div class="form-group">
+                        <label class="control-label" for="categorybarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+                        <select  class="form-control input-sm col-xs-1" id="categorybarcodeless" style="width: 100%" required>
+                            <option></option>
+                        </select>
+                    </div>
 
-    {{-- Weight --}}
-    <div class="form-group">
-        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
-        <input  class="form-control input-sm col-xs-1" id="weight" style="width: 100%" required>
-    </div>
+                    {{-- Product --}}
+                    <div class="form-group">
+                        <label class="control-label" for="prodnamebarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
+                        <select  class="form-control input-sm col-xs-1" id="prodnamebarcodeless" style="width: 100%" required>
+                            <option></option>
+                        </select>
+                    </div>
 
-    {{-- Barcode --}}
-    <div class="form-group">
-        <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
-        <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%" required>
-    </div>
+                    {{-- Pallets --}}
+                    <div class="form-group">
+                        <label class="control-label" for="palletbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
+                        <select  class="form-control input-sm col-xs-1 " id="palletbarcodeless" style="width: 100%" >
+                            <option></option>
+                                    @foreach($pallets as $val)
+                                        <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
+                                    @endforeach
+                            
+                        </select>
+                    </div>
 
-    <br>
-    <br>
+                    {{-- Quantity --}}
+                    <div class="form-group">
+                        <label class="control-label" for="qtybarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
+                        <input  class="form-control input-sm col-xs-1" id="qtybarcodeless" style="width: 100%">
+                    </div>
 
-    <button class="btn btn-success" id="print" style="width: 100%; margin-right: 10px;">PRINT</button>
-    
-    
-</div>
+                    {{-- Weight --}}
+                    <div class="form-group">
+                        <label class="control-label" for="weightbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
+                        <input  class="form-control input-sm col-xs-1" id="weightbarcodeless" style="width: 100%">
+                    </div>
 
-</div>
+                    {{-- Barcode --}}
+                    <div class="form-group">
+                        <label class="control-label" for="barcodebarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
+                        <input class="form-control input-sm col-xs-1" id="barcodebarcodeless" style="width: 100%">
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <button class="btn btn-success" id="printbarcodeless" style="width: 100%; margin-right: 10px;">PRINT</button>
+                </div> 
             </div>
-
-            </div>
-
-            
-
+    
+        </div>
 
         </div>
         
@@ -203,6 +244,143 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
+
+
+        $('#jobid').change(function(){
+            $.ajax({
+
+                url: '{!!url("/getproductbyjobid")!!}',
+                type: "GET",
+                data: {
+                    jobid: $('#jobid').val()
+                },
+                success: function (data) {
+                    $('#department').text(data[0]['DepartmentName']);
+                    $('#department').val(data[0]['DeptID']);
+                    $('#category').val(data[0]['strItemGroup']);
+                    $('#prodname').val(data[0]['ProductDescription']);
+                    $('#barcode').val(data[0]['Barcode']);
+                }
+
+            });
+        });
+        $('#print').click(function(){
+            $.ajax({
+
+                url: '{!!url("/printgenericpalletlabel")!!}',
+                type: "POST",
+                data: {
+                    dept:$('#department').val(),
+                    prodcat:$('#category').val(),
+                    prodname:$('#prodname').val(),
+                    palletconfid:$('#pallet').val(),
+                    qty:$('#qty').val(),
+                    weight:$('#weight').val(),
+                    barcode:$('#barcode').val()
+                },
+                success: function (data) {
+                    alert('Succesful Printout.');
+                }
+
+            });
+        });
+        $('#printbarcodeless').click(function(){
+            $.ajax({
+
+                url: '{!!url("/printgenericpalletlabel")!!}',
+                type: "POST",
+                data: {
+                    dept:$('#departmentbarcodeless').val(),
+                    prodcat:$('#categorybarcodeless').val(),
+                    prodname:$('#prodnamebarcodeless').val(),
+                    palletconfid:$('#palletbarcodeless').val(),
+                    qty:$('#qtybarcodeless').val(),
+                    weight:$('#weightbarcodeless').val(),
+                    barcode:$('#barcodebarcodeless').val()
+                },
+                success: function (data) {
+                    alert('Succesful Printout.');
+                }
+
+            });
+        });
+
+        
+        $('#departmentbarcodeless').change(function(){
+            $.ajax({
+
+                url: '{!!url("/getDepListToPlan")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: $('#departmentbarcodeless option:selected').text(),
+
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#categorybarcodeless").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.intAutoGroupCategoryId+'">'+o.strProductCategory+'</option>';
+                    });
+                    $("#categorybarcodeless").append(toAppend);
+
+                }
+
+            });
+        });
+
+        $('#categorybarcodeless').change(function(){
+            $.ajax({
+
+                url: '{!!url("/getProdListToPlan")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: $('#categorybarcodeless option:selected').text(),
+
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#prodnamebarcodeless").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+
+                        toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
+                    });
+                    $("#prodnamebarcodeless").append(toAppend);
+
+                }
+
+            });
+        });
+
+        $('#prodnamebarcodeless').change(function(){
+            $.ajax({
+
+                url: '{!!url("/getProductBarcode")!!}',
+                type: "GET",
+                data: {
+                    productCode: $('#prodnamebarcodeless option:selected').val(),
+
+                },
+                success: function (data) {
+                    var barcode = data[0]["BarCode"];
+                    console.debug(barcode);
+
+                    if (barcode == null){
+                        $('#barcodebarcodeless').val("0000000000000");
+                    }else{
+                        $('#barcodebarcodeless').val(barcode);
+                    }
+                    
+
+                }
+
+            });
+        });
+
+        
+        
     });
 
 

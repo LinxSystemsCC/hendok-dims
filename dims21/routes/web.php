@@ -971,7 +971,7 @@ Route::post('regradeproduct', [WareHouseController::class,'regradeproduct']);
 Route::post('addproductspec', [WareHouseController::class,'addproductspec']);
 Route::post('editproductspec', [WareHouseController::class,'editproductspec']);
 
-//WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
+//WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
 
 //COMPANYAUTHCONTROLLER CONTROLLER STARTS HERE !!!
 Route::get('getBlockedAccountToAuth', [CompanyAuthController::class,'getBlockedAccountToAuth']);
@@ -1018,6 +1018,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('routePlannerExtParam/{date}/{ordertype}/{route}/{status}', [TabletLoadingApp::class,'routePlannerExtParam']);
 
 //WAREHOUSE
+    Route::get('getproductbyjobid',[WareHouseController::class,'getproductbyjobid']);
+    Route::post('printgenericpalletlabel',[WareHouseController::class,'printgenericpalletlabel']);
     Route::get('updatestartdate', [WareHouseController::class,'updatestartdate']);
     Route::get('jobupdateprint/{jobid}', [WareHouseController::class,'jobupdateprint']);
     Route::get('roofingSOUpdate/{reference}/{machine}', [WareHouseController::class,'roofingSOUpdate']);
