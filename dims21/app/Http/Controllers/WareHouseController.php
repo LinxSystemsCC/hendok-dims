@@ -1487,7 +1487,7 @@ where intDeptID =".$deptId);
     }
 
     public function getLabels(){
-        $labels = DB::connection('sqlsrv2') ->select("Select * from tblPrinterLabels");
+        $labels = DB::connection('sqlsrv2') ->select("Select * from viewLabelsMappedToPrinter");
         return response()->json($labels);
     }
 
@@ -1768,6 +1768,30 @@ where intDeptID =".$deptId);
         $data = DB::connection('sqlsrv2')->select('select * from viewPickingAndLoadingDashboard');
         // dd($data);
         return response()->json($data);
+    }
+
+    public function pickingticketmanager($ref){
+        $allproducts = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingReferenceProducts ?',
+                array($ref)
+            );
+
+        $getsequence = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingReferenceToSequence ?',
+                array($ref)
+            );
+        $pickingheader = DB::connection('sqlsrv3')
+            ->select('exec spGetPickingSheetHeader ?',
+                array($ref)
+            );
+        $trucks = DB::connection('sqlsrv3')
+            ->select('Select * from tblTrucks where intType=2' );
+
+        $teamleaders = DB::connection('sqlsrv3')
+            ->select("Select * from tblDimsusers where strPickingTeams='TeamLeader'" );
+
+        return view('warehouse/pickingticketmanager')->with('teamleaders',$teamleaders)->with('pickingheader',$pickingheader)
+            ->with('listproducts',$allproducts)->with('ref',$ref)->with('sequence',$getsequence)->with('trucks',$trucks);
     }
 
     private static function getTabs($tabcount)
