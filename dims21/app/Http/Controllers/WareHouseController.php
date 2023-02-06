@@ -151,6 +151,12 @@ class WareHouseController extends Controller
 
         return view('warehouse/genericproductlabels')->with('prodGroups',$prodGroups)->with('dept',$dept);
     }
+    public function warehousepalletlabels(){
+    
+
+        $machines = DB::connection('sqlsrv2')->select("select * from viewRoofingMachines");
+        return view('warehouse/warehousepalletlabels')->with('machines', $machines);
+    }
 
     public function getProductBarcode(Request $request){
         $productCode = $request->get("productCode");

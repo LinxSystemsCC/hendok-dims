@@ -32,6 +32,7 @@ if ((Auth::guest()))
     $sales = $v->getThingsUserPermissions(Auth::user()->UserID,'Sales');
     $ppl = $v->getThingsUserPermissions(Auth::user()->UserID,'Print Pallet Labels');
     $gpl = $v->getThingsUserPermissions(Auth::user()->UserID,'Generic Product Labels');
+    $wgpl = $v->getThingsUserPermissions(Auth::user()->UserID,'Warehouse Generic Product Labels');
 
     
     //--------------------------Second Level Options--------------------------------
@@ -513,6 +514,11 @@ if ((Auth::guest()))
         <li>
             @if($gpl !="0")
             <a href='{!!url("/genericproductlabels")!!}'>Product Label Printing</a>
+            @endif
+        </li>
+        <li>
+            @if($gpl !="0")
+            <a href='{!!url("/warehousepalletlabels")!!}'>Warehouse Pallet Printing</a>
             @endif
         </li>
     </ul>
