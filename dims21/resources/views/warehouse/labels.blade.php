@@ -58,6 +58,16 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="config"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Configuration</label>
+                                <select  class="form-control input-sm col-xs-1" id="config" required>
+                                    <option></option>
+                                    <option value="Single">Single</option>
+                                    <option value="Pallet">Pallet</option>
+                                </select>
+                            </div>
+                            <br>
                             <br>
                             <button class="btn-success btn-lg" id="saveLabels" style="width: 100%;">SAVE</button>
                         </form>
@@ -108,6 +118,7 @@
                 data: {
                     labelname: $('#labelname').val(),
                     printerID: $('#printerID').val(),
+                    config: $('#config').val(),
                 },
                 success: function (data) {
                     location.reload();
@@ -168,6 +179,9 @@
                         },{
                             dataField: "strPrinterName",
                             caption: "Printer",
+                        },{
+                            dataField: "strLabelConfig",
+                            caption: "Configuration",
                         },
                     ],
                     onRowDblClick:function(e){

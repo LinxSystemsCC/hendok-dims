@@ -1413,7 +1413,8 @@ where intDeptID =".$deptId);
         $labelname = $request->get("labelname");
         $printerID = $request->get("printerID");
         $statement = "INSERT";
-        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$printerID,$statement)); 
+        $config = $request->get("config");
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$printerID,$statement,$config)); 
         dd($return);
         return response()->json($return);
     }
@@ -1422,7 +1423,8 @@ where intDeptID =".$deptId);
         $labelname = $request->get("labelname");
         $labelID = $request->get("labelID");
         $statement = "UPDATE";
-        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$labelID,$statement)); 
+        $config = "";
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$labelID,$statement,$config)); 
         return response()->json($return);
     }
 
@@ -1430,8 +1432,9 @@ where intDeptID =".$deptId);
         $labelname = $request->get("labelname");
         $labelID = $request->get("labelID");
         $statement = "DELETE";
+        $config = "";
         //dd($labelname,$labelID);
-        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?',array($labelname,$labelID,$statement)); 
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$labelID,$statement,$config)); 
         return response()->json($return);
     }
     

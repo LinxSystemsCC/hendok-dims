@@ -65,7 +65,7 @@
                                 <select  class="form-control input-sm col-xs-1" id="labelname" required>
                                     <option></option>
                                     @foreach($label as $val)
-                                        <option value="{{$val->intLabelTypeID}}">{{$val->strLabelName}}</option>
+                                        <option value="{{$val->intLabelTypeID}}">{{$val->strLabelName}} - {{$val->strLabelConfig}}</option>
                                     @endforeach
                                 </select>
                             </div>
