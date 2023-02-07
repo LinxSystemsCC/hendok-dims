@@ -79,11 +79,12 @@
     <h2 id='batchRef'>REFERENCE: NONE</h2>
     @foreach($products as $val)
         @if($val->intJobId == 0)
-            <div class="inline-flex">
-                <button class="btn btn-danger" type="button" style="width:10% !important;font-size: 24px;">
+            <div class="d-inline-flex w-100">
+                <button class="btn btn-danger" type="button" style="width:10% !important;font-size: 20px; margin-right:10px;">
                     {{$val->intSequence}}
                 </button>
-                <button class="btn btn-danger" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" type="button" style="width:80% !important;font-size: 24px;">
+                
+                <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'">
                     {{$val->PastelDescription}} {{$val->productionstat}}
                 </button>
             </div>
@@ -92,7 +93,7 @@
             <br>
         @else
             @if($val->strJobStatus !="NOT STARTED")
-                <button class="btn btn-danger" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}/None'" type="button" style="width:100% !important;font-size: 24px;">
+                <button class="btn btn-danger" type="button" style="width:100% !important;font-size: 20px;" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}/None'" >
                     {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
                 <br>
                 <br>
