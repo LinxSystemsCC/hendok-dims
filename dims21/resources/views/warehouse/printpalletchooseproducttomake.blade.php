@@ -79,8 +79,15 @@
     <h2 id='batchRef'>REFERENCE: NONE</h2>
     @foreach($products as $val)
         @if($val->intJobId == 0)
-            <button class="btn btn-danger" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" type="button" style="width:100% !important;font-size: 24px;">
-                {{$val->PastelDescription}} {{$val->productionstat}}</button>
+            <div class="inline-flex">
+                <button class="btn btn-danger" type="button" style="width:10% !important;font-size: 24px;">
+                    {{$val->intSequence}}
+                </button>
+                <button class="btn btn-danger" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" type="button" style="width:80% !important;font-size: 24px;">
+                    {{$val->PastelDescription}} {{$val->productionstat}}
+                </button>
+            </div>
+                
             <br>
             <br>
         @else
