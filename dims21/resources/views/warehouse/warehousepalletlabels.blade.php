@@ -411,8 +411,6 @@ function openPage(pageName, elmnt, elementid) {
   // Remove the upper tabs class active
   
   var uppertabs = document.getElementsByClassName("nav-link active");
-  console.log(uppertabs[0].id);
-  console.log(elementid);
   $('#'+uppertabs[0].id).removeClass("active");
   $('#'+elementid).addClass("active");
   // Show the specific tab content
