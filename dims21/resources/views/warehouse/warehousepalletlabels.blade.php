@@ -57,10 +57,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     <div class="col-lg-10"  style="width:100%; max-width:100% !important">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-            <a class="nav-link active" onclick="openPage('barcodepage', this)"id="defaultOpen">Barcode</a>
+            <a class="nav-link active" onclick="openPage('barcodepage', this,'defaultOpen')"id="defaultOpen">Barcode</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" onclick="openPage('barcodelesspage', this)">Barcodeless</a>
+            <a class="nav-link" onclick="openPage('barcodelesspage', this, 'barcodelesstab')"id="barcodelesstab">Barcodeless</a>
             </li>
         </ul>
         
@@ -394,7 +394,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
-function openPage(pageName, elmnt) {
+function openPage(pageName, elmnt, elementid) {
   // Hide all elements with class="tabcontent" by default */
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
@@ -408,8 +408,16 @@ function openPage(pageName, elmnt) {
     tablinks[i].style.backgroundColor = "";
   }
 
+  // Remove the upper tabs class active
+  
+  var uppertabs = document.getElementsByClassName("nav-link active");
+  console.log(uppertabs[0].id);
+  console.log(elementid);
+  $('#'+uppertabs[0].id).removeClass("active");
+  $('#'+elementid).addClass("active");
   // Show the specific tab content
-  document.getElementById(pageName).style.display = "block";
+  document.getElementById(pageName).style.display = "block"; 
+  
 
   // Add the specific color to the button used to open the tab content
 }
