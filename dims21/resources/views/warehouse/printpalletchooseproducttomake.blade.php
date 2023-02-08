@@ -124,6 +124,7 @@
     var Reference = {!! json_encode($products) !!};
     $(document).ready(function() {
         // console.debug(Reference[0]['strReference']);
+
         var BatchRef = Reference[0]['strReference'];
         $('#batchRef').text('BATCH REFERENCE: '+BatchRef);
         var finalData =$.map(JSON.parse(jArray), function(item) {
@@ -179,7 +180,9 @@
 
         });
 
-
+        setTimeout(function(){
+            window.location.reload();
+        }, 5000);
 
     });
 
