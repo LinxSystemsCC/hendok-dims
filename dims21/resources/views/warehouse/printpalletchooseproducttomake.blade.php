@@ -1,6 +1,7 @@
 <?php
 
     $v  =  new \App\Http\Controllers\SalesForm();
+    $GroupId= Auth::user()->GroupId;
 
     if($v->getThings($GroupId,'Has Auto Redirect')){
         $button = "0";
