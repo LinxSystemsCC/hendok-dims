@@ -1,5 +1,8 @@
 <?php
-    if($this->getThings($GroupId,'Has Auto Redirect')){
+
+    $v  =  new \App\Http\Controllers\SalesForm();
+
+    if($v->getThings($GroupId,'Has Auto Redirect')){
         $button = "0";
     }
 
