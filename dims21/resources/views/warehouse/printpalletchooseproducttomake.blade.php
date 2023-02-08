@@ -1,3 +1,9 @@
+<?php
+    if($this->getThings($GroupId,'Has Auto Redirect')){
+        $button = "0";
+    }
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,9 +64,11 @@
 <div class="col-lg-12"  style="padding:20px; min-height: 100vh; min-width: 100%;">
     
     <div style="display: flex;">
+        @if($button !="0")
         <a class="btn btn-dark" href='{!!url("/printpalletchoosemachine")!!}/{{$departmentselected}}' style=" font-size: 30px; left: 0px; top: 15px; height:auto;" >
             <i class="bi bi-arrow-return-left"></i>
         </a>
+        @endif
         
         <div style="padding-left: 20px;">
             @foreach($departments as $val)
