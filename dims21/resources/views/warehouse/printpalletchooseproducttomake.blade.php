@@ -79,16 +79,27 @@
     <h2 id='batchRef'>REFERENCE: NONE</h2>
     @foreach($products as $val)
         @if($val->intJobId == 0)
-            <div class="d-inline-flex w-100">
-                <button class="btn btn-danger" type="button" style="width:10% !important;font-size: 20px; margin-right:10px;">
-                    {{$val->intSequence}}
-                </button>
-                
-                <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'">
-                    {{$val->PastelDescription}} {{$val->productionstat}}
-                </button>
-            </div>
-                
+            @if ($loop->first) 
+                <div class="d-inline-flex w-100">
+                    <button class="btn btn-danger" type="button" style="width:10% !important;font-size: 20px; margin-right:10px;">
+                        {{$val->intSequence}}
+                    </button>
+                    
+                    <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'">
+                        {{$val->PastelDescription}} {{$val->productionstat}}
+                    </button>
+                </div>
+            @else
+                <div class="d-inline-flex w-100">
+                    <button class="btn btn-danger" type="button" style="width:10% !important;font-size: 20px; margin-right:10px;" disabled>
+                        {{$val->intSequence}}
+                    </button>
+                    
+                    <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" disabled>
+                        {{$val->PastelDescription}} {{$val->productionstat}}
+                    </button>
+                </div>
+            @endif
             <br>
             <br>
         @else
