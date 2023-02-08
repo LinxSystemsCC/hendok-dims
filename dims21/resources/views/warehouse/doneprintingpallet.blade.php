@@ -71,7 +71,7 @@
     $(document).ready(function() {
 
         $('#thankyou').click(function(){
-            window.location = '{!!url("/printpalletsselectdept")!!}';
+            window.location = '{!!url("/home")!!}';
         });
 
     });

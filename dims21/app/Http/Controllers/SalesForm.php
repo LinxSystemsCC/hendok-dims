@@ -26,12 +26,7 @@ class SalesForm extends Controller
 
        $sessionUserId = Auth::user()->UserID;
        $GroupId= Auth::user()->GroupId;
-       $userDepartment =Auth::user()->strPickingTeams;
-       $departmentMachines = explode('|', $userDepartment);
-
-       $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '".$departmentMachines[0]."'");
-
-       $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
+       
 
 
     //    dd($deptartmentID,$machineID);
@@ -45,6 +40,13 @@ class SalesForm extends Controller
                return redirect('/createjobs');
            }
            if($this->getThings($GroupId,'Has Auto Redirect')){
+            $userDepartment =Auth::user()->strPickingTeams;
+            $departmentMachines = explode('|', $userDepartment);
+
+            $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '".$departmentMachines[0]."'");
+
+            $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
+            
             return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
         }
 
