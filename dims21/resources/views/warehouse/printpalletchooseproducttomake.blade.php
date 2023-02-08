@@ -120,13 +120,18 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
+
     var jArray = JSON.stringify({!! json_encode($products) !!});
     var Reference = {!! json_encode($products) !!};
+    
     $(document).ready(function() {
-        // console.debug(Reference[0]['strReference']);
-
-        var BatchRef = Reference[0]['strReference'];
-        $('#batchRef').text('BATCH REFERENCE: '+BatchRef);
+        
+        console.debug(Reference);
+        if (Reference.length != 0){
+            var BatchRef = Reference[0]['strReference'];
+            $('#batchRef').text('BATCH REFERENCE: '+BatchRef);
+        }
+        
         var finalData =$.map(JSON.parse(jArray), function(item) {
 
             return {
@@ -181,7 +186,7 @@
         });
 
         setTimeout(function(){
-            window.location.reload();
+            window.location.reload(1);
         }, 5000);
 
     });
