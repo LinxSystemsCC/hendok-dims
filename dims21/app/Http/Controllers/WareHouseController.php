@@ -1385,7 +1385,6 @@ where intDeptID =".$deptId);
             $dept = $val->strDeptName;
         }
 
-
         switch($dept){
             case('Roofing'):
                 return view('warehouse/roofingjoblabel')->with('qrcodeothers',$returnmach)->with('qrcode',$htmlqrcode)->with('jobid',$jobId);
@@ -1399,6 +1398,7 @@ where intDeptID =".$deptId);
 
         
     }
+
     public function mapitemstopallet(){
         $pallets = DB::connection('sqlsrv2')
             ->select("select * from tblPalletConf");
@@ -1425,6 +1425,8 @@ where intDeptID =".$deptId);
         $statement = "UPDATE";
         $config = "";
         $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$labelID,$statement,$config)); 
+        // dd($labelname,$labelID,$statement);
+        // dd($return);
         return response()->json($return);
     }
 
@@ -1433,8 +1435,9 @@ where intDeptID =".$deptId);
         $labelID = $request->get("labelID");
         $statement = "DELETE";
         $config = "";
-        //dd($labelname,$labelID);
         $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$labelID,$statement,$config)); 
+        // dd($labelname,$labelID,$statement);
+        // dd($return);
         return response()->json($return);
     }
     
@@ -1533,6 +1536,28 @@ where intDeptID =".$deptId);
         $scaleNames = DB::connection('wmax') ->select("select * from tblWeighStands");
         //dd($scaleNames);
         return response()->json($scaleNames);
+    }
+
+    public function listenToScale(Request $request){
+        // $host= $request->get("host");
+        // $port= $request->get("port");
+        $host = "192.168.100.232";
+        $port = 23;
+        
+        set_time_limit(0);
+
+        $socket = socket_create(AF_INET, SOCK_STREAM, 0);
+        socket_connect($socket, $host, $port);
+        $input = socket_read($socket, 4096);
+        socket_close($socket);
+
+        // dd($input);
+
+        return response()->json($input);
+    }
+
+    public function weight(){
+        return view('warehouse/weight');
     }
 
     public function getpalletconfforitems(Request $request){
