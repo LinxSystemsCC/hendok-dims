@@ -1185,7 +1185,7 @@ where intDeptID =".$deptId);
         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
         $ID = $t.$randomString;
 
-        //dd($deptname,$qty, $jobId, $operator);
+        dd($deptname,$jobId,$operator,$ID,$qty);
 
         $print = DB::connection('sqlsrv2')->statement('exec spInsertPrintRoofingLabels ?,?,?,?,?',array($deptname,$jobId,$operator,$ID,$qty));
 
@@ -1543,7 +1543,6 @@ where intDeptID =".$deptId);
         // $port= $request->get("port");
         $host = "192.168.100.232";
         $port = 23;
-        
         set_time_limit(0);
 
         $socket = socket_create(AF_INET, SOCK_STREAM, 0);
@@ -1552,7 +1551,6 @@ where intDeptID =".$deptId);
         socket_close($socket);
 
         // dd($input);
-
         return response()->json($input);
     }
 
@@ -1568,6 +1566,8 @@ where intDeptID =".$deptId);
             );
         return response()->json($palletsjson);
     }
+    
+
     public function getMachines(){
         $palletsjson = DB::connection('sqlsrv2')
             ->select("EXEC spGetMachines ");
