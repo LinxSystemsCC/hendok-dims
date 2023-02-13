@@ -6,7 +6,7 @@ use App\Http\Controllers\DimsCommon;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class SalesForm extends Controller
 {
@@ -33,13 +33,13 @@ class SalesForm extends Controller
 
 
        //Print Pallet
-           if($this->getThings($GroupId,'Print Pallet')){
-               return redirect('/printpalletsselectdept');
-           }
-           if($this->getThings($GroupId,'Strictly Job Creators')){
-               return redirect('/createjobs');
-           }
-           if($this->getThings($GroupId,'Has Auto Redirect')){
+        //    if($this->getThings($GroupId,'Print Pallet')){
+        //        return redirect('/printpalletsselectdept');
+        //    }
+        //    if($this->getThings($GroupId,'Strictly Job Creators')){
+        //        return redirect('/createjobs');
+        //    }
+        if($this->getThings($GroupId,'Has Auto Redirect')){
             $userDepartment =Auth::user()->strPickingTeams;
             $departmentMachines = explode('|', $userDepartment);
 
@@ -49,7 +49,6 @@ class SalesForm extends Controller
             
             return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
         }
-
 
            $queryCustomershendocpty =DB::connection('sqlsrv3')->table("viewtblCustomers" )
                ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName')

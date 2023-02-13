@@ -11,6 +11,7 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 
 class WareHouseController extends Controller
@@ -152,15 +153,15 @@ class WareHouseController extends Controller
         return view('warehouse/genericproductlabels')->with('prodGroups',$prodGroups)->with('dept',$dept);
     }
     public function warehousepalletlabels(){
-    
-
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments"); 
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
         $pallets = DB::connection('sqlsrv2')->select("select * from tblPalletConf");
+        $scales = DB::connection('sqlsrv2') ->select("exec spGetScalesByDeptName 'Warehouse'");
         return view('warehouse/warehousepalletlabels')
         ->with('prodGroups',$prodGroups)
         ->with('pallets',$pallets)
-        ->with('dept',$dept);
+        ->with('dept',$dept)
+        ->with('scales',$scales);
     }
 
     public function getproductbyjobid(Request $request){
@@ -257,7 +258,8 @@ class WareHouseController extends Controller
     }
 
     public function galvscale(){
-        return view('warehouse/galvscales');
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
+        return view('warehouse/galvscales')->with('departments',$dept);
     }
 
     public function qc1(){
@@ -1192,6 +1194,23 @@ where intDeptID =".$deptId);
         return response()->json($print);
     }
 
+    public function printAdditionalRoofingLabels(Request $request){
+        $deptname = 'Roofing';
+        $qty = $request->get('qty');
+        $jobId  = $request->get('JobId');
+        $operator  = Auth::user()->UserName;
+        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $t=time();
+        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+        $ID = $t.$randomString;
+
+        // dd($deptname,$jobId,$operator,$ID,$qty);
+
+        $print = DB::connection('sqlsrv2')->select('exec spPrintAdditionalRoofingLabels ?,?,?,?,?',array($deptname,$jobId,$operator,$ID,$qty));
+
+        return response()->json($print);
+    }
+
     public function doneprintingpallet(){
         return view('warehouse/doneprintingpallet');
     }
@@ -1533,16 +1552,24 @@ where intDeptID =".$deptId);
     }
 
     public function getScales(){
-        $scaleNames = DB::connection('wmax') ->select("select * from tblWeighStands");
+        $scales = DB::connection('sqlsrv2') ->select("exec spGetScales");
         //dd($scaleNames);
-        return response()->json($scaleNames);
+        return response()->json($scales);
     }
 
     public function listenToScale(Request $request){
-        // $host= $request->get("host");
-        // $port= $request->get("port");
-        $host = "192.168.100.232";
-        $port = 23;
+        $scaleID = $request->get("scaleID");
+
+        $scales = DB::connection('sqlsrv2') ->select("select strIP, strPort from tblScales where intAutoId = '".$scaleID."'");
+
+        // dd($scales);
+        
+        $host = $scales[0]->strIP;
+        $port =  $scales[0]->strPort;
+
+        // dd($host,$port);
+        // $host = "192.168.100.232";
+        // $port = 23;
         set_time_limit(0);
 
         $socket = socket_create(AF_INET, SOCK_STREAM, 0);
@@ -1551,11 +1578,20 @@ where intDeptID =".$deptId);
         socket_close($socket);
 
         // dd($input);
-        return response()->json($input);
-    }
 
-    public function weight(){
-        return view('warehouse/weight');
+        // $replaced = str::replaceArray('ST,GS,+', [''], $input);
+        // $replaced = str::replaceArray('US,GS,+', [''], $input);
+        
+        $input = trim($input, 'ST,GS,');
+        $input = trim($input, 'UT,GS,');
+        $input = trim($input, '+');
+        $input = trim($input, '-');
+
+        $input = str_replace(array("\r", "\n"), '', $input);
+        $input = ltrim($input);
+
+        // dd($final);
+        return response()->json($input);
     }
 
     public function getpalletconfforitems(Request $request){
@@ -1647,11 +1683,13 @@ where intDeptID =".$deptId);
 
     public function savesscale(Request $request){
         $scalename = $request->get("scalename");
-        $scalemass = $request->get("scalemass");
-        $wsb = $request->get("wsb");
-        //dd($scalename,$scalemass,$wsb);
+        $departmentID = $request->get("departmentID");
+        $IP = $request->get("IP");
+        $port = $request->get("port");
 
-        $returnmach = DB::connection('sqlsrv2')->select('exec spSaveScale ?,?,?',array($scalename,$scalemass, $wsb));
+        // dd($scalename,$scalemass,$departmentID,$IP,$port);
+
+        $returnmach = DB::connection('sqlsrv2')->select('exec spSaveScale ?,?,?,?',array($scalename,$departmentID,$IP,$port));
         return response()->json($returnmach);
     }
 

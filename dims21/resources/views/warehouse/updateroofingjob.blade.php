@@ -5,14 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
     <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Select2 CSS -->
@@ -21,32 +15,46 @@
 
     <!-- Select2 JS -->
 
-    <!-- DevExtreme library -->
-
-    <!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+    <!-- DevExtreme theme -->
+        {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet">
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
 </head>
 
 <body>
     <div class="col-lg-12 bd-highlight"  style="background: white;">
         <div class="col-lg-12 py-2 d-inline-flex">
-            <button type="button" id="printlabels" class="btn btn-secondary mx-1" data-toggle="modal" data-target="#prinlabels">Print Labels</button>
+            {{-- <button type="button" id="printlabels" class="btn btn-secondary mx-1" data-toggle="modal" data-target="#prinlabels">Print Labels</button> --}}
 
             <button type="button" id="updateSeq" class="btn btn-success mx-1" data-toggle="modal" data-target="#sequencedialog">Update Sequence</button>
             
-            {{-- <button type="button" id="printjobcard" class="btn btn-info mx-1" data-toggle="modal" data-target="#sequencedialog">Print Job Card</button> --}}
-            
             <button type="button" id="statuschange" class="btn btn-primary mx-1" data-toggle="modal" data-target="#jobchanges">Change Job Status</button>
+
+            <button type="button" id="printjobcard" class="btn btn-danger mx-1" data-toggle="modal" data-target="#printjobcard">Print Job Card</button>
         </div>
             
         
         <div id="jobgrid" style="width: 100% !important; height:50%; padding-bottom: 10px;">
+        </div>
+
+        <div id="exportButton">
         </div>
 
         <div title="Statuses" id="jobchanges" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="jobchangesTitle" aria-hidden="true">
@@ -73,6 +81,26 @@
                 </div>
             </div>
         </div>
+
+        <div title="Labels" id="additionallabels" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="jobchangesTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="jobchangesTitle">Print Additional Labels</h5>
+                    </div>
+                    <div class="modal-body">
+                        <h6 id="JobId">Job ID: </h6>
+                        <input id="JobIdVal" value="" hidden>
+                        <h6 id="SONum">SO Number: </h6>
+                        <input type="number" class="form-control" id="qtytoprint" value="2">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn-danger btn-lg" id="printadditional" style="width: 100%;">PRINT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
     </div>
 </body>
@@ -82,6 +110,21 @@
         font-size:15px;
     }
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+
+
 
 <script>
     $.ajaxSetup({
@@ -150,6 +193,29 @@
 
         });
 
+        $('#printjobcard').click(function(){
+            //TODO Got to new roofing jobcard for reference and machine (See 'savestatus' above for reference and machine!)
+        });
+
+        $('#printadditional').click(function(){
+            $.ajax({
+                url: '{!!url("/printAdditionalRoofingLabels")!!}',
+                type: "GET",
+                data: {
+                    JobId: $('#JobIdVal').val(),
+                    qty: $('#qtytoprint').val(),
+                },
+                success: function (data) {
+                    if(data[0].Result =="SUCCESS"){
+                        location.reload();
+                    }else{
+                        alert(data[0].Result);
+                        location.reload();
+                    }
+                }
+            });
+        });
+
         var reference = '{!! $reference !!}';
         var machine = '{!! $machine !!}';
 
@@ -176,7 +242,7 @@
                         pageSize: 20,
                     },
                     selection: {
-                        mode: 'single',
+                        mode: 'multiple',
                     },
                     rowDragging: {
                         allowReordering: true,
@@ -191,6 +257,63 @@
 
                             e.component.refresh();
                         },
+                    },
+                    
+                    export: {
+                        formats: ['xlsx', 'pdf', 'csv'],
+                        enabled: true,
+                        allowExportSelectedData: true,
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('Employees');
+
+                        if (e.format === 'xlsx') {
+                            DevExpress.excelExporter.exportDataGrid({
+                                component: e.component,
+                                worksheet,
+                                autoFilterEnabled: true,
+                                selectedRowsOnly: false
+                            }).then(() => {
+                                workbook.xlsx.writeBuffer().then((buffer) => {
+                                    saveAs(new Blob([buffer], {
+                                        type: 'application/octet-stream'
+                                    }), 'Employees.xlsx');
+                                });
+                            });
+                            e.cancel = true;
+                        }
+
+                        if (e.format === 'pdf') {
+                            window.jsPDF = window.jspdf.jsPDF;
+
+                            const doc = new jsPDF();
+                            DevExpress.pdfExporter.exportDataGrid({
+                                jsPDFDocument: doc,
+                                component: e.component,
+
+                            }).then(() => {
+                                doc.save('Companies.pdf');
+                            });
+                        }
+
+                        if (e.format === 'csv') {
+                            const workbook = new ExcelJS.Workbook();
+                            const worksheet = workbook.addWorksheet('Employees');
+
+                            DevExpress.excelExporter.exportDataGrid({
+                                component: e.component,
+                                worksheet: worksheet
+                            }).then(function() {
+                                // https://github.com/exceljs/exceljs#writing-csv
+                                // https://github.com/exceljs/exceljs#reading-csv
+                                workbook.csv.writeBuffer().then(function(buffer) {
+                                    saveAs(new Blob([buffer], {
+                                        type: "application/octet-stream"
+                                    }), "Employees.csv");
+                                });
+                            });
+                        }
                     },
 
                     columns: [
@@ -263,14 +386,36 @@
                     onRowDblClick:function(e){
                         salesorder = e.data.strSONum;
                         invoiceorder = e.data.intOrderLineId;
+                        ID = e.data.intRoofSOID;
 
-                        $('#jobchanges').modal('toggle');
+                        $('#JobId').text('Job ID: '+ID);
+                        $('#JobIdVal').val(ID);
+                        $('#SONum').text('SO Number: '+salesorder);
+                        $('#additionallabels').modal('toggle');
+                        
                     }
 
                 }).dxDataGrid('instance');
             }
         });
 
+    
+
+    });
+
+    $(function(){
+        $('#exportButton').dxButton({
+            onClick: function() {
+                const doc = new jsPDF();
+                DevExpress.pdfExporter.exportDataGrid({
+                    jsPDFDocument: doc,
+                    component: dataGrid
+                }).then(function() {
+                    doc.save('Customers.pdf');
+                });
+            }
+        });
+        const dataGrid = $('#jobgrid').dxDataGrid('instance');
     });
 
     function showDialog(tag,width,height){

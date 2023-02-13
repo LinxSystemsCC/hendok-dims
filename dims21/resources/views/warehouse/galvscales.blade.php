@@ -49,19 +49,29 @@
 
                                 <br>
 
-                                <label class="control-label" for="scalemass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Scale Mass </label>
-                                <input  type="text" class="form-control input-sm col-xs-1" id="scalemass" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+                                <label class="control-label" for="departmentID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
+                                <select  class="form-control input-sm col-xs-1" id="departmentID" required>
+                                    <option></option>
+                                    @foreach($departments as $val)
+                                        <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                                    @endforeach
+    
+                                </select>
 
                                 <br>
 
-                                <label class="control-label" for="wsb"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">W/S/B </label>
-                                <input  type="text" class="form-control input-sm col-xs-1" id="wsb" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+                                <label class="control-label" for="IP"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">IP </label>
+                                <input  type="" class="form-control input-sm col-xs-1" id="IP" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+
+                                <br>
+                                
+                                <label class="control-label" for="port"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Port </label>
+                                <input  type="" class="form-control input-sm col-xs-1" id="port" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
                             </div>
                             <br>
                             <button type="button" id="savesscale" class="btn-lg btn-success" >Save</button>
                             <br>
-    
-    
+
                         </form>
                     </fieldset>
                 </div>
@@ -106,10 +116,10 @@
                 url: '{!!url("/savesscale")!!}',
                 type: "POST",
                 data: {
-                    scalename: $('#scalename').val(),
-                    scalemass: $('#scalemass').val(),
-                    wsb: $('#wsb').val()
-
+                    scalename : $('#scalename').val(),
+                    departmentID : $('#departmentID').val(),
+                    IP : $('#IP').val(),
+                    port : $('#port').val(),
                 },
                 success: function (data) {
                     location.reload();
@@ -132,10 +142,10 @@
                 $("#gridContainer").dxDataGrid({
 
                     dataSource:data, //as json
-
                     showBorders: true,
                     filterRow: { visible: true },
                     allowColumnResizing: true,
+                    columnAutoWidth: true,
                     paging:{
                         pageSize: 15,
                     },
@@ -165,33 +175,35 @@
 
                     columns: [
                         {
-                            dataField: "StandId",
+                            dataField: "intAutoId",
                             caption: "ID",
-                            width: 50,
+                            // width: 50,
 
                         }, {
-                            dataField: "StandName",
+                            dataField: "strName",
                             caption: "Name",
-                            width: 300,
+                            // width: 300,
 
                         }, {
-                            dataField: "StandMass",
-                            caption: "Mass",
-                            width: 150,
-
+                            dataField: "strDeptName",
+                            caption: "Department",
+                            // width: 150,
                         }, {
-                            dataField: "Department",
-                            caption: "W/S/B",
-                            width: 150,
-
+                            dataField: "strIP",
+                            caption: "IP Address",
+                            // width: 150,
+                        }, {
+                            dataField: "strPort",
+                            caption: "Port",
+                            // width: 150,
                         },
                     ],
                     onRowDblClick:function(e){
 
                         // console.debug(e.row,cells[e.columnIndex]);
                         console.log(e.data.intAutoID);
-                        var ScaleId =  e.data.StandId;
-                        var ScaleName =  e.data.StandName;
+                        var ScaleId =  e.data.intAutoId;
+                        var ScaleName =  e.data.strName;
 
                                 //data[0].sendto
                                 var dialog = $('<p><label>You Are About to Delete Scale: '+ScaleName+'</label><br><br>Are You Sure You Would Like To Proceed</p>').dialog({

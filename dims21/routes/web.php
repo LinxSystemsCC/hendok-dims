@@ -830,7 +830,6 @@ Route::get('productsOnBackOrders',[OnlineOrdersReconController::class,'productsO
 
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 Route::get('listenToScale', [WareHouseController::class,'listenToScale']);
-Route::get('weight', [WareHouseController::class,'weight']);
 
 Route::get('warehouseitems', [WareHouseController::class,'warehouseInvetoryItems']);
 Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
@@ -1033,6 +1032,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getroofinglines', [WareHouseController::class,'getroofinglines']);
     Route::get('sendLabelToThePrinter', [WareHouseController::class,'sendLabelToThePrinter']);
     Route::get('sendRoofingLabelToThePrinter', [WareHouseController::class,'sendRoofingLabelToThePrinter']);
+    Route::get('printAdditionalRoofingLabels', [WareHouseController::class,'printAdditionalRoofingLabels']);
     Route::get('startgenratingqrcodeforpallet/{jpbid}/{isroofing}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);

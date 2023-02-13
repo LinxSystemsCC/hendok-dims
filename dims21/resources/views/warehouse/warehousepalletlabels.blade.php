@@ -48,7 +48,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 <body>
 <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
     <div class="col-lg-2" style="background: white;">
-
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
@@ -59,83 +58,93 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             <li class="nav-item">
             <a class="nav-link active" onclick="openPage('barcodepage', this,'defaultOpen')"id="defaultOpen">Barcode</a>
             </li>
+
             <li class="nav-item">
             <a class="nav-link" onclick="openPage('barcodelesspage', this, 'barcodelesstab')"id="barcodelesstab">Barcodeless</a>
             </li>
         </ul>
         
+        {{-- Barcode --}}
         <div class="tab-content p-3">
             <div class="tabcontent tab-pane" id="barcodepage" role="tabpanel">
-            {{-- Barcode Scan Page --}}
-            <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; width: 30%;padding: 20px !important;">
+                {{-- Barcode Scan Page --}}
+                <div class="col-lg-12 bd-highlight"  style="background: white; display: block; height: 100vh; width: 30%;padding: 20px !important;">
 
-                <h3>PALLET LABEL PRINTING</h3>
-                {{--Input of Job ID--}}
-                <div class="form-group">
-                    <label class="control-label" for="jobid"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Job ID </label>
-                    <input  class="form-control input-sm col-xs-1" id="jobid" style="width: 100%" >
-                </div>
+                    <h3>PALLET LABEL PRINTING</h3>
+                    {{--Input of Job ID--}}
+                    <div class="form-group">
+                        <label class="control-label" for="jobid"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Job ID </label>
+                        <input  class="form-control input-sm col-xs-1" id="jobid" style="width: 100%" >
+                    </div>
 
-                {{-- Department --}}
-                <div class="form-group">
-                    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-                    <input  class="form-control input-sm col-xs-1" id="department" style="width: 100%" readonly>
-                </div>
+                    {{-- Department --}}
+                    <div class="form-group">
+                        <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
+                        <input  class="form-control input-sm col-xs-1" id="department" style="width: 100%" readonly>
+                    </div>
 
-                {{-- Product Category --}}
-                <div class="form-group">
-                    <label class="control-label" for="category"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
-                    <input  class="form-control input-sm col-xs-1" id="category" style="width: 100%" readonly>
-                </div>
+                    {{-- Product Category --}}
+                    <div class="form-group">
+                        <label class="control-label" for="category"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+                        <input  class="form-control input-sm col-xs-1" id="category" style="width: 100%" readonly>
+                    </div>
 
-                {{-- Product --}}
-                <div class="form-group">
-                    <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
-                    <input class="form-control input-sm col-xs-1" id="prodname" style="width: 100%" readonly>
-                </div>
+                    {{-- Product --}}
+                    <div class="form-group">
+                        <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
+                        <input class="form-control input-sm col-xs-1" id="prodname" style="width: 100%" readonly>
+                    </div>
 
-                {{-- Pallets --}}
-                <div class="form-group">
-                    <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
-                    <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
-                        <option></option>
-                                @foreach($pallets as $val)
-                                    <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
+                    {{-- Pallets --}}
+                    <div class="form-group">
+                        <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
+                        <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
+                            <option></option>
+                                    @foreach($pallets as $val)
+                                        <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
+                                    @endforeach
+                            
+                        </select>
+                    </div>
+
+                    {{-- Quantity --}}
+                    <div class="form-group">
+                        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
+                        <input  class="form-control input-sm col-xs-1" id="qty" style="width: 100%"type="number">
+                    </div>
+
+                    {{-- Weight --}}
+                    <div class="form-group">
+                        <label class="control-label" for="weight"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
+                        <div class="d-inline-flex">
+                            <select  class="form-control input-sm col-xs-1 " id="scaleID" style="width: 60%" >
+                                <option></option>
+                                @foreach($scales as $scale)
+                                    <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
                                 @endforeach
-                        
-                    </select>
+                                
+                            </select>
+                            <input  class="form-control input-sm col-xs-1" id="weight" style="width: 25%; margin-left: 5px;"type="text" disabled>
+                            <button class="btn btn-success" id="getWeight" style="width: 25%; margin-left: 5px;">READ</button>
+                        </div>
+                    </div>
+
+                    {{-- Barcode --}}
+                    <div class="form-group">
+                        <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
+                        <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%"type="number">
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <button class="btn btn-success" id="print" style="width: 100%; margin-right: 10px;">PRINT</button>
+
                 </div>
-
-                {{-- Quantity --}}
-                <div class="form-group">
-                    <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
-                    <input  class="form-control input-sm col-xs-1" id="qty" style="width: 100%"type="number">
-                </div>
-
-                {{-- Weight --}}
-                <div class="form-group">
-                    <label class="control-label" for="weight"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
-                    <input  class="form-control input-sm col-xs-1" id="weight" style="width: 100%"type="number">
-                </div>
-
-                {{-- Barcode --}}
-                <div class="form-group">
-                    <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
-                    <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%"type="number">
-                </div>
-
-                <br>
-                <br>
-
-                <button class="btn btn-success" id="print" style="width: 100%; margin-right: 10px;">PRINT</button>
-
-    
-
             </div>
-            </div>
-
         </div>
 
+        {{-- Barcodeless --}}
         <div class="tab-content p-3">
             <div class="tabcontent tab-pane" id="barcodelesspage" role="tabpanel">
                 {{-- Barcode Scan Page --}}
@@ -155,7 +164,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         </select>
                     </div>
 
-                        {{-- Product Category --}}
+                    {{-- Product Category --}}
                     <div class="form-group">
                         <label class="control-label" for="categorybarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
                         <select  class="form-control input-sm col-xs-1" id="categorybarcodeless" style="width: 100%" required>
@@ -192,7 +201,17 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     {{-- Weight --}}
                     <div class="form-group">
                         <label class="control-label" for="weightbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
-                        <input  class="form-control input-sm col-xs-1" id="weightbarcodeless" style="width: 100%">
+                        <div class="d-inline-flex">
+                            <select  class="form-control input-sm col-xs-1 " id="scaleIDBarcodeless" style="width: 60%" >
+                                <option></option>
+                                @foreach($scales as $scale)
+                                    <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
+                                @endforeach
+                                
+                            </select>
+                            <input  class="form-control input-sm col-xs-1" id="weightbarcodeless" style="width: 25%; margin-left: 5px;"type="text" disabled>
+                            <button class="btn btn-success" id="getWeightBarcodeless" style="width: 25%; margin-left: 5px;">READ</button>
+                        </div>
                     </div>
 
                     {{-- Barcode --}}
@@ -207,13 +226,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     <button class="btn btn-success" id="printbarcodeless" style="width: 100%; margin-right: 10px;">PRINT</button>
                 </div> 
             </div>
-    
         </div>
 
-        </div>
-        
     </div>
-
 </div>
 
 
@@ -229,10 +244,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
 
     $(document).ready(function() {
-       
         document.getElementById("defaultOpen").click();
-     
-
 
         $('.sidebar ul li a').click(function(){
             var id = $(this).attr('id');
@@ -244,7 +256,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
-
 
         $('#jobid').change(function(){
             $.ajax({
@@ -264,6 +275,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
             });
         });
+
         $('#print').click(function(){
             $.ajax({
 
@@ -284,6 +296,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
             });
         });
+
         $('#printbarcodeless').click(function(){
             $.ajax({
 
@@ -305,7 +318,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             });
         });
 
-        
         $('#departmentbarcodeless').change(function(){
             $.ajax({
 
@@ -379,14 +391,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             });
         });
 
-        
-        
+        $('#getWeight').click(fetchWeight);
+        $('#getWeightBarcodeless').click(fetchWeightBarcodeless);
+
+        // $('#getWeight').toggle(toggleWeigh);
+        // $('#getWeightBarcodeless').toggle(toggleWeighBarcodeless);
     });
 
-
-
-
-    function escapeHtml(unsafe) {
+function escapeHtml(unsafe) {
     return unsafe
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -394,31 +406,32 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
+
 function openPage(pageName, elmnt, elementid) {
-  // Hide all elements with class="tabcontent" by default */
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
+    // Hide all elements with class="tabcontent" by default */
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
 
-  // Remove the background color of all tablinks/buttons
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].style.backgroundColor = "";
-  }
+    // Remove the background color of all tablinks/buttons
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].style.backgroundColor = "";
+    }
 
-  // Remove the upper tabs class active
-  
-  var uppertabs = document.getElementsByClassName("nav-link active");
-  $('#'+uppertabs[0].id).removeClass("active");
-  $('#'+elementid).addClass("active");
-  // Show the specific tab content
-  document.getElementById(pageName).style.display = "block"; 
-  
+    // Remove the upper tabs class active
+    var uppertabs = document.getElementsByClassName("nav-link active");
+    $('#'+uppertabs[0].id).removeClass("active");
+    $('#'+elementid).addClass("active");
+    // Show the specific tab content
+    document.getElementById(pageName).style.display = "block"; 
+    $('#weight').val('');
+    $('#weightbarcodeless').val('');
 
-  // Add the specific color to the button used to open the tab content
 }
+
 function showDialog(tag,width,height){
     $( tag ).dialog({height: height, modal: false,
         width: width,containment: false}).dialogExtend({
@@ -447,5 +460,42 @@ function showDialog(tag,width,height){
         "restore" : function(evt, dlg){  } // event
     });
 }
+
+function toggleWeigh(){
+    setInterval(fetchWeight,5000);
+};
+
+function toggleWeighBarcodeless(){
+    setInterval(fetchWeightBarcodeless,5000);
+};
+
+function fetchWeight(){
+    // console.debug("weigh");
+    $.ajax({
+        url: '{!!url("/listenToScale")!!}',
+        type: "GET",
+        data: {
+            scaleID: $('#scaleID option:selected').val(),
+        },
+        success: function (data) {
+            $('#weight').val(data);
+        }
+    });
+};
+
+function fetchWeightBarcodeless(){
+    // console.debug("weigh Barcodeless");
+    $.ajax({
+        url: '{!!url("/listenToScale")!!}',
+        type: "GET",
+        data: {
+            scaleID: $('#scaleIDBarcodeless option:selected').val(),
+        },
+        success: function (data) {
+            $('#weightbarcodeless').val(data);
+        }
+    });
+};
+
 </script>
 </body>
