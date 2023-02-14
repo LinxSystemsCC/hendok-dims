@@ -195,6 +195,13 @@ class WareHouseController extends Controller
         return response()->json($barcode);
     }
 
+    public function getProductBarcode(Request $request){
+        $productCode = $request->get("productCode");
+        $barcode = DB::connection('sqlsrv2')->select("select BarCode from viewProductBarcode where PastelCode = '$productCode'");
+        // dd($barcode);
+        return response()->json($barcode);
+    }
+
     public function printgenericlabel(Request $request){
         $department = $request->get("department");
         $category = $request->get("category");
