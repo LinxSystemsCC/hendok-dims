@@ -98,13 +98,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     {{-- Pallets --}}
                     <div class="form-group">
                         <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
-                        <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
+                        <input class="form-control input-sm col-xs-1" id="pallet" style="width: 100%" readonly>
+                        {{-- <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
                             <option></option>
                                     @foreach($pallets as $val)
                                         <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
                                     @endforeach
                             
-                        </select>
+                        </select> --}}
                     </div>
 
                     {{-- Quantity --}}
@@ -183,13 +184,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     {{-- Pallets --}}
                     <div class="form-group">
                         <label class="control-label" for="palletbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
-                        <select  class="form-control input-sm col-xs-1 " id="palletbarcodeless" style="width: 100%" >
+                        <input class="form-control input-sm col-xs-1" id="palletbarcodeless" style="width: 100%" readonly>
+                        {{-- <select  class="form-control input-sm col-xs-1 " id="palletbarcodeless" style="width: 100%" >
                             <option></option>
                                     @foreach($pallets as $val)
                                         <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
                                     @endforeach
                             
-                        </select>
+                        </select> --}}
                     </div>
 
                     {{-- Quantity --}}
@@ -266,10 +268,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     jobid: $('#jobid').val()
                 },
                 success: function (data) {
-                    $('#department').text(data[0]['DepartmentName']);
-                    $('#department').val(data[0]['DeptID']);
+                    $('#department').val(data[0]['DepartmentName']);
+                    // $('#department').val(data[0]['DeptID']);
                     $('#category').val(data[0]['strItemGroup']);
                     $('#prodname').val(data[0]['ProductDescription']);
+                    $('#pallet').val(data[0]['intPackSize']);
                     $('#barcode').val(data[0]['Barcode']);
                 }
 
@@ -369,23 +372,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         $('#prodnamebarcodeless').change(function(){
             $.ajax({
 
-                url: '{!!url("/getProductBarcode")!!}',
+                url: '{!!url("/getProductInfo")!!}',
                 type: "GET",
                 data: {
                     productCode: $('#prodnamebarcodeless option:selected').val(),
-
                 },
                 success: function (data) {
-                    var barcode = data[0]["BarCode"];
-                    console.debug(barcode);
-
-                    if (barcode == null){
-                        $('#barcodebarcodeless').val("0000000000000");
-                    }else{
-                        $('#barcodebarcodeless').val(barcode);
-                    }
-                    
-
+                    $('#palletbarcodeless').val(data[0]['intPackSize']);
+                    $('#barcodebarcodeless').val(data[0]['Barcode']);
                 }
 
             });

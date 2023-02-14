@@ -188,9 +188,9 @@ class WareHouseController extends Controller
 
     }
 
-    public function getProductBarcode(Request $request){
+    public function getProductInfo(Request $request){
         $productCode = $request->get("productCode");
-        $barcode = DB::connection('sqlsrv2')->select("select BarCode from viewProductBarcode where PastelCode = '$productCode'");
+        $barcode = DB::connection('sqlsrv2')->select("exec spGetProductInformationBasedProductCode '$productCode'");
         // dd($barcode);
         return response()->json($barcode);
     }
@@ -1586,6 +1586,7 @@ where intDeptID =".$deptId);
         $input = trim($input, 'UT,GS,');
         $input = trim($input, '+');
         $input = trim($input, '-');
+        $input = trim($input, 'kg');
 
         $input = str_replace(array("\r", "\n"), '', $input);
         $input = ltrim($input);
