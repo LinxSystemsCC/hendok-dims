@@ -217,6 +217,26 @@ class BackOrderController extends Controller
         return response()->json($orderheaders);
     }
 
+    public static function getBriefcaseBackorderHeaders(Request $request)
+    {
+        $orderheaders= DB::connection('sqlsrv3')->select("Select * from  viewBackOrderHeadersDims");
+
+        // dd($orderheaders);
+        return response()->json($orderheaders);
+    }
+
+    public static function getBriefcaseBackorderLines(Request $request)
+    {
+        $ID=$request->get('ID');
+        //dd("Select * from  viewBackOrderLinesDims WHERE ID = '$ID'");
+
+        $orderlines= DB::connection('sqlsrv3')->select("Select * from  viewBackOrderLinesDims WHERE ID = '$ID'");
+
+        //dd($orderlines);
+        return response()->json($orderlines);
+    }
+
+
     private static function getTabs($tabcount)
     {
         $tabs = '';
@@ -257,4 +277,5 @@ class BackOrderController extends Controller
         $result .= "</" . $root . ">\r\n";
         return $result;
     }
+
 }

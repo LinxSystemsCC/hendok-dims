@@ -2088,6 +2088,12 @@ class DimsCommon extends Controller
             ->select("Exec spViewDeletedOrdes '".$date1."','".$date2."'");
         return response()->json($returncosts);
     }
+
+    public function backorders()
+    {
+        return view('dims/backorders');
+    }
+
     private static function getTabs($tabcount)
 {
     $tabs = '';

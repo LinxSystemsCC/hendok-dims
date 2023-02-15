@@ -245,7 +245,7 @@ Route::get('viewcustomerpricingjson/{custcode}/{datefrom}/{dateto}/{datefrom2}/{
 Route::get('printcustomerpricingjson/{custcode}/{datefrom}/{dateto}/{datefrom2}/{dateto2}',[DimsCommon::class,'printcustomerpricingjson']);
 Route::post('updateMessage',[DimsCommon::class,'updateMessage'] );
 Route::post('checkifhasmultiaddress',[DimsCommon::class,'checkifhasmultiaddress'] );
-
+Route::get('backorders',[DimsCommon::class,'backorders']);
 
 //DIMS COMMON ENDS HERE HERE!!!!
 
@@ -832,6 +832,8 @@ Route::get('getNewDealToAuthbackorder/{id}',[BackOrderController::class,'getNewD
 Route::post('postauthdealbackorder', [BackOrderController::class,'postauthdealbackorder']);
 Route::get('productsonbackorderjson',[BackOrderController::class,'productsonbackorderjson'] );
 Route::get('productsOnBackOrders',[BackOrderController::class,'productsOnBackOrders'] );
+Route::get('getBriefcaseBackorderHeaders',[BackOrderController::class,'getBriefcaseBackorderHeaders'] );
+Route::get('getBriefcaseBackorderLines',[BackOrderController::class,'getBriefcaseBackorderLines'] );
 //BACK ORDERCONTROLLER CONTROLLER ENDS HERE
 /********************************************************END **************************************************************************/
 

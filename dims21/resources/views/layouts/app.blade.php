@@ -1,3 +1,38 @@
+<?php
+if ((Auth::guest()))
+    {
+
+    }else{
+        $v  =  new \App\Http\Controllers\SalesForm();
+        $things = $v->getThings(Auth::user()->GroupId,'Allow Call Logger');
+        $grid = $v->getThings(Auth::user()->GroupId,'User Grid');
+        $extras = $v->getThings(Auth::user()->GroupId,'AccesToMainExtras');
+        $groupspecialAccess = $v->getThings(Auth::user()->GroupId,'Extras Group Specials');
+        $overallspecial = $v->getThings(Auth::user()->GroupId,'Extras Overall Specials');
+        $backorders = $v->getThings(Auth::user()->GroupId,'Extras Back Orders');
+        $customerspecials = $v->getThings(Auth::user()->GroupId,'Extras Customer Specials');
+        $creditreport = $v->getThings(Auth::user()->GroupId,'Extra DIMS Credit Reports');
+        $console = $v->getThings(Auth::user()->GroupId,'Extras DIMS Management Console');
+
+        $messaging = $v->getThings(Auth::user()->GroupId,'Cpanel Messaging App');
+        $creditnotes = $v->getThings(Auth::user()->GroupId,'Cpanel Credit Notes');
+        $salesperformance = $v->getThings(Auth::user()->GroupId,'Cpanel Sales Performance');
+        $loyalty = $v->getThings(Auth::user()->GroupId,'Cpanel Layalty');
+        $routes = $v->getThings(Auth::user()->GroupId,'Cpanel Routes');
+        $transfers = $v->getThings(Auth::user()->GroupId,'Cpanel Transfers');
+        $drivers = $v->getThings(Auth::user()->GroupId,'Cpanel Drivers');
+        $trucks = $v->getThings(Auth::user()->GroupId,'Cpanel Trucks');
+        $ordertypes = $v->getThings(Auth::user()->GroupId,'Cpanel OrderTypes');
+        $loyalty = $v->getThings(Auth::user()->GroupId,'Loyalty Cards');
+        $pospanel = $v->getThings(Auth::user()->GroupId,'POS Panel');
+        $remoteorders = $v->getThings(Auth::user()->GroupId,'Remote Orders');
+        $briefcase = $v->getThings(Auth::user()->GroupId,'Briefcase');
+        $webstoremassage= $v->getThings(Auth::user()->GroupId,'Webstore Messages');
+        $released= $v->getThings(Auth::user()->GroupId,'released');
+        $printeredit= $v->getThings(Auth::user()->GroupId,'Edit Printer');
+        // $console = $v->getThings(Auth::user()->GroupId,'Extras DIMS Management Console');
+    }
+?>
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -45,24 +80,68 @@
     <script src="{{ asset('js/jspdf.debug.js') }}"></script>
     <script src="{{ asset('js/jquery.tippop.min.js') }}"></script>
     <script src="{{ asset('js/jquery.inputpicker.js') }}"></script>
-    <script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}"></script>
+    <script src="{{ asset('public/js/jquery.easy-autocomplete.min.js') }}"></script>
     <script src="{{ asset('js/jquery.multiselect.js') }}"></script>
     <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
 
     <script src="{{ asset('js/sum().js') }}"></script>
     <script src="{{ asset('js/contextMenu.js') }}"></script>
-    <!--<script src="https://use.fontawesome.com/0f659c6d48.js"></script>-->
     <script src="{{ asset('public/js/jqueryprint.js') }}"></script>
     <script src="{{ asset('js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('js/buttons.flash.min.js') }}"></script>
     <script src="{{ asset('js/jszip.min.js') }}"></script>
-    <script src="{{ asset('js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('public/js/pdfmake.min.js') }}"></script>
     <script src="{{ asset('js//vfs_fonts.js') }}"></script>
     <script src="{{ asset('js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('js/tableSorter.js') }}"></script>
 
+    {{-- Added By Kyle 20230214 --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
+    <style>
+        .fa-xl {
+            line-height: 30px !important;
+        }
+
+        .btn{
+            font-weight: bold !important;
+            margin-left: 10px !important;
+            font-size: 12px !important;
+            text-transform: uppercase !important;
+        }
+
+        .offcanvas-body {
+            /* overflow-y: unset !important; */
+            height: 80%;
+        }
+
+        a{
+            font-size: 12px !important;
+            text-decoration: none !important;
+        }
+
+        span{
+            margin-rigth: 10px !important;
+        }
+
+        li{
+            padding: 3px !important;
+            text-decoration: none !important;
+            text-transform: uppercase !important;
+        }
+
+        span::before{
+            padding:10px !important;
+        }
+
+        .offcanvas.offcanvas-start {
+            width: 300px !important;
+        }
+    </style>
     <style>
         .hide-close-btn .ui-dialog-titlebar-close{
             display: none;
@@ -459,564 +538,99 @@
             margin-right: 0;
             margin-left: 0;
         }
-
-
     </style>
-    <script>
-
-
-        function addChar(input, character) {
-            if(input.value == null || input.value == "0")
-                input.value = character
-            else
-                input.value += character
-        }
-
-        function cos(form) {
-            form.display.value = Math.cos(form.display.value);
-        }
-
-        function sin(form) {
-            form.display.value = Math.sin(form.display.value);
-        }
-
-        function tan(form) {
-            form.display.value = Math.tan(form.display.value);
-        }
-
-        function sqrt(form) {
-            form.display.value = Math.sqrt(form.display.value);
-        }
-
-        function ln(form) {
-            form.display.value = Math.log(form.display.value);
-        }
-
-        function exp(form) {
-            form.display.value = Math.exp(form.display.value);
-        }
-
-        function deleteChar(input) {
-            input.value = input.value.substring(0, input.value.length - 1)
-        }
-        var val = 0.0;
-        function percent(input) {
-            val = input.value;
-            input.value = input.value + "%";
-        }
-
-        function changeSign(input) {
-            if(input.value.substring(0, 1) == "-")
-                input.value = input.value.substring(1, input.value.length)
-            else
-                input.value = "-" + input.value
-        }
-
-        function compute(form) {
-            //if (val !== 0.0) {
-            // var percent = form.display.value;
-            // percent = pcent.substring(percent.indexOf("%")+1);
-            // form.display.value = parseFloat(percent)/100 * val;
-            //val = 0.0;
-            // } else
-            form.display.value = eval(form.display.value);
-        }
-
-
-        function square(form) {
-            form.display.value = eval(form.display.value) * eval(form.display.value)
-        }
-
-        function checkNum(str) {
-            for (var i = 0; i < str.length; i++) {
-                var ch = str.charAt(i);
-                if (ch < "0" || ch > "9") {
-                    if (ch != "/" && ch != "*" && ch != "+" && ch != "-" && ch != "."
-                        && ch != "(" && ch!= ")" && ch != "%") {
-                        alert("invalid entry!")
-                        return false
-                    }
-                }
-            }
-            return true
-        }
-    </script>
 </head>
+
 <body style="color:black">
+    <div id="app">
+        @include('layouts.nav')
 
-<div id="app">
-    <nav class="navbar navbar-default navbar-static-top" style="margin-bottom: 1px">
-        <div class="container">
-            <div class="navbar-header">
+        <header class="navbar flex-md-nowrap flex-sm-nowrap p-3" style="background-color: rgb(255, 255, 255);">
+            <a class="btn position-absolute float-start" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample" style="background-color: rgb(255, 255, 255); color: grey;"><span class="fa fa-bars fa-xl"></span>
+            </a>
 
-                <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                    <span class="sr-only">Toggle Navigation</span>
+            <ul class="nav d-flex justify-content-center align-items-center w-90 px-1">
+                <!-- Authentication Links -->
 
-                    <span class="icon-bar"></span>
-                </button>
+                @if (Auth::guest())
+                    <li><a href="{{ route('login') }}">Login</a></li>
+                    <li><a href="{{ route('register') }}">Register</a></li>
+                @else
+                    <li>
+                        <button type="button" id="orderListing" class="btn btn-warning" style="width: 110px;">ORDER LISTING</button>
+                    </li>
+                    <li style="display: none">
+                        <button type="button" id="reports" class="btn btn-primary" style="width: 110px;display: none">REPORTS</button>
+                    </li>
+                    <li>
+                        <button type="button" id="pricing" class="btn btn-success" style="width: 110px;">Price Check</button>
+                    </li>
+                    <li>
+                        <button type="button" id="pricingOnCustomer" class="btn btn-success" style="width: 110px;">PL</button>
+                    </li>
+                    <li>
+                        <button type="button" id="callList" class="btn btn-primary" style="width: 110px;">Call List</button>
+                    </li>
+                    <li style="display: none">
+                        <button type="button" id="tabletLoadingApp" class="btn btn-primary" style="display:none;">Reprint</button>
+                    </li>
+                    <li style="display: none">
+                        <button type="button" id="salesQuotebtn" class="btn btn-info" style="width: 110px;display: none">Sales Quotes</button>
+                    </li>
+                    <li style="display: none">
+                        <button type="button" id="copyOrdersBtn" class="btn btn-info" style="width: 110px;">Copy Orders</button>
+                    </li>
+                    <li style="display: none">
+                        <button type="button" id="routePlanning" class="btn btn-primary" style="width: 110px;display: none">Route Plan</button>
+                    </li>
+                    <li>
+                        <button type="button" id="salesOnOrder" class="btn btn-primary" style="width: 110px;">On Order</button>
+                    </li>
+                    <li>
+                        <button type="button" id="salesInvoiced" class="btn btn-warning" style="width: 110px;">On Invoice</button>
+                    </li>
+                    <li>
+                        <button type="button" id="posCashUp" class="btn btn-primary" style="width: 110px;">Cash Up</button>
+                    </li>
+                    <li style="display: none">
+                        <button type="button" id="pricelist" class="btn btn-success" style="width: 110px;display:none;">Price List</button>
+                    </li>
+                    <li style="display: none">
+                        <button type="button" id="returns" class="btn btn-success" style="width: 110px;display: none;">Returns</button>
+                    </li>
 
-                <!-- Branding Image -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"aria-haspopup="true" aria-expanded="false">
+                            <b>{{ Auth::user()->UserName }}</b>
+                        </a>
+                        <ul class="dropdown-menu" style="height:83px !important;">
+                            <li>
+                                <a href= "{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
 
-            </div>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            </li>
+                            <li>
+                                <button class="btn-md btn-primary" id="clearlocks" value="{{ Auth::user()->UserId }}" style="height: 30px;    width: 98%;">Clear Locks</button>
+                            </li>
+                        </ul>
+                    </li>
 
-            <div class="collapse navbar-collapse" id="app-navbar-collapse" style="line-height: 0;">
-                <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    &nbsp;
-                </ul>
-
-                <!-- Right Side Of Navbar -->
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Authentication Links -->
-                    <?php
-                        if ((Auth::guest()))
-                            {
-
-                            }else{
-                    $v  =  new \App\Http\Controllers\SalesForm();
-                    $things = $v->getThings(Auth::user()->GroupId,'Allow Call Logger');
-                    $grid = $v->getThings(Auth::user()->GroupId,'User Grid');
-                    $extras = $v->getThings(Auth::user()->GroupId,'AccesToMainExtras');
-                    $groupspecialAccess = $v->getThings(Auth::user()->GroupId,'Extras Group Specials');
-                    $overallspecial = $v->getThings(Auth::user()->GroupId,'Extras Overall Specials');
-                    $backorders = $v->getThings(Auth::user()->GroupId,'Extras Back Orders');
-                    $customerspecials = $v->getThings(Auth::user()->GroupId,'Extras Customer Specials');
-                    $creditreport = $v->getThings(Auth::user()->GroupId,'Extra DIMS Credit Reports');
-                    $console = $v->getThings(Auth::user()->GroupId,'Extras DIMS Management Console');
-
-                    $messaging = $v->getThings(Auth::user()->GroupId,'Cpanel Messaging App');
-                    $creditnotes = $v->getThings(Auth::user()->GroupId,'Cpanel Credit Notes');
-                    $salesperformance = $v->getThings(Auth::user()->GroupId,'Cpanel Sales Performance');
-                    $loyalty = $v->getThings(Auth::user()->GroupId,'Cpanel Layalty');
-                    $routes = $v->getThings(Auth::user()->GroupId,'Cpanel Routes');
-                    $transfers = $v->getThings(Auth::user()->GroupId,'Cpanel Transfers');
-                    $drivers = $v->getThings(Auth::user()->GroupId,'Cpanel Drivers');
-                    $trucks = $v->getThings(Auth::user()->GroupId,'Cpanel Trucks');
-                    $ordertypes = $v->getThings(Auth::user()->GroupId,'Cpanel OrderTypes');
-                    $loyalty = $v->getThings(Auth::user()->GroupId,'Loyalty Cards');
-                    $pospanel = $v->getThings(Auth::user()->GroupId,'POS Panel');
-                    $remoteorders = $v->getThings(Auth::user()->GroupId,'Remote Orders');
-                     $briefcase = $v->getThings(Auth::user()->GroupId,'Briefcase');
-                     $webstoremassage= $v->getThings(Auth::user()->GroupId,'Webstore Messages');
-                     $released= $v->getThings(Auth::user()->GroupId,'released');
-                     $printeredit= $v->getThings(Auth::user()->GroupId,'Edit Printer');
-                   // $console = $v->getThings(Auth::user()->GroupId,'Extras DIMS Management Console');
-
-                    }
-                    ?>
-
-
-                    @if (Auth::guest())
-                        <li><a href="{{ route('login') }}">Login</a></li>
-                        <li><a href="{{ route('register') }}">Register</a></li>
-                    @else
-                        <li><button type="button" id="orderListing" class="btn-warning btn-xs" style="width: 90px;">Order Listing</button></li>
-                        <li><button type="button" id="reports" class="btn-primary btn-xs" style="width: 90px;display: none">Reports</button></li>
-                        <li><button type="button" id="pricing" class="btn-success btn-xs" style="width: 90px;">Price Check</button></li>
-                        <li><button type="button" id="pricingOnCustomer" class="btn-success btn-xs" style="width: 90px;">PL</button></li>
-                        <li><button type="button" id="callList" class="btn-primary btn-xs" style="width: 90px;">Call List</button></li>
-                        <li><button type="button" id="tabletLoadingApp" class="btn-primary btn-xs" style="display:none;">Reprint</button></li>
-                        <li><button type="button" id="salesQuotebtn" class="btn-info btn-xs" style="width: 90px;display: none">Sales Quotes</button></li>
-                        <li><button type="button" id="copyOrdersBtn" class="btn-info btn-xs" style="width: 90px;">Copy Orders</button></li>
-                        <li><button type="button" id="routePlanning" class="btn-primary btn-xs" style="width: 90px;display: none">Route Plan</button></li>
-                        <li><button type="button" id="salesOnOrder" class="btn-primary btn-xs" style="width: 90px;">On Order</button></li>
-                        <li><button type="button" id="salesInvoiced" class="btn-warning btn-xs" style="width: 90px;">On Invoice</button></li>
-                        <li><button type="button" id="posCashUp" class="btn-primary btn-xs" style="width: 90px;">Cash Up</button></li>
-                        <li><button type="button" id="pricelist" class="btn-success btn-xs" style="width: 90px;display:none;">Price List</button></li>
-                        <li><button type="button" id="returns" class="btn-success btn-xs" style="width: 90px;display: none;">Returns</button></li>
-
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Extras <span class="caret"></span></a>
-                            <ul class="dropdown-menu" >
-                                <li>
-                                    <a href='{!!url("/getAwaitingStockbycustomer")!!}' onclick="window.open(this.href, 'getAwaitingStock',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Awaiting Stock Orders</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/getAwaitingStock")!!}' onclick="window.open(this.href, 'getAwaitingStock',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Awaiting Stock Products</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/pickingmain")!!}' onclick="window.open(this.href, 'bulkpicking',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Bulk Picking</a>
-                                </li>
-
-                                @if($released !="0")
-                                <li>
-                                    <a href='{!!url("/getordertorelease")!!}' onclick="window.open(this.href, 'getordertorelease',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Order Release Screen</a>
-                                </li>
-                                @endif
-                              
-                                <li>
-                                    <a href='{!!url("/customerflexgrid")!!}' onclick="window.open(this.href, 'customerflexgrid',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Customers</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/massProducts")!!}' onclick="window.open(this.href, 'massp',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Products</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/stocksheetforstocktake")!!}' onclick="window.open(this.href, 'stocksheetforstocktake',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Stock Take Sheet</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/viewproductbydate")!!}' onclick="window.open(this.href, 'viewproductbydate',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Products By Date</a>
-                                </li>
-                                @if($customerspecials !="0")
-                                <li>
-                                    <a href='{!!url("/specials")!!}' onclick="window.open(this.href, 'specials',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Customer Special</a>
-                                </li>
-                                @endif
-                                <li>
-                                    <a href='{!!url("/import_excel")!!}' onclick="window.open(this.href, 'pricelistimport',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >DIMS Price List Import</a>
-                                </li>
-                                <!--Probably add some or other check from ENV file to make sure only KF sees this-->
-
-                                <li>
-                                    <a href='{!!url("/andNewSpecialKF")!!}' onclick="window.open(this.href, 'massGrid',
-'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" > Customer Specials</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/searchSpecialKF")!!}' onclick="window.open(this.href, 'searchSpecialKF',
-'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" > Search Customer Specials</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/stocktakecountspage")!!}'  onclick="window.open(this.href, 'stocktakecountspage',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Take Counts Page</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/stocktakegrid")!!}'  onclick="window.open(this.href, 'stocktakegrid',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Take Grid Page</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/grvgridpage")!!}'  onclick="window.open(this.href, 'grvgridpage',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">GRV Grid Page</a>
-                                </li>
-<!--
-                                <li>
-                                    <a href='{!!url("/massgridspecialscustomer")!!}' onclick="window.open(this.href, 'massGrid',
-'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" >Mass Customer Specials</a>
-                                </li>
-                -->
-                                <li>
-                                    <a href='{!!url("/pricelistview")!!}' onclick="window.open(this.href, 'pricelistview',
-'left=20,top=20,width=1600,height=800,toolbar=1,resizable=0'); return false;" >Price List Information</a>
-                                </li>
-
-                                @if ($groupspecialAccess != "0")
-                                <li>
-                                    <a href='{!!url("/groupspecials")!!}' onclick="window.open(this.href, 'roupspecials',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Group Specials</a>
-                                </li>
-                                @endif
-
-                                <li>
-                                    <a href='{!!url("/overallspecials")!!}' onclick="window.open(this.href, 'overallspecials',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >Overall Specials</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/combospecials")!!}' onclick="window.open(this.href, 'combospecials',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;" >POS Combo Specials</a>
-                                </li>
-
-                                @if($console !="0")
-                                <li>
-                                    <a href='{!!url("/managementSearch")!!}' onclick="window.open(this.href, 'managementSearch',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;" >Management Console</a>
-                                </li>
-                                @endif
-
-                                <li>
-
-                                    <a href='{!!url("/getreportLayout")!!}' onclick="window.open(this.href, 'reports',
-'left=20,top=20,width=1500,height=1000,toolbar=1,resizable=0'); return false;" >Reports</a>
-                                </li>
-
-                                @if($backorders !="0")
-                                <li>
-                                    <a href='{!!url("/remoteordersbackorders")!!}'  onclick="window.open(this.href, 'remoteordersbackorders',
-'left=20,top=20,width=900,height=900,toolbar=1,resizable=0'); return false;">Back Orders</a>
-                                </li>
-                                @endif
-
-                                <li>
-                                    <a href='{!!url("/routeplanner")!!}' target="_blank">Route Plan</a>
-                                </li>
-
-
-                                <li>
-                                    <a href='{!!url("/customersalespage")!!}' onclick="window.open(this.href, 'salescustomers',
-'left=20,top=20,width=1200,height=950,toolbar=1,resizable=0'); return false;">Customer Sales</a>
-                                </li>
-
-                                <li>
-                                    <a href='{!!url("/getdriverscashoff")!!}' onclick="window.open(this.href, 'getdriverscashoff',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Drivers Cashoff</a>
-                                </li>
-
-                                <li>
-                                    <a href='{!!url("/viewdailycash")!!}' onclick="window.open(this.href, 'viewdailycash',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Daily Sales</a>
-                                </li>
-
-
-                                @if ($things != "0")
-                                <li>
-                                    <a href='{!!url("/getViewCallLogger")!!}' onclick="window.open(this.href, 'viewdailycash',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Call Logger</a>
-                                </li>
-                                @endif
-
-                                <li style="display: none;">
-                                    <a href='{!!url("/gridPickingSlipCollectios")!!}'  onclick="window.open(this.href, 'gridPickingSlipCollectios',
-'left=20,top=20,width=1500,height=500,toolbar=1,resizable=0'); return false;">Picking Slips</a>
-                                </li>
-                                @if(env('APP_STOCK_COUNT_PALLADIUM') =='TRUE')
-                                <li>
-                                    <a href='{!!url("/getPickingDeptPalladium")!!}'  onclick="window.open(this.href, 'getPickingDept',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Sheet</a>
-                                </li>
-                                    @else
-                                    <li>
-                                        <a href='{!!url("/getPickingDept")!!}'  onclick="window.open(this.href, 'getPickingDept',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Stock Sheet</a>
-                                    </li>
-                                @endif
-                                @if ($creditreport != "0")
-                                <li>
-                                    <a href='{!!url("/creditNoteReasonsView")!!}'  onclick="window.open(this.href, 'creditNoteReasonsView',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Credit Note Report</a>
-                                </li>
-                                @endif
-                                <li>
-                                    <a href='{!!url("/viewBlockedAccount")!!}'  onclick="window.open(this.href, 'viewBlockedAccount',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Blocked Orders</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/getNoStockItem")!!}'  onclick="window.open(this.href, 'viewBlockedAccount',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">No Stock Item</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/viewStatusReport")!!}'  onclick="window.open(this.href, 'viewBlockedAccount',
-'left=20,top=20,width=1800,height=750,toolbar=1,resizable=0'); return false;">Progress and Status Report</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">C-Panel <span class="caret"></span></a>
-                            <ul class="dropdown-menu" >
-
-                            @if($drivers !="0")
-                                <li>
-                                    <a href='{!!url("/driverspage")!!}'  onclick="window.open(this.href, 'driverspage',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Drivers</a>
-                                </li>
-                                @endif
-
-                                <li>
-                                    <a href='{!!url("/deliveryaddresspage")!!}'  onclick="window.open(this.href, 'deliveryaddresspage',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Delivery Address Editor</a>
-                                </li>
-                                @if($grid !=0)
-                                <li>
-                                    <a href='{!!url("/grid_Users")!!}'  onclick="window.open(this.href, 'users',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Users</a>
-                                </li>
-                                @endif
-                                @if($transfers !="0")
-                                <li>
-                                    <a href='{!!url("/transfersstatus")!!}'  onclick="window.open(this.href, 'transfersstatus',
-'left=20,top=20,width=1600,height=999,toolbar=1,resizable=0'); return false;">Transfers </a>
-                                </li>
-                                @endif
-                                @if (  Auth::user()->Administrator ==1)
-                                <li>
-                                    <a href='{!!url("/getorderlocksdeleterpage")!!}' onclick="window.open(this.href, 'getorderlocksdeleterpage',
-'left=20,top=20,width=600,height=900,toolbar=1,resizable=0'); return false;">Order Locks Deleter</a>
-                                </li>
-                                @endif
-                                <li>
-                                    <a href='{!!url("/assets")!!}'  onclick="window.open(this.href, 'assets',
-'left=20,top=20,width=1600,height=999,toolbar=1,resizable=0'); return false;">Assets</a>
-                                </li>
-                                    @if($trucks !="0")
-                                <li>
-                                    <a href='{!!url("/trucks")!!}'  onclick="window.open(this.href, 'trucks',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Trucks</a>
-                                </li>
-                                    @endif
-                                @if($routes !="0")
-                                <li>
-                                    <a href='{!!url("/routes1")!!}'  onclick="window.open(this.href, 'routes',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Routes</a>
-                                </li>
-                                @endif
-                                <li>
-                                    <a href='{!!url("/glcodes")!!}'  onclick="window.open(this.href, 'routes',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">GL Codes</a>
-                                </li>
-                                <li style="display: none;">
-                                    <a href='{!!url("/usersCrud")!!}'  onclick="window.open(this.href, 'users',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Users</a>
-                                </li>
-                                    @if($ordertypes !="0")
-                                <li>
-                                    <a href='{!!url("/ordertypes")!!}'  onclick="window.open(this.href, 'ordertypes',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Order Types</a>
-                                </li>
-                                    @endif
-                                <li>
-                                    <a href='{!!url("/getuseractionsBydate")!!}'  onclick="window.open(this.href, 'getuseractionsBydate',
-'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">User Actions</a>
-                                </li>
-                                    <li>
-                                    <a href='{!!url("/liveBulkPicking")!!}'  onclick="window.open(this.href, 'liveBulkPicking',
-'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Picking Screen</a>
-                                </li>
-                                @if($salesperformance !="0")
-                                <li>
-                                    <a href='{!!url("/salesPerformanceview")!!}'  onclick="window.open(this.href, 'telesalesperformance',
-'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Sales Performance</a>
-                                </li>
-                                @endif
-                                @if($creditnotes !=0)
-                                <li>
-                                    <a href='{!!url("/viewCreditLimit")!!}'  onclick="window.open(this.href, 'creditLimitNotes',
-'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Credit Limit Notes</a>
-                                </li>
-                                @endif
-
-                                <li>
-                                    <a href='{!!url("/getProductsStopedBuying")!!}'  onclick="window.open(this.href, 'getProductsStopedBuying',
-'left=20,top=20,width=1200,height=1000,toolbar=1,resizable=0'); return false;">Stopped Buying</a>
-                                </li>
-
-                                <li>
-                                    <a href='{!!url("/brands")!!}'  onclick="window.open(this.href, 'brands',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Brands</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/groups")!!}'  onclick="window.open(this.href, 'groups',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Groups</a>
-                                </li>
-                                <li style="display: none;">
-                                    <a href='{!!url("/taxes")!!}'  onclick="window.open(this.href, 'taxes',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Taxes</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/pickingteam")!!}'  onclick="window.open(this.href, 'pickingteam',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Picking Team</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/groupbrands")!!}'  onclick="window.open(this.href, 'groupbrands',
-'left=20,top=20,width=1250,height=1250,toolbar=1,resizable=0'); return false;">Group Brands</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/webstore")!!}'  onclick="window.open(this.href, 'webstore',
-'left=20,top=20,width=900,height=900,toolbar=1,resizable=0'); return false;">Web Store</a>
-                                </li>
-                                    @if($remoteorders !=0)
-                                <li>
-                                    <a href='{!!url("/remoteorders")!!}'  onclick="window.open(this.href, 'webstore',
-'left=20,top=20,width=900,height=900,toolbar=1,resizable=0'); return false;">Remote Orders</a>
-                                </li>
-                                    @endif
-                                    @if($briefcase !=0)
-                                <li>
-                                    <a href='{!!url("/missedvisit")!!}'  onclick="window.open(this.href, 'briefcase',
-'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Salesman Briefcase</a>
-                                </li>
-                                    @endif
-                                    @if($loyalty !=0)
-                                <li>
-                                    <a href='{!!url("/registercards")!!}'  onclick="window.open(this.href, 'registercards',
-'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Business Loyalty Cards</a>
-                                </li>
-                                <li>
-                                    <a href='{!!url("/registercardswalking")!!}'  onclick="window.open(this.href, 'registercardswalking',
-'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;">Personal Loyalty Cards</a>
-                                </li>
-                                    @endif
-@if($pospanel !=0)
-                                <li>
-                                    <a href='{!!url("/viewassignuserstotill")!!}/{{(new \DateTime())->format('Y-m-d')}}'  onclick="window.open(this.href, 'viewassignuserstotill',
-'left=20,top=20,width=1650,height=900,toolbar=1,resizable=0'); return false;"> POS Panel</a>
-                                </li>
-                                    @endif
-
-                                @if($messaging !=0)
-                                <li>
-                                    <a href='http://linxsystems.co.za/Publish/DIMS%20-%20Network%20Messenger/DIMS%20-%20Network%20Messenger.application'  onclick="window.open(this.href, 'messageapp',
-'left=20,top=20,width=500,height=400,toolbar=1,resizable=0'); return false;">Download Messaging App</a>
-                                </li>
-                                @endif
-                                    @if($webstoremassage !=0)
-                                    <li>
-                                        <a href='{!!url("/WebstoreMessages")!!}' onclick="window.open(this.href, 'WebstoreMessages',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Webstore Messages</a>
-                                    </li>
-                                    @endif
-                                    @if($printeredit !=0)
-                                    <li>
-                                        <a href='{!!url("/PathEditor")!!}' onclick="window.open(this.href, 'PathEditor',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Edit Printer Paths</a>
-                                    </li>
-                                    @endif
-                                    <li>
-                                        <a href='{!!url("/viewDeletedOrders")!!}' onclick="window.open(this.href, 'viewDeletedOrders',
-'left=20,top=20,width=1000,height=950,toolbar=1,resizable=0'); return false;">Deleted Orders</a>
-                                    </li>
-
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle"
-                               data-toggle="dropdown" role="button"
-                               aria-haspopup="true" aria-expanded="false">
-                                {{ Auth::user()->UserName }}
-                                <span class="caret"></span></a>
-                            <ul class="dropdown-menu" style="height:83px !important;">
-                                <li>
-                                    <a href= "{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                     document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        {{ csrf_field() }}
-                                    </form>
-                                </li>
-                                <li>
-                                    <button class="btn-md btn-primary" id="clearlocks" value="{{ Auth::user()->UserId }}" style="height: 30px;    width: 98%;">Clear Locks</button>
-
-
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <i class="fa fa-calculator" aria-hidden="true" id="tamaraCalculatorId" aria-hidden="true" style="color: deeppink;"></i>
-                        </li>
-
-                    @endif
-                </ul>
-            </div>
+                    <li>
+                        <i class="fa fa-calculator fa-2xl" aria-hidden="true" id="tamaraCalculatorId" aria-hidden="true" style="color: deeppink;"></i>
+                    </li>
+                @endif
+            </ul>
+        </header>
+        
+        <div id="main" class="row h-100">
+            @yield('content')
         </div>
-    </nav>
-
-    <div id="main" class="row">
-
-        @yield('content')
-
     </div>
-
-</div>
-
+</body>
 
 <!-- Scripts -->
 <script>
@@ -1026,36 +640,116 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-$('#clearlocks').click(function(){
-    //console.debug($('#orderId').val());
-    if($('#orderId').val().length < 3) {
-        $.ajax({
-            url: '{!!url("/deleteuserOrderLocks")!!}',
-            type: "POST",
-            data: {
-                userId: $('#clearlocks').val()
-            },
-            success: function (data) {
 
+        $('#clearlocks').click(function(){
+            //console.debug($('#orderId').val());
+            if($('#orderId').val().length < 3) {
+                $.ajax({
+                    url: '{!!url("/deleteuserOrderLocks")!!}',
+                    type: "POST",
+                    data: {
+                        userId: $('#clearlocks').val()
+                    },
+                    success: function (data) {
+
+                    }
+                });
+            }else {
+                var dialog = $('<p>Please Reload you DIMS before clearing your locks and also make sure everything is saved.</p>').dialog({
+                    height: 200, width: 700, modal: true, containment: false,
+                    buttons: {
+                        "OKAY": function () {
+
+                            dialog.dialog('close');
+
+                        }
+                    }
+                });
             }
         });
-    }else {
-        var dialog = $('<p>Please Reload you DIMS before clearing your locks and also make sure everything is saved.</p>').dialog({
-            height: 200, width: 700, modal: true, containment: false,
-            buttons: {
-                "OKAY": function () {
 
-                    dialog.dialog('close');
-
-                }
-            }
+        $('#offcanv').click(function(){
+            $('#offcanvas').toggle();
         });
-    }
-});
-});
-
+    });
 </script>
 
+<script>
+    function addChar(input, character) {
+        if(input.value == null || input.value == "0")
+            input.value = character
+        else
+            input.value += character
+    }
 
-</body>
+    function cos(form) {
+        form.display.value = Math.cos(form.display.value);
+    }
+
+    function sin(form) {
+        form.display.value = Math.sin(form.display.value);
+    }
+
+    function tan(form) {
+        form.display.value = Math.tan(form.display.value);
+    }
+
+    function sqrt(form) {
+        form.display.value = Math.sqrt(form.display.value);
+    }
+
+    function ln(form) {
+        form.display.value = Math.log(form.display.value);
+    }
+
+    function exp(form) {
+        form.display.value = Math.exp(form.display.value);
+    }
+
+    function deleteChar(input) {
+        input.value = input.value.substring(0, input.value.length - 1)
+    }
+    var val = 0.0;
+    function percent(input) {
+        val = input.value;
+        input.value = input.value + "%";
+    }
+
+    function changeSign(input) {
+        if(input.value.substring(0, 1) == "-")
+            input.value = input.value.substring(1, input.value.length)
+        else
+            input.value = "-" + input.value
+    }
+
+    function compute(form) {
+        //if (val !== 0.0) {
+        // var percent = form.display.value;
+        // percent = pcent.substring(percent.indexOf("%")+1);
+        // form.display.value = parseFloat(percent)/100 * val;
+        //val = 0.0;
+        // } else
+        form.display.value = eval(form.display.value);
+    }
+
+
+    function square(form) {
+        form.display.value = eval(form.display.value) * eval(form.display.value)
+    }
+
+    function checkNum(str) {
+        for (var i = 0; i < str.length; i++) {
+            var ch = str.charAt(i);
+            if (ch < "0" || ch > "9") {
+                if (ch != "/" && ch != "*" && ch != "+" && ch != "-" && ch != "."
+                    && ch != "(" && ch!= ")" && ch != "%") {
+                    alert("invalid entry!")
+                    return false
+                }
+            }
+        }
+        return true
+    }
+</script>
+
 </html>
