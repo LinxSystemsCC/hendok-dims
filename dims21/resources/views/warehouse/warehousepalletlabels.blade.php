@@ -125,7 +125,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                 @endforeach
                                 
                             </select>
-                            <input  class="form-control input-sm col-xs-1" id="weight" style="width: 25%; margin-left: 5px;"type="text" disabled>
+                            <input  class="form-control input-sm col-xs-1" id="weight" style="width: 25%; margin-left: 5px;"type="number" disabled>
                             <button class="btn btn-success" id="getWeight" style="width: 25%; margin-left: 5px;">READ</button>
                         </div>
                     </div>
@@ -211,7 +211,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                 @endforeach
                                 
                             </select>
-                            <input  class="form-control input-sm col-xs-1" id="weightbarcodeless" style="width: 25%; margin-left: 5px;"type="text" disabled>
+                            <input  class="form-control input-sm col-xs-1" id="weightbarcodeless" style="width: 25%; margin-left: 5px;"type="number" disabled>
                             <button class="btn btn-success" id="getWeightBarcodeless" style="width: 25%; margin-left: 5px;">READ</button>
                         </div>
                     </div>

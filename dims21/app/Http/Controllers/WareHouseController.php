@@ -1599,23 +1599,26 @@ where intDeptID =".$deptId);
         $socket = socket_create(AF_INET, SOCK_STREAM, 0);
         socket_connect($socket, $host, $port);
         $input = socket_read($socket, 4096);
+        // socket_recv($socket, $input, 1024, 0);
         socket_close($socket);
 
-        // dd($input);
+        // dd(($input));
 
         // $replaced = str::replaceArray('ST,GS,+', [''], $input);
         // $replaced = str::replaceArray('US,GS,+', [''], $input);
         
-        $input = trim($input, 'ST,GS,');
-        $input = trim($input, 'UT,GS,');
-        $input = trim($input, '+');
-        $input = trim($input, '-');
-        $input = trim($input, 'kg');
+        // $input = trim($input, );
+        // $input = trim($input, "UT,GS,");
+        // $input = trim($input, "WN");
+        // $input = trim($input, "+");
+        // $input = trim($input, "-");
+        // $input = trim($input, "kg");
 
-        $input = str_replace(array("\r", "\n"), '', $input);
+        // Remove Illegal values
+        $input = str_replace(array("\r", "\n","ST,GS,","UT,GS,","WN","+","-","kg"," "), "", $input);
         $input = ltrim($input);
+        $input = intval($input);
 
-        // dd($final);
         return response()->json($input);
     }
 
