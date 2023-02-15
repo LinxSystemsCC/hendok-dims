@@ -119,19 +119,19 @@ if ((Auth::guest()))
         <img src="{{url('/images/HendokLogoTransparent.png')}}" style="height: 70px; width: 100%; padding: 15px 35px 0px 20px;">
     </a>
     
-	<ul class="main_side">
+	<ul class="main_side" style="padding-right: 10px;">
         <!-- Work Orders -->
         <li>
 			<!-- Fisrt Category -->
             @if($workorders !="0")
-            <a href="#" id="1">Work Orders<span class="caret pull-down"></span></a>
+            <a class="firstmenu" id="1">Work Orders<span class="caret pull-down"></span></a>
             @endif
 			
 			<ul class="item-show-1">
                 <li>
                     <!-- Second Category -->
                     @if($barbed !="0")
-                    <a href="#" id="1a">Barbed Wire<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="1a">Barbed Wire<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-1a">
@@ -153,7 +153,7 @@ if ((Auth::guest()))
                         </li>
                     </ul>
                     @if($galv !="0")
-                    <a href="#" id="1b">Galv<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="1b">Galv<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-1b">
@@ -165,7 +165,7 @@ if ((Auth::guest()))
                         </li>
                     </ul>
                     @if($roof !="0")
-                    <a href="#" id="1c">Roofing<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="1c">Roofing<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-1c">
@@ -185,14 +185,14 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($dispatch !="0")
-            <a href="#" id="2">Dispatch<span class="caret pull-down"></span>
+            <a class="firstmenu" id="2">Dispatch<span class="caret pull-down"></span>
 			</a>
             @endif
 			<ul class="item-show-2">
 				<li>
                     <!-- Second Category -->
                     @if($loadplanning !="0")
-                    <a href="#" id="2a">Load Planning<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="2a">Load Planning<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-2a">
@@ -211,7 +211,7 @@ if ((Auth::guest()))
                     </ul>
 
                     @if($pickingslips !="0")
-                    <a href="#" id="2b">Picking Slips<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="2b">Picking Slips<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-2b">
@@ -239,7 +239,7 @@ if ((Auth::guest()))
                     </ul>
 
                     @if($settlement !="0")
-                    <a href="#" id="2c">Settlement<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="2c">Settlement<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-2c">
@@ -250,7 +250,7 @@ if ((Auth::guest()))
                     </ul>
 
                     @if($authorisation !="0")
-                    <a href="#" id="2d">Authorisation<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="2d">Authorisation<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-2d">
@@ -267,13 +267,13 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($stockcontrol !="0")
-            <a href="#" id="3">Stock Control<span class="caret pull-down"></span>
+            <a class="firstmenu" id="3">Stock Control<span class="caret pull-down"></span>
 			</a>
             @endif
 			<ul class="item-show-3">
 				<li>
                     <!-- Second Category -->
-                    <a href="#" id="3a">Returns<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="3a">Returns<span class="caret pull-down"></span>
                     </a>
                     <ul class="item-show-3a">
                         <!-- Item Links -->
@@ -285,7 +285,7 @@ if ((Auth::guest()))
                         </li>
                     </ul>
 
-                    <a href="#" id="3b">Upliftment Vouchers<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="3b">Upliftment Vouchers<span class="caret pull-down"></span>
                     </a>
                     <ul class="item-show-3b">
                         <!-- Item Links -->
@@ -304,14 +304,14 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($inventory !="0")
-            <a href="#" id="4">Inventory<span class="caret pull-down"></span>
+            <a class="firstmenu" id="4">Inventory<span class="caret pull-down"></span>
 			</a>
             @endif
 			<ul class="item-show-4">
 				<li>
                     <!-- Second Category -->
                     @if($stockonhand !="0")
-                    <a href="#" id="4a">Stock on Hand<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="4a">Stock on Hand<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-4a">
@@ -324,7 +324,7 @@ if ((Auth::guest()))
                     </ul>
 
                     @if($stockcount !="0")
-                    <a href="#" id="4b">Stock Count<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="4b">Stock Count<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-4b">
@@ -343,14 +343,14 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($setup !="0")
-            <a href="#" id="5">Setup<span class="caret pull-down"></span>
+            <a class="firstmenu" id="5">Setup<span class="caret pull-down"></span>
 			</a>
             @endif
 			<ul class="item-show-5">
 				<li>
                     <!-- Second Category -->
                     @if($usergroups !="0")
-                    <a href="#" id="5a">Users/Groups<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="5a">Users/Groups<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-5a">
@@ -368,7 +368,7 @@ if ((Auth::guest()))
                     </ul>
 
                     @if($setupdispatch !="0")
-                    <a href="#" id="5b">Dispatch<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="5b">Dispatch<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-5b">
@@ -391,7 +391,7 @@ if ((Auth::guest()))
                     </ul>
 
                     @if($setupworkorders !="0")
-                    <a href="#" id="5c">Work Orders<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="5c">Work Orders<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-5c">
@@ -480,13 +480,13 @@ if ((Auth::guest()))
         <li class="disabled">
 			<!-- Fisrt Category -->
             @if($sales !="0")
-            <a href="#" id="6">Sales<span class="caret"></span>
+            <a class="firstmenu" id="6">Sales<span class="caret"></span>
 			</a>
             @endif
 			<ul class="item-show-6">
 				<li>
                     <!-- Second Category -->
-                    <a href="#" id="f">Coming Soon <span class="caret pull-down"></span>
+                    <a class="secondmenu" id="f">Coming Soon <span class="caret pull-down"></span>
                     </a>
                     <ul class="item-show-f">
                         <!-- Item Links -->
@@ -505,7 +505,7 @@ if ((Auth::guest()))
         
         <li>
             @if($ppl !="0")
-            <a href='{!!url("/printpalletsselectdept")!!}'>Print Pallet Labels</a>
+            <a class="firstmenu" href='{!!url("/printpalletsselectdept")!!}'>Print Pallet Labels</a>
             @endif
         </li>
 
@@ -513,19 +513,19 @@ if ((Auth::guest()))
         
         <li>
             @if($gpl !="0")
-            <a href='{!!url("/genericproductlabels")!!}'>Product Label Printing</a>
+            <a class="firstmenu" href='{!!url("/genericproductlabels")!!}'>Product Label Printing</a>
             @endif
         </li>
         <li>
             @if($gpl !="0")
-            <a href='{!!url("/warehousepalletlabels")!!}'>Warehouse Pallet Printing</a>
+            <a class="firstmenu" href='{!!url("/warehousepalletlabels")!!}'>Warehouse Pallet Printing</a>
             @endif
         </li>
     </ul>
 </nav>
 <!-- Logout -->
 <nav class="sidebar" style="height: 20vh !important">
-    <div style="position: absolute; bottom: 0; background-color: #242424;">
+    <div style="position: absolute; bottom: 0;">
         <ul>
             <li>
                 <a href= "{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> Logout

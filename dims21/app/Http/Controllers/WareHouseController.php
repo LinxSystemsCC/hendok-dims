@@ -41,6 +41,18 @@ class WareHouseController extends Controller
         return response()->json($users);
     }
 
+    public function deleteUser(Request $request){
+        $ID = $request->get('ID');
+        // dd($ID);
+        $users = DB::connection('sqlsrv2') ->select("EXEC spDisableUser ?",array($ID));
+        return response()->json($users);
+    }
+
+    public function updateUser(){
+        $users = DB::connection('sqlsrv2') ->select("EXEC spUpdateUserInfo ");
+        return response()->json($users);
+    }
+
     public function getqc1(){
         $qc1 = DB::connection('wmax') ->select("select * from viewNewJobs1 v
         inner join (select JobNo, count(JobNo) as count from tblNewJobs group by JobNo) z

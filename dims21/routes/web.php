@@ -845,6 +845,8 @@ Route::get('getMachines', [WareHouseController::class,'getMachines']);
 Route::get('getgroupname', [WareHouseController::class,'getgroupname']);
 Route::get('getgroupsetting', [WareHouseController::class,'getgroupsetting']);
 Route::get('getusers', [WareHouseController::class,'getusers']);
+Route::get('deleteUser', [WareHouseController::class,'deleteUser']);
+Route::get('updateUser', [WareHouseController::class,'updateUser']);
 Route::get('getqc1', [WareHouseController::class,'getqc1']);
 Route::get('getqc2', [WareHouseController::class,'getqc2']);
 Route::get('getweigh', [WareHouseController::class,'getweigh']);

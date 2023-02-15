@@ -91,9 +91,24 @@ nav ul li.active ul li a{
 }
 
 a:hover{
-  color: #e83f2f !important;
+  color: #a9a9a9 !important;
   text-decoration: none;
 }
+
+.firstmenu{
+  color: #ffffff  !important;
+  border-bottom: 2px solid #a9a9a9 ;
+  font-weight: bold;
+}
+
+.firstmenu:hover{
+  color: #a9a9a9  !important;
+}
+
+.secondmenu{
+  color: #df2413 !important;
+}
+
 nav ul ul li a:hover{
   color: #e83f2f !important;
   background: #242424!important;

@@ -3,26 +3,32 @@
 <head>
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
-    <!-- DevExtreme library -->
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- DevExtreme theme -->
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
 </head>
 
@@ -34,8 +40,19 @@
         </div>
     </div>
     <div class="col-lg-10" >
-        <h3 style="flex-grow: 1; padding-left: 15px;">Create Users</h3>
-        <div class="col-lg-12" >
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">USERS</h3>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newuser">
+                New User 
+            </button>
+        </div>
+
+        <div id="gridContainer" style="height:100% !important;"></div>
+        
+        {{-- <div class="col-lg-12">
+            <div id="gridContainer"></div>
+
             <div class="col-lg-4"  style="background: white;">
                 <h4> </h4>
                 <fieldset class="well">
@@ -98,17 +115,134 @@
 
                     </form>
                 </fieldset>
+
             </div>
             <div class="col-lg-8"  style="background: white;">
-                <h4>Existing User Names</h4>
-
-
+                <h4>USERS</h4>
                 <div class="col-lg-12" id="afterFilter">
-                    <div id="gridContainer">
+                    <div id="gridContainer"></div>
+                </div>
+            </div>
+        </div> --}}
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="newuser" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newuserLabel">Create New User</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{-- <div class="form-group">
+                    <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">User Name </label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="username" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+
+                    <br>
+                
+                    <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Email </label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="email" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+                
+                    <br>
+
+                    <label class="control-label" for="password"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Password </label>
+                    <input  type="password" class="form-control input-sm col-xs-1" id="password" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+
+                    <br>
+
+                    <label class="control-label" for="groupID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
+                    <select  class="form-control input-sm col-xs-1" id="groupID" required>
+                        <option></option>
+                        @foreach($groups as $group)
+                            <option value="{{$group->GroupId}}">{{$group->GroupName}}</option>
+                        @endforeach
+                    </select>
+
+                    <br>
+
+                    <label class="control-label" for="pincode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pincode </label>
+                    <input  type="number" class="form-control input-sm col-xs-1" id="pincode" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
+
+                    <br>
+
+                    <label class="control-label" for="tabletuser"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tablet User </label>
+                    <div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuseryes" checked value="1">
+                            <label class="form-check-label" for="tabletuseryes">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuserno" value="0">
+                            <label class="form-check-label" for="tabletuserno"> 
+                            No
+                            </label>
+                        </div>
                     </div>
 
+                    <br>
 
+                    <br>
+                </div> --}}
+
+                <div class="form-group">
+                    <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">User Name </label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="username">
                 </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="email"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Email </label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="email">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="password"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Password </label>
+                    <input  type="password" class="form-control input-sm col-xs-1" id="password">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="groupID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
+                    <select  class="form-select input-sm col-xs-1" id="groupID" required>
+                        <option></option>
+                        @foreach($groups as $group)
+                            <option value="{{$group->GroupId}}">{{$group->GroupName}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="pincode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pincode </label>
+                    <input  type="number" class="form-control input-sm col-xs-1" id="pincode">
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="tabletuser"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tablet User </label>
+                    <div class="d-inline-flex w-100">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuseryes" checked value="1">
+                            <label class="form-check-label" for="tabletuseryes">
+                                Yes
+                            </label>
+                        </div>
+
+                        <div class="form-check" style="padding-left: 50px;">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuserno" value="0">
+                            <label class="form-check-label" for="tabletuserno"> 
+                            No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="savesusername" class="btn btn-success" >Save</button>
             </div>
         </div>
     </div>
@@ -120,7 +254,28 @@
     .dx-datagrid-table{
         font-size:15px;
     }
+
+
+    .dx-datagrid .dx-link {
+        color: #df2413;
+    }
 </style>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
 <script>
     $.ajaxSetup({
@@ -132,7 +287,7 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
-
+        
         $('#savesusername').click(function(){
 
             $.ajax({
@@ -155,7 +310,6 @@
 
         });
 
-
         $.ajax({
 
             url: '{!!url("/getusers")!!}',
@@ -174,11 +328,20 @@
                     filterRow: { visible: true },
                     allowColumnResizing: true,
                     columnAutoWidth: true,
-                    paging:{
-                        pageSize: 10,
+                    height: ((window.screen.height)-50),
+                    scrolling: {
+                        mode: 'infinite',
                     },
+                    // paging:{
+                    //     pageSize: 10,
+                    // },
                     export: {
                         enabled: true
+                    },
+                    editing: {
+                        mode: 'row',
+                        // allowUpdating: true,
+                        allowDeleting: true,
                     },
                     selection: {
                         mode: 'single',
@@ -203,39 +366,38 @@
                         {
                             dataField: "UserID",
                             caption: "ID",
-                            //width: 50,
-
-                        }, {
+                        },{
                             dataField: "UserName",
                             caption: "Username",
-                            //width: 200,
-
-                        }
-                        , {
+                        },{
                             dataField: "Email",
                             caption: "Email",
-                            //width: 350,
-
-                        },
-                        {
+                        },{
                             dataField: "GroupId",
                             caption: "Group ID",
-                            //width: 50,
-
-                        },
-                        {
+                        },{
                             dataField: "TabletUser",
                             caption: "Tablet User",
-                            //width: 50,
-
-                        },
+                        }
                     ],
                     onRowDblClick:function(e){
                         console.log(e.data.intJobId);
                         var intUserID =  e.data.UserID;
 
                         window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID, "location=1,status=1,scrollbars=1, width=600,height=850");
-
+                    },
+                    onRowRemoving: function(e) {
+                        var UserID = e.data.UserID;
+                        $.ajax({
+                            url: '{!!url("/deleteUser")!!}',
+                            type: "GET",
+                            data: {
+                                ID : UserID,
+                            },
+                            success: function (data) {
+                                location.reload();
+                            }
+                        });
                     }
                     
                 });
@@ -257,9 +419,7 @@
 
     });
 
-
-    function showDialog(tag,width,height)
-    {
+    function showDialog(tag,width,height){
         $( tag ).dialog({height: height, modal: false,
             width: width,containment: false}).dialogExtend({
             "closable" : true, // enable/disable close button
@@ -287,10 +447,6 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
-
-
-
-
 
 
 </script>
