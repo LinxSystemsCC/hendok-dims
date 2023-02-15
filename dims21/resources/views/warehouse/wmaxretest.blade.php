@@ -45,7 +45,7 @@
                 <select  class="form-control input-sm col-xs-1 " id="scales" style="width: 100%; height:38px !important;" required>
                     <option></option>
                     @foreach($scales as $val)
-                        <option value="{{$val->ScaleID}}">{{$val->ScaleDescription}}</option>
+                        <option value="{{$val->intAutoId}}">{{$val->strName}}</option>
                     @endforeach
                 </select>
             </div>
@@ -232,7 +232,7 @@
         //Get Scales
         $.ajax({
 
-            url: '{!!url("/getscales")!!}',
+            url: '{!!url("/getTare")!!}',
             type: "GET",
             data: {
 

@@ -841,6 +841,7 @@ Route::get('getLabels', [WareHouseController::class,'getLabels']);
 Route::get('getMappedLabels', [WareHouseController::class,'getMappedLabels']);
 Route::get('getCustomername', [WareHouseController::class,'getCustomername']);
 Route::get('getScales', [WareHouseController::class,'getScales']);
+Route::get('getTare', [WareHouseController::class,'getTare']);
 Route::get('getMachines', [WareHouseController::class,'getMachines']);
 Route::get('getgroupname', [WareHouseController::class,'getgroupname']);
 Route::get('getgroupsetting', [WareHouseController::class,'getgroupsetting']);

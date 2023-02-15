@@ -54,14 +54,14 @@ class WareHouseController extends Controller
     }
 
     public function getqc1(){
-        $qc1 = DB::connection('wmax') ->select("select * from viewNewJobs1 v
+        $qc1 = DB::connection('sqlsrv2') ->select("select * from viewNewJobs1 v
         inner join (select JobNo, count(JobNo) as count from tblNewJobs group by JobNo) z
         on z.JobNo = v.JobNo");
         return response()->json($qc1);
     }
 
     public function getqc2(){
-        $qc2 = DB::connection('wmax') ->select("select * from viewQCPhase1 v
+        $qc2 = DB::connection('sqlsrv2') ->select("select * from viewQCPhase1 v
 		inner join (select JobNo,Reference, count(Reference) as count  from tblNewJobs group by JobNo,Reference) z
         on z.JobNo = v.JobNo and z.Reference = v.Reference");
         return response()->json($qc2);
@@ -73,27 +73,27 @@ class WareHouseController extends Controller
     }
 
     public function getregrade(){
-        $regrade = DB::connection('wmax') ->select("select * from tblRegradeJobs");
+        $regrade = DB::connection('sqlsrv2') ->select("select * from tblRegradeJobs");
         return response()->json($regrade);
     }
 
     public function getticketno(Request $request){
         $customer = $request->get('customer');
         $product = $request->get('product');
-        $ticket = DB::connection('wmax') ->select("select TicketNo FROM tblCompletedJobs WHERE Customer = '" .$customer . "' and ProductName = '".$product."'");
+        $ticket = DB::connection('sqlsrv2') ->select("select TicketNo FROM tblCompletedJobs WHERE Customer = '" .$customer . "' and ProductName = '".$product."'");
         return response()->json($ticket);
     }
 
     public function getmasswmax(Request $request){
         $ticket = $request->get('ticket');
-        $mass = DB::connection('wmax') ->select("select Weight FROM tblCompletedJobs WHERE TicketNo = '".$ticket."'");
+        $mass = DB::connection('sqlsrv2') ->select("select Weight FROM tblCompletedJobs WHERE TicketNo = '".$ticket."'");
         return response()->json($mass);
     }
 
     public function getSEno(Request $request){
         $customer = $request->get('customer');
         $product = $request->get('product');
-        $secode = DB::connection('wmax') ->select("select SECode from tblProducts where CustomerName = '" .$customer . "' and ProductName = '".$product."'");
+        $secode = DB::connection('sqlsrv2') ->select("select SECode from tblProductsWmax where CustomerName = '" .$customer . "' and ProductName = '".$product."'");
         //dd($secode);
         return response()->json($secode);
     }
@@ -101,7 +101,7 @@ class WareHouseController extends Controller
     public function getretest(Request $request){
         $customer = $request->get('customer');
         $product = $request->get('product');
-        $info = DB::connection('wmax') ->select("select * from tblProducts where CustomerName = '" .$customer . "' and ProductName = '".$product."'");
+        $info = DB::connection('sqlsrv2') ->select("select * from tblProductsWmax where CustomerName = '" .$customer . "' and ProductName = '".$product."'");
         //dd($info);
         return response()->json($info);
     }
@@ -265,14 +265,14 @@ class WareHouseController extends Controller
     }
 
     public function galvcreateprodspec(){
-        $customers = DB::connection('wmax')->select("select * from tblCustomers");
-        $products = DB::connection('wmax')->select("select * from tblProducts");
+        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomers");
+        $products = DB::connection('sqlsrv2')->select("select * from tblProducts");
         return view('warehouse/galvcreateprodspec')->with('customers',$customers);
     }
 
     public function galveditprodspec(){
-        $customers = DB::connection('wmax')->select("select * from tblCustomers");
-        $products = DB::connection('wmax')->select("select * from tblProducts");
+        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomers");
+        $products = DB::connection('sqlsrv2')->select("select * from tblProducts");
         return view('warehouse/galveditprodspec')->with('customers',$customers);
     }
 
@@ -298,21 +298,21 @@ class WareHouseController extends Controller
     }
 
     public function wmaxregrade(){
-        $customers = DB::connection('wmax')->select("select * from tblCustomers ");
-        $products = DB::connection('wmax')->select("select * from tblProducts ");
+        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax ");
+        $products = DB::connection('sqlsrv2')->select("select * from tblProductsWmax ");
         return view('warehouse/wmaxregrade')->with('customers',$customers)->with('products',$products);
     }
 
     public function wmaxstockchange(){
         
-        $customers = DB::connection('wmax')->select("select * from tblCustomers");
-        $products = DB::connection('wmax')->select("select * from tblProducts");
+        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax");
+        $products = DB::connection('sqlsrv2')->select("select * from tblProductsWmax");
         return view('warehouse/wmaxstockchange')->with('customers',$customers)->with('products',$products);
     }
 
     public function wmaxretest(){
-        $scales = DB::connection('wmax')->select("select * From tblIndicatorSetup");
-        $customers = DB::connection('wmax')->select("select * from tblCustomers ");
+        $scales = DB::connection('sqlsrv2')->select("select * From tblScales");
+        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax ");
 
         return view('warehouse/wmaxretest')->with('customers',$customers)->with('scales',$scales);
     }
@@ -469,14 +469,14 @@ class WareHouseController extends Controller
     }
 
     public function getqc1comments(Request $request){
-        $comments = DB::connection('wmax')->select("select * from tblQCPhase1Remarks");
+        $comments = DB::connection('sqlsrv2')->select("select * from tblQCPhase1Remarks");
         //dd($comments);
 
         return response()->json($comments);
     }
 
     public function getqc2comments(Request $request){
-        $comments = DB::connection('wmax')->select("select * from tblQCPhase2Remarks");
+        $comments = DB::connection('sqlsrv2')->select("select * from tblQCPhase2Remarks");
         //dd($comments);
 
         return response()->json($comments);
@@ -882,16 +882,16 @@ class WareHouseController extends Controller
         return view('warehouse/printpalletchoosemachine')->with('departments',$dept)->with('machines',$machines)->with('deparment',$deparment);
     }
     public function wmaxlanding(){
-        $customers = DB::connection('wmax')
-            ->select("select * from tblCustomers ");
+        $customers = DB::connection('sqlsrv2')
+            ->select("select * from tblCustomersWmax ");
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments");
         return view('warehouse/wmax')->with('customers',$customers)->with('dept',$dept);
     }
     public function wmaxgetcustomerproduct(Request $request){
         $cust = $request->get("customers");
-        $productlist = DB::connection('wmax')
-            ->select("select * from tblProducts where CustomerName ='".$cust."'");
+        $productlist = DB::connection('sqlsrv2')
+            ->select("select * from tblProductsWmax where CustomerName ='".$cust."'");
         return response()->json($productlist);
     }
 
@@ -900,14 +900,14 @@ class WareHouseController extends Controller
         $product = $request->get("product");
         //dd($customer, $product);
 
-        $productinfo = DB::connection('wmax')
-            ->select("select * from tblProducts where CustomerName ='".$customer."' and ProductName ='".$product."'");
+        $productinfo = DB::connection('sqlsrv2')
+            ->select("select * from tblProductsWmax where CustomerName ='".$customer."' and ProductName ='".$product."'");
         return response()->json($productinfo);
     }
     public function wmaxgetproductwiresize(Request $request){
         $ProductID = $request->get("productId");
-        $productlistsize = DB::connection('wmax')
-            ->select("select * from tblProducts where ProductID =".$ProductID);
+        $productlistsize = DB::connection('sqlsrv2')
+            ->select("select * from tblProductsWmax where ProductID =".$ProductID);
         return response()->json($productlistsize);
     }
     public function wmaxdepartmentgalv(){
@@ -1060,7 +1060,7 @@ where intDeptID =".$deptId);
 
     public function getGalvWIP(Request $request){
 
-        $productonmachine = DB::connection('wmax')->select("select distinct * from tblNewJobs Where Completed <> 'Y'");
+        $productonmachine = DB::connection('sqlsrv2')->select("select distinct * from tblNewJobs Where Completed <> 'Y'");
         return response()->json($productonmachine);
     }
 
@@ -1311,7 +1311,7 @@ where intDeptID =".$deptId);
     }
 
     public function getgalvlabel($customer,$product,$ticketno){
-        $jobdata = DB::connection('wmax')->select("select * from tblCompletedJobs where Customer ='".$customer."' and ProductName ='".$product."' and TicketNo = '".$ticketno."'");
+        $jobdata = DB::connection('sqlsrv2')->select("select * from tblCompletedJobs where Customer ='".$customer."' and ProductName ='".$product."' and TicketNo = '".$ticketno."'");
         //dd($jobdata);
         return view('warehouse/galvlabel')->with("id",$customer)->with("id",$product)->with("ticketno",$ticketno)->with("jobdata",$jobdata);
     }
@@ -1565,7 +1565,7 @@ where intDeptID =".$deptId);
     }
 
     public function getCustomername(){
-        $customernames = DB::connection('wmax') ->select("select * from tblCustomers");
+        $customernames = DB::connection('sqlsrv2') ->select("select * from tblCustomers");
         //dd($customernames);
         return response()->json($customernames);
     }
@@ -1573,6 +1573,11 @@ where intDeptID =".$deptId);
     public function getScales(){
         $scales = DB::connection('sqlsrv2') ->select("exec spGetScales");
         //dd($scaleNames);
+        return response()->json($scales);
+    }
+
+    public function getTare(){
+        $scales = DB::connection('sqlsrv2') ->select("select * from tblWeighStands");
         return response()->json($scales);
     }
 

@@ -308,7 +308,7 @@
         //Get Scales
         $.ajax({
 
-            url: '{!!url("/getscales")!!}',
+            url: '{!!url("/getTare")!!}',
             type: "GET",
             data: {
 
