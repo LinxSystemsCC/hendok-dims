@@ -352,7 +352,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 type: "GET",
                 data: {
                     ItemGroup: $('#categorybarcodeless option:selected').text(),
-
                 },
                 success: function (data) {
                     var toAppend = '';
@@ -384,6 +383,8 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
             });
         });
+
+        // setInterval(fetchWeight,1000);
 
         $('#getWeight').click(fetchWeight);
         $('#getWeightBarcodeless').click(fetchWeightBarcodeless);
@@ -456,7 +457,7 @@ function showDialog(tag,width,height){
 }
 
 function toggleWeigh(){
-    setInterval(fetchWeight,5000);
+    setInterval(fetchWeight,1000);
 };
 
 function toggleWeighBarcodeless(){

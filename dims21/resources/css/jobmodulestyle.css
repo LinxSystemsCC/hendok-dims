@@ -97,7 +97,7 @@ a:hover{
 
 .firstmenu{
   color: #ffffff  !important;
-  border-bottom: 2px solid #a9a9a9 ;
+  /* border-bottom: 2px solid #a9a9a9 ; */
   font-weight: bold;
 }
 
@@ -121,6 +121,11 @@ nav ul li a span{
   font-size: 15px;
   transition: transform 0.4s;
 }
+
+.fa{
+  padding-right: 10px !important;
+}
+
 nav ul li a span.rotate{
   transform: translateY(-50%) rotate(-180deg);
 }

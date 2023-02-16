@@ -571,7 +571,7 @@ class WareHouseController extends Controller
         $dept = $request->get("dept");
         $machine = $request->get("machine");
         $jobnum = $request->get("jobnum");
-        $massProduced = 0;
+        $massProduced = $request->get("netmass");
         $zinc = $request->get("zinc");
         $mpa = $request->get("mpa");
         $castno = $request->get("castno");

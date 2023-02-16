@@ -434,6 +434,12 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
                         },
                         {
+                            dataField: "MassProduced",
+                            caption: "Mass Produced",
+                            //width: 60,dataType:"number"
+
+                        },
+                        {
                             dataField: "TestDateTime",
                             caption: "Test Date",
                             //width: 100,dataType:"date"

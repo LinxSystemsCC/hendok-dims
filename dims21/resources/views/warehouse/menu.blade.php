@@ -113,6 +113,8 @@ if ((Auth::guest()))
 }   
 ?>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <nav class="sidebar">
     <!-- logo --> 
     <a href = "{{url('/dashboard')}}">
@@ -124,7 +126,7 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($workorders !="0")
-            <a class="firstmenu" id="1">Work Orders<span class="caret pull-down"></span></a>
+            <a class="firstmenu" id="1"><i class="fa fa-add"></i>Work Orders<span class="caret pull-down"></span></a>
             @endif
 			
 			<ul class="item-show-1">
@@ -153,7 +155,7 @@ if ((Auth::guest()))
                         </li>
                     </ul>
                     @if($galv !="0")
-                    <a class="secondmenu" id="1b">Galv<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="1b"><i class="fa fa-cauldron"></i>Galv<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-1b">
@@ -185,7 +187,7 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($dispatch !="0")
-            <a class="firstmenu" id="2">Dispatch<span class="caret pull-down"></span>
+            <a class="firstmenu" id="2"><i class="fa fa-truck"></i>Dispatch<span class="caret pull-down"></span>
 			</a>
             @endif
 			<ul class="item-show-2">
@@ -267,7 +269,7 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($stockcontrol !="0")
-            <a class="firstmenu" id="3">Stock Control<span class="caret pull-down"></span>
+            <a class="firstmenu" id="3"><i class="fa fa-line-chart"></i>Stock Control<span class="caret pull-down"></span>
 			</a>
             @endif
 			<ul class="item-show-3">
@@ -304,7 +306,7 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($inventory !="0")
-            <a class="firstmenu" id="4">Inventory<span class="caret pull-down"></span>
+            <a class="firstmenu" id="4"><i class="fa fa-archive"></i>Inventory<span class="caret pull-down"></span>
 			</a>
             @endif
 			<ul class="item-show-4">
@@ -343,7 +345,7 @@ if ((Auth::guest()))
         <li>
 			<!-- Fisrt Category -->
             @if($setup !="0")
-            <a class="firstmenu" id="5">Setup<span class="caret pull-down"></span>
+            <a class="firstmenu" id="5"><i class="fa fa-cog"></i>Setup<span class="caret pull-down"></span>
 			</a>
             @endif
 			<ul class="item-show-5">
@@ -357,12 +359,12 @@ if ((Auth::guest()))
                         <!-- Item Links -->
                         <li>
                             @if($creategroups !="0")
-                            <a href='{!!url("/creategrouppage")!!}'>Create Groups</a>
+                            <a href='{!!url("/creategrouppage")!!}'>Groups</a>
                             @endif
                         </li>
                         <li>
                             @if($createusers !="0")
-                            <a href='{!!url("/createuserpage")!!}'>Create Users</a>
+                            <a href='{!!url("/createuserpage")!!}'>Users</a>
                             @endif
                         </li>
                     </ul>
@@ -480,7 +482,7 @@ if ((Auth::guest()))
         <li class="disabled">
 			<!-- Fisrt Category -->
             @if($sales !="0")
-            <a class="firstmenu" id="6">Sales<span class="caret"></span>
+            <a class="firstmenu" id="6"><i class="fa fa-shopping-cart "></i>Sales<span class="caret"></span>
 			</a>
             @endif
 			<ul class="item-show-6">
@@ -505,7 +507,7 @@ if ((Auth::guest()))
         
         <li>
             @if($ppl !="0")
-            <a class="firstmenu" href='{!!url("/printpalletsselectdept")!!}'>Print Pallet Labels</a>
+            <a class="firstmenu" href='{!!url("/printpalletsselectdept")!!}'><i class="fa fa-print"></i>Print Pallet Labels</a>
             @endif
         </li>
 
@@ -513,12 +515,12 @@ if ((Auth::guest()))
         
         <li>
             @if($gpl !="0")
-            <a class="firstmenu" href='{!!url("/genericproductlabels")!!}'>Product Label Printing</a>
+            <a class="firstmenu" href='{!!url("/genericproductlabels")!!}'><i class="fa fa-print"></i>Product Label Printing</a>
             @endif
         </li>
         <li>
             @if($gpl !="0")
-            <a class="firstmenu" href='{!!url("/warehousepalletlabels")!!}'>Warehouse Pallet Printing</a>
+            <a class="firstmenu" href='{!!url("/warehousepalletlabels")!!}'><i class="fa fa-print"></i>Warehouse Printing</a>
             @endif
         </li>
     </ul>
@@ -528,7 +530,7 @@ if ((Auth::guest()))
     <div style="position: absolute; bottom: 0;">
         <ul>
             <li>
-                <a href= "{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> Logout
+                <a href= "{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> <i class="fa fa-sign-out"></i>Logout
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
