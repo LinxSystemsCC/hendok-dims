@@ -63,6 +63,7 @@ if ((Auth::guest()))
     <link href="{{ asset('css/excel-bootstrap-table-filter-style.css') }}" rel="stylesheet"  type='text/css'>
     <link href="{{ asset('css/contextMenu.css') }}" rel="stylesheet"  type='text/css'>
     <link rel="stylesheet" href="{{ asset('css/jquery-ui2.min.css') }}" type="text/css" />
+    <link rel="stylesheet" href="public/css/myicons.css">
 
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
@@ -103,6 +104,10 @@ if ((Auth::guest()))
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
     <style>
+        
+        ::-webkit-scrollbar {
+            display: none;
+        }
         .fa-xl {
             line-height: 30px !important;
         }
@@ -181,7 +186,7 @@ if ((Auth::guest()))
         .push_product{
             background: #c0dcd0;
         }
-        .ngx-contextmenu > .dropdown-menu {
+        .ngx-contextmenu {
             z-index: 9899999999999999;
         }
         .hidden_row {
@@ -557,16 +562,16 @@ if ((Auth::guest()))
                     <li><a href="{{ route('register') }}">Register</a></li>
                 @else
                     <li>
-                        <button type="button" id="orderListing" class="btn btn-warning" style="width: 110px;">ORDER LISTING</button>
+                        <button type="button" id="orderListing" class="btn btn-primary" style="width: 110px;">ORDER LISTING</button>
                     </li>
                     <li style="display: none">
                         <button type="button" id="reports" class="btn btn-primary" style="width: 110px;display: none">REPORTS</button>
                     </li>
                     <li>
-                        <button type="button" id="pricing" class="btn btn-success" style="width: 110px;">Price Check</button>
+                        <button type="button" id="pricing" class="btn btn-primary" style="width: 110px;">Price Check</button>
                     </li>
                     <li>
-                        <button type="button" id="pricingOnCustomer" class="btn btn-success" style="width: 110px;">PL</button>
+                        <button type="button" id="pricingOnCustomer" class="btn btn-primary" style="width: 110px;">PL</button>
                     </li>
                     <li>
                         <button type="button" id="callList" class="btn btn-primary" style="width: 110px;">Call List</button>
@@ -587,16 +592,16 @@ if ((Auth::guest()))
                         <button type="button" id="salesOnOrder" class="btn btn-primary" style="width: 110px;">On Order</button>
                     </li>
                     <li>
-                        <button type="button" id="salesInvoiced" class="btn btn-warning" style="width: 110px;">On Invoice</button>
+                        <button type="button" id="salesInvoiced" class="btn btn-primary" style="width: 110px;">On Invoice</button>
                     </li>
                     <li>
                         <button type="button" id="posCashUp" class="btn btn-primary" style="width: 110px;">Cash Up</button>
                     </li>
                     <li style="display: none">
-                        <button type="button" id="pricelist" class="btn btn-success" style="width: 110px;display:none;">Price List</button>
+                        <button type="button" id="pricelist" class="btn btn-primary" style="width: 110px;display:none;">Price List</button>
                     </li>
                     <li style="display: none">
-                        <button type="button" id="returns" class="btn btn-success" style="width: 110px;display: none;">Returns</button>
+                        <button type="button" id="returns" class="btn btn-primary" style="width: 110px;display: none;">Returns</button>
                     </li>
 
                     <li class="dropdown">
@@ -650,7 +655,7 @@ if ((Auth::guest()))
                     data: {
                         userId: $('#clearlocks').val()
                     },
-                    success: function (data) {
+                    primary: function (data) {
 
                     }
                 });

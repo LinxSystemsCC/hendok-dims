@@ -20,10 +20,10 @@
     <div class="container" style="width: 100%;">
 
         <div class="row">
-            <div class="col-lg-12 ">
+            <div class="col-lg-12 text-center" style="height:60px;">
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4"></div>
-                <div class="col-lg-4 text-center">
+                <div class="col-lg-4">
                     <table class="table" style="margin-bottom: -14px;font-family: monospace;">
                         <tr style="font-size: 10px;" >
                             <td>No.Orders Today</td>
@@ -40,67 +40,58 @@
                         @endforeach
                     </table>
                 </div>
-
             </div>
-            <div class="col-lg-12  visible-md visible-lg" style="line-height: 0.9">
-                <div class="col-lg-4">
-                    <form>
-                        <fieldset class="well">
-                            <legend class="well-legend">Search</legend>
-                            <div class="form-group col-md-4">
-                                <label class="control-label" for="inputOrderId"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Inv No</label>
-                                <input type="text" class="form-control input-sm col-xs-1" id="invoiceNo" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                                <input type="hidden"  id="invoiceNoKeeper" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="control-label" for="inputOrderId"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Order Id</label>
-                                <input type="text" class="form-control input-sm col-xs-1" id="orderId" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                            </div>
-                            <button type="button" id="checkOrders" class="btn-xs btn-info">Check</button>
-                        </fieldset>
-                    </form>
 
+            <div class="col-lg-12 p-3" style="background-color: white;">
+                <div class="col-lg-3 h-100">
+                    <div class="form-group col-md-4">
+                        <label class="control-label" for="inputOrderId">Inv No.</label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="invoiceNo" placeholder="INVOICE NUMBER">
+                        <input type="hidden"  id="invoiceNoKeeper">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label" for="inputOrderId">Order ID</label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="orderId" placeholder="ORDER ID">
+                    </div>
+                    <button type="button" id="checkOrders" class="btn btn-primary">Check</button>
                 </div>
-                <fieldset class="well">
-                    <legend class="well-legend">Filters</legend>
-                    <form>
-                        <div class="form-group  col-md-2" style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                            <label class="control-label" for="inputOrderId"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Delivery Type</label>
-                            <select class="form-control input-sm col-xs-1" id="orderType" style="height:26px;font-size: 10px;" disabled></select>
-                        </div>
-                        <div class="form-group  col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                            <label class="control-label" for="inputCustAcc"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Account</label>
-                            <input type="text" name="custCode" class="form-control input-sm col-xs-1" id="inputCustAcc" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
-                            <input type="hidden" name="hiddenCustomerNotes" class="form-control input-sm col-xs-1" id="hiddenCustomerNotes" >
-                            <input type="hidden" name="hiddenRouteId" class="form-control input-sm col-xs-1" id="hiddenRouteId" >
-                            <input type="hidden" name="hiddenRouteName" class="form-control input-sm col-xs-1" id="hiddenRouteName" >
-                            <input type="hidden" name="CustomerId" class="form-control input-sm col-xs-1" id="CustomerId" >
-                        </div>
 
-                        <div class="form-group col-md-3"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                            <label class="control-label" for="inputCustName"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Customer Name</label>
-                            <input type="text" name="custDescription" class="form-control input-sm col-xs-1" id="inputCustName" style="height:22px;font-size: 10px;font-weight: 900;    color: black;">
-                            <input type="hidden" name="customerEmail" class="form-control input-sm col-xs-1" id="customerEmail" >
-                            <input type="hidden" name="Routeid" class="form-control input-sm col-xs-1" id="Routeid" >
-                            <input type="hidden" name="hiddenCustDiscount" class="form-control input-sm col-xs-1" id="hiddenCustDiscount" >
-                            <input type="hidden" name="hiddencustomerGp" class="form-control input-sm col-xs-1" id="hiddencustomerGp" >
-                        </div>
-                        <div class="form-group col-md-2"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                            <label class="control-label" for="inputOrderDate"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Order Date</label>
-                            <input type="text" class="form-control input-sm col-xs-1" id="inputOrderDate" style="font-weight: 900;    color: black;font-size: 13px;">
-                        </div>
-                        <div class="form-group col-md-2 "  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">
-                            <label class="control-label" for="inputDeliveryDate"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Delivery Date</label>
-                            <input type="text" class="form-control input-sm col-xs-1" id="inputDeliveryDate" style="font-weight: 900;    color: black;font-size: 13px;">
+                <div class="col-lg-9 h-100">
+                    <div class="form-group  col-md-2">
+                        <label class="control-label" for="inputOrderId">Delivery Type</label>
+                        <select class="form-control input-sm col-xs-1" id="orderType" disabled></select>
+                    </div>
+                    <div class="form-group  col-md-2">
+                        <label class="control-label" for="inputCustAcc">Account</label>
+                        <input type="text" name="custCode" class="form-control input-sm col-xs-1" id="inputCustAcc">
+                        <input type="hidden" name="hiddenCustomerNotes" class="form-control input-sm col-xs-1" id="hiddenCustomerNotes" >
+                        <input type="hidden" name="hiddenRouteId" class="form-control input-sm col-xs-1" id="hiddenRouteId" >
+                        <input type="hidden" name="hiddenRouteName" class="form-control input-sm col-xs-1" id="hiddenRouteName" >
+                        <input type="hidden" name="CustomerId" class="form-control input-sm col-xs-1" id="CustomerId">
+                    </div>
 
-                        </div>
+                    <div class="form-group col-md-3">
+                        <label class="control-label" for="inputCustName">Customer Name</label>
+                        <input type="text" name="custDescription" class="form-control input-sm col-xs-1" id="inputCustName">
+                        <input type="hidden" name="customerEmail" class="form-control input-sm col-xs-1" id="customerEmail" >
+                        <input type="hidden" name="Routeid" class="form-control input-sm col-xs-1" id="Routeid" >
+                        <input type="hidden" name="hiddenCustDiscount" class="form-control input-sm col-xs-1" id="hiddenCustDiscount" >
+                        <input type="hidden" name="hiddencustomerGp" class="form-control input-sm col-xs-1" id="hiddencustomerGp" >
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="control-label" for="inputOrderDate">Order Date</label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="inputOrderDate" style="font-weight: 900;    color: black;font-size: 13px;">
+                    </div>
+                    <div class="form-group col-md-2 ">
+                        <label class="control-label" for="inputDeliveryDate">Delivery Date</label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="inputDeliveryDate" style="font-weight: 900;    color: black;font-size: 13px;">
 
-                        <button type="button" id="submitFilters" class="btn-xs btn-primary">Submit</button>
+                    </div>
 
-
-                    </form>
-                </fieldset>
+                    <button type="button" id="submitFilters" class="btn btn-primary">Submit</button>
+                </div>
             </div>
+
             <div class="col-md-8 visible-md visible-lg" >
 
                 <div class="panel panel-default hidebody" id="toAutoScroll" style="height: 44%;min-height: 200px;overflow-y:auto;" >
@@ -279,6 +270,7 @@
                     <button type="button" id="printDocument" class="btn-xs btn-primary " style=" width: 115px;display:none;">Print</button>
                 </div>
             </div>
+
             <div class="col-md-4 hidebody">
                 <div  class="col-md-12" style="background: #999;height:50px">
                     <form>
