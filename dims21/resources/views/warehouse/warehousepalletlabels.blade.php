@@ -93,11 +93,17 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         <input  class="form-control input-sm col-xs-1" id="category" style="width: 100%" readonly>
                     </div>
 
+                     {{-- Product HIDDEN FOR PURPOSES OF VALUE! --}}
+                     <div class="form-group">
+                        <input  class="form-control input-sm col-xs-1" id="prodnamehidden" style="width: 100%" readonly hidden>
+                    </div>
+
                     {{-- Product --}}
                     <div class="form-group">
                         <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
                         <input class="form-control input-sm col-xs-1" id="prodname" style="width: 100%" readonly>
                     </div>
+
 
                     {{-- Pallets --}}
                     <div class="form-group">
@@ -269,6 +275,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     $('#departmenthidden').val(data[0]['DeptID']);
                     $('#category').val(data[0]['strItemGroup']);
                     $('#prodname').val(data[0]['ProductDescription']);
+                    $('#prodnamehidden').val(data[0]['ItemCode']);
                     $('#pallet').val(data[0]['intPackSize']);
                     $('#barcode').val(data[0]['Barcode']);
                 }
@@ -284,7 +291,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 data: {
                     dept:$('#departmenthidden').val(),
                     prodcat:$('#category').val(),
-                    prodname:$('#prodname').val(),
+                    prodname:$('#prodnamehidden').val(),
                     palletconfid:$('#pallet').val(),
                     qty:$('#qty').val(),
                     weight:$('#weight').val(),
