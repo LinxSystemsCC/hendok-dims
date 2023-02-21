@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html>
 <head>
 
@@ -100,7 +100,142 @@
     .dx-datagrid-table{
         font-size:15px;
     }
+</style> --}}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+
+    <!-- DevExtreme theme -->
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
+
+</head>
+
+<div class="col-lg-12"  style="background: white;">
+    <div class="col-lg-2"  style="background: white;">
+        <div class="vertical-menu">
+            @include('warehouse.menu')
+        </div>
+    </div>
+    <div class="col-lg-10" >
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">MAP PRODUCT TO MACHINE AND DEPARTMENT</h3>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newmapping">
+                New Mapping
+            </button>
+        </div>
+        
+        <div id="gridContainer" style=""></div>
+        
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="newmapping" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newuserLabel">Create New Mapping</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
+                    <select  class="form-select input-sm col-xs-1" id="department" required>
+                        <option></option>
+                        @foreach($departments as $val)
+                            <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
+                    <select  class="form-select input-sm col-xs-1" id="machine" required>
+                        <option></option>
+                        @foreach($machines as $val)
+                            <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="product"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Item</label>
+                    <select  class="form-select input-sm col-xs-1" id="product" required>
+                        <option></option>
+                        @foreach($products as $product)
+                            <option value="{{$product->PastelCode}}">{{$product->PastelDescription}}</option>
+                        @endforeach
+                    </select>
+                    {{-- <input  type="text" class="form-control input-sm col-xs-1" id="productcode" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;"><br>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="productdesc" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;" readonly> --}}
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="savemapping" class="btn btn-success" >Save</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+    .dx-datagrid-table{
+        font-size:15px;
+    }
+
+    .dx-datagrid .dx-link {
+        color: #df2413;
+    }
+
+    .dx-datagrid {
+        height: calc(100vh - 63px);
+    }
 </style>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
 <script>
     $.ajaxSetup({
@@ -114,31 +249,35 @@
     var jArray = JSON.stringify({!! json_encode($products) !!});
     $(document).ready(function() {
 
-        var finalData =$.map(JSON.parse(jArray), function(item) {
+        // var finalData =$.map(JSON.parse(jArray), function(item) {
 
-            return {
-                PastelCode:item.PastelCode,
-                PastelDescription:item.PastelDescription
+        //     return {
+        //         PastelCode:item.PastelCode,
+        //         PastelDescription:item.PastelDescription
 
-            }
+        //     }
 
+        // });
+        // var inputProductcode = $('#productcode').flexdatalist({
+        //     minLength: 1,
+        //     valueProperty: '*',
+        //     selectionRequired: true,
+        //     focusFirstResult: true,
+        //     searchContain:true,
+        //     visibleProperties: ["PastelCode","PastelDescription"],
+        //     searchIn: 'PastelDescription',
+        //     data: finalData
+        // });
+        // inputProductcode.on('select:flexdatalist', function (event, data) {
+
+        //     $('#productcode').val(data.PastelCode);
+        //     $('#productdesc').val(data.PastelDescription);
+        // });
+        $('#product').select2( {
+            theme: 'bootstrap-5'
         });
-        var inputProductcode = $('#productcode').flexdatalist({
-            minLength: 1,
-            valueProperty: '*',
-            selectionRequired: true,
-            focusFirstResult: true,
-            searchContain:true,
-            visibleProperties: ["PastelCode","PastelDescription"],
-            searchIn: 'PastelDescription',
-            data: finalData
-        });
-        inputProductcode.on('select:flexdatalist', function (event, data) {
-
-            $('#productcode').val(data.PastelCode);
-            $('#productdesc').val(data.PastelDescription);
-        });
-        $('#saveitemsdept').click(function(){
+        
+        $('#savemapping').click(function(){
 
             $.ajax({
 
@@ -156,7 +295,6 @@
             });
 
         });
-
 
         $.ajax({
 
@@ -201,70 +339,26 @@
                         {
                             dataField: "intAutoMappedDeptMachItemID",
                             caption: "ID",
-                            width: 50,
-
                         }, {
                             dataField: "strItemCode",
                             caption: "Item Code",
-                            width: 150,
-
                         }, {
                             dataField: "PastelDescription",
                             caption: "Item Name",
-                            width: 450,
-
                         },
                         {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 125,
-
                         },
                         {
                             dataField: "strMachineName",
                             caption: "Machines",
-                            width: 200,
-
                         },
                         {
                             dataField: "statusname",
                             caption: "Status",
-                            width: 125,
-
                         }
                     ],
-                    onRowDblClick:function(e){
-
-                        // console.debug(e.row,cells[e.columnIndex]);
-                        console.log(e.data.intAutoMappedDeptMachItemID);
-                        var palletid =  e.data.intAutoMappedDeptMachItemID;
-                        var dialog = $('<p>Un Mapped</p>').dialog({
-                            height: 300, width: 700,modal: true,containment: false,
-                            buttons: {
-                                "Update": function () {
-
-                                    // console.log($('#statusselect').val());
-                                    $.ajax({
-
-                                        url: '{!!url("/removemappingdeptmachitems")!!}',
-                                        type: "POST",
-                                        data: {
-                                            mappingId:palletid
-                                        },
-                                        success: function (data) {
-                                            location.reload();
-                                        },
-
-                                    });
-
-                                }
-                            }
-                        });
-
-                    },
-                    onRowClick:function(e){
-
-                    },
                 });
 
             }

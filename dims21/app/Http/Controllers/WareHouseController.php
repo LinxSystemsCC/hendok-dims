@@ -147,6 +147,19 @@ class WareHouseController extends Controller
         return view('warehouse/areas');
     }
 
+    public function updateAreaName(Request $request){
+        $ID = $request->get('areaID');
+        $Name = $request->get('areaName');
+        $update = DB::connection('sqlsrv2') ->select("exec spUpdateAreaName ?,?", array($ID,$Name));
+        return response()->json($update);
+    }
+
+    public function deleteArea(Request $request){
+        $ID = $request->get('AreaID');
+        $confirmation = DB::connection('sqlsrv2') ->select("exec spDeleteArea ?", array($ID));
+        return response()->json($confirmation);
+    }
+
     public function labelspage(){
         $printers = DB::connection('sqlsrv2')->select("select * from tblPrinters");
         return view('warehouse/labels')->with("printers", $printers);
@@ -1453,7 +1466,7 @@ where intDeptID =".$deptId);
         $statement = "INSERT";
         $config = $request->get("config");
         $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$printerID,$statement,$config)); 
-        dd($return);
+        // dd($return);
         return response()->json($return);
     }
 
@@ -1462,8 +1475,8 @@ where intDeptID =".$deptId);
         $labelID = $request->get("labelID");
         $statement = "UPDATE";
         $config = "";
-        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$labelID,$statement,$config)); 
         // dd($labelname,$labelID,$statement);
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$labelID,$statement,$config)); 
         // dd($return);
         return response()->json($return);
     }
@@ -1473,8 +1486,8 @@ where intDeptID =".$deptId);
         $labelID = $request->get("labelID");
         $statement = "DELETE";
         $config = "";
-        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$labelID,$statement,$config)); 
         // dd($labelname,$labelID,$statement);
+        $return = DB::connection('sqlsrv2')->select('exec spSaveLabel ?,?,?,?',array($labelname,$labelID,$statement,$config)); 
         // dd($return);
         return response()->json($return);
     }
@@ -1522,9 +1535,8 @@ where intDeptID =".$deptId);
             ->select("EXEC spMappedDepartmentMachineItems ");
         return response()->json($palletsjson);
     }
-    public function getPalletsJson(){
-        $palletsjson = DB::connection('sqlsrv2')
-            ->select("EXEC spGetPalletsConfig ");
+    public function getPallets(){
+        $palletsjson = DB::connection('sqlsrv2')->select("EXEC spGetPalletsConfig");
         return response()->json($palletsjson);
     }
     public function getMachinemappedtoarea(){
@@ -1631,7 +1643,6 @@ where intDeptID =".$deptId);
         return response()->json($palletsjson);
     }
     
-
     public function getMachines(){
         $palletsjson = DB::connection('sqlsrv2')
             ->select("EXEC spGetMachines ");
@@ -1648,23 +1659,37 @@ where intDeptID =".$deptId);
         return response()->json($groupsettingsjson);
     }
 
-    public function savesPalletsPost(Request $request){
-        $palletquantity = $request->get("palletquantity");
+    public function savesPallet(Request $request){
+        $palletqty = $request->get("palletqty");
         $pallettypedesc = $request->get("pallettypedesc");
-        //
-        $returnmach = DB::connection('sqlsrv2')
-            ->select('exec spCreatePalletConf ?,?',
-                array($palletquantity,$pallettypedesc)
-            );
-        return response()->json($returnmach);
+        $return = DB::connection('sqlsrv2')->select('exec spCreatePalletConf ?,?',array($palletqty,$pallettypedesc));
+        return response()->json($return);
     }
+
+    public function updatePalletConfig(Request $request){
+        $palletID = $request->get('palletID');
+        $PalletDesc = $request->get('palletDesc');
+        $PalletQty = $request->get('palletQty');
+        // dd($palletID, $PalletDesc, $PalletQty);
+        $return = DB::connection('sqlsrv2')->select('exec spUpdatePalletConfig ?,?,?',array($palletID, $PalletDesc, $PalletQty));
+        return response()->json($return);
+    }
+
+    public function deletePalletConfig(Request $request){
+        $palletID = $request->get('PalletID');
+        // dd($palletID);
+        $return = DB::connection('sqlsrv2')->select('exec spDeletePalletConfig ?',array($palletID));
+        return response()->json($return);
+    }
+
+
 
     public function savesMachinetoarea(Request $request){
         $machineid = $request->get("machineid");
         $areaid = $request->get("areaid");
         //
         $returnmach = DB::connection('sqlsrv2')
-            ->select('exec [spMapMachineToArea] ?,?',
+            ->select('exec spMapMachineToArea ?,?',
                 array($machineid,$areaid)
             );
         return response()->json($returnmach);
@@ -1721,15 +1746,10 @@ where intDeptID =".$deptId);
         return response()->json($returnmach);
     }
 
-    public function savesmachines(Request $request){
-        $machines = $request->get("machinenames");
-
-        //
-        $returnmach = DB::connection('sqlsrv2')
-            ->select('exec spCreateMachines ?',
-                array($machines)
-            );
-        return response()->json($returnmach);
+    public function savesmachine(Request $request){
+        $machine = $request->get("machinename");
+        $return = DB::connection('sqlsrv2')->select('exec spCreateMachines ?',array($machine));
+        return response()->json($return);
     }
     public function savespalletstoitems(Request $request){
 
@@ -1780,16 +1800,17 @@ where intDeptID =".$deptId);
         return response()->json($returnmach);
     }
 
-
     public function updateDeptName(Request $request){
+        $deptName = $request->get("deptName");
+        $deptID = $request->get("deptID");
+        $return = DB::connection('sqlsrv2')->select('exec spUpdateDepartments ?,?',array($deptID,$deptName));
+        return response()->json($return);
+    }
 
-        $thedeptname = $request->get("thedeptname");
-        $palletid = $request->get("palletid");
-        $returnmach = DB::connection('sqlsrv2')
-            ->select('exec spUpdateDepartments ?,?',
-                array($palletid,$thedeptname)
-            );
-        return response()->json($returnmach);
+    public function deleteDept(Request $request){
+        $deptID = $request->get("deptID");
+        $return = DB::connection('sqlsrv2')->select('exec spDeleteDepartment ?',array($deptID));
+        return response()->json($return);
     }
 
     public function updateLabelMapping(Request $request){
@@ -1834,15 +1855,16 @@ where intDeptID =".$deptId);
     }
 
     public function updateMachineName(Request $request){
+        $MachineID = $request->get("MachineID");
+        $MachineName= $request->get("MachineName");
+        $return= DB::connection('sqlsrv2')->select('exec spUpdateMachines ?,?',array($MachineID,$MachineName));
+        return response()->json($return);
+    }
 
-        $themachinename = $request->get("themachinename");
-        $machineid= $request->get("machineid");
-        //
-        $returnmach = DB::connection('sqlsrv2')
-            ->select('exec spUpdateMachines ?,?',
-                array($machineid,$themachinename)
-            );
-        return response()->json($returnmach);
+    public function deleteMachine(Request $request){
+        $MachineID = $request->get("MachineID");
+        $return= DB::connection('sqlsrv2')->select('exec spDeleteMachine ?',array($MachineID));
+        return response()->json($return);
     }
 
     public function updateupdategroupname(Request $request){

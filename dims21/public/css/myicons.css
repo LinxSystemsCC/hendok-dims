@@ -1,0 +1,101 @@
+.mi-barb {
+    background-image: url("icons/barbed-wire.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}
+
+.mi-galv {
+    background-image: url("icons/galvanization.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}
+
+.mi-roof {
+    background-image: url("icons/roof.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}
+
+.mi-pallet {
+    background-image: url("icons/pallet.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}
+
+.mi-coil {
+    background-image: url("icons/coil.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}
+
+.mi-warehouse {
+    background-image: url("icons/warehouse.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}

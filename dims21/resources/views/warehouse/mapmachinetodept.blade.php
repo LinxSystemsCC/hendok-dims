@@ -1,85 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
-    <!-- DevExtreme library -->
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- DevExtreme theme -->
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
 </head>
+
 <div class="col-lg-12"  style="background: white;">
     <div class="col-lg-2"  style="background: white;">
-
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
     <div class="col-lg-10" >
-        <h3 style="flex-grow: 1;">Map Machine To Department</h3>
-        <div class="col-lg-12" >
-            <div class="col-lg-4"  style="background: white;">
-                <h4>Set-Up</h4>
-                <fieldset class="well">
-                    <form>
-                        Map Machine To Dept
-                        <div class="form-group">
-                            <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-                            <select  class="form-control input-sm col-xs-1" id="department" required>
-                                <option></option>
-                                @foreach($departments as $val)
-                                    <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
-                                @endforeach
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">MAP MACHINE TO DEPARTMENT</h3>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newmapping">
+                New Mapping
+            </button>
+        </div>
+        
+        <div id="gridContainer" style=""></div>
+        
+    </div>
+</div>
 
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
-                            <select  class="form-control input-sm col-xs-1" id="machine" required>
-                                <option></option>
-                                @foreach($machines as $val)
-                                    <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
-                        <br>
-                        <button type="button" id="savemachine" class="btn-lg btn-success" >Save</button>
-                        <br>
-
-
-                    </form>
-                </fieldset>
-                <hr>
-
-
+<!-- Modal -->
+<div class="modal fade" id="newmapping" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newuserLabel">Create New Mapping</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="col-lg-8"  style="background: white;">
-                <h4>Data Grid</h4>
-                <div class="col-lg-12" id="afterFilter">
-                    <div id="gridContainer">
-                    </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
+                    <select  class="form-select input-sm col-xs-1" id="department" required>
+                        <option></option>
+                        @foreach($departments as $val)
+                            <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                        @endforeach
 
-
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
+                    <select  class="form-select input-sm col-xs-1" id="machine" required>
+                        <option></option>
+                        @foreach($machines as $val)
+                            <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="savemapping" class="btn btn-success" >Save</button>
+            </div>
+
+
         </div>
     </div>
 </div>
@@ -90,7 +96,31 @@
     .dx-datagrid-table{
         font-size:15px;
     }
+
+    .dx-datagrid .dx-link {
+        color: #df2413;
+    }
+
+    .dx-datagrid {
+        height: calc(100vh - 63px);
+    }
 </style>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+
 
 <script>
     $.ajaxSetup({
@@ -104,7 +134,7 @@
     $(document).ready(function() {
 
 
-        $('#savemachine').click(function(){
+        $('#savemapping').click(function(){
 
             $.ajax({
 
@@ -134,17 +164,29 @@
             success: function (data) {
 
                 $("#gridContainer").dxDataGrid({
-
                     dataSource:data, //as json
-
+                    hoverStateEnabled: true,
                     showBorders: true,
                     filterRow: { visible: true },
                     allowColumnResizing: true,
-                    paging:{
-                        pageSize: 50,
+                    columnAutoWidth: true,
+                    // height: ((window.screen.height)-50),
+                    scrolling: {
+                        mode: 'infinite',
                     },
+                    // paging:{
+                    //     pageSize: 10,
+                    // },
                     export: {
                         enabled: true
+                    },
+                    editing: {
+                        mode: 'batch',
+                        // allowUpdating: true,
+                        // allowDeleting: true,
+                    },
+                    selection: {
+                        mode: 'single',
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
@@ -166,68 +208,23 @@
                         {
                             dataField: "intAutoMappedMachineDept",
                             caption: "ID",
-                            width: 50,
-
                         }, {
                             dataField: "strMachineName",
                             caption: "Machines",
-                            width: 250,
-
                         }, {
                             dataField: "strDeptName",
                             caption: "Department",
-                            width: 450,
-
                         }
                         , {
                             dataField: "Statuses",
                             caption: "Status",
-                            width: 150,
-
                         }
                         , {
                             dataField: "dteCreate",
                             caption: "Date Time",
-                            width: 125,
-
                         },
                     ],
-                    onRowDblClick:function(e){
-
-                        // console.debug(e.row,cells[e.columnIndex]);
-                        console.log(e.data.intAutoMappedMachineDept);
-                        var palletid =  e.data.intAutoMappedMachineDept;
-                        var dialog = $('<p>Un Mapped</p>').dialog({
-                            height: 300, width: 700,modal: true,containment: false,
-                            buttons: {
-                                "Update": function () {
-
-                                    // console.log($('#statusselect').val());
-                                    $.ajax({
-
-                                        url: '{!!url("/unmapmachinefromdept")!!}',
-                                        type: "POST",
-                                        data: {
-                                            mappingId:palletid
-                                        },
-                                        success: function (data) {
-                                            location.reload();
-                                        },
-
-                                    });
-
-                                }
-                            }
-                        });
-
-
-
-                    },
-                    onRowClick:function(e){
-
-                    },
                 });
-
             }
 
         });

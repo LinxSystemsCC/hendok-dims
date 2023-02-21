@@ -54,6 +54,10 @@ nav ul li a{
   background: #242424;
 }*/
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 nav ul li a:hover{
   background: #242424;
 }

@@ -34,7 +34,6 @@
 
 <div class="col-lg-12"  style="background: white;">
     <div class="col-lg-2"  style="background: white;">
-
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
@@ -48,85 +47,10 @@
             </button>
         </div>
 
-        <div id="gridContainer" style="height:100% !important;"></div>
+        <div id="gridContainer" style=""></div>
         
-        {{-- <div class="col-lg-12">
-            <div id="gridContainer"></div>
-
-            <div class="col-lg-4"  style="background: white;">
-                <h4> </h4>
-                <fieldset class="well">
-                    <form>
-                        Create User
-                        <div class="form-group">
-                            <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">User Name </label>
-                            <input  type="text" class="form-control input-sm col-xs-1" id="username" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-
-                            <br>
-                        
-                            <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Email </label>
-                            <input  type="text" class="form-control input-sm col-xs-1" id="email" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                        
-                            <br>
-
-                            <label class="control-label" for="password"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Password </label>
-                            <input  type="password" class="form-control input-sm col-xs-1" id="password" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-
-                            <br>
-
-                            <label class="control-label" for="groupID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
-                            <select  class="form-control input-sm col-xs-1" id="groupID" required>
-                                <option></option>
-                                @foreach($groups as $group)
-                                    <option value="{{$group->GroupId}}">{{$group->GroupName}}</option>
-                                @endforeach
-                            </select>
-
-                            <br>
-
-                            <label class="control-label" for="pincode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pincode </label>
-                            <input  type="number" class="form-control input-sm col-xs-1" id="pincode" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-
-                            <br>
-
-                            <label class="control-label" for="tabletuser"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tablet User </label>
-                            <div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuseryes" checked value="1">
-                                    <label class="form-check-label" for="tabletuseryes">
-                                        Yes
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuserno" value="0">
-                                    <label class="form-check-label" for="tabletuserno"> 
-                                    No
-                                    </label>
-                                </div>
-                            </div>
-
-                            <br>
-
-                            <button type="button" id="savesusername" class="btn-lg btn-success" >Save</button>
-                        
-                            <br>
-                        </div>
-
-
-                    </form>
-                </fieldset>
-
-            </div>
-            <div class="col-lg-8"  style="background: white;">
-                <h4>USERS</h4>
-                <div class="col-lg-12" id="afterFilter">
-                    <div id="gridContainer"></div>
-                </div>
-            </div>
-        </div> --}}
     </div>
 </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="newuser" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
@@ -137,58 +61,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {{-- <div class="form-group">
-                    <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">User Name </label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="username" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-
-                    <br>
-                
-                    <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Email </label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="email" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                
-                    <br>
-
-                    <label class="control-label" for="password"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Password </label>
-                    <input  type="password" class="form-control input-sm col-xs-1" id="password" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-
-                    <br>
-
-                    <label class="control-label" for="groupID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
-                    <select  class="form-control input-sm col-xs-1" id="groupID" required>
-                        <option></option>
-                        @foreach($groups as $group)
-                            <option value="{{$group->GroupId}}">{{$group->GroupName}}</option>
-                        @endforeach
-                    </select>
-
-                    <br>
-
-                    <label class="control-label" for="pincode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pincode </label>
-                    <input  type="number" class="form-control input-sm col-xs-1" id="pincode" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-
-                    <br>
-
-                    <label class="control-label" for="tabletuser"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tablet User </label>
-                    <div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuseryes" checked value="1">
-                            <label class="form-check-label" for="tabletuseryes">
-                                Yes
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuserno" value="0">
-                            <label class="form-check-label" for="tabletuserno"> 
-                            No
-                            </label>
-                        </div>
-                    </div>
-
-                    <br>
-
-                    <br>
-                </div> --}}
-
                 <div class="form-group">
                     <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">User Name </label>
                     <input  type="text" class="form-control input-sm col-xs-1" id="username">
@@ -248,7 +120,6 @@
     </div>
 </div>
 
-
 <style>
 
     .dx-datagrid-table{
@@ -258,6 +129,10 @@
 
     .dx-datagrid .dx-link {
         color: #df2413;
+    }
+
+    .dx-datagrid {
+        height: calc(100vh - 63px);
     }
 </style>
 
@@ -328,7 +203,7 @@
                     filterRow: { visible: true },
                     allowColumnResizing: true,
                     columnAutoWidth: true,
-                    height: ((window.screen.height)-50),
+                    // height: ((window.screen.height)-50),
                     scrolling: {
                         mode: 'infinite',
                     },
@@ -339,7 +214,7 @@
                         enabled: true
                     },
                     editing: {
-                        mode: 'row',
+                        mode: 'batch',
                         // allowUpdating: true,
                         allowDeleting: true,
                     },

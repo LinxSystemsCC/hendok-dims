@@ -834,7 +834,7 @@ Route::get('listenToScale', [WareHouseController::class,'listenToScale']);
 Route::get('warehouseitems', [WareHouseController::class,'warehouseInvetoryItems']);
 Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
 Route::get('initiateproductonmachine', [WareHouseController::class,'initiateproductonmachine']);
-Route::get('getPalletsJson', [WareHouseController::class,'getPalletsJson']);
+Route::get('getPallets', [WareHouseController::class,'getPallets']);
 Route::get('getDeptname', [WareHouseController::class,'getDeptname']);
 Route::get('getAreaname', [WareHouseController::class,'getAreaname']);
 Route::get('getLabels', [WareHouseController::class,'getLabels']);
@@ -867,24 +867,30 @@ Route::get('getMappedDepartmentsMachinesItemasJson', [WareHouseController::class
 
 
 Route::get('selectedDepartment', [WareHouseController::class,'selectedDepartment']);
-Route::post('selectedPalletConfig', [WareHouseController::class,'selectedPalletConfig']);
+Route::post('updatePalletConfig', [WareHouseController::class,'updatePalletConfig']);
+Route::post('deletePalletConfig', [WareHouseController::class,'deletePalletConfig']);
+
 Route::post('savespalletstoitems', [WareHouseController::class,'savespalletstoitems']);
 Route::post('savesmachinedeptitems', [WareHouseController::class,'savesmachinedeptitems']);
 Route::post('savesMachinetoarea', [WareHouseController::class,'savesMachinetoarea']);
 Route::post('savesMachinemaptodept', [WareHouseController::class,'savesMachinemaptodept']);
 Route::post('updateDeptName', [WareHouseController::class,'updateDeptName']);
+Route::post('deleteDept', [WareHouseController::class,'deleteDept']);
 Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
 Route::post('deleteCustomerName', [WareHouseController::class,'deleteCustomerName']);
 Route::post('deletesalesorders', [WareHouseController::class,'deletesalesorders']);
 Route::post('deleteScale', [WareHouseController::class,'deleteScale']);
 Route::post('updateMachineName', [WareHouseController::class,'updateMachineName']);
+Route::post('deleteMachine', [WareHouseController::class,'deleteMachine']);
 Route::post('updategroupname', [WareHouseController::class,'updategroupname']);
-Route::post('savespallets', [WareHouseController::class,'savesPalletsPost']);
+Route::post('savesPallet', [WareHouseController::class,'savesPallet']);
 Route::post('savesdeptname', [WareHouseController::class,'savesdeptname']);
 Route::post('savesareaname', [WareHouseController::class,'savesareaname']);
+Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
+Route::post('deleteArea', [WareHouseController::class,'deleteArea']);
 Route::post('savescustomername', [WareHouseController::class,'savescustomername']);
 Route::post('savesscale', [WareHouseController::class,'savesscale']);
-Route::post('savesmachines', [WareHouseController::class,'savesmachines']);
+Route::post('savesmachine', [WareHouseController::class,'savesmachine']);
 Route::post('savesgroupname', [WareHouseController::class,'savesgroupname']);
 Route::post('savessettingname', [WareHouseController::class,'savessettingname']);
 Route::post('removemapping', [WareHouseController::class,'removemapping']);

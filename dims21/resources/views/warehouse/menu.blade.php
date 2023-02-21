@@ -115,6 +115,8 @@ if ((Auth::guest()))
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+<link rel="stylesheet" href="public/css/myicons.css">
+
 <nav class="sidebar">
     <!-- logo --> 
     <a href = "{{url('/dashboard')}}">
@@ -133,7 +135,7 @@ if ((Auth::guest()))
                 <li>
                     <!-- Second Category -->
                     @if($barbed !="0")
-                    <a class="secondmenu" id="1a">Barbed Wire<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="1a"><i class="fa mi-barb"></i>Barbed Wire<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-1a">
@@ -155,7 +157,7 @@ if ((Auth::guest()))
                         </li>
                     </ul>
                     @if($galv !="0")
-                    <a class="secondmenu" id="1b"><i class="fa fa-cauldron"></i>Galv<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="1b"><i class="fa mi-galv"></i>Galv<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-1b">
@@ -167,7 +169,7 @@ if ((Auth::guest()))
                         </li>
                     </ul>
                     @if($roof !="0")
-                    <a class="secondmenu" id="1c">Roofing<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="1c"><i class="fa mi-roof"></i>Roofing<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-1c">
@@ -507,7 +509,7 @@ if ((Auth::guest()))
         
         <li>
             @if($ppl !="0")
-            <a class="firstmenu" href='{!!url("/printpalletsselectdept")!!}'><i class="fa fa-print"></i>Print Pallet Labels</a>
+            <a class="firstmenu" href='{!!url("/printpalletsselectdept")!!}'><i class="fa mi-pallet"></i>Print Pallet Labels</a>
             @endif
         </li>
 
@@ -515,12 +517,12 @@ if ((Auth::guest()))
         
         <li>
             @if($gpl !="0")
-            <a class="firstmenu" href='{!!url("/genericproductlabels")!!}'><i class="fa fa-print"></i>Product Label Printing</a>
+            <a class="firstmenu" href='{!!url("/genericproductlabels")!!}'><i class="fa mi-coil"></i>Product Label Printing</a>
             @endif
         </li>
         <li>
             @if($gpl !="0")
-            <a class="firstmenu" href='{!!url("/warehousepalletlabels")!!}'><i class="fa fa-print"></i>Warehouse Printing</a>
+            <a class="firstmenu" href='{!!url("/warehousepalletlabels")!!}'><i class="fa mi-warehouse"></i>Warehouse Printing</a>
             @endif
         </li>
     </ul>

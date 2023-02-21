@@ -118,7 +118,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     <div class="form-group">
                         <label class="control-label" for="weight"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
                         <div class="d-inline-flex">
-                            <select  class="form-control input-sm col-xs-1 " id="scaleID" style="width: 60%" >
+                            <select  class="form-select input-sm col-xs-1 " id="scaleID" style="width: 60%" >
                                 <option></option>
                                 @foreach($scales as $scale)
                                     <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
@@ -156,7 +156,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     {{-- Department --}}
                     <div class="form-group">
                         <label class="control-label" for="departmentbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
-                        <select  class="form-control input-sm col-xs-1 " id="departmentbarcodeless" style="width: 100%" >
+                        <select  class="form-select input-sm col-xs-1 " id="departmentbarcodeless" style="width: 100%" >
                             <option></option>
                                     @foreach($dept as $val)
                                         <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
@@ -168,7 +168,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     {{-- Product Category --}}
                     <div class="form-group">
                         <label class="control-label" for="categorybarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
-                        <select  class="form-control input-sm col-xs-1" id="categorybarcodeless" style="width: 100%" required>
+                        <select  class="form-select input-sm col-xs-1" id="categorybarcodeless" style="width: 100%" required>
                             <option></option>
                         </select>
                     </div>
@@ -176,7 +176,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     {{-- Product --}}
                     <div class="form-group">
                         <label class="control-label" for="prodnamebarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
-                        <select  class="form-control input-sm col-xs-1" id="prodnamebarcodeless" style="width: 100%" required>
+                        <select  class="form-select input-sm col-xs-1" id="prodnamebarcodeless" style="width: 100%" required>
                             <option></option>
                         </select>
                     </div>
@@ -185,13 +185,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     <div class="form-group">
                         <label class="control-label" for="palletbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
                         <input class="form-control input-sm col-xs-1" id="palletbarcodeless" style="width: 100%" readonly>
-                        {{-- <select  class="form-control input-sm col-xs-1 " id="palletbarcodeless" style="width: 100%" >
-                            <option></option>
-                                    @foreach($pallets as $val)
-                                        <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
-                                    @endforeach
-                            
-                        </select> --}}
                     </div>
 
                     {{-- Quantity --}}
@@ -204,7 +197,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     <div class="form-group">
                         <label class="control-label" for="weightbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
                         <div class="d-inline-flex">
-                            <select  class="form-control input-sm col-xs-1 " id="scaleIDBarcodeless" style="width: 60%" >
+                            <select  class="form-select input-sm col-xs-1 " id="scaleIDBarcodeless" style="width: 60%" >
                                 <option></option>
                                 @foreach($scales as $scale)
                                     <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
