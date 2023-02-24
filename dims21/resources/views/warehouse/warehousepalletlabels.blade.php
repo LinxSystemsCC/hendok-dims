@@ -16,7 +16,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    
+
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
@@ -29,7 +29,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
-    
+
 
     <!-- Select2 JS -->
 
@@ -63,7 +63,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             <a class="nav-link" onclick="openPage('barcodelesspage', this, 'barcodelesstab')"id="barcodelesstab">Barcodeless</a>
             </li>
         </ul>
-        
+
         {{-- Barcode --}}
         <div class="tab-content p-3">
             <div class="tabcontent tab-pane" id="barcodepage" role="tabpanel">
@@ -114,7 +114,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     @foreach($pallets as $val)
                                         <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
                                     @endforeach
-                            
+
                         </select> --}}
                     </div>
 
@@ -133,7 +133,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                 @foreach($scales as $scale)
                                     <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
                                 @endforeach
-                                
+
                             </select>
                             <input  class="form-control input-sm col-xs-1" id="weight" style="width: 25%; margin-left: 5px;"type="number" disabled>
                             <button class="btn btn-success" id="getWeight" style="width: 25%; margin-left: 5px;">READ</button>
@@ -171,7 +171,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     @foreach($dept as $val)
                                         <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
                                     @endforeach
-                            
+
                         </select>
                     </div>
 
@@ -212,7 +212,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                 @foreach($scales as $scale)
                                     <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
                                 @endforeach
-                                
+
                             </select>
                             <input  class="form-control input-sm col-xs-1" id="weightbarcodeless" style="width: 25%; margin-left: 5px;"type="number" disabled>
                             <button class="btn btn-success" id="getWeightBarcodeless" style="width: 25%; margin-left: 5px;">READ</button>
@@ -229,7 +229,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     <br>
 
                     <button class="btn btn-success" id="printbarcodeless" style="width: 100%; margin-right: 10px;">PRINT</button>
-                </div> 
+                </div>
             </div>
         </div>
 
@@ -255,9 +255,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
             $('nav ul li #'+id+' span').toggleClass("rotate");
-            
+
         });
-        
+
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
@@ -319,7 +319,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     barcode:$('#barcodebarcodeless').val()
                 },
                 success: function (data) {
-                    alert('Succesful Printout.');
+
+                    if(data[0].Result =="SUCCESS")
+                    {
+                        alert('Succesful Printout.');
+                    }else{
+                        alert(data[0].Result);
+                    }
+
                 }
 
             });
@@ -425,7 +432,7 @@ function openPage(pageName, elmnt, elementid) {
     $('#'+uppertabs[0].id).removeClass("active");
     $('#'+elementid).addClass("active");
     // Show the specific tab content
-    document.getElementById(pageName).style.display = "block"; 
+    document.getElementById(pageName).style.display = "block";
     $('#weight').val('');
     $('#weightbarcodeless').val('');
 
