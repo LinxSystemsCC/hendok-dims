@@ -16,7 +16,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    
+
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
@@ -29,7 +29,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
-    
+
 
     <!-- Select2 JS -->
 
@@ -63,7 +63,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             <a class="nav-link" onclick="openPage('barcodelesspage', this, 'barcodelesstab')"id="barcodelesstab">Barcodeless</a>
             </li>
         </ul>
-        
+
         {{-- Barcode --}}
         <div class="tab-content">
             <div class="tabcontent tab-pane" id="barcodepage" role="tabpanel">
@@ -106,6 +106,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         </div>
 
 
+<<<<<<< HEAD
                         {{-- Pallets --}}
                         <div class="form-group">
                             <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
@@ -145,6 +146,40 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         <div class="form-group">
                             <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
                             <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%"type="number">
+=======
+                    {{-- Pallets --}}
+                    <div class="form-group">
+                        <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
+                        <input class="form-control input-sm col-xs-1" id="pallet" style="width: 100%" readonly>
+                        {{-- <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
+                            <option></option>
+                                    @foreach($pallets as $val)
+                                        <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
+                                    @endforeach
+
+                        </select> --}}
+                    </div>
+
+                    {{-- Quantity --}}
+                    <div class="form-group">
+                        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
+                        <input  class="form-control input-sm col-xs-1" id="qty" style="width: 100%"type="number">
+                    </div>
+
+                    {{-- Weight --}}
+                    <div class="form-group">
+                        <label class="control-label" for="weight"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
+                        <div class="d-inline-flex">
+                            <select  class="form-select input-sm col-xs-1 " id="scaleID" style="width: 60%" >
+                                <option></option>
+                                @foreach($scales as $scale)
+                                    <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
+                                @endforeach
+
+                            </select>
+                            <input  class="form-control input-sm col-xs-1" id="weight" style="width: 25%; margin-left: 5px;"type="number" disabled>
+                            <button class="btn btn-success" id="getWeight" style="width: 25%; margin-left: 5px;">READ</button>
+>>>>>>> 32c623b750d80336d6d9eb488b1a5169318b9e4b
                         </div>
                     </div>
 
@@ -197,6 +232,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                         <h5>BARCODELESS PRODUCT LABEL PRINTING</h5>
 
+<<<<<<< HEAD
                         {{-- Department --}}
                         <div class="form-group">
                             <label class="control-label" for="departmentbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
@@ -206,6 +242,58 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                             <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
                                         @endforeach
                                 
+=======
+                    {{-- Department --}}
+                    <div class="form-group">
+                        <label class="control-label" for="departmentbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
+                        <select  class="form-select input-sm col-xs-1 " id="departmentbarcodeless" style="width: 100%" >
+                            <option></option>
+                                    @foreach($dept as $val)
+                                        <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                                    @endforeach
+
+                        </select>
+                    </div>
+
+                    {{-- Product Category --}}
+                    <div class="form-group">
+                        <label class="control-label" for="categorybarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+                        <select  class="form-select input-sm col-xs-1" id="categorybarcodeless" style="width: 100%" required>
+                            <option></option>
+                        </select>
+                    </div>
+
+                    {{-- Product --}}
+                    <div class="form-group">
+                        <label class="control-label" for="prodnamebarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
+                        <select  class="form-select input-sm col-xs-1" id="prodnamebarcodeless" style="width: 100%" required>
+                            <option></option>
+                        </select>
+                    </div>
+
+                    {{-- Pallets --}}
+                    <div class="form-group">
+                        <label class="control-label" for="palletbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
+                        <input class="form-control input-sm col-xs-1" id="palletbarcodeless" style="width: 100%" readonly>
+                    </div>
+
+                    {{-- Quantity --}}
+                    <div class="form-group">
+                        <label class="control-label" for="qtybarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
+                        <input  class="form-control input-sm col-xs-1" id="qtybarcodeless" style="width: 100%">
+                    </div>
+
+                    {{-- Weight --}}
+                    <div class="form-group">
+                        <label class="control-label" for="weightbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Weight to Print </label>
+                        <div class="d-inline-flex">
+                            <select  class="form-select input-sm col-xs-1 " id="scaleIDBarcodeless" style="width: 60%" >
+                                <option></option>
+                                @foreach($scales as $scale)
+                                    <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
+                                @endforeach
+
+>>>>>>> 32c623b750d80336d6d9eb488b1a5169318b9e4b
                             </select>
                         </div>
 
@@ -322,9 +410,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
             $('nav ul li #'+id+' span').toggleClass("rotate");
-            
+
         });
-        
+
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
@@ -392,7 +480,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     area: $('#areabarcodeless').val()
                 },
                 success: function (data) {
-                    alert('Succesful Printout.');
+
+                    if(data[0].Result =="SUCCESS")
+                    {
+                        alert('Succesful Printout.');
+                    }else{
+                        alert(data[0].Result);
+                    }
+
                 }
 
             });
@@ -498,7 +593,7 @@ function openPage(pageName, elmnt, elementid) {
     $('#'+uppertabs[0].id).removeClass("active");
     $('#'+elementid).addClass("active");
     // Show the specific tab content
-    document.getElementById(pageName).style.display = "block"; 
+    document.getElementById(pageName).style.display = "block";
     $('#weight').val('');
     $('#weightbarcodeless').val('');
 
