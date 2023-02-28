@@ -157,6 +157,10 @@
                             caption: "Item Description",
                             allowEditing: false,
                         },{
+                            dataField: "strItemGroup",
+                            caption: "Item Group",
+                            allowEditing: false,
+                        },{
                             dataField: "intMoveId",
                             caption: "Movement ID",
                             allowEditing: false,
@@ -203,6 +207,10 @@
                         },{
                             dataField: "strAreaName",
                             caption: "Area Name",
+                            allowEditing: false,
+                        },{
+                            dataField: "mnyWeight",
+                            caption: "Weight",
                             allowEditing: false,
                         },
                         
@@ -286,6 +294,10 @@
                             },{
                                 dataField: "strItemDescription",
                                 caption: "Item Description",
+                                allowEditing: false,
+                            },{
+                                dataField: "strItemGroup",
+                                caption: "Item Group",
                                 allowEditing: false,
                             },{
                                 dataField: "intMoveId",
