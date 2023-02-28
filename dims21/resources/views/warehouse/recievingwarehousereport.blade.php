@@ -111,15 +111,22 @@
                     hoverStateEnabled: true,
                     showBorders: true,
                     filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
                     columnAutoWidth: true,
                     // height: ((window.screen.height)-50),
                     scrolling: {
                         mode: 'infinite',
                     },
-                    // paging:{
-                    //     pageSize: 10,
-                    // },
+                    paging:{
+                        pageSize: 10,
+                    },
+                    pager: {
+                        showPageSizeSelector: true,
+                        allowedPageSizes: [10, 20, 50],
+                        showNavigationButtons: true
+                    },
                     export: {
                         enabled: true
                     },
@@ -166,7 +173,7 @@
                             allowEditing: false,
                         },{
                             dataField: "strMoveType",
-                            caption: "Movement Type",
+                            caption: "Type",
                             allowEditing: false,
                         },{
                             dataField: "intJobId",
@@ -215,22 +222,6 @@
                         },
                         
                     ],
-
-                    // +"strItemCode": "BWDRAK200175KG"
-                    // +"strItemDescription": null
-                    // +"intMoveId": "40"
-                    // +"strMoveType": "Move In"
-                    // +"intJobId": "3"
-                    // +"dteTimeCreate": "2022-10-31 11:55:27.360"
-                    // +"mnyEstimatedPallets": "1.0000"
-                    // +"intUserId": "0"
-                    // +"strOperator": "12345"
-                    // +"strDriverName": null
-                    // +"intLocationNameId": null
-                    // +"strLocationName": null
-                    // +"intAreaID": null
-                    // +"strAreaName": null
-
                 });
             }
         });
@@ -250,15 +241,22 @@
                         hoverStateEnabled: true,
                         showBorders: true,
                         filterRow: { visible: true },
+                        filterPanel: { visible: true },
+                        headerFilter: { visible: true },
                         allowColumnResizing: true,
                         columnAutoWidth: true,
                         // height: ((window.screen.height)-50),
                         scrolling: {
                             mode: 'infinite',
                         },
-                        // paging:{
-                        //     pageSize: 10,
-                        // },
+                        paging:{
+                            pageSize: 10,
+                        },
+                        pager: {
+                            showPageSizeSelector: true,
+                            allowedPageSizes: [10, 20, 50],
+                            showNavigationButtons: true
+                        },
                         export: {
                             enabled: true
                         },
@@ -305,7 +303,7 @@
                                 allowEditing: false,
                             },{
                                 dataField: "strMoveType",
-                                caption: "Movement Type",
+                                caption: "Type",
                                 allowEditing: false,
                             },{
                                 dataField: "intJobId",
@@ -347,13 +345,16 @@
                                 dataField: "strAreaName",
                                 caption: "Area Name",
                                 allowEditing: false,
+                            },{
+                                dataField: "mnyWeight",
+                                caption: "Weight",
+                                allowEditing: false,
                             },
                             
                         ],
-
                     });
                 }
-                });
+            });
         });
         
         $('.sidebar ul li a').on(function(){
