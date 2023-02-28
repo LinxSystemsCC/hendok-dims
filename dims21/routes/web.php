@@ -831,7 +831,9 @@ Route::get('productsOnBackOrders',[OnlineOrdersReconController::class,'productsO
 //WAREHOUSECONTROLLER CONTROLLER STARTS HERE !!!
 Route::get('listenToScale', [WareHouseController::class,'listenToScale']);
 Route::get('getForkliftNumber', [WareHouseController::class,'getForkliftNumber']);
-
+Route::get('getMainWarehouseReport', [WareHouseController::class,'getMainWarehouseReport']);
+Route::get('getMainWarehouseReportByDate', [WareHouseController::class,'getMainWarehouseReportByDate']);
+Route::get('recievingwarehousereport', [WareHouseController::class,'recievingwarehousereport']);
 Route::get('warehouseitems', [WareHouseController::class,'warehouseInvetoryItems']);
 Route::get('onOrderAdvanced', [WareHouseController::class,'onOrderAdvanced']);
 Route::get('initiateproductonmachine', [WareHouseController::class,'initiateproductonmachine']);

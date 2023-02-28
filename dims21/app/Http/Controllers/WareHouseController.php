@@ -213,7 +213,23 @@ class WareHouseController extends Controller
         $returndata = DB::connection('sqlsrv2') ->select('exec spInsertPrintForPalletLabels ?,?,?,?,?,?,?,?,?,?,?', array($dept,$prodcat,$prodname,$palletconfid,$qty,$weight,$barcode,$operator,$drivername,$forkliftnumber,$area));
         
         return response()->json($returndata);
+    }
 
+    public function getMainWarehouseReport(Request $request){
+        $report = DB::connection('sqlsrv2')->select("SELECT * FROM viewMainWarehouseMovements ORDER BY intMoveId DESC");
+        // dd($report);
+        return response()->json($report);
+    }
+
+    public function getMainWarehouseReportByDate(Request $request){
+        $date = $request->get('date');
+        $report = DB::connection('sqlsrv2')->select("EXEC spGetMainWarehouseMovementsByDate ?", array($date));
+        // dd($report);
+        return response()->json($report);
+    }
+
+    public function recievingwarehousereport(){
+        return view('warehouse/recievingwarehousereport');
     }
 
     public function getProductInfo(Request $request){

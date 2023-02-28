@@ -339,6 +339,10 @@ if ((Auth::guest()))
                             @endif
                         <li>
                     </ul>
+
+                    {{-- @if($exceptionreport !="0") --}}
+                    <a class="secondmenu" id="4c" href='{!!url("/recievingwarehousereport")!!}'>Recieving Movement</a>
+                    {{-- @endif --}}
                 </li>
 			</ul>
 		</li>
