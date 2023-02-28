@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
     <!-- DevExtreme theme -->
-    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css">
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
@@ -105,124 +105,7 @@
             },
             success: function (data) {
                 console.debug(data);
-                $("#gridContainer").dxDataGrid({
-
-                    dataSource:data, //as json
-                    hoverStateEnabled: true,
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    allowColumnResizing: true,
-                    columnAutoWidth: true,
-                    // height: ((window.screen.height)-50),
-                    scrolling: {
-                        mode: 'infinite',
-                    },
-                    paging:{
-                        pageSize: 10,
-                    },
-                    pager: {
-                        showPageSizeSelector: true,
-                        allowedPageSizes: [10, 20, 50],
-                        showNavigationButtons: true
-                    },
-                    export: {
-                        enabled: true
-                    },
-                    // editing: {
-                    //     mode: 'batch',
-                    //     allowUpdating: true,
-                    //     allowDeleting: true,
-                    // },
-                    selection: {
-                        mode: 'single',
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('WarehouseRecievingMovementReport');
-
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'WarehouseRecievingMovementReport.xlsx');
-                            });
-                        });
-                        e.cancel = true;
-                    },
-
-                    columns: [
-                        {
-                            dataField: "strItemCode",
-                            caption: "Item Code",
-                            allowEditing: false,
-                        },{
-                            dataField: "strItemDescription",
-                            caption: "Item Description",
-                            allowEditing: false,
-                        },{
-                            dataField: "strItemGroup",
-                            caption: "Item Group",
-                            allowEditing: false,
-                        },{
-                            dataField: "intMoveId",
-                            caption: "Movement ID",
-                            allowEditing: false,
-                        },{
-                            dataField: "strMoveType",
-                            caption: "Type",
-                            allowEditing: false,
-                        },{
-                            dataField: "intJobId",
-                            caption: "Job ID",
-                            allowEditing: false,
-                        },{
-                            dataField: "dteTimeCreate",
-                            caption: "Date Created",
-                            allowEditing: false,
-                        },{
-                            dataField: "mnyEstimatedPallets",
-                            caption: "Est Pallet Qty",
-                            allowEditing: false,
-                        },{
-                            dataField: "intUserId",
-                            caption: "User ID",
-                            allowEditing: false,
-                        },{
-                            dataField: "strOperator",
-                            caption: "Operator",
-                            allowEditing: false,
-                        },{
-                            dataField: "strDriverName",
-                            caption: "Driver Name",
-                            allowEditing: false,
-                        },{
-                            dataField: "intLocationNameId",
-                            caption: "Location ID",
-                            allowEditing: false,
-                        },{
-                            dataField: "strLocationName",
-                            caption: "Location Name",
-                            allowEditing: false,
-                        },{
-                            dataField: "intAreaID",
-                            caption: "Area ID",
-                            allowEditing: false,
-                        },{
-                            dataField: "strAreaName",
-                            caption: "Area Name",
-                            allowEditing: false,
-                        },{
-                            dataField: "mnyWeight",
-                            caption: "Weight",
-                            allowEditing: false,
-                        },
-                        
-                    ],
-                });
+                getGrid(data)
             }
         });
 
@@ -234,125 +117,7 @@
                     date: $('#date').val(),
                 },
                 success: function (data) {
-                    console.debug(data);
-                    $("#gridContainer").dxDataGrid({
-
-                        dataSource:data, //as json
-                        hoverStateEnabled: true,
-                        showBorders: true,
-                        filterRow: { visible: true },
-                        filterPanel: { visible: true },
-                        headerFilter: { visible: true },
-                        allowColumnResizing: true,
-                        columnAutoWidth: true,
-                        // height: ((window.screen.height)-50),
-                        scrolling: {
-                            mode: 'infinite',
-                        },
-                        paging:{
-                            pageSize: 10,
-                        },
-                        pager: {
-                            showPageSizeSelector: true,
-                            allowedPageSizes: [10, 20, 50],
-                            showNavigationButtons: true
-                        },
-                        export: {
-                            enabled: true
-                        },
-                        // editing: {
-                        //     mode: 'batch',
-                        //     allowUpdating: true,
-                        //     allowDeleting: true,
-                        // },
-                        selection: {
-                            mode: 'single',
-                        },
-                        onExporting(e) {
-                            const workbook = new ExcelJS.Workbook();
-                            const worksheet = workbook.addWorksheet('WarehouseRecievingMovementReport');
-
-                            DevExpress.excelExporter.exportDataGrid({
-                                component: e.component,
-                                worksheet,
-                                autoFilterEnabled: true,
-                            }).then(() => {
-                                workbook.xlsx.writeBuffer().then((buffer) => {
-                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'WarehouseRecievingMovementReport.xlsx');
-                                });
-                            });
-                            e.cancel = true;
-                        },
-
-                        columns: [
-                            {
-                                dataField: "strItemCode",
-                                caption: "Item Code",
-                                allowEditing: false,
-                            },{
-                                dataField: "strItemDescription",
-                                caption: "Item Description",
-                                allowEditing: false,
-                            },{
-                                dataField: "strItemGroup",
-                                caption: "Item Group",
-                                allowEditing: false,
-                            },{
-                                dataField: "intMoveId",
-                                caption: "Movement ID",
-                                allowEditing: false,
-                            },{
-                                dataField: "strMoveType",
-                                caption: "Type",
-                                allowEditing: false,
-                            },{
-                                dataField: "intJobId",
-                                caption: "Job ID",
-                                allowEditing: false,
-                            },{
-                                dataField: "dteTimeCreate",
-                                caption: "Date Created",
-                                allowEditing: false,
-                            },{
-                                dataField: "mnyEstimatedPallets",
-                                caption: "Est Pallet Qty",
-                                allowEditing: false,
-                            },{
-                                dataField: "intUserId",
-                                caption: "User ID",
-                                allowEditing: false,
-                            },{
-                                dataField: "strOperator",
-                                caption: "Operator",
-                                allowEditing: false,
-                            },{
-                                dataField: "strDriverName",
-                                caption: "Driver Name",
-                                allowEditing: false,
-                            },{
-                                dataField: "intLocationNameId",
-                                caption: "Location ID",
-                                allowEditing: false,
-                            },{
-                                dataField: "strLocationName",
-                                caption: "Location Name",
-                                allowEditing: false,
-                            },{
-                                dataField: "intAreaID",
-                                caption: "Area ID",
-                                allowEditing: false,
-                            },{
-                                dataField: "strAreaName",
-                                caption: "Area Name",
-                                allowEditing: false,
-                            },{
-                                dataField: "mnyWeight",
-                                caption: "Weight",
-                                allowEditing: false,
-                            },
-                            
-                        ],
-                    });
+                    getGrid(data)
                 }
             });
         });
@@ -376,6 +141,131 @@
         });
 
     });
+
+    function getGrid(data){
+        $("#gridContainer").dxDataGrid({
+            dataSource:data, //as json
+            hoverStateEnabled: true,
+            showBorders: true,
+            // filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            height: ((window.screen.height)-63),
+            scrolling: {
+                rowRenderingMode: 'virtual',
+            },
+            paging:{
+                pageSize: 10,
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [5, 10, 20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            export: {
+                enabled: true
+            },
+            // editing: {
+            //     mode: 'batch',
+            //     allowUpdating: true,
+            //     allowDeleting: true,
+            // },
+            selection: {
+                mode: 'single',
+            },
+            onExporting(e) {
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('WarehouseRecievingMovementReport');
+
+                DevExpress.excelExporter.exportDataGrid({
+                    component: e.component,
+                    worksheet,
+                    autoFilterEnabled: true,
+                }).then(() => {
+                    workbook.xlsx.writeBuffer().then((buffer) => {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'WarehouseRecievingMovementReport.xlsx');
+                    });
+                });
+                e.cancel = true;
+            },
+
+            columns: [
+                {
+                    dataField: "strItemCode",
+                    caption: "Item Code",
+                    allowEditing: false,
+                },{
+                    dataField: "strItemDescription",
+                    caption: "Item Description",
+                    allowEditing: false,
+                },{
+                    dataField: "strItemGroup",
+                    caption: "Item Group",
+                    allowEditing: false,
+                },{
+                    dataField: "intMoveId",
+                    caption: "Movement ID",
+                    allowEditing: false,
+                },{
+                    dataField: "strMoveType",
+                    caption: "Type",
+                    allowEditing: false,
+                },{
+                    dataField: "intJobId",
+                    caption: "Job ID",
+                    allowEditing: false,
+                },{
+                    dataField: "dteTimeCreate",
+                    caption: "Date Created",
+                    allowEditing: false,
+                },{
+                    dataField: "mnyEstimatedPallets",
+                    caption: "Est Pallet Qty",
+                    allowEditing: false,
+                },{
+                    dataField: "intUserId",
+                    caption: "User ID",
+                    allowEditing: false,
+                },{
+                    dataField: "strOperator",
+                    caption: "Operator",
+                    allowEditing: false,
+                },{
+                    dataField: "strDriverName",
+                    caption: "Driver Name",
+                    allowEditing: false,
+                },{
+                    dataField: "intLocationNameId",
+                    caption: "Location ID",
+                    allowEditing: false,
+                },{
+                    dataField: "strLocationName",
+                    caption: "Location Name",
+                    allowEditing: false,
+                },{
+                    dataField: "intAreaID",
+                    caption: "Area ID",
+                    allowEditing: false,
+                },{
+                    dataField: "strAreaName",
+                    caption: "Area Name",
+                    allowEditing: false,
+                },{
+                    dataField: "mnyWeight",
+                    caption: "Actual Weight",
+                    allowEditing: false,
+                },{
+                    dataField: "intSageWeight",
+                    caption: "Sage Weight",
+                    allowEditing: false,
+                },
+            ],
+        });
+    };
 
 
     function showDialog(tag,width,height)
