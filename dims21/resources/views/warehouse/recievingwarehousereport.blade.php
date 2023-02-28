@@ -262,6 +262,10 @@
                     dataField: "intSageWeight",
                     caption: "Sage Weight",
                     allowEditing: false,
+                    format: {
+                        type: "fixedPoint",
+                        precision: 2
+                    }
                 },
             ],
         });
