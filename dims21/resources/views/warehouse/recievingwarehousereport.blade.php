@@ -64,9 +64,9 @@
         color: #df2413;
     }
 
-    .dx-datagrid {
+    /* .dx-datagrid {
         min-height: calc(100vh - 63px);
-    }
+    } */
 </style>
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
