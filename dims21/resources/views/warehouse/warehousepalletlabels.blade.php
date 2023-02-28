@@ -349,7 +349,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     </div> 
 
                     <div class="col-lg-6 p-2 bd-highlight">
-
                         <h5>&nbsp;</h5>
                         {{-- Driver Name --}}
                         <div class="form-group">
