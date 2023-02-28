@@ -336,10 +336,12 @@
                         var dept = selectedRowsData[0].DepartmentName;
                         var mach = selectedRowsData[0].MachineName;
                         var title = dept + ", " + mach;
-                        var count = selectedRowsData[0].count;
+                        // var count = selectedRowsData[0].count;
+                        var seq = selectedRowsData[0].SeqNo;
+                        seq = parseInt(seq) +1;
 
                         $('#qc2TestTitle').text(title);
-                        $('#seq').val(count);
+                        $('#seq').val(seq);
                     },
 
                     onRowClick:function(e){

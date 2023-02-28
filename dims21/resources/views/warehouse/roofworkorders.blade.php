@@ -548,7 +548,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         batchReference = e.data.strReference;
                         var machineslist = ({!! json_encode($machines) !!});
 
-                        //console.debug(machineslist);
+                        console.debug(machineslist);
 
                         $.ajax({
                             url: '{!!url("/getroofinglines")!!}',

@@ -274,6 +274,10 @@
                             caption: "Job No",
                             //width:100,
                         },{
+                            dataField: "TestNo",
+                            caption: "Test No",
+                            //width:100,
+                        },{
                             dataField: "Reference",
                             caption: "Reference",
                             //width:150,
@@ -331,10 +335,10 @@
                         var dept = selectedRowsData[0].DepartmentName;
                         var mach = selectedRowsData[0].MachineName;
                         var title = dept + ", " + mach;
-                        var count = selectedRowsData[0].count;
+                        var testNo = selectedRowsData[0].TestNo;
 
                         $('#qc1TestTitle').text(title);
-                        $('#test').val(count);
+                        $('#test').val(testNo);
                     },
 
                     onRowClick:function(e){

@@ -85,7 +85,7 @@
     }
 
     .dx-datagrid {
-        height: calc(100vh - 63px);
+        min-height: calc(100vh - 63px);
     }
 </style>
 <!-- jQuery -->

@@ -54,16 +54,12 @@ class WareHouseController extends Controller
     }
 
     public function getqc1(){
-        $qc1 = DB::connection('sqlsrv2') ->select("select * from viewNewJobs1 v
-        inner join (select JobNo, count(JobNo) as count from tblNewJobs group by JobNo) z
-        on z.JobNo = v.JobNo");
+        $qc1 = DB::connection('sqlsrv2') ->select("select * from viewQCPhase1Jobs");
         return response()->json($qc1);
     }
 
     public function getqc2(){
-        $qc2 = DB::connection('sqlsrv2') ->select("select * from viewQCPhase1 v
-		inner join (select JobNo,Reference, count(Reference) as count  from tblNewJobs group by JobNo,Reference) z
-        on z.JobNo = v.JobNo and z.Reference = v.Reference");
+        $qc2 = DB::connection('sqlsrv2') ->select("select * from viewQCPhase2Jobs");
         return response()->json($qc2);
     }
 
@@ -182,11 +178,15 @@ class WareHouseController extends Controller
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
         $pallets = DB::connection('sqlsrv2')->select("select * from tblPalletConf");
         $scales = DB::connection('sqlsrv2') ->select("exec spGetScalesByDeptName 'Warehouse'");
+        $forklifts = DB::connection('sqlsrv2') ->select("select * from viewTransitLocations");
+        $areas = DB::connection('sqlsrv2') ->select("select * from tblAreas");
         return view('warehouse/warehousepalletlabels')
         ->with('prodGroups',$prodGroups)
         ->with('pallets',$pallets)
         ->with('dept',$dept)
-        ->with('scales',$scales);
+        ->with('scales',$scales)
+        ->with('forklifts',$forklifts)
+        ->with('areas',$areas);
     }
 
     public function getproductbyjobid(Request $request){
@@ -207,7 +207,10 @@ class WareHouseController extends Controller
         $weight=$request->get('weight');
         $barcode=$request->get('barcode');
         $operator=Auth::user()->UserName;
-        $returndata = DB::connection('sqlsrv2') ->select('exec spInsertPrintForPalletLabels ?,?,?,?,?,?,?,?', array($dept,$prodcat,$prodname,$palletconfid,$qty,$weight,$barcode,$operator));
+        $drivername = $request->get('drivername');
+        $forkliftnumber = $request->get('forkliftnumber');
+        $area = $request->get('area');
+        $returndata = DB::connection('sqlsrv2') ->select('exec spInsertPrintForPalletLabels ?,?,?,?,?,?,?,?,?,?,?', array($dept,$prodcat,$prodname,$palletconfid,$qty,$weight,$barcode,$operator,$drivername,$forkliftnumber,$area));
         
         return response()->json($returndata);
 
@@ -278,14 +281,14 @@ class WareHouseController extends Controller
     }
 
     public function galvcreateprodspec(){
-        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomers");
-        $products = DB::connection('sqlsrv2')->select("select * from tblProducts");
+        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax");
+        $products = DB::connection('sqlsrv2')->select("select * from tblProductsWmax");
         return view('warehouse/galvcreateprodspec')->with('customers',$customers);
     }
 
     public function galveditprodspec(){
-        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomers");
-        $products = DB::connection('sqlsrv2')->select("select * from tblProducts");
+        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax");
+        $products = DB::connection('sqlsrv2')->select("select * from tblProductsWmax");
         return view('warehouse/galveditprodspec')->with('customers',$customers);
     }
 
@@ -1560,6 +1563,7 @@ where intDeptID =".$deptId);
         $palletsjson = DB::connection('sqlsrv2') ->select("EXEC spGetAreaNames");
         return response()->json($palletsjson);
     }
+
     
     public function getMappedLabels(){
         $strProdCat = "test";
