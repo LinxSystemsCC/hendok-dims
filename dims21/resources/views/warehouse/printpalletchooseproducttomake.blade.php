@@ -1,11 +1,15 @@
 <?php
 
     $v  =  new \App\Http\Controllers\SalesForm();
-    $GroupId= Auth::user()->GroupId;
-    $button = "1";
+    if (Auth::guest()){
 
-    if($v->getThings($GroupId,'Has Auto Redirect')){
-        $button = "0";
+    }else{
+        $GroupId= Auth::user()->GroupId;
+        $button = "1";
+
+        if($v->getThings($GroupId,'Has Auto Redirect')){
+            $button = "0";
+        }
     }
 
 ?>
