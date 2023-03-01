@@ -225,6 +225,9 @@
                     dataField: "mnyEstimatedPallets",
                     caption: "Est Pallet Qty",
                     allowEditing: false,
+                    customizeText: function(cellInfo) {
+                        return Number(cellInfo.value).toFixed(0);
+                    }
                 },{
                     dataField: "intUserId",
                     caption: "User ID",
@@ -257,16 +260,21 @@
                     dataField: "mnyWeight",
                     caption: "Actual Weight",
                     allowEditing: false,
+                    allowEditing: false,
+                    customizeText: function(cellInfo) {
+                        var weight = cellInfo.value / 1000;
+                        return weight.toFixed(3);
+                    }
                 },{
                     dataField: "intSageWeight",
                     caption: "Sage Weight",
                     allowEditing: false,
                     format: {
                         type: "fixedPoint",
-                        precision: 2
+                        precision: 3
                     },
                     customizeText: function(cellInfo) {
-                        return Number(cellInfo.value).toFixed(2);
+                        return Number(cellInfo.value).toFixed(3);
                     }
                 },
             ],
