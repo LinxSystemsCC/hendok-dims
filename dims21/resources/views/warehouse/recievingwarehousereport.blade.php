@@ -197,66 +197,85 @@
                     dataField: "strItemCode",
                     caption: "Item Code",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "strItemDescription",
                     caption: "Item Description",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "strItemGroup",
                     caption: "Item Group",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "intMoveId",
                     caption: "Movement ID",
                     allowEditing: false,
-                },{
+                    visible: false,
+                },
+                {
                     dataField: "strMoveType",
                     caption: "Type",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "intJobId",
                     caption: "Job ID",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "dteTimeCreate",
                     caption: "Date Created",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "mnyEstimatedPallets",
                     caption: "Est Pallet Qty",
                     allowEditing: false,
                     customizeText: function(cellInfo) {
                         return Number(cellInfo.value).toFixed(0);
                     }
-                },{
+                },
+                {
                     dataField: "intUserId",
                     caption: "User ID",
                     allowEditing: false,
-                },{
+                    visible: false,
+                },
+                {
                     dataField: "strOperator",
                     caption: "Operator",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "strDriverName",
                     caption: "Driver Name",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "intLocationNameId",
                     caption: "Location ID",
                     allowEditing: false,
-                },{
+                    visible: false,
+                },
+                {
                     dataField: "strLocationName",
                     caption: "Location Name",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "intAreaID",
                     caption: "Area ID",
                     allowEditing: false,
-                },{
+                    visible: false,
+                },
+                {
                     dataField: "strAreaName",
                     caption: "Area Name",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "mnyWeight",
                     caption: "Actual Weight",
                     allowEditing: false,
@@ -265,7 +284,8 @@
                         var weight = cellInfo.value / 1000;
                         return weight.toFixed(3);
                     }
-                },{
+                },
+                {
                     dataField: "intSageWeight",
                     caption: "Sage Weight",
                     allowEditing: false,
