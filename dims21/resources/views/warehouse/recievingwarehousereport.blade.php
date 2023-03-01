@@ -64,6 +64,18 @@
         color: #df2413;
     }
 
+    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+        font-weight: 500;
+        background-color: #df2413;
+        color: #fff;
+    }
+
+    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+        color: #df2413;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
     .dx-datagrid {
         min-height: calc(100vh - 63px);
     }
@@ -196,43 +208,37 @@
                 {
                     dataField: "strItemCode",
                     caption: "Item Code",
-                    allowEditing: false,
                 },
                 {
                     dataField: "strItemDescription",
                     caption: "Item Description",
-                    allowEditing: false,
                 },
                 {
                     dataField: "strItemGroup",
                     caption: "Item Group",
-                    allowEditing: false,
                 },
                 {
                     dataField: "intMoveId",
                     caption: "Movement ID",
-                    allowEditing: false,
                     visible: false,
                 },
                 {
                     dataField: "strMoveType",
                     caption: "Type",
-                    allowEditing: false,
                 },
                 {
                     dataField: "intJobId",
                     caption: "Job ID",
-                    allowEditing: false,
+                    alignment: 'center',
                 },
                 {
                     dataField: "dteTimeCreate",
                     caption: "Date Created",
-                    allowEditing: false,
                 },
                 {
                     dataField: "mnyEstimatedPallets",
                     caption: "Est Pallet Qty",
-                    allowEditing: false,
+                    alignment: 'center',
                     customizeText: function(cellInfo) {
                         return Number(cellInfo.value).toFixed(0);
                     }
@@ -240,46 +246,38 @@
                 {
                     dataField: "intUserId",
                     caption: "User ID",
-                    allowEditing: false,
                     visible: false,
                 },
                 {
                     dataField: "strOperator",
                     caption: "Operator",
-                    allowEditing: false,
                 },
                 {
                     dataField: "strDriverName",
                     caption: "Driver Name",
-                    allowEditing: false,
                 },
                 {
                     dataField: "intLocationNameId",
                     caption: "Location ID",
-                    allowEditing: false,
                     visible: false,
                 },
                 {
                     dataField: "strLocationName",
                     caption: "Location Name",
-                    allowEditing: false,
                 },
                 {
                     dataField: "intAreaID",
                     caption: "Area ID",
-                    allowEditing: false,
                     visible: false,
                 },
                 {
                     dataField: "strAreaName",
                     caption: "Area Name",
-                    allowEditing: false,
                 },
                 {
                     dataField: "mnyWeight",
                     caption: "Actual Weight",
-                    allowEditing: false,
-                    allowEditing: false,
+                    alignment: 'center',
                     customizeText: function(cellInfo) {
                         var weight = cellInfo.value / 1000;
                         return weight.toFixed(3);
@@ -288,7 +286,7 @@
                 {
                     dataField: "intSageWeight",
                     caption: "Sage Weight",
-                    allowEditing: false,
+                    alignment: 'center',
                     format: {
                         type: "fixedPoint",
                         precision: 3
