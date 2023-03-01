@@ -2,7 +2,8 @@
 
     $v  =  new \App\Http\Controllers\SalesForm();
     if (Auth::guest()){
-
+        $button ="0";
+        return redirect('home');
     }else{
         $GroupId= Auth::user()->GroupId;
         $button = "1";
