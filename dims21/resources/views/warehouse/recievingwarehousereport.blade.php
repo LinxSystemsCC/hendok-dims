@@ -96,7 +96,6 @@
     $(document).ready(function() {
 
         $.ajax({
-
             url: '{!!url("/getMainWarehouseReport")!!}',
             type: "GET",
             data: {
@@ -265,6 +264,9 @@
                     format: {
                         type: "fixedPoint",
                         precision: 2
+                    },
+                    customizeText: function(cellInfo) {
+                        return Number(cellInfo.value).toFixed(2);
                     }
                 },
             ],
