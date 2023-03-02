@@ -78,6 +78,7 @@
 
     .dx-datagrid {
         min-height: calc(100vh - 63px);
+        max-height: calc(100vh - 63px);
     }
 </style>
 <!-- jQuery -->
@@ -167,7 +168,7 @@
             columnAutoWidth: true,
             // height: ((window.screen.height)-63),
             scrolling: {
-                rowRenderingMode: 'virtual',
+                rowRenderingMode: 'infinite',
             },
             paging:{
                 pageSize: 10,
