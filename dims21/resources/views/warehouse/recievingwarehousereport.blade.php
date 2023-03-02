@@ -42,8 +42,10 @@
             <h3 style="flex-grow: 1; padding-left: 15px;">RECIEVING WAREHOUSE MOVEMENT REPORT</h3>
 
             <div class="d-inline-flex">
-                <label class="d-flex align-items-center px-2" >Date</label> 
-                <input class="form-control mx-2" type="date" id='date'>
+                <label class="d-flex align-items-center px-2" >Date From</label> 
+                <input class="form-control mx-2" type="date" id='datefrom'>
+                <label class="d-flex align-items-center px-2" >Date To</label>
+                <input class="form-control mx-2" type="date" id='dateto'>
                 <button class="btn btn-success" id="search">SEARCH</button>
             </div>
         </div>
@@ -113,10 +115,6 @@
         $.ajax({
             url: '{!!url("/getMainWarehouseReport")!!}',
             type: "GET",
-            data: {
-                datefrom: $('#datefrom').val(),
-                dateto: $('#dateto').val()
-            },
             success: function (data) {
                 console.debug(data);
                 getGrid(data)
@@ -128,7 +126,8 @@
                 url: '{!!url("/getMainWarehouseReportByDate")!!}',
                 type: "GET",
                 data: {
-                    date: $('#date').val(),
+                    datefrom: $('#datefrom').val(),
+                    dateto: $('#dateto').val(),
                 },
                 success: function (data) {
                     getGrid(data)

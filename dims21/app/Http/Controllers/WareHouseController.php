@@ -222,8 +222,9 @@ class WareHouseController extends Controller
     }
 
     public function getMainWarehouseReportByDate(Request $request){
-        $date = $request->get('date');
-        $report = DB::connection('sqlsrv2')->select("EXEC spGetMainWarehouseMovementsByDate ?", array($date));
+        $datefrom = $request->get('datefrom');
+        $dateto = $request->get('dateto');
+        $report = DB::connection('sqlsrv2')->select("EXEC spGetMainWarehouseMovementsByDate ?,?", array($datefrom,$dateto));
         // dd($report);
         return response()->json($report);
     }
