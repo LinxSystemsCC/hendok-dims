@@ -56,11 +56,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     <div class="col-lg-10"  style="max-width:100% !important; height:100vh !important;">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-            <a class="nav-link active" onclick="openPage('barcodepage', this,'defaultOpen')"id="defaultOpen">Barcode</a>
+            <a class="nav-link active" onclick="openPage('barcodepage', this,'barcodetab')"id="barcodetab">Barcode</a>
             </li>
 
             <li class="nav-item">
-            <a class="nav-link" onclick="openPage('barcodelesspage', this, 'barcodelesstab')"id="barcodelesstab">Barcodeless</a>
+            <a class="nav-link" onclick="openPage('barcodelesspage', this, 'defaultOpen')"id="defaultOpen">Barcodeless</a>
             </li>
         </ul>
 
