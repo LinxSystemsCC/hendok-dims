@@ -396,6 +396,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     if(data[0].Result =="SUCCESS")
                     {
                         alert('Succesful Printout.');
+                        location.reload();
                     }else{
                         alert(data[0].Result);
                     }
