@@ -24,9 +24,14 @@ class SalesForm extends Controller
        // (new DimsCommon())->clearAllUserLocks();
 //viewtblCustomers
 
-       $sessionUserId = Auth::user()->UserID;
-       $GroupId= Auth::user()->GroupId;
-       
+        if (Auth::guest())
+            return redirect()->route('login');
+        else{
+            
+
+        $sessionUserId = Auth::user()->UserID;
+        $GroupId= Auth::user()->GroupId;
+
 
 
     //    dd($deptartmentID,$machineID);
@@ -128,6 +133,7 @@ class SalesForm extends Controller
             ->with('company',$company)
             ->with('userperformance',$userPerfomance)->with('printinvoices',$printinvoices)
             ;
+    }
 
     }
     public function selectedCompany($companyName){
