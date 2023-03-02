@@ -168,7 +168,7 @@
             columnAutoWidth: true,
             // height: ((window.screen.height)-63),
             scrolling: {
-                rowRenderingMode: 'virtual',
+                rowRenderingMode: 'infinite',
             },
             paging:{
                 pageSize: 10,
