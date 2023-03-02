@@ -141,7 +141,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     
                                 </select>
                                 <input  class="form-control input-sm col-xs-1" id="weight" style="width: 25%; margin-left: 5px;"type="number" disabled>
-                                <button class="btn btn-success" id="getWeight" style="width: 25%; margin-left: 5px;">READ</button>
                             </div>
                         </div>
 
@@ -253,7 +252,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     
                                 </select>
                                 <input  class="form-control input-sm col-xs-1" id="weightbarcodeless" style="width: 25%; margin-left: 5px;"type="number" disabled>
-                                <button class="btn btn-success" id="getWeightBarcodeless" style="width: 25%; margin-left: 5px;">READ</button>
                             </div>
                         </div>
 
@@ -482,11 +480,12 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
         // setInterval(fetchWeight,1000);
 
-        $('#getWeight').click(fetchWeight);
-        $('#getWeightBarcodeless').click(fetchWeightBarcodeless);
+        fetchWeight();
+       fetchWeightBarcodeless();
+        
+    toggleWeigh();
+    toggleWeighBarcodeless();
 
-        // $('#getWeight').toggle(toggleWeigh);
-        // $('#getWeightBarcodeless').toggle(toggleWeighBarcodeless);
     });
 
 function escapeHtml(unsafe) {
@@ -553,14 +552,15 @@ function showDialog(tag,width,height){
 }
 
 function toggleWeigh(){
-    setInterval(fetchWeight,1000);
+    setInterval(fetchWeight,2000);
 };
 
 function toggleWeighBarcodeless(){
-    setInterval(fetchWeightBarcodeless,5000);
+    setInterval(fetchWeightBarcodeless,2000);
 };
 
 function fetchWeight(){
+    
     // console.debug("weigh");
     $.ajax({
         url: '{!!url("/listenToScale")!!}',
