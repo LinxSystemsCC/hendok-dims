@@ -373,7 +373,13 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     area: $('#area').val()
                 },
                 success: function (data) {
-                    alert('Succesful Printout.');
+                    if(data[0].Result =="SUCCESS")
+                    {
+                        alert('Succesful Printout.');
+                        location.reload();
+                    }else{
+                        alert(data[0].Result);
+                    }
                 }
 
             });

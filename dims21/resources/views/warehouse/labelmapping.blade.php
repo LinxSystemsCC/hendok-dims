@@ -187,6 +187,9 @@
                         },{
                             dataField: "dteCreated",
                             caption: "Date Created",
+                        },{
+                            dataField: "strLabelConfig",
+                            caption: "Configuration",
                         },
                     ],
                     onRowDblClick:function(e){
