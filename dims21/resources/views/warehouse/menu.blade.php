@@ -72,7 +72,10 @@ if ((Auth::guest()))
     //Work Orders Roofing
     $roofcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Create Work Order');
 
+
+    
     //Dispatch - Load Planning
+    $customergridlookup=$v->getThingsUserPermissions(Auth::user()->UserID,'Customer Grid Lookup');
     $pickingplanner = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Planner');
     $routestoinvoice = $v->getThingsUserPermissions(Auth::user()->UserID,'Routes To Invoice');
 
@@ -195,12 +198,18 @@ if ((Auth::guest()))
 			<ul class="item-show-2">
 				<li>
                     <!-- Second Category -->
+                    <li>
+                        @if($customergridlookup !="0")
+                        <a href='{!!url("/customergridlookup")!!}'>Customer Grid Lookup</a>
+                        @endif
+                    </li>
                     @if($loadplanning !="0")
                     <a class="secondmenu" id="2a">Load Planning<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-2a">
                         <!-- Item Links -->
+                       
                         <li>
                             @if($pickingplanner !="0")
                             <a href='{!!url("/routeplanner")!!}'>Picking Planner</a>

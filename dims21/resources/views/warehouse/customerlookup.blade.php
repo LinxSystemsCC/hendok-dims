@@ -100,21 +100,27 @@
     });
 
     $(document).ready(function() {
+        
+    var jArray = JSON.stringify({!! json_encode($customergrid) !!});
+    var finalCustomerGrid = $.map(JSON.parse(jArray), function (item) {
+        return {
+            Account: item.Account,
+            Name: item.Name,
+            areaname: item.areaname,
+            RouteName: item.RouteName,
+            companyName: item.companyName,
+            strAddress: item.strAddress,
+            intOnHold: item.intOnHold
+        }
+
+    });
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
-        $.ajax({
-            url: '{!!url("/customerarealookupjson")!!}',
-            type: "GET",
-            data: {
-
-            },
-            success: function (data) {
                 $("#gridContainer").dxDataGrid({
-                    dataSource:data,
+                    dataSource:finalCustomerGrid,
                     showBorders: true,
                     filterRow: { visible: true },
                     filterPanel: { visible: true },
@@ -133,7 +139,7 @@
                         showNavigationButtons: true,
                     },
                     columns: [
-                        // columns: ['Account', 'Name','areaname','RouteName','companyName'],
+                        
                         {
                             dataField: "Account",
                             caption: "Account Code",
@@ -220,11 +226,8 @@
 
 
 
-            }
-        });
+            });
 
-
-    });
 
 </script>
 </div>

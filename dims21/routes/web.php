@@ -946,6 +946,7 @@ Route::get('doneprintingpallet', [WareHouseController::class,'doneprintingpallet
 Route::get('getBinLocationsJson', [WareHouseController::class,'getBinLocationsJson']);
 Route::get('qrcodeimage/{binlocation}', [WareHouseController::class,'qrcodeimage']);
 Route::post('savenewbin', [WareHouseController::class,'savenewbin']);
+Route::get('customergridlookup', [WareHouseController::class,'customergridlookup']);
 
 
 

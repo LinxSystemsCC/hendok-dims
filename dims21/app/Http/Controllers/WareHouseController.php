@@ -1053,6 +1053,14 @@ where intDeptID =".$deptId);
             );
         return response()->json($productonmachine);
     }
+
+    public function customergridlookup(){
+        
+        $customergrid = DB::connection('sqlsrv2')
+            ->select('select * from  viewGridCustomerAreaLookUp');
+            return view ('warehouse/customerlookup')->with('customergrid',$customergrid);
+    }
+
     public function endjob(Request $request){
         $jobid = $request->get("jobid");
         $endjob = $request->get("endjob");
