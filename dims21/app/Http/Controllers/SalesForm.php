@@ -102,7 +102,8 @@ class SalesForm extends Controller
 
         $taxes= DB::connection('sqlsrv3')
             ->select("Select * from tblTaxes");
- $saleman= DB::connection('sqlsrv3')
+            
+        $saleman= DB::connection('sqlsrv3')
             ->select("Select 0 as UserID,SalesmanDescription as UserName,SalesmanCode as strSalesmanCode from tblSalesCodes");
 
         $GroupId = Auth::user()->GroupId;

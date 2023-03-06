@@ -251,9 +251,4 @@
         });
     }
 
-
-
-
-//TODO grey out ended sales orders, and remove from list when all jobs in that batch have ended
-
 </script>

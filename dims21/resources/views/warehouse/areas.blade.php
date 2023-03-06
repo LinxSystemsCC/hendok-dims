@@ -75,7 +75,6 @@
 
 
 <style>
-
     .dx-datagrid-table{
         font-size:15px;
     }
@@ -84,8 +83,21 @@
         color: #df2413;
     }
 
+    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+        font-weight: 500;
+        background-color: #df2413;
+        color: #fff;
+    }
+
+    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+        color: #df2413;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
     .dx-datagrid {
-        min-height: calc(100vh - 63px);
+        height: calc(100vh - 63px);
+        max-height: calc(100vh - 63px);
     }
 </style>
 <!-- jQuery -->
@@ -152,15 +164,23 @@
                     hoverStateEnabled: true,
                     showBorders: true,
                     filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
                     columnAutoWidth: true,
-                    // height: ((window.screen.height)-50),
                     scrolling: {
-                        mode: 'infinite',
+                        rowRenderingMode: 'infinite',
                     },
-                    // paging:{
-                    //     pageSize: 10,
-                    // },
+                    paging:{
+                        pageSize: 10,
+                    },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [5, 10, 20, 50, 'all'],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true,
+                    },
                     export: {
                         enabled: true
                     },

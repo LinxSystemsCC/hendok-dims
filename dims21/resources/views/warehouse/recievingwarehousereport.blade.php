@@ -57,7 +57,6 @@
 
 
 <style>
-
     .dx-datagrid-table{
         font-size:15px;
     }
@@ -79,7 +78,7 @@
     }
 
     .dx-datagrid {
-        min-height: calc(100vh - 63px);
+        height: calc(100vh - 63px);
         max-height: calc(100vh - 63px);
     }
 </style>
@@ -160,12 +159,11 @@
             dataSource:data, //as json
             hoverStateEnabled: true,
             showBorders: true,
-            // filterRow: { visible: true },
+            filterRow: { visible: true },
             filterPanel: { visible: true },
             headerFilter: { visible: true },
             allowColumnResizing: true,
             columnAutoWidth: true,
-            // height: ((window.screen.height)-63),
             scrolling: {
                 rowRenderingMode: 'infinite',
             },
