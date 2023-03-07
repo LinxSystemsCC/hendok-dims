@@ -366,7 +366,14 @@
                     wire:wire,
                 },
                 success: function (data) {
-                    location.reload();
+                    
+                    if (data[0].Result = "Success"){
+                        var customer =  data[0].CustomerName;
+                        var product =  data[0].ProductName;
+                        var ticket =  data[0].TicketNo;
+
+                        window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket, "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                    }
                 }
 
             });

@@ -97,7 +97,7 @@
             <option id="type" style="font-weight:700; font-size:22pt;" value="{{$val->Type}}">TYPE:&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;{{$val->Type}}</option>
             <option id="mass" style="font-weight:700; font-size:22pt;" value="{{$val->Weight}}">MASS:&emsp;&emsp;&emsp;&emsp;&emsp;{{$val->Weight}}</option>
             <option id="date" style="font-weight:700; font-size:22pt;" value="{{$val->DateTime}}">DATE:&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;{{$val->DateTime}}</option>
-            <option id="operator" style="font-weight:700; font-size:22pt;" value="{{$val->Operator}}">OPERATIOR:&emsp;&emsp;{{$val->Operator}}</option>
+            <option id="operator" style="font-weight:700; font-size:22pt;" value="{{$val->Operator}}">OPERATOR:&emsp;&emsp;{{$val->Operator}}</option>
             <option id="ticketno" style="font-weight:700; font-size:22pt;" value="{{$val->TicketNo}}">TICKET:&emsp;&emsp;&emsp;&emsp;&nbsp;{{$val->TicketNo}}</option>
         </div>
     </page>

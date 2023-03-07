@@ -544,7 +544,7 @@ class WareHouseController extends Controller
         $comment2 = $request->get("comment2");
         $comment3 = $request->get("comment3");
 
-        //dd($Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $testNo, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $testpf, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3);
+        // dd($Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $testNo, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $testpf, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3);
 
         $testQC1 = DB::connection('sqlsrv2')->select('exec spInsertIntoPicking ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', 
         array(
