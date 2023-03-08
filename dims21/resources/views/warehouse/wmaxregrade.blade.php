@@ -353,8 +353,8 @@
                 data: {
                     jobnum:jobnum,
                     sequm:sequm,
-                    custnum:custnum,
-                    custnumfrom:$('#customer option:selected').val(),
+                    custnum:$('#customer option:selected').val(),
+                    custnumfrom:custnum,
                     dept:dept,
                     ref:ref,
                     machine:machine,
