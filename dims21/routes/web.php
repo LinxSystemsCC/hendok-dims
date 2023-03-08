@@ -969,7 +969,7 @@ Route::get('choosemachine/{department}', [WareHouseController::class,'choosemach
 Route::get('printpalletchoosemachine/{department}', [WareHouseController::class,'printpalletchoosemachine']);
 
 Route::get('choosproducttomake/{qty}/{itemcode}/{palletid}/{machineid}', [WareHouseController::class,'choosproducttomake']);
-Route::get('printpalletchoosproducttomake/{department}/{machine}', [WareHouseController::class,'printpalletchoosproducttomake']);
+Route::get('printpalletchoosproducttomake/{department}/{machine}', [WareHouseController::class,'printpalletchoosproducttomake'])->middleware('auth');
 Route::get('printselectedcriteria/{department}/{machine}/{product}', [WareHouseController::class,'printselectedcriteria']);
 Route::get('goprintfirstqrcode/{department}/{machine}/{product}/{pallet}/{required}', [WareHouseController::class,'goprintfirstqrcode']);
 Route::get('startprintingjob/{qty}/{machine}/{product}/{pallet}/{startdate}', [WareHouseController::class,'startprintingjob']);
