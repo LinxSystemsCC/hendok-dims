@@ -224,6 +224,11 @@
         height: calc(100vh - 63px);
         max-height: calc(100vh - 63px);
     }
+
+    .select2-container{
+        z-index: 5000;
+    }
+
 </style>
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -253,7 +258,9 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
-
+        $('#productcategory').select2( {
+            theme: 'bootstrap-5'
+        });
         $('#mapLabelToProdCat').click(function(){
 
             $.ajax({
@@ -406,7 +413,9 @@
                         toAppend += '<option value="'+o.strProductCategory+'">'+o.strProductCategory+'</option>';
                     });
                     $("#productcategory").append(toAppend);
-                    $("#productcategory").select2();
+                    $('#productcategory').select2( {
+                        theme: 'bootstrap-5'
+                    });
 
                 }
 
