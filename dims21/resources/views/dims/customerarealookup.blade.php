@@ -82,8 +82,6 @@
 
 <!-- DevExtreme library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
-<script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
 <script>
 
