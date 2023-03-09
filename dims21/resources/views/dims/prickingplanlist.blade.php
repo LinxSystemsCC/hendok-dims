@@ -154,6 +154,7 @@
             <th class="col-xs-2">Sales Order No</th>
             <th class="col-xs-2">Instruction</th>
             <th class="col-xs-2">Line No</th>
+            <th class="col-xs-2">Product Code</th>
             <th class="col-xs-2">Description</th>
             <th class="col-xs-2" style="width: 80px;" >Quantity</th>
             <th class="col-xs-2" >Weights</th>
@@ -184,6 +185,7 @@
                     <td> </td>
 
                     <td></td>
+                    <td></td>
                 </tr>
                 @endif
             <?php $Grandtotal = $Grandtotal + floatval($val->weightPlanned);?>
@@ -201,6 +203,7 @@
                         <td></td>
                         <td>{{$subtotal}} </td>
 
+                        <td></td>
                         <td></td>
                     </tr>
                     <?php $subtotal = 0;$count = 0; ?>
@@ -227,6 +230,7 @@
                     </td>
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
+                    <td>{{ $val->PastelCode}}</td>
                     <td>{{ $val->PastelDescription}}</td>
                     <td style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
@@ -274,6 +278,7 @@
                     @endif
                     <td>{{ $val->ExtOrderNum}}</td>
                     <td>{{ $val->iLineID}}</td>
+                    <td>{{ $val->PastelCode}}</td>
                     <td>{{ $val->PastelDescription}}</td>
                     <td  style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                     <td>{{ floatval($val->weightPlanned)}}</td>
@@ -303,6 +308,7 @@
             <td>{{$subtotal}} </td>
 
             <td></td>
+            <td></td>
         </tr>
         <tr style="background: grey;color: white;font-weight: 900">
             <td> Grand Total</td>
@@ -316,6 +322,7 @@
             <td>{{ $Grandtotal}}</td>
 
             <td> </td>
+            <td></td>
         </tr>
 
         </tbody>
