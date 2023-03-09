@@ -292,6 +292,17 @@ class WareHouseController extends Controller
         //dd($permissions);
         return view('warehouse/userpermissions')->with("id",$userid)->with("permissions",$permissions)->with("tableCols", $tableCols);
     }
+
+    public function aauptest($userid){
+
+        return view('warehouse/aauptest')->with("id",$userid);
+    }
+
+    public function getJobModuleUserPermissions(Request $request){
+        $userid = $request->get('userid');
+        $permissions = DB::connection('sqlsrv2')->select("select * from viewJobModulePermissions Where UserID =".$userid ."");
+        return response()->json($permissions);
+    }
     
     public function galvcustomer(){
         return view('warehouse/galvcustomers');
@@ -1606,7 +1617,7 @@ where intDeptID =".$deptId);
     }
 
     public function getCustomername(){
-        $customernames = DB::connection('sqlsrv2') ->select("select * from tblCustomers");
+        $customernames = DB::connection('sqlsrv2') ->select("select * from tblCustomersWmax");
         //dd($customernames);
         return response()->json($customernames);
     }
