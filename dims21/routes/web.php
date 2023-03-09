@@ -1054,6 +1054,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);  
     Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']); 
     Route::post('deleteMappedLabels', [WareHouseController::class,'deleteMappedLabels']);    
+    Route::get('galvmodulecomms',[WareHouseController::class,'galvmodulecomms']);
     Route::get('areapage', [WareHouseController::class,'areapage']);
     Route::get('labelspage', [WareHouseController::class,'labelspage']);
     Route::get('labelmapping', [WareHouseController::class,'labelmapping']);
