@@ -91,6 +91,10 @@ if ((Auth::guest()))
     //Inventory - Stock Count
     $exceptionreport = $v->getThingsUserPermissions(Auth::user()->UserID,'Exception Movement Report');
 
+    //Reports
+
+    $galvmodulelogs = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv Module Logs');
+
     //Setup - Users/Groups
     $creategroups = $v->getThingsUserPermissions(Auth::user()->UserID,'Create Groups');
     $createusers = $v->getThingsUserPermissions(Auth::user()->UserID,'Create Users');
@@ -200,7 +204,7 @@ if ((Auth::guest()))
                     <!-- Second Category -->
                     <li>
                         @if($customergridlookup !="0")
-                        <a href='{!!url("/customergridlookup")!!}'>Customer Grid Lookup</a>
+                        <a class="secondmenu" href='{!!url("/customergridlookup")!!}'>Customer Grid Lookup</a>
                         @endif
                     </li>
                     @if($loadplanning !="0")
@@ -351,6 +355,10 @@ if ((Auth::guest()))
 
                     {{-- @if($exceptionreport !="0") --}}
                     <a class="secondmenu" id="4c" href='{!!url("/recievingwarehousereport")!!}'>Recieving Movement</a>
+                    
+                    @if($galvmodulelogs !="0")
+                    <a class="secondmenu" id="4d" href='{!!url("/galvmodulecomms")!!}'>Galv Module Logs</a>
+                    @endif
                     {{-- @endif --}}
                 </li>
 			</ul>

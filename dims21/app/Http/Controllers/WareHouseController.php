@@ -1060,6 +1060,12 @@ where intDeptID =".$deptId);
             ->select('select * from  viewGridCustomerAreaLookUp');
             return view ('warehouse/customerlookup')->with('customergrid',$customergrid);
     }
+    public function galvmodulecomms(){
+        
+        $galvloggrid = DB::connection('sqlsrv2')
+            ->select('select * from  viewGalvModuleLogConsole');
+            return view ('warehouse/galvmodulecomms')->with('galvloggrid',$galvloggrid);
+    }
 
     public function endjob(Request $request){
         $jobid = $request->get("jobid");
