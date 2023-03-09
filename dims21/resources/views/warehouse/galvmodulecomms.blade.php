@@ -250,6 +250,9 @@
 
 
             ] ,
+                    onContentReady: function(e) {
+                e.component.collapseAll();
+            },
             onRowClick: function (e) {
 
 
