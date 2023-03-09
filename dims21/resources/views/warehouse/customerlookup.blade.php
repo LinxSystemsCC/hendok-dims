@@ -30,6 +30,7 @@
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
 </head>
+<body>
 
 <div class="col-lg-12"  style="background: white;">
     <div class="col-lg-2"  style="background: white;">
@@ -73,6 +74,9 @@
         max-height: calc(100vh - 63px);
     }
 </style>
+
+</body>
+
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
@@ -91,7 +95,6 @@
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
 <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
-
 <script>
 
     $( document ).on( 'focus', ':input', function(){
@@ -100,136 +103,155 @@
     });
 
     $(document).ready(function() {
-        
-    var jArray = JSON.stringify({!! json_encode($customergrid) !!});
-    var finalCustomerGrid = $.map(JSON.parse(jArray), function (item) {
-        return {
-            Account: item.Account,
-            Name: item.Name,
-            areaname: item.areaname,
-            RouteName: item.RouteName,
-            companyName: item.companyName,
-            strAddress: item.strAddress,
-            intOnHold: item.intOnHold
-        }
 
-    });
+
+        
+        var jArray = JSON.stringify({!! json_encode($customergrid) !!});
+        var finalCustomerGrid = $.map(JSON.parse(jArray), function (item) {
+            return {
+                Account: item.Account,
+                Name: item.Name,
+                areaname: item.areaname,
+                RouteName: item.RouteName,
+                companyName: item.companyName,
+                strAddress: item.strAddress,
+                intOnHold: item.intOnHold
+            }
+        });
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-                $("#gridContainer").dxDataGrid({
-                    dataSource:finalCustomerGrid,
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    hoverStateEnabled: true,
-                    allowColumnResizing: true,
-                    columnAutoWidth: true,
-                    paging:{
-                        pageSize: 10,
-                    },
-                    pager: {
-                        visible: true,
-                        allowedPageSizes: [5, 10, 20, 50, 100, 200],
-                        showPageSizeSelector: true,
-                        showInfo: true,
-                        showNavigationButtons: true,
-                    },
-                    columns: [
-                        
-                        {
-                            dataField: "Account",
-                            caption: "Account Code",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
 
-                        },
-                        {
-                            dataField: "Name",
-                            caption: "StoreName",
-                            visible:true
-
-                        },
-                        {
-                            dataField: "areaname",
-                            caption: "Area",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        }
-                        ,{
-                            dataField: "RouteName",
-                            caption: "Route Name",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        }
-                        ,{
-                            dataField: "companyName",
-                            caption: "Company Name",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        },{
-                            dataField: "strAddress",
-                            caption: "Address",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        },{
-                            dataField: "intOnHold",
-                            caption: "On Hold",
-                            alignment: 'center',
-                            headerFilter: {
-                                allowSearch: true,
-                            },
-                            cellTemplate: function(container, options) {
-                                if (options.value == 1) {
-                                    container.append("Yes");
-                                } else {
-                                    container.append("No");
-                                }
-                            }
-
-                        }
-
-
-                    ] ,
-                    onRowClick: function (e) {
-
-
-
-                    },
-
-
-                    onInitNewRow: function(e) {
-                        console.debug("InitNewRow");
-                    },
-                    onRowInserting: function(e) {
-                        console.debug("RowInserting");
-                    },
-                    onRowInserted: function(e) {
-                        console.debug("RowInserted");
-                    },
-                    onRowUpdating: function(e) {
-                        console.debug("RowUpdating");
+        $("#gridContainer").dxDataGrid({
+            dataSource:finalCustomerGrid,
+            showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            hoverStateEnabled: true,
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            paging:{
+                pageSize: 10,
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [5, 10, 20, 50, 100, 200],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            columns: [
+                
+                {
+                    dataField: "Account",
+                    caption: "Account Code",
+                    headerFilter: {
+                        allowSearch: true,
                     }
-                });
+
+                },
+                {
+                    dataField: "Name",
+                    caption: "StoreName",
+                    visible:true
+
+                },
+                {
+                    dataField: "areaname",
+                    caption: "Area",
+                    headerFilter: {
+                        allowSearch: true,
+                    }
+
+                }
+                ,{
+                    dataField: "RouteName",
+                    caption: "Route Name",
+                    headerFilter: {
+                        allowSearch: true,
+                    }
+
+                }
+                ,{
+                    dataField: "companyName",
+                    caption: "Company Name",
+                    headerFilter: {
+                        allowSearch: true,
+                    }
+
+                },{
+                    dataField: "strAddress",
+                    caption: "Address",
+                    headerFilter: {
+                        allowSearch: true,
+                    }
+
+                },{
+                    dataField: "intOnHold",
+                    caption: "On Hold",
+                    alignment: 'center',
+                    headerFilter: {
+                        allowSearch: true,
+                    },
+                    cellTemplate: function(container, options) {
+                        if (options.value == 1) {
+                            container.append("Yes");
+                        } else {
+                            container.append("No");
+                        }
+                    }
+
+                }
+
+
+            ] ,
+            onRowClick: function (e) {
 
 
 
-            });
+            },
+
+
+            onInitNewRow: function(e) {
+                console.debug("InitNewRow");
+            },
+            onRowInserting: function(e) {
+                console.debug("RowInserting");
+            },
+            onRowInserted: function(e) {
+                console.debug("RowInserted");
+            },
+            onRowUpdating: function(e) {
+                console.debug("RowUpdating");
+            }
+        });
+
+        // For Side bar nav to work        
+        $('.sidebar ul li a').on(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+
+        $('.sidebar ul li a').click(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+        
+        $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+        });
+
+    });
 
 
 </script>
-</div>
-</body>
+
 </html>
