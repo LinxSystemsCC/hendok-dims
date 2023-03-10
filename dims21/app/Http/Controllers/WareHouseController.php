@@ -278,7 +278,8 @@ class WareHouseController extends Controller
 
     public function userpermissions($userid){
         $permissions = DB::connection('sqlsrv2')->select("select * from vwUserPermsHierarchy Where UserID =".$userid ." order by num1,num2,num3,num4");
-        
+        $username = DB::connection('sqlsrv2')->select("select UserName from tbldimsusers Where UserID =".$userid ."");
+       
         //dd($tableCols);
 
         if (count($permissions) == 0)
@@ -287,7 +288,7 @@ class WareHouseController extends Controller
         DB::connection('sqlsrv2')->statement('exec spCheckUserPermissions ?', array($userid));
 
         //dd($userid);        
-        return view('warehouse/userpermissions')->with("id",$userid)->with("permissions",$permissions);
+        return view('warehouse/userpermissions')->with("username",$username)->with("id",$userid)->with("permissions",$permissions);
     }
 
     public function aauptest($userid){

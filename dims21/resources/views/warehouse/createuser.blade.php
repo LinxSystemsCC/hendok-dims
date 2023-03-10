@@ -259,7 +259,7 @@
                         console.log(e.data.intJobId);
                         var intUserID =  e.data.UserID;
 
-                        window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID, "location=1,status=1,scrollbars=1, width=600,height=850");
+                        window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID);
                     },
                     onRowRemoving: function(e) {
                         var UserID = e.data.UserID;
