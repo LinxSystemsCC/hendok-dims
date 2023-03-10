@@ -277,10 +277,8 @@ class WareHouseController extends Controller
     }
 
     public function userpermissions($userid){
-        $permissions = DB::connection('sqlsrv2')->select("select * from viewUserPermissions Where UserID =".$userid ." and allowView <> 0");
+        $permissions = DB::connection('sqlsrv2')->select("select * from vwUserPermsHierarchy Where UserID =".$userid ." and allowView <> 0");
         
-        $tableCols = DB::connection('sqlsrv2')->select("select max(countHeirarchy) as tableCols From tblDIMSSystemOptions");
-        $tableCols = $tableCols[0]->tableCols;
         //dd($tableCols);
 
         if (count($permissions) == 0)
@@ -288,9 +286,8 @@ class WareHouseController extends Controller
 
         DB::connection('sqlsrv2')->statement('exec spCheckUserPermissions ?', array($userid));
 
-        //dd($userid);
-        //dd($permissions);
-        return view('warehouse/userpermissions')->with("id",$userid)->with("permissions",$permissions)->with("tableCols", $tableCols);
+        //dd($userid);        
+        return view('warehouse/userpermissions')->with("id",$userid)->with("permissions",$permissions);
     }
 
     public function aauptest($userid){
@@ -298,10 +295,11 @@ class WareHouseController extends Controller
         return view('warehouse/aauptest')->with("id",$userid);
     }
 
-    public function getJobModuleUserPermissions(Request $request){
-        $userid = $request->get('userid');
-        $permissions = DB::connection('sqlsrv2')->select("select * from viewJobModulePermissions Where UserID =".$userid ."");
-        return response()->json($permissions);
+    public function xmlUserGridPermsPost(Request $request){
+        
+        $UserID = $request->get("UserID");
+        $gridResult = $request->get("gridResult");
+        DB::connection('sqlsrv2')->statement("exec spUpdateUserPermissionsXML ?,?", array($UserID,$gridResult));
     }
     
     public function galvcustomer(){

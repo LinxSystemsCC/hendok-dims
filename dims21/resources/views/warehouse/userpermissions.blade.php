@@ -43,44 +43,8 @@ if ((Auth::guest()))
 <div class="col-lg-12" style="background: white;">
     <input type="hidden" id= "userID" value="{{ $id }}">
     <h3 style="flex-grow: 1; border-bottom: 1px solid black; padding-left: 15px;">User {{ $id }} Permissions</h3>
-    <input id="toggleall" type="checkbox" value="Toggle All" style="margin-left: 20px;"> <label for="toggleall">Toggle All</label>
-    <div class="col-lg-12" style="height: 80vh; overflow: overlay;" >
-        
-        <table class="table table-borderless table-hover" id="userPermissionsTable" style="background-color: rgb(216, 216, 216);">
-            <thead class="thead-dark">
-                <th class="header" scope="col">Main Tree</th>
-                <th class="header" scope="col">First Branch</th>
-                <th class="header" scope="col">Second Branch</th>
-                <th class="header" scope="col">Page Components</th>
-            </thead>
-            <tbody>
-                <?php $count=1;?>
-                @foreach ($permissions as $permission)
-                <?php $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
-                $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);?>
-                <tr>
-                    @foreach (explode('-', $permission->FullDesc) as $desc)
-                        <td class="row{{ $randomString }}_{{ $count }}">
-                            @if ($v->getThingsUserPermissions( $id , $desc) != "1")
-                                <input id="row{{ $randomString }}_{{ $count }}" type="checkbox" value="{{$desc}}">
-                                <label for ="row{{ $randomString }}_{{ $count }}">
-                                    {{ $desc }}
-                                </label>
-                            @else
-                                <input id="row{{ $randomString }}_{{ $count }}" type="checkbox" value="{{$desc}}" checked>
-                                <label for ="row{{ $randomString }}_{{ $count }}">
-                                    {{ $desc }}
-                                </label>
-                            @endif         
-                        </td>
-                            
-                        <?php $count++;?> 
-                    @endforeach
-                </tr><?php $count=1;?>
-                @endforeach
-            </tbody>
-        </table>
-        
+        <div id= "usergrid" class="col-lg-12" style="height: 80vh; overflow: overlay;" >
+          
     </div>
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-left:15px; margin-top:10px;" id="saveUserPermissions">Save</button>
    
@@ -104,67 +68,131 @@ if ((Auth::guest()))
     });
 
     $(document).ready(function() {
-        $("#toggleall").click(function(){
-            $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
-        });
 
-        $('#userPermissionsTable').on('click', 'tr td', function () {
-            //console.log($(this).attr("class"));
-            //console.log($(this).text());
+        var jArray = JSON.stringify({!! json_encode($permissions) !!});
+    var finalUserGrid = $.map(JSON.parse(jArray), function (item) {
+        var booleanfromitem = (item.Selected ==1);
+        
+        return {
+            Type: item.Type,
+            UserID: item.UserID,
+            num1: item.num1,
+            num2: item.num2,
+            num3: item.num3,
+            num4: item.num4,
+            Selected: booleanfromitem
+        }
 
-            var rowClass = ($(this).attr("class"));
-            var rowNum = rowClass.split("_").pop();
-            var rowName = rowClass.substring(0, rowClass.indexOf('_'));
-            var checked = true; 
+    });
+        $("#usergrid").dxDataGrid({
+                    dataSource:finalUserGrid,
+                    showBorders: true,
+                    keyExpr:'Type',
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    hoverStateEnabled: true,
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    editing: {
+                        mode: 'batch',
+                        allowUpdating: true,
+                        // allowAdding: true,
+                        // allowDeleting: true,
+                        useIcons: true,
+                    },
+                    paging:{
+                        pageSize: 10,
+                    }, 
+                    columns: [
+                        
+                    {
+                            dataField: "Type",
+                            caption: "ID",
+                            headerFilter: {
+                                allowSearch: true,
+                            }
 
-            if ($('#'+rowName+"_"+rowNum).prop('checked')){
-                checked = true;
-            }else{
-                $('#'+rowName+"_"+rowNum).prop('checked', false);
-                checked = false;
-            }
-            //console.debug(checked);
+                        },
+                        {
+                            dataField: "num1",
+                            caption: "Section 1 Detail",
+                            headerFilter: {
+                                allowSearch: true,
+                            }
 
-            if (checked == true){
-                for (let index = 1; index <= rowNum.lenght; index++) {
-                    $('#'+rowName+"_"+index).prop('checked', true);
-                }
-            }
+                        },{
+                            dataField: "num2",
+                            caption: "Section 2 Detail",
+                            headerFilter: {
+                                allowSearch: true,
+                            }
 
-            // if (rowNum = 1){
-            //     $('#'+rowName+"_1").css('background-color', '#eee');
-            // }
+                        },{
+                            dataField: "num3",
+                            caption: "Section 3 Detail",
+                            headerFilter: {
+                                allowSearch: true,
+                            }
 
-            //console.debug(rowNum);
-            //console.debug(rowName);
-        });
+                        },{
+                            dataField: "num4",
+                            caption: "Section 4 Detail",
+                            headerFilter: {
+                                allowSearch: true,
+                            }
 
+                        },
+                        {
+                            dataField: "Selected",
+                            caption: "Yes/No",
+                            dataType: "boolean",
+                            headerFilter: {
+                                allowSearch: true,
+                            }   
+                        },
+                        
+
+
+                    ]
+                });
+        
         $('#saveUserPermissions').click(function(){
             
-            var checkedBoxes = [];
-            /*$("input:checkbox[type=checkbox]:checked").each(function(){
-                checkedBoxes.push($(this).val());
-            });*/
+            var checkedLines = Array();
+            var selectedRowsData =  $("#usergrid").dxDataGrid("getDataSource").store().load().done(function (data) {
+                checkedLines= data;
+                });
+                var gridResults ="<xml>";
+        
+         
 
-            $.each($("input[type=checkbox]:checked"), function(){
-                checkedBoxes.push($(this).val());
-            });
-            
-            console.debug(checkedBoxes);
+                    $.each(checkedLines ,function(key,value) {
+                    gridResults= gridResults + "<result>";
+                    gridResults= gridResults + "<Type>"+value.Type+"</Type>";
+                    if(value.Selected ==true){
+                    gridResults= gridResults + "<Selected>1</Selected>";
+                    }else 
+                    {
+                    gridResults= gridResults + "<Selected>0</Selected>";
+                    }
+                    gridResults= gridResults+ "</result>";
 
+                });
+                    gridResults= gridResults+"</xml>";
+            console.log(gridResults);
             $.ajax({
-
-                url: '{!!url("/savepermissions")!!}',
-                type: "POST",
-                data: {
-                    'UserID':$('#userID').val(),
-                    'CheckBoxes':checkedBoxes
-                },
-                success: function (data) {
-                    location.reload();
-                }
-                
-            });
+                    url: '{!!url("/xmlUserGridPermsPost")!!}',
+                    type: "POST",
+                    data: {
+                        UserID:$('#userID').val(),
+                        gridResult: gridResults
+                    },
+                    success: function (data) {
+                        location.reload(true);
+                        
+                    }
+                });
         });
 
     });

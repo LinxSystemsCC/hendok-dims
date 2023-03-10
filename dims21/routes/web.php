@@ -1053,7 +1053,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateSavedLabels', [WareHouseController::class,'updateSavedLabels']);  
     Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);  
     Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']); 
-    Route::post('deleteMappedLabels', [WareHouseController::class,'deleteMappedLabels']);    
+    Route::post('deleteMappedLabels', [WareHouseController::class,'deleteMappedLabels']);  
+    Route::post('xmlUserGridPermsPost',[WareHouseController::class,'xmlUserGridPermsPost']);  
     Route::get('galvmodulecomms',[WareHouseController::class,'galvmodulecomms']);
     Route::get('areapage', [WareHouseController::class,'areapage']);
     Route::get('labelspage', [WareHouseController::class,'labelspage']);
