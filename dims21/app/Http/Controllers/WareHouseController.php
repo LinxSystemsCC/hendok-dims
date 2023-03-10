@@ -277,7 +277,7 @@ class WareHouseController extends Controller
     }
 
     public function userpermissions($userid){
-        $permissions = DB::connection('sqlsrv2')->select("select * from vwUserPermsHierarchy Where UserID =".$userid ." and allowView <> 0");
+        $permissions = DB::connection('sqlsrv2')->select("select * from vwUserPermsHierarchy Where UserID =".$userid ." order by num1,num2,num3,num4");
         
         //dd($tableCols);
 

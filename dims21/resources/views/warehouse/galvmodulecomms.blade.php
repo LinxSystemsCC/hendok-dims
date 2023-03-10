@@ -187,9 +187,7 @@
                     caption: "Job ID",
                     headerFilter: {
                         allowSearch: true,
-                    },
-                    groupIndex:0
-
+                    }
                 },{
                     dataField: "strStatusJob",
                     caption: "Job Status",
@@ -249,16 +247,7 @@
                 }
 
 
-            ] ,
-                    onContentReady: function(e) {
-                e.component.collapseAll();
-            },
-            onRowClick: function (e) {
-
-
-
-            }
-
+            ] 
         });
 
         // For Side bar nav to work        
