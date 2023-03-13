@@ -246,7 +246,7 @@ class WareHouseController extends Controller
         // dd($barcode);
         return response()->json($barcode);
     }
-    
+
     public function getGalvWIPConsolidated(){
         $consolidatedgalvwip = DB::connection('sqlsrv2')->select("exec spConsolidatedGalvWIP");
         return response()->json($consolidatedgalvwip);
@@ -280,7 +280,22 @@ class WareHouseController extends Controller
 
 
     }
+    
 
+    public function modifyuserleaderpage(){
+        $baseusers = DB::connection('sqlsrv2')->select("Select * from tblDimsusers" );
+        $teamleaders = DB::connection('sqlsrv2')->select("Select * from tblDimsusers where strPickingTeams='TeamLeader'" );
+        return view ('warehouse/modifyleaderusers')->with('teamleaders',$teamleaders)->with('baseusers',$baseusers);
+    }
+    public function modifyuserleader(Request $request){
+        $userid = $request->get('userid');
+        DB::Connection('sqlsrv2')->statement("update tbldimsusers set strpickingteams='TeamLeader' where UserID =".$userid."");
+    }
+    public function deleteuserleader(Request $request){
+        
+        $userid = $request->get('userid');
+        DB::Connection('sqlsrv2')->statement("update tbldimsusers set strpickingteams='' where UserID =".$userid."");
+    }
     public function userpermissions($userid){
         $permissions = DB::connection('sqlsrv2')->select("select * from vwUserPermsHierarchy Where UserID =".$userid ." order by num1,num2,num3,num4");
         $username = DB::connection('sqlsrv2')->select("select UserName from tbldimsusers Where UserID =".$userid ."");
@@ -296,6 +311,7 @@ class WareHouseController extends Controller
         return view('warehouse/userpermissions')->with("username",$username)->with("id",$userid)->with("permissions",$permissions);
     }
 
+    
     public function getUpliftmentPage(){
         return view ('warehouse/upliftments');
     }

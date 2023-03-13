@@ -98,6 +98,7 @@ if ((Auth::guest()))
     //Setup - Users/Groups
     $creategroups = $v->getThingsUserPermissions(Auth::user()->UserID,'Create Groups');
     $createusers = $v->getThingsUserPermissions(Auth::user()->UserID,'Create Users');
+    $modifyuserleaders = $v->getThingsUserPermissions(Auth::user()->UserID,'Modify User Leaders');
 
     //Setup - Dispatch
     $drivers = $v->getThingsUserPermissions(Auth::user()->UserID,'Drivers');
@@ -385,6 +386,11 @@ if ((Auth::guest()))
                         <li>
                             @if($createusers !="0")
                             <a href='{!!url("/createuserpage")!!}'>Users</a>
+                            @endif
+                        </li>
+                        <li>
+                            @if($modifyuserleaders !="0")
+                            <a href='{!!url("/modifyuserleaderpage")!!}'>Leaders</a>
                             @endif
                         </li>
                     </ul>

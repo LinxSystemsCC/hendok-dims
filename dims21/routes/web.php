@@ -920,6 +920,9 @@ Route::get('getjobsdatajson', [WareHouseController::class,'getjobsdatajson']);
 Route::get('getgenericlabelprintscreen', [WareHouseController::class,'getgenericlabelprintscreen']);
 Route::get('createuserpage', [WareHouseController::class,'createuserpage']);
 Route::post('createuser', [WareHouseController::class,'createuser']);
+Route::get('modifyuserleaderpage',[WareHouseController::class,'modifyuserleaderpage']);
+Route::post('modifyuserleader',[WareHouseController::class,'modifyuserleader']);
+Route::post('deleteuserleader',[WareHouseController::class,'deleteuserleader']);
 
 Route::get('creategrouppage', [WareHouseController::class,'creategrouppage']);
 
