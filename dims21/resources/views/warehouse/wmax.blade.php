@@ -567,7 +567,7 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
                     columns: [
                         {
                             dataField: "MachineName",
-                            caption: "Machine Name",
+                            caption: "Machine Group",
                             //width: 80,
 
                         }, {
