@@ -95,6 +95,8 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
             @endif
 
         </div>
+        <div id="gridsummedup" style="width: 100% !important;">
+        </div>
         <div id="gridContainer" style="width: 100% !important;">
         </div>
 
@@ -460,6 +462,80 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
                         window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
 
                     }
+
+                });
+            },
+
+        });
+        $.ajax({
+            url: '{!!url("/getGalvWIPConsolidated")!!}',
+            type: "GET",
+            success: function (data) {
+                $("#gridsummedup").dxDataGrid({
+                    dataSource:data, //as json
+                    showBorders: true,
+                    hoverStateEnabled: true,
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    paging:{
+                        pageSize: 14,
+                    },
+                    export: {
+                        enabled: true
+                    },
+                    selection: {
+                        mode: 'single',
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('consolidated');
+
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'consolidated.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
+
+                    columns: [
+                        {
+                            dataField: "MachineName",
+                            caption: "Machine Name",
+                            //width: 80,
+
+                        }, {
+                            dataField: "DayWeight",
+                            caption: "Day Shift Weights",
+                            //width: 100,
+
+                        }, 
+                        {
+                            dataField: "NightWeight",
+                            caption: "Night Shift Weights",
+                            //width: 250,
+
+                        },
+                        {
+                            dataField: "DayCount",
+                            caption: "Day Shift Holds",
+                            //width: 300,
+
+                        },
+                        {
+                            dataField: "NightCount",
+                            caption: "Night Shift Holds",
+                            //width: 600,
+
+                        },
+                    ]
 
                 });
             },

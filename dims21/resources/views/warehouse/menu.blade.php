@@ -307,10 +307,7 @@ if ((Auth::guest()))
                     <ul class="item-show-3b">
                         <!-- Item Links -->
                         <li>
-                            1
-                        </li>
-                        <li>
-                            2
+                            <a href='{!!url("/getUpliftmentPage")!!}'>Upliftment Report</a>
                         </li>
                     </ul>
                 </li>

@@ -911,6 +911,7 @@ Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationN
 Route::get('getWIP', [WareHouseController::class,'getWIP']);
 Route::get('getRoofWIP', [WareHouseController::class,'getRoofWIP']);
 Route::get('getGalvWIP', [WareHouseController::class,'getGalvWIP']);
+Route::get('getGalvWIPConsolidated',[WareHouseController::class,'getGalvWIPConsolidated']);
 Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
 Route::get('getWIPjobstarted', [WareHouseController::class,'getWIPjobstarted']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
@@ -1050,6 +1051,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::post('saveLabels', [WareHouseController::class,'saveLabels']);  
+    Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
     Route::post('updateSavedLabels', [WareHouseController::class,'updateSavedLabels']);  
     Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);  
     Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']); 
