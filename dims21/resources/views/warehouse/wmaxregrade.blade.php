@@ -358,7 +358,7 @@
                     dept:dept,
                     ref:ref,
                     machine:machine,
-                    prod:$('#product option:selected').val(),
+                    prod:$('#product option:selected').text(),
                     prodfrom:prod,
                     zinc:zinc,
                     tensile:tensile,
