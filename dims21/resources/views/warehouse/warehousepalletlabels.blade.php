@@ -113,14 +113,13 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         {{-- Pallets --}}
                         <div class="form-group">
                             <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
-                            <input class="form-control input-sm col-xs-1" id="pallet" style="width: 100%" readonly>
-                            {{-- <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
+                            <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
                                 <option></option>
                                         @foreach($pallets as $val)
                                             <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
                                         @endforeach
                                 
-                            </select> --}}
+                            </select> 
                         </div>
 
                         {{-- Quantity --}}
@@ -231,7 +230,13 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         {{-- Pallets --}}
                         <div class="form-group">
                             <label class="control-label" for="palletbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
-                            <input class="form-control input-sm col-xs-1" id="palletbarcodeless" style="width: 100%" readonly>
+                            <select  class="form-select input-sm col-xs-1 "id="palletbarcodeless">
+                                <option></option>
+                                @foreach($pallets as $val)
+                                    <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
+                                @endforeach
+                        
+                            </select> 
                         </div>
 
                         {{-- Quantity --}}
@@ -471,6 +476,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     productCode: $('#prodnamebarcodeless option:selected').val(),
                 },
                 success: function (data) {
+                    
                     $('#palletbarcodeless').val(data[0]['intPackSize']);
                     $('#barcodebarcodeless').val(data[0]['Barcode']);
                 }
