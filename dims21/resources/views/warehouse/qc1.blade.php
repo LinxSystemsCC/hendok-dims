@@ -305,16 +305,7 @@
                             dataField: "MaxTDT",
                             caption: "Date",
                             //width:250,
-                        },{
-                            dataField: "Completed",
-                            caption: "Complete",
-                            //width:50,
-                        },{
-                            dataField: "MassProduced",
-                            caption: "Produced",
-                            //width:100,
                         },
-                        
                         {
                             dataField: "MassRequired",
                             caption: "Required",

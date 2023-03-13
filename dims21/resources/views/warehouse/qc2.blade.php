@@ -283,6 +283,10 @@
                             caption: "Reference",
                             //width:150,
                         },{
+                            dataField: "SeqNo",
+                            caption: "Sequence Number",
+                            //width:150,
+                        },{
                             dataField: "ProductName",
                             caption: "Product",
                             //width:150,
@@ -303,13 +307,9 @@
                             precision:2,
                             //width:200,
                         },{
-                            dataField: "MaxTDT",
+                            dataField: "TestDateTime",
                             caption: "Date",
                             //width:250,
-                        },{
-                            dataField: "Completed",
-                            caption: "Complete",
-                            //width:50,
                         },{
                             dataField: "MassProduced",
                             caption: "Produced",
