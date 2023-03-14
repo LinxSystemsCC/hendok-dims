@@ -176,13 +176,11 @@ class WareHouseController extends Controller
     public function warehousepalletlabels(){
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments"); 
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
-        $pallets = DB::connection('sqlsrv2')->select("select * from viewPalletConf");
         $scales = DB::connection('sqlsrv2') ->select("exec spGetScalesByDeptName 'Warehouse'");
         $forklifts = DB::connection('sqlsrv2') ->select("select * from viewTransitLocations");
         $areas = DB::connection('sqlsrv2') ->select("select * from tblAreas");
         return view('warehouse/warehousepalletlabels')
         ->with('prodGroups',$prodGroups)
-        ->with('pallets',$pallets)
         ->with('dept',$dept)
         ->with('scales',$scales)
         ->with('forklifts',$forklifts)
@@ -238,6 +236,13 @@ class WareHouseController extends Controller
         $barcode = DB::connection('sqlsrv2')->select("exec spGetProductInformationBasedProductCode '$productCode'");
         // dd($barcode);
         return response()->json($barcode);
+    }
+    public function getProductInfoAppend(Request $request){
+        $productCode = $request->get("productCode");
+        $appendinfo = DB::connection('sqlsrv2')->select("exec spGetPalletSizesPerProduct '$productCode'");
+        // dd($barcode);
+        return response()->json($appendinfo);
+
     }
 
     public function getProductBarcode(Request $request){
@@ -971,6 +976,7 @@ class WareHouseController extends Controller
             ->select("select * from tblProductsWmax where CustomerName ='".$customer."' and ProductName ='".$product."'");
         return response()->json($productinfo);
     }
+    
     public function wmaxgetproductwiresize(Request $request){
         $ProductID = $request->get("productId");
         $productlistsize = DB::connection('sqlsrv2')

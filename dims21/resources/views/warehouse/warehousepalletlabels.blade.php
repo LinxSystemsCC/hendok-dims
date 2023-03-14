@@ -115,9 +115,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
                             <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
                                 <option></option>
-                                @foreach($pallets as $val)
-                                <option value="{{$val->pack}}">{{$val->packdesc}}</option>
-                                @endforeach
+                                
                                 
                             </select> 
                         </div>
@@ -232,9 +230,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             <label class="control-label" for="palletbarcodeless"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
                             <select  class="form-select input-sm col-xs-1 "id="palletbarcodeless">
                                 <option></option>
-                                @foreach($pallets as $val)
-                                    <option value="{{$val->pack}}">{{$val->packdesc}}</option>
-                                @endforeach
+                                
                         
                             </select> 
                         </div>
@@ -351,8 +347,40 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     $('#categorybarcodehidden').val(data[0]['intCategoryId']);
                     $('#prodname').val(data[0]['ProductDescription']);
                     $('#prodnamehidden').val(data[0]['ItemCode']);
-                    $('#pallet').val(data[0]['intPackSize']);
                     $('#barcode').val(data[0]['Barcode']);
+                    $.ajax({
+
+                        url: '{!!url("/getProductInfoAppend")!!}',
+                        type: "GET",
+                        data: {
+                            productCode: $('#prodnamehidden').val(),
+                        },
+                        success: function (dataappend) {
+                            var toAppend = '';
+                            $("#pallet").empty();
+                            toAppend += '<option></option>';
+                            $.each(dataappend,function(i,o){
+
+                                toAppend += '<option value="'+o.pack+'">'+o.packdesc+'</option>';
+                            });
+                            $("#pallet").append(toAppend);
+
+                            $.ajax({
+
+                                url: '{!!url("/getProductInfo")!!}',
+                                type: "GET",
+                                data: {
+                                    productCode: $('#prodnamehidden').val(),
+                                },
+                                success:function(data){
+
+                                        $('#pallet').val(data[0]['intPackSize']);
+                                        
+                                }});
+                                
+                            }
+
+                    });
                 }
 
             });
@@ -470,19 +498,40 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         $('#prodnamebarcodeless').change(function(){
             $.ajax({
 
-                url: '{!!url("/getProductInfo")!!}',
+                url: '{!!url("/getProductInfoAppend")!!}',
                 type: "GET",
                 data: {
                     productCode: $('#prodnamebarcodeless option:selected').val(),
                 },
-                success: function (data) {
-                    
-                    $('#palletbarcodeless').val(data[0]['intPackSize']);
-                    $('#barcodebarcodeless').val(data[0]['Barcode']);
-                }
+                success: function (dataappend) {
+                    var toAppend = '';
+                    $("#palletbarcodeless").empty();
+                    toAppend += '<option></option>';
+                    $.each(dataappend,function(i,o){
+
+                        toAppend += '<option value="'+o.pack+'">'+o.packdesc+'</option>';
+                    });
+                    $("#palletbarcodeless").append(toAppend);
+
+                    $.ajax({
+
+                        url: '{!!url("/getProductInfo")!!}',
+                        type: "GET",
+                        data: {
+                            productCode: $('#prodnamebarcodeless option:selected').val(),
+                        },
+                        success:function(data){
+
+                                $('#palletbarcodeless').val(data[0]['intPackSize']);
+                                $('#barcodebarcodeless').val(data[0]['Barcode']);
+                                
+                        }});
+                        
+                    }
 
             });
         });
+      
 
         // setInterval(fetchWeight,1000);
 
