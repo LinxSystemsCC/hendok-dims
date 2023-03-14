@@ -176,7 +176,7 @@ class WareHouseController extends Controller
     public function warehousepalletlabels(){
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments"); 
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
-        $pallets = DB::connection('sqlsrv2')->select("select * from tblPalletConf");
+        $pallets = DB::connection('sqlsrv2')->select("select * from viewPalletConf");
         $scales = DB::connection('sqlsrv2') ->select("exec spGetScalesByDeptName 'Warehouse'");
         $forklifts = DB::connection('sqlsrv2') ->select("select * from viewTransitLocations");
         $areas = DB::connection('sqlsrv2') ->select("select * from tblAreas");

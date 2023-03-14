@@ -115,9 +115,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             <label class="control-label" for="pallet"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pallet Configuration</label>
                             <select  class="form-control input-sm col-xs-1 " id="pallet" style="width: 100%" >
                                 <option></option>
-                                        @foreach($pallets as $val)
-                                            <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
-                                        @endforeach
+                                @foreach($pallets as $val)
+                                <option value="{{$val->pack}}">{{$val->packdesc}}</option>
+                                @endforeach
                                 
                             </select> 
                         </div>
@@ -233,7 +233,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                             <select  class="form-select input-sm col-xs-1 "id="palletbarcodeless">
                                 <option></option>
                                 @foreach($pallets as $val)
-                                    <option value="{{$val->intPalletId}}">{{$val->strPalletTypeDescription}}</option>
+                                    <option value="{{$val->pack}}">{{$val->packdesc}}</option>
                                 @endforeach
                         
                             </select> 
