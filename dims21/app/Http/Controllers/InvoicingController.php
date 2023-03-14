@@ -108,6 +108,12 @@ class InvoicingController extends Controller
                         $x->Detail[$lineno]->UnitSellingPrice =floatval($innverVal->Price);
                         echo "Line--".$sdkHelper->GetWarehouseByCode("CPT");
                     }
+                    //TO TEST
+                    echo "Line Quantity ".  $x->Detail[$lineno]->Quantity;
+                    if($innverVal->SoldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity<$innverVal->Toinvoice ){
+                        $x->Detail[$lineno]->Quantity = $innverVal->Toinvoice;
+                    }
+
                     $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
 
                     //isLineInvoiced
