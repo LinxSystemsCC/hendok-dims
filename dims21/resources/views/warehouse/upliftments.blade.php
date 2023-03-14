@@ -77,9 +77,45 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label" for="areaname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upliftment Number</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="areaname">
-                </div>                
+                    <label class="control-label" for="upliftnumber"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upliftment Number</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="upliftnumber">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="date"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="date">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Company</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="company">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="customer"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="customer">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="area"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Area</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="area">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="address"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Address</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="address">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="invoice"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="invoice">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="addproduct"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Add Product</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="addproduct">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="reasonpickup"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reason for Pickup</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="reasonpickup">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="uploadphoto"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Photo</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="uploadphoto">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
