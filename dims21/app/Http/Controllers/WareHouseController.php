@@ -257,6 +257,12 @@ class WareHouseController extends Controller
         return response()->json($consolidatedgalvwip);
     }
 
+    public function changeGalvJobStatus(Request $request){
+        $JobId = $request->get("JobId");
+        $response = DB::connection('sqlsrv2')->select("exec spCompleteGalvJob ?",array($JobId));
+        return response()->json($response);
+    }
+
     public function printgenericlabel(Request $request){
         $department = $request->get("department");
         $category = $request->get("category");
