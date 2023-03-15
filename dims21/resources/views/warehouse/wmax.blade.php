@@ -63,7 +63,7 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
 
     <div class="col-lg-10" >
-        <div class="col-lg-10">
+        <div class="col-lg-10" id="tabs">
             @if($nwo !="0")
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">New Work Order</button>
             @endif
@@ -219,10 +219,10 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
         line-height: 18px;
     }
 
-    .dx-datagrid {
+    /* .dx-datagrid {
         height: calc(50vh - 40px);
         max-height: calc(50vh - 40px);
-    }
+    } */
 </style>
 
 <!-- jQuery -->
@@ -517,6 +517,10 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
                     }
 
                 });
+
+                var height = window.innerHeight - ($("#gridContainer").offset().top);
+                var subtract = $("#gridsummedup").height();
+                $("#gridContainer").height(height - subtract);
             },
 
         });
@@ -529,44 +533,13 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
                     dataSource:data, //as json
                     hoverStateEnabled: true,
                     showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
                     allowColumnResizing: true,
                     columnAutoWidth: true,
                     scrolling: {
                         rowRenderingMode: 'infinite',
                     },
-                    paging:{
-                        pageSize: 10,
-                    },
-                    pager: {
-                        visible: true,
-                        allowedPageSizes: [5, 10, 20, 50, 'all'],
-                        showPageSizeSelector: true,
-                        showInfo: true,
-                        showNavigationButtons: true,
-                    },
-                    export: {
-                        enabled: true
-                    },
                     selection: {
                         mode: 'single',
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('consolidated');
-
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'consolidated.xlsx');
-                            });
-                        });
-                        e.cancel = true;
                     },
 
                     columns: [

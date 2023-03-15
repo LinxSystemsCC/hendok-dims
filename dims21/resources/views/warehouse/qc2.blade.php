@@ -338,7 +338,7 @@
                         var title = dept + ", " + mach;
                         // var count = selectedRowsData[0].count;
                         var seq = selectedRowsData[0].SeqNo;
-                        seq = parseInt(seq) +1;
+                        seq = parseInt(seq);
 
                         $('#qc2TestTitle').text(title);
                         $('#seq').val(seq);
