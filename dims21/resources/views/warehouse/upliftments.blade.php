@@ -128,7 +128,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="reasonpickup"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reason for Pickup</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="reasonpickup">
+                    <textarea  type="text" class="form-control input-sm col-xs-1" id="reasonpickup"></textarea>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="uploadphoto"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Photo</label>
