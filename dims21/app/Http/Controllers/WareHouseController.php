@@ -325,14 +325,10 @@ class WareHouseController extends Controller
     
     public function getUpliftmentPage(){
         
-        $customers = DB::connection('sqlsrv2')->select("select * from viewTblCustomers");
-        $routes = DB::connection('sqlsrv2')->select("select * from tblroutes");
-        $addresses = DB::connection('sqlsrv2')->select("select * from vwEvolutionAreas");
         $companies = DB::connection('sqlsrv2')->select("select * from vwtblCompanies");
         $products = DB::connection('sqlsrv2')->select("select * from viewtblproducts");
 
-        return view ('warehouse/upliftments')->with('customers',$customers)->with('routes',$routes)->with('addresses',$addresses)
-        ->with('companies',$companies)->with('products',$products);
+        return view ('warehouse/upliftments')->with('companies',$companies)->with('products',$products);
     }
     public function getUpliftmentRecords(){
         
@@ -394,6 +390,71 @@ class WareHouseController extends Controller
 
             DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$hexString));
 
+    }
+    public function getCustomerForSelectedCompany(Request $request){
+
+        
+        $company = $request->get("company");
+        $customers = DB::connection('sqlsrv2')->select("exec spGetCustomersCompanyName ?", array($company));
+        return response()->json($customers);
+    }
+    public function getAreaAddressInvoiceInfoParam(Request $request){
+        
+        $Customer = $request->get('customer');
+        $company = $request->get('company');
+        $addresses = DB::connection('sqlsrv3')
+        ->select(" Exec spReturnCustomerAddressList ?,?",
+            array($Customer,$company));
+        $areas = DB::connection('sqlsrv3')
+        ->select(" Exec spReturnAreaCustomer ?",
+            array($Customer));
+            
+        
+        $routes = DB::connection('sqlsrv3')->select("select * from tblroutes");
+            
+        $invoices = DB::connection('sqlsrv3')
+        ->select(" Exec spReturnCustomerInvoiceList ?,?",
+            array($Customer,$company));
+            
+        $i = 0;
+        
+        $output = array();
+        $output2 = array();
+        $output3 = array();
+        $output4 = array();
+
+        foreach($areas as $val)
+        {
+            $output[$i]['Route'] = $val->Route;
+            
+            $i++;
+        }
+        $i = 0;
+        foreach($addresses as $val)
+        {
+            $output2[$i]['strAddress'] = $val->strAddress;
+            
+            $i++;
+        }
+        $i = 0;
+        foreach($invoices as $val)
+        {
+            $output3[$i]['InvNumber'] = $val->InvNumber;
+            
+            $i++;
+        }
+        $i = 0;
+        foreach($routes as $val)
+        {
+            $output4[$i]['Route'] = $val->Route;
+            
+            $i++;
+        }
+        $results['areas'] = $output;
+        $results['addresses'] = $output2;
+        $results['invoices'] = $output3;
+        $results['routes'] = $output4;
+        return $results;
     }
     public function aauptest($userid){
 

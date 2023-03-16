@@ -101,31 +101,30 @@
                     <label class="control-label" for="customers">Customer Name</label>
                     <select  class="form-select" id="customers" style="width: 100%" required>
                     <option></option>
-                    @foreach($customers as $val)
-                        <option value="{{$val->StoreName}}">{{$val->StoreName}}</option>
-                    @endforeach
                 </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="selectedarea">Selected Area</label>
+                    <input readonly  class="form-select" id="selectedarea" style="width: 100%" required>
+                    
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="area">Area Name</label>
                     <select  class="form-select" id="area" style="width: 100%" required>
                     <option></option>
-                    @foreach($routes as $val)
-                        <option value="{{$val->Route}}">{{$val->Route}}</option>
-                    @endforeach
                 </select>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="address">Address Name</label>
                     <select  class="form-select" id="address" style="width: 100%" required>
-                    @foreach($addresses as $val)
-                        <option value="{{$val->strAddress}}">{{$val->strAddress}}</option>
-                    @endforeach
+                    <option></option>
                 </select>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="invoice"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="invoice">
+                    <select  class="form-select" id="invoice" style="width: 100%" required>
+                        <option></option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="reasonpickup"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reason for Pickup</label>
@@ -213,6 +212,77 @@
     });
     $(document).ready(function() {
 
+                    $("#company").change(function () {
+
+                        $.ajax({
+
+                            url: '{!!url("/getCustomerForSelectedCompany")!!}',
+                            type: "POST",
+                            data: {
+                                company: $("#company").val()
+                            },
+                            success: function (data) {
+                                var toAppend = '';
+                                $("#customers").empty();
+                                toAppend += '<option></option>';
+                                $.each(data,function(i,o){
+
+                                    toAppend += '<option value="'+o.CustomerPastelCode+'">'+o.StoreName+'</option>';
+                                });
+                                $("#customers").append(toAppend);
+                                
+                            }
+                        });
+
+                    });
+                    $("#customers").change(function () {
+
+                        $.ajax({
+
+                            url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
+                            type: "POST",
+                            data: {
+                                customer: $("#customers").val(),
+                                company: $("#company").val()
+                            },
+                            success: function (data) {
+                                var toAppend = '';
+                                $("#area").empty();
+                                toAppend += '<option></option>';
+                                $.each(data.routes,function(i,o){
+
+                                    toAppend += '<option value="'+o.Route+'">'+o.Route+'</option>';
+                                });
+                                $("#area").append(toAppend);
+
+                                $("#address").empty();
+                                toAppend='';
+                                $.each(data.addresses,function(i,o){
+
+                                    toAppend += '<option value="'+o.strAddress+'">'+o.strAddress+'</option>';
+                                });
+                                $("#address").append(toAppend);
+
+                                $("#invoice").empty();
+                                toAppend='';
+                                toAppend += '<option></option>';
+                                $.each(data.invoices,function(i,o){
+
+                                    toAppend += '<option value="'+o.InvNumber+'">'+o.InvNumber+'</option>';
+                                });
+                                $("#invoice").append(toAppend);
+
+                                $("#selectedarea").val();
+                                $.each(data.areas,function(i,o){
+
+                                    $("#selectedarea").val(o.Route);
+                                });
+
+                                
+                            }
+                        });
+
+                    });
 
         $('#savesupliftment').click(function(){
             var checkedLines = Array();
@@ -395,7 +465,7 @@
                         },{
                             dataField: "strInvoice",
                             caption: "Invoice Number",
-                        },{
+                        }/*,{
                             dataField: "imageData",
                             caption: "Image",
                             allowFiltering: false,
@@ -408,7 +478,7 @@
                                 container[0].appendChild(img);
                                 console.log(img);
                             }
-                        },
+                        }*/,
                         
                     ],
                     onRowUpdating: function(e){
