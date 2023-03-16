@@ -202,45 +202,48 @@ if ((Auth::guest()))
                         
 
 
-                    ]
+                    ],
+                    onRowUpdated: function(e) {
+                        var checkedLines = Array();
+                        var selectedRowsData =  $("#usergrid").dxDataGrid("getDataSource").store().load().done(function (data) {
+                        checkedLines= data;
+                        });
+                        var gridResults ="<xml>";
+        
+         
+
+                                $.each(checkedLines ,function(key,value) {
+                                gridResults= gridResults + "<result>";
+                                gridResults= gridResults + "<Type>"+value.Type+"</Type>";
+                                if(value.Selected ==true){
+                                gridResults= gridResults + "<Selected>1</Selected>";
+                                }else 
+                                {
+                                gridResults= gridResults + "<Selected>0</Selected>";
+                                }
+                                gridResults= gridResults+ "</result>";
+
+                            });
+                            gridResults= gridResults+"</xml>";
+                            console.log(gridResults);
+                            $.ajax({
+                                url: '{!!url("/xmlUserGridPermsPost")!!}',
+                                type: "POST",
+                                data: {
+                                    UserID:$('#userID').val(),
+                                    gridResult: gridResults
+                                },
+                                success: function (data) {
+                                    location.reload(true);
+                                    
+                                }
+                                });
+                            }
                 });
         
         $('#saveUserPermissions').click(function(){
             
-            var checkedLines = Array();
-            var selectedRowsData =  $("#usergrid").dxDataGrid("getDataSource").store().load().done(function (data) {
-                checkedLines= data;
-                });
-                var gridResults ="<xml>";
-        
-         
-
-                    $.each(checkedLines ,function(key,value) {
-                    gridResults= gridResults + "<result>";
-                    gridResults= gridResults + "<Type>"+value.Type+"</Type>";
-                    if(value.Selected ==true){
-                    gridResults= gridResults + "<Selected>1</Selected>";
-                    }else 
-                    {
-                    gridResults= gridResults + "<Selected>0</Selected>";
-                    }
-                    gridResults= gridResults+ "</result>";
-
-                });
-                    gridResults= gridResults+"</xml>";
-            console.log(gridResults);
-            $.ajax({
-                    url: '{!!url("/xmlUserGridPermsPost")!!}',
-                    type: "POST",
-                    data: {
-                        UserID:$('#userID').val(),
-                        gridResult: gridResults
-                    },
-                    success: function (data) {
-                        location.reload(true);
-                        
-                    }
-                });
+            
         });
 
 

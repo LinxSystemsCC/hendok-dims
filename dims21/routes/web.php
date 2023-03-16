@@ -1058,6 +1058,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::post('saveLabels', [WareHouseController::class,'saveLabels']);  
     Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
+    Route::post('insertUpliftmentAll',[WareHouseController::class,'insertUpliftmentAll']);
+    Route::get('getUpliftmentRecords',[WareHouseController::class,'getUpliftmentRecords']);
     Route::post('updateSavedLabels', [WareHouseController::class,'updateSavedLabels']);  
     Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);  
     Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']); 

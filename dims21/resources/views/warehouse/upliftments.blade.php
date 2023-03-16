@@ -52,7 +52,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="newarea" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+<div class="modal fade modal-lg" id="newarea" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -60,7 +60,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             
-            <div class="d-inline-flex w-100">
+            <div class="d-inline-flex w-100 px-3">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="upliftmentactioncollect" checked value="Collect Stock">
                     <label class="form-check-label" for="upliftmentactioncollect">
@@ -77,36 +77,55 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label" for="upliftnumber"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upliftment Number</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="upliftnumber">
+                    <label class="control-label" for="upliftreason"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upliftment Reason</label>
+                    <select  class="form-select input-sm col-xs-1 " id="upliftreason" style="width: 60%" >
+                        <option value="Upliftment">Upliftment</option>
+                        <option value="Misc">Miscellaneous</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="date"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="date">
+                    <input  type="date" class="form-control input-sm col-xs-1" id="date">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Company</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="company">
+                    <select  class="form-select input-sm col-xs-1 " id="company" style="width: 60%" >
+                        <option></option>
+                        @foreach($companies as $val)
+                        <option value="{{$val->companyname}}">{{$val->companyname}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="customer"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="customer">
+                    <label class="control-label" for="customers">Customer Name</label>
+                    <select  class="form-select" id="customers" style="width: 100%" required>
+                    <option></option>
+                    @foreach($customers as $val)
+                        <option value="{{$val->StoreName}}">{{$val->StoreName}}</option>
+                    @endforeach
+                </select>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="area"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Area</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="area">
+                    <label class="control-label" for="area">Area Name</label>
+                    <select  class="form-select" id="area" style="width: 100%" required>
+                    <option></option>
+                    @foreach($routes as $val)
+                        <option value="{{$val->Route}}">{{$val->Route}}</option>
+                    @endforeach
+                </select>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="address"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Address</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="address">
+                    <label class="control-label" for="address">Address Name</label>
+                    <select  class="form-select" id="address" style="width: 100%" required>
+                    @foreach($addresses as $val)
+                        <option value="{{$val->strAddress}}">{{$val->strAddress}}</option>
+                    @endforeach
+                </select>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="invoice"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice</label>
                     <input  type="text" class="form-control input-sm col-xs-1" id="invoice">
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="addproduct"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Add Product</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="addproduct">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="reasonpickup"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reason for Pickup</label>
@@ -114,7 +133,11 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="uploadphoto"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Photo</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="uploadphoto">
+                    <input type="file" name="photo" class="form-control-file" id="uploadphoto">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="gridBox" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Add Product</label>
+                    <div style="width: 100%;" id="gridBox"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -179,35 +202,129 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
+    
+    var jArray = JSON.stringify({!! json_encode($products) !!});
+    var finalDataProduct = $.map(JSON.parse(jArray), function (item) {
+        return {
+            PastelCode: item.PastelCode,
+            PastelDescription: item.PastelDescription
+        }
+
+    });
     $(document).ready(function() {
 
 
-       /* $('#savesareaname').click(function(){
+        $('#savesupliftment').click(function(){
+            var checkedLines = Array();
+            var grid = $("#gridBox").dxDataGrid("getDataSource").store().load().done(function (data) {
+                checkedLines= data;
+                });
+                var gridResults = '<xml>';
+                $.each(checkedLines ,function(key,value) {
+                    if (value.Quantity !=undefined || value.Quantity !=null){
+                    gridResults= gridResults + "<result>";
+                    gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
+                    gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
+                    gridResults= gridResults + "<Qty>"+value.Quantity+"</Qty>";
+                    gridResults= gridResults+ "</result>";
+                }
+                });
+                    gridResults= gridResults+"</xml>";
+                    var selectedaction="";
+                    var upliftmentAction = $('input[name="flexRadioDefault"]:checked').val();
 
+
+                    if (upliftmentAction === "Collect Stock") {
+                        selectedaction="Collect";
+                    } else if (upliftmentAction === "Deliver Stock") {
+                        selectedaction="Deliver";  
+                    }
+                    var formData = new FormData();
+
+                        // Append the file to the FormData object
+                        formData.append('file', $('#uploadphoto')[0].files[0]);
+
+                        // Append the other form data to the FormData object
+                        formData.append('dataxml', gridResults);
+                        formData.append('invoice', $('#invoice').val());
+                        formData.append('reasonpickup', $('#reasonpickup').val());
+                        formData.append('area', $('#area').val());
+                        formData.append('address', $('#address').val());
+                        formData.append('customers', $('#customers').val());
+                        formData.append('company', $('#company').val());
+                        formData.append('date', $('#date').val());
+                        formData.append('upliftreason', $('#upliftreason').val());
+                        formData.append('upliftmentaction', selectedaction); 
             $.ajax({
 
-                url: '{!!url("/savesareaname")!!}',
+                url: '{!!url("/insertUpliftmentAll")!!}',
                 type: "POST",
-                data: {
-                    areaname: $('#areaname').val()
-
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (data) {
                     location.reload();
+
                 }
-
             });
+        });
 
-        });*/
+
+
+    $("#gridBox").dxDataGrid({
+
+        dataSource:finalDataProduct, //as json
+        hoverStateEnabled: true,
+        showBorders: true,
+        filterRow: { visible: true },
+        filterPanel: { visible: true },
+        headerFilter: { visible: true },
+        allowColumnResizing: true,
+        columnAutoWidth: true,
+        scrolling: {
+            rowRenderingMode: 'infinite',
+        },
+        paging:{
+            pageSize: 10,
+        },
+        pager: {
+            visible: true,
+            allowedPageSizes: [5, 10, 20, 50, 'all'],
+            showPageSizeSelector: true,
+            showInfo: true,
+            showNavigationButtons: true,
+        },
+        editing: {
+                mode: 'batch',
+                allowUpdating: true,
+            },
+        selection: {
+                mode: 'batch',
+            },
+
+        columns: [
+            {
+                dataField: "PastelCode",
+                caption: "Item Code",
+                allowEditing: false,
+            }, {
+                dataField: "PastelDescription",
+                caption: "Item Description",
+                allowEditing: false,
+            }
+            , {
+                dataField: "Quantity",
+                caption: "Quantity",
+                dataType:'float',
+                allowEditing: true,
+            },
+        ]
+    });
 
         $.ajax({
 
             url: '{!!url("/getUpliftmentRecords")!!}',
             type: "GET",
-            data: {
-                datefrom: $('#datefrom').val(),
-                dateto: $('#dateto').val()
-            },
             success: function (data) {
 
                 $("#gridContainer").dxDataGrid({
@@ -254,52 +371,56 @@
 
                     columns: [
                         {
-                            dataField: "intAutoID",
-                            caption: "ID",
-                            allowEditing: false,
+                            dataField: "intUpliftmentNumber",
+                            caption: "Uplift ID",
                         }, {
-                            dataField: "strAreaName",
-                            caption: "Area",
+                            dataField: "dteUpliftDate",
+                            caption: "Uplift Date",
                         }
                         , {
-                            dataField: "dteCreated",
-                            caption: "Date Time",
-                            allowEditing: false,
+                            dataField: "strUpliftAction",
+                            caption: "Uplift Action",
+                        },{
+                            dataField: "strCompany",
+                            caption: "Company",
+                        },{
+                            dataField: "strCustomer",
+                            caption: "Customer",
+                        },{
+                            dataField: "strArea",
+                            caption: "Area",
+                        },{
+                            dataField: "strAddress",
+                            caption: "Address",
+                        },{
+                            dataField: "strInvoice",
+                            caption: "Invoice Number",
+                        },{
+                            dataField: "imageData",
+                            caption: "Image",
+                            allowFiltering: false,
+                            allowSorting: false,
+                            cellTemplate: function(container, options) {
+                                var img = document.createElement("img");
+                                img.src = options.data.imageData;
+                                img.width = 100; 
+                                img.height = 100; 
+                                container[0].appendChild(img);
+                                console.log(img);
+                            }
                         },
+                        
                     ],
                     onRowUpdating: function(e){
-                        // console.debug(e);
-                       /*() var AreaID = e.oldData.intAutoID;
-                        var AreaName = e.newData.strAreaName;
-
-                        $.ajax({
-                            url: '{!!url("/updateAreaName")!!}',
-                            type: "POST",
-                            data: {
-                                areaID:AreaID,
-                                areaName:AreaName,
-                            },
-                            success: function (data) {
-                                location.reload();
-                            }
-                        });*/
+                    
                     },
                     onRowRemoving: function(e) {
-                       /* var AreaID = e.data.intAutoID;
-                        $.ajax({
-                            url: '{!!url("/deleteArea")!!}',
-                            type: "POST",
-                            data: {
-                                AreaID:AreaID,
-                            },
-                            success: function (data) {
-                                location.reload();
-                            }
-                        });*/
+                    
                     }
                 });
             }
         });
+       
         
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
