@@ -6,13 +6,13 @@ if ((Auth::guest()))
     $v  =  new \App\Http\Controllers\SalesForm();
 }
 $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
-$qc1 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 1');
-$qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
-$weight = $v->getThingsUserPermissions(Auth::user()->UserID,'Weight');
-$print = $v->getThingsUserPermissions(Auth::user()->UserID,'Print');
-$regrade = $v->getThingsUserPermissions(Auth::user()->UserID,'Regrade');
-$sc = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock Change');
-$retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
+// $qc1 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 1');
+// $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
+// $weight = $v->getThingsUserPermissions(Auth::user()->UserID,'Weight');
+// $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Print');
+// $regrade = $v->getThingsUserPermissions(Auth::user()->UserID,'Regrade');
+// $sc = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock Change');
+// $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
 ?>
 
@@ -63,40 +63,44 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
 
     <div class="col-lg-10" >
-        <div class="col-lg-10">
+        <div class="col-lg-10" id="tabs">
             @if($nwo !="0")
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">New Work Order</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createjob" style="margin-right:10px;">New Work Order</button>
             @endif
 
-            @if($qc1 !="0")
+            @if($nwo !="0")
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#finalisejob" style="margin-right:10px;" id="completejob" disabled>Complete Job</button>
+            @endif
+
+            {{-- @if($qc1 !="0")
             <button type="button" id="qcphase1" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">QC Phase 1 </button>
-            @endif
+            @endif --}}
 
-            @if($qc2 !="0")
+            {{-- @if($qc2 !="0")
             <button type="button" id="qcphase2" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">QC Phase 2</button>
-            @endif
+            @endif --}}
 
-            @if($weight !="0")
+            {{-- @if($weight !="0")
             <button type="button" id="weigh" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Weigh</button>
-            @endif
+            @endif --}}
             
-            @if($print !="0")
+            {{-- @if($print !="0")
             <button type="button" id="print" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Print</button>
-            @endif
+            @endif --}}
 
             {{-- <button type="button" id="scrapweigh" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Scrap Weighing</button> --}}
 
-            @if($regrade !="0")
+            {{-- @if($regrade !="0")
             <button type="button" id="regrade" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Regrade</button>
-            @endif
+            @endif --}}
 
-            @if($sc !="0")
+            {{-- @if($sc !="0")
             <button type="button" id="stockchange" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Stock Change</button>
-            @endif
+            @endif --}}
 
-            @if($retest !="0")
+            {{-- @if($retest !="0")
             <button type="button" id="retest" class="btn btn-primary" data-toggle="modal" data-target="#sequencedialog">Re-Test</button>
-            @endif
+            @endif --}}
 
         </div>
         <div id="gridsummedup" style="width: 100% !important;">
@@ -106,17 +110,23 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
     </div>
 
-    <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div title="JOB" id="finalisejob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="finalisejob" aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="viewjobTitle">Work Order Data</h5>
+                    <h5 class="modal-title" id="finalisejob">Complete Job</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    <h6 id="JobEndTextMessage">ARE YOU SURE YOU WANT TO COMPLETE THIS JOB?</h6>
                 </div>
+                <div class="modal-footer d-inline">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width: 47%;">Close</button>
+                    <button class="btn btn-danger" id="completesave" style="width: 47%;">COMPLETE</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -219,10 +229,20 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
         line-height: 18px;
     }
 
-    .dx-datagrid {
+    .dx-checkbox-checked .dx-checkbox-icon {
+        background-color: #df2413 !important;
+    }
+
+    .dx-checkbox-indeterminate .dx-checkbox-icon {
+        background-color: #fff;
+        border: 2px solid rgba(0,0,0,.54);
+    }
+
+
+    /* .dx-datagrid {
         height: calc(50vh - 40px);
         max-height: calc(50vh - 40px);
-    }
+    } */
 </style>
 
 <!-- jQuery -->
@@ -340,6 +360,24 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
             });
         });
 
+        $('#completesave').click(function(){
+            var selectedItem = $("#gridContainer").dxDataGrid("instance").getSelectedRowsData()[0];
+            var JobId = selectedItem.JobNo;
+            // console.log(JobId);
+            $.ajax({
+
+                url: '{!!url("/changeGalvJobStatus")!!}',
+                type: "GET",
+                data: {
+                    JobId: JobId,
+                },
+                success: function (data) {
+                    alert("Job Completed!");
+                    location.reload();
+                }
+            });
+        });
+
         $('#but_deptheader').click(function(){
             $.ajax({
 
@@ -421,7 +459,7 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
                         rowRenderingMode: 'infinite',
                     },
                     paging:{
-                        pageSize: 10,
+                        pageSize: 20,
                     },
                     pager: {
                         visible: true,
@@ -430,93 +468,86 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
                         showInfo: true,
                         showNavigationButtons: true,
                     },
-                    export: {
-                        enabled: true
-                    },
                     selection: {
                         mode: 'single',
+                        showCheckBoxesMode: 'always'
                     },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('machineplan');
-
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'machineplan.xlsx');
-                            });
-                        });
-                        e.cancel = true;
-                    },
-
                     columns: [
+                        {
+                            caption: "Complete",
+                            type: 'selection',
+                            allowSelectAll: false,
+                            selectAllMode: 'page',
+                        }, 
                         {
                             dataField: "JobNo",
                             caption: "Job No.",
                             //width: 80,
-
                         }, {
                             dataField: "CustomerName",
                             caption: "Customer Name",
                             //width: 100,
-
                         }, 
                         {
                             dataField: "DepartmentName",
                             caption: "Department",
                             //width: 250,
-
                         },
                         {
                             dataField: "MachineName",
                             caption: "Machine",
                             //width: 300,
-
                         },
                         {
                             dataField: "ProductName",
                             caption: "Product",
                             //width: 600,
-
                         },
                         {
                             dataField: "MassRequired",
                             caption: "Mass Required",
                             //width: 60,dataType:"number"
-
                         },
                         {
                             dataField: "MassProduced",
                             caption: "Mass Produced",
                             //width: 60,dataType:"number"
-
                         },
                         {
                             dataField: "TestDateTime",
                             caption: "Test Date",
                             //width: 100,dataType:"date"
-
                         },
                         {
                             dataField: "Reference",
                             caption: "Reference",
                             //width: 150,
-
-                        },
+                        }
                     ],
 
                     onRowDblClick:function(e){
-                        console.log(e.data.intJobId);
-                        var intJobId =  e.data.intJobId;
 
-                        window.open('{!!url("/jobupdateprint")!!}/' +intJobId, "Job" +intJobId, "location=1,status=1,scrollbars=1, width=1200,height=850");
-
+                    },
+                    onSelectionChanged: function(selectedItem) {
+                        // console.log("Selected items:", selectedItem.selectedRowKeys[0].JobNo);
+                        var JobId = selectedItem.selectedRowKeys[0].JobNo;
+                        $("#JobEndTextMessage").css("white-space", "pre-wrap");
+                        $("#JobEndTextMessage").text("ARE YOU SURE YOU WANT TO COMPLETE JOB: "+JobId+"? \nTHE JOB WILL NO LONGER BE ACCESSABLE ANYMORE");
+                        $("#completejob").prop("disabled", false);
                     }
 
                 });
+
+                // var space = window.innerHeight - ($("#gridContainer").offset().top);
+                // var tabs = $("#tabs").outerHeight(true);
+                // height = space - tabs;
+                // height = height - tabs;
+                // $("#gridContainer").height(height - tabs);
+
+                var gridElement = $("#gridContainer");
+
+                // Set the height to 74%
+                gridElement.css("height", "74%");
             },
 
         });
@@ -529,44 +560,13 @@ $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
                     dataSource:data, //as json
                     hoverStateEnabled: true,
                     showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
                     allowColumnResizing: true,
                     columnAutoWidth: true,
                     scrolling: {
                         rowRenderingMode: 'infinite',
                     },
-                    paging:{
-                        pageSize: 10,
-                    },
-                    pager: {
-                        visible: true,
-                        allowedPageSizes: [5, 10, 20, 50, 'all'],
-                        showPageSizeSelector: true,
-                        showInfo: true,
-                        showNavigationButtons: true,
-                    },
-                    export: {
-                        enabled: true
-                    },
                     selection: {
                         mode: 'single',
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('consolidated');
-
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'consolidated.xlsx');
-                            });
-                        });
-                        e.cancel = true;
                     },
 
                     columns: [

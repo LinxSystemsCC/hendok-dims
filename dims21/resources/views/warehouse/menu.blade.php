@@ -68,6 +68,13 @@ if ((Auth::guest()))
 
     //Work Order - Galv
     $galvcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv Create Work Order');
+    $qc1 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 1');
+    $qc2 = $v->getThingsUserPermissions(Auth::user()->UserID,'QC Phase 2');
+    $weight = $v->getThingsUserPermissions(Auth::user()->UserID,'Weight');
+    $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Print');
+    $regrade = $v->getThingsUserPermissions(Auth::user()->UserID,'Regrade');
+    $sc = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock Change');
+    $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
 
     //Work Orders Roofing
     $roofcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Create Work Order');
@@ -175,6 +182,49 @@ if ((Auth::guest()))
                             <a href='{!!url("/wmaxlanding")!!}'>Create Work Orders</a>
                             @endif
                         </li>
+
+                        <li>
+                            @if($qc1 !="0")
+                            <a href='{!!url("/qc1")!!}'>QC Phase 1</a>
+                            @endif
+                        </li>
+
+                        <li>
+                            @if($qc2 !="0")
+                            <a href='{!!url("/qc2")!!}'>QC Phase 2</a>
+                            @endif
+                        </li>
+
+                        <li>
+                            @if($weight !="0")
+                            <a href='{!!url("/wmaxweigh")!!}'>Weigh</a>
+                            @endif
+                        </li>
+
+                        <li>
+                            @if($print !="0")
+                            <a href=''>Re-Print</a>
+                            @endif
+                        </li>
+
+                        <li>
+                            @if($regrade !="0")
+                            <a href='{!!url("/wmaxregrade")!!}'>Regrade</a>
+                            @endif
+                        </li>
+
+                        <li>
+                            @if($sc !="0")
+                            <a href='{!!url("/wmaxstockchange")!!}'>Stock Change</a>
+                            @endif
+                        </li>
+
+                        <li>
+                            @if($retest !="0")
+                            <a href='{!!url("/wmaxretest")!!}'>Retest</a>
+                            @endif
+                        </li>
+
                     </ul>
                     @if($roof !="0")
                     <a class="secondmenu" id="1c"><i class="fa mi-roof"></i>Roofing<span class="caret pull-down"></span>
