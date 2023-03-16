@@ -263,6 +263,18 @@ class WareHouseController extends Controller
         return response()->json($response);
     }
 
+    public function checkForGalvUpdates(Request $request){
+        $checker = $request->get("checker");
+        $response = DB::connection('sqlsrv2')->select("exec spCheckForGalvUpdates ?",array($checker));
+        return response()->json($response);
+    }
+
+    public function deleteGalvChecker(Request $request){
+        $checker = $request->get("checker");
+        $response = DB::connection('sqlsrv2')->select("exec spDeleteGalvChecker ?",array($checker));
+        return response()->json($response);
+    }
+    
     public function printgenericlabel(Request $request){
         $department = $request->get("department");
         $category = $request->get("category");

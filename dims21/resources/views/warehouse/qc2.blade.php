@@ -508,6 +508,8 @@
 
         });
 
+        doacheck();
+
     });
 
 
@@ -540,4 +542,38 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
+
+    function doacheck(){
+        setInterval(checkforchanges,10000);
+    };
+
+    function checkforchanges(){
+        $.ajax({
+            url: '{!!url("/checkForGalvUpdates")!!}',
+            type: "GET",
+            data: {
+                checker: "QC2",
+            },
+            success: function (data) {
+                // console.log(data[0].Result);
+                if (data[0].Result == "Reload"){
+                    console.log("deleting record and reloading");
+                    //runs store procedure to delete the record
+                    $.ajax({
+                        url: '{!!url("/deleteGalvChecker")!!}',
+                        type: "GET",
+                        data: {
+                            checker: "QC2",
+                        },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }
+                else{
+                    console.log("as you where young lad");
+                }
+            }
+        });
+    };
 </script>

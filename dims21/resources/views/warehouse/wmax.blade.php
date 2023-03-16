@@ -469,8 +469,8 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
                         showNavigationButtons: true,
                     },
                     selection: {
-                        mode: 'single',
-                        showCheckBoxesMode: 'always'
+                        mode: "single",
+                        showCheckBoxesMode: "onClick"
                     },
                     columns: [
                         {
@@ -538,15 +538,7 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
 
                 });
 
-                // var space = window.innerHeight - ($("#gridContainer").offset().top);
-                // var tabs = $("#tabs").outerHeight(true);
-                // height = space - tabs;
-                // height = height - tabs;
-                // $("#gridContainer").height(height - tabs);
-
                 var gridElement = $("#gridContainer");
-
-                // Set the height to 74%
                 gridElement.css("height", "74%");
             },
 
@@ -644,6 +636,9 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
+
+        doacheck();
+        
     });
 
 
@@ -677,10 +672,39 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
         });
     }
 
+    function doacheck(){
+        setInterval(checkforchanges,10000);
+    };
 
-
-
-
+    function checkforchanges(){
+        $.ajax({
+            url: '{!!url("/checkForGalvUpdates")!!}',
+            type: "GET",
+            data: {
+                checker: "NEWJOB",
+            },
+            success: function (data) {
+                // console.log(data[0].Result);
+                if (data[0].Result == "Reload"){
+                    console.log("deleting record and reloading");
+                    //runs store procedure to delete the record
+                    $.ajax({
+                        url: '{!!url("/deleteGalvChecker")!!}',
+                        type: "GET",
+                        data: {
+                            checker: "NEWJOB",
+                        },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }
+                else{
+                    console.log("as you where young lad");
+                }
+            }
+        });
+    };
 
 </script>
 </body>

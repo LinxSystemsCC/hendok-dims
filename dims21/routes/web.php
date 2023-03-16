@@ -911,6 +911,8 @@ Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationN
 Route::get('getWIP', [WareHouseController::class,'getWIP']);
 Route::get('getRoofWIP', [WareHouseController::class,'getRoofWIP']);
 Route::get('getGalvWIP', [WareHouseController::class,'getGalvWIP']);
+Route::get('checkForGalvUpdates', [WareHouseController::class,'checkForGalvUpdates']);
+Route::get('deleteGalvChecker', [WareHouseController::class,'deleteGalvChecker']);
 Route::get('changeGalvJobStatus', [WareHouseController::class,'changeGalvJobStatus']);
 Route::get('getGalvWIPConsolidated',[WareHouseController::class,'getGalvWIPConsolidated']);
 Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
