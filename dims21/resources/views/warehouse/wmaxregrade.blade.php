@@ -373,15 +373,15 @@
                         var ticket =  data[0].TicketNo;
 
                         window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket, "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+
+                        location.reload();
                     }
                 }
 
             });
-            
-                
         });
 
-
+        doacheck();
 });
 
     function showDialog(tag,width,height)
@@ -413,4 +413,38 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
+
+    function doacheck(){
+        setInterval(checkforchanges,10000);
+    };
+
+    function checkforchanges(){
+        $.ajax({
+            url: '{!!url("/checkForGalvUpdates")!!}',
+            type: "GET",
+            data: {
+                checker: "REGRADE",
+            },
+            success: function (data) {
+                // console.log(data[0].Result);
+                if (data[0].Result == "Reload"){
+                    console.log("deleting record and reloading");
+                    //runs store procedure to delete the record
+                    $.ajax({
+                        url: '{!!url("/deleteGalvChecker")!!}',
+                        type: "GET",
+                        data: {
+                            checker: "REGRADE",
+                        },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }
+                else{
+                    console.log("as you where young lad");
+                }
+            }
+        });
+    };
 </script>
