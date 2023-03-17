@@ -52,7 +52,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade modal-lg" id="newarea" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+<div class="modal fade modal-xl" id="newarea" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -137,11 +137,12 @@
                 <div class="form-group form-inline">
                     <label class="control-label" for="inputProdCode" style="margin-right: 10px;font-weight: 700;font-size: 15px;">Add Product</label>
                     <br>
-                    <input class="form-control input-sm" id="inputProdCode" placeholder="Product Code"  required style="width: 20%">
-                    <input class="form-control input-sm" id="inputProdDesc" placeholder="Product Description"  required style="width: 40%">
+                    <input class="form-control input-sm" id="inputProdCode" placeholder="Product Code"  required style="width: 10%">
+                    <input class="form-control input-sm" id="inputProdDesc" placeholder="Product Description"  required style="width: 30%">
                     <input readonly type="number" class="form-control input-sm" id="inputProdWeight" placeholder="Weight"  required style="width: 15%">
                     <input readonly type="number" class="form-control input-sm" id="inputProdWeightHidden" placeholder="Weight"  required style="width: 15%" hidden>
                     <input type="number" class="form-control input-sm" id="inputProdQty" placeholder="Quantity" required style="width: 20%">
+                    <input  class="form-control input-sm" id="inputProdComment" placeholder="Comment" required style="width: 20%">
                 </div>
                 
                 <button type="button" id="savetempproducts" class="btn btn-success" >Add</button>
@@ -240,7 +241,9 @@
                     $('#inputProdWeight').val(0);
                     var Quantity = $('#inputProdQty').val();
                     $('#inputProdQty').val(0);
-                    var newRow = { Code: Code, Name: Name, Quantity:Quantity,Weight: Weight };
+                    var Comment = $('#inputProdComment').val();
+                    $('#inputProdComment').val('');
+                    var newRow = { Code: Code, Name: Name, Quantity:Quantity,Weight: Weight,Comment:Comment};
 
                     // add the new row to the data source and refresh the Datagrid
                     var grid = $("#gridBox").dxDataGrid("instance");
@@ -373,6 +376,8 @@
                     gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
                     gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
                     gridResults= gridResults + "<Qty>"+value.Quantity+"</Qty>";
+                    gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
+                    gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
                     gridResults= gridResults+ "</result>";
                 }
                 });
@@ -549,7 +554,8 @@
             { dataField: 'Code', caption: 'Item Code' },
             { dataField: 'Name', caption: 'Item Description' },
             { dataField: 'Quantity', caption: 'Quantity' },
-            { dataField: 'Weight', caption: 'Weight' }
+            { dataField: 'Weight', caption: 'Weight' },
+            { dataField: 'Comment', caption: 'Comment' }
         ],
         editing: {
             mode: 'batch',
