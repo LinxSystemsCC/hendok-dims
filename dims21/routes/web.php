@@ -1093,7 +1093,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getjobsdata', [WareHouseController::class,'getjobsdata']);
     Route::get('exceptionmovementreport', [WareHouseController::class,'exceptionmovementreport']);
     Route::get('getjobcard/{JobID}', [WareHouseController::class,'getjobcard']);
-    Route::get('getgalvlabel/{JobNo}/{CustName}/{TicketNo}', [WareHouseController::class,'getgalvlabel']);
+    Route::get('getgalvlabel/{JobNo}/{CustName}/{TicketNo}/{Status}', [WareHouseController::class,'getgalvlabel']);
     Route::get('getallactivejobs', [WareHouseController::class,'getallactivejobs']);
     Route::get('getgalvproductspecsheet', [WareHouseController::class,'getgalvproductspecsheet']);
     Route::get('galvcustomer', [WareHouseController::class,'galvcustomer']);

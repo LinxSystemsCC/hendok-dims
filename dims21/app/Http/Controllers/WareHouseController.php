@@ -294,10 +294,11 @@ class WareHouseController extends Controller
         $ticketno = $request->get("ticketno");
         $qty = $request->get("qty");
         $type = 29;
+        $status = $request->get('status');
 
         //dd($ticketno,$qty,$type);
 
-        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertFinalGalvLabelJobToPrint ?,?,?', array($ticketno,$qty,$type));
+        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertFinalGalvLabelJobToPrint ?,?,?,?', array($ticketno,$qty,$type,$status));
         
         return response()->json($returndata);
 
@@ -1545,8 +1546,8 @@ where intDeptID =".$deptId);
         return view('warehouse/galvproductspecsheet');
     }
 
-    public function getgalvlabel($customer,$product,$ticketno){
-        $jobdata = DB::connection('sqlsrv2')->select("select * from tblCompletedJobs where Customer ='".$customer."' and ProductName ='".$product."' and TicketNo = '".$ticketno."'");
+    public function getgalvlabel($customer,$product,$ticketno,$status){
+        $jobdata = DB::connection('sqlsrv2')->select("select *,".$status." as Status from tblCompletedJobs where Customer ='".$customer."' and ProductName ='".$product."' and TicketNo = '".$ticketno."'");
         //dd($jobdata);
         return view('warehouse/galvlabel')->with("id",$customer)->with("id",$product)->with("ticketno",$ticketno)->with("jobdata",$jobdata);
     }
