@@ -343,6 +343,13 @@ class WareHouseController extends Controller
 
         return view ('warehouse/upliftments')->with('companies',$companies)->with('products',$products);
     }
+    public function getUpliftmentDetails(Request $request){
+        $upliftmentNumber = $request->get('upliftmentNumber');
+        
+        $upliftdetails = DB::connection('sqlsrv2')->select("exec spGetUpliftmentDetails ?", array($upliftmentNumber));
+        return response()->json($upliftdetails);
+
+    }
     public function getUpliftmentRecords(){
         
         $returndata = DB::connection('sqlsrv2') ->select("select * from viewtblUpliftmentData");
@@ -1571,6 +1578,7 @@ where intDeptID =".$deptId);
         return response()->json($returnmach);
 
     }
+
 
     public function insertIntoJobTableGalv(Request $request){
         $prodname = $request->get("prodname");

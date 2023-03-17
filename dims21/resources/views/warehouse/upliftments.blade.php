@@ -400,7 +400,12 @@
                         formData.append('dataxml', gridResults);
                         formData.append('invoice', $('#invoice').val());
                         formData.append('reasonpickup', $('#reasonpickup').val());
+                        if ($('#area').val().length > 0){
                         formData.append('area', $('#area').val());
+                        }
+                        else {
+                        formData.append('area', $('#selectedarea').val());
+                        }
                         formData.append('address', $('#address').val());
                         formData.append('customers', $('#customers').val());
                         formData.append('company', $('#company').val());
@@ -510,17 +515,82 @@
                         }*/,
                         
                     ],
-                    onRowUpdating: function(e){
+                    onRowClick: function(e) {
+                        var upliftmentNumber = e.data.intUpliftmentNumber;
+
+                        $.ajax({
+                        url: '{!!url("/getUpliftmentDetails")!!}',
+                        type: 'GET',
+                        data: {
+                            upliftmentNumber: upliftmentNumber
+                        },
+                        success: function(data) {
+                            // Create a new modal popup
+                            var popup = $("<div>").appendTo(document.body).addClass("popup").dxPopup({
+                            title: "Upliftment Details",
+                            width: 800,
+                            height: 600,
+                            toolbarItems: [{
+                                widget: "dxButton",
+                                location: "after",
+                                options: {
+                                    text: "Close",
+                                    onClick: function() {
+                                        popup.hide();
+                                    }
+                                }
+                            }],
+                            contentTemplate: function(contentElement) {
+                                // Create a new datagrid to display the details
+                                $("<div>").appendTo(contentElement).dxDataGrid({
+                                dataSource: data,
+                                
+                                columns: [
+                                    {
+                                        dataField: "intUpliftmentNumber",
+                                        caption: "Uplift ID",
+                                    }, {
+                                        dataField: "PastelCode",
+                                        caption: "Item Code",
+                                    }
+                                    , {
+                                        dataField: "PastelDescription",
+                                        caption: "Item Description",
+                                    },{
+                                        dataField: "Qty",
+                                        caption: "Quantity",
+                                    },{
+                                        dataField: "weight",
+                                        caption: "Weight",
+                                    },{
+                                        dataField: "comment",
+                                        caption: "Comment",
+                                    }
+                                ]
+                            });
+                                $("<div>").appendTo(contentElement).dxButton({
+                            text: "Close",
+                            onClick: function() {
+                                console.log("FC");
+                                popup.dxPopup("hide");
+                            }
+                        });
+
+                        },
+                        onHidden: function() {
+                            // Destroy the popup when it is hidden
+                    popup.remove();
+                }
+                    });
                     
-                    },
-                    onRowRemoving: function(e) {
-                    
-                    }
-                });
+        popup.dxPopup("show");
             }
         });
-       
-        
+    }
+            });
+        }
+        });
+
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
