@@ -293,7 +293,7 @@ class WareHouseController extends Controller
     public function printgalvlabel(Request $request){
         $ticketno = $request->get("ticketno");
         $qty = $request->get("qty");
-        $type = 4;
+        $type = 29;
 
         //dd($ticketno,$qty,$type);
 
