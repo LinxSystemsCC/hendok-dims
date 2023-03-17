@@ -338,7 +338,7 @@ class WareHouseController extends Controller
     public function getUpliftmentPage(){
         
         $companies = DB::connection('sqlsrv2')->select("select * from vwtblCompanies");
-        $products = DB::connection('sqlsrv2')->select("select * from viewtblproducts");
+        $products = DB::connection('sqlsrv2')->select("select * from viewTblProductWeightedCalc");
 
         return view ('warehouse/upliftments')->with('companies',$companies)->with('products',$products);
     }

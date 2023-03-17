@@ -105,7 +105,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="selectedarea">Selected Area</label>
-                    <input readonly  class="form-select" id="selectedarea" style="width: 100%" required>
+                    <input readonly  class="form-control input-sm col-xs-1" id="selectedarea" style="width: 100%" required>
                     
                 </div>
                 <div class="form-group">
@@ -134,11 +134,19 @@
                     <label class="control-label" for="uploadphoto"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Photo</label>
                     <input type="file" name="photo" class="form-control-file" id="uploadphoto">
                 </div>
-                <div class="form-group">
-                    <label class="control-label" for="gridBox" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Add Product</label>
-                    <div style="width: 100%;" id="gridBox"></div>
+                <div class="form-group form-inline">
+                    <label class="control-label" for="inputProdCode" style="margin-right: 10px;font-weight: 700;font-size: 15px;">Add Product</label>
+                    <br>
+                    <input class="form-control input-sm" id="inputProdCode" placeholder="Product Code"  required style="width: 20%">
+                    <input class="form-control input-sm" id="inputProdDesc" placeholder="Product Description"  required style="width: 40%">
+                    <input readonly type="number" class="form-control input-sm" id="inputProdWeight" placeholder="Weight"  required style="width: 15%">
+                    <input readonly type="number" class="form-control input-sm" id="inputProdWeightHidden" placeholder="Weight"  required style="width: 15%" hidden>
+                    <input type="number" class="form-control input-sm" id="inputProdQty" placeholder="Quantity" required style="width: 20%">
                 </div>
-            </div>
+                
+                <button type="button" id="savetempproducts" class="btn btn-success" >Add</button>
+                <div style="width: 100%; height: 5%%;" id="gridBox"></div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="savesupliftment" class="btn btn-success" >Save</button>
@@ -172,6 +180,11 @@
         height: calc(100vh - 63px);
         max-height: calc(100vh - 63px);
     }
+    .form-inline .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+    }
 </style>
 
 <!-- jQuery -->
@@ -179,6 +192,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>    
+<script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
@@ -206,12 +221,71 @@
     var finalDataProduct = $.map(JSON.parse(jArray), function (item) {
         return {
             PastelCode: item.PastelCode,
-            PastelDescription: item.PastelDescription
+            PastelDescription: item.PastelDescription,
+            Weight: item.Weight,
         }
 
     });
     $(document).ready(function() {
+        createDataGrid();
+        $("#savetempproducts").click(function() {
+            if ($('#inputProdCode').val().length>0 && $('#inputProdDesc').val().length>0 && $('#inputProdWeight').val()!=0 && $('#inputProdQty').val()!=0 )
+                {
+                    // retrieve the input values and create a new row object
+                    var Code = $('#inputProdCode').val();
+                    $('#inputProdCode').val('');
+                    var Name = $('#inputProdDesc').val();
+                    $('#inputProdDesc').val('');
+                    var Weight = $('#inputProdWeight').val();
+                    $('#inputProdWeight').val(0);
+                    var Quantity = $('#inputProdQty').val();
+                    $('#inputProdQty').val(0);
+                    var newRow = { Code: Code, Name: Name, Quantity:Quantity,Weight: Weight };
 
+                    // add the new row to the data source and refresh the Datagrid
+                    var grid = $("#gridBox").dxDataGrid("instance");
+                    if (grid) {
+                        var dataSource = grid.getDataSource();
+                        console.log(dataSource);
+                        dataSource.store().insert(newRow);
+                        dataSource.reload();
+                    } else {
+                        console.log('Datagrid not found.');
+                    }
+                }
+        });
+        var inputProduct = $('#inputProdCode').flexdatalist({
+            minLength: 1,
+            valueProperty: '*',
+            selectionRequired: true,
+            focusFirstResult: true,
+            searchContain:true,
+            visibleProperties: ["PastelCode","PastelDescription"],
+            searchIn: ["PastelCode","PastelDescription"],
+            data: finalDataProduct
+        });
+        inputProduct.on('select:flexdatalist', function (event, data) {
+            //fill in inputs of code desc weight, empty qty empty comment..
+            $('#inputProdCode').val(data.PastelCode);
+            $('#inputProdDesc').val(data.PastelDescription);
+            $('#inputProdWeightHidden').val(data.Weight);
+        });
+        var inputProductDesc = $('#inputProdDesc').flexdatalist({
+            minLength: 1,
+            valueProperty: '*',
+            selectionRequired: true,
+            focusFirstResult: true,
+            searchContain:true,
+            visibleProperties: ["PastelCode","PastelDescription"],
+            searchIn: ["PastelCode","PastelDescription"],
+            data: finalDataProduct
+        });
+        inputProductDesc.on('select:flexdatalist', function (event, data) {
+            //fill in inputs of code desc weight, empty qty empty comment..
+            $('#inputProdCode').val(data.PastelCode);
+            $('#inputProdDesc').val(data.PastelDescription);
+            $('#inputProdWeightHidden').val(data.Weight);
+        });
                     $("#company").change(function () {
 
                         $.ajax({
@@ -234,6 +308,9 @@
                             }
                         });
 
+                    });
+                    $("#inputProdQty").change(function(){
+                        $('#inputProdWeight').val($('#inputProdQty').val()*$('#inputProdWeightHidden').val())
                     });
                     $("#customers").change(function () {
 
@@ -338,59 +415,6 @@
                 }
             });
         });
-
-
-
-    $("#gridBox").dxDataGrid({
-
-        dataSource:finalDataProduct, //as json
-        hoverStateEnabled: true,
-        showBorders: true,
-        filterRow: { visible: true },
-        filterPanel: { visible: true },
-        headerFilter: { visible: true },
-        allowColumnResizing: true,
-        columnAutoWidth: true,
-        scrolling: {
-            rowRenderingMode: 'infinite',
-        },
-        paging:{
-            pageSize: 10,
-        },
-        pager: {
-            visible: true,
-            allowedPageSizes: [5, 10, 20, 50, 'all'],
-            showPageSizeSelector: true,
-            showInfo: true,
-            showNavigationButtons: true,
-        },
-        editing: {
-                mode: 'batch',
-                allowUpdating: true,
-            },
-        selection: {
-                mode: 'batch',
-            },
-
-        columns: [
-            {
-                dataField: "PastelCode",
-                caption: "Item Code",
-                allowEditing: false,
-            }, {
-                dataField: "PastelDescription",
-                caption: "Item Description",
-                allowEditing: false,
-            }
-            , {
-                dataField: "Quantity",
-                caption: "Quantity",
-                dataType:'float',
-                allowEditing: true,
-            },
-        ]
-    });
-
         $.ajax({
 
             url: '{!!url("/getUpliftmentRecords")!!}',
@@ -512,6 +536,37 @@
 
     });
 
+
+    function createDataGrid() {
+        var dataSource = new DevExpress.data.DataSource({
+        store: [],
+        paginate: true
+    });
+    $("#gridBox").dxDataGrid({
+        dataSource: dataSource,
+        
+        columns: [
+            { dataField: 'Code', caption: 'Item Code' },
+            { dataField: 'Name', caption: 'Item Description' },
+            { dataField: 'Quantity', caption: 'Quantity' },
+            { dataField: 'Weight', caption: 'Weight' }
+        ],
+        editing: {
+            mode: 'batch',
+            allowDeleting: true
+        },
+        onRowInserted: function(e) {
+            var newRecord = e.data;
+            // retrieve the new record and perform any necessary processing
+        },
+        onRowUpdated: function(e) {
+            var updatedRecord = e.data;
+            // retrieve the updated record and perform any necessary processing
+        }
+    });
+    
+
+}
 
     function showDialog(tag,width,height)
     {
