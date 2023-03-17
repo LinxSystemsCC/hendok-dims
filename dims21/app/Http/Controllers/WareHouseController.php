@@ -418,8 +418,8 @@ class WareHouseController extends Controller
         ->select(" Exec spReturnCustomerAddressList ?,?",
             array($Customer,$company));
         $areas = DB::connection('sqlsrv3')
-        ->select(" Exec spReturnAreaCustomer ?",
-            array($Customer));
+        ->select(" Exec spReturnAreaCustomer ?,?",
+            array($Customer,$company));
             
         
         $routes = DB::connection('sqlsrv3')->select("select * from tblroutes");
