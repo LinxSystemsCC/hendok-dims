@@ -1547,7 +1547,7 @@ where intDeptID =".$deptId);
     }
 
     public function getgalvlabel($customer,$product,$ticketno,$status){
-        $jobdata = DB::connection('sqlsrv2')->select("select *,".$status." as buttonStatus from tblCompletedJobs where Customer ='".$customer."' and ProductName ='".$product."' and TicketNo = '".$ticketno."'");
+        $jobdata = DB::connection('sqlsrv2')->select("select *,'".$status."' as buttonStatus from tblCompletedJobs where Customer ='".$customer."' and ProductName ='".$product."' and TicketNo = '".$ticketno."'");
         //dd($jobdata);
         return view('warehouse/galvlabel')->with("id",$customer)->with("id",$product)->with("ticketno",$ticketno)->with("jobdata",$jobdata);
     }
