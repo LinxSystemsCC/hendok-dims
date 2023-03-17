@@ -124,7 +124,7 @@
                 data: {
                     ticketno: $('#ticketno').val(),
                     qty: $('#qty').val(),
-                    status:$('#status').val()
+                    status:$('#Status').val()
                 },
                 success: function (data) {
                     location.reload();
