@@ -54,8 +54,43 @@ if ((Auth::guest()))
             <h3 class="text-uppercase" style="flex-grow: 1; padding-left: 15px;">{{ $user->UserName }}'s PERMISSIONS</h3>
             @endforeach
         </div>
-        
-        <div id="usergrid" style=""></div>
+        <input id="toggleall" type="checkbox" value="Toggle All" style="margin-left: 20px;"> <label for="toggleall">Toggle All</label>
+        <div class="col-lg-12" style="height: 80vh; overflow: overlay;" >
+            
+            <table class="table table-borderless table-hover" id="userPermissionsTable" style="background-color: rgb(216, 216, 216);">
+                <thead class="thead-dark">
+                    <th class="header" scope="col">Main Tree</th>
+                    <th class="header" scope="col">First Branch</th>
+                    <th class="header" scope="col">Second Branch</th>
+                    <th class="header" scope="col">Page Components</th>
+                </thead>
+                <tbody>
+                    <?php $count=1;?>
+                    @foreach ($permissions as $permission)
+                    <?php $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+                    $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);?>
+                    <tr>
+                        @foreach (explode('-', $permission->FullDesc) as $desc)
+                            <td class="row{{ $randomString }}_{{ $count }}">
+                                @if ($v->getThingsUserPermissions( $id , $desc) != "1")
+                                    <input id="row{{ $randomString }}_{{ $count }}" type="checkbox" value="{{$desc}}">
+                                    <label for ="row{{ $randomString }}_{{ $count }}">
+                                        {{ $desc }}
+                                    </label>
+                                @else
+                                    <input id="row{{ $randomString }}_{{ $count }}" type="checkbox" value="{{$desc}}" checked>
+                                    <label for ="row{{ $randomString }}_{{ $count }}">
+                                        {{ $desc }}
+                                    </label>
+                                @endif         
+                            </td>
+                                
+                            <?php $count++;?> 
+                        @endforeach
+                    </tr><?php $count=1;?>
+                    @endforeach
+                </tbody>
+            </table>
         
     </div>
 </div>
@@ -117,6 +152,41 @@ if ((Auth::guest()))
 
     $(document).ready(function() {
 
+        $("#toggleall").click(function(){
+            $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+        });
+        $('#userPermissionsTable').on('click', 'tr td', function () {
+            //console.log($(this).attr("class"));
+            //console.log($(this).text());
+
+            var rowClass = ($(this).attr("class"));
+            var rowNum = rowClass.split("_").pop();
+            var rowName = rowClass.substring(0, rowClass.indexOf('_'));
+            var checked = true; 
+
+            if ($('#'+rowName+"_"+rowNum).prop('checked')){
+                checked = true;
+            }else{
+                $('#'+rowName+"_"+rowNum).prop('checked', false);
+                checked = false;
+            }
+            //console.debug(checked);
+
+            if (checked == true){
+                for (let index = 1; index <= rowNum.lenght; index++) {
+                    $('#'+rowName+"_"+index).prop('checked', true);
+                }
+            }
+
+            // if (rowNum = 1){
+            //     $('#'+rowName+"_1").css('background-color', '#eee');
+            // }
+
+            //console.debug(rowNum);
+            //console.debug(rowName);
+        });
+
+/*
         var jArray = JSON.stringify({!! json_encode($permissions) !!});
     var finalUserGrid = $.map(JSON.parse(jArray), function (item) {
         var booleanfromitem = (item.Selected ==1);
@@ -240,9 +310,34 @@ if ((Auth::guest()))
                                 });
                             }
                 });
-        
+        */
         $('#saveUserPermissions').click(function(){
+                        
+            var checkedBoxes = [];
+            /*$("input:checkbox[type=checkbox]:checked").each(function(){
+                checkedBoxes.push($(this).val());
+            });*/
+
+            $.each($("input[type=checkbox]:checked"), function(){
+                checkedBoxes.push($(this).val());
+            });
             
+            console.debug(checkedBoxes);
+
+            $.ajax({
+
+                url: '{!!url("/savepermissions")!!}',
+                type: "POST",
+                data: {
+                    'UserID':$('#userID').val(),
+                    'CheckBoxes':checkedBoxes
+                },
+                success: function (data) {
+                    location.reload();
+                }
+                
+            });
+        });
             
         });
 

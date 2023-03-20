@@ -321,7 +321,7 @@ class WareHouseController extends Controller
         DB::Connection('sqlsrv2')->statement("update tbldimsusers set strpickingteams='' where UserID =".$userid."");
     }
     public function userpermissions($userid){
-        $permissions = DB::connection('sqlsrv2')->select("select * from vwUserPermsHierarchy Where UserID =".$userid ." order by num1,num2,num3,num4");
+        $permissions = DB::connection('sqlsrv2')->select("select * from viewUserPermissions Where UserID =".$userid ." and allowView <> 0");
         $username = DB::connection('sqlsrv2')->select("select UserName from tbldimsusers Where UserID =".$userid ."");
  
         //dd($tableCols);
