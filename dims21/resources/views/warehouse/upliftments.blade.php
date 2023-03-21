@@ -518,6 +518,7 @@
                     onRowClick: function(e) {
                         var upliftmentNumber = e.data.intUpliftmentNumber;
 
+                        console.log("Creating details...");
                         $.ajax({
                         url: '{!!url("/getUpliftmentDetails")!!}',
                         type: 'GET',
@@ -526,62 +527,77 @@
                         },
                         success: function(data) {
                             // Create a new modal popup
+                            console.log("Creating Getting details...");
                             var popup = $("<div>").appendTo(document.body).addClass("popup").dxPopup({
-                            title: "Upliftment Details",
-                            width: 800,
-                            height: 600,
-                            toolbarItems: [{
-                                widget: "dxButton",
-                                location: "after",
-                                options: {
-                                    text: "Close",
-                                    onClick: function() {
-                                        popup.hide();
+                                title: "Upliftment Details",
+                                width: 800,
+                                height: 600,
+                                toolbarItems: [{
+                                    widget: "dxButton",
+                                    location: "after",
+                                    
+                                    options: {
+                                        
+                                        text: "Close",
+                                        onClick: function() {
+                                            console.log("Hiding...");
+                                            popup.hide();
+                                        }
                                     }
-                                }
-                            }],
-                            contentTemplate: function(contentElement) {
-                                // Create a new datagrid to display the details
-                                $("<div>").appendTo(contentElement).dxDataGrid({
-                                dataSource: data,
-                                
-                                columns: [
-                                    {
-                                        dataField: "intUpliftmentNumber",
-                                        caption: "Uplift ID",
-                                    }, {
-                                        dataField: "PastelCode",
-                                        caption: "Item Code",
-                                    }
-                                    , {
-                                        dataField: "PastelDescription",
-                                        caption: "Item Description",
-                                    },{
-                                        dataField: "Qty",
-                                        caption: "Quantity",
-                                    },{
-                                        dataField: "weight",
-                                        caption: "Weight",
-                                    },{
-                                        dataField: "comment",
-                                        caption: "Comment",
-                                    }
-                                ]
-                            });
-                                $("<div>").appendTo(contentElement).dxButton({
-                            text: "Close",
-                            onClick: function() {
-                                console.log("FC");
-                                popup.dxPopup("hide");
-                            }
-                        });
+                                }],
+                                contentTemplate: function(contentElement) {
+                                    // Create a new datagrid to display the details
+                                    console.log("Creating columns...");
+                                    $("<div>").appendTo(contentElement).dxDataGrid({
+                                        dataSource: data,
+                                        columns: [
+                                            {
+                                                dataField: "intUpliftmentNumber",
+                                                caption: "Uplift ID",
+                                            }, 
+                                            {
+                                                dataField: "PastelCode",
+                                                caption: "Item Code",
+                                            },
+                                            {
+                                                dataField: "PastelDescription",
+                                                caption: "Item Description",
+                                            },
+                                            {
+                                                dataField: "Qty",
+                                                caption: "Quantity",
+                                            },
+                                            {
+                                                dataField: "weight",
+                                                caption: "Weight",
+                                            },
+                                            {
+                                                dataField: "comment",
+                                                caption: "Comment",
+                                            }
+                                        ]
+                                    });
 
-                        },
-                        onHidden: function() {
-                            // Destroy the popup when it is hidden
-                    popup.remove();
-                }
-                    });
+                                    // Create a Close button
+                                    console.log("Creating popup...");
+                                    $("<div>").appendTo(contentElement).dxButton({
+                                        text: "Close",
+                                        onInitialized: function(e) {
+                                        // Attach an event listener to the button to hide and dispose of the popup
+                                        e.element.on("click", function() {
+                                            popup.hide();
+                                            popup.dxPopup("instance").dispose();
+                                            console.log("GO AWAY");
+                                        });
+                                        }
+                                    });
+                                },
+                                onHidden: function() {
+                                // Destroy the popup when it is hidden
+                                popup.dxPopup("instance").dispose();
+                                }
+                            });
+
                     
         popup.dxPopup("show");
             }
