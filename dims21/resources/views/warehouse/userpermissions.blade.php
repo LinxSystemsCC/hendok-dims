@@ -359,7 +359,7 @@ if ((Auth::guest()))
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
-    });
+    
 
     function showDialog(tag,width,height)
     {
