@@ -112,12 +112,14 @@
 
 
     $(document).ready(function() {
+        var prodCode = "{{ $productCode }}";
+        console.log(prodCode);
         // console.debug($('#productCode').val())
         $.ajax({
             url: '{!!url("/getviewGridStockBalance")!!}',
             type: "GET",
             data: {
-                ItemCode:$('#productCode').val()
+                ItemCode: prodCode
             },
             success: function (data) {
                 $("#balance").dxDataGrid({
@@ -204,7 +206,7 @@
             url: '{!!url("/getviewGridStockReport")!!}',
             type: "GET",
             data: {
-                ItemCode:$('#productCode').val()
+                ItemCode:prodCode
             },
             success: function (data) {
                 $("#report").dxDataGrid({
