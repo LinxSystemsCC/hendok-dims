@@ -30,10 +30,6 @@
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
-    <!-- Select2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
-
 </head>
 
 <body>
@@ -45,14 +41,11 @@
             
             <button type="button" id="statuschange" class="btn btn-primary mx-1" data-toggle="modal" data-target="#jobchanges">Change Job Status</button>
 
-            <button type="button" id="printjobcard" class="btn btn-danger mx-1" data-toggle="modal" data-target="#printjobcard">Print Job Card</button>
+            <button type="button" id="printjobcard" class="btn btn-danger mx-1">Print Job Card</button>
         </div>
             
         
         <div id="jobgrid" style="width: 100% !important; height:50%; padding-bottom: 10px;">
-        </div>
-
-        <div id="exportButton">
         </div>
 
         <div title="Statuses" id="jobchanges" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="jobchangesTitle" aria-hidden="true">
@@ -109,9 +102,6 @@
     }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
@@ -191,9 +181,9 @@
 
         });
 
-        $('#printjobcard').click(function(){
-            //TODO Got to new roofing jobcard for reference and machine (See 'savestatus' above for reference and machine!)
-        });
+        // $('#printjobcard').click(function(){
+        //     //TODO Got to new roofing jobcard for reference and machine (See 'savestatus' above for reference and machine!)
+        // });
 
         $('#printadditional').click(function(){
             $.ajax({
@@ -256,64 +246,6 @@
                             e.component.refresh();
                         },
                     },
-                    
-                    export: {
-                        formats: ['xlsx', 'pdf', 'csv'],
-                        enabled: true,
-                        allowExportSelectedData: true,
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('Employees');
-
-                        if (e.format === 'xlsx') {
-                            DevExpress.excelExporter.exportDataGrid({
-                                component: e.component,
-                                worksheet,
-                                autoFilterEnabled: true,
-                                selectedRowsOnly: false
-                            }).then(() => {
-                                workbook.xlsx.writeBuffer().then((buffer) => {
-                                    saveAs(new Blob([buffer], {
-                                        type: 'application/octet-stream'
-                                    }), 'Employees.xlsx');
-                                });
-                            });
-                            e.cancel = true;
-                        }
-
-                        if (e.format === 'pdf') {
-                            window.jsPDF = window.jspdf.jsPDF;
-
-                            const doc = new jsPDF();
-                            DevExpress.pdfExporter.exportDataGrid({
-                                jsPDFDocument: doc,
-                                component: e.component,
-
-                            }).then(() => {
-                                doc.save('Companies.pdf');
-                            });
-                        }
-
-                        if (e.format === 'csv') {
-                            const workbook = new ExcelJS.Workbook();
-                            const worksheet = workbook.addWorksheet('Employees');
-
-                            DevExpress.excelExporter.exportDataGrid({
-                                component: e.component,
-                                worksheet: worksheet
-                            }).then(function() {
-                                // https://github.com/exceljs/exceljs#writing-csv
-                                // https://github.com/exceljs/exceljs#reading-csv
-                                workbook.csv.writeBuffer().then(function(buffer) {
-                                    saveAs(new Blob([buffer], {
-                                        type: "application/octet-stream"
-                                    }), "Employees.csv");
-                                });
-                            });
-                        }
-                    },
-
                     columns: [
                         {
                             dataField: "intRoofSOID",
@@ -399,21 +331,6 @@
 
     
 
-    });
-
-    $(function(){
-        $('#exportButton').dxButton({
-            onClick: function() {
-                const doc = new jsPDF();
-                DevExpress.pdfExporter.exportDataGrid({
-                    jsPDFDocument: doc,
-                    component: dataGrid
-                }).then(function() {
-                    doc.save('Customers.pdf');
-                });
-            }
-        });
-        const dataGrid = $('#jobgrid').dxDataGrid('instance');
     });
 
     function showDialog(tag,width,height){
