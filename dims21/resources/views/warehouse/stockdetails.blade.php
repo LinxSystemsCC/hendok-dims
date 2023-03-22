@@ -301,7 +301,12 @@
                         {
                             dataField: "TransactionType",
                             caption: "TransactionType",
-                        }
+                        },
+                        {
+                            dataField: "dteTimeCreate",
+                            caption: "Created",
+                        },
+                            
                     ],
                     onRowDblClick: function (e) {
 
