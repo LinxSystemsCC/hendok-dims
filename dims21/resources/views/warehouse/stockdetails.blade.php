@@ -32,19 +32,10 @@
 </head>
 
 <div class="col-lg-12"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;">
-        <div class="vertical-menu">
-            @include('warehouse.menu')
-        </div>
-    </div>
     <div class="col-lg-10" >
         <div class="col-lg-12 d-inline-flex" >
             <h3 style="flex-grow: 1; padding-left: 15px;">STOCK DETAILS</h3>
         </div>
-
-        <div id="balance" style=""></div>
-
-        <h3 style="flex-grow: 1; padding-left: 15px;">STOCK REPORT</h3>
         <div id="report" style=""></div>
         
     </div>
@@ -72,8 +63,8 @@
     }
 
     .dx-datagrid {
-        height: calc(50vh - 63px);
-        max-height: calc(50h - 63px);
+        height: calc(100vh - 63px);
+        max-height: calc(100h - 63px);
     }
 </style>
 
@@ -114,8 +105,7 @@
 
     $(document).ready(function() {
         var prodCode = "{{ $productCode }}";
-        console.log(prodCode);
-        // console.debug($('#productCode').val())
+        // console.log(prodCode);
         $.ajax({
             url: '{!!url("/getviewGridStockBalance")!!}',
             type: "GET",
@@ -166,6 +156,19 @@
                         });
                         e.cancel = true;
                     },
+
+                    // Item Code
+                    // Item Name	
+                    // Item Group	
+                    // Last Mover	
+                    // Mov Type	
+                    // Last Move 
+                    // Date/time	
+                    // Location	
+                    // Item Qty	
+                    // Qty Type	
+                    // Job Id	
+                    // strItem
 
                     columns: [
                         {
@@ -249,6 +252,10 @@
                         e.cancel = true;
                     },
 
+                
+                    // Job Id	
+                    // strItem
+
                     columns: [
                         {
                             dataField: "strErpItemCode",
@@ -264,49 +271,50 @@
                         }, 
                         {
                             dataField: "Username",
-                            caption: "User Name",
-                        }, 
-                        {
-                            dataField: "mnyPalletQty",
-                            caption: "Qty", dataType: "number", format: "#0",
-                        }, 
-                        {
-                            dataField: "MinLevel",
-                            caption: "Min Level",
-                        }, 
-                        {
-                            dataField: "MaxLevel",
-                            caption: "Max Level",
-                        }, 
-                        {
-                            dataField: "QtyInStock",
-                            caption: "Stock On Hand",
-                        }, 
-                        {
-                            dataField: "strLocation",
-                            caption: "Location",
-                        },
-                        {
-                            dataField: "intJobId",
-                            caption: "Job Id",
+                            caption: "Last Mover",
                         },
                         {
                             dataField: "strMoveType",
                             caption: "Mov Type",
                         },
                         {
-                            dataField: "strItem",
-                            caption: "strItem",
+                            dataField: "dteTimeCreate",
+                            caption: "Last Move Date/Time",
+                        },
+                        {
+                            dataField: "strLocation",
+                            caption: "Location",
+                        },
+                        {
+                            dataField: "mnyPalletQty",
+                            caption: "Qty", 
+                            dataType: "number", 
+                            format: "#0",
                         },
                         {
                             dataField: "TransactionType",
-                            caption: "TransactionType",
+                            caption: "Qty Type",
                         },
+                        
+                        // {
+                        //     dataField: "MinLevel",
+                        //     caption: "Min Level",
+                        // }, 
+                        // {
+                        //     dataField: "MaxLevel",
+                        //     caption: "Max Level",
+                        // }, 
+                         
+                        
                         {
-                            dataField: "dteTimeCreate",
-                            caption: "Created",
+                            dataField: "intJobId",
+                            caption: "Job Id",
                         },
-                            
+                        
+                        {
+                            dataField: "strItem",
+                            caption: "strItem",
+                        }
                     ],
                     onRowDblClick: function (e) {
 
