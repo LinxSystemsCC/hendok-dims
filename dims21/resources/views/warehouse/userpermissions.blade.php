@@ -93,6 +93,7 @@ if ((Auth::guest()))
             </table>
         
     </div>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createjob" style="margin-left:15px; margin-top:10px;" id="saveUserPermissions">Save</button>
 </div>
 
 
