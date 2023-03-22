@@ -41,9 +41,10 @@
         <div class="col-lg-12 d-inline-flex" >
             <h3 style="flex-grow: 1; padding-left: 15px;">STOCK DETAILS</h3>
         </div>
-        
+
         <div id="balance" style=""></div>
 
+        <h3 style="flex-grow: 1; padding-left: 15px;">STOCK REPORT</h3>
         <div id="report" style=""></div>
         
     </div>
