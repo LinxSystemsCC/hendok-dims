@@ -1067,6 +1067,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateSavedLabels', [WareHouseController::class,'updateSavedLabels']);  
     Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);  
     Route::get('getUpliftmentDetails',[WareHouseController::class,'getUpliftmentDetails']);
+    Route::post('deleteUpliftmentPost',[WareHouseController::class,'deleteUpliftmentPost']);
+    Route::get('upliftImageGetter/{upliftmentnumber}',[WareHouseController::class,'upliftImageGetter']);
     Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']); 
     Route::post('deleteMappedLabels', [WareHouseController::class,'deleteMappedLabels']);  
     Route::post('xmlUserGridPermsPost',[WareHouseController::class,'xmlUserGridPermsPost']);  
