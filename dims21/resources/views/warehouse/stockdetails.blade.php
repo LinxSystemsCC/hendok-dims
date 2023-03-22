@@ -148,11 +148,6 @@
                     export: {
                         enabled: true
                     },
-                    editing: {
-                        mode: 'batch',
-                        allowUpdating: true,
-                        allowDeleting: true,
-                    },
                     selection: {
                         mode: 'single',
                     },
@@ -234,11 +229,6 @@
                     },
                     export: {
                         enabled: true
-                    },
-                    editing: {
-                        mode: 'batch',
-                        allowUpdating: true,
-                        allowDeleting: true,
                     },
                     selection: {
                         mode: 'single',
