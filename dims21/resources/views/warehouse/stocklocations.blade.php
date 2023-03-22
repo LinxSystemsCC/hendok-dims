@@ -187,7 +187,7 @@
 
                         }, {
                             dataField: "QtyInStock",
-                            caption: "Stock On Hand",
+                            caption: "Sage Qty",
 
                         }
                     ],
