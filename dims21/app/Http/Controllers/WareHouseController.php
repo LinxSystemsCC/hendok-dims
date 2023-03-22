@@ -320,6 +320,7 @@ class WareHouseController extends Controller
         $userid = $request->get('userid');
         DB::Connection('sqlsrv2')->statement("update tbldimsusers set strpickingteams='' where UserID =".$userid."");
     }
+    
     public function userpermissions($userid){
         $permissions = DB::connection('sqlsrv2')->select("select * from viewUserPermissions Where UserID =".$userid ." and allowView <> 0");
         $username = DB::connection('sqlsrv2')->select("select UserName from tbldimsusers Where UserID =".$userid ."");
@@ -349,6 +350,49 @@ class WareHouseController extends Controller
         $upliftdetails = DB::connection('sqlsrv2')->select("exec spGetUpliftmentDetails ?", array($upliftmentNumber));
         return response()->json($upliftdetails);
 
+    }
+    public function deleteUpliftmentPost(Request $request){
+
+        $intUpliftmentNumber = $request->get('intUpliftmentNumber');
+        
+        DB::connection('sqlsrv2')->statement('exec spUpliftmentDelete ?', array($intUpliftmentNumber));
+
+    }
+    public function upliftImageGetter($upliftmentnumber){
+        
+        $returndata = DB::connection('sqlsrv2') ->select("select image from tblUpliftmentPhotos where intUpliftment = ".$upliftmentnumber);
+        foreach ($returndata as $row) {
+            $base64Image = hex2bin($row->image);
+
+    // Get the MIME type of the image from the base64-encoded string
+    $finfo = finfo_open();
+    $mimeType = finfo_buffer($finfo, $base64Image, FILEINFO_MIME_TYPE);
+    finfo_close($finfo);
+
+    // Generate the appropriate data URI scheme based on the MIME type of the image
+    switch ($mimeType) {
+        case 'image/png':
+            $uriScheme = 'data:image/png;base64,';
+            break;
+        case 'image/jpeg':
+            $uriScheme = 'data:image/jpeg;base64,';
+            break;
+        case 'image/gif':
+            $uriScheme = 'data:image/gif;base64,';
+            break;
+        // Add cases for other supported image formats here
+        default:
+            $uriScheme = 'data:image/bmp;base64,';
+            break;
+    }
+
+    // Prefix the base64-encoded string with the appropriate data URI scheme
+    $dataURI = $uriScheme . base64_encode($base64Image);
+
+    // Replace the binary image data with the data URI in the row object
+    $row->image = $dataURI;
+        }
+        return view('warehouse/upliftmentimagepage')->with('imagedata', $returndata);
     }
     public function getUpliftmentRecords(){
         

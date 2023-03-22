@@ -517,6 +517,8 @@
                     ],
                     onRowClick: function(e) {
                         var upliftmentNumber = e.data.intUpliftmentNumber;
+                        
+                        
 
                         console.log("Creating details...");
                         $.ajax({
@@ -526,83 +528,13 @@
                             upliftmentNumber: upliftmentNumber
                         },
                         success: function(data) {
-                            // Create a new modal popup
-                            console.log("Creating Getting details...");
-                            var popup = $("<div>").appendTo(document.body).addClass("popup").dxPopup({
-                                title: "Upliftment Details",
-                                width: 800,
-                                height: 600,
-                                toolbarItems: [{
-                                    widget: "dxButton",
-                                    location: "after",
-                                    
-                                    options: {
-                                        
-                                        text: "Close",
-                                        onClick: function() {
-                                            console.log("Hiding...");
-                                            popup.hide();
-                                        }
-                                    }
-                                }],
-                                contentTemplate: function(contentElement) {
-                                    // Create a new datagrid to display the details
-                                    console.log("Creating columns...");
-                                    $("<div>").appendTo(contentElement).dxDataGrid({
-                                        dataSource: data,
-                                        columns: [
-                                            {
-                                                dataField: "intUpliftmentNumber",
-                                                caption: "Uplift ID",
-                                            }, 
-                                            {
-                                                dataField: "PastelCode",
-                                                caption: "Item Code",
-                                            },
-                                            {
-                                                dataField: "PastelDescription",
-                                                caption: "Item Description",
-                                            },
-                                            {
-                                                dataField: "Qty",
-                                                caption: "Quantity",
-                                            },
-                                            {
-                                                dataField: "weight",
-                                                caption: "Weight",
-                                            },
-                                            {
-                                                dataField: "comment",
-                                                caption: "Comment",
-                                            }
-                                        ]
-                                    });
+                        
+                        showPopup(data);
+                        }});
+                    // Get the data for the clicked row
 
-                                    // Create a Close button
-                                    console.log("Creating popup...");
-                                    $("<div>").appendTo(contentElement).dxButton({
-                                        text: "Close",
-                                        onInitialized: function(e) {
-                                        // Attach an event listener to the button to hide and dispose of the popup
-                                        e.element.on("click", function() {
-                                            popup.hide();
-                                            popup.dxPopup("instance").dispose();
-                                            console.log("GO AWAY");
-                                        });
-                                        }
-                                    });
-                                },
-                                onHidden: function() {
-                                // Destroy the popup when it is hidden
-                                popup.dxPopup("instance").dispose();
-                                }
-                            });
-
-                    
-        popup.dxPopup("show");
-            }
-        });
-    }
+                    // Show the popup with the data for the clicked row
+                    }
             });
         }
         });
@@ -625,6 +557,7 @@
             $(this).addClass("active").siblings().removeClass("active");
         });
 
+        
     });
 
 
@@ -689,4 +622,127 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
+    function showPopup(data) {
+    // Create a new div to hold the popup content
+    var content = $("<div>");
+
+    // Create a new instance of the dxPopup widget
+    
+    var intUpliftForImage = data[0].intUpliftmentNumber;
+    console.log(intUpliftForImage);
+    var popup = $("<div>").appendTo(document.body).dxPopup({
+    title: "Upliftment Details",
+    width: 800,
+    height: 600,
+    toolbarItems: [
+    {
+        widget: "dxButton",
+        location: "before",
+        options: {
+            text: "Upliftment Image",
+            onClick: function() {
+                window.open('{!!url("/upliftImageGetter")!!}/'+intUpliftForImage, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+            }
+        }
+    },
+    {
+        widget: "dxButton",
+        location: "after",
+        options: {
+            text: "Delete",
+            onClick: function() {
+                console.log("DELETING");
+                $.ajax({
+                    url: '{!!url("/deleteUpliftmentPost")!!}',
+                    type: 'POST',
+                    data: {
+                        intUpliftmentNumber: intUpliftForImage
+                    },
+                    success: function(data) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+    },
+    {
+        widget: "dxButton",
+        location: "after",
+        options: {
+            text: "Close",
+            onClick: function() {
+                popup.hide();
+            }
+        }
+    }
+],
+
+    contentTemplate: function(contentElement) {
+        // Add the content to the popup
+        content.appendTo(contentElement);
+        // Create a Close button
+        $("<div>").appendTo(contentElement).dxButton({
+            text: "Close",
+            onInitialized: function(e) {
+                // Attach an event listener to the button to hide and dispose of the popup
+                e.element.on("click", function() {
+                    popup.hide();
+                });
+            }
+        });
+    },
+    onHidden: function() {
+        // Destroy the popup when it is hidden
+        popup.dxPopup("instance").dispose();
+    }
+}).dxPopup("instance");
+    // Create a new datagrid to display the details
+    console.log("Creating columns...");
+    console.log(data);
+    $("<div>").appendTo(content).dxDataGrid({
+        dataSource: data,
+        columns: [
+            {
+                dataField: "intUpliftmentNumber",
+                caption: "Uplift ID",
+            }, 
+            {
+                dataField: "PastelCode",
+                caption: "Item Code",
+            },
+            {
+                dataField: "PastelDescription",
+                caption: "Item Description",
+            },
+            {
+                dataField: "Qty",
+                caption: "Quantity",
+            },
+            {
+                dataField: "weight",
+                caption: "Weight",
+            },
+            {
+                dataField: "comment",
+                caption: "Comment",
+            }
+        ]
+    });
+
+    // Create a Close button
+    console.log("Creating popup...");
+    $("<div>").appendTo(content).dxButton({
+        text: "Close",
+        onInitialized: function(e) {
+            // Attach an event listener to the button to hide and dispose of the popup
+            e.element.on("click", function() {
+                popup.hide();
+            });
+        }
+    });
+
+    // Show the popup
+    popup.show();
+}
+
 </script>
