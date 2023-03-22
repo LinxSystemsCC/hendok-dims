@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <link rel="stylesheet" href="{{ asset('css/jobmodulestyle.css') }}">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
@@ -39,7 +39,9 @@
         </div>
     </div>
     <div class="col-lg-10" >
-        
+        @foreach($imagedata as $val)
+        <img src="{{$val->image}}">
+        @endforeach
     </div>
 </div>
 <style>
