@@ -286,7 +286,7 @@
                             caption: "Location",
                         },
                         {
-                            dataField: "mnyPalletQty",
+                            dataField: "mnyEstimatedPallets",
                             caption: "Qty", 
                             dataType: "number", 
                             format: "#0",
