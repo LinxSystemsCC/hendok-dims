@@ -163,7 +163,7 @@ class WareHouseController extends Controller
 
     public function labelmapping(){
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
-        $label = DB::connection('sqlsrv2')->select("select * from tblPrinterLabels");
+        $label = DB::connection('sqlsrv2')->select("select * from tblPrinterLabels order by strLabelName");
         return view('warehouse/labelmapping')->with('dept',$dept)->with('label',$label);
     }
 
