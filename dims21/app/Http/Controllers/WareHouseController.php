@@ -700,11 +700,11 @@ class WareHouseController extends Controller
         $UserID = $request->get("UserID");
         $permissions = $request->get("CheckBoxes");
         //dd($UserID);
-        //dd($permissions);
+        // dd($permissions);
         DB::connection('sqlsrv2')->statement("update tblDIMSUserPermissions set Selected = 0 where UserID = ".$UserID);
 
         foreach ($permissions as $permission)
-            //dump($permission);
+            // dump($permission);
             $returndata = DB::connection('sqlsrv2') ->statement('exec spUpdateUserPermissions ?,?', array($UserID,$permission));
         
 
@@ -1122,6 +1122,15 @@ class WareHouseController extends Controller
             ->select("select * from viewLastKnownMovement where  strErpItemCode ='".$ItemCode."' order by dteTimeCreate");
         return response()->json($gridstock);
     }
+
+    public function getviewGridStockDetails(Request $request){
+        $ItemCode = $request->get("ItemCode");
+        $gridstock = DB::connection('sqlsrv2')
+            ->select("select * from viewLastKnownMovement where  strErpItemCode ='".$ItemCode."' order by dteTimeCreate");
+        return response()->json($gridstock);
+    }
+
+    
 
     public function choosemachine($itemCode){
         /*  $dept = DB::connection('sqlsrv2')

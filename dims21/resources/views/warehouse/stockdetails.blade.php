@@ -1,174 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ asset('css/jobmodulestyle.css') }}">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
-
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-
-
-
-    <!-- Select2 JS -->
-
-
-    <!-- DevExtreme library -->
-
-    <!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-
-    <style>
-        .vertical-menu {
-            width: 200px;
-        }
-
-        .vertical-menu a {
-            background-color: #eee;
-            color: black;
-            display: block;
-            padding: 12px;
-            text-decoration: none;
-        }
-
-        .vertical-menu a:hover {
-            background-color: #ccc;
-        }
-
-        .vertical-menu a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .stock {
-            background-color: #ccc !important;
-        }
-    </style>
-
+    <!-- DevExtreme theme -->
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
 </head>
-<body>
 
-
-<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;border-right: 2px solid black;">
-
-        <div class="vertical-menu">
-            @include('warehouse.menu')
-        </div>
-    </div>
+<div class="col-lg-12"  style="background: white;">
     <div class="col-lg-10" >
-        <!--a href='{!!url("/stocklocation")!!}' class="stock">Back</a-->
-        <br>
-        <div class="contentWrapper">
-            <div class="content" id="profile"  aria-labelledby="profile-tab">
-                <h5>Detail Bin Balance</h5>
-                    <input type="hidden" id="productCode" value="{{$productCode}}">
-                    
-                    
-
-                    <div id="balance" style="width: 100% !important;">
-                    </div>
-            </div>
-            <br>
-            <div class="content" id="profile"  aria-labelledby="profile-tab">
-                <h5>Detail Bin Report</h5>
-                    <input type="hidden" id="productCode" value="{{$productCode}}">
-                    
-                    
-
-                    <div id="report" style="width: 100% !important;">
-                    </div>
-            </div>
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">STOCK DETAILS</h3>
         </div>
-
-
-    </div>
-    <div title="JOB" id="viewjob" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="viewjobTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewjobTitle">Job Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div title="Location Type" id="createlocationtype" class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="createlocationtypeTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createlocationtypeTitle">Create A Location Type</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="strLocationType"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Description</label>
-                        <input  class="form-control input-sm col-xs-1 " id="strLocationType" style="width: 100%" required>
-                    </div>
-                </div>
-                <br><br><br>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn-danger btn-lg" id="savelocationtype" style="width: 100%;">SAVE</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div title="Location Name" id="createlocationname" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createlocationname" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createlocationnameTitle">Create A Location</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="strLocationName"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Name</label>
-                        <input  class="form-control input-sm col-xs-1 " id="strLocationName" style="width: 100%" required>
-                    </div>
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="locationtype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Location Type</label>
-
-                    </div>
-                </div>
-                <br><br><br>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn-danger btn-lg" id="savelocationame" style="width: 100%;">SAVE</button>
-                </div>
-            </div>
-        </div>
-
+        <div id="report" style=""></div>
+        
     </div>
 </div>
+
+<style>
+    .dx-datagrid-table{
+        font-size:15px;
+    }
+
+    .dx-datagrid .dx-link {
+        color: #df2413;
+    }
+
+    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+        font-weight: 500;
+        background-color: #df2413;
+        color: #fff;
+    }
+
+    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+        color: #df2413;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    .dx-datagrid {
+        height: calc(100vh - 63px);
+        max-height: calc(100h - 63px);
+    }
+</style>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+
 <script>
 
     const tabs = document.querySelector(".wrapper");
@@ -187,26 +104,42 @@
 
 
     $(document).ready(function() {
-        console.debug($('#productCode').val())
+        var prodCode = "{{ $productCode }}";
+        // console.log(prodCode);
         $.ajax({
             url: '{!!url("/getviewGridStockBalance")!!}',
             type: "GET",
             data: {
-                ItemCode:$('#productCode').val()
+                ItemCode: prodCode
             },
             success: function (data) {
                 $("#balance").dxDataGrid({
-                    dataSource: data, //as json
+                    dataSource:data, //as json
+                    hoverStateEnabled: true,
                     showBorders: true,
-                    filterRow: {visible: true},
-                    filterPanel: {visible: true},
-                    headerFilter: {visible: true},
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
-                    paging: {
-                        pageSize: 20,
+                    columnAutoWidth: true,
+                    scrolling: {
+                        rowRenderingMode: 'infinite',
+                    },
+                    paging:{
+                        pageSize: 10,
+                    },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [5, 10, 20, 50, 'all'],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true,
                     },
                     export: {
                         enabled: true
+                    },
+                    selection: {
+                        mode: 'single',
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
@@ -224,31 +157,38 @@
                         e.cancel = true;
                     },
 
+                    // Item Code
+                    // Item Name	
+                    // Item Group	
+                    // Last Mover	
+                    // Mov Type	
+                    // Last Move 
+                    // Date/time	
+                    // Location	
+                    // Item Qty	
+                    // Qty Type	
+                    // Job Id	
+                    // strItem
+
                     columns: [
                         {
                             dataField: "strErpItemCode",
                             caption: "Item Code",
-                            width: 150,
                         }, {
                             dataField: "Description_1",
                             caption: "Item Name",
-                            width: 460,
                         }, {
                             dataField: "ItemGroupDescription",
                             caption: "Item Group",
-                            width: 180,
                         }, {
                             dataField: "Username",
                             caption: "User Name",
-                            width: 140,
                         }, {
                             dataField: "PalletQty",
                             caption: "Qty", dataType: "number", format: "#0",
-                            width: 80,
                         },{
                             dataField: "strLocation",
                             caption: "Location",
-                            width: 80,
                         },
 
                     ],
@@ -265,21 +205,36 @@
             url: '{!!url("/getviewGridStockReport")!!}',
             type: "GET",
             data: {
-                ItemCode:$('#productCode').val()
+                ItemCode:prodCode
             },
             success: function (data) {
                 $("#report").dxDataGrid({
-                    dataSource: data, //as json
+                    dataSource:data, //as json
+                    hoverStateEnabled: true,
                     showBorders: true,
-                    filterRow: {visible: true},
-                    filterPanel: {visible: true},
-                    headerFilter: {visible: true},
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
-                    paging: {
-                        pageSize: 20,
+                    columnAutoWidth: true,
+                    scrolling: {
+                        rowRenderingMode: 'infinite',
+                    },
+                    paging:{
+                        pageSize: 10,
+                    },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [5, 10, 20, 50, 'all'],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true,
                     },
                     export: {
                         enabled: true
+                    },
+                    selection: {
+                        mode: 'single',
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
@@ -297,71 +252,68 @@
                         e.cancel = true;
                     },
 
+                
+                    // Job Id	
+                    // strItem
+
                     columns: [
                         {
                             dataField: "strErpItemCode",
                             caption: "Item Code",
-                            width: 150,
                         }, 
                         {
                             dataField: "Description_1",
                             caption: "Item Name",
-                            width: 460,
                         }, 
                         {
                             dataField: "ItemGroupDescription",
                             caption: "Item Group",
-                            width: 180,
                         }, 
                         {
                             dataField: "Username",
-                            caption: "User Name",
-                            width: 140,
-                        }, 
-                        {
-                            dataField: "mnyPalletQty",
-                            caption: "Qty", dataType: "number", format: "#0",
-                            width: 80,
-                        }, 
-                        {
-                            dataField: "MinLevel",
-                            caption: "Min Level",
-                            width: 80,
-                        }, 
-                        {
-                            dataField: "MaxLevel",
-                            caption: "Max Level",
-                            width: 80,
-                        }, 
-                        {
-                            dataField: "QtyInStock",
-                            caption: "Stock On Hand",
-                            width: 80,
-                        }, 
-                        {
-                            dataField: "strLocation",
-                            caption: "Location",
-                            width: 180,
-                        },
-                        {
-                            dataField: "intJobId",
-                            caption: "Job Id",
-                            width: 80,
+                            caption: "Last Mover",
                         },
                         {
                             dataField: "strMoveType",
                             caption: "Mov Type",
-                            width: 80,
                         },
                         {
-                            dataField: "strItem",
-                            caption: "strItem",
-                            width: 80,
+                            dataField: "dteTimeCreate",
+                            caption: "Last Move Date/Time",
+                        },
+                        {
+                            dataField: "strLocation",
+                            caption: "Location",
+                        },
+                        {
+                            dataField: "mnyEstimatedPallets",
+                            caption: "Qty", 
+                            dataType: "number", 
+                            format: "#0",
                         },
                         {
                             dataField: "TransactionType",
-                            caption: "TransactionType",
-                            width: 80,
+                            caption: "Qty Type",
+                        },
+                        
+                        // {
+                        //     dataField: "MinLevel",
+                        //     caption: "Min Level",
+                        // }, 
+                        // {
+                        //     dataField: "MaxLevel",
+                        //     caption: "Max Level",
+                        // }, 
+                         
+                        
+                        {
+                            dataField: "intJobId",
+                            caption: "Job Id",
+                        },
+                        
+                        {
+                            dataField: "strItem",
+                            caption: "strItem",
                         }
                     ],
                     onRowDblClick: function (e) {
