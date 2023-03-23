@@ -99,9 +99,8 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="customers">Customer Name</label>
-                    <select  class="form-select" id="customers" style="width: 100%" required>
-                    <option></option>
-                </select>
+                    <input  class="form-control input-sm col-xs-1" id="customers" style="width: 100%" required>
+                    
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="selectedarea">Selected Area</label>
@@ -109,9 +108,8 @@
                     
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="area">Area Name</label>
-                    <select  class="form-select" id="area" style="width: 100%" required>
-                    <option></option>
+                    <label class="control-label" for="area">Custom Area Selection</label>
+                    <input readonly  class="form-control input-sm col-xs-1" id="area" style="width: 100%" required>
                 </select>
                 </div>
                 <div class="form-group">
@@ -121,14 +119,16 @@
                 </select>
                 </div>
                 <div class="form-group">
+                    <label class="control-label" for="altaddress">Alternative Address Name</label>
+                    <textarea  class="form-control input-sm col-xs-1" id="altaddress" style="width: 100%" required></textarea>
+                </div>
+                <div class="form-group">
                     <label class="control-label" for="invoice"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice</label>
-                    <select  class="form-select" id="invoice" style="width: 100%" required>
-                        <option></option>
-                    </select>
+                    <input readonly  class="form-control input-sm col-xs-1" id="invoice" style="width: 100%" required>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="reasonpickup"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reason for Pickup</label>
-                    <textarea  type="text" class="form-control input-sm col-xs-1" id="reasonpickup"></textarea>
+                    <textarea   class="form-control input-sm col-xs-1" id="reasonpickup"></textarea>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="uploadphoto"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Photo</label>
@@ -298,26 +298,35 @@
                             data: {
                                 company: $("#company").val()
                             },
-                            success: function (data) {
-                                var toAppend = '';
+                            success: function (datacustomerdata) {
                                 $("#customers").empty();
-                                toAppend += '<option></option>';
-                                $.each(data,function(i,o){
-
-                                    toAppend += '<option value="'+o.CustomerPastelCode+'">'+o.StoreName+'</option>';
-                                });
-                                $("#customers").append(toAppend);
                                 
-                            }
-                        });
+                                $("#invoice").empty();
+                                $("#address").empty();
+                                $("#area").empty();
+                                $("#selectedarea").empty();
+                                var jArrayCustomers = JSON.stringify(datacustomerdata);
+                                var finalDataCustomer = $.map(JSON.parse(jArrayCustomers), function (item) {
+                                    return {
+                                        CustomerCode: item.CustomerPastelCode,
+                                        StoreName: item.StoreName,
+                                    }
 
-                    });
-                    $("#inputProdQty").change(function(){
-                        $('#inputProdWeight').val($('#inputProdQty').val()*$('#inputProdWeightHidden').val())
-                    });
-                    $("#customers").change(function () {
-
-                        $.ajax({
+                                });
+                                var inputCustomer = $('#customers').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["CustomerCode","StoreName"],
+                                    searchIn: ["CustomerCode","StoreName"],
+                                    data: finalDataCustomer
+                                });
+                                inputCustomer.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#customers').val(data.CustomerCode);
+                                    $.ajax({
 
                             url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
                             type: "POST",
@@ -326,17 +335,34 @@
                                 company: $("#company").val()
                             },
                             success: function (data) {
-                                var toAppend = '';
-                                $("#area").empty();
-                                toAppend += '<option></option>';
-                                $.each(data.routes,function(i,o){
 
-                                    toAppend += '<option value="'+o.Route+'">'+o.Route+'</option>';
+                                var jArrayAreas = JSON.stringify(data.routes);
+                                console.log(jArrayAreas)
+                                var finalDataAreas = $.map(JSON.parse(jArrayAreas), function (item) {
+                                    return {
+                                        routeID: item.routeID,
+                                        Route: item.Route,
+                                    }
+
                                 });
-                                $("#area").append(toAppend);
+                                var inputAreas = $('#area').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["routeID","Route"],
+                                    searchIn: ["routeID","Route"],
+                                    data: finalDataAreas
+                                });
+                                
+                                inputAreas.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#area').val(data.Route);
+                                });
 
                                 $("#address").empty();
-                                toAppend='';
+                                var toAppend='';
                                 $.each(data.addresses,function(i,o){
 
                                     toAppend += '<option value="'+o.strAddress+'">'+o.strAddress+'</option>';
@@ -344,13 +370,30 @@
                                 $("#address").append(toAppend);
 
                                 $("#invoice").empty();
-                                toAppend='';
-                                toAppend += '<option></option>';
-                                $.each(data.invoices,function(i,o){
+                                var jArrayInvoices = JSON.stringify(data.invoices);
+                                console.log(jArrayInvoices);
+                                console.log(data.invoices);
+                                var finalDataInvoices = $.map(JSON.parse(jArrayInvoices), function (item) {
+                                    return {
+                                        InvNumber: item.InvNumber
+                                    }
 
-                                    toAppend += '<option value="'+o.InvNumber+'">'+o.InvNumber+'</option>';
                                 });
-                                $("#invoice").append(toAppend);
+                                var inputInvoices = $('#invoice').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["InvNumber"],
+                                    searchIn: ["InvNumber"],
+                                    data: finalDataInvoices
+                                });
+                                
+                                inputInvoices.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#invoice').val(data.InvNumber);
+                                });
 
                                 $("#selectedarea").val();
                                 $.each(data.areas,function(i,o){
@@ -362,7 +405,16 @@
                             }
                         });
 
+                                });
+                                
+                            }
+                        });
+
                     });
+                    $("#inputProdQty").change(function(){
+                        $('#inputProdWeight').val($('#inputProdQty').val()*$('#inputProdWeightHidden').val())
+                    });
+                    
 
         $('#savesupliftment').click(function(){
             var checkedLines = Array();
@@ -406,7 +458,14 @@
                         else {
                         formData.append('area', $('#selectedarea').val());
                         }
+                        
+                        if ($('#altaddress').val().length > 0){
+                        formData.append('address', $('#altaddress').val());
+                        }
+                        else {
                         formData.append('address', $('#address').val());
+                        }
+                        
                         formData.append('customers', $('#customers').val());
                         formData.append('company', $('#company').val());
                         formData.append('date', $('#date').val());
@@ -698,7 +757,6 @@
 }).dxPopup("instance");
     // Create a new datagrid to display the details
     console.log("Creating columns...");
-    console.log(data);
     $("<div>").appendTo(content).dxDataGrid({
         dataSource: data,
         columns: [

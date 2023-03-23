@@ -472,9 +472,8 @@ class WareHouseController extends Controller
         $areas = DB::connection('sqlsrv3')
         ->select(" Exec spReturnAreaCustomer ?,?",
             array($Customer,$company));
-            
         
-        $routes = DB::connection('sqlsrv3')->select("select * from tblroutes");
+        $routes = DB::connection('sqlsrv3')->select("select * from viewEvolutionGridAreas where company = '" .$company."'" );
             
         $invoices = DB::connection('sqlsrv3')
         ->select(" Exec spReturnCustomerInvoiceList ?,?",
