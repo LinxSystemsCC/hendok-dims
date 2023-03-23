@@ -172,7 +172,7 @@
                             caption: "Item Group",
 
                         }, {
-                            dataField: "mnyPalletQty",
+                            dataField: "mnyEstimatedPallets",
                             caption: "Qty",
                             dataType:"number",
                             format: "#0",
