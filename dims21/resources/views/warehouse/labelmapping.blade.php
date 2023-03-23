@@ -348,6 +348,9 @@
                         },{
                             dataField: "strLabelConfig",
                             caption: "Configuration",
+                        },{
+                            dataField: "strPrinterName",
+                            caption: "Printer",
                         },
                     ],
                     onRowDblClick:function(e){
