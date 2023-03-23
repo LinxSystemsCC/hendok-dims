@@ -306,10 +306,10 @@
                         // }, 
                          
                         
-                        {
-                            dataField: "intJobId",
-                            caption: "Job Id",
-                        },
+                        // {
+                        //     dataField: "intJobId",
+                        //     caption: "Job Id",
+                        // },
                         
                         {
                             dataField: "strItem",
