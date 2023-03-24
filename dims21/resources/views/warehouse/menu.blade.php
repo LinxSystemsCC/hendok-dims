@@ -203,7 +203,7 @@ if ((Auth::guest()))
 
                         <li>
                             @if($print !="0")
-                            <a href=''>Re-Print</a>
+                            <a href='/wmaxreprint'>Re-Print</a>
                             @endif
                         </li>
 

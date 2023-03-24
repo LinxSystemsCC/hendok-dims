@@ -144,7 +144,7 @@
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('getviewGridStockSummary');
+                        const worksheet = workbook.addWorksheet('StockLocation');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -152,7 +152,7 @@
                             autoFilterEnabled: true,
                         }).then(() => {
                             workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'getviewGridStockSummary.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'StockLocation.xlsx');
                             });
                         });
                         e.cancel = true;
