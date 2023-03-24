@@ -2,6 +2,8 @@
 <html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="icon" type="image/png" href="{{url('images/dimslogo.png')}}">
+    <title>Upliftments</title>
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -41,7 +43,7 @@
         <div class="col-lg-12 d-inline-flex" >
             <h3 style="flex-grow: 1; padding-left: 15px;">Upliftments</h3>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newarea">
+            <button type="button" id="newupliftmentbutton"class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newarea">
                 New Upliftment
             </button>
         </div>
@@ -56,7 +58,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newuserLabel">Create New Upliftment</h1>
+                <h1 class="modal-title fs-5" id="newuserLabel">Create/Edit Upliftment</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             
@@ -146,9 +148,15 @@
                 </div>
                 
                 <button type="button" id="savetempproducts" class="btn btn-success" >Add</button>
-                <div style="width: 100%; height: 5%%;" id="gridBox"></div>
+                <div style="width: 100%; height: 5%;" id="gridBox"></div>
+                <div style="width: 100%; height: 5%;" id="gridBoxCurrent"></div>
 
             <div class="modal-footer">
+                <button type="button" id="updateupliftment" class="btn btn-success" hidden>Update</button>
+                <button type="button" id="imageupliftment" class="btn btn-success" hidden>Images</button>
+                <button type="button" id="enquireupliftment" class="btn btn-success" hidden>Enquiry</button>
+                <button type="button" id="editupliftment" class="btn btn-success" hidden>Edit</button>
+
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="savesupliftment" class="btn btn-success" >Save</button>
             </div>
@@ -228,7 +236,6 @@
 
     });
     $(document).ready(function() {
-        createDataGrid();
         $("#savetempproducts").click(function() {
             if ($('#inputProdCode').val().length>0 && $('#inputProdDesc').val().length>0 && $('#inputProdWeight').val()!=0 && $('#inputProdQty').val()!=0 )
                 {
@@ -415,7 +422,26 @@
                         $('#inputProdWeight').val($('#inputProdQty').val()*$('#inputProdWeightHidden').val())
                     });
                     
+                    $('#newupliftmentbutton').click(function(){
 
+                        createDataGrid();
+                        $('#imageupliftment').prop('hidden',true);
+                        $('#updateupliftment').prop('hidden',true);
+                        $('#enquireupliftment').prop('hidden',true);
+                        $('#editupliftment').prop('hidden',true);
+                        $('#saveupliftment').prop('hidden',false);
+                        
+                        $('#invoice').val('');
+                        $('#reasonpickup').val('');
+                        $('#area').val('');
+                        $('#selectedarea').val('');
+                        $('#altaddress').val('');
+                        $('#address').val('');
+                        $('#customers').val('');
+                        $('#company').val('');
+                        $('#date').val('');
+                        $('#upliftreason').val('');
+                    });
         $('#savesupliftment').click(function(){
             var checkedLines = Array();
             var grid = $("#gridBox").dxDataGrid("getDataSource").store().load().done(function (data) {
@@ -425,8 +451,8 @@
                 $.each(checkedLines ,function(key,value) {
                     if (value.Quantity !=undefined || value.Quantity !=null){
                     gridResults= gridResults + "<result>";
-                    gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
-                    gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
+                    gridResults= gridResults + "<PastelCode>"+value.Code+"</PastelCode>";
+                    gridResults= gridResults + "<PastelDescription>"+value.Name+"</PastelDescription>";
                     gridResults= gridResults + "<Qty>"+value.Quantity+"</Qty>";
                     gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
                     gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
@@ -544,6 +570,9 @@
                             dataField: "strUpliftAction",
                             caption: "Uplift Action",
                         },{
+                            dataField: "strReasonPickup",
+                            caption: "Reason for Upliftment",
+                        },{
                             dataField: "strCompany",
                             caption: "Company",
                         },{
@@ -574,9 +603,26 @@
                         }*/,
                         
                     ],
-                    onRowClick: function(e) {
+                    onRowDblClick: function(e) {
                         var upliftmentNumber = e.data.intUpliftmentNumber;
+                        $('#newarea').modal('toggle');
+                        $('#updateupliftment').prop('hidden',false);
+                        $('#imageupliftment').prop('hidden',false);
+                        $('#enquireupliftment').prop('hidden',false);
+                        $('#editupliftment').prop('hidden',false);
+                        $('#saveupliftment').prop('hidden',true);
                         
+                        
+                        $('#invoice').val(e.data.strInvoice);
+                        $('#reasonpickup').val(e.data.strUpliftAction);
+                        $('#area').val(e.data.strArea);
+                        $('#selectedarea').val(e.data.strArea);
+                        $('#altaddress').val(e.data.strAddress);
+                        $('#address').val(e.data.strAddress);
+                        $('#customers').val(e.data.strCustomer);
+                        $('#company').val(e.data.strCompany);
+                        $('#date').val(e.data.dteUpliftDate);
+                        $('#upliftreason').val(e.data.strReasonPickup);
                         
 
                         console.log("Creating details...");
@@ -587,8 +633,9 @@
                             upliftmentNumber: upliftmentNumber
                         },
                         success: function(data) {
-                        
-                        showPopup(data);
+                            populateDataGrid(data);
+                        //showPopup(data, e.data);
+
                         }});
                     // Get the data for the clicked row
 
@@ -621,6 +668,8 @@
 
 
     function createDataGrid() {
+        $('#gridBoxCurrent').hide();
+        $('#gridBox').show();
         var dataSource = new DevExpress.data.DataSource({
         store: [],
         paginate: true
@@ -633,6 +682,36 @@
             { dataField: 'Name', caption: 'Item Description' },
             { dataField: 'Quantity', caption: 'Quantity' },
             { dataField: 'Weight', caption: 'Weight' },
+            { dataField: 'Comment', caption: 'Comment' }
+        ],
+        editing: {
+            mode: 'batch',
+            allowDeleting: true
+        },
+        onRowInserted: function(e) {
+            var newRecord = e.data;
+            // retrieve the new record and perform any necessary processing
+        },
+        onRowUpdated: function(e) {
+            var updatedRecord = e.data;
+            // retrieve the updated record and perform any necessary processing
+        }
+    });
+    
+
+}
+function populateDataGrid(datagriddata) {
+        console.log(datagriddata);
+        $('#gridBox').hide();
+        $('#gridBoxCurrent').show();
+    $("#gridBoxCurrent").dxDataGrid({
+        dataSource: datagriddata,
+        
+        columns: [
+            { dataField: 'PastelCode', caption: 'Item Code' },
+            { dataField: 'PastelDescription', caption: 'Item Description' },
+            { dataField: 'Qty', caption: 'Quantity' },
+            { dataField: 'weight', caption: 'Weight' },
             { dataField: 'Comment', caption: 'Comment' }
         ],
         editing: {
@@ -681,7 +760,7 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
-    function showPopup(data) {
+    function showPopup(data, extradata) {
     // Create a new div to hold the popup content
     var content = $("<div>");
 
@@ -694,11 +773,21 @@
     width: 800,
     height: 600,
     toolbarItems: [
-    {
+        {
         widget: "dxButton",
         location: "before",
         options: {
             text: "Upliftment Image",
+            onClick: function() {
+                window.open('{!!url("/upliftImageGetter")!!}/'+intUpliftForImage, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+            }
+        }
+    },
+    {
+        widget: "dxButton",
+        location: "before",
+        options: {
+            text: "Enquiry",
             onClick: function() {
                 window.open('{!!url("/upliftImageGetter")!!}/'+intUpliftForImage, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
             }
@@ -738,66 +827,26 @@
 
     contentTemplate: function(contentElement) {
         // Add the content to the popup
+        $("<div>").appendTo(contentElement).text("Upliftment ID: " + extradata.intUpliftmentNumber);
+        $("<div>").appendTo(contentElement).text("Upliftment Date: " + extradata.dteUpliftDate);
+        $("<div>").appendTo(contentElement).text("Upliftment Action: " + extradata.strUpliftAction);
+        $("<div>").appendTo(contentElement).text("Upliftment Reason: " + extradata.strReasonPickup);
+        $("<div>").appendTo(contentElement).text("Company: " + extradata.strCompany);
+        $("<div>").appendTo(contentElement).text("Customer: " + extradata.strCustomer);
+        $("<div>").appendTo(contentElement).text("Area: " + extradata.strArea);
+        $("<div>").appendTo(contentElement).text("Address: " + extradata.strAddress);
+        $("<div>").appendTo(contentElement).text("Invoice Number: " + extradata.strInvoice);
+
+        $("<div>").appendTo(contentElement).text("Invoice Number: " + extradata.strInvoice);
+    
         content.appendTo(contentElement);
-        // Create a Close button
-        $("<div>").appendTo(contentElement).dxButton({
-            text: "Close",
-            onInitialized: function(e) {
-                // Attach an event listener to the button to hide and dispose of the popup
-                e.element.on("click", function() {
-                    popup.hide();
-                });
-            }
-        });
-    },
-    onHidden: function() {
-        // Destroy the popup when it is hidden
-        popup.dxPopup("instance").dispose();
+        
+        
     }
 }).dxPopup("instance");
-    // Create a new datagrid to display the details
-    console.log("Creating columns...");
-    $("<div>").appendTo(content).dxDataGrid({
-        dataSource: data,
-        columns: [
-            {
-                dataField: "intUpliftmentNumber",
-                caption: "Uplift ID",
-            }, 
-            {
-                dataField: "PastelCode",
-                caption: "Item Code",
-            },
-            {
-                dataField: "PastelDescription",
-                caption: "Item Description",
-            },
-            {
-                dataField: "Qty",
-                caption: "Quantity",
-            },
-            {
-                dataField: "weight",
-                caption: "Weight",
-            },
-            {
-                dataField: "comment",
-                caption: "Comment",
-            }
-        ]
-    });
 
-    // Create a Close button
-    console.log("Creating popup...");
-    $("<div>").appendTo(content).dxButton({
-        text: "Close",
-        onInitialized: function(e) {
-            // Attach an event listener to the button to hide and dispose of the popup
-            e.element.on("click", function() {
-                popup.hide();
-            });
-        }
-    });
+
+  
 
     // Show the popup
     popup.show();
