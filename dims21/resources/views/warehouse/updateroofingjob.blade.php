@@ -86,7 +86,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn-danger btn-lg" id="printadditional" style="width: 100%;">PRINT</button>
+                        <button class="btn btn-danger btn-lg" id="printadditional" style="width: 100%;">PRINT</button>
                     </div>
                 </div>
             </div>
@@ -110,6 +110,8 @@
 <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
 <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+
 
 
 
@@ -127,6 +129,10 @@
     var invoiceorder = '';
 
     $(document).ready(function() {
+
+        var reference = '{!! $reference !!}';
+        var machine = '{!! $machine !!}';
+
         $('#savestatus').click(function(){
             $.ajax({
                 url: '{!!url("/changeRoofingSOStatus")!!}',
@@ -180,10 +186,6 @@
 
         });
 
-        // $('#printjobcard').click(function(){
-        //     //TODO Got to new roofing jobcard for reference and machine (See 'savestatus' above for reference and machine!)
-        // });
-
         $('#printadditional').click(function(){
             $.ajax({
                 url: '{!!url("/printAdditionalRoofingLabels")!!}',
@@ -203,8 +205,24 @@
             });
         });
 
-        var reference = '{!! $reference !!}';
-        var machine = '{!! $machine !!}';
+        $('#printjobcard').click(function(){
+            const datagrid = $('#jobgrid').dxDataGrid('instance');
+
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Areas');
+
+            DevExpress.excelExporter.exportDataGrid({
+                component: datagrid,
+                worksheet,
+                autoFilterEnabled: true,
+            }).then(() => {
+                workbook.xlsx.writeBuffer().then((buffer) => {
+                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), ''+reference+'.xlsx');
+                });
+            });
+        });
+
+        
 
         $.ajax({
             url: '{!!url("/getRoofingSOtoUpdate")!!}',
@@ -214,7 +232,7 @@
                 machine: machine
             },
             success: function (data) {
-                console.log(data);
+                // console.log(data);
 
                 $("#jobgrid").dxDataGrid({
                     dataSource: data, //as json
@@ -324,11 +342,9 @@
                         
                     }
 
-                }).dxDataGrid('instance');
+                });
             }
         });
-
-    
 
     });
 
