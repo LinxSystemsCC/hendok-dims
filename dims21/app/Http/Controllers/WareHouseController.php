@@ -394,6 +394,22 @@ class WareHouseController extends Controller
         }
         return view('warehouse/upliftmentimagepage')->with('imagedata', $returndata);
     }
+    public function upliftEnquiry($upliftmentID){
+        
+        $upliftheaderdetails = DB::connection('sqlsrv2')->select("exec spGetUpliftmentEnquiryDetails ?",array($upliftmentID));
+
+        $upliftmakerdata = DB::connection('sqlsrv2')->select("exec spGetUpliftmentEnquiryHistory ?",array($upliftmentID));
+        return view('warehouse/upliftmentenquirypage')->with('upliftmakerdata', $upliftmakerdata)->with('headerdetails', $upliftheaderdetails);
+
+    }
+    public function upliftmentMessagePost(Request $request){
+        $upliftmentNumber = $request->get('upliftmentNumber');
+        $upliftmentMessage = $request->get('upliftmentMessage');
+        
+        $UserID = Auth::user()->UserID;
+
+        DB::connection('sqlsrv2')->statement("exec spPostUpliftmentMessage ?,?,?",array($upliftmentNumber,$upliftmentMessage,$UserID));
+    }
     public function getUpliftmentRecords(){
         
         $returndata = DB::connection('sqlsrv2') ->select("select * from viewtblUpliftmentData");
@@ -442,6 +458,8 @@ class WareHouseController extends Controller
             }
 
             $dataxml = $request->input('dataxml');
+            
+            $UserID = Auth::user()->UserID;
             $invoice = $request->input('invoice');
             $reasonpickup = $request->input('reasonpickup');
             $area = $request->input('area');
@@ -451,8 +469,9 @@ class WareHouseController extends Controller
             $date = $request->input('date');
             $date=(new \DateTime($date))->format('Y-m-d');
             $upliftmentaction = $request->input('upliftmentaction');
+            $upliftreason=$request->input('upliftreason');
 
-            DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$hexString));
+            DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString,$UserID));
 
     }
     public function getCustomerForSelectedCompany(Request $request){
