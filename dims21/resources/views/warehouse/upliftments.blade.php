@@ -570,8 +570,11 @@
                             dataField: "strUpliftAction",
                             caption: "Uplift Action",
                         },{
+                            dataField: "strReasonUpliftment",
+                            caption: "Upliftment Reason",
+                        },{
                             dataField: "strReasonPickup",
-                            caption: "Reason for Upliftment",
+                            caption: "Upliftment Description",
                         },{
                             dataField: "strCompany",
                             caption: "Company",
@@ -614,7 +617,7 @@
                         
                         
                         $('#invoice').val(e.data.strInvoice);
-                        $('#reasonpickup').val(e.data.strUpliftAction);
+                        $('#reasonpickup').val(e.data.strReasonPickup);
                         $('#area').val(e.data.strArea);
                         $('#selectedarea').val(e.data.strArea);
                         $('#altaddress').val(e.data.strAddress);
@@ -622,7 +625,18 @@
                         $('#customers').val(e.data.strCustomer);
                         $('#company').val(e.data.strCompany);
                         $('#date').val(e.data.dteUpliftDate);
-                        $('#upliftreason').val(e.data.strReasonPickup);
+                        $('#upliftreason').val(e.data.strReasonUpliftment);
+                        const collectRadio = document.getElementById("upliftmentactioncollect");
+                        const deliverRadio = document.getElementById("upliftmentactiondeliver");
+                        if (e.data.strUpliftAction =="Collect"){
+                            deliverRadio.checked = false;
+                            collectRadio.checked = true;
+                        }
+                        else
+                        {
+                            deliverRadio.checked = true;
+                            collectRadio.checked = false;
+                        }
                         
 
                         console.log("Creating details...");

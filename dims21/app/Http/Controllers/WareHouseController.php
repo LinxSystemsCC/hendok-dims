@@ -451,8 +451,9 @@ class WareHouseController extends Controller
             $date = $request->input('date');
             $date=(new \DateTime($date))->format('Y-m-d');
             $upliftmentaction = $request->input('upliftmentaction');
+            $upliftreason=$request->input('upliftreason');
 
-            DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$hexString));
+            DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString));
 
     }
     public function getCustomerForSelectedCompany(Request $request){
