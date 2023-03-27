@@ -215,7 +215,7 @@
                 machine: machine
             },
             success: function (data) {
-                //console.debug(data);
+                console.log(data);
 
                 $("#jobgrid").dxDataGrid({
                     dataSource: data, //as json
