@@ -1544,7 +1544,7 @@ where intDeptID =".$deptId);
         $machine = $request->get("machine");
         // dd($reference, $machine);
         $jobdata = DB::connection('sqlsrv3')->select('exec spGetRoofingSOHeader ?,?',array($reference, $machine));
-        // dd($jobdata);
+        dd($jobdata);
         return response()->json($jobdata);
     }
 
