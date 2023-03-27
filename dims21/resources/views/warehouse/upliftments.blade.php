@@ -155,7 +155,6 @@
                 <button type="button" id="updateupliftment" class="btn btn-success" hidden>Update</button>
                 <button type="button" id="imageupliftment" class="btn btn-success" hidden>Images</button>
                 <button type="button" id="enquireupliftment" class="btn btn-success" hidden>Enquiry</button>
-                <button type="button" id="editupliftment" class="btn btn-success" hidden>Edit</button>
 
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="savesupliftment" class="btn btn-success" >Save</button>
@@ -428,7 +427,6 @@
                         $('#imageupliftment').prop('hidden',true);
                         $('#updateupliftment').prop('hidden',true);
                         $('#enquireupliftment').prop('hidden',true);
-                        $('#editupliftment').prop('hidden',true);
                         $('#saveupliftment').prop('hidden',false);
                         
                         $('#invoice').val('');
@@ -590,20 +588,13 @@
                         },{
                             dataField: "strInvoice",
                             caption: "Invoice Number",
-                        }/*,{
-                            dataField: "imageData",
-                            caption: "Image",
-                            allowFiltering: false,
-                            allowSorting: false,
-                            cellTemplate: function(container, options) {
-                                var img = document.createElement("img");
-                                img.src = options.data.imageData;
-                                img.width = 100; 
-                                img.height = 100; 
-                                container[0].appendChild(img);
-                                console.log(img);
-                            }
-                        }*/,
+                        },{
+                            dataField: "strUpliftmentStatus",
+                            caption: "Upliftment Status",
+                        },{
+                            dataField: "Username",
+                            caption: "User",
+                        },
                         
                     ],
                     onRowDblClick: function(e) {
@@ -612,7 +603,6 @@
                         $('#updateupliftment').prop('hidden',false);
                         $('#imageupliftment').prop('hidden',false);
                         $('#enquireupliftment').prop('hidden',false);
-                        $('#editupliftment').prop('hidden',false);
                         $('#saveupliftment').prop('hidden',true);
                         
                         
@@ -638,22 +628,32 @@
                             collectRadio.checked = false;
                         }
                         
+                        const imagebutton = document.getElementById("imageupliftment");
+                        const enquirebutton = document.getElementById("enquireupliftment");
 
-                        console.log("Creating details...");
+                        enquirebutton.setAttribute("href", '{!!url("/upliftEnquiry")!!}/' + upliftmentNumber);
+                        imagebutton.setAttribute("href", '{!!url("/upliftImageGetter")!!}/' + upliftmentNumber);
+
+                        imagebutton.addEventListener("click", function() {
+                            window.open('{!!url("/upliftImageGetter")!!}/'+upliftmentNumber, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        });
+
+                        enquirebutton.addEventListener("click", function() {
+                            window.open('{!!url("/upliftEnquiry")!!}/'+upliftmentNumber, 'upliftenquirygetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        });
+                        
                         $.ajax({
-                        url: '{!!url("/getUpliftmentDetails")!!}',
-                        type: 'GET',
-                        data: {
-                            upliftmentNumber: upliftmentNumber
-                        },
-                        success: function(data) {
-                            populateDataGrid(data);
-                        //showPopup(data, e.data);
+                            url: '{!!url("/getUpliftmentDetails")!!}',
+                            type: 'GET',
+                            data: {
+                                upliftmentNumber: upliftmentNumber
+                            },
+                            success: function(data) {
+                                populateDataGrid(data);
+                     
 
                         }});
-                    // Get the data for the clicked row
 
-                    // Show the popup with the data for the clicked row
                     }
             });
         }
@@ -803,7 +803,7 @@ function populateDataGrid(datagriddata) {
         options: {
             text: "Enquiry",
             onClick: function() {
-                window.open('{!!url("/upliftImageGetter")!!}/'+intUpliftForImage, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+                window.open('{!!url("/upliftEnquiry")!!}/'+intUpliftForImage, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
             }
         }
     },

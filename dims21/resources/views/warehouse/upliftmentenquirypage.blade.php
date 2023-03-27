@@ -32,14 +32,51 @@
 </head>
 
 
-<div class="col-lg-12"  style="background: white;">
     
-    <div class="col-lg-12" >
-        @foreach($imagedata as $val)
-        <img src="{{$val->image}}">
+        <div class="row">
+        <div class="form-group col-md-6">
+            <label class="control-label" for="fromuser">From</label>
+            <input class="form-control input-sm" id="fromuser" value="{{Auth::user()->UserName}}" required readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="control-label" for="fromemail">From Email</label>
+            <input class="form-control input-sm" id="fromemail" value="{{Auth::user()->Email}}" required readonly>
+        </div>
+        </div>
+        
+        
+    
+<div class="row">
+    <div class="form-group col-md-6">
+        <label class="control-label" for="touser">To</label>
+        @foreach($headerdetails as $val)
+        <input class="form-control input-sm" id="touser" value="{{$val->Username}}" required readonly>
         @endforeach
     </div>
-</div>
+    <div class="form-group col-md-6">
+        <label class="control-label" for="toemail">To Email</label>
+        @foreach($headerdetails as $val)
+        <input class="form-control input-sm" id="toemail" value="{{$val->Email}}" required readonly>
+        <input class="form-control input-sm" id="upliftmentnumber" value="{{$val->UpliftmentNumber}}" required readonly hidden>
+        @endforeach
+    </div>
+    </div>
+
+    <br>
+    <div class="row">
+
+    
+        <textarea  class="form-control input-sm col-xs-1" id="message" style="width: 100%" required></textarea>
+    </div>
+    <br>
+    <div class="row">
+
+    
+        <button type="button" id="messageupliftment" class="btn btn-success">Send Message</button>
+    </div>
+    <br>
+    Enquiry History
+    <div id="gridContainer" style=""></div>
 <style>
     .dx-datagrid-table{
         font-size:15px;
@@ -101,11 +138,93 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
-    
+    var jArray = JSON.stringify({!! json_encode($upliftmakerdata) !!});
+    var finalDataMessages = $.map(JSON.parse(jArray), function (item) {
+        return {
+            dteTimestamp: item.dteTimestamp,
+            strMessage: item.strMessage,
+            Username: item.Username,
+        }
+
+    });
     $(document).ready(function() {
 
-       
+        $('#messageupliftment').click(function(){
+
+            $.ajax({
+                        url: '{!!url("/upliftmentMessagePost")!!}',
+                        type: 'POST',
+                        data: {
+                            upliftmentNumber: $('#upliftmentnumber').val(),
+                            upliftmentMessage:$('#message').val()
+                        },
+                        success: function(data) {
+                            location.reload();
+                        }
+            });
+        
+
+
     });
+    
+    $("#gridContainer").dxDataGrid({
+
+dataSource:finalDataMessages, //as json
+hoverStateEnabled: true,
+showBorders: true,
+filterRow: { visible: true },
+filterPanel: { visible: true },
+headerFilter: { visible: true },
+allowColumnResizing: true,
+columnAutoWidth: true,
+scrolling: {
+    rowRenderingMode: 'infinite',
+},
+paging:{
+    pageSize: 10,
+},
+pager: {
+    visible: true,
+    allowedPageSizes: [5, 10, 20, 50, 'all'],
+    showPageSizeSelector: true,
+    showInfo: true,
+    showNavigationButtons: true,
+},
+export: {
+    enabled: true
+},
+onExporting(e) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('UpliftmentMessageTrail');
+
+    DevExpress.excelExporter.exportDataGrid({
+        component: e.component,
+        worksheet,
+        autoFilterEnabled: true,
+    }).then(() => {
+        workbook.xlsx.writeBuffer().then((buffer) => {
+            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'UpliftmentMessageTrail.xlsx');
+        });
+    });
+    e.cancel = true;
+},
+
+columns: [
+    {
+        dataField: "dteTimestamp",
+        caption: "Timestamp",
+    },{
+        dataField: "strMessage",
+        caption: "Message",
+    },{
+        dataField: "Username",
+        caption: "Username",
+    },
+    
+]
+});
+});
+        
 
 
     function showDialog(tag,width,height)
