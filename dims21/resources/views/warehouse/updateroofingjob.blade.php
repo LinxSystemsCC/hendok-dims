@@ -57,7 +57,7 @@
                     </div>
                     <div class="modal-body">
     
-                        <select class="form-control" id="setstatus">
+                        <select class="form-select" id="setstatus">
                             <option></option>
                             <option value="start">Start</option>
                             <option value="hold">Hold</option>
@@ -65,8 +65,8 @@
                         </select>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn-danger btn-lg" id="savestatus" style="width: 100%;">SAVE</button>
+                        <button type="button" class="btn btn-secondary"  style="width:48%;" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger" id="savestatus"  style="width:48%;">SAVE</button>
                     </div>
                 </div>
             </div>
@@ -85,8 +85,8 @@
                         <input type="number" class="form-control" id="qtytoprint" value="2">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn btn-danger btn-lg" id="printadditional" style="width: 100%;">PRINT</button>
+                        <button type="button" class="btn btn-secondary" style="width:48%;" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger" style="width:48%;" id="printadditional" >PRINT</button>
                     </div>
                 </div>
             </div>
