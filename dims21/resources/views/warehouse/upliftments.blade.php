@@ -326,9 +326,9 @@
             $('#inputProdWeightHidden').val(data.Weight);
         });
                     $("#company").change(function () {
-
+                        var jArrayCustomers="";
                         $.ajax({
-
+                        
                             url: '{!!url("/getCustomerForSelectedCompany")!!}',
                             type: "POST",
                             data: {
@@ -336,12 +336,12 @@
                             },
                             success: function (datacustomerdata) {
                                 $("#customers").empty();
-                                
                                 $("#invoice").empty();
                                 $("#address").empty();
                                 $("#area").empty();
                                 $("#selectedarea").empty();
-                                var jArrayCustomers = JSON.stringify(datacustomerdata);
+                                
+                                jArrayCustomers = JSON.stringify(datacustomerdata);
                                 var finalDataCustomer = $.map(JSON.parse(jArrayCustomers), function (item) {
                                     return {
                                         CustomerCode: item.CustomerPastelCode,
@@ -349,7 +349,8 @@
                                     }
 
                                 });
-                                var inputCustomer = $('#customers').flexdatalist({
+
+                                var inputCustomerCompany = $('#customers').flexdatalist({
                                     minLength: 1,
                                     valueProperty: '*',
                                     selectionRequired: true,
@@ -359,7 +360,9 @@
                                     searchIn: ["CustomerCode","StoreName"],
                                     data: finalDataCustomer
                                 });
-                                inputCustomer.on('select:flexdatalist', function (event, data) {
+                                $('#customers').val('').trigger('reset');
+                                inputCustomerCompany.on('select:flexdatalist', function (event, data) {
+                                    console.log("using flexlist within company change");
                                     //fill in inputs of code desc weight, empty qty empty comment..
                                     $('#customers').val(data.CustomerCode);
                                     $.ajax({
@@ -373,7 +376,6 @@
                             success: function (data) {
 
                                 var jArrayAreas = JSON.stringify(data.routes);
-                                console.log(jArrayAreas)
                                 var finalDataAreas = $.map(JSON.parse(jArrayAreas), function (item) {
                                     return {
                                         routeID: item.routeID,
@@ -407,8 +409,7 @@
 
                                 $("#invoice").empty();
                                 var jArrayInvoices = JSON.stringify(data.invoices);
-                                console.log(jArrayInvoices);
-                                console.log(data.invoices);
+                                
                                 var finalDataInvoices = $.map(JSON.parse(jArrayInvoices), function (item) {
                                     return {
                                         InvNumber: item.InvNumber
@@ -441,6 +442,7 @@
                             }
                         });
 
+                        
                                 });
                                 
                             }
@@ -547,7 +549,7 @@
                 });
                 var gridResults = '<xml>';
                 $.each(checkedLines ,function(key,value) {
-                    if (value.Quantity !=undefined || value.Quantity !=null){
+                    if (value.Qty !=undefined || value.Qty !=null){
                     gridResults= gridResults + "<result>";
                     gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
                     gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
@@ -558,6 +560,7 @@
                 }
                 });
                     gridResults= gridResults+"</xml>";
+                    
                     var selectedaction="";
                     var upliftmentAction = $('input[name="flexRadioDefault"]:checked').val();
 
@@ -709,14 +712,15 @@
                         $('#savesupliftment').prop('hidden',true);
                         $('#savetempproductsCurrent').prop('hidden',false);
                         $('#savetempproducts').prop('hidden',true);
-                        
-                        
+
                         $('#invoice').val(e.data.strInvoice);
                         $('#reasonpickup').val(e.data.strReasonPickup);
                         $('#area').val(e.data.strArea);
                         $('#selectedarea').val(e.data.strArea);
                         $('#altaddress').val(e.data.strAddress);
+                        $('#customers').val('').trigger('reset');
                         $('#customers').val(e.data.strCustomer);
+                        console.log("double click filled in the box");
                         $('#company').val(e.data.strCompany);
                         $('#date').val(e.data.dteUpliftDate);
                         $('#upliftreason').val(e.data.strReasonUpliftment);
@@ -739,7 +743,7 @@
                                     }
 
                                 });
-                                var inputCustomer = $('#customers').flexdatalist({
+                                var inputCustomerInner = $('#customers').flexdatalist({
                                     minLength: 1,
                                     valueProperty: '*',
                                     selectionRequired: true,
@@ -749,9 +753,12 @@
                                     searchIn: ["CustomerCode","StoreName"],
                                     data: finalDataCustomer
                                 });
-                                inputCustomer.on('select:flexdatalist', function (event, data) {
+                                
+                                inputCustomerInner.on('select:flexdatalist', function (event, data) {
                                     //fill in inputs of code desc weight, empty qty empty comment..
                                     $('#customers').val(data.CustomerCode);
+                                    
+                                    console.log("Flex data list called within double click");
                                     $.ajax({
 
                             url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
@@ -763,7 +770,6 @@
                             success: function (data) {
 
                                 var jArrayAreas = JSON.stringify(data.routes);
-                                console.log(jArrayAreas)
                                 var finalDataAreas = $.map(JSON.parse(jArrayAreas), function (item) {
                                     return {
                                         routeID: item.routeID,
@@ -795,8 +801,7 @@
                                 $("#address").append(toAppend);
 
                                 var jArrayInvoices = JSON.stringify(data.invoices);
-                                console.log(jArrayInvoices);
-                                console.log(data.invoices);
+                                
                                 var finalDataInvoices = $.map(JSON.parse(jArrayInvoices), function (item) {
                                     return {
                                         InvNumber: item.InvNumber
