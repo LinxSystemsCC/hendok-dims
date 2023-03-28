@@ -402,6 +402,14 @@ class WareHouseController extends Controller
         return view('warehouse/upliftmentenquirypage')->with('upliftmakerdata', $upliftmakerdata)->with('headerdetails', $upliftheaderdetails);
 
     }
+    public function upliftmentBacklog($upliftmentID){
+        
+        $upliftbacklogdetails = DB::connection('sqlsrv2')->select("exec spGetUpliftmentBacklog ?",array($upliftmentID));
+
+        return view('warehouse/upliftmentbacklog')->with('upliftbacklogdetails', $upliftbacklogdetails);
+
+    }
+
     public function upliftmentMessagePost(Request $request){
         $upliftmentNumber = $request->get('upliftmentNumber');
         $upliftmentMessage = $request->get('upliftmentMessage');

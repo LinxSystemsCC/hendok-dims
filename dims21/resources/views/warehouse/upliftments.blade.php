@@ -156,6 +156,7 @@
                 <button type="button" id="updateupliftment" class="btn btn-success" hidden>Update</button>
                 <button type="button" id="imageupliftment" class="btn btn-success" hidden>Images</button>
                 <button type="button" id="enquireupliftment" class="btn btn-success" hidden>Enquiry</button>
+                <button type="button" id="backlogupliftment" class="btn btn-success" hidden>Backlog</button>
 
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="savesupliftment" class="btn btn-success" >Save</button>
@@ -461,6 +462,7 @@
                         $('#imageupliftment').prop('hidden',true);
                         $('#updateupliftment').prop('hidden',true);
                         $('#enquireupliftment').prop('hidden',true);
+                        $('#backlogupliftment').prop('hidden',true);
                         $('#saveupliftment').prop('hidden',false);
                         
                         $('#invoice').val('');
@@ -709,6 +711,7 @@
                         $('#updateupliftment').prop('hidden',false);
                         $('#imageupliftment').prop('hidden',false);
                         $('#enquireupliftment').prop('hidden',false);
+                        $('#backlogupliftment').prop('hidden',false);
                         $('#savesupliftment').prop('hidden',true);
                         $('#savetempproductsCurrent').prop('hidden',false);
                         $('#savetempproducts').prop('hidden',true);
@@ -851,12 +854,18 @@
                         
                         const imagebutton = document.getElementById("imageupliftment");
                         const enquirebutton = document.getElementById("enquireupliftment");
+                        const backlogbutton = document.getElementById("backlogupliftment");
 
                         enquirebutton.setAttribute("href", '{!!url("/upliftEnquiry")!!}/' + upliftmentNumber);
                         imagebutton.setAttribute("href", '{!!url("/upliftImageGetter")!!}/' + upliftmentNumber);
+                        backlogbutton.setAttribute("href", '{!!url("/upliftmentBacklog")!!}/' + upliftmentNumber);
 
                         imagebutton.addEventListener("click", function() {
                             window.open('{!!url("/upliftImageGetter")!!}/'+upliftmentNumber, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        });
+                        
+                        backlogbutton.addEventListener("click", function() {
+                            window.open('{!!url("/upliftmentBacklog")!!}/'+upliftmentNumber, 'upliftmentbackloggetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
                         });
 
                         enquirebutton.addEventListener("click", function() {
