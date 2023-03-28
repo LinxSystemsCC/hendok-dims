@@ -413,37 +413,6 @@ class WareHouseController extends Controller
     public function getUpliftmentRecords(){
         
         $returndata = DB::connection('sqlsrv2') ->select("select * from viewtblUpliftmentData");
-        foreach ($returndata as $row) {
-            $base64Image = hex2bin($row->imageData);
-
-    // Get the MIME type of the image from the base64-encoded string
-    $finfo = finfo_open();
-    $mimeType = finfo_buffer($finfo, $base64Image, FILEINFO_MIME_TYPE);
-    finfo_close($finfo);
-
-    // Generate the appropriate data URI scheme based on the MIME type of the image
-    switch ($mimeType) {
-        case 'image/png':
-            $uriScheme = 'data:image/png;base64,';
-            break;
-        case 'image/jpeg':
-            $uriScheme = 'data:image/jpeg;base64,';
-            break;
-        case 'image/gif':
-            $uriScheme = 'data:image/gif;base64,';
-            break;
-        // Add cases for other supported image formats here
-        default:
-            $uriScheme = 'data:image/bmp;base64,';
-            break;
-    }
-
-    // Prefix the base64-encoded string with the appropriate data URI scheme
-    $dataURI = $uriScheme . base64_encode($base64Image);
-
-    // Replace the binary image data with the data URI in the row object
-    $row->imageData = $dataURI;
-        }
         return response()->json($returndata);
     }
     public function insertUpliftmentAll(Request $request){
