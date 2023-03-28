@@ -1590,7 +1590,7 @@ where intDeptID =".$deptId);
     public function getRoofingSOtoUpdate(Request $request){
         $reference = $request->get("reference");
         $machine = $request->get("machine");
-        // dd($reference, $machine);
+        // dump($reference,$machine);
         $jobdata = DB::connection('sqlsrv3')->select('exec spGetRoofingSOHeader ?,?',array($reference, $machine));
         // dd($jobdata);
         return response()->json($jobdata);

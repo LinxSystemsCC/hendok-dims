@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
@@ -58,7 +57,7 @@
                     </div>
                     <div class="modal-body">
     
-                        <select class="form-control" id="setstatus">
+                        <select class="form-select" id="setstatus">
                             <option></option>
                             <option value="start">Start</option>
                             <option value="hold">Hold</option>
@@ -66,8 +65,8 @@
                         </select>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn-danger btn-lg" id="savestatus" style="width: 100%;">SAVE</button>
+                        <button type="button" class="btn btn-secondary"  style="width:48%;" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger" id="savestatus"  style="width:48%;">SAVE</button>
                     </div>
                 </div>
             </div>
@@ -86,8 +85,8 @@
                         <input type="number" class="form-control" id="qtytoprint" value="2">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn-danger btn-lg" id="printadditional" style="width: 100%;">PRINT</button>
+                        <button type="button" class="btn btn-secondary" style="width:48%;" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger" style="width:48%;" id="printadditional" >PRINT</button>
                     </div>
                 </div>
             </div>
@@ -111,6 +110,8 @@
 <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
 <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+
 
 
 
@@ -128,6 +129,10 @@
     var invoiceorder = '';
 
     $(document).ready(function() {
+
+        var reference = '{!! $reference !!}';
+        var machine = '{!! $machine !!}';
+
         $('#savestatus').click(function(){
             $.ajax({
                 url: '{!!url("/changeRoofingSOStatus")!!}',
@@ -181,10 +186,6 @@
 
         });
 
-        // $('#printjobcard').click(function(){
-        //     //TODO Got to new roofing jobcard for reference and machine (See 'savestatus' above for reference and machine!)
-        // });
-
         $('#printadditional').click(function(){
             $.ajax({
                 url: '{!!url("/printAdditionalRoofingLabels")!!}',
@@ -204,8 +205,24 @@
             });
         });
 
-        var reference = '{!! $reference !!}';
-        var machine = '{!! $machine !!}';
+        $('#printjobcard').click(function(){
+            const datagrid = $('#jobgrid').dxDataGrid('instance');
+
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Areas');
+
+            DevExpress.excelExporter.exportDataGrid({
+                component: datagrid,
+                worksheet,
+                autoFilterEnabled: true,
+            }).then(() => {
+                workbook.xlsx.writeBuffer().then((buffer) => {
+                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), ''+reference+'.xlsx');
+                });
+            });
+        });
+
+        
 
         $.ajax({
             url: '{!!url("/getRoofingSOtoUpdate")!!}',
@@ -215,7 +232,7 @@
                 machine: machine
             },
             success: function (data) {
-                //console.debug(data);
+                // console.log(data);
 
                 $("#jobgrid").dxDataGrid({
                     dataSource: data, //as json
@@ -325,11 +342,9 @@
                         
                     }
 
-                }).dxDataGrid('instance');
+                });
             }
         });
-
-    
 
     });
 
