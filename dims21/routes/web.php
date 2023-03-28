@@ -1060,6 +1060,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('saveLabels', [WareHouseController::class,'saveLabels']);  
     Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
     Route::post('insertUpliftmentAll',[WareHouseController::class,'insertUpliftmentAll']);
+    Route::post('updateUpliftmentPost',[WareHouseController::class,'updateUpliftmentPost']);
     Route::get('getUpliftmentRecords',[WareHouseController::class,'getUpliftmentRecords']);
     Route::post('getCustomerForSelectedCompany',[WareHouseController::class,'getCustomerForSelectedCompany']);
     Route::post('getAreaAddressInvoiceInfoParam',[WarehouseController::class,'getAreaAddressInvoiceInfoParam']);

@@ -474,6 +474,35 @@ class WareHouseController extends Controller
             DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString,$UserID));
 
     }
+    public function updateUpliftmentPost(Request $request){
+        $file = $request->file('file');
+    
+            if ($request->hasFile('file') && $file->isValid()) {
+                $varbinaryData = $file->get();
+                $hexString = bin2hex($varbinaryData);
+
+            } else {
+                $hexString = null;
+            }
+
+            $dataxml = $request->input('dataxml');
+            
+            $UserID = Auth::user()->UserID;
+            $invoice = $request->input('invoice');
+            $reasonpickup = $request->input('reasonpickup');
+            $area = $request->input('area');
+            $address = $request->input('address');
+            $customers = $request->input('customers');
+            $company = $request->input('company');
+            $date = $request->input('date');
+            $date=(new \DateTime($date))->format('Y-m-d');
+            $upliftmentaction = $request->input('upliftmentaction');
+            $upliftreason=$request->input('upliftreason');
+            $SelectedUpliftmentNumber = $request->input('SelectedUpliftmentNumber');
+
+            DB::connection('sqlsrv2')->statement("exec spUpdateUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString,$UserID,$SelectedUpliftmentNumber));
+
+    }
     public function getCustomerForSelectedCompany(Request $request){
 
         

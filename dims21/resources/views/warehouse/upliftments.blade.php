@@ -111,7 +111,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="area">Custom Area Selection</label>
-                    <input readonly  class="form-control input-sm col-xs-1" id="area" style="width: 100%" required>
+                    <input  class="form-control input-sm col-xs-1" id="area" style="width: 100%" required>
                 </select>
                 </div>
                 <div class="form-group">
@@ -126,7 +126,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="invoice"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice</label>
-                    <input readonly  class="form-control input-sm col-xs-1" id="invoice" style="width: 100%" required>
+                    <input  class="form-control input-sm col-xs-1" id="invoice" style="width: 100%" required>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="reasonpickup"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reason for Pickup</label>
@@ -148,6 +148,7 @@
                 </div>
                 
                 <button type="button" id="savetempproducts" class="btn btn-success" >Add</button>
+                <button type="button" id="savetempproductsCurrent" class="btn btn-success" hidden >Add</button>
                 <div style="width: 100%; height: 5%;" id="gridBox"></div>
                 <div style="width: 100%; height: 5%;" id="gridBoxCurrent"></div>
 
@@ -235,6 +236,7 @@
 
     });
     $(document).ready(function() {
+        var SelectedUpliftmentNumber = 0;
         $("#savetempproducts").click(function() {
             if ($('#inputProdCode').val().length>0 && $('#inputProdDesc').val().length>0 && $('#inputProdWeight').val()!=0 && $('#inputProdQty').val()!=0 )
                 {
@@ -253,6 +255,34 @@
 
                     // add the new row to the data source and refresh the Datagrid
                     var grid = $("#gridBox").dxDataGrid("instance");
+                    if (grid) {
+                        var dataSource = grid.getDataSource();
+                        console.log(dataSource);
+                        dataSource.store().insert(newRow);
+                        dataSource.reload();
+                    } else {
+                        console.log('Datagrid not found.');
+                    }
+                }
+        });
+        $("#savetempproductsCurrent").click(function() {
+            if ($('#inputProdCode').val().length>0 && $('#inputProdDesc').val().length>0 && $('#inputProdWeight').val()!=0 && $('#inputProdQty').val()!=0 )
+                {
+                    // retrieve the input values and create a new row object
+                    var Code = $('#inputProdCode').val();
+                    $('#inputProdCode').val('');
+                    var Name = $('#inputProdDesc').val();
+                    $('#inputProdDesc').val('');
+                    var Weight = $('#inputProdWeight').val();
+                    $('#inputProdWeight').val(0);
+                    var Quantity = $('#inputProdQty').val();
+                    $('#inputProdQty').val(0);
+                    var Comment = $('#inputProdComment').val();
+                    $('#inputProdComment').val('');
+                    var newRow = { PastelCode: Code, PastelDescription: Name, Qty:Quantity,weight: Weight,Comment:Comment};
+
+                    // add the new row to the data source and refresh the Datagrid
+                    var grid = $("#gridBoxCurrent").dxDataGrid("instance");
                     if (grid) {
                         var dataSource = grid.getDataSource();
                         console.log(dataSource);
@@ -423,6 +453,8 @@
                     
                     $('#newupliftmentbutton').click(function(){
 
+                        $('#savetempproductsCurrent').prop('hidden',true);
+                        $('#savetempproducts').prop('hidden',false);
                         createDataGrid();
                         $('#imageupliftment').prop('hidden',true);
                         $('#updateupliftment').prop('hidden',true);
@@ -440,7 +472,7 @@
                         $('#date').val('');
                         $('#upliftreason').val('');
                     });
-        $('#savesupliftment').click(function(){
+                    $('#savesupliftment').click(function(){
             var checkedLines = Array();
             var grid = $("#gridBox").dxDataGrid("getDataSource").store().load().done(function (data) {
                 checkedLines= data;
@@ -508,6 +540,76 @@
                 }
             });
         });
+        $('#updateupliftment').click(function(){
+            var checkedLines = Array();
+            var grid = $("#gridBoxCurrent").dxDataGrid("getDataSource").store().load().done(function (data) {
+                checkedLines= data;
+                });
+                var gridResults = '<xml>';
+                $.each(checkedLines ,function(key,value) {
+                    if (value.Quantity !=undefined || value.Quantity !=null){
+                    gridResults= gridResults + "<result>";
+                    gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
+                    gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
+                    gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
+                    gridResults= gridResults + "<Weight>"+value.weight+"</Weight>";
+                    gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
+                    gridResults= gridResults+ "</result>";
+                }
+                });
+                    gridResults= gridResults+"</xml>";
+                    var selectedaction="";
+                    var upliftmentAction = $('input[name="flexRadioDefault"]:checked').val();
+
+
+                    if (upliftmentAction === "Collect Stock") {
+                        selectedaction="Collect";
+                    } else if (upliftmentAction === "Deliver Stock") {
+                        selectedaction="Deliver";  
+                    }
+                    var formData = new FormData();
+
+                        // Append the file to the FormData object
+                        formData.append('file', $('#uploadphoto')[0].files[0]);
+
+                        // Append the other form data to the FormData object
+                        formData.append('dataxml', gridResults);
+                        formData.append('invoice', $('#invoice').val());
+                        formData.append('reasonpickup', $('#reasonpickup').val());
+                        if ($('#area').val().length > 0){
+                        formData.append('area', $('#area').val());
+                        }
+                        else {
+                        formData.append('area', $('#selectedarea').val());
+                        }
+                        
+                        if ($('#altaddress').val().length > 0){
+                        formData.append('address', $('#altaddress').val());
+                        }
+                        else {
+                        formData.append('address', $('#address').val());
+                        }
+                        
+                        formData.append('customers', $('#customers').val());
+                        formData.append('company', $('#company').val());
+                        formData.append('date', $('#date').val());
+                        formData.append('upliftreason', $('#upliftreason').val());
+                        formData.append('upliftmentaction', selectedaction); 
+                        formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/updateUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        
         $.ajax({
 
             url: '{!!url("/getUpliftmentRecords")!!}',
@@ -599,11 +701,14 @@
                     ],
                     onRowDblClick: function(e) {
                         var upliftmentNumber = e.data.intUpliftmentNumber;
+                        SelectedUpliftmentNumber = e.data.intUpliftmentNumber;
                         $('#newarea').modal('toggle');
                         $('#updateupliftment').prop('hidden',false);
                         $('#imageupliftment').prop('hidden',false);
                         $('#enquireupliftment').prop('hidden',false);
-                        $('#saveupliftment').prop('hidden',true);
+                        $('#savesupliftment').prop('hidden',true);
+                        $('#savetempproductsCurrent').prop('hidden',false);
+                        $('#savetempproducts').prop('hidden',true);
                         
                         
                         $('#invoice').val(e.data.strInvoice);
@@ -611,13 +716,124 @@
                         $('#area').val(e.data.strArea);
                         $('#selectedarea').val(e.data.strArea);
                         $('#altaddress').val(e.data.strAddress);
-                        $('#address').val(e.data.strAddress);
                         $('#customers').val(e.data.strCustomer);
                         $('#company').val(e.data.strCompany);
                         $('#date').val(e.data.dteUpliftDate);
                         $('#upliftreason').val(e.data.strReasonUpliftment);
                         const collectRadio = document.getElementById("upliftmentactioncollect");
                         const deliverRadio = document.getElementById("upliftmentactiondeliver");
+                        $.ajax({
+
+                            url: '{!!url("/getCustomerForSelectedCompany")!!}',
+                            type: "POST",
+                            data: {
+                                company: $("#company").val()
+                            },
+                            success: function (datacustomerdata) {
+                                
+                                var jArrayCustomers = JSON.stringify(datacustomerdata);
+                                var finalDataCustomer = $.map(JSON.parse(jArrayCustomers), function (item) {
+                                    return {
+                                        CustomerCode: item.CustomerPastelCode,
+                                        StoreName: item.StoreName,
+                                    }
+
+                                });
+                                var inputCustomer = $('#customers').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["CustomerCode","StoreName"],
+                                    searchIn: ["CustomerCode","StoreName"],
+                                    data: finalDataCustomer
+                                });
+                                inputCustomer.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#customers').val(data.CustomerCode);
+                                    $.ajax({
+
+                            url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
+                            type: "POST",
+                            data: {
+                                customer: $("#customers").val(),
+                                company: $("#company").val()
+                            },
+                            success: function (data) {
+
+                                var jArrayAreas = JSON.stringify(data.routes);
+                                console.log(jArrayAreas)
+                                var finalDataAreas = $.map(JSON.parse(jArrayAreas), function (item) {
+                                    return {
+                                        routeID: item.routeID,
+                                        Route: item.Route,
+                                    }
+
+                                });
+                                var inputAreas = $('#area').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["routeID","Route"],
+                                    searchIn: ["routeID","Route"],
+                                    data: finalDataAreas
+                                });
+                                
+                                inputAreas.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#area').val(data.Route);
+                                });
+
+                                var toAppend='';
+                                $.each(data.addresses,function(i,o){
+
+                                    toAppend += '<option value="'+o.strAddress+'">'+o.strAddress+'</option>';
+                                });
+                                $("#address").append(toAppend);
+
+                                var jArrayInvoices = JSON.stringify(data.invoices);
+                                console.log(jArrayInvoices);
+                                console.log(data.invoices);
+                                var finalDataInvoices = $.map(JSON.parse(jArrayInvoices), function (item) {
+                                    return {
+                                        InvNumber: item.InvNumber
+                                    }
+
+                                });
+                                var inputInvoices = $('#invoice').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["InvNumber"],
+                                    searchIn: ["InvNumber"],
+                                    data: finalDataInvoices
+                                });
+                                
+                                inputInvoices.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#invoice').val(data.InvNumber);
+                                });
+
+                                $("#selectedarea").val();
+                                $.each(data.areas,function(i,o){
+
+                                    $("#selectedarea").val(o.Route);
+                                });
+
+                                
+                            }
+                        });
+
+                                });
+                                
+                            }
+                        });
+                        $('#address').val(e.data.strAddress);
                         if (e.data.strUpliftAction =="Collect"){
                             deliverRadio.checked = false;
                             collectRadio.checked = true;
@@ -650,7 +866,6 @@
                             },
                             success: function(data) {
                                 populateDataGrid(data);
-                     
 
                         }});
 
@@ -715,7 +930,6 @@
 
 }
 function populateDataGrid(datagriddata) {
-        console.log(datagriddata);
         $('#gridBox').hide();
         $('#gridBoxCurrent').show();
     $("#gridBoxCurrent").dxDataGrid({
@@ -774,7 +988,7 @@ function populateDataGrid(datagriddata) {
             "restore" : function(evt, dlg){  } // event
         });
     }
-    function showPopup(data, extradata) {
+  /*   function showPopup(data, extradata) {
     // Create a new div to hold the popup content
     var content = $("<div>");
 
@@ -864,6 +1078,6 @@ function populateDataGrid(datagriddata) {
 
     // Show the popup
     popup.show();
-}
+} */
 
 </script>
