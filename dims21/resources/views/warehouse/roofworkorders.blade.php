@@ -483,11 +483,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                 // Use the array data as needed
                 arrayData.forEach((element, index, value) => {
-                    SalesOrderList.push(element[11]);
+                    SalesOrderList.push(element[4]);
                     $('#salesorders').val(SalesOrderList.join('\n'));
-                    InvoiceOrderList.push(element[12]);
+                    InvoiceOrderList.push(element[5]);
                     $('#invoiceorders').val(InvoiceOrderList.join('\n'));
-                    CompanyList.push(element[13]);
+                    CompanyList.push(element[6]);
                     $('#company').val(CompanyList.join('\n'));
                 });
             };
