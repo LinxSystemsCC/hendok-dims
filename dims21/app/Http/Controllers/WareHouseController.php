@@ -1689,8 +1689,6 @@ where intDeptID =".$deptId);
 
         $data = DB::connection('sqlsrv2')->select('exec spXMLInsertRoofinSoNumToPlan ?,?,?',array($orderlinesxml,$operator,$reference));
 
-
-
         return response()->json($data);
     }
 
