@@ -133,8 +133,16 @@
                     <textarea   class="form-control input-sm col-xs-1" id="reasonpickup"></textarea>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="uploadphoto"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Photo</label>
-                    <input type="file" name="photo" class="form-control-file" id="uploadphoto">
+                    <label class="control-label" for="uploadphoto1"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a First Photo</label>
+                    <input type="file" name="photo" class="form-control-file" id="uploadphoto1">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="uploadphoto2"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Second Photo</label>
+                    <input type="file" name="photo" class="form-control-file" id="uploadphoto2">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="uploadphoto3"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Third Photo</label>
+                    <input type="file" name="photo" class="form-control-file" id="uploadphoto3">
                 </div>
                 <div class="form-group form-inline">
                     <label class="control-label" for="inputProdCode" style="margin-right: 10px;font-weight: 700;font-size: 15px;">Add Product</label>
@@ -506,7 +514,9 @@
                     var formData = new FormData();
 
                         // Append the file to the FormData object
-                        formData.append('file', $('#uploadphoto')[0].files[0]);
+                        formData.append('file1', $('#uploadphoto1')[0].files[0]);
+                        formData.append('file2', $('#uploadphoto2')[0].files[0]);
+                        formData.append('file3', $('#uploadphoto3')[0].files[0]);
 
                         // Append the other form data to the FormData object
                         formData.append('dataxml', gridResults);
@@ -575,7 +585,9 @@
                     var formData = new FormData();
 
                         // Append the file to the FormData object
-                        formData.append('file', $('#uploadphoto')[0].files[0]);
+                        formData.append('file1', $('#uploadphoto1')[0].files[0]);
+                        formData.append('file2', $('#uploadphoto2')[0].files[0]);
+                        formData.append('file3', $('#uploadphoto3')[0].files[0]);
 
                         // Append the other form data to the FormData object
                         formData.append('dataxml', gridResults);

@@ -424,15 +424,36 @@ class WareHouseController extends Controller
         return response()->json($returndata);
     }
     public function insertUpliftmentAll(Request $request){
-        $file = $request->file('file');
+        $file = $request->file('file1');
     
-            if ($request->hasFile('file') && $file->isValid()) {
+            if ($request->hasFile('file1') && $file->isValid()) {
                 $varbinaryData = $file->get();
-                $hexString = bin2hex($varbinaryData);
+                $hexString1 = bin2hex($varbinaryData);
 
             } else {
-                $hexString = null;
+                $hexString1 = null;
             }
+
+            $file = $request->file('file2');
+    
+            if ($request->hasFile('file2') && $file->isValid()) {
+                $varbinaryData = $file->get();
+                $hexString2 = bin2hex($varbinaryData);
+
+            } else {
+                $hexString2 = null;
+            }
+
+            $file = $request->file('file3');
+    
+            if ($request->hasFile('file3') && $file->isValid()) {
+                $varbinaryData = $file->get();
+                $hexString3 = bin2hex($varbinaryData);
+
+            } else {
+                $hexString3 = null;
+            }
+
 
             $dataxml = $request->input('dataxml');
             
@@ -448,18 +469,38 @@ class WareHouseController extends Controller
             $upliftmentaction = $request->input('upliftmentaction');
             $upliftreason=$request->input('upliftreason');
 
-            DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString,$UserID));
+            DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString1,$hexString2,$hexString3,$UserID));
 
     }
     public function updateUpliftmentPost(Request $request){
-        $file = $request->file('file');
+        $file = $request->file('file1');
     
-            if ($request->hasFile('file') && $file->isValid()) {
+            if ($request->hasFile('file1') && $file->isValid()) {
                 $varbinaryData = $file->get();
-                $hexString = bin2hex($varbinaryData);
+                $hexString1 = bin2hex($varbinaryData);
 
             } else {
-                $hexString = null;
+                $hexString1 = null;
+            }
+
+            $file = $request->file('file2');
+    
+            if ($request->hasFile('file2') && $file->isValid()) {
+                $varbinaryData = $file->get();
+                $hexString2 = bin2hex($varbinaryData);
+
+            } else {
+                $hexString2 = null;
+            }
+
+            $file = $request->file('file3');
+    
+            if ($request->hasFile('file3') && $file->isValid()) {
+                $varbinaryData = $file->get();
+                $hexString3 = bin2hex($varbinaryData);
+
+            } else {
+                $hexString3 = null;
             }
 
             $dataxml = $request->input('dataxml');
@@ -477,7 +518,7 @@ class WareHouseController extends Controller
             $upliftreason=$request->input('upliftreason');
             $SelectedUpliftmentNumber = $request->input('SelectedUpliftmentNumber');
 
-            DB::connection('sqlsrv2')->statement("exec spUpdateUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString,$UserID,$SelectedUpliftmentNumber));
+            DB::connection('sqlsrv2')->statement("exec spUpdateUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString1,$hexString2,$hexString3,$UserID,$SelectedUpliftmentNumber));
 
     }
     public function getCustomerForSelectedCompany(Request $request){

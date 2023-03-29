@@ -33,10 +33,9 @@
 
 
 <div class="col-lg-12"  style="background: white;">
-    
-    <div class="col-lg-12" >
+    <div class="image-container">
         @foreach($imagedata as $val)
-        <img src="{{$val->image}}">
+        <img src="{{$val->image}}"style="display: block; width: 100%; height: auto;">
         @endforeach
     </div>
 </div>
