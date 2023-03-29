@@ -280,7 +280,7 @@
                     $('#inputProdQty').val(0);
                     var Comment = $('#inputProdComment').val();
                     $('#inputProdComment').val('');
-                    var newRow = { PastelCode: Code, PastelDescription: Name, Qty:Quantity,weight: Weight,Comment:Comment};
+                    var newRow = { PastelCode: Code, PastelDescription: Name, Qty:Quantity,weight: Weight,comment:Comment};
 
                     // add the new row to the data source and refresh the Datagrid
                     var grid = $("#gridBoxCurrent").dxDataGrid("instance");
@@ -463,7 +463,7 @@
                         $('#updateupliftment').prop('hidden',true);
                         $('#enquireupliftment').prop('hidden',true);
                         $('#backlogupliftment').prop('hidden',true);
-                        $('#saveupliftment').prop('hidden',false);
+                        $('#savesupliftment').prop('hidden',false);
                         
                         $('#invoice').val('');
                         $('#reasonpickup').val('');
@@ -557,7 +557,7 @@
                     gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
                     gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
                     gridResults= gridResults + "<Weight>"+value.weight+"</Weight>";
-                    gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
+                    gridResults= gridResults + "<Comment>"+value.comment+"</Comment>";
                     gridResults= gridResults+ "</result>";
                 }
                 });
@@ -954,7 +954,7 @@ function populateDataGrid(datagriddata) {
             { dataField: 'PastelDescription', caption: 'Item Description' },
             { dataField: 'Qty', caption: 'Quantity' },
             { dataField: 'weight', caption: 'Weight' },
-            { dataField: 'Comment', caption: 'Comment' }
+            { dataField: 'comment', caption: 'Comment' }
         ],
         editing: {
             mode: 'batch',
