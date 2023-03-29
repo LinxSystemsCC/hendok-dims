@@ -42,6 +42,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
 
 </head>
 
@@ -75,20 +76,24 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     <h5 class="modal-title" id="preplanningsoTitle">Pre Planning SO</h5>
                 </div>
                 <div class="modal-body">
+                    <form id="upload-form" class="w-100">
+                        <input type="file" id="excel-file" class="px-3" name="excel-file" accept=".xlsx">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
                     <div class="d-inline-flex w-100">
                         <div class="form-group col-4">
                             <label class="control-label" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sales Orders</label>
-                            <textarea  type="text" rows="20" class="form-control input-sm col-xs-1" id="salesorders" required></textarea>
+                            <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="salesorders" required></textarea>
                         </div>
                         
                         <div class="form-group col-4">
                             <label class="control-label" for="invoiceorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice Orders</label>
-                            <textarea  type="text" rows="20" class="form-control input-sm col-xs-1" id="invoiceorders" required></textarea>
+                            <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="invoiceorders" required></textarea>
                         </div>
 
                         <div class="form-group col-4">
                             <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Company</label>
-                            <textarea  type="text" rows="20" class="form-control input-sm col-xs-1" id="company" required></textarea>
+                            <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="company" required></textarea>
                         </div>
                     </div>
                         
@@ -131,22 +136,8 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
             {{--  Batch Sequencing Page --}}
             <div class="tab-pane fade" id="BSPage" role="tabpanel">
-                
-                {{-- <div class="form-group">
-                    <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
-                    <select  class="form-control input-sm col-xs-1" id="machine" required>
-                        <option></option>
-                        @foreach($machines as $val)
-                            <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
-                        @endforeach
-
-                    </select>
-                </div> --}}
-
                 <div id="sequencegrid" style="width: 50% !important; height:50%; padding-bottom: 10px;">
                 </div>
-
-                {{-- <button type="button" class="btn btn-success" id="updateBS" aria-label="Save">Update Sequence</button> --}}
             </div>
 
 
@@ -215,10 +206,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             $('#BSTab').addClass("active");
         }
         
-        // localStorage.setItem('PPSO', '');
-        // localStorage.setItem('PPSO', '');
-        // localStorage.setItem('PPSO', '');
-        
         $.ajax({
             url: '{!!url("/getRoofWIP")!!}',
             type: "GET",
@@ -235,20 +222,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     headerFilter: { visible: true },
                     allowColumnResizing: true,
                     columnAutoWidth: true,
-                    // rowDragging: {
-                    //     allowReordering: true,
-                    //     showDragIcons: false,
-                    //     onReorder(e) {
-                    //         const visibleRows = e.component.getVisibleRows();
-                    //         const toIndex = data.findIndex((item) => item.UniqueId === visibleRows[e.toIndex].data.UniqueId);
-                    //         const fromIndex = data.findIndex((item) => item.UniqueId === e.itemData.UniqueId);
 
-                    //         data.splice(fromIndex, 1);
-                    //         data.splice(toIndex, 0, e.itemData);
-
-                    //         e.component.refresh();
-                    //     },
-                    // },
                     paging:{
                         pageSize: 20,
                     },
@@ -325,7 +299,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             $('#BSOPTab').removeClass("active");
             $('#BSTab').addClass("active");
         });
-
 
         $('#savePPSO').click(function(){
             if (($("#reference").val()).length < 1)
@@ -472,7 +445,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
         });
 
-
         $('.sidebar ul li a').click(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
@@ -483,6 +455,54 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
+
+        // Function to read excel
+        $("#upload-form").submit(function(event) {
+            event.preventDefault();
+
+            // Get the file data
+            var file = $("#excel-file")[0].files[0];
+            var reader = new FileReader();
+            var SalesOrderList = new Array();
+            var InvoiceOrderList = new Array();
+            var CompanyList = new Array();
+
+            reader.onload = function(event) {
+                var data = event.target.result;
+
+                // Use a library like SheetJS to parse the Excel data
+                var workbook = XLSX.read(data, {type: 'binary'});
+                var sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+                // Convert the sheet data to an array
+                var arrayData = XLSX.utils.sheet_to_json(sheet, { header: 1});
+
+                arrayData.shift();
+
+                console.log(arrayData);
+
+                // Use the array data as needed
+                arrayData.forEach((element, index, value) => {
+                    SalesOrderList.push(element[11]);
+                    $('#salesorders').val(SalesOrderList.join('\n'));
+                    InvoiceOrderList.push(element[12]);
+                    $('#invoiceorders').val(InvoiceOrderList.join('\n'));
+                    CompanyList.push(element[13]);
+                    $('#company').val(CompanyList.join('\n'));
+                });
+            };
+
+            console.log(file);
+            // console.log(InvoiceOrderList);
+            // console.log(CompanyList);
+            var ref = file["name"];
+            ref = ref.replace(".xlsx", "");
+            $('#reference').val(ref);
+
+            reader.readAsBinaryString(file);
+        });
+
+
     });
 
     function headersFunction(){
@@ -652,8 +672,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             }
         });
     };
-
-    //TODO remove ended sales orders from the Batch Processing List
 
     function escapeHtml(unsafe) {
     return unsafe
