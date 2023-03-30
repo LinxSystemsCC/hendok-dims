@@ -402,6 +402,9 @@ Ref: <input id="ref" >
                         if (e.rowType == 'data' && e.data.instruct =="WAREHOUSE TRANSFER") {
                             e.rowElement.css('background', 'lightgreen');
                         }
+                        if (e.rowType == 'data' && e.data.instruct =="Upliftment-DIMS") {
+                            e.rowElement.css('background', 'yellow');
+                        }
 
                     },
                     onRowClick: function (e) {
