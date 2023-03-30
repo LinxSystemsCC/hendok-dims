@@ -353,9 +353,10 @@ class WareHouseController extends Controller
     }
     public function deleteUpliftmentPost(Request $request){
 
+        $UserID = Auth::user()->UserID;
         $intUpliftmentNumber = $request->get('intUpliftmentNumber');
         
-        DB::connection('sqlsrv2')->statement('exec spUpliftmentDelete ?', array($intUpliftmentNumber));
+        DB::connection('sqlsrv2')->statement('exec spUpliftmentDelete ?,?', array($intUpliftmentNumber,$UserID));
 
     }
     public function upliftImageGetter($upliftmentnumber){
@@ -519,6 +520,14 @@ class WareHouseController extends Controller
             $SelectedUpliftmentNumber = $request->input('SelectedUpliftmentNumber');
 
             DB::connection('sqlsrv2')->statement("exec spUpdateUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml,$date,$address,$area,$company,$customers, $invoice,$upliftmentaction,$reasonpickup,$upliftreason,$hexString1,$hexString2,$hexString3,$UserID,$SelectedUpliftmentNumber));
+
+    }
+    public function approveUpliftmentPost(Request $request){
+
+            $SelectedUpliftmentNumber = $request->input('SelectedUpliftmentNumber');
+            $UserID = Auth::user()->UserID;
+
+            DB::connection('sqlsrv2')->statement("exec spApproveUpliftment ?,?", array($SelectedUpliftmentNumber,$UserID));
 
     }
     public function getCustomerForSelectedCompany(Request $request){

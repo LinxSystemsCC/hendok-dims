@@ -161,6 +161,7 @@
                 <div style="width: 100%; height: 5%;" id="gridBoxCurrent"></div>
 
             <div class="modal-footer">
+                <button type="button" id="approveupliftment" class="btn btn-success" hidden>Approve</button>
                 <button type="button" id="updateupliftment" class="btn btn-success" hidden>Update</button>
                 <button type="button" id="imageupliftment" class="btn btn-success" hidden>Images</button>
                 <button type="button" id="enquireupliftment" class="btn btn-success" hidden>Enquiry</button>
@@ -469,6 +470,7 @@
                         createDataGrid();
                         $('#imageupliftment').prop('hidden',true);
                         $('#updateupliftment').prop('hidden',true);
+                        $('#approveupliftment').prop('hidden',true);
                         $('#enquireupliftment').prop('hidden',true);
                         $('#backlogupliftment').prop('hidden',true);
                         $('#savesupliftment').prop('hidden',false);
@@ -554,6 +556,25 @@
                 }
             });
         });
+        $('#approveupliftment').click(function(){
+
+            var formData = new FormData();
+
+            formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/approveUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        
         $('#updateupliftment').click(function(){
             var checkedLines = Array();
             var grid = $("#gridBoxCurrent").dxDataGrid("getDataSource").store().load().done(function (data) {
@@ -721,6 +742,7 @@
                         SelectedUpliftmentNumber = e.data.intUpliftmentNumber;
                         $('#newarea').modal('toggle');
                         $('#updateupliftment').prop('hidden',false);
+                        $('#approveupliftment').prop('hidden',false);
                         $('#imageupliftment').prop('hidden',false);
                         $('#enquireupliftment').prop('hidden',false);
                         $('#backlogupliftment').prop('hidden',false);
