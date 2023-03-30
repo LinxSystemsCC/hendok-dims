@@ -239,13 +239,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         {
                             dataField: "strReference",
                             caption: "Reference",
-                            //width: 80,
                         },
                         {
                             dataField: "strMachineName",
                             caption: "Machine",
-                            //width: 300,
-
+                        },
+                        {
+                            dataField: "strStatus",
+                            caption: "Status",
                         }
                     ],
 
