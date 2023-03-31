@@ -64,7 +64,7 @@
 
     </div>
     <div class="col-lg-12"  style="background: white;display:flex;text-align: center;margin-left: 105px; margin-top: 5px;">
-        <input type="number" id="qty" value="1"> <br>
+        <input type="number" id="qty" value="2"> <br>
         <input type="hidden" id="jobId" value="{{$jobid}}" style="width: 100%"> <br>
 
 @if($fullfilled !="Finished")
