@@ -1,3 +1,22 @@
+
+<?php
+if ((Auth::guest()))
+{
+
+}else{
+    $v  =  new \App\Http\Controllers\SalesForm();
+    $make = $v->getThingsUserPermissions(Auth::user()->UserID,'Make Voucher');
+    $view = $v->getThingsUserPermissions(Auth::user()->UserID,'View Upliftment Voucher');
+    $update = $v->getThingsUserPermissions(Auth::user()->UserID,'Update Upliftment Voucher');
+    $enquiry = $v->getThingsUserPermissions(Auth::user()->UserID,'Enquire Upliftment Voucher');
+    $backlog = $v->getThingsUserPermissions(Auth::user()->UserID,'View Backlogs Upliftment Voucher');
+    $approve = $v->getThingsUserPermissions(Auth::user()->UserID,'Approve Uplifment Voucher');
+    $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Print Upliftment Voucher');
+    $complete = $v->getThingsUserPermissions(Auth::user()->UserID,'Complete Upliftment Voucher');
+    $viewimage = $v->getThingsUserPermissions(Auth::user()->UserID,'View Image Upliftment Voucher');
+    
+}   
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,9 +62,15 @@
         <div class="col-lg-12 d-inline-flex" >
             <h3 style="flex-grow: 1; padding-left: 15px;">Upliftments</h3>
             <!-- Button trigger modal -->
+            @if($make !="0")
             <button type="button" id="newupliftmentbutton"class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newarea">
                 New Upliftment
-            </button>
+            </button>  
+            @else
+            <button type="button" id="newupliftmentbutton"class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newarea"disabled>
+                New Upliftment
+            </button>  
+            @endif
         </div>
         
         <div id="gridContainer" style=""></div>
@@ -161,14 +186,60 @@
                 <div style="width: 100%; height: 5%;" id="gridBoxCurrent"></div>
 
             <div class="modal-footer">
+
+            @if($complete !="0")
+                <button type="button" id="completeupliftment" class="btn btn-success" hidden>Complete</button>
+                @else
+                
+                <button type="button" id="completeupliftment" class="btn btn-success" hidden disabled>Complete</button>
+            @endif
+
+            @if($print !="0")
+                <button type="button" id="printupliftment" class="btn btn-success" hidden>Print</button>
+                @else
+                
+                <button type="button" id="printupliftment" class="btn btn-success" hidden disabled>Print</button>
+            @endif
+
+            @if($approve !="0")
                 <button type="button" id="approveupliftment" class="btn btn-success" hidden>Approve</button>
+                @else
+                
+                <button type="button" id="approveupliftment" class="btn btn-success" hidden disabled>Approve</button>
+            @endif
+            
+            @if($update !="0")
                 <button type="button" id="updateupliftment" class="btn btn-success" hidden>Update</button>
+                @else
+                
+                <button type="button" id="updateupliftment" class="btn btn-success" hidden disabled>Update</button>
+            @endif
+            
+            @if($viewimage !="0")
                 <button type="button" id="imageupliftment" class="btn btn-success" hidden>Images</button>
+                @else
+                
+                <button type="button" id="imageupliftment" class="btn btn-success" hidden disabled>Images</button>
+            @endif
+            
+            @if($enquiry !="0")
                 <button type="button" id="enquireupliftment" class="btn btn-success" hidden>Enquiry</button>
+                @else
+                
+                <button type="button" id="enquireupliftment" class="btn btn-success" hidden disabled>Enquiry</button>
+            @endif
+            
+            @if($backlog !="0")
                 <button type="button" id="backlogupliftment" class="btn btn-success" hidden>Backlog</button>
+                @else
+                
+                <button type="button" id="backlogupliftment" class="btn btn-success" hidden disabled>Backlog</button>
+            @endif
 
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
                 <button type="button" id="savesupliftment" class="btn btn-success" >Save</button>
+
             </div>
         </div>
     </div>
@@ -470,6 +541,8 @@
                         createDataGrid();
                         $('#imageupliftment').prop('hidden',true);
                         $('#updateupliftment').prop('hidden',true);
+                        $('#printupliftment').prop('hidden',true);
+                        $('#completeupliftment').prop('hidden',true);
                         $('#approveupliftment').prop('hidden',true);
                         $('#enquireupliftment').prop('hidden',true);
                         $('#backlogupliftment').prop('hidden',true);
@@ -648,6 +721,8 @@
             });
         });
         
+    var viewPermission = <?php echo json_encode($view); ?>;
+    console.log("viewperms " + viewPermission);
         $.ajax({
 
             url: '{!!url("/getUpliftmentRecords")!!}',
@@ -737,10 +812,15 @@
                         },
                         
                     ],
+                    
                     onRowDblClick: function(e) {
+                        
+                    if (viewPermission) {
                         var upliftmentNumber = e.data.intUpliftmentNumber;
                         SelectedUpliftmentNumber = e.data.intUpliftmentNumber;
                         $('#newarea').modal('toggle');
+                        $('#printupliftment').prop('hidden',false);
+                        $('#completeupliftment').prop('hidden',false);
                         $('#updateupliftment').prop('hidden',false);
                         $('#approveupliftment').prop('hidden',false);
                         $('#imageupliftment').prop('hidden',false);
@@ -916,7 +996,7 @@
                                 populateDataGrid(data);
 
                         }});
-
+                    }
                     }
             });
         }
