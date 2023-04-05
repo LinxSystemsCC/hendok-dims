@@ -359,6 +359,32 @@ class WareHouseController extends Controller
         DB::connection('sqlsrv2')->statement('exec spUpliftmentDelete ?,?', array($intUpliftmentNumber,$UserID));
 
     }
+
+    public function completeUpliftmentPost(Request $request){
+
+        $UserID = Auth::user()->UserID;
+        $intUpliftmentNumber = $request->get('intUpliftmentNumber');
+        
+        DB::connection('sqlsrv2')->statement('exec spUpliftmentComplete ?,?', array($intUpliftmentNumber,$UserID));
+
+    }
+    public function printUpliftmentPost(Request $request){
+
+        $UserID = Auth::user()->UserID;
+        $intUpliftmentNumber = $request->get('intUpliftmentNumber');
+        
+        DB::connection('sqlsrv2')->statement('exec spUpliftmentPrint ?,?', array($intUpliftmentNumber,$UserID));
+
+    }
+
+    public function denyUpliftmentPost(Request $request){
+
+        $UserID = Auth::user()->UserID;
+        $intUpliftmentNumber = $request->get('intUpliftmentNumber');
+        
+        DB::connection('sqlsrv2')->statement('exec spUpliftmentDeny ?,?', array($intUpliftmentNumber,$UserID));
+
+    }
     public function upliftImageGetter($upliftmentnumber){
         
         $returndata = DB::connection('sqlsrv2') ->select("select image from tblUpliftmentPhotos where intUpliftment = ".$upliftmentnumber);
@@ -785,6 +811,8 @@ class WareHouseController extends Controller
 
         return response()->json($returndata);
     }
+
+    
     
     public function getDepListToPlan(Request $request){
         $ItemGroup = $request->get("ItemGroup");

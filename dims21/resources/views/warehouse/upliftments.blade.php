@@ -207,6 +207,12 @@ if ((Auth::guest()))
                 
                 <button type="button" id="approveupliftment" class="btn btn-success" hidden disabled>Approve</button>
             @endif
+            @if($approve !="0")
+                <button type="button" id="denyupliftment" class="btn btn-success" hidden>Deny</button>
+                @else
+                
+                <button type="button" id="denyupliftment" class="btn btn-success" hidden disabled>Deny</button>
+            @endif
             
             @if($update !="0")
                 <button type="button" id="updateupliftment" class="btn btn-success" hidden>Update</button>
@@ -544,6 +550,7 @@ if ((Auth::guest()))
                         $('#printupliftment').prop('hidden',true);
                         $('#completeupliftment').prop('hidden',true);
                         $('#approveupliftment').prop('hidden',true);
+                        $('#denyupliftment').prop('hidden',true);
                         $('#enquireupliftment').prop('hidden',true);
                         $('#backlogupliftment').prop('hidden',true);
                         $('#savesupliftment').prop('hidden',false);
@@ -648,6 +655,61 @@ if ((Auth::guest()))
             });
         });
         
+        $('#printupliftment').click(function(){
+
+            var formData = new FormData();
+
+            formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/printUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        
+        $('#completeupliftment').click(function(){
+
+            var formData = new FormData();
+
+            formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/completeUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        $('#denyupliftment').click(function(){
+
+            var formData = new FormData();
+
+            formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/denyUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
         $('#updateupliftment').click(function(){
             var checkedLines = Array();
             var grid = $("#gridBoxCurrent").dxDataGrid("getDataSource").store().load().done(function (data) {
@@ -817,12 +879,24 @@ if ((Auth::guest()))
                         
                     if (viewPermission) {
                         var upliftmentNumber = e.data.intUpliftmentNumber;
+                        var statusupliftment = e.data.strUpliftmentStatus;
                         SelectedUpliftmentNumber = e.data.intUpliftmentNumber;
                         $('#newarea').modal('toggle');
-                        $('#printupliftment').prop('hidden',false);
-                        $('#completeupliftment').prop('hidden',false);
+                        if(statusupliftment !="Denied" &&statusupliftment !="Enquired" &&statusupliftment !="Pending")
+                        {
+                            console.log("hiding");
+                        $('#printupliftment').prop('hidden',false); //can only appear from approved
+                        }
+                        
+                        if(statusupliftment =="Printed" || statusupliftment =="Completed")
+                        {
+                            console.log("hiding");
+                        $('#completeupliftment').prop('hidden',false); // can only appear from printed
+                        }
                         $('#updateupliftment').prop('hidden',false);
+                        
                         $('#approveupliftment').prop('hidden',false);
+                        $('#denyupliftment').prop('hidden',false);
                         $('#imageupliftment').prop('hidden',false);
                         $('#enquireupliftment').prop('hidden',false);
                         $('#backlogupliftment').prop('hidden',false);

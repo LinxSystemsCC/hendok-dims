@@ -1070,6 +1070,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);  
     Route::get('getUpliftmentDetails',[WareHouseController::class,'getUpliftmentDetails']);
     Route::post('deleteUpliftmentPost',[WareHouseController::class,'deleteUpliftmentPost']);
+    Route::post('printUpliftmentPost',[WareHouseController::class,'printUpliftmentPost']);
+    Route::post('completeUpliftmentPost',[WareHouseController::class,'completeUpliftmentPost']);
+    Route::post('denyUpliftmentPost',[WareHouseController::class,'denyUpliftmentPost']);
     Route::get('upliftImageGetter/{upliftmentnumber}',[WareHouseController::class,'upliftImageGetter']);
     Route::get('upliftmentBacklog/{upliftmentnumber}',[WareHouseController::class,'upliftmentBacklog']);
     Route::get('upliftEnquiry/{upliftmentnumber}',[WareHouseController::class,'upliftEnquiry']);
