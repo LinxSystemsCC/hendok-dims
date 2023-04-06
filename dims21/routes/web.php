@@ -544,6 +544,7 @@ Route::get('printtripsheet/{ref}', [InvoicingController::class,'printtripsheet']
 Route::get('testWarehouseT/{ref}/{sonumber}/{ownerid}', [InvoicingController::class,'testWarehouseT']);
 Route::get('invManualAdj/{ref}/{sonumber}/{ownerid}/{autoindex}/{dates}', [InvoicingController::class,'invManualAdj']);
 Route::get('individualInvoicing', [InvoicingController::class,'individualInvoicing']);
+Route::get('individualInvoicingAPI', [InvoicingController::class,'individualInvoicingAPI']);
 Route::get('processInvoce', [InvoicingController::class,'processInvoce']);
 Route::get('viewAwaitingtoinvoice', [InvoicingController::class,'viewAwaitingtoinvoice']);
 Route::get('assignweighbridgeticket', [InvoicingController::class,'assignweighbridgeticket']);
@@ -1057,7 +1058,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('startgenratingqrcodeforpallet/{jpbid}/{isroofing}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
-    Route::post('saveLabels', [WareHouseController::class,'saveLabels']);  
+    Route::post('saveLabels', [WareHouseController::class,'saveLabels']);
     Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
     Route::post('insertUpliftmentAll',[WareHouseController::class,'insertUpliftmentAll']);
     Route::post('updateUpliftmentPost',[WareHouseController::class,'updateUpliftmentPost']);
@@ -1066,8 +1067,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('getCustomerForSelectedCompany',[WareHouseController::class,'getCustomerForSelectedCompany']);
     Route::post('getAreaAddressInvoiceInfoParam',[WarehouseController::class,'getAreaAddressInvoiceInfoParam']);
     Route::post('getAreaAddressInvoices',[WareHouseController::class,'getAreaAddressInvoices']);
-    Route::post('updateSavedLabels', [WareHouseController::class,'updateSavedLabels']);  
-    Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);  
+    Route::post('updateSavedLabels', [WareHouseController::class,'updateSavedLabels']);
+    Route::post('deleteSavedLabels', [WareHouseController::class,'deleteSavedLabels']);
     Route::get('getUpliftmentDetails',[WareHouseController::class,'getUpliftmentDetails']);
     Route::post('deleteUpliftmentPost',[WareHouseController::class,'deleteUpliftmentPost']);
     Route::post('printUpliftmentPost',[WareHouseController::class,'printUpliftmentPost']);
@@ -1077,9 +1078,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('upliftmentBacklog/{upliftmentnumber}',[WareHouseController::class,'upliftmentBacklog']);
     Route::get('upliftEnquiry/{upliftmentnumber}',[WareHouseController::class,'upliftEnquiry']);
     Route::post('upliftmentMessagePost',[WarehouseController::class,'upliftmentMessagePost']);
-    Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']); 
-    Route::post('deleteMappedLabels', [WareHouseController::class,'deleteMappedLabels']);  
-    Route::post('xmlUserGridPermsPost',[WareHouseController::class,'xmlUserGridPermsPost']);  
+    Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']);
+    Route::post('deleteMappedLabels', [WareHouseController::class,'deleteMappedLabels']);
+    Route::post('xmlUserGridPermsPost',[WareHouseController::class,'xmlUserGridPermsPost']);
     Route::get('galvmodulecomms',[WareHouseController::class,'galvmodulecomms']);
     Route::get('areapage', [WareHouseController::class,'areapage']);
     Route::get('labelspage', [WareHouseController::class,'labelspage']);
