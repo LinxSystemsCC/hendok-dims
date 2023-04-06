@@ -159,7 +159,13 @@
                     barcode: $('#barcode').val()
                 },
                 success: function (data) {
-                    location.reload();
+                    if(data[0].Result =="SUCCESS")
+                    {
+                        alert('Succesful Printout.');
+                        location.reload();
+                    }else{
+                        alert(data[0].Result);
+                    }
                 }
 
             });
