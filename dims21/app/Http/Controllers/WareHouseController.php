@@ -371,7 +371,7 @@ class WareHouseController extends Controller
     public function printUpliftmentPost(Request $request){
 
         $UserID = Auth::user()->UserID;
-        $intUpliftmentNumber = $request->get('intUpliftmentNumber');
+        $intUpliftmentNumber = $request->get('SelectedUpliftmentNumber');
         
         DB::connection('sqlsrv2')->statement('exec spUpliftmentPrint ?,?', array($intUpliftmentNumber,$UserID));
 
