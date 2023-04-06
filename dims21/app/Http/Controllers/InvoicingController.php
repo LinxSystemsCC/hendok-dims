@@ -108,10 +108,14 @@ class InvoicingController extends Controller
                         $x->Detail[$lineno]->UnitSellingPrice =floatval($innverVal->Price);
                         echo "Line--".$sdkHelper->GetWarehouseByCode("CPT");
                     }
+
                     //TO TEST
-                    echo "Line Quantity ".  $x->Detail[$lineno]->Quantity;
-                    if($innverVal->SoldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity<$innverVal->Toinvoice ){
-                        $x->Detail[$lineno]->Quantity = $innverVal->Toinvoice;
+                    // echo "Line Quantity ".  $x->Detail[$lineno]->Quantity;
+                    // dd($innverVal->soldByWeight);
+                    if($innverVal->soldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity<floatval($innverVal->Toinvoice) ){
+
+                        $x->Detail[$lineno]->Quantity = floatval($innverVal->Toinvoice);
+                        //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
                     }
 
                     $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
@@ -155,6 +159,17 @@ class InvoicingController extends Controller
                 return $err;
             }
         }
+
+    }
+    public function individualInvoicingAPI($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName){
+
+        echo $ownersId."<br>";
+        echo $SoNumber."<br>";
+        echo $invoiceid."<br>";
+        echo $ref."<br>";
+        echo $userid."<br>";
+        echo $userName."<br>";
+
 
     }
     //NOT IBT
@@ -464,7 +479,7 @@ class InvoicingController extends Controller
             }else{
                 $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");
             }
-          //new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
+            //new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
             $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemCode);
             $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($warehousecode) ;
             $InventoryTransaction->Operation =intval($adjmentType);//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
@@ -485,13 +500,13 @@ class InvoicingController extends Controller
 
             //echo "Finished";
             //isTranferedToCentralWH
-          //  DB::connection('sqlsrv3')->table('tblPickingPlan')
-               // ->where('intorderdetailId',$intorderdetailId )
+            //  DB::connection('sqlsrv3')->table('tblPickingPlan')
+            // ->where('intorderdetailId',$intorderdetailId )
             //    ->update(['isTranferedToCentralWH' => 1]);//
 
         }catch (Error $err){
             $result = $err;
-          //  echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+            //  echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             //echo $err;
         }
         return $result;
