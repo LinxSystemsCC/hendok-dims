@@ -285,7 +285,7 @@ class WareHouseController extends Controller
 
         //dd($product,$category,$department,$qty);
 
-        $returndata = DB::connection('sqlsrv2') ->statement('exec spInsertPrintForGenericLabels ?,?,?,?,?,?', array($product,$category,$department,$qty,$operator, $barcode));
+        $returndata = DB::connection('sqlsrv2') ->select('exec spInsertPrintForGenericLabels ?,?,?,?,?,?', array($product,$category,$department,$qty,$operator, $barcode));
         
         return response()->json($returndata);
     }
