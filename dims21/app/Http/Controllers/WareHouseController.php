@@ -380,7 +380,7 @@ class WareHouseController extends Controller
     public function denyUpliftmentPost(Request $request){
 
         $UserID = Auth::user()->UserID;
-        $intUpliftmentNumber = $request->get('intUpliftmentNumber');
+        $intUpliftmentNumber = $request->get('SelectedUpliftmentNumber');
         
         DB::connection('sqlsrv2')->statement('exec spUpliftmentDeny ?,?', array($intUpliftmentNumber,$UserID));
 
