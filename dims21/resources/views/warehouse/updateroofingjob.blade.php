@@ -310,6 +310,10 @@
                             caption: "Qty Planned",
                             //width: 600,
                         },{
+                            dataField: "fltWeight",
+                            caption: "Weight Planned",
+                            //width: 600,
+                        },{
                             dataField: "dtmCreated",
                             caption: "Created",
                             //width: 600,
