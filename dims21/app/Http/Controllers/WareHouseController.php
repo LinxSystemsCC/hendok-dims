@@ -363,7 +363,7 @@ class WareHouseController extends Controller
     public function completeUpliftmentPost(Request $request){
 
         $UserID = Auth::user()->UserID;
-        $intUpliftmentNumber = $request->get('intUpliftmentNumber');
+        $intUpliftmentNumber = $request->get('SelectedUpliftmentNumber');
         
         DB::connection('sqlsrv2')->statement('exec spUpliftmentComplete ?,?', array($intUpliftmentNumber,$UserID));
 
