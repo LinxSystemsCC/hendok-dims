@@ -804,6 +804,15 @@ if ((Auth::guest()))
                     scrolling: {
                         rowRenderingMode: 'infinite',
                     },
+                    editing: {
+                        mode: "row", // enable row editing
+                        allowDeleting: true, // enable row deletion
+                        confirmDelete: true, // show confirmation dialog before deletion
+                        texts: {
+                            deleteRow: "Delete row", // customize the delete button text
+                            confirmDeleteMessage: "Are you sure you want to delete this row?" // customize the confirmation message
+                        }
+                    },
                     paging:{
                         pageSize: 10,
                     },
@@ -874,6 +883,19 @@ if ((Auth::guest()))
                         },
                         
                     ],
+                    onRowRemoving: function(e) {
+                        console.log("DELETING"); // log the deleting action
+                        $.ajax({
+                            url: '{!!url("/deleteUpliftmentPost")!!}',
+                            type: 'POST',
+                            data: {
+                                intUpliftmentNumber: e.data.intUpliftmentNumber // pass the selected row data as data
+                            },
+                            success: function(data) {
+                                alert('Deleted');
+                            }
+                        });
+                    },
                     
                     onRowDblClick: function(e) {
                         
@@ -1229,17 +1251,7 @@ function populateDataGrid(datagriddata) {
         options: {
             text: "Delete",
             onClick: function() {
-                console.log("DELETING");
-                $.ajax({
-                    url: '{!!url("/deleteUpliftmentPost")!!}',
-                    type: 'POST',
-                    data: {
-                        intUpliftmentNumber: intUpliftForImage
-                    },
-                    success: function(data) {
-                        location.reload();
-                    }
-                });
+                
             }
         }
     },
