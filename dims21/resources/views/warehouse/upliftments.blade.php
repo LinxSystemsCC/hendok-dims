@@ -680,7 +680,7 @@ if ((Auth::guest()))
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    location.reload();
+                    window.location= '{!!url("/retrieveUpliftmentPrint")!!}/'+SelectedUpliftmentNumber;
 
                 }
             });
