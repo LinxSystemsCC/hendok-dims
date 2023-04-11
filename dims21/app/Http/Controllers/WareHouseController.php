@@ -498,7 +498,7 @@ class WareHouseController extends Controller
     }
     public function getUpliftmentPrintPDFEmbed($upliftmentnumber)
     {
-        $returndata = DB::connection('sqlsrv2')->select("select image from tblPrintedDocumentsFiles where strDocNumber = " . $upliftmentnumber);
+        $returndata = DB::connection('sqlsrv2')->select("select imgPDF from tblPrintedDocumentsFiles where strDocNumber = " . $upliftmentnumber);
         foreach ($returndata as $row) {
             $base64Image = hex2bin($row->image);
 
