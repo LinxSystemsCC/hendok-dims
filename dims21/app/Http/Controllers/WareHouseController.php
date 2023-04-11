@@ -508,11 +508,7 @@ class WareHouseController extends Controller
             finfo_close($finfo);
 
             // Generate the appropriate data URI scheme based on the MIME type of the image
-            switch ($mimeType) {
-                case 'application/pdf':
                     $uriScheme = 'data:application/pdf;base64,';
-                    break;
-            }
 
             // Prefix the base64-encoded string with the appropriate data URI scheme
             $dataURI = $uriScheme . base64_encode($base64Image);
