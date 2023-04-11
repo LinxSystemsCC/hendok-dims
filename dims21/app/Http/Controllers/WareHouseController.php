@@ -500,7 +500,7 @@ class WareHouseController extends Controller
     {
         $returndata = DB::connection('sqlsrv2')->select("select imgPDF as image from tblPrintedDocumentsFiles where strDocNumber = " . $upliftmentnumber);
         foreach ($returndata as $row) {
-            $base64Image = hex2bin($row->image);
+            $base64Image = ($row->image);
 
             // Get the MIME type of the image from the base64-encoded string
             $finfo = finfo_open();
