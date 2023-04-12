@@ -32,7 +32,7 @@
 </head>
 
 
-<div class="col-lg-12" style="background: white;height: 700px;">
+<div class="col-lg-12" style="background: white;height: 100%;">
     @forelse($imagedata as $val)
   <object type="application/pdf" data="{{ $val->image }}" style="width:100%; min-height:400px; height:100%;"></object>
 @empty
