@@ -544,7 +544,7 @@ Route::get('printtripsheet/{ref}', [InvoicingController::class,'printtripsheet']
 Route::get('testWarehouseT/{ref}/{sonumber}/{ownerid}', [InvoicingController::class,'testWarehouseT']);
 Route::get('invManualAdj/{ref}/{sonumber}/{ownerid}/{autoindex}/{dates}', [InvoicingController::class,'invManualAdj']);
 Route::get('individualInvoicing', [InvoicingController::class,'individualInvoicing']);
-Route::get('individualInvoicingAPI', [InvoicingController::class,'individualInvoicingAPI']);
+Route::get('individualInvoicingAPI/{ownersId}/{SoNumber}/{invoiceid}/{ref}/{userid}/{userName}{', [InvoicingController::class,'individualInvoicingAPI']);
 Route::get('processInvoce', [InvoicingController::class,'processInvoce']);
 Route::get('viewAwaitingtoinvoice', [InvoicingController::class,'viewAwaitingtoinvoice']);
 Route::get('assignweighbridgeticket', [InvoicingController::class,'assignweighbridgeticket']);
