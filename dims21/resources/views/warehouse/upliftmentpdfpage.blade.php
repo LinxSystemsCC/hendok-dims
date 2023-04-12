@@ -33,10 +33,20 @@
 
 
 <div class="col-lg-12" style="background: white;height: 700px;">
-        @foreach($imagedata as $val)
-        
-        <object type="application/pdf" data="{{$val->image}}" style="width:100%; min-height:400px; height:100%;"></object>
-        @endforeach
+    @forelse($imagedata as $val)
+  <object type="application/pdf" data="{{ $val->image }}" style="width:100%; min-height:400px; height:100%;"></object>
+@empty
+  <p id="loading-message">No image data found. Please be patient for the file to generate...</p>
+  <script>
+    // Set an interval to refresh the page every 5 seconds if the message is still displayed
+    setInterval(function() {
+      if (document.getElementById('loading-message')) {
+        location.reload();
+      }
+    }, 5000);
+  </script>
+@endforelse
+
 </div>
 <style>
     .dx-datagrid-table{
