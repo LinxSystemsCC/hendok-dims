@@ -35,7 +35,8 @@
 <div class="col-lg-12"  style="background: white;">
     <div class="image-container">
         @foreach($imagedata as $val)
-        <img src="{{$val->image}}"style="display: block; width: 100%; height: auto;">
+        
+        <object type="application/pdf" data="{{$val->image}}" style="width:100%; min-height:400px; height:100%;"></object>
         @endforeach
     </div>
 </div>

@@ -498,15 +498,10 @@ class WareHouseController extends Controller
     }
     public function getUpliftmentPrintPDFEmbed($upliftmentnumber)
     {
-        $returndata = DB::connection('sqlsrv2')->select("select imgPDF as image from tblPrintedDocumentsFiles where strDocNumber = " . $upliftmentnumber);
+        $returndata = DB::connection('sqlsrv2')->select("exec spRetrieveDocumentUpliftment ? ",array($upliftmentnumber));
         foreach ($returndata as $row) {
             $base64Image = ($row->image);
-
-            // Get the MIME type of the image from the base64-encoded string
-            $finfo = finfo_open();
-            $mimeType = finfo_buffer($finfo, $base64Image, FILEINFO_MIME_TYPE);
-            finfo_close($finfo);
-
+            
             // Generate the appropriate data URI scheme based on the MIME type of the image
                     $uriScheme = 'data:application/pdf;base64,';
 
