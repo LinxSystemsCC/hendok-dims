@@ -32,13 +32,11 @@
 </head>
 
 
-<div class="col-lg-12"  style="background: white;">
-    <div class="image-container">
+<div class="col-lg-12" style="background: white;height: 700px;">
         @foreach($imagedata as $val)
         
         <object type="application/pdf" data="{{$val->image}}" style="width:100%; min-height:400px; height:100%;"></object>
         @endforeach
-    </div>
 </div>
 <style>
     .dx-datagrid-table{
