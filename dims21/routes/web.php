@@ -1060,6 +1060,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::post('saveLabels', [WareHouseController::class,'saveLabels']);
     Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
+    Route::get('retrieveUpliftmentPrint/{intupliftmentnumber}',[WareHouseController::class,'getUpliftmentPrintPDFEmbed']);
     Route::post('insertUpliftmentAll',[WareHouseController::class,'insertUpliftmentAll']);
     Route::post('updateUpliftmentPost',[WareHouseController::class,'updateUpliftmentPost']);
     Route::post('approveUpliftmentPost',[WareHouseController::class,'approveUpliftmentPost']);

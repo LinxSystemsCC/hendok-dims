@@ -125,33 +125,39 @@ if ((Auth::guest()))
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="customers">Customer Name</label>
+                    <label class="control-label" for="customers"style="font-weight: 700;">Customer Name</label>
                     <input  class="form-control input-sm col-xs-1" id="customers" style="width: 100%" required>
                     
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="selectedarea">Selected Area</label>
+                    <label class="control-label" for="selectedarea"style="font-weight: 700;">Selected Area</label>
                     <input readonly  class="form-control input-sm col-xs-1" id="selectedarea" style="width: 100%" required>
                     
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="area">Custom Area Selection</label>
+                    <label class="control-label" for="area"style="font-weight: 700;">Alternative Area Selection</label>
                     <input  class="form-control input-sm col-xs-1" id="area" style="width: 100%" required>
                 </select>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="address">Address Name</label>
+                    <label class="control-label" for="address"style="font-weight: 700;">Address Name</label>
                     <select  class="form-select" id="address" style="width: 100%" required>
                     <option></option>
                 </select>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="altaddress">Alternative Address Name</label>
+                    <label class="control-label" for="altaddress"style="font-weight: 700;">Alternative Address Name</label>
                     <textarea  class="form-control input-sm col-xs-1" id="altaddress" style="width: 100%" required></textarea>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="invoice"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice</label>
                     <input  class="form-control input-sm col-xs-1" id="invoice" style="width: 100%" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="control-label" for="altinvoice"style="font-weight: 700;">Alternative Invoice</label>
+                    <input  class="form-control input-sm col-xs-1" id="altinvoice" style="width: 100%" required>
+                </select>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="reasonpickup"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reason for Pickup</label>
@@ -560,6 +566,7 @@ if ((Auth::guest()))
                         $('#area').val('');
                         $('#selectedarea').val('');
                         $('#altaddress').val('');
+                        $('#altinvoice').val('');
                         $('#address').val('');
                         $('#customers').val('');
                         $('#company').val('');
@@ -602,7 +609,6 @@ if ((Auth::guest()))
 
                         // Append the other form data to the FormData object
                         formData.append('dataxml', gridResults);
-                        formData.append('invoice', $('#invoice').val());
                         formData.append('reasonpickup', $('#reasonpickup').val());
                         if ($('#area').val().length > 0){
                         formData.append('area', $('#area').val());
@@ -616,6 +622,12 @@ if ((Auth::guest()))
                         }
                         else {
                         formData.append('address', $('#address').val());
+                        }
+                        if ($('#altinvoice').val().length > 0){
+                        formData.append('invoice', $('#altinvoice').val());
+                        }
+                        else {
+                        formData.append('invoice', $('#invoice').val());
                         }
                         
                         formData.append('customers', $('#customers').val());
@@ -668,7 +680,7 @@ if ((Auth::guest()))
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    location.reload();
+                    window.location= '{!!url("/retrieveUpliftmentPrint")!!}/'+SelectedUpliftmentNumber;
 
                 }
             });
@@ -747,7 +759,6 @@ if ((Auth::guest()))
 
                         // Append the other form data to the FormData object
                         formData.append('dataxml', gridResults);
-                        formData.append('invoice', $('#invoice').val());
                         formData.append('reasonpickup', $('#reasonpickup').val());
                         if ($('#area').val().length > 0){
                         formData.append('area', $('#area').val());
@@ -762,7 +773,12 @@ if ((Auth::guest()))
                         else {
                         formData.append('address', $('#address').val());
                         }
-                        
+                        if ($('#altinvoice').val().length > 0){
+                        formData.append('invoice', $('#altinvoice').val());
+                        }
+                        else {
+                        formData.append('invoice', $('#invoice').val());
+                        }
                         formData.append('customers', $('#customers').val());
                         formData.append('company', $('#company').val());
                         formData.append('date', $('#date').val());
@@ -803,6 +819,15 @@ if ((Auth::guest()))
                     columnAutoWidth: true,
                     scrolling: {
                         rowRenderingMode: 'infinite',
+                    },
+                    editing: {
+                        mode: "row", // enable row editing
+                        allowDeleting: true, // enable row deletion
+                        confirmDelete: true, // show confirmation dialog before deletion
+                        texts: {
+                            deleteRow: "Delete row", // customize the delete button text
+                            confirmDeleteMessage: "Are you sure you want to delete this row?" // customize the confirmation message
+                        }
                     },
                     paging:{
                         pageSize: 10,
@@ -874,6 +899,19 @@ if ((Auth::guest()))
                         },
                         
                     ],
+                    onRowRemoving: function(e) {
+                        console.log("DELETING"); // log the deleting action
+                        $.ajax({
+                            url: '{!!url("/deleteUpliftmentPost")!!}',
+                            type: 'POST',
+                            data: {
+                                intUpliftmentNumber: e.data.intUpliftmentNumber // pass the selected row data as data
+                            },
+                            success: function(data) {
+                                alert('Deleted');
+                            }
+                        });
+                    },
                     
                     onRowDblClick: function(e) {
                         
@@ -1229,17 +1267,7 @@ function populateDataGrid(datagriddata) {
         options: {
             text: "Delete",
             onClick: function() {
-                console.log("DELETING");
-                $.ajax({
-                    url: '{!!url("/deleteUpliftmentPost")!!}',
-                    type: 'POST',
-                    data: {
-                        intUpliftmentNumber: intUpliftForImage
-                    },
-                    success: function(data) {
-                        location.reload();
-                    }
-                });
+                
             }
         }
     },
