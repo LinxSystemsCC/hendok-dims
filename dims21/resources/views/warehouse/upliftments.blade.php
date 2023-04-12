@@ -680,7 +680,7 @@ if ((Auth::guest()))
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    window.open('{!!url("/retrieveUpliftmentPrint")!!}/'+SelectedUpliftmentNumber, '_blank');
+                    window.open('{!!url("/retrieveUpliftmentPrint")!!}/'+SelectedUpliftmentNumber, 'width=800,height=600,resizable=yes,scrollbars=yes,status=yes');
 
                 }
             });
