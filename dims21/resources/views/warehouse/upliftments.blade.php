@@ -926,7 +926,7 @@ if ((Auth::guest()))
                         $('#printupliftment').prop('hidden',false); //can only appear from approved
                         }
                         
-                        if(statusupliftment =="Printed" || statusupliftment =="Completed")
+                        if(statusupliftment =="Printed" || statusupliftment =="Completed"|| statusupliftment =="Approved")
                         {
                             console.log("hiding");
                         $('#completeupliftment').prop('hidden',false); // can only appear from printed
