@@ -309,6 +309,9 @@
                         showPageSizeSelector: true,
                         showInfo: true,
                         showNavigationButtons: true,
+                    },editing: {
+                        mode: 'batch',
+                        allowDeleting: true,
                     },
                     export: {
                         enabled: true
@@ -353,6 +356,19 @@
                             caption: "Printer",
                         },
                     ],
+                    onRowRemoving: function(e) {
+                        var labelID = e.data.intAutoLinkedCatLabelId;
+                        $.ajax({
+                            url: '{!!url("/deleteSavedLabelMapping")!!}',
+                            type: "POST",
+                            data: {
+                                labelID:labelID,
+                            },
+                            success: function (data) {
+                                location.reload();
+                            }
+                        });
+                    },
                     onRowDblClick:function(e){
 
                         // console.debug(e.row,cells[e.columnIndex]);

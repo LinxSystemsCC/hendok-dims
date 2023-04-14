@@ -1059,6 +1059,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::post('saveLabels', [WareHouseController::class,'saveLabels']);
+    Route::post('deleteSavedLabelMapping',[WareHouseController::class,'deleteSavedLabelMapping']);
     Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
     Route::get('retrieveUpliftmentPrint/{intupliftmentnumber}',[WareHouseController::class,'getUpliftmentPrintPDFEmbed']);
     Route::post('insertUpliftmentAll',[WareHouseController::class,'insertUpliftmentAll']);

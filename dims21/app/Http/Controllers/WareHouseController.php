@@ -2066,7 +2066,11 @@ where intDeptID =" . $deptId);
         // dd($return);
         return response()->json($return);
     }
-
+    public function deleteSavedLabelMapping(Request $request)
+    {
+        $labelID = $request->get("labelID");
+        DB::connection('sqlsrv2')->statement('exec spDeleteMappedLabel ?', array($labelID));
+    }
     public function deleteSavedLabels(Request $request)
     {
         $labelname = $request->get("labelname");
