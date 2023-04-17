@@ -1575,8 +1575,20 @@ where intDeptID =" . $deptId);
         return view('warehouse/galvmodulecomms')->with('galvloggrid', $galvloggrid);
     }
 
-    public function endjob(Request $request)
-    {
+    public function issuestock(){
+        // $pastelUsers = '';
+        // $ProductCodes = '';
+        // $ProductDescriptions = '';
+
+        return view ('warehouse/issuestock');
+    }
+
+    public function getIssueStock(Request $request){
+        $result =  DB::connection('sqlsrv3')->select('select * from tblStockIssueHeader');
+        return response()->json($result);
+    }
+
+    public function endjob(Request $request){
         $jobid = $request->get("jobid");
         $endjob = $request->get("endjob");
         $endjob = (new \DateTime($endjob))->format('Y-m-d H:i:s');
@@ -1844,6 +1856,17 @@ where intDeptID =" . $deptId);
         $status = $request->get("status");
 
         $data = DB::connection('sqlsrv3')->select('exec spUpdateRoofingSOStatus ?,?,?', array($reference, $machine, $status));
+        return response()->json($data);
+    }
+
+    public function changeRoofingInvoiceStatus(Request $request){
+        $reference = $request->get("reference");
+        $machine = $request->get("machine");
+        $SONumber = $request->get("SONumber");
+        $InvNumber = $request->get("InvNumber");
+        $status = $request->get("status");
+
+        $data = DB::connection('sqlsrv3')->select('exec spUpdateRoofingInvoiceStatus ?,?,?,?,?',array($reference, $machine, $SONumber, $InvNumber, $status));
         return response()->json($data);
     }
 

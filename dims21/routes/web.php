@@ -906,6 +906,8 @@ Route::post('savepermissions', [WareHouseController::class,'savepermissions']);
 Route::post('printgenericlabel', [WareHouseController::class,'printgenericlabel']);
 Route::post('printgalvlabel', [WareHouseController::class,'printgalvlabel']);
 Route::get('startendjob', [WareHouseController::class,'startendjob']);
+Route::get('issuestock', [WareHouseController::class,'issuestock']);
+Route::get('getIssueStock', [WareHouseController::class,'getIssueStock']);
 
 
 Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
@@ -1049,6 +1051,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('roofingSOUpdate/{reference}/{machine}', [WareHouseController::class,'roofingSOUpdate']);
     Route::get('getRoofingSOtoUpdate', [WareHouseController::class,'getRoofingSOtoUpdate']);
     Route::get('changeRoofingSOStatus', [WareHouseController::class,'changeRoofingSOStatus']);
+    Route::get('changeRoofingInvoiceStatus', [WareHouseController::class,'changeRoofingInvoiceStatus']);
     Route::get('getsalesorders', [WareHouseController::class,'getsalesorders']);
     Route::get('getroofingheaders', [WareHouseController::class,'getroofingheaders']);
     Route::get('getroofinglines', [WareHouseController::class,'getroofinglines']);

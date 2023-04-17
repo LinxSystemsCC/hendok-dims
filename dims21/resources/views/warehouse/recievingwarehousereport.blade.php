@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
     <!-- DevExtreme theme -->
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css">
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
@@ -110,6 +110,14 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
+        // Select the date input element
+        var dateFromInput = $('#deliveryDate');
+
+        // Get the current date
+        var today = new Date().toISOString().slice(0, 10);
+
+        // Set the default value of the date input to today's date
+        dateFromInput.val(today);
 
         $.ajax({
             url: '{!!url("/getMainWarehouseReport")!!}',

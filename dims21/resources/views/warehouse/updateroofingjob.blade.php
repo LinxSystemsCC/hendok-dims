@@ -133,26 +133,6 @@
         var reference = '{!! $reference !!}';
         var machine = '{!! $machine !!}';
 
-        $('#savestatus').click(function(){
-            $.ajax({
-                url: '{!!url("/changeRoofingSOStatus")!!}',
-                type: "GET",
-                data: {
-                    reference: '{!! $reference !!}',
-                    machine: '{!! $machine !!}',
-                    status:$('#setstatus').val(),
-                },
-                success: function (data) {
-                    if(data[0].Result =="SUCCESS"){
-                        location.reload();
-                    }else{
-                        alert(data[0].Result);
-                        location.reload();
-                    }
-                }
-            });
-        });
-
         $('#updateSeq').click(function(){
             var allGridItems =  $("#jobgrid").dxDataGrid("getDataSource").items();
             var checkedLines = new Array();
@@ -222,7 +202,7 @@
             });
         });
 
-        
+        var jobGrid;
 
         $.ajax({
             url: '{!!url("/getRoofingSOtoUpdate")!!}',
@@ -234,7 +214,7 @@
             success: function (data) {
                 // console.log(data);
 
-                $("#jobgrid").dxDataGrid({
+                jobGrid = $("#jobgrid").dxDataGrid({
                     dataSource: data, //as json
                     showBorders: true,
                     hoverStateEnabled: true,
@@ -346,7 +326,57 @@
                         
                     }
 
-                });
+                }).dxDataGrid("instance");
+            }
+        });
+
+        $('#savestatus').click(function(){
+            if (jobGrid) {
+                var selectedRows = jobGrid.getSelectedRowsData();
+                if (selectedRows.length > 0) {
+                    selectedRows.forEach(function(row) {
+                        var strSONum = row.strSONum;
+                        var intOrderLineId = row.intOrderLineId;
+                        // console.log("SO Number: " + strSONum + ", Order Line ID: " + intOrderLineId);
+                            $.ajax({
+                                url: '{!!url("/changeRoofingInvoiceStatus")!!}',
+                                type: "GET",
+                                data: {
+                                    reference: '{!! $reference !!}',
+                                    machine: '{!! $machine !!}',
+                                    SONumber: strSONum,
+                                    InvNumber: intOrderLineId,
+                                    status:$('#setstatus').val(),
+                                },
+                                success: function (data) {
+                                    if(data[0].Result =="SUCCESS"){
+                                        location.reload();
+                                    }else{
+                                        alert(data[0].Result);
+                                        location.reload();
+                                    }
+                                }
+                            });
+                    });
+                } else {
+                    $.ajax({
+                        url: '{!!url("/changeRoofingSOStatus")!!}',
+                        type: "GET",
+                        data: {
+                            reference: '{!! $reference !!}',
+                            machine: '{!! $machine !!}',
+                            status:$('#setstatus').val(),
+                        },
+                        success: function (data) {
+                            if(data[0].Result =="SUCCESS"){
+                                location.reload();
+                            }else{
+                                alert(data[0].Result);
+                                location.reload();
+                            }
+                        }
+                    });
+                }
             }
         });
 
