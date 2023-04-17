@@ -245,6 +245,10 @@
                     },
                     columns: [
                         {
+                            dataField: "strJobStatus",
+                            caption: "Status",
+                            //width: 600,
+                        },{
                             dataField: "intRoofSOID",
                             caption: 'ID', 
                             // visible: false,
@@ -307,11 +311,7 @@
                             dataField: "dtmJobEnded",
                             caption: "End Date",
                             //width: 600,
-                        },{
-                            dataField: "strJobStatus",
-                            caption: "Status",
-                            //width: 600,
-                        },
+                        }
                     ],
 
                     onRowDblClick:function(e){

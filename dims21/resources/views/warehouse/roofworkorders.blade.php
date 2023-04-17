@@ -205,67 +205,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             $('#BSOPTab').removeClass("active");
             $('#BSTab').addClass("active");
         }
-        
-        $.ajax({
-            url: '{!!url("/getRoofWIP")!!}',
-            type: "GET",
-            data: {
-            },
-            success: function (data) {
-
-                $("#sequencegrid").dxDataGrid({
-                    dataSource:data, //as json
-                    showBorders: true,
-                    hoverStateEnabled: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    allowColumnResizing: true,
-                    columnAutoWidth: true,
-
-                    paging:{
-                        pageSize: 20,
-                    },
-                    selection: {
-                        mode: 'single',
-                    },
-
-                    columns: [
-                        {
-                            dataField: "UniqueId",
-                            caption: 'ID', 
-                            visible: false,
-                        },
-                        {
-                            dataField: "strReference",
-                            caption: "Reference",
-                        },
-                        {
-                            dataField: "strMachineName",
-                            caption: "Machine",
-                        },
-                        {
-                            dataField: "strStatus",
-                            caption: "Status",
-                        }
-                    ],
-
-                    
-                    onRowDblClick:function(e){
-                        //console.log(e.data.intJobId);
-                        var strReference =  e.data.strReference;
-                        var strMachineName = e.data.strMachineName;
-
-                        window.open('{!!url("/roofingSOUpdate")!!}/'+strReference+'/'+strMachineName,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
-
-                    }
-
-                }).dxDataGrid('instance');
-            }
-
-        });
 
         headersFunction();
+        getRoofWIP();
+        setInterval(getRoofWIP, 60000);
         
         $('#getheaders').click(function(){
             headersFunction();
@@ -503,7 +446,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             reader.readAsBinaryString(file);
         });
 
-
     });
 
     function headersFunction(){
@@ -673,6 +615,67 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             }
         });
     };
+
+    function getRoofWIP() {
+        $.ajax({
+            url: '{!!url("/getRoofWIP")!!}',
+            type: "GET",
+            data: {
+            },
+            success: function (data) {
+
+                $("#sequencegrid").dxDataGrid({
+                    dataSource:data, //as json
+                    showBorders: true,
+                    hoverStateEnabled: true,
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+
+                    paging:{
+                        pageSize: 20,
+                    },
+                    selection: {
+                        mode: 'single',
+                    },
+
+                    columns: [
+                        {
+                            dataField: "UniqueId",
+                            caption: 'ID', 
+                            visible: false,
+                        },
+                        {
+                            dataField: "strReference",
+                            caption: "Reference",
+                        },
+                        {
+                            dataField: "strMachineName",
+                            caption: "Machine",
+                        },
+                        {
+                            dataField: "strStatus",
+                            caption: "Status",
+                        }
+                    ],
+
+                    
+                    onRowDblClick:function(e){
+                        //console.log(e.data.intJobId);
+                        var strReference =  e.data.strReference;
+                        var strMachineName = e.data.strMachineName;
+
+                        window.open('{!!url("/roofingSOUpdate")!!}/'+strReference+'/'+strMachineName,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
+
+                    }
+
+                }).dxDataGrid('instance');
+            }
+
+        });
+    }
 
     function escapeHtml(unsafe) {
     return unsafe
