@@ -921,6 +921,9 @@ Route::get('deleteGalvChecker', [WareHouseController::class,'deleteGalvChecker']
 Route::get('changeGalvJobStatus', [WareHouseController::class,'changeGalvJobStatus']);
 Route::get('getGalvWIPConsolidated',[WareHouseController::class,'getGalvWIPConsolidated']);
 Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
+Route::post('deleteRoofingBatch', [WareHouseController::class,'deleteRoofingBatch']);
+Route::post('deleteRoofingSO', [WareHouseController::class,'deleteRoofingSO']);
+
 Route::get('getWIPjobstarted', [WareHouseController::class,'getWIPjobstarted']);
 Route::get('endjob', [WareHouseController::class,'endjob']);
 Route::get('getJobStarted', [WareHouseController::class,'getJobStarted']);

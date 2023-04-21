@@ -1956,6 +1956,23 @@ where intDeptID =" . $deptId);
         return response()->json($lines);
     }
 
+    public function deleteRoofingBatch(Request $request){
+        $ID = $request->get("ID");
+        $userid =  Auth::user()->UserID;
+
+        $result = DB::connection('sqlsrv3')->statement("exec spDeleteRoofingBatch ?,?", array($ID, $userid));
+        return response()->json($result);
+    }
+
+    public function deleteRoofingSO(Request $request){
+        $ID = $request->get("ID");
+        $userid =  Auth::user()->UserID;
+
+        $result = DB::connection('sqlsrv3')->statement("exec spDeleteRoofingSO ?,?", array($ID, $userid));
+        return response()->json($result);
+    }
+
+
     public function getjobcard($jobid)
     {
         $jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?', array($jobid));

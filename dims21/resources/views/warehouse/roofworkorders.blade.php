@@ -23,8 +23,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Select2 CSS -->
@@ -33,7 +31,26 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
     <!-- Select2 JS -->
 
-    <!-- DevExtreme library -->
+    <!-- DevExtreme theme -->
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
     <!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
@@ -47,7 +64,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 </head>
 
 <body>
-<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
+<div class="col-lg-12 d-flex bd-highlight w-100"  style="background: white;">
     <div class="col-lg-2" style="background: white;">
 
         <div class="vertical-menu">
@@ -55,7 +72,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         </div>
     </div>
 
-    <div class="col-lg-10"  style="width:100%; max-width:100% !important">
+    <div class="col-lg-10 mw-100"  style="width:100%; max-width: 89%; !important">
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link active" id="PPSOTab" aria-current="page">Pre Plan SO's</a>
@@ -123,10 +140,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                 <br><br>
                 
-                <div id="headergrid" style="width: 100% !important; height:50%;">
+                <div id="headergrid">
                 </div>
 
-                <div id="linesgrid" class="py-3" style="width: 100% !important; height:50%;">
+                <div id="linesgrid" class="py-3">
                     
                 </div>
 
@@ -148,8 +165,28 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 </div>
 
 <style>
-    .dx-datagrid-table{
-        font-size:15px;
+    .dx-datagrid{
+        max-width: 100% !important;
+    }
+
+    .dx-datagrid .dx-link {
+        color: #df2413;
+    }
+
+    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+        font-weight: 500;
+        background-color: #df2413;
+        color: #fff;
+    }
+
+    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+        color: #df2413;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    #linesgrid{
+        height: calc(100vh - 350px);
     }
 </style>
 
@@ -318,6 +355,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         });
 
         $('#saveBSOP').click(function(){
+            // alert('Clicked MF!');
             var allGridItems =  $("#linesgrid").dxDataGrid("getDataSource").items();
             var checkedLines = new Array();
 
@@ -344,8 +382,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
-                        location.reload();
-                        localStorage.setItem('BSOP', 'active');
+                        getLin
+                        // location.reload();
+                        // localStorage.setItem('BSOP', 'active');
                     }else{
                         alert(""+data[0].Result);
                     }
@@ -423,7 +462,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                 arrayData.shift();
 
-                console.log(arrayData);
+                // console.log(arrayData);
 
                 // Use the array data as needed
                 arrayData.forEach((element, index, value) => {
@@ -436,7 +475,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 });
             };
 
-            console.log(file);
+            // console.log(file);
             // console.log(InvoiceOrderList);
             // console.log(CompanyList);
             var ref = file["name"];
@@ -479,7 +518,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         mode: 'form',
                         // allowUpdating: true,
                         // allowAdding: true,
-                        // allowDeleting: true,
+                        allowDeleting: true,
                         useIcons: true,
                     },
                     selection: {
@@ -510,8 +549,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         batchID = headerID;
                         batchReference = e.data.strReference;
                         var machineslist = ({!! json_encode($machines) !!});
+                        machineslist.unshift({ intAutoMachineID: 0, strMachineName: "Unassigned" });
 
-                        console.debug(machineslist);
+                        // console.debug(machineslist);
 
                         $.ajax({
                             url: '{!!url("/getroofinglines")!!}',
@@ -533,17 +573,18 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     columnAutoWidth: true,
                                     keyExpr: 'UniqueID',
                                     editing: {
-                                        mode: 'batch',
+                                        mode: 'cell',
                                         allowUpdating: true,
+                                        saveButton: true, // enable Save Changes button
                                         // allowAdding: true,
-                                        // allowDeleting: true,
+                                        allowDeleting: true,
                                         useIcons: true,
                                     },
                                     selection: {
                                         mode: 'single',
                                     },
-                                    paging: {
-                                        enabled: false
+                                    paging:{
+                                        // pageSize: 11,
                                     },
 
                                     columns: [
@@ -574,6 +615,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                             dataField: "StoreName",
                                             caption: "Store Name",
                                             allowEditing : false,
+                                            width: 300,
                                         }, {
                                             dataField: "Code",
                                             caption: "Code",
@@ -591,7 +633,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                                 dataSource: machineslist,
                                                 valueExpr: "intAutoMachineID",
                                                 displayExpr: "strMachineName",
+                                            },
+                                            cellTemplate: function(container, options) {
+                                            if (options.value === 0) {
+                                                container.text("Unassigned");
+                                            } else {
+                                                container.text(options.displayValue);
                                             }
+                                        }
                                         },
                                         {
                                             dataField: "intQty",
@@ -599,15 +648,37 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         },
                                         
                                     ],
-                                    onSaved(data){
-                                        var orderheader = $("#orderheader").dxDataGrid("instance");
-                                        var row = orderheader.getSelectedRowKeys();
-                                        //console.debug(data);
-                                        var type = data.changes[0]["type"];
-                                        data = data.changes[0]["key"];
+                                    onRowRemoved(e){
+                                        var UniqueID = e.data.UniqueID
+
+                                        $.ajax({
+                                            url: '{!!url("/deleteRoofingSO")!!}',
+                                            type: "POST",
+                                            data: {
+                                                ID: UniqueID,
+                                            },
+                                            success: function (data) {
+                                                alert("Order Deleted");
+                                            }
+                                        });
                                     },
                                     
-                                });
+                                }).dxDataGrid("instance");
+                            }
+                        });
+                    },
+
+                    onRowRemoved(e){
+                        var HeaderID = e.data.intRoofingHeader
+
+                        $.ajax({
+                            url: '{!!url("/deleteRoofingBatch")!!}',
+                            type: "POST",
+                            data: {
+                                ID: HeaderID,
+                            },
+                            success: function (data) {
+                                alert("Reference Deleted");
                             }
                         });
                     },
