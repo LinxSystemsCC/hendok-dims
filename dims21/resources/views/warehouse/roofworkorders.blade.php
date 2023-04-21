@@ -185,9 +185,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         line-height: 18px;
     }
 
-    #linesgrid{
-        height: calc(100vh - 350px);
-    }
 </style>
 
 <script>
