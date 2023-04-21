@@ -1576,15 +1576,67 @@ where intDeptID =" . $deptId);
     }
 
     public function issuestock(){
-        // $pastelUsers = '';
-        // $ProductCodes = '';
-        // $ProductDescriptions = '';
+        $stockGroup = DB::connection('sqlsrv3')->select("SELECT DISTINCT whs.StockGroup FROM [Hendok Distribution].dbo._bvWarehouseStockFull whs WHERE whs.WhCode = 'MRO'");
+        $upkeepjobs = $this->getOpenUpkeepWorkOrders();
+        $areas = DB::connection('sqlsrv3')->select("SELECT * FROM tblAreas");
+        $departments = DB::connection('sqlsrv3')->select("SELECT * FROM tblDepartments");
+        $machines = DB::connection('sqlsrv3')->select("SELECT * FROM tblMachines");
 
-        return view ('warehouse/issuestock');
+        return view ('warehouse/issuestock')
+        ->with('stockGroup', $stockGroup)
+        ->with('upkeepjobs', $upkeepjobs)
+        ->with('areas', $areas)
+        ->with('departments', $departments)
+        ->with('machines', $machines);
     }
 
+
+    // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
+    public function getOpenUpkeepWorkOrders(){
+        $curl = curl_init();
+    
+        $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
+    
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/work-orders',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Session-Token: ' . $token,
+                'Cookie: upkeepsess=' . $token
+            ),
+        ));
+    
+        $response = curl_exec($curl);
+    
+        curl_close($curl);
+    
+        $result = json_decode($response, true);
+    
+        $openWorkOrders = array();
+    
+        foreach ($result['results'] as $workOrder) {
+            if ($workOrder['status'] !== 'complete') {
+                $openWorkOrders[] = $workOrder;
+            }
+        }
+        
+        // dd($openWorkOrders);
+        return $openWorkOrders;
+    }
+
+
+
+    // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
+    
+
     public function getIssueStock(Request $request){
-        $result =  DB::connection('sqlsrv3')->select('select * from tblStockIssueHeader');
+        $result =  DB::connection('sqlsrv3')->select('select * from viewStockIssue');
         return response()->json($result);
     }
 
@@ -1924,6 +1976,17 @@ where intDeptID =" . $deptId);
         //dd($jobdata);
         return view('warehouse/galvproductspecsheet');
     }
+
+    public function syncing(){
+        return view('warehouse/syncing');
+    }
+
+    public function syncPastelStockTable(){
+        $response = DB::connection('sqlsrv3')->statement('exec spSyncBvStockFull');
+        return response()->json($response);
+    }
+
+    
 
     public function getgalvlabel($customer, $product, $ticketno, $status)
     {

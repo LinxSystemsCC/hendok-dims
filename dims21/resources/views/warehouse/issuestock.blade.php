@@ -158,444 +158,158 @@
 
         });
 
+        // var stockGroup = ({!! json_encode($stockGroup) !!});
+        var upkeepjobs = ({!! json_encode($upkeepjobs) !!});
+        var areas = ({!! json_encode($areas) !!});
+        var departments = ({!! json_encode($departments) !!});
+        var machines = ({!! json_encode($machines) !!});
+
+        var stockGroup = [
+                {"StockGroup":"CSBB"},
+                {"StockGroup":"CSNUTS"},
+                {"StockGroup":"CSOILSEALS"},
+                {"StockGroup":"NULL"},
+                {"StockGroup":"CSBELTS"},
+                {"StockGroup":"CSADHESIVES"},
+                {"StockGroup":"CSWASHES"},
+                {"StockGroup":"CSFITTINGS"}
+        ]
+
+        // console.log(stockGroup);
         var data = [];
-        var categories = [
-            {
-                "name":"icecream",
-                "id":1,
-            },
-            {
-            "name": "Aurora",
-            "id": 51
-            },
-            {
-            "name": "Maximilian",
-            "id": 52
-            },
-            {
-            "name": "Niamh",
-            "id": 53
-            },
-            {
-            "name": "Orson",
-            "id": 54
-            },
-            {
-            "name": "Eliana",
-            "id": 55
-            },
-            {
-            "name": "Elio",
-            "id": 56
-            },
-            {
-            "name": "Aaliyah",
-            "id": 57
-            },
-            {
-            "name": "Zayn",
-            "id": 58
-            },
-            {
-            "name": "Maddison",
-            "id": 59
-            },
-            {
-            "name": "Khalil",
-            "id": 60
-            },
-            {
-            "name": "Tia",
-            "id": 61
-            },
-            {
-            "name": "Carmela",
-            "id": 66
-            },
-            {
-            "name": "Kaidence",
-            "id": 67
-            },
-            {
-            "name": "Emmet",
-            "id": 68
-            },
-            {
-            "name": "Malcolm",
-            "id": 69
-            },
-            {
-            "name": "Gloria",
-            "id": 70
-            },
-            {
-            "name": "Nathanael",
-            "id": 71
-            },
-            {
-            "name": "Lilith",
-            "id": 72
-            },
-            {
-            "name": "Jovani",
-            "id": 73
-            },
-            {
-            "name": "Karlie",
-            "id": 74
-            },
-            {
-            "name": "Truman",
-            "id": 75
-            },
-            {
-            "name": "Astrid",
-            "id": 76
-            },
-            {
-            "name": "Rome",
-            "id": 77
-            },
-            {
-            "name": "Naya",
-            "id": 78
-            },
-            {
-            "name": "Marlon",
-            "id": 79
-            },
-            {
-            "name": "Scarlette",
-            "id": 80
-            },
-            {
-            "name": "Kye",
-            "id": 81
-            },
-            {
-            "name": "Kensington",
-            "id": 82
-            },
-            {
-            "name": "Alaya",
-            "id": 83
-            },
-            {
-            "name": "Harper",
-            "id": 84
-            },
-            {
-            "name": "Brock",
-            "id": 85
-            },
-            {
-            "name": "Rubi",
-            "id": 86
-            },
-            {
-            "name": "Colson",
-            "id": 87
-            },
-            {
-            "name": "Averi",
-            "id": 88
-            },
-            {
-            "name": "Darian",
-            "id": 89
-            },
-            {
-            "name": "Lennon",
-            "id": 90
-            },
-            {
-            "name": "Jaida",
-            "id": 91
-            },
-            {
-            "name": "Maison",
-            "id": 92
-            },
-            {
-            "name": "Charleigh",
-            "id": 93
-            },
-            {
-            "name": "Aurora",
-            "id": 51
-            },
-            {
-            "name": "Maximilian",
-            "id": 52
-            },
-            {
-            "name": "Niamh",
-            "id": 53
-            },
-            {
-            "name": "Orson",
-            "id": 54
-            },
-            {
-            "name": "Eliana",
-            "id": 55
-            },
-            {
-            "name": "Elio",
-            "id": 56
-            },
-            {
-            "name": "Aaliyah",
-            "id": 57
-            },
-            {
-            "name": "Zayn",
-            "id": 58
-            },
-            {
-            "name": "Maddison",
-            "id": 59
-            },
-            {
-            "name": "Khalil",
-            "id": 60
-            },
-            {
-            "name": "Tia",
-            "id": 61
-            },
-            {
-            "name": "Preston",
-            "id": 62
-            },
-            {
-            "name": "Kashton",
-            "id": 63
-            },
-            {
-            "name": "Anabelle",
-            "id": 64
-            },
-            {
-            "name": "Deacon",
-            "id": 65
-            },
-            {
-            "name": "Carmela",
-            "id": 66
-            },
-            {
-            "name": "Kaidence",
-            "id": 67
-            },
-            {
-            "name": "Emmet",
-            "id": 68
-            },
-            {
-            "name": "Malcolm",
-            "id": 69
-            },
-            {
-            "name": "Gloria",
-            "id": 70
-            },
-            {
-            "name": "Nathanael",
-            "id": 71
-            },
-            {
-            "name": "Lilith",
-            "id": 72
-            },
-            {
-            "name": "Jovani",
-            "id": 73
-            },
-            {
-            "name": "Karlie",
-            "id": 74
-            },
-            {
-            "name": "Truman",
-            "id": 75
-            },
-            {
-            "name": "Astrid",
-            "id": 76
-            },
-            {
-            "name": "Rome",
-            "id": 77
-            },
-            {
-            "name": "Naya",
-            "id": 78
-            },
-            {
-            "name": "Marlon",
-            "id": 79
-            },
-            {
-            "name": "Scarlette",
-            "id": 80
-            },
-            {
-            "name": "Kye",
-            "id": 81
-            },
-            {
-            "name": "Kensington",
-            "id": 82
-            },
-            {
-            "name": "Alaya",
-            "id": 83
-            },
-            {
-            "name": "Harper",
-            "id": 84
-            },
-            {
-            "name": "Brock",
-            "id": 85
-            },
-            {
-            "name": "Rubi",
-            "id": 86
-            },
-            {
-            "name": "Colson",
-            "id": 87
-            },
-            {
-            "name": "Averi",
-            "id": 88
-            },
-            {
-            "name": "Darian",
-            "id": 89
-            },
-            {
-            "name": "Lennon",
-            "id": 90
-            },
-            {
-            "name": "Jaida",
-            "id": 91
-            },
-            {
-            "name": "Maison",
-            "id": 92
-            },
-            {
-            "name": "Charleigh",
-            "id": 93
-            },
-        ];
 
-        var categoriesStore = new DevExpress.data.ArrayStore({
-            key: "id",
-            data: categories
+        $("#itemsGrid").dxDataGrid({
+            dataSource: data,
+            hoverStateEnabled: true,
+            showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            editing: {
+                mode: "popup",
+                allowAdding: true,
+                allowUpdating: true,
+                allowDeleting: true,
+                popup: {
+                    container: "#newstock"
+                }
+            },
+
+            columns: [
+                {
+                    dataField: "strIssueType",
+                    caption: "Type",
+                    lookup: {
+                        dataSource: stockGroup,
+                        valueExpr: "StockGroup",
+                        displayExpr: "StockGroup",
+                    },
+                },
+                {
+                    dataField: "strGroup",
+                    caption: "Item Group",
+                },
+                {
+                    dataField: "strPastelCode",
+                    caption: "Item Code",
+                },
+                {
+                    dataField: "strPastelDescription",
+                    caption: "Item Desc",
+                },
+                {
+                    dataField: "intInStockQty",
+                    caption: "In Stock",
+                },
+                {
+                    dataField: "intQtyRequired",
+                    caption: "Required",
+                    allowEditing: true,
+                },
+                {
+                    dataField: "strUpkeepId",
+                    caption: "Upkeep Job",
+                    lookup: {
+                        dataSource: upkeepjobs,
+                        valueExpr: "workOrderNo",
+                        displayExpr: "workOrderNo",
+                    },
+                },
+                {
+                    dataField: "intArea",
+                    caption: "Area",
+                    lookup: {
+                        dataSource: areas,
+                        valueExpr: "intAutoID",
+                        displayExpr: "strAreaName",
+                    },
+                    
+                },
+                {
+                    dataField: "intDept",
+                    caption: "Dept",
+                    lookup: {
+                        dataSource: departments,
+                        valueExpr: "intAutoID",
+                        displayExpr: "strDeptName",
+                        onValueChanged: function(e) {
+                            if (e.value !== null) {
+                                $.ajax({
+                                    url: '{!!url("/getMachinesforselecteddept")!!}',
+                                    type: 'GET',
+                                    data: { 
+                                        deptId: e.value,
+                                        prodname: 1
+                                    },
+                                    success: function(response) {
+                                        machines = response;
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.log('Error retrieving machines data: ' + error);
+                                    }
+                                });
+                            }
+                        }
+                    },
+                },
+                {
+                    dataField: "intSubDept",
+                    caption: "Sub Dept",
+                },
+                {
+                    dataField: "intMachine",
+                    caption: "Machine",
+                    lookup: {
+                        dataSource: machines,
+                        valueExpr: "intAutoMachineID",
+                        displayExpr: "strMachineName",
+                    },
+                },
+                {
+                    dataField: "strPastelProject",
+                    caption: "Pastel Project",
+                },
+            ],
+
+            onRowUpdating: function(e){
+
+            },
+
+            onRowRemoving: function(e) {
+
+            },
+            
+            onCellPrepared: function(e) {
+                if (e.rowType === 'data' && e.column.dataField === 'strIssueType' && e.cellElement) {
+                    $(e.cellElement).dxLookup({
+                        searchValue: e.text,
+                        searchOperation: 'contains',
+                    });
+                }
+            },
         });
-
-$("#itemsGrid").dxDataGrid({
-    dataSource: data,
-    hoverStateEnabled: true,
-    showBorders: true,
-    filterRow: { visible: true },
-    filterPanel: { visible: true },
-    headerFilter: { visible: true },
-    allowColumnResizing: true,
-    columnAutoWidth: true,
-    editing: {
-        mode: "popup",
-        allowAdding: true,
-        allowUpdating: true,
-        allowDeleting: true,
-        popup: {
-            //... other popup options ...
-            container: "#newstock" // Set container to the ID of the Bootstrap modal's element
-        }
-    },
-
-    columns: [
-        {
-            dataField: "strIssueType",
-            caption: "Type",
-            lookup: {
-                dataSource: categoriesStore,
-                valueExpr: "id",
-                displayExpr: "name",
-                allowClearing: true,
-                searchEnabled: true,
-                searchExpr: "name",
-            },
-        },
-        {
-            dataField: "strGroup",
-            caption: "Item Group",
-        },
-        {
-            dataField: "strPastelCode",
-            caption: "Item Code",
-        },
-        {
-            dataField: "strPastelDescription",
-            caption: "Item Desc",
-        },
-        {
-            dataField: "intInStockQty",
-            caption: "In Stock",
-        },
-        {
-            dataField: "intQtyRequired",
-            caption: "Required",
-            allowEditing: true,
-        },
-        {
-            dataField: "strUpkeepId",
-            caption: "Upkeep Job",
-        },
-        {
-            dataField: "intArea",
-            caption: "Area",
-        },
-        {
-            dataField: "intDept",
-            caption: "Dept",
-        },
-        {
-            dataField: "intSubDept",
-            caption: "Sub Dept",
-        },
-        {
-            dataField: "intMachine",
-            caption: "Machine",
-        },
-        {
-            dataField: "strPastelProject",
-            caption: "Pastel Project",
-        },
-    ],
-
-    onRowUpdating: function(e){
-
-    },
-
-    onRowRemoving: function(e) {
-
-    },
-    
-    onCellPrepared: function(e) {
-        if (e.rowType === 'data' && e.column.dataField === 'strIssueType' && e.cellElement) {
-            $(e.cellElement).dxLookup({
-                searchValue: e.text,
-                searchOperation: 'contains',
-            });
-        }
-    },
-});
 
 
         $.ajax({
@@ -635,8 +349,8 @@ $("#itemsGrid").dxDataGrid({
                     },
                     editing: {
                         mode: 'batch',
-                        allowUpdating: true,
-                        allowDeleting: true,
+                        // allowUpdating: true,
+                        // allowDeleting: true,
                         useIcons: true,
                     },
                     selection: {
@@ -660,22 +374,19 @@ $("#itemsGrid").dxDataGrid({
 
                     columns: [
                         {
-                            dataField: "intAutoID",
-                            caption: "ID",
-                        },{
                             dataField: "strPastelCode",
                             caption: "Item Code",
                         },{
-                            dataField: "strPastelDesc",
+                            dataField: "strPastelDescription",
                             caption: "Item Description",
                         },{
-                            dataField: "mnyQty",
+                            dataField: "mnyQtyOnHand",
                             caption: "Qty on Hand",
                         },{
-                            dataField: "MinLevel",
+                            dataField: "intMinLevel",
                             caption: "Min Level",
                         },{
-                            dataField: "MaxLevel",
+                            dataField: "intMaxLevel",
                             caption: "Max Level",
                         },
                     ],

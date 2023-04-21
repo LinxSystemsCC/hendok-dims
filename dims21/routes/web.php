@@ -908,6 +908,8 @@ Route::post('printgalvlabel', [WareHouseController::class,'printgalvlabel']);
 Route::get('startendjob', [WareHouseController::class,'startendjob']);
 Route::get('issuestock', [WareHouseController::class,'issuestock']);
 Route::get('getIssueStock', [WareHouseController::class,'getIssueStock']);
+Route::get('syncing', [WareHouseController::class,'syncing']);
+Route::get('syncPastelStockTable', [WareHouseController::class,'syncPastelStockTable']);
 
 
 Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);

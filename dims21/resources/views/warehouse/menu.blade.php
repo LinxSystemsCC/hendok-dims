@@ -550,6 +550,10 @@ if ((Auth::guest()))
                             @endif
                         </li>
                     </ul>
+
+                    @if($setup !="0")
+                    <a class="secondmenu" href='{!!url("/syncing")!!}'>Data Syncing</a>
+                    @endif
                 </li>
 			</ul>
 		</li>
