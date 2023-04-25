@@ -1576,18 +1576,54 @@ where intDeptID =" . $deptId);
     }
 
     public function issuestock(){
-        $stockGroup = DB::connection('sqlsrv3')->select("SELECT DISTINCT whs.StockGroup FROM [Hendok Distribution].dbo._bvWarehouseStockFull whs WHERE whs.WhCode = 'MRO'");
+        $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName FROM viewSage300Employees WHERE EmployeeStatusCode = 'A' ");
+        $reference = DB::connection('sqlsrv3')->select("SELECT TOP 1 intAutoId FROM tblStockIssueHeader ORDER BY dteCreated DESC");
+        $intAutoId = count($reference) > 0 ? $reference[0]->intAutoId : 0;
+        $types = DB::connection('sqlsrv3')->select("SELECT * FROM tblStockIssueTypes");
+        $groups = DB::connection('sqlsrv3')->select("SELECT DISTINCT strStockGroup, strStockGroupDesc FROM viewStockIssue");
+        $stock = DB::connection('sqlsrv3')->select("SELECT * FROM viewStockIssue");
         $upkeepjobs = $this->getOpenUpkeepWorkOrders();
         $areas = DB::connection('sqlsrv3')->select("SELECT * FROM tblAreas");
         $departments = DB::connection('sqlsrv3')->select("SELECT * FROM tblDepartments");
+        $subdepartments = DB::connection('sqlsrv3')->select("SELECT * FROM tblSubDepartments");
         $machines = DB::connection('sqlsrv3')->select("SELECT * FROM tblMachines");
+        $pastelProjects = DB::connection('sqlsrv3')->select("SELECT ProjectCode FROM [Hendok Distribution].dbo.Project WHERE ActiveProject = 1");
 
         return view ('warehouse/issuestock')
-        ->with('stockGroup', $stockGroup)
+        ->with('users', $users)
+        ->with('intAutoId', $intAutoId)
+        ->with('types', $types)
+        ->with('groups', $groups)
+        ->with('stock', $stock)
         ->with('upkeepjobs', $upkeepjobs)
         ->with('areas', $areas)
         ->with('departments', $departments)
-        ->with('machines', $machines);
+        ->with('subdepartments', $subdepartments)
+        ->with('machines', $machines)
+        ->with('pastelProjects', $pastelProjects);
+    }
+
+    public function getStockGroups(){
+        $groups = DB::connection('sqlsrv3')->select("SELECT DISTINCT strStockGroup, strStockGroupDesc FROM viewStockIssue");
+        return response()->json($groups);
+    }
+
+    public function savestockissue(Request $request){
+        $reference = $request->get("reference");
+        $assignedBy = Auth::user()->UserID;
+        $assignedTo = $request->get("assignedTo");
+        $lines = $request->get("lines");
+
+        if (is_array($lines)) {
+            $linesxml = $this->toxml($lines, "xml", array("result"));
+
+            // dd($linesxml);
+            $data = DB::connection('sqlsrv2')->statement('exec spInsertStockIssue ?,?,?,?', array($reference, $assignedBy, $assignedTo,$linesxml));
+
+            // dd($data);
+        }
+
+        return response()->json($data);
     }
 
 
@@ -2003,7 +2039,77 @@ where intDeptID =" . $deptId);
         return response()->json($response);
     }
 
-    
+    public function stockIssueTypes (){
+        return view('warehouse/stockissuetypes');
+    }
+
+    public function getStockIssueTypes(){
+        $response = DB::connection('sqlsrv3')->select('SELECT * FROM tblStockIssueTypes');
+        return response()->json($response);
+    }
+
+    public function saveStockIssueType(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'CREATE';
+
+        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function updateStockIssueType(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'UPDATE';
+
+        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function deleteStockIssueType(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'DELETE';
+
+        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function subDepartments (){
+        return view('warehouse/subdepartments');
+    }
+
+    public function getSubDepartments(){
+        $response = DB::connection('sqlsrv3')->select('SELECT * FROM tblSubDepartments');
+        return response()->json($response);
+    }
+
+    public function saveSubDepartment(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'CREATE';
+
+        $response = DB::connection('sqlsrv3')->statement('spSubDepartmentCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function updateSubDepartment(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'UPDATE';
+
+        $response = DB::connection('sqlsrv3')->statement('spSubDepartmentCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function deleteSubDepartment(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'DELETE';
+
+        $response = DB::connection('sqlsrv3')->statement('spSubDepartmentCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
 
     public function getgalvlabel($customer, $product, $ticketno, $status)
     {
@@ -2100,6 +2206,7 @@ where intDeptID =" . $deptId);
             // dd($orderlinesxml);
             $data = DB::connection('sqlsrv2')->select('exec spUpdateRoofLinesSequence ?', array($orderlinesxml));
         }
+        dd($data);
 
         return response()->json($data);
     }

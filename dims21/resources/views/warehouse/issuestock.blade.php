@@ -5,8 +5,6 @@
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
     <!-- DevExtreme theme -->
     {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
@@ -29,6 +27,49 @@
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+
+    <style>
+        .select2-container--default .select2-dropdown--below {
+            z-index: 1051; /* or any higher value */
+        }
+
+        .select2-container--default .select2-dropdown--above {
+            z-index: 1051; /* or any higher value */
+        }
+
+        .modal-xl {
+            --bs-modal-width: 90%;
+        }
+
+        .dx-datagrid-table{
+            font-size:15px;
+        }
+
+        .dx-datagrid .dx-link {
+            color: #df2413;
+        }
+
+        .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+            font-weight: 500;
+            background-color: #df2413;
+            color: #fff;
+        }
+
+        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+            color: #df2413;
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        #gridContainer {
+            height: calc(100vh - 63px);
+            max-height: calc(100vh - 63px);
+        }
+    </style>
+
 </head>
 
 <div class="col-lg-12"  style="background: white;">
@@ -41,7 +82,7 @@
         <div class="col-lg-12 d-inline-flex" >
             <h3 style="flex-grow: 1; padding-left: 15px;">ISSUE STOCK</h3>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newstock">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newStockModal">
                 New Stock Issue
             </button>
         </div>
@@ -51,12 +92,12 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal modal-xl fade" id="newstock" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+<!-- Modal New Stock -->
+<div class="modal modal-xl fade" id="newStockModal" aria-labelledby="newStockModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newuserLabel">Create New Stock Issue</h1>
+                <h1 class="modal-title fs-5" id="newStockModal">Create New Stock Issue</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -66,10 +107,19 @@
                     <input type="text" class="form-control input-sm col-xs-1" id="reference" disabled>
 
                     <label class="control-label" for="issuedto">Issued to</label>
-                    <select type="text" class="form-select input-sm col-xs-1" id="issuedto">
+
+                    <select class="form-select mx-2" type="text" id='issuedto'>
                         <option></option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->EmployeeCode }}">{{ $user->FirstName }} {{ $user->LastName }}</option>
+                        @endforeach
                     </select>
-                </div>      
+                </div>    
+
+                {{-- <br>
+
+                <button type="button" class="btn btn-success" data-bs-target="#newItemModal" data-bs-toggle="modal">ADD</button> 
+                --}}
                 <div class="form-group">
                     <div id="itemsGrid"></div>
                 </div>
@@ -78,57 +128,100 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="savesareaname" class="btn btn-success" >Save</button>
+                <button type="button" id="savestockissue" class="btn btn-success" >Save</button>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .dx-datagrid-table{
-        font-size:15px;
-    }
+<!-- Modal New Item -->
+<div class="modal modal-lg fade" id="newItemModal" aria-labelledby="newItemModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newItemModal">Insert New Stock Item</h1>
+            </div>
 
-    .dx-datagrid .dx-link {
-        color: #df2413;
-    }
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="newType" class="col-form-label">Stock Issue Type</label>
+                            <select class="form-select mx-2" type="text" id='newType'>
+                                <option></option>
+                                @foreach ($types as $type)
+                                    <option value="{{ $type->intAutoID }}">{{ $type->strIssueType }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="newItemGroup" class="col-form-label">Item Group</label>
+                            <select class="form-select mx-2" type="text" id='newType'>
+                                <option></option>
+                                @foreach ($groups as $group)
+                                    <option value="{{ $group->strStockGroup }}">{{ $group->strStockGroupDesc }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type3" class="col-form-label">Stock Issue Type 3</label>
+                            <input type="text" class="form-control" id="type3">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type4" class="col-form-label">Stock Issue Type 4</label>
+                            <input type="text" class="form-control" id="type4">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type5" class="col-form-label">Stock Issue Type 5</label>
+                            <input type="text" class="form-control" id="type5">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type6" class="col-form-label">Stock Issue Type 6</label>
+                            <input type="text" class="form-control" id="type6">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type7" class="col-form-label">Stock Issue Type 7</label>
+                            <input type="text" class="form-control" id="type7">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type8" class="col-form-label">Stock Issue Type 8</label>
+                            <input type="text" class="form-control" id="type8">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type9" class="col-form-label">Stock Issue Type 9</label>
+                            <input type="text" class="form-control" id="type9">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type10" class="col-form-label">Stock Issue Type 10</label>
+                            <input type="text" class="form-control" id="type10">
+                        </div>
+                    </div>
+                </form>           
+            </div>
 
-    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
-        font-weight: 500;
-        background-color: #df2413;
-        color: #fff;
-    }
-
-    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
-        color: #df2413;
-        font-size: 14px;
-        line-height: 18px;
-    }
-
-    #gridContainer {
-        height: calc(100vh - 63px);
-        max-height: calc(100vh - 63px);
-    }
-</style>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-target="#newStockModal" data-bs-toggle="modal">Cancel</button>
+                <button type="button" id="savestockissue" class="btn btn-success" data-bs-target="#newStockModal" data-bs-toggle="modal">Insert</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Excel Saver -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+
+<!-- Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
 
-<!-- JavaScript Bundle with Popper -->
+<!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
 <!-- DevExtreme library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
-
-<script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
 <script>
     $.ajaxSetup({
@@ -140,15 +233,63 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
+        var ref ={{ $intAutoId }};
+        var ref = ref+1;
+        $('#reference').val('STK-'+ref);
 
-        $('#saveStockIssue').click(function(){
+        $('#issuedto').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newStockModal'),
+            matcher: function(params, data) {
+                // If there's no search term, return all options
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                // Check if search term matches option value
+                if (data.id.toLowerCase().indexOf(params.term.toLowerCase()) >= 0) {
+                    return data;
+                }
+                // Check if search term matches option display text
+                if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) >= 0) {
+                    return data;
+                }
+                // Return null if there's no match
+                return null;
+            }
+        });
+
+        $('#newType').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+        
+        $('#savestockissue').click(function(){
+            var allGridItems =  $("#itemsGrid").dxDataGrid("getDataSource").items();
+            var newLines = new Array();
+
+            allGridItems.forEach((element, index, value) => {
+                newLines.push({
+                    'intType': element['intType'],
+                    'strStockGroup': element['strStockGroup'],
+                    'strPastelCode': element['strPastelCode'],
+                    'mnyQty': element['mnyQty'],
+                    'strUpkeep': element['strUpkeep'],
+                    'strPastelProjectJob': element['strPastelProjectJob'],
+                    'intArea': element['intArea'],
+                    'intDept': element['intDept'],
+                    'intSubDept': element['intSubDept'],
+                    'intMachine': element['intMachine']
+                });
+            });
 
             $.ajax({
 
                 url: '{!!url("/savestockissue")!!}',
                 type: "POST",
                 data: {
-
+                    reference: $("#reference").val(),
+                    assignedTo: $("#issuedto").val(),
+                    lines: newLines
                 },
                 success: function (data) {
                     location.reload();
@@ -158,24 +299,17 @@
 
         });
 
-        // var stockGroup = ({!! json_encode($stockGroup) !!});
+        var types = ({!! json_encode($types) !!});
+        var groups = ({!! json_encode($groups) !!});
+        var stock = ({!! json_encode($stock) !!});
         var upkeepjobs = ({!! json_encode($upkeepjobs) !!});
         var areas = ({!! json_encode($areas) !!});
         var departments = ({!! json_encode($departments) !!});
+        var subdepartments = ({!! json_encode($subdepartments) !!});
         var machines = ({!! json_encode($machines) !!});
+        var pastelProjects = ({!! json_encode($pastelProjects) !!});
 
-        var stockGroup = [
-                {"StockGroup":"CSBB"},
-                {"StockGroup":"CSNUTS"},
-                {"StockGroup":"CSOILSEALS"},
-                {"StockGroup":"NULL"},
-                {"StockGroup":"CSBELTS"},
-                {"StockGroup":"CSADHESIVES"},
-                {"StockGroup":"CSWASHES"},
-                {"StockGroup":"CSFITTINGS"}
-        ]
-
-        // console.log(stockGroup);
+        // console.log(stock);
         var data = [];
 
         $("#itemsGrid").dxDataGrid({
@@ -188,53 +322,62 @@
             allowColumnResizing: true,
             columnAutoWidth: true,
             editing: {
-                mode: "popup",
+                mode: "cell",
                 allowAdding: true,
                 allowUpdating: true,
                 allowDeleting: true,
                 popup: {
-                    container: "#newstock"
+                    container: "#newStockModal",
                 }
             },
-
             columns: [
                 {
-                    dataField: "strIssueType",
+                    dataField: "intType",
                     caption: "Type",
                     lookup: {
-                        dataSource: stockGroup,
-                        valueExpr: "StockGroup",
-                        displayExpr: "StockGroup",
+                        dataSource: types,
+                        valueExpr: "intAutoID",
+                        displayExpr: "strIssueType",
                     },
                 },
                 {
-                    dataField: "strGroup",
+                    dataField: "strStockGroup",
                     caption: "Item Group",
+                    lookup: {
+                        dataSource: groups,
+                        valueExpr: "strStockGroup",
+                        displayExpr: "strStockGroupDesc",
+                    },
                 },
                 {
                     dataField: "strPastelCode",
-                    caption: "Item Code",
+                    caption: "Item",
+                    lookup: {
+                        dataSource: stock,
+                        valueExpr: "strPastelCode",
+                        displayExpr: "strPastelDescription",
+                    }
                 },
                 {
-                    dataField: "strPastelDescription",
-                    caption: "Item Desc",
+                    dataField: "mnyQty",
+                    caption: "Qty Required",
                 },
                 {
-                    dataField: "intInStockQty",
-                    caption: "In Stock",
-                },
-                {
-                    dataField: "intQtyRequired",
-                    caption: "Required",
-                    allowEditing: true,
-                },
-                {
-                    dataField: "strUpkeepId",
+                    dataField: "strUpkeep",
                     caption: "Upkeep Job",
                     lookup: {
                         dataSource: upkeepjobs,
                         valueExpr: "workOrderNo",
                         displayExpr: "workOrderNo",
+                    },
+                },
+                {
+                    dataField: "strPastelProjectJob",
+                    caption: "Pastel Project",
+                    lookup: {
+                        dataSource: pastelProjects,
+                        valueExpr: "ProjectCode",
+                        displayExpr: "ProjectCode",
                     },
                 },
                 {
@@ -254,29 +397,16 @@
                         dataSource: departments,
                         valueExpr: "intAutoID",
                         displayExpr: "strDeptName",
-                        onValueChanged: function(e) {
-                            if (e.value !== null) {
-                                $.ajax({
-                                    url: '{!!url("/getMachinesforselecteddept")!!}',
-                                    type: 'GET',
-                                    data: { 
-                                        deptId: e.value,
-                                        prodname: 1
-                                    },
-                                    success: function(response) {
-                                        machines = response;
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.log('Error retrieving machines data: ' + error);
-                                    }
-                                });
-                            }
-                        }
                     },
                 },
                 {
                     dataField: "intSubDept",
                     caption: "Sub Dept",
+                    lookup: {
+                        dataSource: subdepartments,
+                        valueExpr: "intAutoID",
+                        displayExpr: "strSubDeptName",
+                    },
                 },
                 {
                     dataField: "intMachine",
@@ -287,30 +417,8 @@
                         displayExpr: "strMachineName",
                     },
                 },
-                {
-                    dataField: "strPastelProject",
-                    caption: "Pastel Project",
-                },
-            ],
-
-            onRowUpdating: function(e){
-
-            },
-
-            onRowRemoving: function(e) {
-
-            },
-            
-            onCellPrepared: function(e) {
-                if (e.rowType === 'data' && e.column.dataField === 'strIssueType' && e.cellElement) {
-                    $(e.cellElement).dxLookup({
-                        searchValue: e.text,
-                        searchOperation: 'contains',
-                    });
-                }
-            },
-        });
-
+            ],            
+        }).dxDataGrid("instance");
 
         $.ajax({
 
@@ -380,6 +488,12 @@
                             dataField: "strPastelDescription",
                             caption: "Item Description",
                         },{
+                            dataField: "strStockGroup",
+                            caption: "Item Group",
+                        },{
+                            dataField: "strStockGroupDesc",
+                            caption: "Item Group Description",
+                        },{
                             dataField: "mnyQtyOnHand",
                             caption: "Qty on Hand",
                         },{
@@ -399,6 +513,8 @@
                 });
             }
         });
+
+        // Adding New Lines!
         
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');

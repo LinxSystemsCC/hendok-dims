@@ -1133,6 +1133,21 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('pickersandloadersdashboard', [WareHouseController::class,'pickersandloadersdashboard']);
     Route::get('pickingticketmanager/{ref}', [WareHouseController::class,'pickingticketmanager']);
     Route::get('getpickersandloadersdashboard', [WareHouseController::class,'getpickersandloadersdashboard']);
+    Route::get('stockIssueTypes', [WareHouseController::class,'stockIssueTypes']);
+    Route::get('getStockIssueTypes', [WareHouseController::class,'getStockIssueTypes']);
+    Route::post('saveStockIssueType', [WareHouseController::class,'saveStockIssueType']);
+    Route::post('updateStockIssueType', [WareHouseController::class,'updateStockIssueType']);
+    Route::post('deleteStockIssueType', [WareHouseController::class,'deleteStockIssueType']);
+    Route::get('subDepartments', [WareHouseController::class,'subDepartments']);
+    Route::get('getSubDepartments', [WareHouseController::class,'getSubDepartments']);
+    Route::post('saveSubDepartment', [WareHouseController::class,'saveSubDepartment']);
+    Route::post('updateSubDepartment', [WareHouseController::class,'updateSubDepartment']);
+    Route::post('deleteSubDepartment', [WareHouseController::class,'deleteSubDepartment']);
+    Route::post('savestockissue', [WareHouseController::class,'savestockissue']);
+
+    Route::get('getStockGroups', [WareHouseController::class,'getStockGroups']);
+
+    
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!
