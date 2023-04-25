@@ -361,14 +361,14 @@ if ((Auth::guest()))
                             <a href='{!!url("/getUpliftmentPage")!!}'>Upliftment Report</a>
                         </li>
                     </ul>
+
+                    <li>
+                        {{-- @if($ppl !="0") --}}
+                        <a class="secondmenu" href='{!!url("/issuestock")!!}'><i class="fa fa-line-chart"></i>Stock Issue</a>
+                        {{-- @endif --}}
+                    </li>
                 </li>
 			</ul>
-
-            <li>
-                {{-- @if($ppl !="0") --}}
-                <a class="firstmenu" href='{!!url("/issuestock")!!}'><i class="fa fa-line-chart"></i>Stock Issue</a>
-                {{-- @endif --}}
-            </li>
 		</li>
 
         <!-- Inventory -->
