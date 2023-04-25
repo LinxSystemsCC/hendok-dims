@@ -1581,7 +1581,7 @@ where intDeptID =" . $deptId);
         $intAutoId = count($reference) > 0 ? $reference[0]->intAutoId : 0;
         $types = DB::connection('sqlsrv3')->select("SELECT * FROM tblStockIssueTypes");
         $groups = DB::connection('sqlsrv3')->select("SELECT DISTINCT strStockGroup, strStockGroupDesc FROM viewStockIssue");
-        $stock = DB::connection('sqlsrv3')->select("SELECT * FROM viewStockIssue");
+        $stockItems = DB::connection('sqlsrv3')->select("SELECT * FROM viewStockIssue");
         $upkeepjobs = $this->getOpenUpkeepWorkOrders();
         $areas = DB::connection('sqlsrv3')->select("SELECT * FROM tblAreas");
         $departments = DB::connection('sqlsrv3')->select("SELECT * FROM tblDepartments");
@@ -1594,7 +1594,7 @@ where intDeptID =" . $deptId);
         ->with('intAutoId', $intAutoId)
         ->with('types', $types)
         ->with('groups', $groups)
-        ->with('stock', $stock)
+        ->with('stockItems', $stockItems)
         ->with('upkeepjobs', $upkeepjobs)
         ->with('areas', $areas)
         ->with('departments', $departments)

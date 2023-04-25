@@ -118,8 +118,8 @@
 
                 {{-- <br>
 
-                <button type="button" class="btn btn-success" data-bs-target="#newItemModal" data-bs-toggle="modal">ADD</button> 
-                --}}
+                <button type="button" class="btn btn-success" data-bs-target="#newItemModal" data-bs-toggle="modal">ADD</button>  --}}
+
                 <div class="form-group">
                     <div id="itemsGrid"></div>
                 </div>
@@ -156,7 +156,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="newItemGroup" class="col-form-label">Item Group</label>
-                            <select class="form-select mx-2" type="text" id='newType'>
+                            <select class="form-select mx-2" type="text" id='newItemGroup'>
                                 <option></option>
                                 @foreach ($groups as $group)
                                     <option value="{{ $group->strStockGroup }}">{{ $group->strStockGroupDesc }}</option>
@@ -164,36 +164,71 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="type3" class="col-form-label">Stock Issue Type 3</label>
-                            <input type="text" class="form-control" id="type3">
+                            <label for="newItem" class="col-form-label">Item </label>
+                            <select class="form-select mx-2" type="text" id='newItem'>
+                                <option></option>
+                                @foreach ($stockItems as $stock)
+                                    <option value="{{ $stock->strPastelCode }}">{{ $stock->strPastelDescription }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="type4" class="col-form-label">Stock Issue Type 4</label>
-                            <input type="text" class="form-control" id="type4">
+                            <label for="newQtyRequired" class="col-form-label">Qty Required</label>
+                            <input type="text" class="form-control" id="newQtyRequired">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="type5" class="col-form-label">Stock Issue Type 5</label>
-                            <input type="text" class="form-control" id="type5">
+                            <label for="newUpkeepJob" class="col-form-label">Upkeep Job</label>
+                            <select class="form-select mx-2" type="text" id='newUpkeepJob'>
+                                <option></option>
+                                @foreach ($upkeepjobs as $job)
+                                    <option value="{{ $job['workOrderNo'] }}">{{ $job['workOrderNo'] }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="type6" class="col-form-label">Stock Issue Type 6</label>
-                            <input type="text" class="form-control" id="type6">
+                            <label for="newPastelProject" class="col-form-label">Pastel Project</label>
+                            <select class="form-select mx-2" type="text" id='newPastelProject'>
+                                <option></option>
+                                @foreach ($pastelProjects as $project)
+                                    <option value="{{ $project->ProjectCode }}">{{ $project->ProjectCode }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="type7" class="col-form-label">Stock Issue Type 7</label>
-                            <input type="text" class="form-control" id="type7">
+                            <label for="newArea" class="col-form-label">Area</label>
+                            <select class="form-select mx-2" type="text" id='newArea'>
+                                <option></option>
+                                @foreach ($areas as $area)
+                                    <option value="{{ $area->intAutoID }}">{{ $area->strAreaName }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="type8" class="col-form-label">Stock Issue Type 8</label>
-                            <input type="text" class="form-control" id="type8">
+                            <label for="newDepartment" class="col-form-label">Department</label>
+                            <select class="form-select mx-2" type="text" id='newDepartment'>
+                                <option></option>
+                                @foreach ($departments as $dept)
+                                    <option value="{{ $dept->intAutoID }}">{{ $dept->strDeptName }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="type9" class="col-form-label">Stock Issue Type 9</label>
-                            <input type="text" class="form-control" id="type9">
+                            <label for="newSubDepartment" class="col-form-label">Sub Department</label>
+                            <select class="form-select mx-2" type="text" id='newSubDepartment'>
+                                <option></option>
+                                @foreach ($subdepartments as $subdept)
+                                    <option value="{{ $subdept->intAutoID }}">{{ $subdept->strSubDeptName }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="type10" class="col-form-label">Stock Issue Type 10</label>
-                            <input type="text" class="form-control" id="type10">
+                            <label for="newMachine" class="col-form-label">Machine</label>
+                            <select class="form-select mx-2" type="text" id='newMachine'>
+                                <option></option>
+                                @foreach ($machines as $machine)
+                                    <option value="{{ $machine->intAutoMachineID }}">{{ $machine->strMachineName }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </form>           
@@ -201,7 +236,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-target="#newStockModal" data-bs-toggle="modal">Cancel</button>
-                <button type="button" id="savestockissue" class="btn btn-success" data-bs-target="#newStockModal" data-bs-toggle="modal">Insert</button>
+                <button type="button" id="insertNewLine" class="btn btn-success" data-bs-target="#newStockModal" data-bs-toggle="modal">Insert</button>
             </div>
         </div>
     </div>
@@ -262,6 +297,47 @@
             theme: 'bootstrap-5',
             dropdownParent: $('#newItemModal'),
         });
+
+        $('#newItemGroup').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+
+        $('#newItem').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+
+        $('#newUpkeepJob').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+
+        $('#newPastelProject').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+
+        $('#newArea').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+
+        $('#newDepartment').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+
+        $('#newSubDepartment').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+
+        $('#newMachine').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newItemModal'),
+        });
+
         
         $('#savestockissue').click(function(){
             var allGridItems =  $("#itemsGrid").dxDataGrid("getDataSource").items();
@@ -308,12 +384,44 @@
         var subdepartments = ({!! json_encode($subdepartments) !!});
         var machines = ({!! json_encode($machines) !!});
         var pastelProjects = ({!! json_encode($pastelProjects) !!});
+        $('#insertNewLine').click(function(){
+            // Get the values from the input fields
+            var intType = $("#newType").val();
+            var strStockGroup = $("#newItemGroup").val();
+            var strPastelCode = $("#newItem").val();
+            var mnyQty = $("#newQtyRequired").val();
+            var strUpkeep = $("#newUpkeepJob").val();
+            var strPastelProjectJob = $("#newPastelProject").val();
+            var intArea = $("#newArea").val();
+            var intDept = $("#newDepartment").val();
+            var intSubDept = $("#newSubDepartment").val();
+            var intMachine = $("#newMachine").val();
 
-        // console.log(stock);
-        var data = [];
+            // Get a reference to the grid's underlying data source
+            var grid = $("#itemsGrid").dxDataGrid("instance");
+
+            // Create an object that represents the new row
+            var newRow = {
+                intType: intType,
+                strStockGroup: strStockGroup,
+                strPastelCode: strPastelCode,
+                mnyQty: mnyQty,
+                strUpkeep: strUpkeep,
+                strPastelProjectJob: strPastelProjectJob,
+                intArea: intArea,
+                intDept: intDept,
+                intSubDept: intSubDept,
+                intMachine: intMachine
+            };
+
+            // Add the new row to the data source
+            grid.addRow(newRow);
+
+            grid.refresh(); // refresh the grid's view
+        });
 
         $("#itemsGrid").dxDataGrid({
-            dataSource: data,
+            dataSource: [],
             hoverStateEnabled: true,
             showBorders: true,
             filterRow: { visible: true },
@@ -322,7 +430,7 @@
             allowColumnResizing: true,
             columnAutoWidth: true,
             editing: {
-                mode: "cell",
+                mode: "popup",
                 allowAdding: true,
                 allowUpdating: true,
                 allowDeleting: true,
