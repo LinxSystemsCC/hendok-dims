@@ -1145,7 +1145,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('deleteSubDepartment', [WareHouseController::class,'deleteSubDepartment']);
     Route::post('savestockissue', [WareHouseController::class,'savestockissue']);
 
-    Route::get('getStockGroups', [WareHouseController::class,'getStockGroups']);
+    Route::get('getStockItemsByGroup', [WareHouseController::class,'getStockItemsByGroup']);
+    Route::get('getMachinesByDepartment', [WareHouseController::class,'getMachinesByDepartment']);
+    
+    
 
     
 });

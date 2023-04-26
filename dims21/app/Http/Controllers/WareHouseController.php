@@ -1603,9 +1603,16 @@ where intDeptID =" . $deptId);
         ->with('pastelProjects', $pastelProjects);
     }
 
-    public function getStockGroups(){
-        $groups = DB::connection('sqlsrv3')->select("SELECT DISTINCT strStockGroup, strStockGroupDesc FROM viewStockIssue");
+    public function getStockItemsByGroup(Request $request){
+        $itemGroup = $request->get('ItemGroup');
+        $groups = DB::connection('sqlsrv3')->select("SELECT strPastelCode, strPastelDescription FROM viewStockIssue WHERE strStockGroup = '".$itemGroup."'");
         return response()->json($groups);
+    }
+
+    public function getMachinesByDepartment(Request $request){
+        $DeptID = $request->get('DeptID');
+        $machines = DB::connection('sqlsrv3')->select("EXEC spGetMachinesByDept ?",array($DeptID));
+        return response()->json($machines);
     }
 
     public function savestockissue(Request $request){

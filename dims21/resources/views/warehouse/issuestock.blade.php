@@ -109,16 +109,18 @@
                     <label class="control-label" for="issuedto">Issued to</label>
 
                     <select class="form-select mx-2" type="text" id='issuedto'>
-                        <option></option>
+                        <option selected disabled></option>
                         @foreach ($users as $user)
                             <option value="{{ $user->EmployeeCode }}">{{ $user->FirstName }} {{ $user->LastName }}</option>
                         @endforeach
                     </select>
                 </div>    
 
-                {{-- <br>
+                <br>
 
-                <button type="button" class="btn btn-success" data-bs-target="#newItemModal" data-bs-toggle="modal">ADD</button>  --}}
+                <button type="button" class="btn btn-success" data-bs-target="#newItemModal" data-bs-toggle="modal" id="addNewItem">ADD</button> 
+
+                <br><br>
 
                 <div class="form-group">
                     <div id="itemsGrid"></div>
@@ -145,7 +147,7 @@
             <div class="modal-body">
                 <form>
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label for="newType" class="col-form-label">Stock Issue Type</label>
                             <select class="form-select mx-2" type="text" id='newType'>
                                 <option></option>
@@ -164,13 +166,17 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="newItem" class="col-form-label">Item </label>
+                            <label for="newItem" class="col-form-label">Item Code</label>
                             <select class="form-select mx-2" type="text" id='newItem'>
                                 <option></option>
-                                @foreach ($stockItems as $stock)
+                                {{-- @foreach ($stockItems as $stock)
                                     <option value="{{ $stock->strPastelCode }}">{{ $stock->strPastelDescription }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="newQtyOnHand" class="col-form-label">Qty On Hand</label>
+                            <input type="text" class="form-control" id="newQtyOnHand" disabled>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="newQtyRequired" class="col-form-label">Qty Required</label>
@@ -225,9 +231,9 @@
                             <label for="newMachine" class="col-form-label">Machine</label>
                             <select class="form-select mx-2" type="text" id='newMachine'>
                                 <option></option>
-                                @foreach ($machines as $machine)
+                                {{-- @foreach ($machines as $machine)
                                     <option value="{{ $machine->intAutoMachineID }}">{{ $machine->strMachineName }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
                     </div>
@@ -270,6 +276,17 @@
     $(document).ready(function() {
         var ref ={{ $intAutoId }};
         var ref = ref+1;
+
+        var types = ({!! json_encode($types) !!});
+        var groups = ({!! json_encode($groups) !!});
+        var stockItems = ({!! json_encode($stockItems) !!});
+        var upkeepjobs = ({!! json_encode($upkeepjobs) !!});
+        var areas = ({!! json_encode($areas) !!});
+        var departments = ({!! json_encode($departments) !!});
+        var subdepartments = ({!! json_encode($subdepartments) !!});
+        var machines = ({!! json_encode($machines) !!});
+        var pastelProjects = ({!! json_encode($pastelProjects) !!});
+
         $('#reference').val('STK-'+ref);
 
         $('#issuedto').select2({
@@ -338,198 +355,29 @@
             dropdownParent: $('#newItemModal'),
         });
 
-        
-        $('#savestockissue').click(function(){
-            var allGridItems =  $("#itemsGrid").dxDataGrid("getDataSource").items();
-            var newLines = new Array();
+        $("#newItem").change(function(){
+            var strPastelCode = $('#newItem').val();
 
-            allGridItems.forEach((element, index, value) => {
-                newLines.push({
-                    'intType': element['intType'],
-                    'strStockGroup': element['strStockGroup'],
-                    'strPastelCode': element['strPastelCode'],
-                    'mnyQty': element['mnyQty'],
-                    'strUpkeep': element['strUpkeep'],
-                    'strPastelProjectJob': element['strPastelProjectJob'],
-                    'intArea': element['intArea'],
-                    'intDept': element['intDept'],
-                    'intSubDept': element['intSubDept'],
-                    'intMachine': element['intMachine']
-                });
+            var result = $.grep(stockItems, function(e) {
+                return e.strPastelCode == strPastelCode;
             });
 
-            $.ajax({
-
-                url: '{!!url("/savestockissue")!!}',
-                type: "POST",
-                data: {
-                    reference: $("#reference").val(),
-                    assignedTo: $("#issuedto").val(),
-                    lines: newLines
-                },
-                success: function (data) {
-                    location.reload();
-                }
-
-            });
-
+            if (result.length > 0) {
+                var mnyQtyOnHand = result[0].mnyQtyOnHand;
+                $("#newQtyOnHand").val(mnyQtyOnHand);
+            } else {
+                $("#newQtyOnHand").val("");
+            }
         });
 
-        var types = ({!! json_encode($types) !!});
-        var groups = ({!! json_encode($groups) !!});
-        var stock = ({!! json_encode($stock) !!});
-        var upkeepjobs = ({!! json_encode($upkeepjobs) !!});
-        var areas = ({!! json_encode($areas) !!});
-        var departments = ({!! json_encode($departments) !!});
-        var subdepartments = ({!! json_encode($subdepartments) !!});
-        var machines = ({!! json_encode($machines) !!});
-        var pastelProjects = ({!! json_encode($pastelProjects) !!});
-        $('#insertNewLine').click(function(){
-            // Get the values from the input fields
-            var intType = $("#newType").val();
-            var strStockGroup = $("#newItemGroup").val();
-            var strPastelCode = $("#newItem").val();
-            var mnyQty = $("#newQtyRequired").val();
-            var strUpkeep = $("#newUpkeepJob").val();
-            var strPastelProjectJob = $("#newPastelProject").val();
-            var intArea = $("#newArea").val();
-            var intDept = $("#newDepartment").val();
-            var intSubDept = $("#newSubDepartment").val();
-            var intMachine = $("#newMachine").val();
+        $('#addNewItem').prop('disabled', true);
+        $('#savestockissue').prop('disabled', true);
 
-            // Get a reference to the grid's underlying data source
-            var grid = $("#itemsGrid").dxDataGrid("instance");
-
-            // Create an object that represents the new row
-            var newRow = {
-                intType: intType,
-                strStockGroup: strStockGroup,
-                strPastelCode: strPastelCode,
-                mnyQty: mnyQty,
-                strUpkeep: strUpkeep,
-                strPastelProjectJob: strPastelProjectJob,
-                intArea: intArea,
-                intDept: intDept,
-                intSubDept: intSubDept,
-                intMachine: intMachine
-            };
-
-            // Add the new row to the data source
-            grid.addRow(newRow);
-
-            grid.refresh(); // refresh the grid's view
+        $("#issuedto").change(function(){
+            $('#addNewItem').prop('disabled', false);
         });
-
-        $("#itemsGrid").dxDataGrid({
-            dataSource: [],
-            hoverStateEnabled: true,
-            showBorders: true,
-            filterRow: { visible: true },
-            filterPanel: { visible: true },
-            headerFilter: { visible: true },
-            allowColumnResizing: true,
-            columnAutoWidth: true,
-            editing: {
-                mode: "popup",
-                allowAdding: true,
-                allowUpdating: true,
-                allowDeleting: true,
-                popup: {
-                    container: "#newStockModal",
-                }
-            },
-            columns: [
-                {
-                    dataField: "intType",
-                    caption: "Type",
-                    lookup: {
-                        dataSource: types,
-                        valueExpr: "intAutoID",
-                        displayExpr: "strIssueType",
-                    },
-                },
-                {
-                    dataField: "strStockGroup",
-                    caption: "Item Group",
-                    lookup: {
-                        dataSource: groups,
-                        valueExpr: "strStockGroup",
-                        displayExpr: "strStockGroupDesc",
-                    },
-                },
-                {
-                    dataField: "strPastelCode",
-                    caption: "Item",
-                    lookup: {
-                        dataSource: stock,
-                        valueExpr: "strPastelCode",
-                        displayExpr: "strPastelDescription",
-                    }
-                },
-                {
-                    dataField: "mnyQty",
-                    caption: "Qty Required",
-                },
-                {
-                    dataField: "strUpkeep",
-                    caption: "Upkeep Job",
-                    lookup: {
-                        dataSource: upkeepjobs,
-                        valueExpr: "workOrderNo",
-                        displayExpr: "workOrderNo",
-                    },
-                },
-                {
-                    dataField: "strPastelProjectJob",
-                    caption: "Pastel Project",
-                    lookup: {
-                        dataSource: pastelProjects,
-                        valueExpr: "ProjectCode",
-                        displayExpr: "ProjectCode",
-                    },
-                },
-                {
-                    dataField: "intArea",
-                    caption: "Area",
-                    lookup: {
-                        dataSource: areas,
-                        valueExpr: "intAutoID",
-                        displayExpr: "strAreaName",
-                    },
-                    
-                },
-                {
-                    dataField: "intDept",
-                    caption: "Dept",
-                    lookup: {
-                        dataSource: departments,
-                        valueExpr: "intAutoID",
-                        displayExpr: "strDeptName",
-                    },
-                },
-                {
-                    dataField: "intSubDept",
-                    caption: "Sub Dept",
-                    lookup: {
-                        dataSource: subdepartments,
-                        valueExpr: "intAutoID",
-                        displayExpr: "strSubDeptName",
-                    },
-                },
-                {
-                    dataField: "intMachine",
-                    caption: "Machine",
-                    lookup: {
-                        dataSource: machines,
-                        valueExpr: "intAutoMachineID",
-                        displayExpr: "strMachineName",
-                    },
-                },
-            ],            
-        }).dxDataGrid("instance");
 
         $.ajax({
-
             url: '{!!url("/getIssueStock")!!}',
             type: "GET",
             data: {
@@ -622,8 +470,247 @@
             }
         });
 
-        // Adding New Lines!
-        
+        $('#savestockissue').click(function(){
+            $('#savestockissue').prop('disabled', true);
+            var allGridItems =  $("#itemsGrid").dxDataGrid("getDataSource").items();
+            var newLines = new Array();
+
+            allGridItems.forEach((element, index, value) => {
+                newLines.push({
+                    'intType': element['intType'],
+                    'strStockGroup': element['strStockGroup'],
+                    'strPastelCode': element['strPastelCode'],
+                    'mnyQty': element['mnyQty'],
+                    'strUpkeep': element['strUpkeep'],
+                    'strPastelProjectJob': element['strPastelProjectJob'],
+                    'intArea': element['intArea'],
+                    'intDept': element['intDept'],
+                    'intSubDept': element['intSubDept'],
+                    'intMachine': element['intMachine']
+                });
+            });
+
+            $.ajax({
+
+                url: '{!!url("/savestockissue")!!}',
+                type: "POST",
+                data: {
+                    reference: $("#reference").val(),
+                    assignedTo: $("#issuedto").val(),
+                    lines: newLines
+                },
+                success: function (data) {
+                    location.reload();
+                }
+
+            });
+
+        });
+
+        var itemsGrid = $("#itemsGrid").dxDataGrid({
+            dataSource: [],
+            hoverStateEnabled: true,
+            showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            noDataText: "Please Add Lines",
+            editing: {
+                allowDeleting: true,
+            },
+            columns: [
+                {
+                    dataField: "intType",
+                    caption: "Type",
+                    lookup: {
+                        dataSource: types,
+                        valueExpr: "intAutoID",
+                        displayExpr: "strIssueType",
+                    },
+                },
+                {
+                    dataField: "strStockGroup",
+                    caption: "Item Group",
+                    lookup: {
+                        dataSource: groups,
+                        valueExpr: "strStockGroup",
+                        displayExpr: "strStockGroupDesc",
+                    },
+                },
+                {
+                    dataField: "strPastelCode",
+                    caption: "Item",
+                    lookup: {
+                        dataSource: stockItems,
+                        valueExpr: "strPastelCode",
+                        displayExpr: "strPastelDescription",
+                    }
+                },
+                {
+                    dataField: "mnyQty",
+                    caption: "Qty Required",
+                },
+                {
+                    dataField: "strUpkeep",
+                    caption: "Upkeep Job",
+                    lookup: {
+                        dataSource: upkeepjobs,
+                        valueExpr: "workOrderNo",
+                        displayExpr: "workOrderNo",
+                    },
+                },
+                {
+                    dataField: "strPastelProjectJob",
+                    caption: "Pastel Project",
+                    lookup: {
+                        dataSource: pastelProjects,
+                        valueExpr: "ProjectCode",
+                        displayExpr: "ProjectCode",
+                    },
+                },
+                {
+                    dataField: "intArea",
+                    caption: "Area",
+                    lookup: {
+                        dataSource: areas,
+                        valueExpr: "intAutoID",
+                        displayExpr: "strAreaName",
+                    },
+                    
+                },
+                {
+                    dataField: "intDept",
+                    caption: "Dept",
+                    lookup: {
+                        dataSource: departments,
+                        valueExpr: "intAutoID",
+                        displayExpr: "strDeptName",
+                    },
+                },
+                {
+                    dataField: "intSubDept",
+                    caption: "Sub Dept",
+                    lookup: {
+                        dataSource: subdepartments,
+                        valueExpr: "intAutoID",
+                        displayExpr: "strSubDeptName",
+                    },
+                },
+                {
+                    dataField: "intMachine",
+                    caption: "Machine",
+                    lookup: {
+                        dataSource: machines,
+                        valueExpr: "intAutoMachineID",
+                        displayExpr: "strMachineName",
+                    },
+                },
+            ],     
+            onRowRemoved: function(e) {
+                var dataSource = itemsGrid.getDataSource();
+                if (dataSource.items().length === 0) {
+                    $('#savestockissue').prop('disabled', true);
+                }
+            },       
+        }).dxDataGrid("instance");
+
+        $('#insertNewLine').click(function(){
+            $('#savestockissue').prop('disabled', false);
+            // Get the values from the input fields
+            var intType = $("#newType").val();
+            var strStockGroup = $("#newItemGroup").val();
+            var strPastelCode = $("#newItem").val();
+            var mnyQty = $("#newQtyRequired").val();
+            var strUpkeep = $("#newUpkeepJob").val();
+            var strPastelProjectJob = $("#newPastelProject").val();
+            var intArea = $("#newArea").val();
+            var intDept = $("#newDepartment").val();
+            var intSubDept = $("#newSubDepartment").val();
+            var intMachine = $("#newMachine").val();
+
+            // Create an object that represents the new row
+            var newRow = {
+                intType: intType,
+                strStockGroup: strStockGroup,
+                strPastelCode: strPastelCode,
+                mnyQty: mnyQty,
+                strUpkeep: strUpkeep,
+                strPastelProjectJob: strPastelProjectJob,
+                intArea: intArea,
+                intDept: intDept,
+                intSubDept: intSubDept,
+                intMachine: intMachine
+            };
+
+            var dataSource = itemsGrid.getDataSource();
+            dataSource.store().insert(newRow).then(function() {
+                dataSource.reload();
+            })
+
+            $("#newType").val("").trigger("change");
+            $("#newItemGroup").val("").trigger("change");
+            $("#newItem").val("").trigger("change");
+            $("#newQtyOnHand").val("").trigger("change");
+            $("#newQtyRequired").val("").trigger("change");
+            $("#newUpkeepJob").val("").trigger("change");
+            $("#newPastelProject").val("").trigger("change");
+            $("#newArea").val("").trigger("change");
+            $("#newDepartment").val("").trigger("change");
+            $("#newSubDepartment").val("").trigger("change");
+            $("#newMachine").val("").trigger("change");
+        });
+
+        // Item Restrictions
+
+        $('#newItemGroup').change(function(){
+            $.ajax({
+                url: '{!!url("/getStockItemsByGroup")!!}',
+                type: "GET",
+                data: {
+                    ItemGroup: $('#newItemGroup option:selected').val(),
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#newItem").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+                        toAppend += '<option value="'+o.strPastelCode+'">'+o.strPastelDescription+'</option>';
+                    });
+                    $("#newItem").append(toAppend);
+                    $('#newItem').select2({
+                        theme: 'bootstrap-5',
+                        dropdownParent: $('#newItemModal'),
+                    });
+                }
+            });
+        });
+
+        $('#newDepartment').change(function(){
+            $.ajax({
+                url: '{!!url("/getMachinesByDepartment")!!}',
+                type: "GET",
+                data: {
+                    DeptID: $('#newDepartment option:selected').val(),
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#newMachine").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+                        toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
+                    });
+                    $("#newMachine").append(toAppend);
+                    $('#newMachine').select2({
+                        theme: 'bootstrap-5',
+                        dropdownParent: $('#newItemModal'),
+                    });
+                }
+            });
+        });
+
+
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
