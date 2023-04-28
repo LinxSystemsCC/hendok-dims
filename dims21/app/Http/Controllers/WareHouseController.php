@@ -1668,15 +1668,65 @@ where intDeptID =" . $deptId);
                 $openWorkOrders[] = $workOrder;
             }
         }
-        
         // dd($openWorkOrders);
         return $openWorkOrders;
     }
 
+    public function getUpkeepJobAsset($ID){
+        $curl = curl_init();
 
+        $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/assets/'.$ID,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Session-Token: ' . $token,
+                'Cookie: upkeepsess=' . $token
+            ),
+        ));
+    
+        $response = curl_exec($curl);
+        curl_close($curl);    
+        $result = json_decode($response, true);
+    
+        return $result;
+    }
+
+    public function getUpkeepJobLocation($ID){
+        $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/locations/'.$ID,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Session-Token: ' . $token,
+                'Cookie: upkeepsess=' . $token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);        
+        $result = json_decode($response, true);
+    
+        return $result;
+    }
 
     // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
-    
 
     public function getIssueStock(Request $request){
         $result =  DB::connection('sqlsrv3')->select('select * from viewStockIssue');

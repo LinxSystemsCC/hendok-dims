@@ -1147,10 +1147,9 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('getStockItemsByGroup', [WareHouseController::class,'getStockItemsByGroup']);
     Route::get('getMachinesByDepartment', [WareHouseController::class,'getMachinesByDepartment']);
-    
-    
 
-    
+    Route::get('getUpkeepJobAsset/{ID}', [WareHouseController::class,'getUpkeepJobAsset']);
+    Route::get('getUpkeepJobLocation/{ID}', [WareHouseController::class,'getUpkeepJobLocation']);
 });
 
 //LAYALTYPROGRAMCONTROLLER CONTROLLER STARTS HERE !!!

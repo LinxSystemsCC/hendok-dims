@@ -33,11 +33,11 @@
 
     <style>
         .select2-container--default .select2-dropdown--below {
-            z-index: 1051; /* or any higher value */
+            z-index: 1051;
         }
 
         .select2-container--default .select2-dropdown--above {
-            z-index: 1051; /* or any higher value */
+            z-index: 1051;
         }
 
         .modal-xl {
@@ -98,7 +98,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="newStockModal">Create New Stock Issue</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
@@ -109,7 +108,7 @@
                     <label class="control-label" for="issuedto">Issued to</label>
 
                     <select class="form-select mx-2" type="text" id='issuedto'>
-                        <option selected disabled></option>
+                        <option value="None" selected disabled></option>
                         @foreach ($users as $user)
                             <option value="{{ $user->EmployeeCode }}">{{ $user->FirstName }} {{ $user->LastName }}</option>
                         @endforeach
@@ -129,7 +128,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeCreateNewStockIssue">Close</button>
                 <button type="button" id="savestockissue" class="btn btn-success" >Save</button>
             </div>
         </div>
@@ -150,11 +149,32 @@
                         <div class="col-md-12 mb-3">
                             <label for="newType" class="col-form-label">Stock Issue Type</label>
                             <select class="form-select mx-2" type="text" id='newType'>
-                                <option></option>
+                                <option value="None"></option></option>
                                 @foreach ($types as $type)
                                     <option value="{{ $type->intAutoID }}">{{ $type->strIssueType }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div id="isUpkeepJob" class="col-md-12 mb-3">
+                            <label for="upkeep" class="col-form-label">Is this an Upkeep Job?</label>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="yesUpkeep">
+                                        <label class="form-check-label" for="yesUpkeep">
+                                        Yes
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="noUpkeep" checked>
+                                        <label class="form-check-label" for="noUpkeep">
+                                        No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="newItemGroup" class="col-form-label">Item Group</label>
@@ -200,7 +220,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div id='area' class="col-md-6 mb-3">
                             <label for="newArea" class="col-form-label">Area</label>
                             <select class="form-select mx-2" type="text" id='newArea'>
                                 <option></option>
@@ -209,7 +229,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div id='department' class="col-md-6 mb-3">
                             <label for="newDepartment" class="col-form-label">Department</label>
                             <select class="form-select mx-2" type="text" id='newDepartment'>
                                 <option></option>
@@ -218,7 +238,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div id='subdepartment' class="col-md-6 mb-3">
                             <label for="newSubDepartment" class="col-form-label">Sub Department</label>
                             <select class="form-select mx-2" type="text" id='newSubDepartment'>
                                 <option></option>
@@ -227,7 +247,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div id='machine' class="col-md-6 mb-3">
                             <label for="newMachine" class="col-form-label">Machine</label>
                             <select class="form-select mx-2" type="text" id='newMachine'>
                                 <option></option>
@@ -236,12 +256,32 @@
                                 @endforeach --}}
                             </select>
                         </div>
+
+                        {{-- This is for upkeep jobs --}}
+
+                        <div id='upkeeparea' class="col-md-6 mb-3">
+                            <label for="upkeepNewArea" class="col-form-label">Area</label>
+                            <input type="text" class="form-control" id="upkeepNewArea" disabled>
+                        </div>
+                        <div id='upkeepdepartment' class="col-md-6 mb-3">
+                            <label for="upkeepNewDepartment" class="col-form-label">Department</label>
+                            <input type="text" class="form-control" id="upkeepNewDepartment" disabled>
+                        </div>
+                        <div id='upkeepsubdepartment' class="col-md-6 mb-3">
+                            <label for="upkeepNewSubDepartment" class="col-form-label">Sub Department</label>
+                            <input type="text" class="form-control" id="upkeepNewSubDepartment" disabled>
+                        </div>
+                        <div id='upkeepmachine' class="col-md-6 mb-3">
+                            <label for="upkeepNewMachine" class="col-form-label">Machine</label>
+                            <input type="text" class="form-control" id="upkeepNewMachine" disabled>
+                        </div>
+
                     </div>
                 </form>           
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-target="#newStockModal" data-bs-toggle="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-target="#newStockModal" data-bs-toggle="modal" id="cancelNewStockItem">Cancel</button>
                 <button type="button" id="insertNewLine" class="btn btn-success" data-bs-target="#newStockModal" data-bs-toggle="modal">Insert</button>
             </div>
         </div>
@@ -372,6 +412,12 @@
 
         $('#addNewItem').prop('disabled', true);
         $('#savestockissue').prop('disabled', true);
+        $('#isUpkeepJob').prop('hidden', true);
+        $('#upkeeparea').prop('hidden', true);
+        $('#upkeepdepartment').prop('hidden', true);
+        $('#upkeepsubdepartment').prop('hidden', true);
+        $('#upkeepmachine').prop('hidden', true);
+        $('#newUpkeepJob').prop('disabled', true);
 
         $("#issuedto").change(function(){
             $('#addNewItem').prop('disabled', false);
@@ -660,9 +706,78 @@
             $("#newDepartment").val("").trigger("change");
             $("#newSubDepartment").val("").trigger("change");
             $("#newMachine").val("").trigger("change");
+
+            $("#upkeepNewArea").val("").trigger("change");
+            $("#upkeepNewMachine").val("").trigger("change");
+            $("#upkeepNewDepartment").val("").trigger("change");
+            $("#upkeepNewSubDepartment").val("").trigger("change");
         });
 
         // Item Restrictions
+
+        $('#newType').change(function(){
+            var Type = $('#newType :selected').text();
+            // console.log(Type);
+            if (Type === 'Parts'){
+                $('#isUpkeepJob').prop('hidden', false);
+                $("#noUpkeep").prop('checked', true);
+                $("#yesUpkeep").prop('checked', false);
+                
+            }else{
+                $('#isUpkeepJob').prop('hidden', true);
+                $('#upkeeparea').prop('hidden', true);
+                $('#upkeepdepartment').prop('hidden', true);
+                $('#upkeepsubdepartment').prop('hidden', true);
+                $('#upkeepmachine').prop('hidden', true);
+
+                $('#area').prop('hidden', false);
+                $('#department').prop('hidden', false);
+                $('#subdepartment').prop('hidden', false);
+                $('#machine').prop('hidden', false);
+            }
+
+            $('#newUpkeepJob').prop('disabled', true);
+            $('#newUpkeepJob').val("").trigger("change");
+            $('#upkeepNewArea').val("").trigger("change");
+            $('#upkeepNewMachine').val("").trigger("change");
+            $('#upkeepNewDepartment').val("").trigger("change");
+            $('#upkeepNewSubDepartment').val("").trigger("change");
+        });
+
+        $("#yesUpkeep").change(function() {
+            $('#area').prop('hidden', true);
+            $('#department').prop('hidden', true);
+            $('#subdepartment').prop('hidden', true);
+            $('#machine').prop('hidden', true);
+
+            $('#upkeeparea').prop('hidden', false);
+            $('#upkeepdepartment').prop('hidden', false);
+            $('#upkeepsubdepartment').prop('hidden', false);
+            $('#upkeepmachine').prop('hidden', false);
+
+            $('#newUpkeepJob').prop('disabled', false);
+            
+        });
+
+        $("#noUpkeep").change(function() {
+            $('#area').prop('hidden', false);
+            $('#department').prop('hidden', false);
+            $('#subdepartment').prop('hidden', false);
+            $('#machine').prop('hidden', false);
+
+            $('#upkeeparea').prop('hidden', true);
+            $('#upkeepdepartment').prop('hidden', true);
+            $('#upkeepsubdepartment').prop('hidden', true);
+            $('#upkeepmachine').prop('hidden', true);
+
+            $('#newUpkeepJob').prop('disabled', true);
+            $("#newUpkeepJob").val("").trigger("change");
+
+            $('#upkeepNewArea').val("").trigger("change");
+            $('#upkeepNewMachine').val("").trigger("change");
+            $('#upkeepNewDepartment').val("").trigger("change");
+            $('#upkeepNewSubDepartment').val("").trigger("change");
+        });
 
         $('#newItemGroup').change(function(){
             $.ajax({
@@ -710,6 +825,95 @@
             });
         });
 
+        $('#newUpkeepJob').change(function(){
+            
+                var JobsList = {!! json_encode($upkeepjobs) !!};
+                var upkeepID = $('#newUpkeepJob').val();
+                var strPastelCode = $('#newItem').val();
+
+                if (upkeepID !== ''){
+                    var result = $.grep(JobsList, function(e) {
+                        return e.workOrderNo == upkeepID;
+                    });
+
+                    console.log("-------------------------------------------- Job Info --------------------------------------------");
+                    console.log(result);
+
+                    var AssetID = result[0].asset;
+                    var LocationID = result[0].location;
+
+                    $.ajax({
+                        url: '{!!url("/getUpkeepJobAsset/")!!}'+'/'+AssetID,
+                        type: "GET",
+                        data: {
+                        },
+                        success: function (data) {
+                            console.log("-------------------------------------------- Asset Info --------------------------------------------");
+                            console.log(data);
+                            if (data.success === true){
+                                var AreaName = data.result.area;
+                                var MachineName = data.result.name;
+                            }else{
+                                alert(data.message);
+                            }
+
+                            $('#upkeepNewArea').val(AreaName);
+                            $('#upkeepNewMachine').val(MachineName);
+                        }
+                    });
+
+                    $.ajax({
+                        url: '{!!url("/getUpkeepJobLocation/")!!}'+'/'+LocationID,
+                        type: "GET",
+                        data: {
+                        },
+                        success: function (data) {
+                            console.log("-------------------------------------------- Location Info --------------------------------------------");
+                            console.log(data);
+
+                            if (data.success === true){
+                                var DepartmentName = data.result.name
+                            }else{
+                                alert(data.message);
+                            }
+
+                            $('#upkeepNewDepartment').val(DepartmentName);
+                            $('#upkeepNewSubDepartment').val(DepartmentName);
+                        }
+                    });
+                }else{
+                    console.log("Kyle Is an amazing Programmer :)");
+                }
+        });
+
+        $('#closeCreateNewStockIssue').click(function(){
+            $("#issuedto").val("None").trigger("change");
+            $('#addNewItem').prop('disabled', true);
+            var dataSource = itemsGrid.getDataSource();
+
+            dataSource.store().clear();
+            dataSource.reload();
+        });
+
+        $('#cancelNewStockItem').click(function(){
+            $("#newType").val("").trigger("change");
+            $("#newItemGroup").val("").trigger("change");
+            $("#newItem").val("").trigger("change");
+            $("#newQtyOnHand").val("").trigger("change");
+            $("#newQtyRequired").val("").trigger("change");
+            $("#newUpkeepJob").val("").trigger("change");
+            $("#newPastelProject").val("").trigger("change");
+            $("#newArea").val("").trigger("change");
+            $("#newDepartment").val("").trigger("change");
+            $("#newSubDepartment").val("").trigger("change");
+            $("#newMachine").val("").trigger("change");
+
+            $("#upkeepNewArea").val("").trigger("change");
+            $("#upkeepNewMachine").val("").trigger("change");
+            $("#upkeepNewDepartment").val("").trigger("change");
+            $("#upkeepNewSubDepartment").val("").trigger("change");
+
+        });
 
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
