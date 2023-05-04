@@ -1733,6 +1733,41 @@ where intDeptID =" . $deptId);
         return response()->json($result);
     }
 
+    public function bulkMapping(){
+        $mappings =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping mappings');
+        $areas =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping areas');
+        $departments =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping departments');
+        $subdepartments =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping subdepartments');
+        $machines =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping machines');
+
+        // dd($mappings, $areas, $departments, $subdepartments, $machines);
+
+        return view('warehouse/bulkMapping')
+            ->with('mappings',$mappings)
+            ->with('areas',$areas)
+            ->with('departments',$departments)
+            ->with('subdepartments',$subdepartments)
+            ->with('machines',$machines);
+    }
+
+    public function checkBulkMapping(Request $request){
+        $ID = $request->get("ID");
+        $prompt = $request->get("prompt");
+        $data =  DB::connection('sqlsrv3')->select("EXEC spCheckBulkMapping $ID, $prompt");
+        return response()->json($data);
+    }
+
+    public function bulkMappingCRUD(Request $request){
+        $area = $request->get("area");
+        $department = $request->get("department");
+        $subdepartment = $request->get("subdepartment");
+        $machine = $request->get("machine");
+        $ID = $request->get("ID");
+        $prompt = $request->get("prompt");
+        $data =  DB::connection('sqlsrv3')->select("EXEC spBulkMappingCRUD $area, $department, $subdepartment, $machine, $ID, '$prompt'");
+        return response()->json($data);
+    }
+
     public function endjob(Request $request){
         $jobid = $request->get("jobid");
         $endjob = $request->get("endjob");
