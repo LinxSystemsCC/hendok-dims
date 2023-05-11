@@ -850,6 +850,13 @@ class WareHouseController extends Controller
         return view('warehouse/roofworkorders')->with('machines', $machines);
     }
 
+    public function getRoofingSalesOrders()
+    {
+        $salesOrders = DB::connection('sqlsrv2')
+            ->select('EXEC spGetRoofingSalesOrdersToPlan');
+        return response()->json($salesOrders);
+    }
+
     public function getBinLocationsJson()
     {
         $getBins = DB::connection('sqlsrv2')
@@ -1726,6 +1733,12 @@ where intDeptID =" . $deptId);
         return $result;
     }
 
+    public function GetAreaDeptSubDeptByMachine(Request $request){
+        $MachineName = $request->get('MachineName');
+        $result =  DB::connection('sqlsrv3')->select("EXEC spGetAreaDeptSubDeptByMachine '$MachineName'");
+        return response()->json($result);
+    }
+
     // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
 
     public function getIssueStock(Request $request){
@@ -1766,6 +1779,19 @@ where intDeptID =" . $deptId);
         $prompt = $request->get("prompt");
         $data =  DB::connection('sqlsrv3')->select("EXEC spBulkMappingCRUD $area, $department, $subdepartment, $machine, $ID, '$prompt'");
         return response()->json($data);
+    }
+
+    public function getBulkMappingAreaDeptSubDeptMachines(Request $request){
+        $ID = $request->get("ID");
+        $prompt = $request->get("prompt");
+        print_r($ID, $prompt);
+        $data =  DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $ID, '$prompt'"); 
+        return response()->json($data);
+    }
+
+    public function nailsInner(){
+        $nails =  DB::connection('sqlsrv3')->select("SELECT * FROM tblNailsInner"); 
+        return view('warehouse/nailsInner')->with('nails',$nails);
     }
 
     public function endjob(Request $request){
@@ -2411,15 +2437,12 @@ where intDeptID =" . $deptId);
 
     public function mapdeptitem()
     {
-        $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments");
-
         $machines = DB::connection('sqlsrv2')
             ->select("select * from tblMachines");
 
         $products = DB::connection('sqlsrv2')
             ->select("select * from viewtblProducts");
-        return view('warehouse/mapitemstomachineanddept')->with('departments', $dept)->with('products', $products)->with('machines', $machines);
+        return view('warehouse/mapitemstomachineanddept')->with('products', $products)->with('machines', $machines);
     }
     public function getMappedItemstoPalletJson()
     {
@@ -2430,9 +2453,17 @@ where intDeptID =" . $deptId);
     public function getMappedDepartmentsMachinesItemasJson()
     {
         $palletsjson = DB::connection('sqlsrv2')
-            ->select("EXEC spMappedDepartmentMachineItems ");
+            ->select("EXEC spMappedDepartmentMachineItems");
         return response()->json($palletsjson);
     }
+
+    public function getProductsMappedToMachine()
+    {
+        $palletsjson = DB::connection('sqlsrv2')
+            ->select("EXEC spGetProductsMappedToMachine");
+        return response()->json($palletsjson);
+    }
+
     public function getPallets()
     {
         $palletsjson = DB::connection('sqlsrv2')->select("EXEC spGetPalletsConfig");
@@ -2506,43 +2537,46 @@ where intDeptID =" . $deptId);
     {
         $scaleID = $request->get("scaleID");
 
-        $scales = DB::connection('sqlsrv2')->select("select strIP, strPort from tblScales where intAutoId = '" . $scaleID . "'");
+        if (!empty($scaleID)){
+            $scales = DB::connection('sqlsrv2')->select("select strIP, strPort from tblScales where intAutoId = '" . $scaleID . "'");
 
-        // dd($scales);
+            // dd($scales);
 
-        $host = $scales[0]->strIP;
-        $port =  $scales[0]->strPort;
+            $host = $scales[0]->strIP;
+            $port =  $scales[0]->strPort;
 
-        // dd($host,$port);
-        // $host = "192.168.100.232";
-        // $port = 23;
-        set_time_limit(0);
+            // dd($host,$port);
+            // $host = "192.168.100.232";
+            // $port = 23;
+            set_time_limit(0);
 
-        $socket = socket_create(AF_INET, SOCK_STREAM, 0);
-        socket_connect($socket, $host, $port);
-        $input = socket_read($socket, 4096);
-        // socket_recv($socket, $input, 1024, 0);
-        socket_close($socket);
+            $socket = socket_create(AF_INET, SOCK_STREAM, 0);
+            socket_connect($socket, $host, $port);
+            $input = socket_read($socket, 4096);
+            // socket_recv($socket, $input, 1024, 0);
+            socket_close($socket);
 
-        // dd(($input));
+            // dd(($input));
 
-        // $replaced = str::replaceArray('ST,GS,+', [''], $input);
-        // $replaced = str::replaceArray('US,GS,+', [''], $input);
+            // $replaced = str::replaceArray('ST,GS,+', [''], $input);
+            // $replaced = str::replaceArray('US,GS,+', [''], $input);
 
-        // $input = trim($input, );
-        // $input = trim($input, "UT,GS,");
-        // $input = trim($input, "WN");
-        // $input = trim($input, "+");
-        // $input = trim($input, "-");
-        // $input = trim($input, "kg");
+            // $input = trim($input, );
+            // $input = trim($input, "UT,GS,");
+            // $input = trim($input, "WN");
+            // $input = trim($input, "+");
+            // $input = trim($input, "-");
+            // $input = trim($input, "kg");
 
-        // Remove Illegal values
-        $input = str_replace(array("\r", "\n", "ST,GS,", "UT,GS,", "WN", "+", "-", "kg", " "), "", $input);
-        $input = ltrim($input);
-        $input = intval($input);
+            // Remove Illegal values
+            $input = str_replace(array("\r", "\n", "ST,GS,", "UT,GS,", "WN", "+", "-", "kg", " "), "", $input);
+            $input = ltrim($input);
+            $input = intval($input);
 
-        return response()->json($input);
+            return response()->json($input);
+        }
     }
+
 
     public function getpalletconfforitems(Request $request)
     {
@@ -2704,6 +2738,18 @@ where intDeptID =" . $deptId);
             ->select(
                 'exec spMapDeptMachineItems ?,?,?',
                 array($productcode, $machine, $department)
+            );
+        return response()->json($returnmach);
+    }
+
+    public function mapProductToMachine(Request $request){
+        $machine = $request->get("machine");
+        $productcode = $request->get("productcode");
+
+        $returnmach = DB::connection('sqlsrv2')
+            ->select(
+                'exec spMapItemToMachine ?,?',
+                array($productcode, $machine)
             );
         return response()->json($returnmach);
     }

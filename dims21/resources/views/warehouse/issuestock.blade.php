@@ -232,25 +232,22 @@
                         <div id='department' class="col-md-6 mb-3">
                             <label for="newDepartment" class="col-form-label">Department</label>
                             <select class="form-select mx-2" type="text" id='newDepartment'>
-                                <option></option>
-                                @foreach ($departments as $dept)
+                                {{-- @foreach ($departments as $dept)
                                     <option value="{{ $dept->intAutoID }}">{{ $dept->strDeptName }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
                         <div id='subdepartment' class="col-md-6 mb-3">
                             <label for="newSubDepartment" class="col-form-label">Sub Department</label>
                             <select class="form-select mx-2" type="text" id='newSubDepartment'>
-                                <option></option>
-                                @foreach ($subdepartments as $subdept)
+                                {{-- @foreach ($subdepartments as $subdept)
                                     <option value="{{ $subdept->intAutoID }}">{{ $subdept->strSubDeptName }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
                         <div id='machine' class="col-md-6 mb-3">
                             <label for="newMachine" class="col-form-label">Machine</label>
                             <select class="form-select mx-2" type="text" id='newMachine'>
-                                <option></option>
                                 {{-- @foreach ($machines as $machine)
                                     <option value="{{ $machine->intAutoMachineID }}">{{ $machine->strMachineName }}</option>
                                 @endforeach --}}
@@ -431,7 +428,6 @@
             success: function (data) {
 
                 $("#gridContainer").dxDataGrid({
-
                     dataSource:data, //as json
                     hoverStateEnabled: true,
                     showBorders: true,
@@ -801,14 +797,69 @@
             });
         });
 
-        $('#newDepartment').change(function(){
+        $('#newArea').change(function(){
             $.ajax({
-                url: '{!!url("/getMachinesByDepartment")!!}',
+                url: '{!!url("/getBulkMappingAreaDeptSubDeptMachines")!!}',
                 type: "GET",
                 data: {
-                    DeptID: $('#newDepartment option:selected').val(),
+                    ID: $('#newArea').val(),
+                    prompt: 'Departments'
                 },
                 success: function (data) {
+                    console.log(data);
+                    var toAppend = '';
+                    $("#newDepartment").empty();
+                    $("#newSubDepartment").empty();
+                    $("#newMachine").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+                        toAppend += '<option value="'+o.intDeptID+'">'+o.strDeptName+'</option>';
+                    });
+                    $("#newDepartment").append(toAppend);
+                    $('#newDepartment').select2({
+                        theme: 'bootstrap-5',
+                        dropdownParent: $('#newItemModal'),
+                    });
+                }
+            });
+        });
+
+        $('#newDepartment').change(function(){
+            $.ajax({
+                url: '{!!url("/getBulkMappingAreaDeptSubDeptMachines")!!}',
+                type: "GET",
+                data: {
+                    ID: $('#newDepartment').val(),
+                    prompt: 'SubDepartments'
+                },
+                success: function (data) {
+                    console.log(data);
+                    var toAppend = '';
+                    $("#newSubDepartment").empty();
+                    $("#newMachine").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+                        toAppend += '<option value="'+o.intSubDeptID+'">'+o.strSubDeptName+'</option>';
+                    });
+                    $("#newSubDepartment").append(toAppend);
+                    $('#newSubDepartment').select2({
+                        theme: 'bootstrap-5',
+                        dropdownParent: $('#newItemModal'),
+                    });
+                }
+            });
+        });
+
+        $('#newSubDepartment').change(function(){
+            $.ajax({
+                url: '{!!url("/getBulkMappingAreaDeptSubDeptMachines")!!}',
+                type: "GET",
+                data: {
+                    ID: $('#newSubDepartment').val(),
+                    prompt: 'Machines'
+                },
+                success: function (data) {
+                    console.log(data);
                     var toAppend = '';
                     $("#newMachine").empty();
                     toAppend += '<option></option>';
@@ -835,8 +886,8 @@
                         return e.workOrderNo == upkeepID;
                     });
 
-                    console.log("-------------------------------------------- Job Info --------------------------------------------");
-                    console.log(result);
+                    // console.log("-------------------------------------------- Job Info --------------------------------------------");
+                    // console.log(result);
 
                     var AssetID = result[0].asset;
                     var LocationID = result[0].location;
@@ -847,39 +898,37 @@
                         data: {
                         },
                         success: function (data) {
-                            console.log("-------------------------------------------- Asset Info --------------------------------------------");
-                            console.log(data);
+                            // console.log("-------------------------------------------- Asset Info --------------------------------------------");
+                            // console.log(data);
                             if (data.success === true){
-                                var AreaName = data.result.area;
                                 var MachineName = data.result.name;
                             }else{
                                 alert(data.message);
                             }
 
-                            $('#upkeepNewArea').val(AreaName);
                             $('#upkeepNewMachine').val(MachineName);
+
+                            $.ajax({
+                                url: '{!!url("/GetAreaDeptSubDeptByMachine")!!}',
+                                type: "GET",
+                                data: {
+                                    MachineName: MachineName,
+                                },
+                                success: function (data) {
+                                    // alert(data.length);
+                                    if (data.length !== 0){
+                                        $('#upkeepNewArea').val(data[0]['strAreaName']);
+                                        $('#upkeepNewDepartment').val(data[0]['strDeptName']);
+                                        $('#upkeepNewSubDepartment').val(data[0]['strSubDeptName']);
+                                    }
+                                    else{
+                                        alert("The Machine needs to be mapped! Please contact IT.")
+                                    }
+                                }
+                            });
                         }
                     });
 
-                    $.ajax({
-                        url: '{!!url("/getUpkeepJobLocation/")!!}'+'/'+LocationID,
-                        type: "GET",
-                        data: {
-                        },
-                        success: function (data) {
-                            console.log("-------------------------------------------- Location Info --------------------------------------------");
-                            console.log(data);
-
-                            if (data.success === true){
-                                var DepartmentName = data.result.name
-                            }else{
-                                alert(data.message);
-                            }
-
-                            $('#upkeepNewDepartment').val(DepartmentName);
-                            $('#upkeepNewSubDepartment').val(DepartmentName);
-                        }
-                    });
                 }else{
                     console.log("Kyle Is an amazing Programmer :)");
                 }
@@ -933,7 +982,6 @@
         });
 
     });
-
 
     function showDialog(tag,width,height)
     {

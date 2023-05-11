@@ -142,7 +142,7 @@
     </div>
     <div class="col-lg-10" >
         <div class="col-lg-12 d-inline-flex" >
-            <h3 style="flex-grow: 1; padding-left: 15px;">MAP PRODUCT TO MACHINE AND DEPARTMENT</h3>
+            <h3 style="flex-grow: 1; padding-left: 15px;">MAP PRODUCT TO MACHINE</h3>
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newmapping">
                 New Mapping
@@ -164,16 +164,6 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-                    <select  class="form-select input-sm col-xs-1" id="department" required>
-                        <option></option>
-                        @foreach($departments as $val)
-                            <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
                     <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
                     <select  class="form-select input-sm col-xs-1" id="machine" required>
                         <option></option>
@@ -191,8 +181,6 @@
                             <option value="{{$product->PastelCode}}">{{$product->PastelDescription}}</option>
                         @endforeach
                     </select>
-                    {{-- <input  type="text" class="form-control input-sm col-xs-1" id="productcode" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;"><br>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="productdesc" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;" readonly> --}}
                 </div>
 
             </div>
@@ -261,30 +249,10 @@
     var jArray = JSON.stringify({!! json_encode($products) !!});
     $(document).ready(function() {
 
-        // var finalData =$.map(JSON.parse(jArray), function(item) {
+        $('#product').select2( {
+            theme: 'bootstrap-5'
+        });
 
-        //     return {
-        //         PastelCode:item.PastelCode,
-        //         PastelDescription:item.PastelDescription
-
-        //     }
-
-        // });
-        // var inputProductcode = $('#productcode').flexdatalist({
-        //     minLength: 1,
-        //     valueProperty: '*',
-        //     selectionRequired: true,
-        //     focusFirstResult: true,
-        //     searchContain:true,
-        //     visibleProperties: ["PastelCode","PastelDescription"],
-        //     searchIn: 'PastelDescription',
-        //     data: finalData
-        // });
-        // inputProductcode.on('select:flexdatalist', function (event, data) {
-
-        //     $('#productcode').val(data.PastelCode);
-        //     $('#productdesc').val(data.PastelDescription);
-        // });
         $('#product').select2( {
             theme: 'bootstrap-5'
         });
@@ -293,12 +261,11 @@
 
             $.ajax({
 
-                url: '{!!url("/savesmachinedeptitems")!!}',
+                url: '{!!url("/mapProductToMachine")!!}',
                 type: "POST",
                 data: {
                     machine: $('#machine').val(),
-                    department: $('#department').val(),
-                    productcode: $('#productcode').val()
+                    productcode: $('#product').val()
                 },
                 success: function (data) {
                     location.reload();
@@ -310,11 +277,10 @@
 
         $.ajax({
 
-            url: '{!!url("/getMappedDepartmentsMachinesItemasJson")!!}',
+            url: '{!!url("/getProductsMappedToMachine")!!}',
             type: "GET",
             data: {
-                datefrom: $('#datefrom').val(),
-                dateto: $('#dateto').val()
+
             },
             success: function (data) {
 
@@ -361,18 +327,14 @@
 
                     columns: [
                         {
-                            dataField: "intAutoMappedDeptMachItemID",
+                            dataField: "intAutoID",
                             caption: "ID",
                         }, {
                             dataField: "strItemCode",
                             caption: "Item Code",
                         }, {
-                            dataField: "PastelDescription",
-                            caption: "Item Name",
-                        },
-                        {
-                            dataField: "strDeptName",
-                            caption: "Department",
+                            dataField: "strItemDescription",
+                            caption: "Item Description",
                         },
                         {
                             dataField: "strMachineName",

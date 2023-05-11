@@ -179,9 +179,11 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
+
     $(document).ready(function() {
         var mappings = ({!! json_encode($mappings) !!});
 
@@ -247,22 +249,6 @@
                 }
             });
         });
-
-        // $("#machine").change(function(){
-        //     var ID = $("#machine").val();
-        //     var prompt = 'machine';
-        //     $.ajax({
-        //         url: '{!!url("/checkBulkMapping")!!}',
-        //         type: "GET",
-        //         data: {
-        //             ID: ID,
-        //             prompt: prompt,
-        //         },
-        //         success: function (data) {
-        //             alert(data);
-        //         }
-        //     });
-        // });
 
         $('#saveMapping').click(function(){
             // alert("Saving mappings has not been set up yet!")
@@ -360,7 +346,7 @@
                 alert("Removing Has Not been implemented Yet!")
             },
         });
-        
+
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
@@ -374,11 +360,10 @@
             $('nav ul li #'+id+' span').toggleClass("rotate");
             
         });
-        
+
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
-
     });
 
     function showDialog(tag,width,height){
@@ -409,4 +394,5 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
+
 </script>

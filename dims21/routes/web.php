@@ -867,6 +867,8 @@ Route::get('getMachinesmappedtodept', [WareHouseController::class,'getMachinesma
 Route::post('getpalletconfforitems', [WareHouseController::class,'getpalletconfforitems']);
 Route::post('validatepalletsplan', [WareHouseController::class,'validatepalletsplan']);
 Route::get('getMappedDepartmentsMachinesItemasJson', [WareHouseController::class,'getMappedDepartmentsMachinesItemasJson']);
+Route::get('getProductsMappedToMachine', [WareHouseController::class,'getProductsMappedToMachine']);
+Route::post('mapProductToMachine', [WareHouseController::class,'mapProductToMachine']);
 Route::get('selectedDepartment', [WareHouseController::class,'selectedDepartment']);
 Route::post('updatePalletConfig', [WareHouseController::class,'updatePalletConfig']);
 Route::post('deletePalletConfig', [WareHouseController::class,'deletePalletConfig']);
@@ -915,6 +917,7 @@ Route::get('deleteGalvChecker', [WareHouseController::class,'deleteGalvChecker']
 Route::get('changeGalvJobStatus', [WareHouseController::class,'changeGalvJobStatus']);
 Route::get('getGalvWIPConsolidated',[WareHouseController::class,'getGalvWIPConsolidated']);
 Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
+Route::get('getRoofingSalesOrders', [WareHouseController::class,'getRoofingSalesOrders']);
 Route::post('deleteRoofingBatch', [WareHouseController::class,'deleteRoofingBatch']);
 Route::post('deleteRoofingSO', [WareHouseController::class,'deleteRoofingSO']);
 Route::get('getWIPjobstarted', [WareHouseController::class,'getWIPjobstarted']);
@@ -1128,9 +1131,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getMachinesByDepartment', [WareHouseController::class,'getMachinesByDepartment']);
     Route::get('getUpkeepJobAsset/{ID}', [WareHouseController::class,'getUpkeepJobAsset']);
     Route::get('getUpkeepJobLocation/{ID}', [WareHouseController::class,'getUpkeepJobLocation']);
+    Route::get('GetAreaDeptSubDeptByMachine', [WareHouseController::class,'GetAreaDeptSubDeptByMachine']);
     Route::get('bulkMapping', [WareHouseController::class,'bulkMapping']);
     Route::get('checkBulkMapping', [WareHouseController::class,'checkBulkMapping']);
-    Route::post('bulkMappingCRUD', [WareHouseController::class,'bulkMappingCRUD']);
+    Route::post('bulkMappingCRUD', [WareHouseController::class,'bulkMappingCRUD']);    
+    Route::get('getBulkMappingAreaDeptSubDeptMachines', [WareHouseController::class,'getBulkMappingAreaDeptSubDeptMachines']);
+    Route::get('nailsInner', [WareHouseController::class,'nailsInner']);        
 
 });
 
