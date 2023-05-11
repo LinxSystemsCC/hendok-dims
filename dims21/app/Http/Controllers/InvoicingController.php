@@ -161,6 +161,7 @@ class InvoicingController extends Controller
         }
 
     }
+    //{ownersId}/{SoNumber}/{invoiceid}/{ref}/{userid}/{userName}
     public function individualInvoicingAPI($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName){
 
         $refDescription = "";
@@ -203,7 +204,7 @@ class InvoicingController extends Controller
                         array($ref, $SoNumber, $ownersId)
                     );
                 $v = new \App\Http\Controllers\SalesForm();
-                $isCapeUser = $v->getThings(Auth::user()->GroupId, 'isCapeUser');
+                $isCapeUser = $v->getThings($this->getusergroupid($userid), 'isCapeUser');
                 $x = $sdkHelper->GetSalesOrder($SoNumber);
                 // $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
                 $x->InvoiceDate = date('Y-m-d H:i:s');
@@ -530,6 +531,11 @@ class InvoicingController extends Controller
     //DIMS Manual Adjustment
     public function getdimsmanuals(){
         return view('dims/warehouseadj');
+    }
+    public function getusergroupid($userid){
+        $groupformid= DB::connection('sqlsrv3')
+            ->select("select GroupId from tblDIMSUSERS where UserId=".$userid);
+        return $groupformid[0]->GroupId;
     }
     public function getqrcode(){
         return view('warehouse/jobqrcode');
