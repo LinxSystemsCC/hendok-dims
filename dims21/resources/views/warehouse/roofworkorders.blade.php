@@ -16,38 +16,78 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
     
-
     <!-- Select2 JS -->
 
-    <!-- DevExtreme library -->
+    <!-- DevExtreme theme -->
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/21.1.5/css/dx.common.css" />
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
-    <!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+    <style>
+        .dx-datagrid{
+            max-width: 100% !important;
+        }
+    
+        .dx-datagrid .dx-link {
+            color: #df2413;
+        }
+    
+        .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+            font-weight: 500;
+            background-color: #df2413;
+            color: #fff;
+        }
+    
+        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+            color: #df2413;
+            font-size: 14px;
+            line-height: 18px;
+        }
+    
+        #ppsoGrid{
+            height: calc(100vh - 265px);
+            max-width: calc(100vw - 270px) !important;
+        }
+    
+        #headergrid{
+            max-height: calc(54vh - 155px);
+            min-height: calc(54vh - 155px);
+            max-width: calc(100vw - 270px) !important;
+        }
+    
+        #linesgrid{
+            max-height: calc(54vh - 155px);
+            min-height: calc(54vh - 155px);
+            max-width: calc(100vw - 270px) !important;
+        }
+    
+    </style>
 
 </head>
 
 <body>
-<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
+<div class="col-lg-12 d-flex bd-highlight w-100"  style="background: white;">
     <div class="col-lg-2" style="background: white;">
 
         <div class="vertical-menu">
@@ -55,7 +95,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         </div>
     </div>
 
-    <div class="col-lg-10"  style="width:100%; max-width:100% !important">
+    <div class="col-lg-10">
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link active" id="PPSOTab" aria-current="page">Pre Plan SO's</a>
@@ -68,11 +108,13 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             </li>
         </ul>
         
-        <div class="tab-content p-3">
+        <div class="tab-content p-3 w-100">
             {{-- Pre Planned Sales Orders Page --}}
             <div class="tab-pane fade show active" id="PPSOPage" role="tabpanel">
 
-                <div class="modal-header">
+                {{-- -------------------------------------- Old Design -------------------------------------- --}}
+
+                {{-- <div class="modal-header">
                     <h5 class="modal-title" id="preplanningsoTitle">Pre Planning SO</h5>
                 </div>
                 <div class="modal-body">
@@ -105,9 +147,21 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                     <button class="btn-danger btn-lg" id="savePPSO" style="width: 100%;">SAVE</button>
 
+                </div> --}}
+                <h3>Pre Plan Sales Orders</h3>
+
+                {{-- <button class="btn btn-primary" id="syncNewOrders" style="width: 100%;">SYNC NEW ORDERS</button> --}}
+
+                <div id="ppsoGrid" class="py-2"></div>
+
+                <div class="form-group">
+                    <label class="control-label" for="reference"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reference </label>
+                    <input type="text"  class="form-control input-sm col-xs-1" id="reference" required>
                 </div>
 
-                
+                <button class="btn btn-success" id="savePPSO" style="width: 100%;">SAVE</button>
+
+
             </div>
 
             {{--  Batch Sales Order Processing Page --}}
@@ -123,10 +177,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                 <br><br>
                 
-                <div id="headergrid" style="width: 100% !important; height:50%;">
+                <div id="headergrid">
                 </div>
 
-                <div id="linesgrid" class="py-3" style="width: 100% !important; height:50%;">
+                <div id="linesgrid" class="my-3">
                     
                 </div>
 
@@ -147,11 +201,23 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
 </div>
 
-<style>
-    .dx-datagrid-table{
-        font-size:15px;
-    }
-</style>
+
+
+    <!-- jQuery --> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <!-- Dev Extreme -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
+
+    <!-- Excel Saver -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+
+    <!-- File Saver -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+
 
 <script>
     $.ajaxSetup({
@@ -206,6 +272,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             $('#BSTab').addClass("active");
         }
 
+        ppsoGrid();
         headersFunction();
         getRoofWIP();
         setInterval(getRoofWIP, 60000);
@@ -244,58 +311,91 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             $('#BSTab').addClass("active");
         });
 
+        // Old Design -------------------------------------------------------------------------------------------------------------------
+        // $('#savePPSO').click(function(){
+        //     if (($("#reference").val()).length < 1)
+        //         alert("The Reference needs to be inserted");
+        //     else{
+        //         const salorders = $("#salesorders").val();
+        //         const invorders = $("#invoiceorders").val();
+        //         const comp = $("#company").val();
+
+        //         var salesorders = salorders.split("\n");
+        //         var invoiceorders = invorders.split("\n");
+        //         var company = comp.split("\n");
+                
+        //         var SOnumbers = new Array();
+        //         var IOnumbers = new Array();
+        //         var CompName = new Array();
+                
+
+        //         linesignored = 0;
+
+        //         for (let i = 0; i < salesorders.length; i++)
+        //             if (salesorders[i] == ''){
+        //                 salesorders+= 1;
+        //             }else{
+        //                 SOnumbers.push(escapeHtml(salesorders[i]));
+        //             }
+                
+        //         var linesignored = 0;
+
+        //         for (let i = 0; i < invoiceorders.length; i++)
+        //             if (invoiceorders[i] == ''){
+        //                 linesignored+= 1;
+        //             }else{
+        //                 IOnumbers.push(escapeHtml(invoiceorders[i]));
+        //             }
+
+
+        //         linesignored = 0;
+
+        //         for (let i = 0; i < company.length; i++)
+        //             if (company[i] == ''){
+        //                 company+= 1;
+        //             }else{
+        //                 CompName.push(escapeHtml(company[i]));
+        //             }
+
+        //         var orderlines = new Array();
+                
+        //         for (let i = 0; i < salesorders.length; i++)
+        //             orderlines.push({'SOnumbers': SOnumbers[i],'IOnumbers': IOnumbers[i],'CompanyName': CompName[i]});
+
+        //         // console.log(orderlines);
+        //         // console.log(IOnumbers);
+
+        //         $.ajax({
+        //             url: '{!!url("/insertPrePlannedSO")!!}',
+        //             type: "POST",
+        //             data: {
+        //                 orderlines: orderlines,
+        //                 reference: $("#reference").val()
+        //             },
+        //             success: function (data) {
+        //                 if(data[0].Result == "Success"){
+        //                     location.reload();
+        //                     localStorage.setItem('PPSO', 'active');
+        //                 }else{
+        //                     alert(""+data[0].Result);
+        //                 }
+        //             }
+        //         });
+        //     }
+                
+        // });
+
         $('#savePPSO').click(function(){
             if (($("#reference").val()).length < 1)
                 alert("The Reference needs to be inserted");
             else{
-                const salorders = $("#salesorders").val();
-                const invorders = $("#invoiceorders").val();
-                const comp = $("#company").val();
-
-                var salesorders = salorders.split("\n");
-                var invoiceorders = invorders.split("\n");
-                var company = comp.split("\n");
-                
-                var SOnumbers = new Array();
-                var IOnumbers = new Array();
-                var CompName = new Array();
-                
-
-                linesignored = 0;
-
-                for (let i = 0; i < salesorders.length; i++)
-                    if (salesorders[i] == ''){
-                        salesorders+= 1;
-                    }else{
-                        SOnumbers.push(escapeHtml(salesorders[i]));
-                    }
-                
-                var linesignored = 0;
-
-                for (let i = 0; i < invoiceorders.length; i++)
-                    if (invoiceorders[i] == ''){
-                        linesignored+= 1;
-                    }else{
-                        IOnumbers.push(escapeHtml(invoiceorders[i]));
-                    }
-
-
-                linesignored = 0;
-
-                for (let i = 0; i < company.length; i++)
-                    if (company[i] == ''){
-                        company+= 1;
-                    }else{
-                        CompName.push(escapeHtml(company[i]));
-                    }
-
+                var toPlan =  $("#ppsoGrid").dxDataGrid("getSelectedRowKeys");
                 var orderlines = new Array();
-                
-                for (let i = 0; i < salesorders.length; i++)
-                    orderlines.push({'SOnumbers': SOnumbers[i],'IOnumbers': IOnumbers[i],'CompanyName': CompName[i]});
 
-                // console.log(orderlines);
-                // console.log(IOnumbers);
+                for (var i = 0; i < toPlan.length; i++) {
+                    var rowKey = toPlan[i];
+                    orderlines.push({'SOnumbers': toPlan[i]['OrderNumber'],'IOnumbers': toPlan[i]['idInvoiceLines'],'CompanyName': toPlan[i]['Company']});
+                }
 
                 $.ajax({
                     url: '{!!url("/insertPrePlannedSO")!!}',
@@ -314,10 +414,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     }
                 });
             }
-                
         });
 
         $('#saveBSOP').click(function(){
+            // alert('Clicked MF!');
             var allGridItems =  $("#linesgrid").dxDataGrid("getDataSource").items();
             var checkedLines = new Array();
 
@@ -344,8 +444,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
-                        location.reload();
-                        localStorage.setItem('BSOP', 'active');
+                        getLin
+                        // location.reload();
+                        // localStorage.setItem('BSOP', 'active');
                     }else{
                         alert(""+data[0].Result);
                     }
@@ -423,7 +524,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                 arrayData.shift();
 
-                console.log(arrayData);
+                // console.log(arrayData);
 
                 // Use the array data as needed
                 arrayData.forEach((element, index, value) => {
@@ -436,7 +537,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 });
             };
 
-            console.log(file);
+            // console.log(file);
             // console.log(InvoiceOrderList);
             // console.log(CompanyList);
             var ref = file["name"];
@@ -447,6 +548,162 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         });
 
     });
+    
+    function ppsoGrid(){
+        $.ajax({
+            url: '{!!url("/getRoofingSalesOrders")!!}',
+            type: "GET",
+            data: {
+
+            },
+            success: function (data) {
+                //console.debug(data);
+                
+                const ppsoGrid = $("#ppsoGrid").dxDataGrid({
+                    dataSource:data, //as json
+                    showBorders: true,
+                    hoverStateEnabled: true,
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    noDataText: 'Please Sync for new Sales Orders',
+                    scrolling: {
+                        mode: 'infinite',
+                    },
+                    paging:{
+                        pageSize: 20,
+                    },
+                    editing:{
+                        mode: 'form',
+                        // allowUpdating: true,
+                        // allowAdding: true,
+                        // allowDeleting: true,
+                        useIcons: true,
+                    },
+                    selection: {
+                        mode: 'multiple',
+                    },
+                    export: {
+                        enabled: true,
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('RoofPlanning');
+
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'RoofPlanning.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
+                    columns: [
+                        {
+                            dataField: "RoofingCat",
+                            caption: "Category",
+                        }, {
+                            dataField: "RMCode",
+                            caption: "Raw Material Code",
+                            visible: false,
+                        }, {
+                            dataField: "RMProduct",
+                            caption: "Raw Material Description",
+                        }, {
+                            dataField: "RMStockOnHand",
+                            caption: "Stock On Hand",
+                        }, {
+                            dataField: "ProductCode",
+                            caption: "Product Code",
+                            visible: false,
+                        }, {
+                            dataField: "Product",
+                            caption: "Product Description",
+                        }, {
+                            dataField: "UnitWeight",
+                            caption: "Unit Weight",
+                            visible: false,
+                        }, {
+                            dataField: "AccountNumber",
+                            caption: "Account Number",
+                        }, {
+                            dataField: "CustomerName",
+                            caption: "Customer Name",
+                        }, {
+                            dataField: "RepName",
+                            caption: "Rep Name",
+                        }, {
+                            dataField: "CustomerStatus",
+                            caption: "Customer Status",
+                        }, {
+                            dataField: "OrderNumber",
+                            caption: "Order Number",
+                        }, {
+                            dataField: "idInvoiceLines",
+                            caption: "Invoice Number",
+                        }, {
+                            dataField: "Company",
+                            caption: "Company",
+                        }, {
+                            dataField: "OrderDate",
+                            caption: "Order Date",
+                        }, {
+                            dataField: "DueDate",
+                            caption: "Due Date",
+                        }, {
+                            dataField: "QtyOrdered",
+                            caption: "Qty Ordered",
+                        }, {
+                            dataField: "QtyOutstanding",
+                            caption: "Qty Outstanding",
+                        }, {
+                            dataField: "TonsOutstanding",
+                            caption: "Tons Outstanding",
+                        }, {
+                            dataField: "PricePerTon",
+                            caption: "Price Per Ton",
+                            visible: false,
+                        }, {
+                            dataField: "Area",
+                            caption: "Area",
+                        }, {
+                            dataField: "DeliveryInstructions",
+                            caption: "Delivery Instructions",
+                        }, {
+                            dataField: "OrderComplete",
+                            caption: "Order Complete",
+                            visible: false,
+                        }, {
+                            dataField: "DateCompleted",
+                            caption: "Date Completed",
+                            visible: false,
+                        }, {
+                            dataField: "NumberOfItemsCut",
+                            caption: "Number Of Items Cut",
+                            visible: false,
+                        }, {
+                            dataField: "PartialCut",
+                            caption: "Partial Cut",
+                            visible: false,
+                        },
+
+                    ],
+
+                    onRowClick:function(e){
+
+                    },
+                    onRowRemoved(e){
+
+                    },
+                });
+            }
+        });
+    };
 
     function headersFunction(){
         $.ajax({
@@ -473,13 +730,20 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         mode: 'infinite',
                     },
                     paging:{
-                        pageSize: 20,
+                        pageSize: 10,
+                    },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [5, 10, 20, 50],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true,
                     },
                     editing:{
                         mode: 'form',
                         // allowUpdating: true,
                         // allowAdding: true,
-                        // allowDeleting: true,
+                        allowDeleting: true,
                         useIcons: true,
                     },
                     selection: {
@@ -510,8 +774,9 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         batchID = headerID;
                         batchReference = e.data.strReference;
                         var machineslist = ({!! json_encode($machines) !!});
+                        machineslist.unshift({ intAutoMachineID: 0, strMachineName: "Unassigned" });
 
-                        console.debug(machineslist);
+                        // console.debug(machineslist);
 
                         $.ajax({
                             url: '{!!url("/getroofinglines")!!}',
@@ -533,17 +798,25 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                     columnAutoWidth: true,
                                     keyExpr: 'UniqueID',
                                     editing: {
-                                        mode: 'batch',
+                                        mode: 'cell',
                                         allowUpdating: true,
+                                        saveButton: true, // enable Save Changes button
                                         // allowAdding: true,
-                                        // allowDeleting: true,
+                                        allowDeleting: true,
                                         useIcons: true,
                                     },
                                     selection: {
                                         mode: 'single',
                                     },
-                                    paging: {
-                                        enabled: false
+                                    paging:{
+                                        pageSize: 10,
+                                    },                    
+                                    pager: {
+                                        visible: true,
+                                        allowedPageSizes: [5, 10, 20, 50],
+                                        showPageSizeSelector: true,
+                                        showInfo: true,
+                                        showNavigationButtons: true,
                                     },
 
                                     columns: [
@@ -574,10 +847,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                             dataField: "StoreName",
                                             caption: "Store Name",
                                             allowEditing : false,
+                                            width: 300,
                                         }, {
                                             dataField: "Code",
                                             caption: "Code",
-                                            visble: false,
+                                            visible: false,
                                             allowEditing : false,
                                         }, {
                                             dataField: "ItemName",
@@ -591,7 +865,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                                 dataSource: machineslist,
                                                 valueExpr: "intAutoMachineID",
                                                 displayExpr: "strMachineName",
+                                            },
+                                            cellTemplate: function(container, options) {
+                                            if (options.value === 0) {
+                                                container.text("Unassigned");
+                                            } else {
+                                                container.text(options.displayValue);
                                             }
+                                        }
                                         },
                                         {
                                             dataField: "intQty",
@@ -599,15 +880,37 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                         },
                                         
                                     ],
-                                    onSaved(data){
-                                        var orderheader = $("#orderheader").dxDataGrid("instance");
-                                        var row = orderheader.getSelectedRowKeys();
-                                        //console.debug(data);
-                                        var type = data.changes[0]["type"];
-                                        data = data.changes[0]["key"];
+                                    onRowRemoved(e){
+                                        var UniqueID = e.data.UniqueID
+
+                                        $.ajax({
+                                            url: '{!!url("/deleteRoofingSO")!!}',
+                                            type: "POST",
+                                            data: {
+                                                ID: UniqueID,
+                                            },
+                                            success: function (data) {
+                                                alert("Order Deleted");
+                                            }
+                                        });
                                     },
                                     
-                                });
+                                }).dxDataGrid("instance");
+                            }
+                        });
+                    },
+
+                    onRowRemoved(e){
+                        var HeaderID = e.data.intRoofingHeader
+
+                        $.ajax({
+                            url: '{!!url("/deleteRoofingBatch")!!}',
+                            type: "POST",
+                            data: {
+                                ID: HeaderID,
+                            },
+                            success: function (data) {
+                                alert("Reference Deleted");
                             }
                         });
                     },

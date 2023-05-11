@@ -163,13 +163,116 @@ class InvoicingController extends Controller
     }
     public function individualInvoicingAPI($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName){
 
-        echo $ownersId."<br>";
-        echo $SoNumber."<br>";
-        echo $invoiceid."<br>";
-        echo $ref."<br>";
-        echo $userid."<br>";
-        echo $userName."<br>";
+        $refDescription = "";
+        $mustStockAdjust = 0;
+//dd();
+        $invnum =$this->returnInvoiceNumber($invoiceid,$ownersId);
+        if(strlen(trim($invnum) ) > 4){
+            //dd($userid."-".$invoiceid."-".$SoNumber."".$ownersId."-".$userName) ;
+            $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+                ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
+                    array($userid, $invoiceid, $SoNumber, $ownersId, $userName)
+                );
+            return response()->json($returnGetsalesorderNoLines);
+        }else{
 
+            $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
+            try {
+                //Initialise
+                $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
+                $sdkHelper->SetLicense("DE12111039", "4626921");
+                switch ($ownersId) {
+                    case 1:
+                        $sdkHelper->CreateConnection(env('HENDOK'));
+                        $refDescription = "Hendok";
+                        break;
+                    case 2:
+                        $sdkHelper->CreateConnection(env('HENROOF'));
+                        $refDescription = "Henroof";
+                        $mustStockAdjust = 1;
+                        break;
+                    case 3:
+                        $sdkHelper->CreateConnection(env('UKHOSI'));
+                        $refDescription = "Ukhosi";
+                        $mustStockAdjust = 1;
+                        break;
+                }
+
+                $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+                    ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+                        array($ref, $SoNumber, $ownersId)
+                    );
+                $v = new \App\Http\Controllers\SalesForm();
+                $isCapeUser = $v->getThings(Auth::user()->GroupId, 'isCapeUser');
+                $x = $sdkHelper->GetSalesOrder($SoNumber);
+                // $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
+                $x->InvoiceDate = date('Y-m-d H:i:s');
+
+
+                // theSalesOrder.UserDefinedFields.Item("ucIDSOrdXXXXFieldName").Value = "xxxxx"
+                //  $salesOrder->Save();
+
+
+                foreach ($returnGetsalesorderNoLines as $innverVal) {
+                    $lineno = $innverVal->LineNos - 1;
+                    if ($isCapeUser == "1" && $mustStockAdjust == 0) {
+                        $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPT");
+                        $x->Detail[$lineno]->UnitSellingPrice =floatval($innverVal->Price);
+                        echo "Line--".$sdkHelper->GetWarehouseByCode("CPT");
+                    }
+
+                    //TO TEST
+                    // echo "Line Quantity ".  $x->Detail[$lineno]->Quantity;
+                    // dd($innverVal->soldByWeight);
+                    if($innverVal->soldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity<floatval($innverVal->Toinvoice) ){
+
+                        $x->Detail[$lineno]->Quantity = floatval($innverVal->Toinvoice);
+                        //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
+                    }
+
+                    $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
+
+                    //isLineInvoiced
+                    // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";
+                }
+                $reference = $x->Save();
+                //Now invoice
+
+                $x->Process();
+                //  echo "************* INV CREATED***".$reference."<br>";
+                $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+                    ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
+                        array($userid, $invoiceid, $SoNumber, $ownersId, $userName)
+                    );
+
+                if ($isCapeUser == "1" && $mustStockAdjust == 1) {
+                    if ($returnGetsalesorderNoLines[0]->result) {
+                        //$itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2
+                        //isCapeUser
+
+                        $itemstotransfers = DB::connection('sqlsrv3')
+                            ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
+                                array($ref, $SoNumber, $ownersId)
+                            );
+                        foreach ($itemstotransfers as $value) {
+                            //If you need to do normal warehouse transfer
+                            // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
+                            $dates = date('Y-m-d H:i:s');
+                            $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId, $invoiceid, $ownersId, $dates);
+                        }
+
+                    }
+                }
+
+
+
+                return response()->json($returnGetsalesorderNoLines);
+
+            } catch (Error $err) {
+                echo "<h3 style='color: darkred'>__________Errors_________</h3>";
+                return $err;
+            }
+        }
 
     }
     //NOT IBT

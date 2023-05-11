@@ -1,106 +1,3 @@
-{{-- <!DOCTYPE html>
-<html>
-<head>
-
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
-
-
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
-    <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
-    <!-- DevExtreme library -->
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-</head>
-<div class="col-lg-12"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;">
-
-        <div class="vertical-menu">
-            @include('warehouse.menu')
-        </div>
-    </div>
-    <div class="col-lg-10" >
-        <h3 style="flex-grow: 1;">Map Machine, Departments and Products</h3>
-        <div class="col-lg-12" >
-            <div class="col-lg-4"  style="background: white;">
-                <h4>Create Mapping</h4>
-                <fieldset class="well">
-                    <form>
-                        Map Departments, Machines and Items
-
-                        <div class="form-group">
-                            <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-                            <select  class="form-control input-sm col-xs-1" id="department" required>
-                                <option></option>
-                                @foreach($departments as $val)
-                                    <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
-                            <select  class="form-control input-sm col-xs-1" id="machine" required>
-                                <option></option>
-                                @foreach($machines as $val)
-                                    <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
-
-                        <br>
-                        <div class="form-group">
-                            <label class="control-label" for="productcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Item</label>
-                            <input  type="text" class="form-control input-sm col-xs-1" id="productcode" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;"><br>
-                            <input  type="text" class="form-control input-sm col-xs-1" id="productdesc" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;" readonly>
-                        </div>
-                        <br>
-                        <button type="button" id="saveitemsdept" class="btn-lg btn-success" >Save</button>
-                        <br>
-
-
-                    </form>
-                </fieldset>
-            </div>
-            <div class="col-lg-8"  style="background: white;">
-                <h4>Data Grid</h4>
-
-
-                <div class="col-lg-12" id="afterFilter">
-                    <div id="gridContainer">
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<style>
-
-    .dx-datagrid-table{
-        font-size:15px;
-    }
-</style> --}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -109,7 +6,7 @@
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
     <!-- DevExtreme theme -->
     {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
@@ -142,10 +39,10 @@
     </div>
     <div class="col-lg-10" >
         <div class="col-lg-12 d-inline-flex" >
-            <h3 style="flex-grow: 1; padding-left: 15px;">MAP PRODUCT TO MACHINE</h3>
+            <h3 style="flex-grow: 1; padding-left: 15px;">STOCK ISSUE TYPES</h3>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newmapping">
-                New Mapping
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newarea">
+                New Type
             </button>
         </div>
         
@@ -155,41 +52,23 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="newmapping" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+<div class="modal fade" id="newarea" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newuserLabel">Create New Mapping</h1>
+                <h1 class="modal-title fs-5" id="newuserLabel">Create New Type</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Machine</label>
-                    <select  class="form-select input-sm col-xs-1" id="machine" required>
-                        <option></option>
-                        @foreach($machines as $val)
-                            <option value="{{$val->intAutoMachineID}}">{{$val->strMachineName}}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="product"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Item</label>
-                    <select  class="form-select input-sm col-xs-1" id="product" required>
-                        <option></option>
-                        @foreach($products as $product)
-                            <option value="{{$product->PastelCode}}">{{$product->PastelDescription}}</option>
-                        @endforeach
-                    </select>
-                </div>
-
+                    <label class="control-label" for="stocktype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Stock Type</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="stocktype">
+                </div>                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="savemapping" class="btn btn-success" >Save</button>
+                <button type="button" id="savestocktype" class="btn btn-success" >Save</button>
             </div>
-
-
         </div>
     </div>
 </div>
@@ -216,13 +95,15 @@
     }
 
     .dx-datagrid {
-        height: calc(100vh - 75px);
-        max-height: calc(100vh - 75px);
+        height: calc(100vh - 63px);
+        max-height: calc(100vh - 63px);
     }
 </style>
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
@@ -246,26 +127,18 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
-    var jArray = JSON.stringify({!! json_encode($products) !!});
     $(document).ready(function() {
 
-        $('#product').select2( {
-            theme: 'bootstrap-5'
-        });
 
-        $('#product').select2( {
-            theme: 'bootstrap-5'
-        });
-        
-        $('#savemapping').click(function(){
+        $('#savestocktype').click(function(){
 
             $.ajax({
 
-                url: '{!!url("/mapProductToMachine")!!}',
+                url: '{!!url("/saveStockIssueType")!!}',
                 type: "POST",
                 data: {
-                    machine: $('#machine').val(),
-                    productcode: $('#product').val()
+                    Name: $('#stocktype').val()
+
                 },
                 success: function (data) {
                     location.reload();
@@ -276,14 +149,12 @@
         });
 
         $.ajax({
-
-            url: '{!!url("/getProductsMappedToMachine")!!}',
+            url: '{!!url("/getStockIssueTypes")!!}',
             type: "GET",
             data: {
-
+                
             },
             success: function (data) {
-
                 $("#gridContainer").dxDataGrid({
                     dataSource:data, //as json
                     hoverStateEnabled: true,
@@ -309,9 +180,17 @@
                     export: {
                         enabled: true
                     },
+                    editing: {
+                        mode: 'batch',
+                        allowUpdating: true,
+                        allowDeleting: true,
+                    },
+                    selection: {
+                        mode: 'single',
+                    },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('MappedMachinesDeptItems');
+                        const worksheet = workbook.addWorksheet('StockTypes');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -319,7 +198,7 @@
                             autoFilterEnabled: true,
                         }).then(() => {
                             workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MappedMachinesDeptItems.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'StockTypes.xlsx');
                             });
                         });
                         e.cancel = true;
@@ -329,26 +208,57 @@
                         {
                             dataField: "intAutoID",
                             caption: "ID",
+                            allowEditing: false,
                         }, {
-                            dataField: "strItemCode",
-                            caption: "Item Code",
-                        }, {
-                            dataField: "strItemDescription",
-                            caption: "Item Description",
-                        },
-                        {
-                            dataField: "strMachineName",
-                            caption: "Machines",
-                        },
-                        {
-                            dataField: "statusname",
-                            caption: "Status",
+                            dataField: "strIssueType",
+                            caption: "Type",
                         }
+                        , {
+                            dataField: "dtmCreated",
+                            caption: "Created",
+                            allowEditing: false,
+                        },
                     ],
-                });
+                    onRowUpdating: function(e){
+                        // console.debug(e);
+                        var ID = e.oldData.intAutoID;
+                        var Name = e.newData.strIssueType;
 
+                        $.ajax({
+                            url: '{!!url("/updateStockIssueType")!!}',
+                            type: "POST",
+                            data: {
+                                ID:ID,
+                                Name:Name,
+                            },
+                            success: function (data) {
+                                location.reload();
+                            }
+                        });
+                    },
+                    onRowRemoving: function(e) {
+                        var ID = e.data.intAutoID;
+                        $.ajax({
+                            url: '{!!url("/deleteStockIssueType")!!}',
+                            type: "POST",
+                            data: {
+                                ID:ID,
+                            },
+                            success: function (data) {
+                                location.reload();
+                            }
+                        });
+                    }
+                    });
             }
+        });
 
+        
+        $('.sidebar ul li a').on(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
         });
 
         $('.sidebar ul li a').click(function(){
@@ -361,7 +271,6 @@
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
-
 
     });
 
@@ -395,10 +304,4 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
-
-
-
-
-
-
 </script>

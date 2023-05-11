@@ -361,6 +361,12 @@ if ((Auth::guest()))
                             <a href='{!!url("/getUpliftmentPage")!!}'>Upliftment Report</a>
                         </li>
                     </ul>
+
+                    <li>
+                        {{-- @if($ppl !="0") --}}
+                        <a class="secondmenu" href='{!!url("/issuestock")!!}'><i class="fa fa-line-chart"></i>Stock Issue</a>
+                        {{-- @endif --}}
+                    </li>
                 </li>
 			</ul>
 		</li>
@@ -485,6 +491,11 @@ if ((Auth::guest()))
                             @endif 
                         </li>
                         <li>
+                            @if($departments !="0") 
+                            <a href='{!!url("/subDepartments")!!}'>Sub-Departments</a> 
+                            @endif 
+                        </li>
+                        <li>
                             @if($machines !="0") 
                             <a href='{!!url("/machines")!!}'>Machines</a>
                             @endif 
@@ -549,6 +560,13 @@ if ((Auth::guest()))
                             <a href='{!!url("/galveditprodspec")!!}'>Edit Galv Product Spec</a> 
                             @endif
                         </li>
+                        <li>
+                            @if("1" !="0")
+                            <a href='{!!url("/stockIssueTypes")!!}'>Stock Issue Types</a> 
+                            @endif
+                        </li>
+
+                        
                     </ul>
 
                     @if($setup !="0")

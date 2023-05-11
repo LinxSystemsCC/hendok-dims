@@ -374,7 +374,7 @@ class WareHouseController extends Controller
 
         DB::connection('sqlsrv2')->statement('exec spCheckUserPermissions ?', array($userid));
 
-        //dd($userid);
+        //dd($userid);        
         return view('warehouse/userpermissions')->with("username", $username)->with("id", $userid)->with("permissions", $permissions);
     }
 
@@ -501,7 +501,7 @@ class WareHouseController extends Controller
         $returndata = DB::connection('sqlsrv2')->select("exec spRetrieveDocumentUpliftment ? ",array($upliftmentnumber));
         foreach ($returndata as $row) {
             $base64Image = ($row->image);
-
+            
             // Generate the appropriate data URI scheme based on the MIME type of the image
                     $uriScheme = 'data:application/pdf;base64,';
 
@@ -848,6 +848,13 @@ class WareHouseController extends Controller
         // dd($machines);
 
         return view('warehouse/roofworkorders')->with('machines', $machines);
+    }
+
+    public function getRoofingSalesOrders()
+    {
+        $salesOrders = DB::connection('sqlsrv2')
+            ->select('EXEC spGetRoofingSalesOrdersToPlan');
+        return response()->json($salesOrders);
     }
 
     public function getBinLocationsJson()
@@ -1576,27 +1583,70 @@ where intDeptID =" . $deptId);
     }
 
     public function issuestock(){
-        $stockGroup = DB::connection('sqlsrv3')->select("SELECT DISTINCT whs.StockGroup FROM [Hendok Distribution].dbo._bvWarehouseStockFull whs WHERE whs.WhCode = 'MRO'");
+        $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName FROM viewSage300Employees WHERE EmployeeStatusCode = 'A' ");
+        $reference = DB::connection('sqlsrv3')->select("SELECT TOP 1 intAutoId FROM tblStockIssueHeader ORDER BY dteCreated DESC");
+        $intAutoId = count($reference) > 0 ? $reference[0]->intAutoId : 0;
+        $types = DB::connection('sqlsrv3')->select("SELECT * FROM tblStockIssueTypes");
+        $groups = DB::connection('sqlsrv3')->select("SELECT DISTINCT strStockGroup, strStockGroupDesc FROM viewStockIssue");
+        $stockItems = DB::connection('sqlsrv3')->select("SELECT * FROM viewStockIssue");
         $upkeepjobs = $this->getOpenUpkeepWorkOrders();
         $areas = DB::connection('sqlsrv3')->select("SELECT * FROM tblAreas");
         $departments = DB::connection('sqlsrv3')->select("SELECT * FROM tblDepartments");
+        $subdepartments = DB::connection('sqlsrv3')->select("SELECT * FROM tblSubDepartments");
         $machines = DB::connection('sqlsrv3')->select("SELECT * FROM tblMachines");
+        $pastelProjects = DB::connection('sqlsrv3')->select("SELECT ProjectCode FROM [Hendok Distribution].dbo.Project WHERE ActiveProject = 1");
 
         return view ('warehouse/issuestock')
-        ->with('stockGroup', $stockGroup)
+        ->with('users', $users)
+        ->with('intAutoId', $intAutoId)
+        ->with('types', $types)
+        ->with('groups', $groups)
+        ->with('stockItems', $stockItems)
         ->with('upkeepjobs', $upkeepjobs)
         ->with('areas', $areas)
         ->with('departments', $departments)
-        ->with('machines', $machines);
+        ->with('subdepartments', $subdepartments)
+        ->with('machines', $machines)
+        ->with('pastelProjects', $pastelProjects);
+    }
+
+    public function getStockItemsByGroup(Request $request){
+        $itemGroup = $request->get('ItemGroup');
+        $groups = DB::connection('sqlsrv3')->select("SELECT strPastelCode, strPastelDescription FROM viewStockIssue WHERE strStockGroup = '".$itemGroup."'");
+        return response()->json($groups);
+    }
+
+    public function getMachinesByDepartment(Request $request){
+        $DeptID = $request->get('DeptID');
+        $machines = DB::connection('sqlsrv3')->select("EXEC spGetMachinesByDept ?",array($DeptID));
+        return response()->json($machines);
+    }
+
+    public function savestockissue(Request $request){
+        $reference = $request->get("reference");
+        $assignedBy = Auth::user()->UserID;
+        $assignedTo = $request->get("assignedTo");
+        $lines = $request->get("lines");
+
+        if (is_array($lines)) {
+            $linesxml = $this->toxml($lines, "xml", array("result"));
+
+            // dd($linesxml);
+            $data = DB::connection('sqlsrv2')->statement('exec spInsertStockIssue ?,?,?,?', array($reference, $assignedBy, $assignedTo,$linesxml));
+
+            // dd($data);
+        }
+
+        return response()->json($data);
     }
 
 
     // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
     public function getOpenUpkeepWorkOrders(){
         $curl = curl_init();
-
+    
         $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
-
+    
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.onupkeep.com/api/v2/work-orders',
             CURLOPT_RETURNTRANSFER => true,
@@ -1611,33 +1661,137 @@ where intDeptID =" . $deptId);
                 'Cookie: upkeepsess=' . $token
             ),
         ));
-
+    
         $response = curl_exec($curl);
-
+    
         curl_close($curl);
-
+    
         $result = json_decode($response, true);
-
+    
         $openWorkOrders = array();
-
+    
         foreach ($result['results'] as $workOrder) {
             if ($workOrder['status'] !== 'complete') {
                 $openWorkOrders[] = $workOrder;
             }
         }
-
         // dd($openWorkOrders);
         return $openWorkOrders;
     }
 
+    public function getUpkeepJobAsset($ID){
+        $curl = curl_init();
 
+        $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/assets/'.$ID,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Session-Token: ' . $token,
+                'Cookie: upkeepsess=' . $token
+            ),
+        ));
+    
+        $response = curl_exec($curl);
+        curl_close($curl);    
+        $result = json_decode($response, true);
+    
+        return $result;
+    }
+
+    public function getUpkeepJobLocation($ID){
+        $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/locations/'.$ID,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Session-Token: ' . $token,
+                'Cookie: upkeepsess=' . $token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);        
+        $result = json_decode($response, true);
+    
+        return $result;
+    }
+
+    public function GetAreaDeptSubDeptByMachine(Request $request){
+        $MachineName = $request->get('MachineName');
+        $result =  DB::connection('sqlsrv3')->select("EXEC spGetAreaDeptSubDeptByMachine '$MachineName'");
+        return response()->json($result);
+    }
 
     // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
-
 
     public function getIssueStock(Request $request){
         $result =  DB::connection('sqlsrv3')->select('select * from viewStockIssue');
         return response()->json($result);
+    }
+
+    public function bulkMapping(){
+        $mappings =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping mappings');
+        $areas =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping areas');
+        $departments =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping departments');
+        $subdepartments =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping subdepartments');
+        $machines =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping machines');
+
+        // dd($mappings, $areas, $departments, $subdepartments, $machines);
+
+        return view('warehouse/bulkMapping')
+            ->with('mappings',$mappings)
+            ->with('areas',$areas)
+            ->with('departments',$departments)
+            ->with('subdepartments',$subdepartments)
+            ->with('machines',$machines);
+    }
+
+    public function checkBulkMapping(Request $request){
+        $ID = $request->get("ID");
+        $prompt = $request->get("prompt");
+        $data =  DB::connection('sqlsrv3')->select("EXEC spCheckBulkMapping $ID, $prompt");
+        return response()->json($data);
+    }
+
+    public function bulkMappingCRUD(Request $request){
+        $area = $request->get("area");
+        $department = $request->get("department");
+        $subdepartment = $request->get("subdepartment");
+        $machine = $request->get("machine");
+        $ID = $request->get("ID");
+        $prompt = $request->get("prompt");
+        $data =  DB::connection('sqlsrv3')->select("EXEC spBulkMappingCRUD $area, $department, $subdepartment, $machine, $ID, '$prompt'");
+        return response()->json($data);
+    }
+
+    public function getBulkMappingAreaDeptSubDeptMachines(Request $request){
+        $ID = $request->get("ID");
+        $prompt = $request->get("prompt");
+        print_r($ID, $prompt);
+        $data =  DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $ID, '$prompt'"); 
+        return response()->json($data);
+    }
+
+    public function nailsInner(){
+        $nails =  DB::connection('sqlsrv3')->select("SELECT * FROM tblNailsInner"); 
+        return view('warehouse/nailsInner')->with('nails',$nails);
     }
 
     public function endjob(Request $request){
@@ -1956,6 +2110,23 @@ where intDeptID =" . $deptId);
         return response()->json($lines);
     }
 
+    public function deleteRoofingBatch(Request $request){
+        $ID = $request->get("ID");
+        $userid =  Auth::user()->UserID;
+
+        $result = DB::connection('sqlsrv3')->statement("exec spDeleteRoofingBatch ?,?", array($ID, $userid));
+        return response()->json($result);
+    }
+
+    public function deleteRoofingSO(Request $request){
+        $ID = $request->get("ID");
+        $userid =  Auth::user()->UserID;
+
+        $result = DB::connection('sqlsrv3')->statement("exec spDeleteRoofingSO ?,?", array($ID, $userid));
+        return response()->json($result);
+    }
+
+
     public function getjobcard($jobid)
     {
         $jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?', array($jobid));
@@ -1986,7 +2157,77 @@ where intDeptID =" . $deptId);
         return response()->json($response);
     }
 
+    public function stockIssueTypes (){
+        return view('warehouse/stockissuetypes');
+    }
 
+    public function getStockIssueTypes(){
+        $response = DB::connection('sqlsrv3')->select('SELECT * FROM tblStockIssueTypes');
+        return response()->json($response);
+    }
+
+    public function saveStockIssueType(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'CREATE';
+
+        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function updateStockIssueType(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'UPDATE';
+
+        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function deleteStockIssueType(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'DELETE';
+
+        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function subDepartments (){
+        return view('warehouse/subdepartments');
+    }
+
+    public function getSubDepartments(){
+        $response = DB::connection('sqlsrv3')->select('SELECT * FROM tblSubDepartments');
+        return response()->json($response);
+    }
+
+    public function saveSubDepartment(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'CREATE';
+
+        $response = DB::connection('sqlsrv3')->statement('spSubDepartmentCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function updateSubDepartment(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'UPDATE';
+
+        $response = DB::connection('sqlsrv3')->statement('spSubDepartmentCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
+
+    public function deleteSubDepartment(Request $request){
+        $ID = $request->get('ID');
+        $Name = $request->get('Name');
+        $Operation = 'DELETE';
+
+        $response = DB::connection('sqlsrv3')->statement('spSubDepartmentCRUD ?,?,?', array($ID, $Name, $Operation));
+        return response()->json($response);
+    }
 
     public function getgalvlabel($customer, $product, $ticketno, $status)
     {
@@ -2083,6 +2324,7 @@ where intDeptID =" . $deptId);
             // dd($orderlinesxml);
             $data = DB::connection('sqlsrv2')->select('exec spUpdateRoofLinesSequence ?', array($orderlinesxml));
         }
+        dd($data);
 
         return response()->json($data);
     }
@@ -2195,15 +2437,12 @@ where intDeptID =" . $deptId);
 
     public function mapdeptitem()
     {
-        $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments");
-
         $machines = DB::connection('sqlsrv2')
             ->select("select * from tblMachines");
 
         $products = DB::connection('sqlsrv2')
             ->select("select * from viewtblProducts");
-        return view('warehouse/mapitemstomachineanddept')->with('departments', $dept)->with('products', $products)->with('machines', $machines);
+        return view('warehouse/mapitemstomachineanddept')->with('products', $products)->with('machines', $machines);
     }
     public function getMappedItemstoPalletJson()
     {
@@ -2214,9 +2453,17 @@ where intDeptID =" . $deptId);
     public function getMappedDepartmentsMachinesItemasJson()
     {
         $palletsjson = DB::connection('sqlsrv2')
-            ->select("EXEC spMappedDepartmentMachineItems ");
+            ->select("EXEC spMappedDepartmentMachineItems");
         return response()->json($palletsjson);
     }
+
+    public function getProductsMappedToMachine()
+    {
+        $palletsjson = DB::connection('sqlsrv2')
+            ->select("EXEC spGetProductsMappedToMachine");
+        return response()->json($palletsjson);
+    }
+
     public function getPallets()
     {
         $palletsjson = DB::connection('sqlsrv2')->select("EXEC spGetPalletsConfig");
@@ -2290,43 +2537,46 @@ where intDeptID =" . $deptId);
     {
         $scaleID = $request->get("scaleID");
 
-        $scales = DB::connection('sqlsrv2')->select("select strIP, strPort from tblScales where intAutoId = '" . $scaleID . "'");
+        if (!empty($scaleID)){
+            $scales = DB::connection('sqlsrv2')->select("select strIP, strPort from tblScales where intAutoId = '" . $scaleID . "'");
 
-        // dd($scales);
+            // dd($scales);
 
-        $host = $scales[0]->strIP;
-        $port =  $scales[0]->strPort;
+            $host = $scales[0]->strIP;
+            $port =  $scales[0]->strPort;
 
-        // dd($host,$port);
-        // $host = "192.168.100.232";
-        // $port = 23;
-        set_time_limit(0);
+            // dd($host,$port);
+            // $host = "192.168.100.232";
+            // $port = 23;
+            set_time_limit(0);
 
-        $socket = socket_create(AF_INET, SOCK_STREAM, 0);
-        socket_connect($socket, $host, $port);
-        $input = socket_read($socket, 4096);
-        // socket_recv($socket, $input, 1024, 0);
-        socket_close($socket);
+            $socket = socket_create(AF_INET, SOCK_STREAM, 0);
+            socket_connect($socket, $host, $port);
+            $input = socket_read($socket, 4096);
+            // socket_recv($socket, $input, 1024, 0);
+            socket_close($socket);
 
-        // dd(($input));
+            // dd(($input));
 
-        // $replaced = str::replaceArray('ST,GS,+', [''], $input);
-        // $replaced = str::replaceArray('US,GS,+', [''], $input);
+            // $replaced = str::replaceArray('ST,GS,+', [''], $input);
+            // $replaced = str::replaceArray('US,GS,+', [''], $input);
 
-        // $input = trim($input, );
-        // $input = trim($input, "UT,GS,");
-        // $input = trim($input, "WN");
-        // $input = trim($input, "+");
-        // $input = trim($input, "-");
-        // $input = trim($input, "kg");
+            // $input = trim($input, );
+            // $input = trim($input, "UT,GS,");
+            // $input = trim($input, "WN");
+            // $input = trim($input, "+");
+            // $input = trim($input, "-");
+            // $input = trim($input, "kg");
 
-        // Remove Illegal values
-        $input = str_replace(array("\r", "\n", "ST,GS,", "UT,GS,", "WN", "+", "-", "kg", " "), "", $input);
-        $input = ltrim($input);
-        $input = intval($input);
+            // Remove Illegal values
+            $input = str_replace(array("\r", "\n", "ST,GS,", "UT,GS,", "WN", "+", "-", "kg", " "), "", $input);
+            $input = ltrim($input);
+            $input = intval($input);
 
-        return response()->json($input);
+            return response()->json($input);
+        }
     }
+
 
     public function getpalletconfforitems(Request $request)
     {
@@ -2492,6 +2742,18 @@ where intDeptID =" . $deptId);
         return response()->json($returnmach);
     }
 
+    public function mapProductToMachine(Request $request){
+        $machine = $request->get("machine");
+        $productcode = $request->get("productcode");
+
+        $returnmach = DB::connection('sqlsrv2')
+            ->select(
+                'exec spMapItemToMachine ?,?',
+                array($productcode, $machine)
+            );
+        return response()->json($returnmach);
+    }
+
     public function savesgroupname(Request $request)
     {
         $groupname = $request->get("groupname");
@@ -2643,9 +2905,6 @@ where intDeptID =" . $deptId);
     {
         return view('warehouse/pickersandloadersdashboard');
     }
-    public function getPageToReversePicked(){
-        return view('warehouse/reversepicked');
-    }
 
     public function getpickersandloadersdashboard()
     {
@@ -2680,12 +2939,6 @@ where intDeptID =" . $deptId);
 
         return view('warehouse/pickingticketmanager')->with('teamleaders', $teamleaders)->with('pickingheader', $pickingheader)
             ->with('listproducts', $allproducts)->with('ref', $ref)->with('sequence', $getsequence)->with('trucks', $trucks);
-    }
-    public function roofinguserscreen(){
-
-        $teamleaders = DB::connection('sqlsrv3')
-            ->select("Select * from tblDimsusers where strPickingTeams='TeamLeader'");
-        return view('warehouse/roofingtopick');
     }
 
     private static function getTabs($tabcount)
