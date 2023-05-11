@@ -978,6 +978,7 @@ Route::get('qrcodereversepallet', [WareHouseController::class,'qrcodereversepall
 Route::get('qrcodebreakpallet', [WareHouseController::class,'qrcodebreakpallet']);
 
 Route::get('getProductPlannedOnThatMachine', [WareHouseController::class,'getProductPlannedOnThatMachine']);
+Route::get('roofinguserscreen', [WareHouseController::class,'roofinguserscreen']);
 Route::get('choosemachine/{department}', [WareHouseController::class,'choosemachine']);
 Route::get('printpalletchoosemachine/{department}', [WareHouseController::class,'printpalletchoosemachine']);
 
