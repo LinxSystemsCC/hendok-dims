@@ -374,7 +374,7 @@ class WareHouseController extends Controller
 
         DB::connection('sqlsrv2')->statement('exec spCheckUserPermissions ?', array($userid));
 
-        //dd($userid);        
+        //dd($userid);
         return view('warehouse/userpermissions')->with("username", $username)->with("id", $userid)->with("permissions", $permissions);
     }
 
@@ -501,7 +501,7 @@ class WareHouseController extends Controller
         $returndata = DB::connection('sqlsrv2')->select("exec spRetrieveDocumentUpliftment ? ",array($upliftmentnumber));
         foreach ($returndata as $row) {
             $base64Image = ($row->image);
-            
+
             // Generate the appropriate data URI scheme based on the MIME type of the image
                     $uriScheme = 'data:application/pdf;base64,';
 
@@ -1594,9 +1594,9 @@ where intDeptID =" . $deptId);
     // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
     public function getOpenUpkeepWorkOrders(){
         $curl = curl_init();
-    
+
         $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
-    
+
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.onupkeep.com/api/v2/work-orders',
             CURLOPT_RETURNTRANSFER => true,
@@ -1611,21 +1611,21 @@ where intDeptID =" . $deptId);
                 'Cookie: upkeepsess=' . $token
             ),
         ));
-    
+
         $response = curl_exec($curl);
-    
+
         curl_close($curl);
-    
+
         $result = json_decode($response, true);
-    
+
         $openWorkOrders = array();
-    
+
         foreach ($result['results'] as $workOrder) {
             if ($workOrder['status'] !== 'complete') {
                 $openWorkOrders[] = $workOrder;
             }
         }
-        
+
         // dd($openWorkOrders);
         return $openWorkOrders;
     }
@@ -1633,7 +1633,7 @@ where intDeptID =" . $deptId);
 
 
     // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
-    
+
 
     public function getIssueStock(Request $request){
         $result =  DB::connection('sqlsrv3')->select('select * from viewStockIssue');
@@ -1986,7 +1986,7 @@ where intDeptID =" . $deptId);
         return response()->json($response);
     }
 
-    
+
 
     public function getgalvlabel($customer, $product, $ticketno, $status)
     {
@@ -2643,6 +2643,9 @@ where intDeptID =" . $deptId);
     {
         return view('warehouse/pickersandloadersdashboard');
     }
+    public function getPageToReversePicked(){
+        return view('warehouse/reversepicked');
+    }
 
     public function getpickersandloadersdashboard()
     {
@@ -2677,6 +2680,12 @@ where intDeptID =" . $deptId);
 
         return view('warehouse/pickingticketmanager')->with('teamleaders', $teamleaders)->with('pickingheader', $pickingheader)
             ->with('listproducts', $allproducts)->with('ref', $ref)->with('sequence', $getsequence)->with('trucks', $trucks);
+    }
+    public function roofinguserscreen(){
+
+        $teamleaders = DB::connection('sqlsrv3')
+            ->select("Select * from tblDimsusers where strPickingTeams='TeamLeader'");
+        return view('warehouse/roofingtopick');
     }
 
     private static function getTabs($tabcount)
