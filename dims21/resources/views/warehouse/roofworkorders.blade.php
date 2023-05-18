@@ -693,6 +693,19 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                         },
 
                     ],
+                    summary: {
+                        totalItems: [{
+                            column: "QtyOutstanding",
+                            summaryType: 'sum',
+                            valueFormat: { type: 'fixedPoint', precision: 2 },
+                            displayFormat: '{0}',
+                        }, {
+                            column: "TonsOutstanding",
+                            summaryType: 'sum',
+                            valueFormat: { type: 'fixedPoint', precision: 2 },
+                            displayFormat: '{0}',
+                        }]
+                    },
 
                     onRowClick:function(e){
 
@@ -700,6 +713,12 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     onRowRemoved(e){
 
                     },
+                });
+
+                ppsoGrid.dxDataGrid("instance").on("customizeSummaryValue", function(e) {
+                    if (e.summaryProcess === "finalize" && e.summaryName.startsWith("Total")) {
+                        e.totalValue = ppsoGrid.dxDataGrid("instance").getDataSource().totalSummary(e.summaryName);
+                    }
                 });
             }
         });

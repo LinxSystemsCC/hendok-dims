@@ -940,6 +940,7 @@ Route::get('getpalletmovementreport', [WareHouseController::class,'getpalletmove
 Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovementreport']);
 Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
 Route::get('wmaxlanding', [WareHouseController::class,'wmaxlanding']);
+Route::get('wmaxreprint', [WareHouseController::class,'wmaxreprint']);
 Route::get('wmaxgetcustomerproduct', [WareHouseController::class,'wmaxgetcustomerproduct']);
 Route::get('wmaxgetproductinfo', [WareHouseController::class,'wmaxgetproductinfo']);
 Route::get('wmaxgetproductwiresize', [WareHouseController::class,'wmaxgetproductwiresize']);

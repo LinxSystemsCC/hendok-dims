@@ -501,6 +501,11 @@ if ((Auth::guest()))
                             @endif 
                         </li>
                         <li>
+                            {{-- @if($mmdp !="0")  --}}
+                            <a href='{!!url("/bulkMapping")!!}'>Bulk Mapping</a> <!-- TODO add userpermission for bulk mapping -->
+                            {{-- @endif  --}}
+                        </li>
+                        <li>
                             @if($palletconfig !="0") 
                             <a href='{!!url("/createPalletConfig")!!}'>Pallet Configurations</a>
                             @endif 
@@ -515,19 +520,19 @@ if ((Auth::guest()))
                             <a href='{!!url("/labelspage")!!}'>Labels</a> <!-- TODO add userpermission for labels -->
                             {{-- @endif --}}
                         </li>
-                        <li>
+                        {{-- <li>
                             @if($mm2a !="0") 
                             <a href='{!!url("/mapmachinetoarea")!!}'>Map Machine To Area</a> 
                             @endif 
-                        </li>
-                        <li>
+                        </li> --}}
+                        {{-- <li>
                             @if($mm2d !="0")
                             <a href='{!!url("/mapmachinestodept")!!}'>Map Machines To Department</a> 
                             @endif 
-                        </li>
+                        </li> --}}
                         <li>
                             @if($mmdp !="0") 
-                            <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Machines, Deptartment & Product</a>
+                            <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Product To Machine</a>
                             @endif 
                         </li>
                         <li>

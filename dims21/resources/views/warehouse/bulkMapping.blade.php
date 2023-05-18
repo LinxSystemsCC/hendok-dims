@@ -277,6 +277,9 @@
             dataSource:mappings, //as json
             hoverStateEnabled: true,
             showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
             allowColumnResizing: true,
             columnAutoWidth: true,
             scrolling: {

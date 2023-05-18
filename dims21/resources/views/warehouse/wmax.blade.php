@@ -241,6 +241,12 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
         border: 2px solid rgba(0,0,0,.54);
     }
 
+    .dx-selection {
+        background-color: #df2413; /* Specify the desired background color */
+        font-weight: 700;
+        /* Additional styles */
+    }
+
 
     /* .dx-datagrid {
         height: calc(50vh - 40px);
@@ -442,6 +448,8 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
 
         });
 
+        var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
+
         $.ajax({
             url: '{!!url("/getGalvWIP")!!}',
             type: "GET",
@@ -473,15 +481,16 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
                     },
                     selection: {
                         mode: "single",
-                        showCheckBoxesMode: "onClick"
+                        rowCssClass: 'custom-selected-row'
+                        // showCheckBoxesMode: "onClick"
                     },
                     columns: [
-                        {
-                            caption: "Complete",
-                            type: 'selection',
-                            allowSelectAll: false,
-                            selectAllMode: 'page',
-                        }, 
+                        // {
+                        //     caption: "Complete",
+                        //     type: 'selection',
+                        //     allowSelectAll: false,
+                        //     selectAllMode: 'page',
+                        // }, 
                         {
                             dataField: "JobNo",
                             caption: "Job No.",
@@ -531,14 +540,24 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
                     onRowDblClick:function(e){
 
                     },
-                    onSelectionChanged: function(selectedItem) {
-                        // console.log("Selected items:", selectedItem.selectedRowKeys[0].JobNo);
-                        var JobId = selectedItem.selectedRowKeys[0].JobNo;
-                        $("#JobEndTextMessage").css("white-space", "pre-wrap");
-                        $("#JobEndTextMessage").text("ARE YOU SURE YOU WANT TO COMPLETE JOB: "+JobId+"? \nTHE JOB WILL NO LONGER BE ACCESSABLE ANYMORE");
-                        $("#completejob").prop("disabled", false);
-                    }
+                    onRowClick:function(e){
+                        var currentID = currentSelectedRow[0];
+                        var clickedID = e.data.JobNo;
 
+                        if (clickedID === currentID){
+                            currentSelectedRow = [];
+                            e.component.clearSelection();
+                            $("#completejob").prop("disabled", true);
+                        }else{
+                            currentSelectedRow = [];
+                            currentSelectedRow.push(clickedID);
+
+                            $("#JobEndTextMessage").css("white-space", "pre-wrap");
+                            $("#JobEndTextMessage").text("ARE YOU SURE YOU WANT TO COMPLETE JOB: "+clickedID+"? \nTHE JOB WILL NO LONGER BE ACCESSABLE ANYMORE");
+                            $("#completejob").prop("disabled", false);
+                        }
+
+                    },
                 });
 
                 var gridElement = $("#gridContainer");
