@@ -8,11 +8,6 @@
     
         <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
-        <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-        <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         
         <!-- DevExtreme theme -->
         {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
@@ -51,9 +46,9 @@
         <div id="gridContainer" style="max-width: 100% !important; height: 100%;">
         </div>
     </div>
-                    </div>
+</div>
 
-    <div title="Job Creation" id="createjob" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
+    {{-- <div title="Job Creation" id="createjob" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -65,7 +60,7 @@
 
                 <div class="modal-body">
                 
-                    <div class="form-group">
+                    <div class="col-md-6 mb-1">
                         <label class="control-label" for="initmass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Initial Mass</label>
                         <input type="number"  class="form-control input-sm col-xs-1" id="initmass" required>
                     </div>
@@ -176,7 +171,141 @@
             </div>
         </div>
 
+    </div> --}}
+
+<!-- Modal New Item -->
+<div class="modal modal-lg fade" id="createjob" aria-labelledby="createjob" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="qc1TestTitle"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="CloseModal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    {{-- <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="initmass">Initial Mass</label>
+                        <input type="number"  class="form-control" id="initmass" required>
+                    </div> --}}
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="initmass">Initial Mass</label>
+                        <input type="number"  class="form-control" id="initmass" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="stripmass">Strip Mass</label>
+                        <input type="number"  class="form-control" id="stripmass" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="stripsize">Strip Size</label>
+                        <input type="number"  class="form-control" id="stripsize" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="zinc">Zinc</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-primary px-4" id="calczinc">
+                                    Calculate
+                                </button>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="number"  class="form-control" id="zinc" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="mpa">MPA Tested</label>
+                        <input type="number"  class="form-control" id="mpa" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="ticket">Tensile Ticket</label>
+                        <input type="number"  class="form-control" id="ticket" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="wiresize">Wire Size</label>
+                        <input type="number"  class="form-control" id="wiresize" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="stresstest">1 % Stress Test</label>
+                        <input type="number"  class="form-control" id="stresstest" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="elongation">Elongation at Break %</label>
+                        <input type="number"  class="form-control" id="elongation" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="torsion">Torsion Test</label>
+                        <input type="number"  class="form-control" id="torsion" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="wraptest">1 Diameter Wrap Test</label>
+                        <input type="number"  class="form-control" id="wraptest" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="coating">Coating Uniformity</label>
+
+                        <select  class="form-control" id="coating" required>
+                            <option>
+                                PASS
+                            </option>
+
+                            <option>
+                                FAIL
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="CastNo">Cast Number</label>
+                        <input type="number"  class="form-control" id="CastNo" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="seq">Seq Number</label>
+                        <input type="number"  class="form-control" id="seq" required disabled>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="comment1">Comment</label>
+                        <select  class="form-control" id="comment1" required>
+                            <option>
+                            </option>
+                        </select>
+                        <br>
+                        <select  class="form-control" id="comment2" required>
+                            <option>
+                            </option>
+                        </select>
+                        <br>
+                        <select  class="form-control" id="comment3" required>
+                            <option>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="d-inline-flex gap-2">
+                    <button class="btn btn-success" id="testpass">PASS</button>
+                    <button class="btn btn-danger" id="testfail">FAIL</button>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
 </div>
 
@@ -211,21 +340,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-
 
 <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
 <!-- DevExtreme library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
-<script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
 <script>
     $.ajaxSetup({
@@ -242,6 +362,10 @@
 
         $("#wiresize").change(function() {
             $(this).val(parseFloat($(this).val()).toFixed(2));
+        });
+
+        $("#createjob").on("hidden.bs.modal", function () {
+            $("#createjob input, #createjob select").val("");
         });
 
         $.ajax({

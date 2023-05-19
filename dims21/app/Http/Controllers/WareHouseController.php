@@ -1414,6 +1414,13 @@ class WareHouseController extends Controller
             ->select("select * from tblDepartments");
         return view('warehouse/wmax')->with('customers', $customers)->with('dept', $dept);
     }
+
+    public function wmaxreprint()
+    {
+        $jobs = DB::connection('sqlsrv2')->select("select * from tblCompletedJobs order by [DateTime] desc");
+        return view('warehouse/wmaxreprint')->with('jobs',$jobs);
+    }
+
     public function wmaxgetcustomerproduct(Request $request)
     {
         $cust = $request->get("customers");

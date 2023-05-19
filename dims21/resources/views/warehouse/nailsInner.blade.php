@@ -29,100 +29,77 @@
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
-    <style>
-		.col-lg-2, .col-lg-10 {
-			min-height: 100vh;
-		}
-
-        .col-lg-10{
-            max-width: 100% !important;
-        }
-
-        h3{
-            padding-left: 0px !important;
-        }
-	</style>
 </head>
-<body>
-    <div class="container-fluid">
-		<div class="row">
-			<div class="col-lg-2">
-                <div class="vertical-menu">
-                    @include('warehouse.menu')
-                </div>
-			</div>
-            <div class="col-lg-10" >
-                <div class="col-lg-12 d-inline-flex" >
-                    <h3 style="flex-grow: 1; padding-left: 15px;">BULK MAPPING</h3>
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newMapping">
-                        New Mapping
-                    </button>
-                </div>
-                
-                <div id="bulkMappingGrid"></div>
-                
-            </div>
-		</div>
-	</div>
-</body>
 
-<!-- Modal New Mapping -->
-<div class="modal fade" id="newMapping" aria-labelledby="newMapping" aria-hidden="true">
+<div class="col-lg-12"  style="background: white;">
+    <div class="col-lg-2"  style="background: white;">
+        <div class="vertical-menu">
+            @include('warehouse.menu')
+        </div>
+    </div>
+    <div class="col-lg-10" >
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">NAILS INNER</h3>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newNail">
+                New Nail Type
+            </button>
+        </div>
+        
+        <div id="gridContainer" style=""></div>
+        
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="newNail" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newMapping">New Mapping</h1>
+                <h1 class="modal-title fs-5" id="newuserLabel">Create New Nail Type</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label for="area" class="col-form-label">Area</label>
-                            <select class="form-select" type="text" id='area'>
-                                <option value="NULL">None</option>
-                                @foreach ($areas as $area)
-                                    <option value="{{ $area->intAutoID }}">{{ $area->strAreaName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="department" class="col-form-label">Department</label>
-                            <select class="form-select" type="text" id='department'>
-                                <option value="NULL">None</option>
-                                @foreach ($departments as $department)
-                                    <option value="{{ $department->intAutoID }}">{{ $department->strDeptName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="subdepartment" class="col-form-label">Sub Department</label>
-                            <select class="form-select" type="text" id='subdepartment'>
-                                <option value="NULL">None</option>
-                                @foreach ($subdepartments as $subdepartment)
-                                    <option value="{{ $subdepartment->intAutoID }}">{{ $subdepartment->strSubDeptName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label for="machine" class="col-form-label">Machines</label>
-                            <select class="form-select" type="text" id='machine'>
-                                <option value="NULL">None</option>
-                                @foreach ($machines as $machine)
-                                    <option value="{{ $machine->intAutoMachineID }}">{{ $machine->strMachineName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                    </div>
-                </form>
+                <div class="form-group">
+                    <label class="control-label" for="code"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Code</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="code">
+                </div>    
+                <div class="form-group">
+                    <label class="control-label" for="description"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Description</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="description">
+                </div> 
+                <div class="form-group">
+                    <label class="control-label" for="group"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Group</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="group">
+                </div> 
+                <div class="form-group">
+                    <label class="control-label" for="labelDescripion"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Label Description</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="labelDescripion">
+                </div> 
+                <div class="form-group">
+                    <label class="control-label" for="size"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Size</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="size">
+                </div> 
+                <div class="form-group">
+                    <label class="control-label" for="packsize"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pack Size Outer</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="packsize">
+                </div> 
+                <div class="form-group">
+                    <label class="control-label" for="packaging"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Nail Packaging</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="packaging">
+                </div> 
+                <div class="form-group">
+                    <label class="control-label" for="coating"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Coating</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="coating">
+                </div> 
+                <div class="form-group">
+                    <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="barcode">
+                </div>            
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="saveMapping" class="btn btn-success" >Save</button>
+                <button type="button" id="saveNail" class="btn btn-success" >Save</button>
             </div>
         </div>
     </div>
@@ -179,102 +156,39 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
-
     $(document).ready(function() {
-        var mappings = ({!! json_encode($mappings) !!});
+        var nails = ({!! json_encode($nails) !!});
 
-        $('#area').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#newMapping'),
-        });
+        $('#saveNail').click(function(){
 
-        $('#department').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#newMapping'),
-        });
-
-        $('#subdepartment').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#newMapping'),
-        });
-
-        $('#machine').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#newMapping'),
-        });
-
-        $("#department").change(function(){
-            var ID = $("#department").val();
-            var prompt = 'department';
             $.ajax({
-                url: '{!!url("/checkBulkMapping")!!}',
-                type: "GET",
-                data: {
-                    ID: ID,
-                    prompt: prompt,
-                },
-                success: function (data) {
-                    console.log(data);
-                    if (data[0]['intAreaID'] === null){
-                        alert("This Department is being mapped for the first time.");
-                    }else{
-                        $('#area').val(data[0]['intAreaID']).trigger("change");
-                    }
-                }
-            });
-        });
-
-        $("#subdepartment").change(function(){
-            var ID = $("#subdepartment").val();
-            var prompt = 'subdepartment';
-            $.ajax({
-                url: '{!!url("/checkBulkMapping")!!}',
-                type: "GET",
-                data: {
-                    ID: ID,
-                    prompt: prompt,
-                },
-                success: function (data) {
-                    console.log(data);
-                    if (data[0]['intAreaID'] === null){
-                        alert("This Sub Department is being mapped for the first time.");
-                    }else{
-                        $('#area').val(data[0]['intAreaID']).trigger("change");
-                        $('#department').val(data[0]['intDeptID']).trigger("change");
-                    }
-                }
-            });
-        });
-
-        $('#saveMapping').click(function(){
-            // alert("Saving mappings has not been set up yet!")
-            $.ajax({
-                url: '{!!url("/bulkMappingCRUD")!!}',
+                url: '{!!url("/nailsInnerCrud")!!}',
                 type: "POST",
                 data: {
-                    area: $('#area').val(),
-                    department: $('#department').val(),
-                    subdepartment: $('#subdepartment').val(),
-                    machine: $('#machine').val(),
+                    code: $('#code').val(),
+                    description: $('#description').val(),
+                    group: $('#group').val(),
+                    labelDescripion: $('#labelDescripion').val(),
+                    size: $('#size').val(),
+                    packsize: $('#packsize').val(),
+                    packaging: $('#packaging').val(),
+                    coating: $('#coating').val(),
+                    barcode: $('#barcode').val(),
+                    prompt: 'Insert',
                     ID: 0,
-                    prompt: 'insert',
                 },
                 success: function (data) {
-                    if (data[0]['Result'] === 'Success'){
-                        location.reload();
-                    }else{
-                        alert(data[0]['Result']);
-                    }
+                    alert(data[0]['Result']);
+                    location.reload();
                 }
             });
         });
 
-        $("#bulkMappingGrid").dxDataGrid({
-            dataSource:mappings, //as json
+        $("#gridContainer").dxDataGrid({
+            dataSource: nails, //as json
             hoverStateEnabled: true,
             showBorders: true,
             filterRow: { visible: true },
@@ -286,7 +200,7 @@
                 rowRenderingMode: 'infinite',
             },
             paging:{
-                pageSize: 50,
+                pageSize: 10,
             },
             pager: {
                 visible: true,
@@ -300,6 +214,7 @@
             },
             editing: {
                 mode: 'batch',
+                allowUpdating: true,
                 allowDeleting: true,
             },
             selection: {
@@ -307,7 +222,7 @@
             },
             onExporting(e) {
                 const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('BulkMapping');
+                const worksheet = workbook.addWorksheet('Areas');
 
                 DevExpress.excelExporter.exportDataGrid({
                     component: e.component,
@@ -315,7 +230,7 @@
                     autoFilterEnabled: true,
                 }).then(() => {
                     workbook.xlsx.writeBuffer().then((buffer) => {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'BulkMapping.xlsx');
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Areas.xlsx');
                     });
                 });
                 e.cancel = true;
@@ -323,33 +238,104 @@
 
             columns: [
                 {
-                    dataField: "strAreaName",
-                    caption: "Area",
-                    // groupIndex: 0,
-                }, 
-                {
-                    dataField: "strDeptName",
-                    caption: "Department",
-                    // groupIndex: 1,
+                    dataField: "intAutoID",
+                    caption: "ID",
+                    allowEditing: false,
+                }, {
+                    dataField: "strPastelCode",
+                    caption: "Code",
+                }, {
+                    dataField: "strPastelDescription",
+                    caption: "Description",
+                },{
+                    dataField: "strProductGroup",
+                    caption: "Group",
+                },{
+                    dataField: "strLabelDescription",
+                    caption: "Label Description",
+                },{
+                    dataField: "strSize",
+                    caption: "Size",
+                },{
+                    dataField: "strPackSizeOuter",
+                    caption: "Pack Size Outer",
+                },{
+                    dataField: "strNailPackaging",
+                    caption: "Nail Packaging",
+                },{
+                    dataField: "strCoating",
+                    caption: "Coating",
+                },{
+                    dataField: "strBarcode",
+                    caption: "Barcode",
+                },{
+                    dataField: "dteCreated",
+                    caption: "Date Time",
+                    allowEditing: false,
                 },
-                {
-                    dataField: "strSubDeptName",
-                    caption: "Sub Department",
-                    // groupIndex: 2,
-                },
-                {
-                    dataField: "strMachineName",
-                    caption: "Machine",
-                }
             ],
             onRowUpdating: function(e){
-                alert("Updating Has Not been implemented Yet!")
+                var ID = e.oldData.intAutoID;
+                var code = e.newData.strPastelCode;
+                var description = e.newData.strPastelDescription;
+                var group = e.newData.strProductGroup;
+                var labelDescripion = e.newData.strLabelDescription;
+                var size = e.newData.strSize;
+                var packsize = e.newData.strPackSizeOuter;
+                var packaging = e.newData.strNailPackaging;
+                var coating = e.newData.strCoating;
+                var barcode = e.newData.strBarcode;
+                
+                $.ajax({
+                    url: '{!!url("/nailsInnerCrud")!!}',
+                    type: "POST",
+                    data: {
+                        code: code,  
+                        description: description,  
+                        group: group,  
+                        labelDescripion: labelDescripion,  
+                        size: size,  
+                        packsize: packsize,  
+                        packaging: packaging,  
+                        coating: coating,  
+                        barcode: barcode,  
+                        prompt: 'Update',
+                        ID: ID,
+                    },
+                    success: function (data) {
+                        alert(data[0]['Result']);
+                        location.reload();
+                    }
+                });
             },
             onRowRemoving: function(e) {
-                alert("Removing Has Not been implemented Yet!")
-            },
-        });
+                var ID = e.data.intAutoID;
+                var code = e.data.strPastelCode;
 
+                $.ajax({
+                    url: '{!!url("/nailsInnerCrud")!!}',
+                    type: "POST",
+                    data: {
+                        code: code,
+                        description: 'NA',
+                        group: 'NA',
+                        labelDescripion: 'NA',
+                        size: 'NA',
+                        packsize: 'NA',
+                        packaging: 'NA',
+                        coating: 'NA',
+                        barcode: 'NA',
+                        prompt: 'Delete',
+                        ID: ID,
+                    },
+                    success: function (data) {
+                        alert(data[0]['Result']);
+                        location.reload();
+                    }
+                });
+            }
+        });
+        
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
@@ -363,13 +349,16 @@
             $('nav ul li #'+id+' span').toggleClass("rotate");
             
         });
-
+        
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
+
     });
 
-    function showDialog(tag,width,height){
+
+    function showDialog(tag,width,height)
+    {
         $( tag ).dialog({height: height, modal: false,
             width: width,containment: false}).dialogExtend({
             "closable" : true, // enable/disable close button
@@ -397,5 +386,4 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
-
 </script>
