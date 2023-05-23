@@ -166,6 +166,9 @@ class InvoicingController extends Controller
 
         $refDescription = "";
         $mustStockAdjust = 0;
+        DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference', $ref)
+            ->update(['isReadyForInvoicing' => 1]);
 //dd();
         $invnum =$this->returnInvoiceNumber($invoiceid,$ownersId);
         if(strlen(trim($invnum) ) > 4){
