@@ -393,7 +393,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 type: "POST",
                 data: {
                     dept:$('#departmenthidden').val(),
-                    prodcat:$('#categorybarcodehidden').val(),
+                    prodcat:$('#categorybarcodehidden option:selected').text(),
                     prodname:$('#prodnamehidden').val(),
                     palletconfid:$('#pallet').val(),
                     qty:$('#qty').val(),
@@ -423,7 +423,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 type: "POST",
                 data: {
                     dept:$('#departmentbarcodeless').val(),
-                    prodcat:$('#categorybarcodeless').val(),
+                    prodcat:$('#categorybarcodeless option:selected').text(),
                     prodname:$('#prodnamebarcodeless').val(),
                     palletconfid:$('#palletbarcodeless').val(),
                     qty:$('#qtybarcodeless').val(),
