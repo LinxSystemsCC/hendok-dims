@@ -478,7 +478,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 url: '{!!url("/getProdListToPlan")!!}',
                 type: "GET",
                 data: {
-                    ItemGroup: $('#categorybarcodeless option:selected').text(),
+                    ItemGroup: $('#categorybarcodeless option:selected').val(),
                 },
                 success: function (data) {
                     var toAppend = '';
