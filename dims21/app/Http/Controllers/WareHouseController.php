@@ -929,7 +929,7 @@ class WareHouseController extends Controller
         //dd($ItemGroup);
         $strProductCategory = $request->get("strProductCategory");
         $prodCategory = DB::connection('sqlsrv2')
-            ->select("select * from viewItemsToPlanJob where strProductCategory ='" . $ItemGroup . "' order by strItemName");
+            ->select("select * from viewItemsToPlanJob where ItemGroup ='" . $ItemGroup . "' order by strItemName");
         //dd($prodCategory);
         return response()->json($prodCategory);
     }
@@ -1799,6 +1799,28 @@ where intDeptID =" . $deptId);
     public function nailsInner(){
         $nails =  DB::connection('sqlsrv3')->select("SELECT * FROM tblNailsInner"); 
         return view('warehouse/nailsInner')->with('nails',$nails);
+    }
+
+    public function nailsInnerCrud(Request $request){
+        $code = $request->get("code");
+        $description = $request->get("description");
+        $group = $request->get("group");
+        $labelDescription = $request->get("labelDescription");
+        $size = $request->get("size");
+        $packsize = $request->get("packsize");
+        $packaging = $request->get("packaging");
+        $coating = $request->get("coating");
+        $barcode = $request->get("barcode");
+        $prompt = $request->get("prompt");
+        $ID = $request->get("ID");
+        $UserID = Auth::user()->UserID;
+        
+        // dd($code,$description,$group,$labelDescription,$size,$packsize,$packaging,$coating,$barcode,$prompt,$ID,$UserID);
+
+        $nails =  DB::connection('sqlsrv3')->select("EXEC spNailsInnerCrud ?,?,?,?,?,?,?,?,?,?,?,?", 
+        array($code,$description,$group,$labelDescription,$size,$packsize,$packaging,$coating,$barcode,$prompt,$ID,$UserID));
+        
+        return response()->json($nails);
     }
 
     public function endjob(Request $request){

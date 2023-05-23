@@ -1138,7 +1138,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('checkBulkMapping', [WareHouseController::class,'checkBulkMapping']);
     Route::post('bulkMappingCRUD', [WareHouseController::class,'bulkMappingCRUD']);    
     Route::get('getBulkMappingAreaDeptSubDeptMachines', [WareHouseController::class,'getBulkMappingAreaDeptSubDeptMachines']);
-    Route::get('nailsInner', [WareHouseController::class,'nailsInner']);        
+    Route::get('nailsInner', [WareHouseController::class,'nailsInner']);     
+    Route::post('nailsInnerCrud', [WareHouseController::class,'nailsInnerCrud']);
 
 });
 

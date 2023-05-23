@@ -124,6 +124,8 @@ if ((Auth::guest()))
     $mp2i = $v->getThingsUserPermissions(Auth::user()->UserID,'Map Pallet To Item');
     $galvcustomers = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv Customers');
     $galvscales = $v->getThingsUserPermissions(Auth::user()->UserID,'Scales');
+    $nailsInner = $v->getThingsUserPermissions(Auth::user()->UserID,'Nails Inner');
+    // $bulkmapping = $v->getThingsUserPermissions(Auth::user()->UserID,'Bulk Mapping');
     
 }   
 ?>
@@ -501,9 +503,14 @@ if ((Auth::guest()))
                             @endif 
                         </li>
                         <li>
-                            {{-- @if($mmdp !="0")  --}}
+                            {{-- @if($bulkMapping !="0") --}}
                             <a href='{!!url("/bulkMapping")!!}'>Bulk Mapping</a> <!-- TODO add userpermission for bulk mapping -->
-                            {{-- @endif  --}}
+                            {{-- @endif --}}
+                        </li>
+                        <li>
+                            {{-- @if($nailsinner !="0") --}}
+                            <a href='{!!url("/nailsInner")!!}'>Nails Inner</a> <!-- TODO add userpermission for nails Inner -->
+                            {{-- @endif --}}
                         </li>
                         <li>
                             @if($palletconfig !="0") 

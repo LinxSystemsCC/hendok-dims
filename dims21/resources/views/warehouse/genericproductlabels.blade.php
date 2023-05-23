@@ -295,7 +295,7 @@
                 url: '{!!url("/getProdListToPlan")!!}',
                 type: "GET",
                 data: {
-                    ItemGroup: $('#category option:selected').text(),
+                    ItemGroup: $('#category option:selected').val(),
 
                 },
                 success: function (data) {

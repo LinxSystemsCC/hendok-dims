@@ -73,8 +73,8 @@
                     <input  type="text" class="form-control input-sm col-xs-1" id="group">
                 </div> 
                 <div class="form-group">
-                    <label class="control-label" for="labelDescripion"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Label Description</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="labelDescripion">
+                    <label class="control-label" for="labelDescription"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Label Description</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="labelDescription">
                 </div> 
                 <div class="form-group">
                     <label class="control-label" for="size"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Size</label>
@@ -171,7 +171,7 @@
                     code: $('#code').val(),
                     description: $('#description').val(),
                     group: $('#group').val(),
-                    labelDescripion: $('#labelDescripion').val(),
+                    labelDescription: $('#labelDescription').val(),
                     size: $('#size').val(),
                     packsize: $('#packsize').val(),
                     packaging: $('#packaging').val(),
@@ -269,22 +269,22 @@
                     dataField: "strBarcode",
                     caption: "Barcode",
                 },{
-                    dataField: "dteCreated",
+                    dataField: "dtmCreated",
                     caption: "Date Time",
                     allowEditing: false,
                 },
             ],
             onRowUpdating: function(e){
                 var ID = e.oldData.intAutoID;
-                var code = e.newData.strPastelCode;
-                var description = e.newData.strPastelDescription;
-                var group = e.newData.strProductGroup;
-                var labelDescripion = e.newData.strLabelDescription;
-                var size = e.newData.strSize;
-                var packsize = e.newData.strPackSizeOuter;
-                var packaging = e.newData.strNailPackaging;
-                var coating = e.newData.strCoating;
-                var barcode = e.newData.strBarcode;
+                var code = e.newData.strPastelCode || e.oldData.strPastelCode;
+                var description = e.newData.strPastelDescription || e.oldData.strPastelDescription;
+                var group = e.newData.strProductGroup || e.oldData.strProductGroup;
+                var labelDescription = e.newData.strLabelDescription || e.oldData.strLabelDescription;
+                var size = e.newData.strSize || e.oldData.strSize;
+                var packsize = e.newData.strPackSizeOuter || e.oldData.strPackSizeOuter;
+                var packaging = e.newData.strNailPackaging || e.oldData.strNailPackaging;
+                var coating = e.newData.strCoating || e.oldData.strCoating;
+                var barcode = e.newData.strBarcode || e.oldData.strBarcode;
                 
                 $.ajax({
                     url: '{!!url("/nailsInnerCrud")!!}',
@@ -293,7 +293,7 @@
                         code: code,  
                         description: description,  
                         group: group,  
-                        labelDescripion: labelDescripion,  
+                        labelDescription: labelDescription,  
                         size: size,  
                         packsize: packsize,  
                         packaging: packaging,  
@@ -319,7 +319,7 @@
                         code: code,
                         description: 'NA',
                         group: 'NA',
-                        labelDescripion: 'NA',
+                        labelDescription: 'NA',
                         size: 'NA',
                         packsize: 'NA',
                         packaging: 'NA',
