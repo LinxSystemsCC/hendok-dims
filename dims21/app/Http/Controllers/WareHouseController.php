@@ -1456,12 +1456,8 @@ class WareHouseController extends Controller
     public function wmaxdepartmentmachinesgalv(Request $request)
     {
         $deptId = $request->get("deptId");
-        $machines = DB::connection('sqlsrv2')
-            ->select("select intAutoMachineID,strMachineName from tblMapMachineToDept d
-inner join tblMachines m on m.intAutoMachineID = d.intMachineID
-where intDeptID =" . $deptId);
+        $machines = DB::connection('sqlsrv2')->select("EXEC spGetMachinesByDept  $deptId");
         return response()->json($machines);
-        #TODO REPLACE THIS MAPPING!!!!!!
     }
 
     public function getMachinesforselecteddept(Request $request)

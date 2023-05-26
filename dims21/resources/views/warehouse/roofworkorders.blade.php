@@ -546,11 +546,24 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             var selectedRowKeys = [];
             dataSource.forEach(function(item) {
                 for (var i = 0; i < salesorders.length; i++) {
-                    if (salesorders[i] === item.OrderNumber || invoiceorders[i] === item.idInvoiceLines || company[i] === item.Company) {
+                    if (salesorders[i] === item.OrderNumber) {
                         var key = dataGrid.getKeyByRowIndex(dataGrid.getRowIndexByKey(item));
                         selectedRowKeys.push(key);
-                        // console.log(key);
-                        break;
+                        console.log(key);
+                    }
+                }
+                for (var i = 0; i < invoiceorders.length; i++) {
+                    if (invoiceorders[i] === item.idInvoiceLines) {
+                        var key = dataGrid.getKeyByRowIndex(dataGrid.getRowIndexByKey(item));
+                        selectedRowKeys.push(key);
+                        console.log(key);
+                    }
+                }
+                for (var i = 0; i < company.length; i++) {
+                    if (company[i] === item.Company) {
+                        var key = dataGrid.getKeyByRowIndex(dataGrid.getRowIndexByKey(item));
+                        selectedRowKeys.push(key);
+                        console.log(key);
                     }
                 }
             });
