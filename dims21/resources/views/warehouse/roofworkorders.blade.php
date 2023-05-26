@@ -18,12 +18,11 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-    <!-- Select2 JS -->
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
 
     <!-- DevExtreme theme -->
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/21.1.5/css/dx.common.css" />
     {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet">
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
@@ -87,121 +86,155 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 </head>
 
 <body>
-<div class="col-lg-12 d-flex bd-highlight w-100"  style="background: white;">
-    <div class="col-lg-2" style="background: white;">
+    <div class="col-lg-12 d-flex bd-highlight w-100"  style="background: white;">
+        <div class="col-lg-2" style="background: white;">
 
-        <div class="vertical-menu">
-            @include('warehouse.menu')
+            <div class="vertical-menu">
+                @include('warehouse.menu')
+            </div>
         </div>
-    </div>
 
-    <div class="col-lg-10">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" id="PPSOTab" aria-current="page">Pre Plan SO's</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="BSOPTab">Batch SO Processing</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="BSTab" >Batch Progression</a>
-            </li>
-        </ul>
-        
-        <div class="tab-content p-3 w-100">
-            {{-- Pre Planned Sales Orders Page --}}
-            <div class="tab-pane fade show active" id="PPSOPage" role="tabpanel">
+        <div class="col-lg-10">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="PPSOTab" aria-current="page">Pre Plan SO's</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="BSOPTab">Batch SO Processing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="BSTab" >Batch Progression</a>
+                </li>
+            </ul>
+            
+            <div class="tab-content p-3 w-100">
+                {{-- Pre Planned Sales Orders Page --}}
+                <div class="tab-pane fade show active" id="PPSOPage" role="tabpanel">
 
-                {{-- -------------------------------------- Old Design -------------------------------------- --}}
+                    {{-- -------------------------------------- Old Design -------------------------------------- --}}
 
-                {{-- <div class="modal-header">
-                    <h5 class="modal-title" id="preplanningsoTitle">Pre Planning SO</h5>
-                </div>
-                <div class="modal-body">
-                    <form id="upload-form" class="w-100">
-                        <input type="file" id="excel-file" class="px-3" name="excel-file" accept=".xlsx">
-                        <button type="submit" class="btn btn-primary">Upload</button>
-                    </form>
-                    <div class="d-inline-flex w-100">
-                        <div class="form-group col-4">
-                            <label class="control-label" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sales Orders</label>
-                            <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="salesorders" required></textarea>
-                        </div>
-                        
-                        <div class="form-group col-4">
-                            <label class="control-label" for="invoiceorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice Orders</label>
-                            <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="invoiceorders" required></textarea>
-                        </div>
-
-                        <div class="form-group col-4">
-                            <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Company</label>
-                            <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="company" required></textarea>
-                        </div>
+                    {{-- <div class="modal-header">
+                        <h5 class="modal-title" id="preplanningsoTitle">Pre Planning SO</h5>
                     </div>
-                        
-    
+                    <div class="modal-body">
+                        <form id="upload-form" class="w-100">
+                            <input type="file" id="excel-file" class="px-3" name="excel-file" accept=".xlsx">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+                        <div class="d-inline-flex w-100">
+                            <div class="form-group col-4">
+                                <label class="control-label" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sales Orders</label>
+                                <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="salesorders" required></textarea>
+                            </div>
+                            
+                            <div class="form-group col-4">
+                                <label class="control-label" for="invoiceorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice Orders</label>
+                                <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="invoiceorders" required></textarea>
+                            </div>
+
+                            <div class="form-group col-4">
+                                <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Company</label>
+                                <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="company" required></textarea>
+                            </div>
+                        </div>
+                            
+        
+                        <div class="form-group">
+                            <label class="control-label" for="reference"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reference </label>
+                            <input type="text"  class="form-control input-sm col-xs-1" id="reference" required>
+                        </div>
+
+                        <button class="btn-danger btn-lg" id="savePPSO" style="width: 100%;">SAVE</button>
+
+                    </div> --}}
+                    <h3>Pre Plan Sales Orders</h3>
+
+                    {{-- <button class="btn btn-primary" id="syncNewOrders" style="width: 100%;">SYNC NEW ORDERS</button> --}}
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#mulkMapModal">Bulk Selection</button>
+
+                    <div id="ppsoGrid" class="py-2"></div>
+
                     <div class="form-group">
                         <label class="control-label" for="reference"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reference </label>
                         <input type="text"  class="form-control input-sm col-xs-1" id="reference" required>
                     </div>
 
-                    <button class="btn-danger btn-lg" id="savePPSO" style="width: 100%;">SAVE</button>
+                    <button class="btn btn-success" id="savePPSO" style="width: 100%;">SAVE</button>
 
-                </div> --}}
-                <h3>Pre Plan Sales Orders</h3>
 
-                {{-- <button class="btn btn-primary" id="syncNewOrders" style="width: 100%;">SYNC NEW ORDERS</button> --}}
-
-                <div id="ppsoGrid" class="py-2"></div>
-
-                <div class="form-group">
-                    <label class="control-label" for="reference"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reference </label>
-                    <input type="text"  class="form-control input-sm col-xs-1" id="reference" required>
                 </div>
 
-                <button class="btn btn-success" id="savePPSO" style="width: 100%;">SAVE</button>
+                {{--  Batch Sales Order Processing Page --}}
+                <div class="tab-pane fade" id="BSOPPage" role="tabpanel">
+                    {{-- Date from --}}
+                    <label class="control-label" for="datefromheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date From </label>
+                    <input type="date" id="datefromheader">
 
+                    {{-- Date To --}}
+                    <label class="control-label" for="datetoheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
+                    <input type="date" id="datetoheader">
+                    <button class="btn btn-info" id="getheaders">GET</button>
 
-            </div>
-
-            {{--  Batch Sales Order Processing Page --}}
-            <div class="tab-pane fade" id="BSOPPage" role="tabpanel">
-                {{-- Date from --}}
-                <label class="control-label" for="datefromheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date From </label>
-                <input type="date" id="datefromheader">
-
-                {{-- Date To --}}
-                <label class="control-label" for="datetoheader"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
-                <input type="date" id="datetoheader">
-                <button class="btn btn-info" id="getheaders">GET</button>
-
-                <br><br>
-                
-                <div id="headergrid">
-                </div>
-
-                <div id="linesgrid" class="my-3">
+                    <br><br>
                     
+                    <div id="headergrid">
+                    </div>
+
+                    <div id="linesgrid" class="my-3">
+                        
+                    </div>
+
+                    <button type="button" class="btn btn-success" id="saveBSOP" aria-label="Save">Save</button>
+
                 </div>
 
-                <button type="button" class="btn btn-success" id="saveBSOP" aria-label="Save">Save</button>
-
-            </div>
-
-            {{--  Batch Sequencing Page --}}
-            <div class="tab-pane fade" id="BSPage" role="tabpanel">
-                <div id="sequencegrid" style="width: 50% !important; height:50%; padding-bottom: 10px;">
+                {{--  Batch Sequencing Page --}}
+                <div class="tab-pane fade" id="BSPage" role="tabpanel">
+                    <div id="sequencegrid" style="width: 50% !important; height:50%; padding-bottom: 10px;">
+                    </div>
                 </div>
+
+
             </div>
-
-
+            
         </div>
-        
+
+        <!-- Modal New Stock -->
+        <div class="modal modal-xl fade" id="mulkMapModal" aria-labelledby="mulkMapModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="mulkMapModal">Bulk Select Roofing Jobs</h1>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="d-inline-flex w-100">
+                            <div class="form-group col-4">
+                                <label class="control-label" for="salesorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sales Orders</label>
+                                <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="salesorders" required></textarea>
+                            </div>
+                            
+                            <div class="form-group col-4 px-3">
+                                <label class="control-label" for="invoiceorders"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice Orders</label>
+                                <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="invoiceorders" required></textarea>
+                            </div>
+
+                            <div class="form-group col-4">
+                                <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Company</label>
+                                <textarea  type="text" rows="15" class="form-control input-sm col-xs-1" id="company" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBulkSelectModal">Close</button>
+                        <button type="button" id="bulkSelect" data-bs-dismiss="modal" class="btn btn-success" >Select</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-</div>
-
-
 
     <!-- jQuery --> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -496,7 +529,39 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             $('nav ul li #'+id+' span').toggleClass("rotate");
             
         });
+
+        $('#bulkSelect').click(function(){
+            const salorders = $("#salesorders").val();
+            const invorders = $("#invoiceorders").val();
+            const comp = $("#company").val();
+
+            var salesorders = salorders.split("\n");
+            var invoiceorders = invorders.split("\n");
+            var company = comp.split("\n");
+
+            var dataGrid = $("#ppsoGrid").dxDataGrid("instance");
+            var dataSource = dataGrid.getDataSource().items();
+            // console.log(dataSource);
+
+            var selectedRowKeys = [];
+            dataSource.forEach(function(item) {
+                for (var i = 0; i < salesorders.length; i++) {
+                    if (salesorders[i] === item.OrderNumber || invoiceorders[i] === item.idInvoiceLines || company[i] === item.Company) {
+                        var key = dataGrid.getKeyByRowIndex(dataGrid.getRowIndexByKey(item));
+                        selectedRowKeys.push(key);
+                        // console.log(key);
+                        break;
+                    }
+                }
+            });
+            dataGrid.selectRows(selectedRowKeys);
+        });
         
+        // Clear inputs and selects within the modal
+        $("#mulkMapModal").on("hidden.bs.modal", function () {
+            $("#mulkMapModal textarea").val("");
+        });
+
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
@@ -570,11 +635,12 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     columnAutoWidth: true,
                     noDataText: 'Please Sync for new Sales Orders',
                     scrolling: {
-                        mode: 'infinite',
+                        rowRenderingMode: 'infinite',
                     },
                     paging:{
-                        pageSize: 20,
+                        pageSize: 2000,
                     },
+                    
                     editing:{
                         mode: 'form',
                         // allowUpdating: true,
@@ -605,6 +671,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     },
                     columns: [
                         {
+                            dataField: "intRowKey",
+                            caption: "Key",
+                            visible: false,
+                        },{
                             dataField: "RoofingCat",
                             caption: "Category",
                         }, {

@@ -8,11 +8,6 @@
     
         <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
-        <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-        <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         
         <!-- DevExtreme theme -->
         {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
@@ -52,9 +47,7 @@
         </div>
     </div>
 
-    
-
-    <div title="Job Creation" id="createjob" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
+    <!--div title="Job Creation" id="createjob" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -74,11 +67,9 @@
                                     Job No
                                 </label>
                                 <label class="control-label" id="jobnum"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;">
-                                     
                                 </label>
                             </div>
                         </div>
-                
                         <div class="form-group"  style="width: 50%;">
                             <div class="d-flex" style="padding: 10px;">
                                 <label class="control-label" for="seqnum"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">
@@ -99,7 +90,6 @@
                                     Customer No
                                 </label>
                                 <label class="control-label" id="custnum"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;">
-                                     
                                 </label>
                             </div>
                         </div>
@@ -124,7 +114,6 @@
                                     Reference
                                 </label>
                                 <label class="control-label" id="ref"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;">
-                                     
                                 </label>
                             </div>
                         </div>
@@ -149,7 +138,6 @@
                                     Product
                                 </label>
                                 <label class="control-label" id="prod"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;">
-                                     
                                 </label>
                             </div>
                         </div>
@@ -269,6 +257,139 @@
             </div>
         </div>
 
+    </!--div-->
+
+    <div class="modal modal-lg fade" id="createjob" aria-labelledby="createjob" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="weighTestTitle">Set Weight</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="CloseModal"></button>
+                </div>
+    
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="jobnum"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Job No</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="jobnum"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="seqnum"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">
+                                Seq No
+                            </label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="seqnum"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="custnum"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Customer No</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="custnum"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="dept"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Department</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="dept"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="ref"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Reference</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="ref"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="machine"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Machine</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="machine"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="prod"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Product</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="prod"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="zinc"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Zinc</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="zinc" style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="tensile"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Tensile Ticket</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="tensile"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="mpa"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">MPA</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="mpa"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="wire"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Actual Wire Size</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="wire"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-2 mb-1">
+                            <label class="control-label" for="cast"  style="margin-bottom: 0px;font-weight: 400;font-size: 15px; white-space: nowrap;">Cast No</label>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <label class="control-label" id="cast"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px; white-space: nowrap;"></label>
+                        </div>
+
+                        <div class="col-md-3 mb-1">
+                            <label class="control-label" for="tare"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tare Mass</label>
+                        </div>
+                        <div class="col-md-9 mb-1">
+                            <select  class="form-select" id="tare" required>
+                                <option>
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mb-1">
+                            <label class="control-label" for="mass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Mass</label>
+                        </div>
+                        <div class="col-md-9 mb-1">
+                            <input type="number" class="form-control input-sm col-xs-1" id="mass" required>
+                        </div>
+
+                        <div class="col-md-3 mb-1">
+                            <label class="control-label" for="final"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Final Mass</label>
+                        </div>  
+                        <div class="col-md-9 mb-1">
+                            <input type="number" class="form-control input-sm col-xs-1" id="final" required disabled>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="d-inline-flex gap-2">
+                        <button class="btn btn-success" id="accept" style="width:50%">ACCEPT</button>
+                        <button class="btn btn-danger" id="hold" style="width:50%">HOLD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -304,21 +425,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-
 
 <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
 <!-- DevExtreme library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
-<script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
 <script>
     $.ajaxSetup({
@@ -481,19 +593,19 @@
                         var wire = selectedRowsData[0].WireSize;
                         var castno = selectedRowsData[0].CastNo;
 
-                        $('#jobnum').text(": "+ jobnum);
-                        $('#seqnum').text(": "+ sequm);
-                        $('#custnum').text(": "+ custnum);
-                        $('#dept').text(": "+ dept);
-                        $('#ref').text(": "+ ref);
-                        $('#machine').text(": "+ machine);
-                        $('#prod').text(": "+ prod);
-                        //$('#SEno').text(": "+ SEno);
-                        $('#zinc').text(": "+ zinc);
-                        $('#tensile').text(": "+ tensile);
-                        $('#mpa').text(": "+ mpa);
-                        $('#wire').text(": "+ wire);
-                        $('#cast').text(": "+ castno);
+                        $('#jobnum').text(jobnum);
+                        $('#seqnum').text(sequm);
+                        $('#custnum').text(custnum);
+                        $('#dept').text(dept);
+                        $('#ref').text(ref);
+                        $('#machine').text(machine);
+                        $('#prod').text(prod);
+                        //$('#SEno').text(SEno);
+                        $('#zinc').text(zinc);
+                        $('#tensile').text(tensile);
+                        $('#mpa').text(mpa);
+                        $('#wire').text(wire);
+                        $('#cast').text(castno);
                     },
 
                     onRowClick:function(e){
@@ -721,7 +833,7 @@
                     });
                 }
                 else{
-                    console.log("as you where young lad");
+                    // console.log("as you where young lad");
                 }
             }
         });

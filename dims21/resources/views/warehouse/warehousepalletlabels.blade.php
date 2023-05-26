@@ -531,15 +531,14 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
             });
         });
-      
 
         // setInterval(fetchWeight,1000);
 
         fetchWeight();
-       fetchWeightBarcodeless();
+        fetchWeightBarcodeless();
         
-    toggleWeigh();
-    toggleWeighBarcodeless();
+        toggleWeigh();
+        toggleWeighBarcodeless();
 
     });
 

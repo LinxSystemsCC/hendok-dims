@@ -627,7 +627,7 @@
                     });
                 }
                 else{
-                    console.log("as you where young lad");
+                    // console.log("as you where young lad");
                 }
             }
         });

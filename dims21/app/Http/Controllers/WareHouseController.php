@@ -1461,6 +1461,7 @@ class WareHouseController extends Controller
 inner join tblMachines m on m.intAutoMachineID = d.intMachineID
 where intDeptID =" . $deptId);
         return response()->json($machines);
+        #TODO REPLACE THIS MAPPING!!!!!!
     }
 
     public function getMachinesforselecteddept(Request $request)
