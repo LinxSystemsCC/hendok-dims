@@ -377,7 +377,7 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
-                        toAppend += '<option value="'+o.intAutoMachineID+'">'+o.strMachineName+'</option>';
+                        toAppend += '<option value="'+o.intMachineID+'">'+o.strMachineName+'</option>';
                     });
                     $("#machinename").append(toAppend);
                     $("#machinename").select2({
