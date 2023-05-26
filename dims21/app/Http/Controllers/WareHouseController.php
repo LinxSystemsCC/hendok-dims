@@ -1225,12 +1225,12 @@ class WareHouseController extends Controller
         $diametertolerancemin = $request->get("diametertolerancemin");
         $diametertolerancemax = $request->get("diametertolerancemax");
 
-        $diametertolerance = "{$diametertolerancemin} - {$diametertolerancemax}";
+        $diametertolerance = "{$diametertolerancemin}-{$diametertolerancemax}";
 
         $tensilestrenghtmin = $request->get("tensilestrenghtmin");
         $tensilestrenghtmax = $request->get("tensilestrenghtmax");
 
-        $tensilestrenght = "{$tensilestrenghtmin} - {$tensilestrenghtmax}";
+        $tensilestrenght = "{$tensilestrenghtmin}-{$tensilestrenghtmax}";
 
         $stresstest = $request->get("stresstest");
         $elongation = $request->get("elongation");
@@ -1239,7 +1239,7 @@ class WareHouseController extends Controller
         $zinccoatingmin = $request->get("zinccoatingmin");
         $zinccoatingmax = $request->get("zinccoatingmax");
 
-        $zinccoating = "{$zinccoatingmin} - {$zinccoatingmax}";
+        $zinccoating = "{$zinccoatingmin}-{$zinccoatingmax}";
 
         $coatinguniformity = $request->get("coatinguniformity");
         $coatingadhesion = $request->get("coatingadhesion");
