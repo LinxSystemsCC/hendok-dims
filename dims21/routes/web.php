@@ -340,6 +340,11 @@ Route::get('pickingplanlisttest/{ref}',[TabletLoadingApp::class,'pickingplanlist
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
 Route::get('viewpickingtickets',[TabletLoadingApp::class,'viewpickingtickets']);
+Route::post('assignTeamLeaderToPickingTicket',[TabletLoadingApp::class,'assignTeamLeaderToPickingTicket']);
+Route::post('assignHorseToPickingTicket',[TabletLoadingApp::class,'assignHorseToPickingTicket']);
+Route::post('assignTrailorToPickingTicket',[TabletLoadingApp::class,'assignTrailorToPickingTicket']);
+Route::post('assignDriversToPickingTicket',[TabletLoadingApp::class,'assignDriversToPickingTicket']);
+Route::post('assignTicketToPickingTicket',[TabletLoadingApp::class,'assignTicketToPickingTicket']);
 Route::post('sequencepickingplans',[TabletLoadingApp::class,'sequencepickingplans']);
 Route::get('jsongetpickingplan',[TabletLoadingApp::class,'jsongetpickingplan']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);

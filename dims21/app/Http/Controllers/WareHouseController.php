@@ -1408,10 +1408,8 @@ class WareHouseController extends Controller
     }
     public function wmaxlanding()
     {
-        $customers = DB::connection('sqlsrv2')
-            ->select("select * from tblCustomersWmax ");
-        $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments");
+        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax ");
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         return view('warehouse/wmax')->with('customers', $customers)->with('dept', $dept);
     }
 

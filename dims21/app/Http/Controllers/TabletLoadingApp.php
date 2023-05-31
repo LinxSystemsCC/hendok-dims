@@ -367,9 +367,62 @@ class TabletLoadingApp extends controller
             ->with('ref',$ref);
     }
     public function viewpickingtickets(){
-
-        return view('dims/getpickingtickets');
+        $teamleaders = DB::connection('sqlsrv2')->select("Select UserID, UserName from tblDimsusers where strPickingTeams='TeamLeader'");
+        $drivers = DB::connection('sqlsrv2')->select(" select DriverId, DriverName from tblDrivers");
+        $horses = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Horse'");
+        $trailors = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Trailer'");
+        $tickets = DB::connection('weights')->select("SELECT TICKET_NO strTicket FROM WB_Tickets_In_Use");
+        
+        return view('dims/getpickingtickets')->with('teamleaders', $teamleaders)->with('drivers', $drivers)->with('horses', $horses)->with('trailors', $trailors)->with('tickets', $tickets);
     }
+
+    public function assignTeamLeaderToPickingTicket(Request $request){
+        $ID = $request->get('ID');
+        $teamLeader = $request->get('teamLeader');
+        // dd($ID,$teamLeader);
+        $result = DB::connection('sqlsrv3')->select('exec spAssignTeamLeaderToPickingTicket ?,?', array($ID,$teamLeader));
+
+        return response()->json($result);
+    }
+
+    public function assignHorseToPickingTicket(Request $request){
+        $ID = $request->get('ID');
+        $horse = $request->get('horse');
+        // dd($ID,$horse);
+        $result = DB::connection('sqlsrv3')->select('exec spAssignHorseToPickingTicket ?,?,?,?', array($ID, $horse));
+
+        return response()->json($result);
+    }
+
+    public function assignTrailorToPickingTicket(Request $request){
+        $ID = $request->get('ID');
+        $trailorOne = $request->get('trailorOne');
+        $trailorTwo = $request->get('trailorTwo');
+        // dd($ID,$horse,$trailorOne,$trailorTwo);
+        $result = DB::connection('sqlsrv3')->select('exec spAssignTrailorToPickingTicket ?,?,?', array($ID, $trailorOne, $trailorTwo));
+
+        return response()->json($result);
+    }
+
+    public function assignDriversToPickingTicket(Request $request){
+        $ID = $request->get('ID');
+        $driverOne = $request->get('driverOne');
+        $driverTwo = $request->get('driverTwo');
+        // dd($ID, $driverOne, $driverTwo);
+        $result = DB::connection('sqlsrv3')->select('exec spAssignDriversToPickingTicket ?,?,?', array($ID, $driverOne, $driverTwo));
+
+        return response()->json($result);
+    }
+
+    public function assignTicketToPickingTicket(Request $request){
+        $ID = $request->get('ID');
+        $ticket = $request->get('ticket');
+        // dd($ID);
+        $result = DB::connection('sqlsrv3')->select('exec spAssignTicketToPickingTicket ?,?', array($ID, $ticket));
+
+        return response()->json($result);
+    }
+
     public function jsongetpickingplan(Request $request){
         $dateFrom = (new \DateTime($request->get('from')))->format('Y-m-d');
         $dateTo = (new \DateTime($request->get('to')))->format('Y-m-d');
