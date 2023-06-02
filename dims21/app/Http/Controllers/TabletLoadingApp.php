@@ -371,7 +371,7 @@ class TabletLoadingApp extends controller
         $drivers = DB::connection('sqlsrv2')->select(" select DriverId, DriverName from tblDrivers");
         $horses = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Horse'");
         $trailors = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Trailer'");
-        $tickets = DB::connection('weights')->select("SELECT TICKET_NO strTicket FROM WB_Tickets_In_Use");
+        $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL");
         
         return view('dims/getpickingtickets')->with('teamleaders', $teamleaders)->with('drivers', $drivers)->with('horses', $horses)->with('trailors', $trailors)->with('tickets', $tickets);
     }
