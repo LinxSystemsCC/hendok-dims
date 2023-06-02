@@ -281,7 +281,7 @@ if ((Auth::guest()))
                     </ul>
 
                     @if($pickingslips !="0")
-                    <a class="secondmenu" id="2b">Picking Slips<span class="caret pull-down"></span>
+                    <a class="secondmenu" id="2b">Loading<span class="caret pull-down"></span>
                     </a>
                     @endif
                     <ul class="item-show-2b">
@@ -293,19 +293,19 @@ if ((Auth::guest()))
                         </li>
                         <li>
                             @if($pickingtickets !="0")
-                            <a href='{!!url("/viewpickingtickets")!!}'>Picking Tickets</a>
+                            <a href='{!!url("/viewpickingtickets")!!}'>Truck Loading</a>
                             @endif
                         </li>
-                        <li>
+                        {{-- <li>
                             @if($assignweighttickets !="0")
                             <a href='{!!url("/assignweighbridgeticket")!!}'>Assign Weight Tickets</a>
                             @endif
-                        </li>
-                        <li>
+                        </li> --}}
+                        {{-- <li>
                             @if($authorisepicking !="0")
                             <a href='{!!url("/getPickingAuth")!!}'>Authorise Picking</a>
                             @endif
-                        </li>
+                        </li> --}}
                     </ul>
 
                     @if($settlement !="0")
