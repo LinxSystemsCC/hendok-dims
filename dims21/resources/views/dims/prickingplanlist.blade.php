@@ -515,16 +515,17 @@
 
                             console.debug(data);
 
-                            if(data !="Success")
+                            if(data =="Credit Limit")
                             {
+                                alert("CREDIT LIMIT ISSUES");
+
+                            }else{
                                 $('#' + rowId).css('background', '#89CFF0');
                                 $('#rtrr' + rowId).css('background', '#89CFF0');
                                 if(data[0].result =="SUCCESS"){
                                     alert("done");
                                     $this.closest('tr').find('.invnumber').val(data[0].InvNumber);
                                 }
-                            }else{
-                                alert("CREDIT LIMIT ISSUES");
                             }
 
 
