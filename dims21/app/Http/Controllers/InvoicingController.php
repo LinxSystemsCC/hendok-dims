@@ -55,6 +55,9 @@ class InvoicingController extends Controller
         $mustStockAdjust = 0;
 //dd();
         $invnum =$this->returnInvoiceNumber($invoiceid,$ownersId);
+        $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
+        if ($hasLimits == "Success")
+        {
         if(strlen(trim($invnum) ) > 4){
             //dd($userid."-".$invoiceid."-".$SoNumber."".$ownersId."-".$userName) ;
             $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
@@ -158,6 +161,10 @@ class InvoicingController extends Controller
                 echo "<h3 style='color: darkred'>__________Errors_________</h3>";
                 return $err;
             }
+        }
+        }else{
+            return $hasLimits;
+
         }
 
     }
