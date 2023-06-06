@@ -381,6 +381,11 @@
 
     </textarea>
     <button class="btn-lg btn-success" id="saveseq">SAVE</button>
+    <br>
+    <hr>
+    <label>Staging Zone</label>
+    <select id="stagingname"> </select>
+    <hr>
 </div>
 
 </body>
@@ -510,12 +515,18 @@
 
                             console.debug(data);
 
-                            $('#' + rowId).css('background', '#89CFF0');
-                            $('#rtrr' + rowId).css('background', '#89CFF0');
-                            if(data[0].result =="SUCCESS"){
-                                alert("done");
-                                $this.closest('tr').find('.invnumber').val(data[0].InvNumber);
+                            if(data !="Success")
+                            {
+                                $('#' + rowId).css('background', '#89CFF0');
+                                $('#rtrr' + rowId).css('background', '#89CFF0');
+                                if(data[0].result =="SUCCESS"){
+                                    alert("done");
+                                    $this.closest('tr').find('.invnumber').val(data[0].InvNumber);
+                                }
+                            }else{
+                                alert("CREDIT LIMIT ISSUES");
                             }
+
 
                         }
                     });
