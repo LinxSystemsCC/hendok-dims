@@ -157,96 +157,88 @@
             },
             columns: [
                 {
-                    dataField: "intRowKey",
-                    caption: "Key",
-                    visible: false,
-                },{
                     dataField: "RoofingCat",
-                    caption: "Category",
-                }, {
+                    caption: "RoofingCat",
+                },{
                     dataField: "RMCode",
-                    caption: "Raw Material Code",
-                    visible: false,
-                }, {
+                    caption: "RMCode",
+                },{
                     dataField: "RMProduct",
-                    caption: "Raw Material Description",
-                }, {
+                    caption: "RMProduct",
+                },{
                     dataField: "RMStockOnHand",
-                    caption: "Stock On Hand",
-                }, {
+                    caption: "RMStockOnHand",
+                },{
                     dataField: "ProductCode",
-                    caption: "Product Code",
-                    visible: false,
-                }, {
+                    caption: "ProductCode",
+                },{
                     dataField: "Product",
-                    caption: "Product Description",
-                }, {
+                    caption: "Product",
+                },{
                     dataField: "UnitWeight",
-                    caption: "Unit Weight",
-                    visible: false,
-                }, {
+                    caption: "UnitWeight",
+                },{
                     dataField: "AccountNumber",
-                    caption: "Account Number",
-                }, {
+                    caption: "AccountNumber",
+                },{
                     dataField: "CustomerName",
-                    caption: "Customer Name",
-                }, {
+                    caption: "CustomerName",
+                },{
                     dataField: "RepName",
-                    caption: "Rep Name",
-                }, {
+                    caption: "RepName",
+                },{
                     dataField: "CustomerStatus",
-                    caption: "Customer Status",
-                }, {
+                    caption: "CustomerStatus",
+                },{
                     dataField: "OrderNumber",
-                    caption: "Order Number",
-                }, {
+                    caption: "OrderNumber",
+                },{
                     dataField: "idInvoiceLines",
-                    caption: "Invoice Number",
-                }, {
+                    caption: "idInvoiceLines",
+                },{
                     dataField: "Company",
                     caption: "Company",
-                }, {
+                },{
                     dataField: "OrderDate",
-                    caption: "Order Date",
-                }, {
+                    caption: "OrderDate",
+                },{
                     dataField: "DueDate",
-                    caption: "Due Date",
-                }, {
+                    caption: "DueDate",
+                },{
                     dataField: "QtyOrdered",
-                    caption: "Qty Ordered",
-                }, {
+                    caption: "QtyOrdered",
+                },{
                     dataField: "QtyOutstanding",
-                    caption: "Qty Outstanding",
-                }, {
+                    caption: "QtyOutstanding",
+                },{
                     dataField: "TonsOutstanding",
-                    caption: "Tons Outstanding",
-                }, {
+                    caption: "TonsOutstanding",
+                },{
                     dataField: "PricePerTon",
-                    caption: "Price Per Ton",
-                    visible: false,
-                }, {
+                    caption: "PricePerTon",
+                },{
                     dataField: "Area",
                     caption: "Area",
-                }, {
+                },{
                     dataField: "DeliveryInstructions",
-                    caption: "Delivery Instructions",
-                }, {
+                    caption: "DeliveryInstructions",
+                },{
                     dataField: "OrderComplete",
-                    caption: "Order Complete",
-                    visible: false,
-                }, {
+                    caption: "OrderComplete",
+                },{
                     dataField: "DateCompleted",
-                    caption: "Date Completed",
-                    visible: false,
-                }, {
+                    caption: "DateCompleted",
+                },{
                     dataField: "NumberOfItemsCut",
-                    caption: "Number Of Items Cut",
-                    visible: false,
-                }, {
+                    caption: "NumberOfItemsCut",
+                },{
                     dataField: "PartialCut",
-                    caption: "Partial Cut",
-                    visible: false,
+                    caption: "PartialCut",
+                },{
+                    dataField: "catString",
+                    caption: "catString",
                 },
+
 
             ],
             summary: {
