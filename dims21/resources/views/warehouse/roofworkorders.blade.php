@@ -477,7 +477,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                 },
                 success: function (data) {
                     if(data[0].Result == "Success"){
-                        getLin
+                        
                         // location.reload();
                         // localStorage.setItem('BSOP', 'active');
                     }else{
@@ -1089,7 +1089,7 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-}
+    }
 
 function showDialog(tag,width,height){
     $( tag ).dialog({height: height, modal: false,

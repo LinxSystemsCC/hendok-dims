@@ -109,8 +109,6 @@
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
     <!-- DevExtreme theme -->
     {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
@@ -132,6 +130,10 @@
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
 </head>
 
@@ -182,14 +184,28 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="control-label" for="config"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;"> Label Config </label>
+                    <select  class="form-select input-sm col-xs-1" id="config" required>
+                        <option></option>
+                        <option value="Single">Single</option>
+                        <option value="Pallet">Pallet</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="printer"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;"> Printer </label>
+                    <select  class="form-select input-sm col-xs-1" id="printer" required>
+                        <option></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label class="control-label" for="labelname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Label Type </label>
                     <select  class="form-select input-sm col-xs-1" id="labelname" required>
                         <option></option>
-                        @foreach($label as $val)
-                            <option value="{{$val->intLabelTypeID}}">{{$val->strLabelName}} - {{$val->strLabelConfig}} - {{$val->intLabelTypeID}}</option>
-                        @endforeach
                     </select>
-                </div>               
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -230,23 +246,21 @@
     }
 
 </style>
+
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Excel Saver -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+
+<!-- Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-
-<!-- JavaScript Bundle with Popper -->
+<!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
 <!-- DevExtreme library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
-<script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
 <script>
     $.ajaxSetup({
@@ -259,8 +273,20 @@
     });
     $(document).ready(function() {
         $('#productcategory').select2( {
-            theme: 'bootstrap-5'
+            theme: 'bootstrap-5',
+            dropdownParent: $('#labelmapping'),
         });
+
+        $('#printer').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#labelmapping'),
+        });
+
+        $('#labels').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#labelmapping'),
+        });
+
         $('#mapLabelToProdCat').click(function(){
 
             $.ajax({
@@ -432,12 +458,63 @@
                         toAppend += '<option value="'+o.strProductCategory+'">'+o.strProductCategory+'</option>';
                     });
                     $("#productcategory").append(toAppend);
-                    $('#productcategory').select2( {
-                        theme: 'bootstrap-5'
+                    $('#productcategory').select2({
+                        theme: 'bootstrap-5',
+                        dropdownParent: $('#labelmapping'),
                     });
 
                 }
 
+            });
+        });
+
+        $('#config').change(function(){
+            $.ajax({
+                url: '{!!url("/getLabelInformation")!!}',
+                type: "GET",
+                data: {
+                    type: $('#config').val(),
+                    prompt: 'Printers'
+                },
+                success: function (data) {
+                    console.log(data);
+                    var toAppend = '';
+                    $("#printer").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+                        toAppend += '<option value="'+o.strPrinterName+'">'+o.strPrinterName+'</option>';
+                    });
+                    $("#printer").append(toAppend);
+                    $('#printer').select2({
+                        theme: 'bootstrap-5',
+                        dropdownParent: $('#labelmapping'),
+                    });
+                }
+            });
+        });
+
+        $('#printer').change(function(){
+            $.ajax({
+                url: '{!!url("/getLabelInformation")!!}',
+                type: "GET",
+                data: {
+                    type: $('#printer').val(),
+                    prompt: 'Lables'
+                },
+                success: function (data) {
+                    console.log(data);
+                    var toAppend = '';
+                    $("#labelname").empty();
+                    toAppend += '<option></option>';
+                    $.each(data,function(i,o){
+                        toAppend += '<option value="'+o.intLabelTypeID+'">'+o.strLabelName+'</option>';
+                    });
+                    $("#labelname").append(toAppend);
+                    $('#labelname').select2({
+                        theme: 'bootstrap-5',
+                        dropdownParent: $('#labelmapping'),
+                    });
+                }
             });
         });
         

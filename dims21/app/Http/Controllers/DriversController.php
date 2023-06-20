@@ -76,7 +76,7 @@ class DriversController extends Controller
 
 
         $deleteDriver = DB::connection('sqlsrv3')
-            ->statement("EXEC spCRUDDrivers ".$DriverId.",'".$DriverName."','".$GLCode."','Delete',1");
+            ->statement("EXEC spCRUDDrivers ".$DriverId.",'".$DriverName."','".$GLCode."','Delete'");
         return response()->json($deleteDriver);
     }
 
@@ -167,12 +167,10 @@ class DriversController extends Controller
         $Route = "NULL";
         $userAuthID = \Illuminate\Support\Facades\Auth::user()->GroupId;
         $v  =  new \App\Http\Controllers\SalesForm();
-        $readRoutes = DB::connection('sqlsrv3')
-            ->select("EXEC spCRUDRoutes ".$Routeid.",'".$Route."','Select'");
+        $readRoutes = DB::connection('sqlsrv3')->select("EXEC spCRUDRoutes ".$Routeid.",'".$Route."','Select'");
         $things = $v->getThings($userAuthID,'Add Routes');
 
-        return view('dims/routes1')
-            ->with('readRoutesItems',$readRoutes)->with('routesfullaccess',1);
+        return view('dims/routes1')->with('readRoutesItems',$readRoutes)->with('routesfullaccess',1);
     }
 
     public function editRoutesItem(Request $request)

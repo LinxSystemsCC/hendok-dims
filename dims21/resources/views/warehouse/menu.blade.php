@@ -239,6 +239,11 @@ if ((Auth::guest()))
                             <a href='{!!url("/roofworkorders")!!}'>Create Work Orders</a>
                             @endif
                         </li>
+                        <li>
+                            @if($roofcreateworkorder !="0")
+                            <a href='{!!url("/roofingReport")!!}'>Roofing Report</a> <!-- TODO add userpermission for bulk roofing report -->
+                            @endif
+                        </li>
                     </ul>
 
                 </li>
@@ -542,11 +547,11 @@ if ((Auth::guest()))
                             <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Product To Machine</a>
                             @endif 
                         </li>
-                        <li>
+                        {{-- <li>
                             @if($mp2i !="0")
                             <a href='{!!url("/mapitemstopallet")!!}'>Map Pallet To Items</a> 
                             @endif
-                        </li>
+                        </li> --}}
                         <li>
                             {{-- @if($mp2i !="0") --}}
                             <a href='{!!url("/labelmapping")!!}'>Map Label to Product Category</a> <!-- TODO add userpermission for labelmapping -->

@@ -31,6 +31,38 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
+    <style>
+        .dx-datagrid-table{
+            font-size:15px;
+        }
+    
+        .dx-datagrid .dx-link {
+            color: #df2413;
+        }
+    
+        .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+            font-weight: 500;
+            background-color: #df2413;
+            color: #fff;
+        }
+    
+        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+            color: #df2413;
+            font-size: 14px;
+            line-height: 18px;
+        }
+    
+        .dx-datagrid {
+            height: calc(100vh - 63px);
+            max-height: calc(100vh - 63px);
+        }
+    
+        .select2-container{
+            z-index: 5000;
+        }
+    
+    </style>
+
 </head>
 
 <div class="col-lg-12"  style="background: white;">
@@ -40,90 +72,14 @@
         </div>
     </div>
     <div class="col-lg-10" >
-        <div class="col-lg-12 d-inline-flex" >
-            <h3 style="flex-grow: 1; padding-left: 15px;">TRUCKS</h3>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newTruck">
-                New Truck
-            </button>
-
+        <div class="col-lg-12 d-inline-flex">
+            <h3>Daily Roofing Report</h3>
         </div>
         
-        <div id="gridContainer"></div>
+        <div id="gridContainer" style=""></div>
         
     </div>
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="newTruck" tabindex="-1" aria-labelledby="newTruck" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newuserLabel">Create New Truck</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="TruckName" class="col-form-label">Fleet No</label>
-                        <input type="text" class="form-control" id="TruckName">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="TruckReg" class="col-form-label">Truck Reg No.</label>
-                        <input type="text" class="form-control" id="TruckReg">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="TruckCapacity" class="col-form-label">Truck Capacity</label>
-                        <input type="number" class="form-control" id="TruckCapacity">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="TruckType" class="col-form-label">Truck Type</label>
-                        <select class="form-select mx-2" type="text" id='TruckType'>
-                            <option value="1">Articulated Horse</option>
-                            <option value="2">Rigid</option>
-                        </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="TruckModel" class="col-form-label">Truck Model</label>
-                        <input type="text" class="form-control" id="TruckModel">
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="saveTruck" class="btn btn-success" >Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    .dx-datagrid-table{
-        font-size:15px;
-    }
-
-    .dx-datagrid .dx-link {
-        color: #df2413;
-    }
-
-    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
-        font-weight: 500;
-        background-color: #df2413;
-        color: #fff;
-    }
-
-    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
-        color: #df2413;
-        font-size: 14px;
-        line-height: 18px;
-    }
-
-    .dx-datagrid {
-        height: calc(100vh - 63px);
-        max-height: calc(100vh - 63px);
-    }
-</style>
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -150,41 +106,12 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
-        var trucks = ({!! json_encode($readTrucksItems) !!});
-
-        $('#saveTruck').click(function(){
-            $.ajax({
-                url: '{!!url("/addTrucksItem")!!}',
-                type: "POST",
-                data: {
-                    TruckName: $('#TruckName').val(),
-                    RegNo: $('#TruckReg').val(),
-                    Capacity: $('#TruckCapacity').val(),
-                    transportmodeid: $('#TruckType').val(),
-                    model: $('#TruckModel').val(),
-                    statement: 'Insert'
-                },
-                success: function (data)
-                {
-                    location.reload(true);
-                }
-            });
-        });
-
-        var transportType = [
-            {
-                'intType':1,
-                'strType':'Articulated Horse'
-            },{
-                'intType':2,
-                'strType':'Ridgid'
-            }
-        ]
+        var data = {!! json_encode($data) !!};
 
         $("#gridContainer").dxDataGrid({
-            dataSource:trucks, //as json
-            hoverStateEnabled: true,
+            dataSource:data, //as json
             showBorders: true,
+            hoverStateEnabled: true,
             filterRow: { visible: true },
             filterPanel: { visible: true },
             headerFilter: { visible: true },
@@ -198,25 +125,24 @@
             },
             pager: {
                 visible: true,
-                allowedPageSizes: [5, 10, 20, 50, 'all'],
+                allowedPageSizes: [5, 10, 20, 50],
                 showPageSizeSelector: true,
                 showInfo: true,
                 showNavigationButtons: true,
             },
+            editing:{
+                mode: 'form',
+                // allowUpdating: true,
+                // allowAdding: true,
+                // allowDeleting: true,
+                useIcons: true,
+            },
             export: {
-                enabled: true
-            },
-            editing: {
-                mode: 'batch',
-                allowUpdating: true,
-                allowDeleting: true,
-            },
-            selection: {
-                mode: 'single',
+                enabled: true,
             },
             onExporting(e) {
                 const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('Trucks');
+                const worksheet = workbook.addWorksheet('Roofing_Report');
 
                 DevExpress.excelExporter.exportDataGrid({
                     component: e.component,
@@ -224,84 +150,127 @@
                     autoFilterEnabled: true,
                 }).then(() => {
                     workbook.xlsx.writeBuffer().then((buffer) => {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Trucks.xlsx');
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Roofing_Report.xlsx');
                     });
                 });
                 e.cancel = true;
             },
-
             columns: [
                 {
-                    dataField: "TruckId",
-                    caption: "ID",
-                    allowEditing: false,
+                    dataField: "intRowKey",
+                    caption: "Key",
+                    visible: false,
                 },{
-                    dataField: "TruckName",
-                    caption: "Fleet No.",
-                },{
-                    dataField: "RegNo",
-                    caption: "Truck Reg No.",
-                },{
-                    dataField: "Capacity",
-                    caption: "Truck Capacity",
-                },{
-                    dataField: "intType",
-                    caption: "Type ID",
-                    lookup: {
-                        dataSource: transportType,
-                        valueExpr: "intType",
-                        displayExpr: "strType",
-                    },
-                },{
-                    dataField: "Model",
-                    caption: "Model",
-                }
-            ],
-            onRowUpdating: function(e){
-                var TruckId = e.oldData.TruckId;
-                var TruckName = e.newdata.TruckName || e.oldData.TruckName;
-                var RegNo = e.newdata.RegNo || e.oldData.RegNo;
-                var Capacity = e.newdata.Capacity || e.oldData.Capacity;
-                var intType = e.newdata.intType || e.oldData.intType;
-                var Model = e.newdata.Model || e.oldData.Model;
-                
-                $.ajax({
-                    url: '{!!url("/editTrucksItem")!!}',
-                    type: "POST",
-                    data: {
-                        TruckId: TruckId,
-                        TruckName: TruckName,
-						RegNo: RegNo,
-						Capacity: Capacity,
-                        transportmodeid: intType,
-                        model: Model,
-                        statement: 'Update'
-                    },
-                    success: function (data)
-					{
-						location.reload(true);
-                    }
-                });
-            },
-            onRowRemoving: function(e) {
-                // var ID = e.data.DriverId;
-                // var DriverName = e.data.DriverName;
+                    dataField: "RoofingCat",
+                    caption: "Category",
+                }, {
+                    dataField: "RMCode",
+                    caption: "Raw Material Code",
+                    visible: false,
+                }, {
+                    dataField: "RMProduct",
+                    caption: "Raw Material Description",
+                }, {
+                    dataField: "RMStockOnHand",
+                    caption: "Stock On Hand",
+                }, {
+                    dataField: "ProductCode",
+                    caption: "Product Code",
+                    visible: false,
+                }, {
+                    dataField: "Product",
+                    caption: "Product Description",
+                }, {
+                    dataField: "UnitWeight",
+                    caption: "Unit Weight",
+                    visible: false,
+                }, {
+                    dataField: "AccountNumber",
+                    caption: "Account Number",
+                }, {
+                    dataField: "CustomerName",
+                    caption: "Customer Name",
+                }, {
+                    dataField: "RepName",
+                    caption: "Rep Name",
+                }, {
+                    dataField: "CustomerStatus",
+                    caption: "Customer Status",
+                }, {
+                    dataField: "OrderNumber",
+                    caption: "Order Number",
+                }, {
+                    dataField: "idInvoiceLines",
+                    caption: "Invoice Number",
+                }, {
+                    dataField: "Company",
+                    caption: "Company",
+                }, {
+                    dataField: "OrderDate",
+                    caption: "Order Date",
+                }, {
+                    dataField: "DueDate",
+                    caption: "Due Date",
+                }, {
+                    dataField: "QtyOrdered",
+                    caption: "Qty Ordered",
+                }, {
+                    dataField: "QtyOutstanding",
+                    caption: "Qty Outstanding",
+                }, {
+                    dataField: "TonsOutstanding",
+                    caption: "Tons Outstanding",
+                }, {
+                    dataField: "PricePerTon",
+                    caption: "Price Per Ton",
+                    visible: false,
+                }, {
+                    dataField: "Area",
+                    caption: "Area",
+                }, {
+                    dataField: "DeliveryInstructions",
+                    caption: "Delivery Instructions",
+                }, {
+                    dataField: "OrderComplete",
+                    caption: "Order Complete",
+                    visible: false,
+                }, {
+                    dataField: "DateCompleted",
+                    caption: "Date Completed",
+                    visible: false,
+                }, {
+                    dataField: "NumberOfItemsCut",
+                    caption: "Number Of Items Cut",
+                    visible: false,
+                }, {
+                    dataField: "PartialCut",
+                    caption: "Partial Cut",
+                    visible: false,
+                },
 
-                // $.ajax({
-                //     url: '{!!url("/deleteItem")!!}',
-                //     type: "POST",
-                //     data: {
-                //         DriverId: ID,
-                //         statement: 'Delete'
-                //     },
-                //     success: function (data)
-                //     {
-                //         location.reload(true);
-                //     }
-                // });
-            }
+            ],
+            summary: {
+                totalItems: [{
+                    column: "QtyOutstanding",
+                    summaryType: 'sum',
+                    valueFormat: { type: 'fixedPoint', precision: 2 },
+                    displayFormat: '{0}',
+                }, {
+                    column: "TonsOutstanding",
+                    summaryType: 'sum',
+                    valueFormat: { type: 'fixedPoint', precision: 2 },
+                    displayFormat: '{0}',
+                }]
+            },
+
+            onRowClick:function(e){
+
+            },
+            onRowRemoved(e){
+
+            },
         });
-        
+
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
@@ -323,8 +292,7 @@
     });
 
 
-    function showDialog(tag,width,height)
-    {
+    function showDialog(tag,width,height){
         $( tag ).dialog({height: height, modal: false,
             width: width,containment: false}).dialogExtend({
             "closable" : true, // enable/disable close button
@@ -352,4 +320,5 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
+
 </script>

@@ -922,6 +922,7 @@ Route::get('deleteGalvChecker', [WareHouseController::class,'deleteGalvChecker']
 Route::get('changeGalvJobStatus', [WareHouseController::class,'changeGalvJobStatus']);
 Route::get('getGalvWIPConsolidated',[WareHouseController::class,'getGalvWIPConsolidated']);
 Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
+Route::get('roofingReport', [WareHouseController::class,'roofingReport']);
 Route::get('getRoofingSalesOrders', [WareHouseController::class,'getRoofingSalesOrders']);
 Route::post('deleteRoofingBatch', [WareHouseController::class,'deleteRoofingBatch']);
 Route::post('deleteRoofingSO', [WareHouseController::class,'deleteRoofingSO']);
@@ -1047,6 +1048,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getRoofingSOtoUpdate', [WareHouseController::class,'getRoofingSOtoUpdate']);
     Route::get('changeRoofingSOStatus', [WareHouseController::class,'changeRoofingSOStatus']);
     Route::get('changeRoofingInvoiceStatus', [WareHouseController::class,'changeRoofingInvoiceStatus']);
+    Route::post('sendProductionCommunication', [WareHouseController::class,'sendProductionCommunication']);
     Route::get('getsalesorders', [WareHouseController::class,'getsalesorders']);
     Route::get('getroofingheaders', [WareHouseController::class,'getroofingheaders']);
     Route::get('getroofinglines', [WareHouseController::class,'getroofinglines']);
@@ -1085,6 +1087,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('areapage', [WareHouseController::class,'areapage']);
     Route::get('labelspage', [WareHouseController::class,'labelspage']);
     Route::get('labelmapping', [WareHouseController::class,'labelmapping']);
+    Route::get('getLabelInformation', [WareHouseController::class,'getLabelInformation']);
     Route::get('genericproductlabels', [WareHouseController::class,'genericproductlabels']);
     Route::get('warehousepalletlabels', [WareHouseController::class,'warehousepalletlabels']);
     Route::get('getProductInfo', [WareHouseController::class,'getProductInfo']);

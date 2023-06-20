@@ -1,183 +1,148 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
-@section('content')
-	<head>
-		<style>
-			h2{color:red;}
-			h3 {color:blue;}
-			h4 {color:orange;}
-			td{color:orange;}
-			tbody{background-color:black;}
+    <!-- DevExtreme theme -->
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
-			input[type=text], select {
-				width: 100%;
-				padding: 12px 20px;
-				margin: 8px 0;
-				display: inline-block;
-				border: 1px solid #ccc;
-				border-radius: 2px;
-				box-sizing: border-box;
-				cursor: text;
-			}
+</head>
 
-			div.scrollable
-			{
-				width:100%;
-				height: 100%;
-				margin: 0;
-				padding: 0;
-				overflow-y: scroll
-			}
+<div class="col-lg-12"  style="background: white;">
+    <div class="col-lg-2"  style="background: white;">
+        <div class="vertical-menu">
+            @include('warehouse.menu')
+        </div>
+    </div>
+    <div class="col-lg-10" >
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">DRIVERS</h3>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newDriver">
+                New Driver
+            </button>
 
+        </div>
+        
+        <div id="gridContainer"></div>
+        
+    </div>
+</div>
 
-
-		</style>
-	</head>
-
-
-	<div class="container" style="width: 100%;">
-		<div class="form-group row add">
-            <a href='{!!url("/driverspdfdocs")!!}' onclick="window.open(this.href, 'managementSearch',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;display: none">Invoices</a>
-            <a href='{!!url("/driversperformancereport")!!}' onclick="window.open(this.href, 'driversperformance',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;display: none">Drivers Performance</a>
-
-            <a href='{!!url("/noOfStops")!!}' onclick="window.open(this.href, 'noofdel',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;display: none">NO.Delveries</a>
-            <a href='{!!url("/liveFleetDeliveries")!!}' onclick="window.open(this.href, 'fleet',
-'left=20,top=20,width=1500,height=1250,toolbar=1,resizable=0'); return false;"  style="background: red; color: #f9f1f1;padding: 2px;font-weight: 900;display: none">Live Fleet</a>
-			<div class="col-lg-12" >
-
-				<div class="col-lg-4">
-
-					<form>
-						<fieldset class="well">
-							<legend class="well-legend">Add Screen</legend>
-							<div class="form-group ">
-								<label class="control-label" for=  "DriverName" style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Driver Name</h4></label>
-								<input type="text" class="form-control input-sm col-s-2" id="DriverName" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Name You Want To Add" required>
-							</div>
-							<div class="form-group ">
-								<label class="control-label" for="glCode"  style="margin-bottom: 2px;font-weight: 700;font-size: 11px;"><h4>Driver Code</h4></label>
-                                <input type="text" class="form-control input-sm col-s-2" id="glCode" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="" required>
-
-							<!--<input type="text" class="form-control input-sm col-s-2" id="GLCode" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a GLCode" required>-->
-							</div>
-							<button class=" btn btn-success fa fa-plus-circle" type="submit" id="add" >ADD</button>
-
-						</fieldset>
-					</form>
-
-				</div>
-				<div class="col-lg-8">
-					<div class="col-lg-12  visible-md visible-lg" >
-						<div id="Drivers" title="Drivers List">
-							<div class="col-lg-12">
-								<form>
-									<div class="table-responsive scrollable text-center">
-										<table class="table table-borderless" id="tableDriver">
-											<thead>
-											<tr>
-												<th class="text-center " ><h3>Driver ID</h3></th>
-												<th class="text-center "><h3>Driver Name</h3></th>
-												<th class="text-center "><h3>Codes</h3></th>
-
-											</tr>
-											</thead>
-											<tbody>
-											@foreach($readItems as $values)
-												<tr class="item{{$values->DriverId}}">
-													<td class="text-center" >{{$values->DriverId}}</td>
-													<td class="text-center" >{{$values->DriverName}}</td>
-													<td class="text-center" >{{$values->GLCode}}</td>
-												</tr>
-											@endforeach
-											</tbody>
-
-										</table>
-									</div>
-
-
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div id="editDriver" title="Please Edit Driver Information">
-			<form>
-				<fieldset class="well">
-					<legend class="well-legend">Edit Screen</legend>
-					<div><h2 id="updatemessage">  </h2>
-					</div>
-					<div class="form-group ">
-						<label class="control-label" for="DriverNameEdit"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Driver Name</label>
-						<input type="text" class="form-control input-sm col-xs-1" id="DriverNameEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Name You want to add" required>
-						<input type="hidden" class="form-control input-sm col-xs-1" id="DriverIdEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;" placeholder="Enter a Name You want to add" required>
-					</div>
-					<div class="form-group ">
-						<label class="control-label" for="GLCodeEdit"  style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">Driver Code</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="GLCodeEdit" style="font-size: 12px;font-family: sans-serif;font-weight: 900;"required>
-
+<!-- Modal -->
+<div class="modal fade" id="newDriver" tabindex="-1" aria-labelledby="newDriver" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newuserLabel">Create New Driver</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="DriverName" class="col-form-label">Driver Name</label>
+                        <input type="text" class="form-control" id="DriverName">
                     </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="Driver Code" class="col-form-label">Driver Code</label>
+                        <input type="text" class="form-control" id="DriverCode">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="saveDriver" class="btn btn-success" >Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<style>
+    .dx-datagrid-table{
+        font-size:15px;
+    }
 
-				</fieldset>
-			</form>
-			<div class="col-lg-4">
-				<button class="btn btn-primary " type="submit" id="edit">UPDATE</button>
-			</div>
-			<div class="col-lg-4">
-				<button class=" btn btn-danger "  type="submit" id="delete">DELETE</button>
-			</div>
+    .dx-datagrid .dx-link {
+        color: #df2413;
+    }
 
+    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+        font-weight: 500;
+        background-color: #df2413;
+        color: #fff;
+    }
 
+    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+        color: #df2413;
+        font-size: 14px;
+        line-height: 18px;
+    }
 
-		</div>
+    .dx-datagrid {
+        height: calc(100vh - 63px);
+        max-height: calc(100vh - 63px);
+    }
+</style>
 
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<!-- Excel Saver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
 
-	</div>
+<!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
-@endsection
-<script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
 
 <script>
-    $(document).ready(function(){
-        $('#QuoteDetails').hide();
-        $('#extraInfo').hide();
-        $('#salesQEmail').hide();
-        $('#orderListing').hide();
-        $('#pricing').hide();
-        $('#callList').hide();
-        $('#copyOrdersBtn').hide();
-        $('#tabletLoadingApp').hide();
-        $('#pricingOnCustomer').hide();
-        $('#salesOnOrder').hide();
-        $('#posCashUp').hide();
-        $('#dropdown').hide();
-        $('#editDriver').hide();
-        $('#salesInvoiced').hide();
-        $('#returns').hide();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $( document ).on( 'focus', ':input', function(){
+        $( this ).attr( 'autocomplete', 'off' );
+    });
+    $(document).ready(function() {
+        var drivers = ({!! json_encode($readItems) !!});
 
-        $("#add").click(function()
-        {
-
+        $('#saveDriver').click(function(){
             $.ajax({
                 url: '{!!url("/addItem")!!}',
                 type: "POST",
                 data: {
-                    DriverId: $('#DriverId').val(),
                     DriverName: $('#DriverName').val(),
-                    GLCode: $('#glCode').val(),
+                    GLCode: $('#DriverCode').val(),
                     statement: 'Insert'
                 },
                 success: function (data)
@@ -186,79 +151,132 @@
                 }
             });
 
-
         });
 
-        $('#tableDriver tbody').on('dblclick', 'tr', function() {
-            // $(this).closest("tr").hide();
-            $('#editDriver').show();
-            var $this = $(this);
-            var row = $this.closest("tr");
-            var driverId = row.find('td:eq(0)').text();
-            var driverName = row.find('td:eq(1)').text();
-            var glCode = row.find('td:eq(2)').text();
-            showDialog('#editDriver',600,600);
-            $('#updatemessage').empty();
-            $('#DriverNameEdit').val(driverName);
-            $('#GLCodeEdit').val(glCode);
-            $('#DriverIdEdit').val(driverId);
-            $('#updatemessage').append("You are now editing the information of " + driverName+"!");
+        $("#gridContainer").dxDataGrid({
 
-        });
+            dataSource:drivers, //as json
+            hoverStateEnabled: true,
+            showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            scrolling: {
+                rowRenderingMode: 'infinite',
+            },
+            paging:{
+                pageSize: 10,
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [5, 10, 20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            export: {
+                enabled: true
+            },
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+                allowDeleting: true,
+            },
+            selection: {
+                mode: 'single',
+            },
+            onExporting(e) {
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Drivers');
 
-        $('#tableDriver tbody').on('click', 'button', function (e) {
-            $('#deleteDriver').show();
-            var $this = $(this);
-            var row = $this.closest("button");
-            showDialog('#deleteDriver',600,600);
+                DevExpress.excelExporter.exportDataGrid({
+                    component: e.component,
+                    worksheet,
+                    autoFilterEnabled: true,
+                }).then(() => {
+                    workbook.xlsx.writeBuffer().then((buffer) => {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Drivers.xlsx');
+                    });
+                });
+                e.cancel = true;
+            },
 
-        });
-
-
-        $("#edit").click(function()
-        {
-
-            $.ajax({
-                url: '{!!url("/editItem")!!}',
-                type: "POST",
-                data: {
-                    DriverId: $('#DriverIdEdit').val(),
-                    DriverName: $('#DriverNameEdit').val(),
-                    GLCode: $('#GLCodeEdit').val(),
-                    statement: 'Update'
-                },
-                success: function (data)
+            columns: [
                 {
-                    location.reload(true);
-
+                    dataField: "DriverId",
+                    caption: "ID",
+                    allowEditing: false,
+                },{
+                    dataField: "DriverName",
+                    caption: "Name",
+                },{
+                    dataField: "GLCode",
+                    caption: "Code",
                 }
+            ],
+            onRowUpdating: function(e){
+                // console.debug(e);
+                var ID = e.oldData.DriverId;
+                var DriverName = e.newData.DriverName || e.oldData.DriverName;
+                var GLCode = e.newData.GLCode || e.oldData.GLCode;
+                
+                $.ajax({
+                    url: '{!!url("/editItem")!!}',
+                    type: "POST",
+                    data: {
+                        DriverId: ID,
+                        DriverName: DriverName,
+                        GLCode: GLCode,
+                        statement: 'Update'
+                    },
+                    success: function (data)
+                    {
+                        location.reload(true);
+                    }
+                });
+            },
+            onRowRemoving: function(e) {
+                var ID = e.data.DriverId;
+                var DriverName = e.data.DriverName;
 
-            });
-
-
+                $.ajax({
+                    url: '{!!url("/deleteItem")!!}',
+                    type: "POST",
+                    data: {
+                        DriverId: ID,
+                        statement: 'Delete'
+                    },
+                    success: function (data)
+                    {
+                        location.reload(true);
+                    }
+                });
+            }
+        });
+        
+        $('.sidebar ul li a').on(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
         });
 
-        $("#delete").click(function()
-        {
-
-            $.ajax({
-                url: '{!!url("/deleteItem")!!}',
-                type: "POST",
-                data: {
-                    DriverId: $('#DriverIdEdit').val(),
-                    statement: 'Delete'
-                },
-                success: function (data)
-                {
-                    location.reload(true);
-                }
-
-            });
-
-
+        $('.sidebar ul li a').click(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+        
+        $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
         });
 
     });
+
+
     function showDialog(tag,width,height)
     {
         $( tag ).dialog({height: height, modal: false,
@@ -288,6 +306,4 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
-
-
 </script>

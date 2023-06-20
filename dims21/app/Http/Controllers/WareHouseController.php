@@ -193,6 +193,15 @@ class WareHouseController extends Controller
         return view('warehouse/labelmapping')->with('dept', $dept)->with('label', $label);
     }
 
+    public function getLabelInformation(Request $request)
+    {
+        $type = $request->get('type');
+        $prompt = $request->get('prompt');
+
+        $data = DB::connection('sqlsrv2')->select("exec spGetLabelInformation ?,?", array($type, $prompt));
+        return response()->json($data);
+    }
+
     public function genericproductlabels()
     {
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
@@ -1881,6 +1890,13 @@ class WareHouseController extends Controller
         return response()->json($getdata);
     }
 
+
+    public function roofingReport(Request $request)
+    {
+        $data = DB::connection('sqlsrv2')->select('SELECT * FROM viewRoofingReport');
+        return view('warehouse/roofingReport')->with('data', $data);
+    }
+
     public function getWIPjobstarted(Request $request)
     {
 
@@ -2097,6 +2113,18 @@ class WareHouseController extends Controller
         $status = $request->get("status");
 
         $data = DB::connection('sqlsrv3')->select('exec spUpdateRoofingInvoiceStatus ?,?,?,?,?',array($reference, $machine, $SONumber, $InvNumber, $status));
+        return response()->json($data);
+    }
+
+    public function sendProductionCommunication(Request $request){
+        $sendTo = $request->get("sendTo");
+        $subject = $request->get("subject");
+        $body = $request->get("body");
+        $type = $request->get("type");
+
+        // dd($sendTo, $subject, $body, $type);
+
+        $data = DB::connection('sqlsrv3')->select('exec spInsertProductionCommunication ?,?,?,?',array($sendTo, $subject, $body, $type));
         return response()->json($data);
     }
 
