@@ -87,6 +87,9 @@
 <!-- Excel Saver -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
 
+<!-- File Saver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+
 <!-- Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
@@ -125,7 +128,7 @@
             },
             pager: {
                 visible: true,
-                allowedPageSizes: [5, 10, 20, 50],
+                allowedPageSizes: [5, 10, 20, 50, 'all'],
                 showPageSizeSelector: true,
                 showInfo: true,
                 showNavigationButtons: true,
@@ -141,8 +144,9 @@
                 enabled: true,
             },
             onExporting(e) {
+                var currentDate = new Date();
                 const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('Roofing_Report');
+                const worksheet = workbook.addWorksheet('Roofing Report');
 
                 DevExpress.excelExporter.exportDataGrid({
                     component: e.component,
@@ -150,7 +154,7 @@
                     autoFilterEnabled: true,
                 }).then(() => {
                     workbook.xlsx.writeBuffer().then((buffer) => {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Roofing_Report.xlsx');
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Roofing Report - '+currentDate+'.xlsx');
                     });
                 });
                 e.cancel = true;
