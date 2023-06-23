@@ -227,6 +227,9 @@
                     dataField: "DeliveryInstructions",
                     caption: "DeliveryInstructions",
                 },{
+                    dataField: "Status",
+                    caption: "Status",
+                },{
                     dataField: "OrderComplete",
                     caption: "OrderComplete",
                 },{
@@ -239,8 +242,11 @@
                     dataField: "PartialCut",
                     caption: "PartialCut",
                 },{
-                    dataField: "catString",
-                    caption: "catString",
+                    dataField: "LineID",
+                    caption: "LineID",
+                },{
+                    dataField: "CatString",
+                    caption: "CatString",
                 },
 
 
