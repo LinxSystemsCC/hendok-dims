@@ -249,6 +249,11 @@
                             caption: "Status",
                             //width: 600,
                         },{
+                            dataField: "productionstat",
+                            caption: "Completed",
+                            //width: 600,
+                        },
+                        {
                             dataField: "intRoofSOID",
                             caption: 'ID', 
                             // visible: false,
@@ -331,52 +336,69 @@
         });
 
         $('#savestatus').click(function(){
-            if (jobGrid) {
-                var selectedRows = jobGrid.getSelectedRowsData();
-                if (selectedRows.length > 0) {
-                    selectedRows.forEach(function(row) {
-                        var strSONum = row.strSONum;
-                        var intOrderLineId = row.intOrderLineId;
-                        // console.log("SO Number: " + strSONum + ", Order Line ID: " + intOrderLineId);
-                            $.ajax({
-                                url: '{!!url("/changeRoofingInvoiceStatus")!!}',
-                                type: "GET",
-                                data: {
-                                    reference: '{!! $reference !!}',
-                                    machine: '{!! $machine !!}',
-                                    SONumber: strSONum,
-                                    InvNumber: intOrderLineId,
-                                    status:$('#setstatus').val(),
-                                },
-                                success: function (data) {
-                                    if(data[0].Result =="SUCCESS"){
-                                        location.reload();
-                                    }else{
-                                        alert(data[0].Result);
-                                        location.reload();
-                                    }
-                                }
-                            });
-                    });
-                } else {
+            var lines = ''; // Initialize lines variable
+            var selectedRows = jobGrid.getSelectedRowsData();
+
+            if (selectedRows.length > 0) {
+                selectedRows.forEach(function(row) {
+                    var strSONum = row.strSONum;
+                    var intOrderLineId = row.intOrderLineId;
+                    // console.log("SO Number: " + strSONum + ", Order Line ID: " + intOrderLineId);
                     $.ajax({
-                        url: '{!!url("/changeRoofingSOStatus")!!}',
+                        url: '{!!url("/changeRoofingInvoiceStatus")!!}',
                         type: "GET",
                         data: {
                             reference: '{!! $reference !!}',
                             machine: '{!! $machine !!}',
+                            SONumber: strSONum,
+                            InvNumber: intOrderLineId,
                             status:$('#setstatus').val(),
                         },
                         success: function (data) {
-                            if(data[0].Result =="SUCCESS"){
-                                location.reload();
-                            }else{
-                                alert(data[0].Result);
-                                location.reload();
-                            }
-                        }
+                            location.reload();
+                        },
                     });
-                }
+                });
+            } 
+            else {
+                var status = $('#setstatus').val();
+                $.ajax({
+                    url: '{!!url("/changeRoofingSOStatus")!!}',
+                    type: "GET",
+                    data: {
+                        reference: '{!! $reference !!}',
+                        machine: '{!! $machine !!}',
+                        status: status,
+                    },
+                    success: function (data) {
+                        // console.log(data[0].OrderLineIDs);
+                        lines = data[0].OrderLineIDs;
+
+                        console.log(lines);
+                        
+                        var body = 'The following Roofing Plan has been updated:\n\nReference: {!! $reference !!}\nStatus:'+status+' \nMachine: {!! $machine !!} \nInvoice Lines: '+ lines;
+
+                        $.ajax({
+                            url: '{!!url("/sendProductionCommunication")!!}',
+                            type: "POST",
+                            data: {
+                                sendTo: 'kyle@lsystems.co.za',
+                                subject: 'Roofing Plan Update',
+                                body: body,
+                                type: 'Email'
+                            },
+                            success: function (data) {
+                                // console.log(data);
+                                if(data[0].Result =="SUCCESS"){
+                                    location.reload();
+                                }else{
+                                    alert(data[0].Result);
+                                    location.reload();
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
 

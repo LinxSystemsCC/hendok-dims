@@ -104,7 +104,7 @@
                     </button>
                     
                     <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'">
-                        {{$val->PastelDescription}} {{$val->productionstat}}
+                        {{$val->PastelDescription}} {{$val->packToCut}} | {{$val->productionstat}}
                     </button>
                 </div>
             @else
@@ -114,7 +114,7 @@
                     </button>
                     
                     <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intRoofSOID}}/Roofing'" disabled>
-                        {{$val->PastelDescription}} {{$val->productionstat}}
+                        {{$val->PastelDescription}} {{$val->packToCut}} | {{$val->productionstat}}
                     </button>
                 </div>
             @endif
