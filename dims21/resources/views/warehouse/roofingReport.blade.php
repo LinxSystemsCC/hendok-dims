@@ -230,6 +230,9 @@
                     dataField: "Status",
                     caption: "Status",
                 },{
+                    dataField: "strReference",
+                    caption: "Reference",
+                },{
                     dataField: "OrderComplete",
                     caption: "OrderComplete",
                 },{
