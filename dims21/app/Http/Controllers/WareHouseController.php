@@ -741,7 +741,8 @@ class WareHouseController extends Controller
 
     public function wmaxweigh()
     {
-        return view('warehouse/wmaxweigh');
+        $scales = DB::connection('sqlsrv2')->select("exec spGetScalesByDeptName 'Galv Line 1 and 2'");
+        return view('warehouse/wmaxweigh')->with('scales', $scales);
     }
 
     public function wmaxscrap()
@@ -1418,7 +1419,7 @@ class WareHouseController extends Controller
     public function wmaxlanding()
     {
         $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax ");
-        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments Where strDeptName Like '%Galv%'"); //TODO This could be refactored to work with Modules
         return view('warehouse/wmax')->with('customers', $customers)->with('dept', $dept);
     }
 

@@ -364,6 +364,23 @@
             $(this).val(parseFloat($(this).val()).toFixed(2));
         });
 
+        $('#wiresize').on('input', function() {
+            // console.log($('#wiresize').val());
+            var inputValue = $(this).val();
+            
+            if (inputValue.length > 4) {
+                $(this).val(inputValue.slice(0, 4)); // Truncate the input to four characters
+            }
+        });
+
+        $('#mpa').on('input', function() {
+            var inputValue = $(this).val();
+            
+            if (inputValue.length > 4) {
+                $(this).val(inputValue.slice(0, 4)); // Truncate the input to four characters
+            }
+        });
+
         $("#createjob").on("hidden.bs.modal", function () {
             $("#createjob input, #createjob select").val("");
         });
@@ -651,7 +668,7 @@
             var zincStripSize = $("#stripsize").val();
 
             var formula = ((zincInitialMass-zincStripMass)/zincStripMass)*(1960*zincStripSize);
-            formula = parseFloat(formula).toFixed(2);
+            formula = parseFloat(formula).toFixed(4);
             
             $('#zinc').val(formula);
 

@@ -368,8 +368,21 @@
                         <div class="col-md-3 mb-1">
                             <label class="control-label" for="mass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Mass</label>
                         </div>
-                        <div class="col-md-9 mb-1">
-                            <input type="number" class="form-control input-sm col-xs-1" id="mass" required>
+                        <div class="d-inline-flex col-md-9 mb-1">
+                            <div class="col-md-6 mb-1">
+                                <select  class="form-select" id="scales" required>
+                                    <option></option>
+                                    @foreach ($scales as $scale)
+                                        <option value="{{ $scale->intAutoId }}">{{ $scale->strName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <button class="btn btn-primary mx-1" id="update">UPDATE</button>
+                            </div>
+                            <div class="col-md-4 mb-1">
+                                <input type="number" class="form-control input-sm col-xs-1" id="mass" required>
+                            </div>
                         </div>
 
                         <div class="col-md-3 mb-1">
@@ -771,6 +784,8 @@
         });
 
         doacheck();
+        fetchWeight();
+        toggleWeigh();
 
 
 });
@@ -838,4 +853,23 @@
             }
         });
     };
+
+    function toggleWeigh(){
+        setInterval(fetchWeight,10000);
+    };
+
+    function fetchWeight(){
+    
+    // console.debug("weigh");
+    $.ajax({
+        url: '{!!url("/listenToScale")!!}',
+        type: "GET",
+        data: {
+            scaleID: $('#scales option:selected').val(),
+        },
+        success: function (data) {
+            $('#final').val(data);
+        }
+    });
+};
 </script>

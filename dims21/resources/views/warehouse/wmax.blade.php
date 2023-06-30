@@ -367,9 +367,7 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
                 url: '{!!url("/wmaxdepartmentmachinesgalv")!!}',
                 type: "GET",
                 data: {
-                    deptId: $('#department').val(),
-
-
+                    deptId: $('#department').val(), 
                 },
                 success: function (data) {
                     var toAppend = '';
