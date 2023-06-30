@@ -868,7 +868,7 @@
             scaleID: $('#scales option:selected').val(),
         },
         success: function (data) {
-            $('#final').val(data);
+            $('#mass').val(data);
         }
     });
 };
