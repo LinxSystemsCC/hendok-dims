@@ -923,6 +923,7 @@ Route::get('changeGalvJobStatus', [WareHouseController::class,'changeGalvJobStat
 Route::get('getGalvWIPConsolidated',[WareHouseController::class,'getGalvWIPConsolidated']);
 Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
 Route::get('roofingReport', [WareHouseController::class,'roofingReport']);
+Route::get('galvReport', [WareHouseController::class,'galvReport']);
 Route::get('getRoofingSalesOrders', [WareHouseController::class,'getRoofingSalesOrders']);
 Route::post('deleteRoofingBatch', [WareHouseController::class,'deleteRoofingBatch']);
 Route::post('deleteRoofingSO', [WareHouseController::class,'deleteRoofingSO']);

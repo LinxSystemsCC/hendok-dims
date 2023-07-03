@@ -1028,7 +1028,6 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
             data: {
             },
             success: function (data) {
-
                 $("#sequencegrid").dxDataGrid({
                     dataSource:data, //as json
                     showBorders: true,

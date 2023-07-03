@@ -342,12 +342,11 @@ class WareHouseController extends Controller
     {
         $ticketno = $request->get("ticketno");
         $qty = $request->get("qty");
-        $type = 29;
         $status = $request->get('status');
 
         //dd($ticketno,$qty,$type);
 
-        $returndata = DB::connection('sqlsrv2')->statement('exec spInsertFinalGalvLabelJobToPrint ?,?,?,?', array($ticketno, $qty, $type, $status));
+        $returndata = DB::connection('sqlsrv2')->statement('exec spInsertFinalGalvLabelJobToPrint ?,?,?', array($ticketno, $qty, $status));
 
         return response()->json($returndata);
     }
@@ -366,7 +365,6 @@ class WareHouseController extends Controller
     }
     public function deleteuserleader(Request $request)
     {
-
         $userid = $request->get('userid');
         DB::Connection('sqlsrv2')->statement("update tbldimsusers set strpickingteams='' where UserID =" . $userid . "");
     }
@@ -1896,6 +1894,11 @@ class WareHouseController extends Controller
     {
         $data = DB::connection('sqlsrv2')->select('SELECT * FROM viewRoofingReport');
         return view('warehouse/roofingReport')->with('data', $data);
+    }
+    public function galvReport(Request $request)
+    {
+        $data = DB::connection('sqlsrv2')->select('SELECT * FROM viewGalvReport');
+        return view('warehouse/galvReport')->with('data', $data);
     }
 
     public function getWIPjobstarted(Request $request)
