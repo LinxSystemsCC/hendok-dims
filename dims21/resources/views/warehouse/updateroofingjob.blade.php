@@ -297,11 +297,13 @@
                         },{
                             dataField: "intQty",
                             caption: "Qty Planned",
-                            //width: 600,
+                            dataType: 'number',
+                            format: {type: "fixedPoint", precision: 2}
                         },{
                             dataField: "fltWeight",
                             caption: "Weight Planned",
-                            //width: 600,
+                            dataType: 'number',
+                            format: {type: "fixedPoint", precision: 2}
                         },{
                             dataField: "dtmCreated",
                             caption: "Created",
@@ -374,7 +376,7 @@
                         // console.log(data[0].OrderLineIDs);
                         lines = data[0].OrderLineIDs;
 
-                        console.log(lines);
+                        // console.log(lines);
                         
                         var body = 'The following Roofing Plan has been updated:\n\nReference: {!! $reference !!}\nStatus:'+status+' \nMachine: {!! $machine !!} \nInvoice Lines: '+ lines;
 

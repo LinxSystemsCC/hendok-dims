@@ -73,7 +73,7 @@
     </div>
     <div class="col-lg-10" >
         <div class="col-lg-12 d-inline-flex">
-            <h3>Galv Report</h3>
+            <h3>Galv Products</h3>
         </div>
         
         <div id="gridContainer" style=""></div>
@@ -110,6 +110,7 @@
     });
     $(document).ready(function() {
         var data = {!! json_encode($data) !!};
+        console.log(data);
 
         $("#gridContainer").dxDataGrid({
             dataSource:data, //as json
@@ -134,8 +135,8 @@
                 showNavigationButtons: true,
             },
             editing:{
-                mode: 'form',
-                // allowUpdating: true,
+                mode: 'popup',
+                allowUpdating: true,
                 // allowAdding: true,
                 // allowDeleting: true,
                 useIcons: true,
@@ -146,7 +147,7 @@
             onExporting(e) {
                 var currentDate = new Date();
                 const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('Galv Report');
+                const worksheet = workbook.addWorksheet('Galv Products');
 
                 DevExpress.excelExporter.exportDataGrid({
                     component: e.component,
@@ -154,135 +155,196 @@
                     autoFilterEnabled: true,
                 }).then(() => {
                     workbook.xlsx.writeBuffer().then((buffer) => {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Galv Report - '+currentDate+'.xlsx');
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Galv Products - '+currentDate+'.xlsx');
                     });
                 });
                 e.cancel = true;
             },
             columns: [
-                {
-                    dataField : 'dtmSaved',
-                    caption : 'Time',
+                { 
+                    type: "buttons" 
                 },
                 {
-                    dataField : 'strShift',
-                    caption : 'Shift',
+                    dataField: 'ProductID',
+                    caption: 'ID',
+                    allowEditing: false,
+                    dataType: 'number'
                 },
                 {
-                    dataField : 'strDepartment',
-                    caption : 'Department',
+                    dataField: 'ProductName',
+                    caption: 'Name',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strMachine',
-                    caption : 'Machine',
+                    dataField: 'WireSize',
+                    caption: 'Wire Size',
+                    dataType: 'number',
+                    format: {type: "fixedPoint", precision: 2}
                 },
                 {
-                    dataField : 'intJobNo',
-                    caption : 'Job No.',
+                    dataField: 'SizeTolerance',
+                    caption: 'Size Tolerance',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intSeqNo',
-                    caption : 'Seq No.',
+                    dataField: 'Type',
+                    caption: 'Type',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intTestNo',
-                    caption : 'Test No.',
+                    dataField: 'MPATolerance',
+                    caption: 'MPA Tolerance',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strCustomer',
-                    caption : 'Customer',
+                    dataField: 'ZincSpec',
+                    caption: 'Zinc spec',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strProductName',
-                    caption : 'Product',
+                    dataField: 'Gas',
+                    caption: 'Gas',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strQCPhase',
-                    caption : 'Phase',
+                    dataField: 'LedDip',
+                    caption: 'Led Dip',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strWireTol',
-                    caption : 'Wire Tol',
+                    dataField: 'DV',
+                    caption: 'DV',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intWireTest',
-                    caption : 'Wire Tested',
+                    dataField: 'RodSize',
+                    caption: 'Rod Size',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strZincSpec',
-                    caption : 'Zinc Spec',
+                    dataField: 'RodType',
+                    caption: 'Rod Type',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intZincTest',
-                    caption : 'Zinc Tested',
+                    dataField: 'SECode',
+                    caption: 'SE Code',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strMPASpec',
-                    caption : 'MPA Spec',
+                    dataField: 'CustomerName',
+                    caption: 'Customer',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intMPATest',
-                    caption : 'MPA Tested',
+                    dataField: 'WDBlackTol',
+                    caption: 'WD Black Tolerance',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intElongTest',
-                    caption : 'Elongation Tested',
+                    dataField: 'GalvRPM',
+                    caption: 'Galv RPM',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intTorsionTest',
-                    caption : 'Torsion Tested',
+                    dataField: 'QCStrict',
+                    caption: 'QC Strict',
+                    dataType: 'boolean',
                 },
                 {
-                    dataField : 'intStressTest',
-                    caption : 'Stress Tested',
+                    dataField: 'strProductApplication',
+                    caption: 'Product Application',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intWrapTest',
-                    caption : 'Dia Wrap Tested',
+                    dataField: 'strRodTreatment',
+                    caption: 'Rod Treatment',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'intWeight',
-                    caption : 'Weight',
+                    dataField: 'intStressTest',
+                    caption: 'Stress Test Spec',
+                    dataType: 'number'
                 },
                 {
-                    dataField : 'strCastNo',
-                    caption : 'CasNo',
+                    dataField: 'intElongation',
+                    caption: 'Elongation Spec',
+                    dataType: 'number'
                 },
                 {
-                    dataField : 'strTicket',
-                    caption : 'Ticket',
+                    dataField: 'strLeadBathDip',
+                    caption: 'Lead Bath Dip',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strOldTicket',
-                    caption : 'Old Ticket',
+                    dataField: 'strZincCoatingMinMax',
+                    caption: 'Zinc Coating Tolerance',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strPassFail',
-                    caption : 'Status',
+                    dataField: 'strCoatingUniformity',
+                    caption: 'Coating Uniformity',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strComment1',
-                    caption : 'Comment 1',
+                    dataField: 'strCoatingAdhesion',
+                    caption: 'Coating Adhesion',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strComment2',
-                    caption : 'Comment 2',
+                    dataField: 'strLabelling',
+                    caption: 'Labelling',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strComment3',
-                    caption : 'Comment 3',
+                    dataField: 'intMaxWelds',
+                    caption: 'Max Welds',
+                    dataType: 'number'
                 },
                 {
-                    dataField : 'strRegrade',
-                    caption : 'Regraded',
+                    dataField: 'strPackagingRequirements',
+                    caption: 'Packaging Requirements',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strStockChange',
-                    caption : 'Stock Changed',
+                    dataField: 'strSpecialInstructions',
+                    caption: 'Special Instructions',
+                    dataType: 'string'
                 },
                 {
-                    dataField : 'strOperator',
-                    caption : 'Operator',
+                    dataField: 'boolStrictDiameterTolerance',
+                    caption: 'Strict Diameter Tolerance',
+                    dataType: 'boolean'
+                },
+                {
+                    dataField: 'boolStrictTensileStrength',
+                    caption: 'Strict Tensile Strength',
+                    dataType: 'boolean'
+                },
+                {
+                    dataField: 'boolStrictStressTest',
+                    caption: 'Strict Stress Test',
+                    dataType: 'boolean'
+                },
+                {
+                    dataField: 'boolStrictElongation',
+                    caption: 'Strict Elongation Test',
+                    dataType: 'boolean'
+                },
+                {
+                    dataField: 'boolStrictZincCoatingMinMax',
+                    caption: 'Strict Zinc Coating',
+                    dataType: 'boolean'
+                },
+                {
+                    dataField: 'intNitroDieSize',
+                    caption: 'Strict Nitro Die Size',
+                    dataType: 'number'
+                },
+                {
+                    dataField: 'boolStrictMaxWelds',
+                    caption: 'Strict Max Welds',
+                    dataType: 'boolean'
                 },
             ],
 
@@ -291,6 +353,92 @@
             },
             onRowRemoved(e){
 
+            },
+            onRowUpdated(e){
+                // console.log(e);
+                var ProductID = e.data.ProductID
+                var ProductName = e.data.ProductName
+                var WireSize = e.data.WireSize
+                var SizeTolerance = e.data.SizeTolerance
+                var Type = e.data.Type
+                var MPATolerance = e.data.MPATolerance
+                var ZincSpec = e.data.ZincSpec
+                var Gas = e.data.Gas
+                var LedDip = e.data.LedDip
+                var DV = e.data.DV
+                var RodSize = e.data.RodSize
+                var RodType = e.data.RodType
+                var SECode = e.data.SECode
+                var CustomerName = e.data.CustomerName
+                var WDBlackTol = e.data.WDBlackTol
+                var GalvRPM = e.data.GalvRPM
+                var QCStrict = e.data.QCStrict
+                var strProductApplication = e.data.strProductApplication
+                var strRodTreatment = e.data.strRodTreatment
+                var intStressTest = e.data.intStressTest
+                var intElongation = e.data.intElongation
+                var strLeadBathDip = e.data.strLeadBathDip
+                var strZincCoatingMinMax = e.data.strZincCoatingMinMax
+                var strCoatingUniformity = e.data.strCoatingUniformity
+                var strCoatingAdhesion = e.data.strCoatingAdhesion
+                var strLabelling = e.data.strLabelling
+                var intMaxWelds = e.data.intMaxWelds
+                var strPackagingRequirements = e.data.strPackagingRequirements
+                var strSpecialInstructions = e.data.strSpecialInstructions
+                var boolStrictDiameterTolerance = e.data.boolStrictDiameterTolerance
+                var boolStrictTensileStrength = e.data.boolStrictTensileStrength
+                var boolStrictStressTest = e.data.boolStrictStressTest
+                var boolStrictElongation = e.data.boolStrictElongation
+                var boolStrictZincCoatingMinMax = e.data.boolStrictZincCoatingMinMax
+                var intNitroDieSize = e.data.intNitroDieSize
+                var boolStrictMaxWelds = e.data.boolStrictMaxWelds
+
+                $.ajax({
+                    url: '{!!url("/updateGalvProduct")!!}',
+                    type: "POST",
+                    data: {
+                        ProductID : ProductID,
+                        ProductName : ProductName,
+                        WireSize : WireSize,
+                        SizeTolerance : SizeTolerance,
+                        Type : Type,
+                        MPATolerance : MPATolerance,
+                        ZincSpec : ZincSpec,
+                        Gas : Gas,
+                        LedDip : LedDip,
+                        DV : DV,
+                        RodSize : RodSize,
+                        RodType : RodType,
+                        SECode : SECode,
+                        CustomerName : CustomerName,
+                        WDBlackTol : WDBlackTol,
+                        GalvRPM : GalvRPM,
+                        QCStrict : QCStrict,
+                        strProductApplication : strProductApplication,
+                        strRodTreatment : strRodTreatment,
+                        intStressTest : intStressTest,
+                        intElongation : intElongation,
+                        strLeadBathDip : strLeadBathDip,
+                        strZincCoatingMinMax : strZincCoatingMinMax,
+                        strCoatingUniformity : strCoatingUniformity,
+                        strCoatingAdhesion : strCoatingAdhesion,
+                        strLabelling : strLabelling,
+                        intMaxWelds : intMaxWelds,
+                        strPackagingRequirements : strPackagingRequirements,
+                        strSpecialInstructions : strSpecialInstructions,
+                        boolStrictDiameterTolerance : boolStrictDiameterTolerance,
+                        boolStrictTensileStrength : boolStrictTensileStrength,
+                        boolStrictStressTest : boolStrictStressTest,
+                        boolStrictElongation : boolStrictElongation,
+                        boolStrictZincCoatingMinMax : boolStrictZincCoatingMinMax,
+                        intNitroDieSize : intNitroDieSize,
+                        boolStrictMaxWelds : boolStrictMaxWelds,
+                    },
+                    success: function (data) {
+                        location.reload();
+                    }
+
+                    });
             },
         });
 

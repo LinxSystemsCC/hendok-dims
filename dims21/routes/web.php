@@ -924,6 +924,8 @@ Route::get('getGalvWIPConsolidated',[WareHouseController::class,'getGalvWIPConso
 Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
 Route::get('roofingReport', [WareHouseController::class,'roofingReport']);
 Route::get('galvReport', [WareHouseController::class,'galvReport']);
+Route::get('galvProducts', [WareHouseController::class,'galvProducts']);
+Route::post('updateGalvProduct', [WareHouseController::class,'updateGalvProduct']);
 Route::get('getRoofingSalesOrders', [WareHouseController::class,'getRoofingSalesOrders']);
 Route::post('deleteRoofingBatch', [WareHouseController::class,'deleteRoofingBatch']);
 Route::post('deleteRoofingSO', [WareHouseController::class,'deleteRoofingSO']);

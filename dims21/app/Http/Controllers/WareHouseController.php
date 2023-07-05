@@ -1901,6 +1901,55 @@ class WareHouseController extends Controller
         return view('warehouse/galvReport')->with('data', $data);
     }
 
+    public function galvProducts(Request $request)
+    {
+        $data = DB::connection('sqlsrv2')->select('SELECT * FROM tblProductsWmax');
+        return view('warehouse/galvProducts')->with('data', $data);
+    }
+
+    public function updateGalvProduct(Request $request)
+    {
+        $ProductID = $request->get('ProductID');
+        $ProductName = $request->get('ProductName');
+        $WireSize = $request->get('WireSize');
+        $SizeTolerance = $request->get('SizeTolerance');
+        $Type = $request->get('Type');
+        $MPATolerance = $request->get('MPATolerance');
+        $ZincSpec = $request->get('ZincSpec');
+        $Gas = $request->get('Gas');
+        $LedDip = $request->get('LedDip');
+        $DV = $request->get('DV');
+        $RodSize = $request->get('RodSize');
+        $RodType = $request->get('RodType');
+        $SECode = $request->get('SECode');
+        $CustomerName = $request->get('CustomerName');
+        $WDBlackTol = $request->get('WDBlackTol');
+        $GalvRPM = $request->get('GalvRPM');
+        $QCStrict = $request->get('QCStrict');
+        $strProductApplication = $request->get('strProductApplication');
+        $strRodTreatment = $request->get('strRodTreatment');
+        $intStressTest = $request->get('intStressTest');
+        $intElongation = $request->get('intElongation');
+        $strLeadBathDip = $request->get('strLeadBathDip');
+        $strZincCoatingMinMax = $request->get('strZincCoatingMinMax');
+        $strCoatingUniformity = $request->get('strCoatingUniformity');
+        $strCoatingAdhesion = $request->get('strCoatingAdhesion');
+        $strLabelling = $request->get('strLabelling');
+        $intMaxWelds = $request->get('intMaxWelds');
+        $strPackagingRequirements = $request->get('strPackagingRequirements');
+        $strSpecialInstructions = $request->get('strSpecialInstructions');
+        $boolStrictDiameterTolerance = $request->get('boolStrictDiameterTolerance');
+        $boolStrictTensileStrength = $request->get('boolStrictTensileStrength');
+        $boolStrictStressTest = $request->get('boolStrictStressTest');
+        $boolStrictElongation = $request->get('boolStrictElongation');
+        $boolStrictZincCoatingMinMax = $request->get('boolStrictZincCoatingMinMax');
+        $intNitroDieSize = $request->get('intNitroDieSize');
+        $boolStrictMaxWelds = $request->get('boolStrictMaxWelds');
+
+        $response = DB::connection('sqlsrv2')->select("EXEC spUpdateGalvProduct '$ProductID', '$ProductName', '$WireSize', '$SizeTolerance', '$Type', '$MPATolerance', '$ZincSpec', '$Gas', '$LedDip', '$DV', '$RodSize', '$RodType', '$SECode', '$CustomerName', '$WDBlackTol', '$GalvRPM', '$QCStrict', '$strProductApplication', '$strRodTreatment', '$intStressTest', '$intElongation', '$strLeadBathDip', '$strZincCoatingMinMax', '$strCoatingUniformity', '$strCoatingAdhesion', '$strLabelling', '$intMaxWelds', '$strPackagingRequirements', '$strSpecialInstructions', '$boolStrictDiameterTolerance', '$boolStrictTensileStrength', '$boolStrictStressTest', '$boolStrictElongation', '$boolStrictZincCoatingMinMax', '$intNitroDieSize', '$boolStrictMaxWelds'");
+        return response()->json($response);
+    }
+
     public function getWIPjobstarted(Request $request)
     {
 
