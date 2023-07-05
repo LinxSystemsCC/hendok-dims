@@ -885,6 +885,7 @@ Route::post('updateDeptName', [WareHouseController::class,'updateDeptName']);
 Route::post('deleteDept', [WareHouseController::class,'deleteDept']);
 Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
 Route::post('deleteCustomerName', [WareHouseController::class,'deleteCustomerName']);
+Route::post('updateGalvCustomer', [WareHouseController::class,'updateGalvCustomer']);
 Route::post('deletesalesorders', [WareHouseController::class,'deletesalesorders']);
 Route::post('deleteScale', [WareHouseController::class,'deleteScale']);
 Route::post('updateMachineName', [WareHouseController::class,'updateMachineName']);

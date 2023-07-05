@@ -256,7 +256,6 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
         /* Additional styles */
     }
 
-
     /* .dx-datagrid {
         height: calc(50vh - 40px);
         max-height: calc(50vh - 40px);
@@ -370,6 +369,11 @@ $nwo = $v->getThingsUserPermissions(Auth::user()->UserID,'New Work Order');
                     deptId: $('#department').val(), 
                 },
                 success: function (data) {
+                    console.log(data);
+                    var data = data.filter(function (item) {
+                        return item.strMachineName.includes("Take-Up");
+                    });
+
                     var toAppend = '';
                     $("#machinename").empty();
                     toAppend += '<option></option>';

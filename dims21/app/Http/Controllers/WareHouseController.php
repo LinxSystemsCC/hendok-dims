@@ -1417,7 +1417,7 @@ class WareHouseController extends Controller
     public function wmaxlanding()
     {
         $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax ");
-        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments Where strDeptName Like '%Galv%'"); //TODO This could be refactored to work with Modules
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments Where strDeptName in ('Galv Line 1','Galv Line 2')"); //TODO This could be refactored to work with Modules
         return view('warehouse/wmax')->with('customers', $customers)->with('dept', $dept);
     }
 
@@ -2794,10 +2794,11 @@ class WareHouseController extends Controller
     public function savescustomername(Request $request)
     {
         $customername = $request->get("customername");
+        $customertype = $request->get("customertype");
         //dd($customername);
 
-        $returnmach = DB::connection('sqlsrv2')->select('exec spSaveCustomer ?', array($customername));
-        return response()->json($returnmach);
+        $data = DB::connection('sqlsrv2')->select('exec spSaveGalvCustomer ?,?', array($customername, $customertype));
+        return response()->json($data);
     }
 
     public function savesscale(Request $request)
@@ -2936,12 +2937,19 @@ class WareHouseController extends Controller
 
     public function deleteCustomerName(Request $request)
     {
-        //$theCustomername = $request->get("theCustomername");
         $CustomerID = $request->get("CustomerID");
-        //dd($theCustomername);
-        //dd($CustomerID);
-        $returnmach = DB::connection('sqlsrv2')->select('exec spDeleteCustomer ?', array($CustomerID));
+        $returnmach = DB::connection('sqlsrv2')->select('exec spDeleteGalvCustomer ?', array($CustomerID));
         return response()->json($returnmach);
+    }
+
+    public function updateGalvCustomer(Request $request)
+    {
+        $CustomerID = $request->get("CustomerID");
+        $CustomerName = $request->get("CustomerName");
+        $CustomerType = $request->get("Type");
+
+        $data = DB::connection('sqlsrv2')->select('exec spUpdateGalvCustomer ?,?,?', array($CustomerID, $CustomerName, $CustomerType));
+        return response()->json($data);
     }
 
     public function deleteScale(Request $request)

@@ -2,83 +2,134 @@
 <html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
-    <!-- DevExtreme library -->
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- DevExtreme theme -->
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+
+    <style>
+        .dx-datagrid-table{
+            font-size:15px;
+        }
+    
+        .dx-datagrid .dx-link {
+            color: #df2413;
+        }
+    
+        .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+            font-weight: 500;
+            background-color: #df2413;
+            color: #fff;
+        }
+    
+        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+            color: #df2413;
+            font-size: 14px;
+            line-height: 18px;
+        }
+    
+        .dx-datagrid {
+            height: calc(100vh - 63px);
+            max-height: calc(100vh - 63px);
+        }
+    
+        .select2-container{
+            z-index: 5000;
+        }
+    
+    </style>
 
 </head>
 
-
-<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2" style="background: white;">
-
+<div class="col-lg-12"  style="background: white;">
+    <div class="col-lg-2"  style="background: white;">
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
-    
-    
     <div class="col-lg-10" >
-        <h3 style="flex-grow: 1;">Create Galv Plant Customers</h3>
-        <div>
-            <div class="col-lg-12" >
-                <div class="col-lg-4"  style="background: white;">
-                    <fieldset class="well">
-                        <form>
-                            <h4>Create Customer</h4>
-                            <div class="form-group">
-                                <label class="control-label" for="customername"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer Name </label>
-                                <input  type="text" class="form-control input-sm col-xs-1" id="customername" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                            </div>
-                            <br>
-                            <button type="button" id="savescustomername" class="btn-lg btn-success" >Save</button>
-                            <br>
-    
-    
-                        </form>
-                    </fieldset>
-                </div>
-                <div class="col-lg-8"  style="background: white;">
-                    <h4>Existing Customers</h4>
-    
-    
-                    <div class="col-lg-12" id="afterFilter">
-                        <div id="gridContainer">
-                        </div>
-    
-    
-                    </div>
-                </div>
-            </div>
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">Galv Customers</h3>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newcustomer">
+                New Customer
+            </button>
         </div>
+        
+        <div id="gridContainer" style="min-width: 100%;"></div>
         
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="newcustomer" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newuserLabel">Create New Customer</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="customername"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">customer Name</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="customername">
+                    <label class="control-label" for="customertype"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">customer Type</label>
+                    <select  class="form-select input-sm col-xs-1" id="customertype" required>
+                        <option value=""></option>
+                        <option value="Customer">Customer</option>
+                        <option value="Hendok">Hendok</option>
+                    </select>
+                </div>                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="savescustomername" class="btn btn-success" >Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<style>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    .dx-datagrid-table{
-        font-size:15px;
-    }
-</style>
+<!-- Excel Saver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+
+<!-- File Saver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+
+<!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
 
 <script>
     $.ajaxSetup({
@@ -99,7 +150,8 @@
                 url: '{!!url("/savescustomername")!!}',
                 type: "POST",
                 data: {
-                    customername: $('#customername').val()
+                    customername: $('#customername').val(),
+                    customertype: $('#customertype').val()
 
                 },
                 success: function (data) {
@@ -121,21 +173,40 @@
             success: function (data) {
 
                 $("#gridContainer").dxDataGrid({
-
                     dataSource:data, //as json
-
                     showBorders: true,
+                    hoverStateEnabled: true,
                     filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    scrolling: {
+                        rowRenderingMode: 'infinite',
+                    },
                     paging:{
-                        pageSize: 15,
+                        pageSize: 10,
+                    },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [5, 10, 20, 50, 'all'],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true,
+                    },
+                    editing:{
+                        mode: 'form',
+                        allowUpdating: true,
+                        // allowAdding: true,
+                        allowDeleting: true,
+                        useIcons: true,
                     },
                     export: {
-                        enabled: true
+                        enabled: true,
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('GalvCustomers');
+                        const worksheet = workbook.addWorksheet('Galv Customers');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -143,7 +214,7 @@
                             autoFilterEnabled: true,
                         }).then(() => {
                             workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'GalvCustomers.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Galv Customers.xlsx');
                             });
                         });
                         e.cancel = true;
@@ -153,48 +224,65 @@
                         {
                             dataField: "CustomerID",
                             caption: "ID",
-                            width: 50,
-
-                        }, {
+                        },{
                             dataField: "CustomerName",
                             caption: "Customer Name",
-                            width: 300,
-
-                        }
-                        ,
+                        },{
+                            dataField: "Type",
+                            caption: "Type",
+                            lookup: {
+                                dataSource: [
+                                    {
+                                        value: "Customer",
+                                        text: "Customer"
+                                    },
+                                    {
+                                        value: "Hendok",
+                                        text: "Hendok"
+                                    }
+                                ],
+                                valueExpr: "value",
+                                displayExpr: "text"
+                            }
+                        },
                     ],
-                    onRowDblClick:function(e){
+                    onRowRemoved(e){
+                        var CustomerID =  e.data.CustomerID;
 
-                        // console.debug(e.row,cells[e.columnIndex]);
-                        console.log(e.data.intAutoID);
+                        $.ajax({
+
+                            url: '{!!url("/deleteCustomerName")!!}',
+                            type: "POST",
+                            data: {
+                                CustomerID:CustomerID
+                            },
+                            success: function (data) {
+                                location.reload();
+                            },
+
+                        });
+                    },
+                    onRowUpdated(e){
                         var CustomerID =  e.data.CustomerID;
                         var CustomerName =  e.data.CustomerName;
+                        var Type =  e.data.Type;
 
-                                //data[0].sendto
-                                var dialog = $('<p><label>You Are About to Delete Customer: '+CustomerName+'</label><br><br>Are You Sure You Would Like To Proceed</p>').dialog({
-                                    height: 300, width: 700,modal: true,containment: false,
-                                    buttons: {
-                                        "Delete": function () {
+                        $.ajax({
 
-                                            $.ajax({
+                            url: '{!!url("/updateGalvCustomer")!!}',
+                            type: "POST",
+                            data: {
+                                CustomerID:CustomerID,
+                                CustomerName:CustomerName,
+                                Type:Type,
+                            },
+                            success: function (data) {
+                                location.reload();
+                            },
 
-                                                url: '{!!url("/deleteCustomerName")!!}',
-                                                type: "POST",
-                                                data: {
-                                                    theCustomername: CustomerName,
-                                                    CustomerID:CustomerID
-                                                },
-                                                success: function (data) {
-                                                    location.reload();
-                                                },
-
-                                            });
-
-                                        }
-                                    }
-                                });
-
-
+                        });
+                    },
+                    onRowDblClick:function(e){
 
                     },
                     onRowClick:function(e){

@@ -1,4 +1,6 @@
 <?php
+
+use Illuminate\Support\Facades\Auth;
 if ((Auth::guest()))
 {
 
@@ -225,6 +227,12 @@ if ((Auth::guest()))
                             @if($retest !="0")
                             <a href='{!!url("/wmaxretest")!!}'>Retest</a>
                             @endif
+                        </li>
+
+                        <li>
+                            {{-- @if($retest !="0") --}}
+                            <a href='{!!url("/galvReport")!!}'>QC Report</a> <!-- TODO Add user Permission for report -->
+                            {{-- @endif --}}
                         </li>
 
                     </ul>
@@ -562,6 +570,13 @@ if ((Auth::guest()))
                             <a href='{!!url("/galvcustomer")!!}'>Galv Customers</a> 
                             @endif
                         </li>
+
+                        <li>
+                            {{-- @if($galvcustomers !="0") --}}
+                            <a href='{!!url("/galvProducts")!!}'>Galv Products</a> <!-- TODO add userpermission for products -->
+                            {{-- @endif --}}
+                        </li>
+
                         <li>
                             @if($galvscales !="0")
                             <a href='{!!url("/galvscale")!!}'>Scales</a> 

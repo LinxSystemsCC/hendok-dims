@@ -171,6 +171,11 @@
                     dataType: 'number'
                 },
                 {
+                    dataField: 'CustomerName',
+                    caption: 'Customer',
+                    dataType: 'string'
+                },
+                {
                     dataField: 'ProductName',
                     caption: 'Name',
                     dataType: 'string'
@@ -229,11 +234,6 @@
                 {
                     dataField: 'SECode',
                     caption: 'SE Code',
-                    dataType: 'string'
-                },
-                {
-                    dataField: 'CustomerName',
-                    caption: 'Customer',
                     dataType: 'string'
                 },
                 {

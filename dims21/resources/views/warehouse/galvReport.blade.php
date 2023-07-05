@@ -207,6 +207,8 @@
                 {
                     dataField : 'intWireTest',
                     caption : 'Wire Tested',
+                    dataType: 'number',
+                    format: {type: "fixedPoint", precision: 2}
                 },
                 {
                     dataField : 'strZincSpec',
