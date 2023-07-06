@@ -17,6 +17,7 @@ use App\Http\Controllers\WareHouseController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PDFController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1177,3 +1178,7 @@ Route::get('/xero/getItems', [\App\Http\Controllers\XeroController::class, 'getI
 
 Route::get('getOrderTypes',[ApisContoller::class,'getOrderTypes'] );
 Route::get('getRoutes',[ApisContoller::class,'getRoutes'] );
+
+//PDFS
+Route::get('displayPDFLabel',[PDFController::class,'displayPDFLabel'] );
+Route::get('printPDFLabel',[PDFController::class,'printPDFLabel'] );
