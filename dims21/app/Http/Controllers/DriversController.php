@@ -183,6 +183,15 @@ class DriversController extends Controller
         return response()->json($updateRoutes);
 
     }
+    public function deleteMappedRouteToArea(Request $request)
+    {
+        $Routeid = $request->get('Routeid');
+
+        $updateRoutes = DB::connection('sqlsrv3')
+            ->statement("EXEC spDeleteRouteToAreaMapping $Routeid");
+        return response()->json($updateRoutes);
+
+    }
 
     public function deleteRoutesItem(Request $request)
     {

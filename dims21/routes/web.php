@@ -627,6 +627,7 @@ Route::post('/deleteTrucksItem',[DriversController::class,'deleteTrucksItem']);
 Route::get('routes1',[DriversController::class,'readRoutesItems']);
 Route::post('/addRoutesItem', [DriversController::class,'addRoutesItem']);
 Route::post('/editRoutesItem',[DriversController::class,'editRoutesItem']);
+Route::post('/deleteMappedRouteToArea',[DriversController::class,'deleteMappedRouteToArea']);
 Route::post('/deleteRoutesItem',[DriversController::class,'deleteRoutesItem']);
 Route::get('glcodes', [DriversController::class,'readGLCode']);
 Route::get('driversperformancereport', [DriversController::class,'driversperformancereport']);
@@ -1180,5 +1181,5 @@ Route::get('getOrderTypes',[ApisContoller::class,'getOrderTypes'] );
 Route::get('getRoutes',[ApisContoller::class,'getRoutes'] );
 
 //PDFS
-Route::get('displayPDFLabel',[PDFController::class,'displayPDFLabel'] );
-Route::get('printPDFLabel',[PDFController::class,'printPDFLabel'] );
+Route::get('displayPDFLabel/id',[PDFController::class,'displayPDFLabel'] );
+Route::get('printPDFLabel/id',[PDFController::class,'printPDFLabel'] );

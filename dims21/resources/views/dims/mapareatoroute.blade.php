@@ -41,6 +41,9 @@
     </div>
     <div class="col-lg-10" >
         <div class="col-lg-12 d-inline-flex" >
+            <button type="button" class="btn btn-success" onclick="location.href='{!!url("/routes1")!!}'">
+                Back
+            </button>
             <h3 style="flex-grow: 1; padding-left: 15px;">MAP ROUTE TO AREA</h3>
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newMapping">
@@ -124,6 +127,9 @@
 <!-- Excel Saver -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
 
+<!-- File Saver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+
 <!-- Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
@@ -199,7 +205,7 @@
                     editing: {
                         mode: 'batch',
                         // allowUpdating: true,
-                        // allowDeleting: true,
+                        allowDeleting: true,
                     },
                     selection: {
                         mode: 'single',
@@ -222,6 +228,9 @@
 
                     columns: [
                         {
+                            dataField: "intAutoAreaMappingId",
+                            caption: "ID",
+                        },{
                             dataField: "strRouteDescription",
                             caption: "Area Name",
                         },{
@@ -250,20 +259,18 @@
                         // });
                     },
                     onRowRemoving: function(e) {
-                        // var Routeid = e.data.Routeid;
-                        // $.ajax({
-                        //     url: '{!!url("/deleteRoutesItem")!!}',
-                        //     type: "POST",
-                        //     data: {
-                        //         Routeid: Routeid,
-                        //         statement: 'Delete'
-                        //     },
-                        //     success: function (data)
-                        // 	{
-                        // 		location.reload(true);
-                        //     }
-
-                        // });
+                        var Routeid = e.data.intAutoAreaMappingId;
+                        $.ajax({
+                            url: '{!!url("/deleteMappedRouteToArea")!!}',
+                            type: "POST",
+                            data: {
+                                Routeid: Routeid,
+                            },
+                            success: function (data)
+                        	{
+                        		location.reload(true);
+                            }
+                        });
                     }
                 });
             }
