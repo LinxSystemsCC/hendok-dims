@@ -56,40 +56,40 @@
             <table>
                 <tr>
                     <td><p>CUSTOMER:</p></td>
-                    <td><p>BAILEY PEGS</p></td>
+                    <td><p>{{ $job[0]->Customer }}</p></td>
                 </tr>
                 <tr>
                     <td><p>PRODUCT:</p></td>
-                    <td><p>1.40 -  LG</p></td>
+                    <td><p>{{ $job[0]->ProductName }}</p></td>
                 </tr>
                 <tr>
                     <td><p>MPA:</p></td>
-                    <td><p>100</p></td>
+                    <td><p>{{ $job[0]->TreatedMPA }}</p></td>
                 </tr>
                 <tr>
                     <td><p>CODE:</p></td>
-                    <td><p>GWJV150800100LG</p></td>
+                    <td><p>{{ $job[0]->SECode }}</p></td>
                 </tr>
                 <tr>
                     <td><p>MASS:</p></td>
-                    <td><p>500</p></td>
+                    <td><p>{{ $job[0]->Weight }}</p></td>
                 </tr>
                 <tr>
                     <td><p>OPERATOR:</p></td>
-                    <td><p> KYLE WESTRAN</p></td>
+                    <td><p>{{ $job[0]->Operator }}</p></td>
                 </tr>
                 <tr>
                     <td><p>DATE:</p></td>
-                    <td><p>03/07/2023 11:02:25</p></td>
+                    <td><p>{{ $job[0]->DateTime }}</p></td>
                 </tr>
                 <tr>
                     <td><p>TICKET:</p></td>
-                    <td><p>0000068</p></td>
+                    <td><p>{{ $job[0]->TicketNo }}</p></td>
                 </tr>
             </table>
         </div>
         <div class="right-panel">
-            <p style="font-size: 2mm !important; margin-top: 1mm; margin-bottom:1mm; text-align: center;">HOLD</p>
+            <p style="font-size: 1.5mm !important; margin-top: 1mm; margin-bottom:1mm; text-align: center;">{{ $job[0]->strStatus }}</p>
             <div>
                 <img src="{{asset('images/hdkLogo.png')}}" alt="" style="margin-bottom: 1mm; width: 60%; margin-left: 1.8mm;"/>
                 <img src="data:image/png;base64,{{ base64_encode($qrCode) }}" alt="QR Code" style=" margin-left: 1.4mm;">

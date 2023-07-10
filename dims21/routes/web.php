@@ -1181,5 +1181,5 @@ Route::get('getOrderTypes',[ApisContoller::class,'getOrderTypes'] );
 Route::get('getRoutes',[ApisContoller::class,'getRoutes'] );
 
 //PDFS
-Route::get('displayPDFLabel/id',[PDFController::class,'displayPDFLabel'] );
-Route::get('printPDFLabel/id',[PDFController::class,'printPDFLabel'] );
+Route::get('displayPDFLabel/{id}',[PDFController::class,'displayPDFLabel'] );
+Route::get('printGalvLabel/{id}',[PDFController::class,'printGalvLabel'] );
