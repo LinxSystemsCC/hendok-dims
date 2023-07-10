@@ -255,23 +255,24 @@
         $("#tare").change(function() {
             //console.debug($('#tare').val());
             finalweight = ($("#mass").val()-$('#tare').val());
+            
             $('#final').val(finalweight);
         });
         
-        $("#mass").change(function() {
-            finalweight = ($("#mass").val()-$('#tare').val());
-            $('#final').val(finalweight);
-        });
+        // $("#mass").change(function() {
+        //     finalweight = ($("#mass").val()-$('#tare').val());
+        //     $('#final').val(finalweight);
+        // });
 
         $("#scales").change(function() {
-            console.log($("#scales").val() );
+            // console.log($("#scales").val() );
             if ($("#scales").val() == ''){
                 $('#update').prop('disabled', false);
             }else{
                 $('#update').prop('disabled', true);
                 $('#mass').prop('disabled', true);
             }
-            
+            fetchWeight();
         });
 
         $("#update").click(function(){
@@ -687,6 +688,8 @@
         success: function (data) {
             if (data){
                 $('#mass').val(data);
+                finalweight = ($("#mass").val()-$('#tare').val());
+                $('#final').val(finalweight);
             }else{
                 $('#mass').val(0);
             }
