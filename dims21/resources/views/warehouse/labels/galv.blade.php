@@ -89,7 +89,7 @@
             </table>
         </div>
         <div class="right-panel">
-            <p style="font-size: 1.5mm !important; margin-top: 1mm; margin-bottom:1mm; text-align: center;">{{ $job[0]->strStatus }}</p>
+            <p style="font-size: 1.5mm !important; margin-top: 1mm; margin-bottom:1mm; text-align: center;">{{ $job[0]->strStatus }} &nbsp;</p>
             <div>
                 <img src="{{asset('images/hdkLogo.png')}}" alt="" style="margin-bottom: 1mm; width: 60%; margin-left: 1.8mm;"/>
                 <img src="data:image/png;base64,{{ base64_encode($qrCode) }}" alt="QR Code" style=" margin-left: 1.4mm;">
