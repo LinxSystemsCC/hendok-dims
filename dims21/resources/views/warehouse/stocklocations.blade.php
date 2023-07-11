@@ -178,6 +178,10 @@
                             format: "#0",
 
                         }, {
+                            dataField: "mnyWeight",
+                            caption: "Weight",
+
+                        },{
                             dataField: "MinLevel",
                             caption: "Min Level",
 
