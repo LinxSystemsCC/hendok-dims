@@ -519,7 +519,7 @@
                         var ticket =  data[0].TicketNo;
 
                         // window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket +'/Accept', "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
-                        window.open('{!!url("/printGalvLabel")!!}/'+ticket)
+                        window.open('{!!url("/printGalvLabel")!!}/'+ticket,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
 
                         location.reload();
                     }
