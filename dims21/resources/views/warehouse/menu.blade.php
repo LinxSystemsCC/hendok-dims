@@ -252,6 +252,11 @@ if ((Auth::guest()))
                             <a href='{!!url("/roofingReport")!!}'>Roofing Report</a> <!-- TODO add userpermission for bulk roofing report -->
                             @endif
                         </li>
+                        <li>
+                            @if($roofcreateworkorder !="0")
+                            <a href='{!!url("/roofingreprint")!!}'>Reprint Label</a> <!-- TODO add userpermission for roofing reprint -->
+                            @endif
+                        </li>
                     </ul>
 
                 </li>
