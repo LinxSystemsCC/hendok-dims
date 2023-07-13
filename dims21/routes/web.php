@@ -953,6 +953,7 @@ Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovement
 Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
 Route::get('wmaxlanding', [WareHouseController::class,'wmaxlanding']);
 Route::get('wmaxreprint', [WareHouseController::class,'wmaxreprint']);
+Route::get('roofingreprint', [WareHouseController::class,'roofingreprint']);
 Route::get('wmaxgetcustomerproduct', [WareHouseController::class,'wmaxgetcustomerproduct']);
 Route::get('wmaxgetproductinfo', [WareHouseController::class,'wmaxgetproductinfo']);
 Route::get('wmaxgetproductwiresize', [WareHouseController::class,'wmaxgetproductwiresize']);
@@ -1183,3 +1184,4 @@ Route::get('getRoutes',[ApisContoller::class,'getRoutes'] );
 //PDFS
 Route::get('displayPDFLabel/{id}',[PDFController::class,'displayPDFLabel'] );
 Route::get('printGalvLabel/{id}',[PDFController::class,'printGalvLabel'] );
+Route::get('printRoofingLabel/{id}',[PDFController::class,'printRoofingLabel'] );

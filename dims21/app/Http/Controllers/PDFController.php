@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class PDFController extends Controller
 {
-    // Print a pdf of truck control sheet
     public function printGalvLabel($ticketno)
     {
         $job = DB::connection('sqlsrv2')->select('exec spGetGalvLabelToPrint ?', array($ticketno));
@@ -23,6 +22,21 @@ class PDFController extends Controller
         $pdf->setPaper([0, 0, 90, 60]); // 0, 0, W, H
         $pdf->render();
         return $pdf->stream('galv.pdf');
+        // return $pdf->download('galv.pdf');
+    }
+
+    public function printRoofingLabel($id)
+    {
+        $job = DB::connection('sqlsrv2')->select('exec spGetRoofingLabelToPrint ?', array($id));
+        // dd($job);
+
+        $qrCode = QrCode::size(25)->generate($id);
+        $data = ['qrCode'=>$qrCode,'job'=>$job ];
+
+        $pdf = PDF::loadView('warehouse/labels/roofing', $data);
+        $pdf->setPaper([0, 0, 90, 60]); // 0, 0, W, H
+        $pdf->render();
+        return $pdf->stream('roofing.pdf');
         // return $pdf->download('galv.pdf');
     }
 
