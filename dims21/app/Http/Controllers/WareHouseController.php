@@ -3060,6 +3060,18 @@ class WareHouseController extends Controller
             ->with('listproducts', $allproducts)->with('ref', $ref)->with('sequence', $getsequence)->with('trucks', $trucks);
     }
 
+    public function teamleadermanage($ref)
+    {
+        $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
+        $horses = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Horse'");
+        $trailors = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Trailer'");
+        $pickers = DB::connection('sqlsrv2')->select("Select UserID, UserName from tblDimsusers where strPickingTeams='Picker'");
+        $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL");
+
+
+        return view('warehouse/teamleadermanage')->with('listproducts',$allproducts)->with('horses',$horses)->with('trailors',$trailors)->with('pickers',$pickers)->with('tickets',$tickets);
+    }
+
     private static function getTabs($tabcount)
     {
         $tabs = '';

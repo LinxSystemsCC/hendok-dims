@@ -999,6 +999,7 @@ Route::post('saveretest', [WareHouseController::class,'saveretest']);
 Route::post('regradeproduct', [WareHouseController::class,'regradeproduct']);
 Route::post('addproductspec', [WareHouseController::class,'addproductspec']);
 Route::post('editproductspec', [WareHouseController::class,'editproductspec']);
+Route::get('teamleadermanage/{ref}', [WareHouseController::class,'teamleadermanage']);
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
 
@@ -1185,3 +1186,5 @@ Route::get('getRoutes',[ApisContoller::class,'getRoutes'] );
 Route::get('displayPDFLabel/{id}',[PDFController::class,'displayPDFLabel'] );
 Route::get('printGalvLabel/{id}',[PDFController::class,'printGalvLabel'] );
 Route::get('printRoofingLabel/{id}',[PDFController::class,'printRoofingLabel'] );
+Route::get('printNailsInnerLabel/{id}',[PDFController::class,'printNailsInnerLabel'] );
+Route::get('printNailsOuterLabel/{id}',[PDFController::class,'printNailsOuterLabel'] );
