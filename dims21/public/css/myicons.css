@@ -99,3 +99,71 @@
     vertical-align: middle !important;
     margin-right: 10px;
 }
+
+.mi-wire {
+    background-image: url("icons/wire.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}
+
+.mi-wireFence {
+    background-image: url("icons/wire-fence.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}
+
+.mi-nails {
+    background-image: url("icons/nail.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}
+
+.mi-clips {
+    background-image: url("icons/staples.png");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    filter: invert(1);
+    vertical-align: middle !important;
+    margin-right: 10px;
+}

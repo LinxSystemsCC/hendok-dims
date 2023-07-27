@@ -35,15 +35,15 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
     </head>
 
-    <div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-        <div class="col-lg-2" style="background: white;">
+    <div class="col-12 d-flex px-0"  style="background: white;">
+        <div class="col-custom-2" style="background: white;">
     
             <div class="vertical-menu">
                 @include('warehouse.menu')
             </div>
         </div>
 
-        <div class="col-lg-10">
+        <div class="col p-3">
             <h3 style="flex-grow: 1;">Weigh</h3>
             <div class="tablearea" >
             <div id="gridContainer" style="max-width: 100% !important; height: 100%;">

@@ -134,32 +134,18 @@ nav ul li a span.rotate{
   transform: translateY(-50%) rotate(-180deg);
 }
 
-.col-lg-12 {
-  padding: 0px !important; 
-  display: flex;
-}
-
-.col-lg-10 {
+/* .col-custom-10 {
   padding: 10px !important;
-    flex: 1 1 auto !important;
-    max-width: fit-content !important;
-}
+  width: 85% !important;
+} */
 
-.col-lg-2 {
+.col-custom-2 {
   padding: 0px !important;
   margin: 0px !important;
-  width: 220px !important;
+  min-width: 220px !important;
+  max-width: 220px !important;
   flex: 0 0 auto !important;
   height: 100vh !important;
-}
-
-h3{
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJbecmNE.woff2) format('woff2');
-  padding-left: 15px;
 }
 
 .disabled {

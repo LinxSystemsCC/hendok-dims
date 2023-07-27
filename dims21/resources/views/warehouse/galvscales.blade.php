@@ -26,8 +26,8 @@
 </head>
 
 
-<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2" style="background: white;">
+<div class="col12 d-flex px-0"  style="background: white;">
+    <div class="col-custom-2" style="background: white;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')
@@ -35,7 +35,7 @@
     </div>
     
     
-    <div class="col-lg-10" >
+    <div class="col p-3" >
         <h3 style="flex-grow: 1;">Create Galv Plant Scale</h3>
         <div>
             <div class="col-lg-12" >

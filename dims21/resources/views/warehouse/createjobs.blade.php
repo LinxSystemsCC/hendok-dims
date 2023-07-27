@@ -4,8 +4,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
@@ -33,8 +31,8 @@
 </head>
 
 <body>
-<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2" style="background: white;">
+<div class="col-12 px-0 d-flex "  style="background: white;">
+    <div class="col-custom-2 px-0" style="background: white;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')
@@ -42,7 +40,7 @@
     </div>
     
     
-    <div class="col-lg-10" >
+    <div class="col p-3" >
         <h3 style="flex-grow: 1;">Work Orders</h3>
         
         <div>

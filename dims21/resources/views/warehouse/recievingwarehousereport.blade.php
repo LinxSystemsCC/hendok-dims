@@ -31,13 +31,13 @@
 
 </head>
 
-<div class="col-lg-12"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;">
+<div class="col-12 d-flex px-0"  style="background: white;">
+    <div class="col-custom-2"  style="background: white;">
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="col-lg-10" >
+    <div class="col p-3" >
         <div class="col-lg-12 d-inline-flex" >
             <h3 style="flex-grow: 1; padding-left: 15px;">RECIEVING WAREHOUSE MOVEMENT REPORT</h3>
 
@@ -77,9 +77,10 @@
         line-height: 18px;
     }
 
-    .dx-datagrid {
-        height: calc(100vh - 63px);
-        max-height: calc(100vh - 63px);
+    #gridContainer{
+        max-width: calc(100vw - 260px) !important;
+        height: calc(100vh - 80px);
+        max-height: calc(100vh - 80px);
     }
 </style>
 <!-- jQuery -->

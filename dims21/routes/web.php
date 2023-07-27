@@ -1000,6 +1000,9 @@ Route::post('regradeproduct', [WareHouseController::class,'regradeproduct']);
 Route::post('addproductspec', [WareHouseController::class,'addproductspec']);
 Route::post('editproductspec', [WareHouseController::class,'editproductspec']);
 Route::get('teamleadermanage/{ref}', [WareHouseController::class,'teamleadermanage']);
+Route::get('getTeamLeaderPlans',[WarehouseController::class,'getTeamLeaderPlans']);
+Route::get('teamLeaderUpdatePickingPlan',[WarehouseController::class,'teamLeaderUpdatePickingPlan']);
+Route::get('teamLeaderGetPickingPlanData',[WarehouseController::class,'teamLeaderGetPickingPlanData']);
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
 
@@ -1179,12 +1182,18 @@ Route::get('/xero/getItems', [\App\Http\Controllers\XeroController::class, 'getI
 
 /**********HANDCRAFTED APIs*************************************************************************************************************/
 
-Route::get('getOrderTypes',[ApisContoller::class,'getOrderTypes'] );
-Route::get('getRoutes',[ApisContoller::class,'getRoutes'] );
+Route::get('getOrderTypes',[ApisContoller::class,'getOrderTypes']);
+Route::get('getRoutes',[ApisContoller::class,'getRoutes']);
 
 //PDFS
-Route::get('displayPDFLabel/{id}',[PDFController::class,'displayPDFLabel'] );
-Route::get('printGalvLabel/{id}',[PDFController::class,'printGalvLabel'] );
-Route::get('printRoofingLabel/{id}',[PDFController::class,'printRoofingLabel'] );
-Route::get('printNailsInnerLabel/{id}',[PDFController::class,'printNailsInnerLabel'] );
-Route::get('printNailsOuterLabel/{id}',[PDFController::class,'printNailsOuterLabel'] );
+Route::get('displayPDFLabel/{id}',[PDFController::class,'displayPDFLabel']);
+Route::get('printGalvLabel/{id}',[PDFController::class,'printGalvLabel']);
+Route::get('printRoofingLabel/{id}',[PDFController::class,'printRoofingLabel']);
+Route::get('printNailsInnerLabel/{id}',[PDFController::class,'printNailsInnerLabel']);
+Route::get('printNailsOuterLabel/{id}',[PDFController::class,'printNailsOuterLabel']);
+Route::get('printBarbedWireLabel/{id}',[PDFController::class,'printBarbedWireLabel']);
+Route::get('printLabelPage/{department}',[PDFController::class,'printLabelPage']);
+Route::post('printLabelByDepartment',[PDFController::class,'printLabelByDepartment']);
+
+
+

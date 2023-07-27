@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 if ((Auth::guest()))
 {
-
+    return redirect()->route('login');
 }else{
     $v  =  new \App\Http\Controllers\SalesForm();
     /*$areaspage = $v->getThings(Auth::user()->GroupId,'areaspage');
@@ -134,7 +134,7 @@ if ((Auth::guest()))
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<link rel="stylesheet" href="public/css/myicons.css">
+<link rel="stylesheet" href="{{ asset('/css/myicons.css') }}">
 
 <nav class="sidebar">
     <!-- logo --> 
@@ -175,6 +175,7 @@ if ((Auth::guest()))
                             @endif
                         </li>
                     </ul>
+
                     @if($galv !="0")
                     <a class="secondmenu" id="1b"><i class="fa mi-galv"></i>Galv<span class="caret pull-down"></span>
                     </a>
@@ -236,6 +237,7 @@ if ((Auth::guest()))
                         </li>
 
                     </ul>
+
                     @if($roof !="0")
                     <a class="secondmenu" id="1c"><i class="fa mi-roof"></i>Roofing<span class="caret pull-down"></span>
                     </a>
@@ -256,6 +258,123 @@ if ((Auth::guest()))
                             @if($roofcreateworkorder !="0")
                             <a href='{!!url("/roofingreprint")!!}'>Reprint Label</a> <!-- TODO add userpermission for roofing reprint -->
                             @endif
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1d"><i class="fa mi-wire"></i>White Mesh<span class="caret pull-down"></span><!-- TODO add userpermission for white mesh -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1d">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/White Mesh")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1e"><i class="fa mi-wire"></i>Black Mesh<span class="caret pull-down"></span><!-- TODO add userpermission for black mesh -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1e">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/Black Mesh")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1f"><i class="fa mi-wireFence"></i>Field Fence<span class="caret pull-down"></span><!-- TODO add userpermission for field fence -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1f">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/Field Fence")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1g"><i class="fa mi-nails"></i>Nails<span class="caret pull-down"></span><!-- TODO add userpermission for nails -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1g">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/Nails")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1h"><i class="fa mi-clips"></i>C Clips<span class="caret pull-down"></span><!-- TODO add userpermission for c clips -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1h">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/C Clips")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1i"><i class="fa mi-wire"></i>Netting<span class="caret pull-down"></span><!-- TODO add userpermission for netting -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1i">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/Netting")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1j"><i class="fa mi-wire"></i>Diamond Mesh<span class="caret pull-down"></span><!-- TODO add userpermission for diamond mesh -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1j">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/Diamond Mesh")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1k"><i class="fa mi-barb"></i>Galv Wire<span class="caret pull-down"></span><!-- TODO add userpermission for razor wire -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1k">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/Galv Wire")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                    </ul>
+
+                    {{-- @if($roof !="0") --}}
+                    <a class="secondmenu" id="1l"><i class="fa mi-barb"></i>Razor Wire<span class="caret pull-down"></span><!-- TODO add userpermission for razor wire -->
+                    </a>
+                    {{-- @endif --}}
+                    <ul class="item-show-1l">
+                        <!-- Item Links -->
+                        <li>
+                            {{-- @if($roofcreateworkorder !="0") --}}
+                            <a href='{!!url("/printLabelPage/Razor")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
                         </li>
                     </ul>
 

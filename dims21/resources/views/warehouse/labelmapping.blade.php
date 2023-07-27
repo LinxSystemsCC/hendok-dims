@@ -1,107 +1,3 @@
-{{-- <!DOCTYPE html>
-<html>
-<head>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
-
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
-    <!-- DevExtreme library -->
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-</head>
-
-
-<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2" style="background: white;">
-
-        <div class="vertical-menu">
-            @include('warehouse.menu')
-        </div>
-    </div>
-    
-    
-    <div class="col-lg-10" >
-        <h3 style="flex-grow: 1;">Map label to Product Category</h3>
-        <div>
-            <div class="col-lg-12" >
-                <div class="col-lg-4"  style="background: white;">
-                    <fieldset class="well">
-                        <form>
-                            <h4>Mapping</h4>
-                            <div class="form-group">
-                                <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department </label>
-                                <select  class="form-control input-sm col-xs-1" id="department" required>
-                                    <option></option>
-                                    @foreach($dept as $val)
-                                        <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="productcategory"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
-                                <select  class="form-control input-sm col-xs-1" id="productcategory" required>
-
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="labelname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Label Type </label>
-                                <select  class="form-control input-sm col-xs-1" id="labelname" required>
-                                    <option></option>
-                                    @foreach($label as $val)
-                                        <option value="{{$val->intLabelTypeID}}">{{$val->strLabelName}} - {{$val->strLabelConfig}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <br>
-                            <button type="button" id="mapLabelToProdCat" class="btn-lg btn-success" >Map</button>
-                            <br>
-    
-    
-                        </form>
-                    </fieldset>
-                </div>
-                <div class="col-lg-8"  style="background: white;">
-                    <h4>Existing Mappings</h4>
-    
-    
-                    <div class="col-lg-12" id="afterFilter">
-                        <div id="gridContainer">
-                        </div>
-    
-    
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-</div>
-
-
-<style>
-
-    .dx-datagrid-table{
-        font-size:15px;
-    }
-</style> --}}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,25 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <!-- DevExtreme theme -->
-    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
@@ -137,13 +15,13 @@
 
 </head>
 
-<div class="col-lg-12"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;">
+<div class="col-12 d-flex px-0"  style="background: white;">
+    <div class="col-custom-2"  style="background: white;">
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="col-lg-10" >
+    <div class="col p-3" >
         <div class="col-lg-12 d-inline-flex" >
             <h3 style="flex-grow: 1; padding-left: 15px;">LABEL MAPPING</h3>
             <!-- Button trigger modal -->

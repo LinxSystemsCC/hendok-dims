@@ -32,8 +32,8 @@
 
 </head>
 <body>
-<div class="col-lg-12 d-flex bd-highlight"  style="background: white;">
-    <div class="col-lg-2" style="background: white; width:200 !important;">
+<div class="col-12 d-flex px-0"  style="background: white;">
+    <div class="col-custom-2" style="background: white; width:200 !important;">
 
         <div class="vertical-menu">
             @include('warehouse.menu')

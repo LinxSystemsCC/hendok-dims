@@ -8,13 +8,13 @@
 </head>
 
 
-<div class="col-lg-12">
-    <div class="col-lg-2">
+<div class="col-12 d-flex px-0">
+    <div class="col-custom-2">
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="col-lg-10 mw-100">
+    <div class="col p-3">
         <h3>DATA SYNCING</h3>
         <div class="container-fluid flex-grow-1 py-2">
             <button class="btn btn-primary" style="height: 100px; width: 300px;" id="syncPastelStock">SYNC PASTEL STOCK TABLE</button>

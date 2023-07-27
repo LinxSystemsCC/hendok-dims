@@ -6,6 +6,7 @@
     <style>
         body{
             margin: 0px;
+            zoom: 500;
         }
         
         @page {

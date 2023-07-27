@@ -65,18 +65,16 @@
 
 </head>
 
-<div class="col-lg-12"  style="background: white;">
-    <div class="col-lg-2"  style="background: white;">
+<div class="col-12 d-flex px-0"  style="background: white;">
+    <div class="col-custom-2"  style="background: white;">
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="col-lg-10" >
-        <div class="col-lg-12 d-inline-flex">
-            <h3>Daily Roofing Report</h3>
-        </div>
+    <div class="col p-3" >
+        <h3>Daily Roofing Report</h3>
         
-        <div id="gridContainer" style=""></div>
+        <div id="gridContainer" style="max-width: 100% !important;"></div>
         
     </div>
 </div>

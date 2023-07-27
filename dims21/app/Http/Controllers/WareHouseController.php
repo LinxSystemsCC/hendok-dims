@@ -1397,7 +1397,6 @@ class WareHouseController extends Controller
             );
         return view('warehouse/choosemachine')->with('machines', $machines)->with('pallets', $palletsjson);
     }
-    //
     public function printpalletchoosemachine($deparment)
     {
         $dept = DB::connection('sqlsrv2')
@@ -3065,11 +3064,43 @@ class WareHouseController extends Controller
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         $horses = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Horse'");
         $trailors = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Trailer'");
-        $pickers = DB::connection('sqlsrv2')->select("Select UserID, UserName from tblDimsusers where strPickingTeams='Picker'");
+        $pickers = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM tblDimsusers");
+        $stagingAreas = DB::connection('sqlsrv2')->select("SELECT * FROM tblStagingAreas");
         $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL");
 
+        return view('warehouse/teamleadermanage')->with('ref', $ref)->with('listproducts', $allproducts)->with('horses', $horses)->with('trailors', $trailors)->with('pickers', $pickers)->with('stagingAreas', $stagingAreas)->with('tickets', $tickets);
+    }
 
-        return view('warehouse/teamleadermanage')->with('listproducts',$allproducts)->with('horses',$horses)->with('trailors',$trailors)->with('pickers',$pickers)->with('tickets',$tickets);
+    public function getTeamLeaderPlans(Request $request){
+        $dateFrom = (new \DateTime($request->get('from')))->format('Y-m-d');
+        $dateTo = (new \DateTime($request->get('to')))->format('Y-m-d');
+        $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingTicketsToPrint ?,?',array($dateFrom,$dateTo));
+
+        return response()->json($allproducts);
+    }
+
+    public function teamLeaderUpdatePickingPlan(Request $request){
+        $ref = $request->get('ref');
+        $horse = $request->get('horse');
+        $trailorOne = $request->get('trailorOne');
+        $trailorTwo = $request->get('trailorTwo');
+        $picker = $request->get('picker');
+        $loader = $request->get('loader');
+        $staging = $request->get('staging');
+        $ticket = $request->get('ticket');
+        $prompt = $request->get('prompt');
+        $userID = Auth::user()->UserID;
+
+        $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderPickingPlanCRUD '$ref', '$horse', '$trailorOne', '$trailorTwo', '$picker', '$loader', '$staging', '$ticket', '$prompt',$userID");
+        return response()->json($data);
+    }
+
+    public function teamLeaderGetPickingPlanData(Request $request){
+        $ref = $request->get('ref');
+        $prompt = 'read';
+        $userID = Auth::user()->UserID;
+        $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderPickingPlanCRUD '$ref','','','','','','','','$prompt',$userID");
+        return response()->json($data);
     }
 
     private static function getTabs($tabcount)
