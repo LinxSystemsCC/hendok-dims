@@ -3072,14 +3072,13 @@ class WareHouseController extends Controller
     }
 
     public function getTeamLeaderPlans(Request $request){
-        $dateFrom = (new \DateTime($request->get('from')))->format('Y-m-d');
-        $dateTo = (new \DateTime($request->get('to')))->format('Y-m-d');
-        $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingTicketsToPrint ?,?',array($dateFrom,$dateTo));
-
-        return response()->json($allproducts);
+        $date = $request->get('date');
+        $userID = 8;//Auth::user()->UserID;
+        $data = DB::connection('sqlsrv3')->select("exec spGetTeamLeaderPlans '$date',$userID");
+        return response()->json($data);
     }
 
-    public function teamLeaderUpdatePickingPlan(Request $request){
+    public function teamLeaderAssign(Request $request){
         $ref = $request->get('ref');
         $horse = $request->get('horse');
         $trailorOne = $request->get('trailorOne');
@@ -3088,18 +3087,31 @@ class WareHouseController extends Controller
         $loader = $request->get('loader');
         $staging = $request->get('staging');
         $ticket = $request->get('ticket');
-        $prompt = $request->get('prompt');
         $userID = Auth::user()->UserID;
 
-        $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderPickingPlanCRUD '$ref', '$horse', '$trailorOne', '$trailorTwo', '$picker', '$loader', '$staging', '$ticket', '$prompt',$userID");
+        $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderAssignment '$ref', '$horse', '$trailorOne', '$trailorTwo', '$picker', '$loader', '$staging', '$ticket',$userID");
+        return response()->json($data);
+    }
+
+    public function teamLeaderEquipmentAssign(Request $request){
+        $ref = $request->get('ref');
+        $belts = $request->get('belts');
+        $ratchets = $request->get('ratchets');
+        $tarps = $request->get('tarps');
+        $dunnages = $request->get('dunnages');
+        $pallets = $request->get('pallets');
+        $plates = $request->get('plates');
+        $nets = $request->get('nets');
+        $stands = $request->get('stands');
+
+        $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderEquipmentAssign '$ref', $belts, $ratchets, $tarps, $dunnages, $pallets, $plates, $nets, $stands");
+
         return response()->json($data);
     }
 
     public function teamLeaderGetPickingPlanData(Request $request){
         $ref = $request->get('ref');
-        $prompt = 'read';
-        $userID = Auth::user()->UserID;
-        $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderPickingPlanCRUD '$ref','','','','','','','','$prompt',$userID");
+        $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderGetAssignmentEquipmentNotifications '$ref'");
         return response()->json($data);
     }
 

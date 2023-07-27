@@ -14,11 +14,20 @@
 
 
     <!-- DevExtreme theme -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet"> --}}
+    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css">
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+
+    <style>
+        .red-cell {
+            background-color: red;
+            color: white;
+        }
+    </style>
+    
 
 </head>
 
@@ -31,7 +40,7 @@
                     <h3>Team Leader Management</h3>
                 </div>
                 <div class="col-md-6">
-                    <h4 id="loadId" class="float-end">TL0</h4>
+                    <h4 id="loadId" class="float-end"></h4>
                 </div>
             </div>
         </div>
@@ -63,31 +72,47 @@
         <div class="tab-content h-auto py-3" id="tabs">
             @if ($ref == 0)
             <!-- Management -->
-            <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
+            <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1" style="height: calc(100vh - 150px); overflow-y: auto;">
                 <div class="d-inline-flex mb-2">
                     <label class="d-flex align-items-center px-2" >Delivery Date</label> 
                     <input class="form-control px-2" type="date" id='date'>
                     <button class="btn btn-success mx-2" id="getdata">SEARCH</button>
                 </div>
 
-                <div id="gridContainer"></div>
+                <div id="managementTable"></div>
             </div>
             @else
             <!-- Management -->
-            <div class="tab-pane fade show" id="content1" role="tabpanel" aria-labelledby="tab1">
+            <div class="tab-pane fade show" id="content1" role="tabpanel" aria-labelledby="tab1" style="height: calc(100vh - 150px); overflow-y: auto;">
                 <div class="d-inline-flex mb-2">
                     <label class="d-flex align-items-center px-2" >Delivery Date</label> 
                     <input class="form-control px-2" type="date" id='date'>
                     <button class="btn btn-success mx-2" id="getdata">SEARCH</button>
                 </div>
 
-                <div id="gridContainer"></div>
+                <div id="managementTable"></div>
+
+                {{-- <table id="managementTable" class="table">
+                    <thead class="sticky-top">
+                        <tr style="background: black; color: white;">
+                            <th>Assigned Loads</th>
+                            <th>Items Assigned</th>
+                            <th>Equipment Assigned</th>
+                            <th>Picking Status</th>
+                            <th>Loading Status</th>
+                            <th>Notifications</th>
+                            <th>Invoice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table> --}}
             </div>
             
             <!-- Pick Load -->
-            <div class="tab-pane fade show active" id="content2" role="tabpanel" aria-labelledby="tab2">
+            <div class="tab-pane fade show active" id="content2" role="tabpanel" aria-labelledby="tab2" style="height: calc(100vh - 150px); overflow-y: auto;">
                 <table id="pickLoadTable" class="table">
-                    <thead>
+                    <thead class="sticky-top">
                         <tr style="background: black; color: white;">
                             <th class="col-xs-2">Storename</th>
                             <th class="col-xs-2">Order Date</th>
@@ -256,7 +281,7 @@
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <label for="picker" class="col-form-label">Picker</label>
+                            <label for="picker" class="col-form-label">Pickers</label>
                             <select class="form-select" type="text" id='picker' multiple="multiple" >
                                 @foreach ($pickers as $picker)
                                     <option value="{{ $picker->UserID }}">{{ $picker->UserName }}</option>
@@ -264,7 +289,7 @@
                             </select>
                         </div>
                         <div class="col mb-3">
-                            <label for="loader" class="col-form-label">Loader</label>
+                            <label for="loader" class="col-form-label">Loaders</label>
                             <select class="form-select" type="text" id='loader' multiple="multiple" >
                                 @foreach ($pickers as $picker)
                                     <option value="{{ $picker->UserID }}">{{ $picker->UserName }}</option>
@@ -272,7 +297,7 @@
                             </select>
                         </div>
                         <div class="col mb-3">
-                            <label for="staging" class="col-form-label">Staging Area</label>
+                            <label for="staging" class="col-form-label">Staging / Loading Areas</label>
                             <select class="form-select" type="text" id='staging' multiple="multiple" >
                                 @foreach ($stagingAreas as $stagingArea)
                                     <option value="{{ $stagingArea->intAutoStagingId }}">{{ $stagingArea->strAreaName }}</option>
@@ -284,12 +309,52 @@
                         <button class="btn btn-success float-end px-5 py-3" id="assign">ASSIGN</button>
                     </div>
                 </div>
-                
             </div>
 
             <!-- Equipment -->
             <div class="tab-pane fade" id="content4" role="tabpanel" aria-labelledby="tab4">
-                <h4>Equipment</h4>
+                <div class="container-fluid">
+                    <div class="row">
+                        
+                        <div class="col mb-3">
+                            <label for="belts" class="col-form-label">Belts</label>
+                            <input id="belts" class="form-control" type="number">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="ratchets" class="col-form-label">Ratchets</label>
+                            <input id="ratchets" class="form-control" type="number">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="tarps" class="col-form-label">Tarps</label>
+                            <input id="tarps" class="form-control" type="number">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="dunnages" class="col-form-label">Dunnage</label>
+                            <input id="dunnages" class="form-control" type="number">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="pallets" class="col-form-label">Pallets</label>
+                            <input id="pallets" class="form-control" type="number">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="plates" class="col-form-label">Corner Plates</label>
+                            <input id="plates" class="form-control" type="number">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="nets" class="col-form-label">Nets</label>
+                            <input id="nets" class="form-control" type="number">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="stands" class="col-form-label">Stands</label>
+                            <input id="stands" class="form-control" type="number">
+                        </div>
+                    </div>
+                    <div class="container-fluid p-0">
+                        <button class="btn btn-success float-end px-5 py-3" id="assignEquipment">ASSIGN</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Notifications -->
@@ -396,21 +461,36 @@
             const stringLoaders = loader.join(',');
             const stringStaging = staging.join(',');
 
-            updateData(ref, horse, trailorOne, trailorTwo, stringPickers, stringLoaders, stringStaging, ticket, prompt);
+            AssignData(ref, horse, trailorOne, trailorTwo, stringPickers, stringLoaders, stringStaging, ticket, prompt);
+        });
+
+        $('#assignEquipment').click(function(){
+            const ref = '{{ $ref }}';
+            const belts = $('#belts').val();
+            const ratchets = $('#ratchets').val();
+            const tarps = $('#tarps').val();
+            const dunnages = $('#dunnages').val();
+            const pallets = $('#pallets').val();
+            const plates = $('#plates').val();
+            const nets = $('#nets').val();
+            const stands = $('#stands').val();
+
+            assignEquipment(ref, belts, ratchets, tarps, dunnages, pallets, plates, nets, stands);
         });
     });
 
     function getData(){
-        var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
         $.ajax({
             url: '{!!url("/getTeamLeaderPlans")!!}',
             type: "GET",
             data: {
-                from: $('#date').val(),
-                to: $('#date').val()
+                date: $('#date').val(),
             },
             success: function (data) {
-                $("#gridContainer").dxDataGrid({
+
+                console.log(data);
+
+                $("#managementTable").dxDataGrid({
                     dataSource:data,
                     showBorders: true,
                     filterRow: { visible: true },
@@ -427,90 +507,100 @@
                     columnResizingMode: "nextColumn",
                     columns: [
                         {
-                            dataField: "intAutoPickingHeader",
-                            caption: "Load No.",
-                            calculateCellValue: function(data) {
-                                return "TL" + data.intAutoPickingHeader;
-                            },
-                        },
-                        {
                             dataField: "strUnickReference",
-                            caption: "Ref No.",
+                            caption: "Reference",
                             visible: false,
                         },
                         {
-                            width: 150,
-                            dataField: "strPickingNickname",
-                            caption: "Route Name",
+                            dataField: "intLoadID",
+                            caption: "Assigned Loads",
+                            calculateCellValue: function(data) {
+                                return "TL" + data.intLoadID;
+                            },
                         },
                         {
-                            dataField: "strTeamLeader",
-                            caption: "Team Leader",
+                            dataField: "intItemsAssigned",
+                            caption: "Items Assigned",
+                            cellTemplate: function (container, options) {
+                                const value = options.data.intItemsAssigned;
+                                if (value == 0) {
+                                    container.addClass("bg-danger text-white");
+                                    container.text('Not Assigned');
+
+                                } else if (value == 1) {
+                                    container.addClass("bg-success text-white");
+                                    container.text('Assigned');
+                                }
+                                
+                            },
                         },
                         {
-                            dataField: "strTrailorNo",
-                            caption: "Horse",
+                            dataField: "intEquipmentAssigned",
+                            caption: "Equipment Assigned",
+                            cellTemplate: function (container, options) {
+                                const value = options.data.intEquipmentAssigned;
+                                if (value == 0) {
+                                    container.addClass("bg-danger text-white");
+                                    container.text('Not Assigned');
+
+                                } else if (value == 1) {
+                                    container.addClass("bg-success text-white");
+                                    container.text('Assigned');
+                                }
+                                
+                            },
                         },
                         {
-                            dataField: "strTrailorone",
-                            caption: "Trailor One",
+                            dataField: "strPickingStatus",
+                            caption: "Picking Status",
                         },
                         {
-                            dataField: "strTrailortwo",
-                            caption: "Trailor Two",
+                            dataField: "strLoadingStatus",
+                            caption: "Loading Status",
                         },
                         {
-                            dataField: "strDriverOne",
-                            caption: "Driver One",
+                            dataField: "intNotifications",
+                            caption: "Outstanding Notifications",
+                            cellTemplate: function (container, options) {
+                                const value = options.data.intNotifications;
+                                if (value == 0) {
+                                    container.addClass("bg-danger text-white");
+                                    container.text('Outstanding');
+
+                                } else if (value == 1) {
+                                    container.addClass("bg-success text-white");
+                                    container.text('None Outstanding');
+                                }
+                                
+                            },
                         },
                         {
-                            dataField: "strDriverTwo",
-                            caption: "Driver Two",
+                            dataField: "intInvoiceStatus",
+                            caption: "Invoice",
+                            cellTemplate: function (container, options) {
+                                const value = options.data.intInvoiceStatus;
+                                if (value == 0) {
+                                    const button = $("<button class='btn btn-primary w-100' disabled>").text("invoice").on("click", function() {});
+                                    container.append(button);
+
+                                } else if (value == 1) {
+                                    const button = $("<button class='btn btn-primary w-100'>").text("invoice").on("click", function() {
+                                        console.log(options.data.strUnickReference);
+                                    });
+                                    container.append(button);
+                                }
+                                
+                            },
                         },
-                        {
-                            dataField: "strTicket",
-                            caption: "Ticket Number",
-                        },
-                        {
-                            dataField: "statustext",
-                            caption: "Status",
-                            cellTemplate: function(element, info) {
-                                element.append("<div>" + info.text + "</div>")
-                                    .css("font-size", "16px")
-                                    .css("font-weight", "900");
-                            }
-                        }
                     ] ,
                     onRowPrepared(e) {
-                        if (e.rowType == 'data' && e.data.isCancelled ==1) {
-                            e.rowElement.css('background', 'red');
-                        }
+
                     },
                     onRowClick: function (e) {
-                        var currentID = currentSelectedRow[0];
-                        var clickedID = e.data.intAutoPickingHeader;
 
-                        if (clickedID === currentID){
-                            currentSelectedRow = [];
-                            e.component.clearSelection();
-                            $("#btnTeamLeader").prop("disabled", true);
-                            $("#btnHorse").prop("disabled", true);
-                            $("#btnTrailor").prop("disabled", true);
-                            $("#btnDriver").prop("disabled", true);
-                            $("#btnTicket").prop("disabled", true);
-                        }else{
-                            currentSelectedRow = [];
-                            currentSelectedRow.push(clickedID);
-
-                            $("#btnTeamLeader").prop("disabled", false);
-                            $("#btnHorse").prop("disabled", false);
-                            $("#btnTrailor").prop("disabled", false);
-                            $("#btnDriver").prop("disabled", false);
-                            $("#btnTicket").prop("disabled", false);
-                        }
                     },
                     onRowDblClick: function (e) {
-                        window.location.href = '{!!url("/teamleadermanage")!!}/' + e.data.strUnickReference;
+                        window.open('{!!url("/teamleadermanage")!!}/'+e.data.strUnickReference);
                     },
                     onInitNewRow: function(e) {
                         console.debug("InitNewRow");
@@ -525,7 +615,10 @@
                         console.debug("RowUpdating");
                     }
                 });
-
+                
+            },
+            error: function (error) {
+                console.error("Error loading data: ", error);
             }
         });
     };
@@ -554,6 +647,14 @@
                     $('#trailorTwo').val(data[0]['strTrailortwo']).trigger('change');
                     $('#staging').val(data[0]['']).trigger('change');
                     $('#ticket').val(data[0]['strTicket']).trigger('change');
+                    $('#belts').val(data[0]['intBelts']);
+                    $('#ratchets').val(data[0]['intStraps']);
+                    $('#tarps').val(data[0]['intTarps']);
+                    $('#dunnages').val(data[0]['intDunnages']);
+                    $('#pallets').val(data[0]['intPallets']);
+                    $('#plates').val(data[0]['intPlasticCorners']);
+                    $('#nets').val(data[0]['intNets']);
+                    $('#stands').val(data[0]['intStans']);
 
                     for(var i in pickersList) {
                         var val = pickersList[i];
@@ -577,9 +678,9 @@
         });
     };
 
-    function updateData(ref, horse, trailorOne, trailorTwo, picker, loader, staging, ticket, prompt){
+    function AssignData(ref, horse, trailorOne, trailorTwo, picker, loader, staging, ticket, prompt){
         $.ajax({
-            url: '{!!url("/teamLeaderUpdatePickingPlan")!!}',
+            url: '{!!url("/teamLeaderAssign")!!}',
             type: "GET",
             data: {
                 ref : ref,
@@ -594,6 +695,27 @@
             },
             success: function (data) {
                 // location.reload();
+                alert('Updated');
+            }
+        });
+    };
+
+    function assignEquipment(ref, belts, ratchets, tarps, dunnages, pallets, plates, nets, stands){
+        $.ajax({
+            url: '{!!url("/teamLeaderEquipmentAssign")!!}',
+            type: "GET",
+            data: {
+                ref: ref,
+                belts: belts,
+                ratchets: ratchets,
+                tarps: tarps,
+                dunnages: dunnages,
+                pallets: pallets,
+                plates: plates,
+                nets: nets,
+                stands: stands
+            },
+            success: function (data) {
                 alert('Updated');
             }
         });

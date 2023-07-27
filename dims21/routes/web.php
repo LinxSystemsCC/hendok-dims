@@ -1001,7 +1001,8 @@ Route::post('addproductspec', [WareHouseController::class,'addproductspec']);
 Route::post('editproductspec', [WareHouseController::class,'editproductspec']);
 Route::get('teamleadermanage/{ref}', [WareHouseController::class,'teamleadermanage']);
 Route::get('getTeamLeaderPlans',[WarehouseController::class,'getTeamLeaderPlans']);
-Route::get('teamLeaderUpdatePickingPlan',[WarehouseController::class,'teamLeaderUpdatePickingPlan']);
+Route::get('teamLeaderAssign',[WarehouseController::class,'teamLeaderAssign']);
+Route::get('teamLeaderEquipmentAssign',[WarehouseController::class,'teamLeaderEquipmentAssign']);
 Route::get('teamLeaderGetPickingPlanData',[WarehouseController::class,'teamLeaderGetPickingPlanData']);
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
