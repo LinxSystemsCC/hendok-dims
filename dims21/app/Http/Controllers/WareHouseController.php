@@ -3062,10 +3062,10 @@ class WareHouseController extends Controller
     public function teamleadermanage($ref)
     {
         // Check if the user is authenticated
-        if (!auth()->check()) {
-            // If not authenticated, redirect to the login page
-            return redirect()->route('login'); // 'login' should be replaced with your actual login route name
-        }
+        // if (!auth()->check()) {
+        //     // If not authenticated, redirect to the login page
+        //     return redirect()->route('login'); // 'login' should be replaced with your actual login route name
+        // }
         
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         $horses = DB::connection('weights')->select("SELECT DISTINCT VEHICLE_REGISTRATION TruckId, VEHICLE_REGISTRATION TruckName FROM dims_trucks WHERE VEHICLE_TYPE = 'Horse'");
