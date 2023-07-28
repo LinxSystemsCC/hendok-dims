@@ -3061,9 +3061,15 @@ class WareHouseController extends Controller
 
     public function teamleadermanage($ref)
     {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            // If not authenticated, redirect to the login page
+            return redirect()->route('login'); // 'login' should be replaced with your actual login route name
+        }
+        
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
-        $horses = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Horse'");
-        $trailors = DB::connection('weights')->select("SELECT DISTINCT REGISTRATION_NR TruckId, REGISTRATION_NR TruckName FROM WB_Transporter_Reg_Nums_Maintenance WHERE VEHICLE_TYPE = 'Trailer'");
+        $horses = DB::connection('weights')->select("SELECT DISTINCT VEHICLE_REGISTRATION TruckId, VEHICLE_REGISTRATION TruckName FROM dims_trucks WHERE VEHICLE_TYPE = 'Horse'");
+        $trailors = DB::connection('weights')->select("SELECT DISTINCT VEHICLE_REGISTRATION TruckId, VEHICLE_REGISTRATION TruckName FROM dims_trucks WHERE VEHICLE_TYPE = 'Trailer'");
         $pickers = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM tblDimsusers");
         $stagingAreas = DB::connection('sqlsrv2')->select("SELECT * FROM tblStagingAreas");
         $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL");
@@ -3112,6 +3118,20 @@ class WareHouseController extends Controller
     public function teamLeaderGetPickingPlanData(Request $request){
         $ref = $request->get('ref');
         $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderGetAssignmentEquipmentNotifications '$ref'");
+        return response()->json($data);
+    }
+
+    public function teamLeaderGetNotifications(Request $request){
+        $ref = $request->get('ref');
+        $data = DB::connection('sqlsrv3')->select("select * from viewTeamLeaderNotifications WHERE strUnickReference = '$ref'");
+        return response()->json($data);
+    }
+
+    public function teamLeaderApproveNotification(Request $request){
+        $id = $request->get('id');
+        $approvedBy = Auth::user()->UserID;
+
+        $data = DB::connection('sqlsrv3')->select("EXEC spTeamLeaderApproveNotification $id, $approvedBy");
         return response()->json($data);
     }
 

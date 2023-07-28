@@ -98,13 +98,14 @@
                 <table id="pickLoadTable" class="table">
                     <thead class="sticky-top">
                         <tr style="background: black; color: white;">
+                            <th class="col-xs-2">Storename</th>
                             <th class="col-xs-2">Order Date</th>
-                            <th class="col-xs-2">SO Num</th>
+                            <th class="col-xs-2">Sales Order No</th>
                             <th class="col-xs-2">Instruction</th>
-                            <th class="col-xs-2">Desc.</th>
-                            <th class="col-xs-2">Qty</th>
-                            <th class="col-xs-2">Picked</th>
-                            <th class="col-xs-2">Loaded</th>
+                            <th class="col-xs-2">Description</th>
+                            <th class="col-xs-2">Quantity</th>
+                            <th class="col-xs-2">Items Picked</th>
+                            <th class="col-xs-2">Items Loaded</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,9 +118,7 @@
                         $istrue = true;
                         $count = 0;
                         ?>
-
                         @foreach($listproducts as $val)
-
                         <?php
                         $externalCount = 0;
                         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
@@ -127,10 +126,13 @@
                         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
                         $ID = $t . $randomString;
                         ?>
-                        
                         @if($count == 0)
                         <tr style="background: darkgray; color: white; font-weight: 900;" id="{{$ID}}">
-                            <td colspan="4">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
+                            <td>STOP: {{$val->intSequence}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -140,7 +142,11 @@
                         @if($storenames != $val->StoreName)
                         @if($count > 0)
                         <tr style="background: darkgray; color: white; font-weight: 900;">
-                            <td colspan="4">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
+                            <td>STOP: {{$val->intSequence}}</td>
+                            <td>NEXT</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -151,6 +157,7 @@
                         @else
                         <tr id="rtrr{{$ID}}">
                         @endif
+                        <td>{{ $val->StoreName}}</td>
                         <td>{{ $val->OrderDate}}</td>
                         <td>{{$val->OrderNum}}</td>
                         <td>{{ $val->ExtOrderNum}}</td>
@@ -168,6 +175,11 @@
                         ?>
                         @else
                         <tr>
+                            @if($storenames != $val->StoreName)
+                            <td>{{ $val->StoreName}}</td>
+                            @else
+                            <td></td>
+                            @endif
                             @if($orderdate != $val->OrderDate)
                             <td>{{ $val->OrderDate}}</td>
                             @else
@@ -187,7 +199,6 @@
                         <?php
                         $storenames = $val->StoreName;
                         $orderNumber = $val->OrderNum;
-                        $orderdate = $val->OrderDate;
                         $area = $val->areas;
                         if ($storenames == $val->StoreName) {
                             $istrue = true;
@@ -197,6 +208,7 @@
                         <?php $count++; ?>
                         @endforeach
                         <tr style="background: darkgray; color: white; font-weight: 900;">
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
