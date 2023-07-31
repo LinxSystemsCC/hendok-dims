@@ -14,8 +14,8 @@
 
 
     <!-- DevExtreme theme -->
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet"> --}}
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
@@ -26,6 +26,11 @@
             background-color: red;
             color: white;
         }
+
+        .customPadding {
+            padding: 3px !important;
+        }
+
     </style>
     
 
@@ -66,6 +71,9 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="tab5" data-bs-toggle="tab" href="#content5" role="tab" aria-controls="content5" aria-selected="false">Notifications</a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="tab6" data-bs-toggle="tab" href="#content6" role="tab" aria-controls="content6" aria-selected="false">Instructions</a>
+            </li>
             @endif
         </ul>
 
@@ -99,9 +107,8 @@
                     <thead class="sticky-top">
                         <tr style="background: black; color: white;">
                             <th class="col-xs-2">Order Date</th>
-                            <th class="col-xs-2">SO Num</th>
-                            <th class="col-xs-2">Instruction</th>
-                            <th class="col-xs-2">Desc.</th>
+                            <th class="col-xs-2">SO Number</th>
+                            <th class="col-xs-2">Description</th>
                             <th class="col-xs-2">Qty</th>
                             <th class="col-xs-2">Picked</th>
                             <th class="col-xs-2">Loaded</th>
@@ -133,7 +140,6 @@
                             <td colspan="4">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
                             <td></td>
                             <td></td>
-                            <td></td>
                         </tr>
                         @endif
                         <?php $Grandtotal = $Grandtotal + floatval($val->mnyPickedQuantity);?>
@@ -141,7 +147,6 @@
                         @if($count > 0)
                         <tr style="background: darkgray; color: white; font-weight: 900;">
                             <td colspan="4">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
-                            <td></td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -153,7 +158,6 @@
                         @endif
                         <td>{{ $val->OrderDate}}</td>
                         <td>{{$val->OrderNum}}</td>
-                        <td>{{ $val->ExtOrderNum}}</td>
                         <td>{{ $val->PastelDescription}}</td>
                         <td style="font-size: 14px; background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                         <td>{{ floatval($val->mnyPickedQuantity)}}</td>
@@ -178,7 +182,6 @@
                             @else
                             <td></td> 
                             @endif
-                            <td>{{ $val->ExtOrderNum}}</td>
                             <td>{{ $val->PastelDescription}}</td>
                             <td style="font-size: 14px; background: #cacaca">{{ floatval($val->mnyQty)}}</td>
                             <td>{{ floatval($val->mnyPickedQuantity)}}</td>
@@ -197,7 +200,6 @@
                         <?php $count++; ?>
                         @endforeach
                         <tr style="background: darkgray; color: white; font-weight: 900;">
-                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -333,6 +335,11 @@
             <div class="tab-pane fade" id="content5" role="tabpanel" aria-labelledby="tab5" style="height: calc(100vh - 150px); overflow-y: auto;">
                 <div id="notificationsTable"></div>
             </div>
+
+            <!-- Instructions -->
+            <div class="tab-pane fade" id="content6" role="tabpanel" aria-labelledby="tab6" style="height: calc(100vh - 150px); overflow-y: auto;">
+                <div id="instructionsTable"></div>
+            </div>
             @endif
         </div>
 
@@ -414,6 +421,7 @@
         getData();
         getPickingPlanData('{{ $ref }}');
         getNotifications('{{ $ref }}');
+        getInstructions('{{ $ref }}');
 
         $('#getdata').click(function(){
             getData();
@@ -487,6 +495,9 @@
                             calculateCellValue: function(data) {
                                 return "TL" + data.intLoadID;
                             },
+                        },{
+                            dataField: "strRouteName",
+                            caption: "Route Name",
                         },
                         {
                             dataField: "intItemsAssigned",
@@ -549,17 +560,18 @@
                             caption: "Invoice",
                             cellTemplate: function (container, options) {
                                 const value = options.data.intInvoiceStatus;
+                                container.addClass("customPadding"); // Add the no-padding class to the container
+
                                 if (value == 0) {
                                     const button = $("<button class='btn btn-primary btn-sm w-100' disabled>").text("invoice").on("click", function() {});
                                     container.append(button);
 
-                                } else if (value == 1) {
+                                } else {
                                     const button = $("<button class='btn btn-primary btn-sm w-100'>").text("invoice").on("click", function() {
                                         console.log(options.data.strUnickReference);
                                     });
                                     container.append(button);
                                 }
-                                
                             },
                         },
                     ] ,
@@ -750,7 +762,7 @@
                             caption: "Approved",
                             cellTemplate: function (container, options) {
                                 const value = options.data.bitApproved;
-                                if (value == 0) {
+                                if (value != 1) {
                                     const button = $("<button class='btn btn-primary btn-sm w-100'>").text("Approve").on("click", function() {
                                         console.log(options.data.intAutoID);
                                         approveNotification(options.data.intAutoID);
@@ -765,6 +777,68 @@
                             },
                         },
 
+                    ] ,
+                    onRowPrepared(e) {
+                        
+                    },
+                    onRowClick: function (e) {
+                        
+                    },
+                    onRowDblClick: function (e) {
+                        
+                    },
+                    onInitNewRow: function(e) {
+                        
+                    },
+                    onRowInserting: function(e) {
+                        
+                    },
+                    onRowInserted: function(e) {
+                        
+                    },
+                    onRowUpdating: function(e) {
+                        
+                    }
+                });
+            }
+        });
+    };
+
+    function getInstructions(ref){
+        $.ajax({
+            url: '{!!url("/teamLeaderGetInstructions")!!}',
+            type: "GET",
+            data: {
+                ref: ref,
+            },
+            success: function (data) {
+                $("#instructionsTable").dxDataGrid({
+                    dataSource:data,
+                    showBorders: true,
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    paging: {
+                        enabled: false
+                    },
+                    selection: {
+                        mode: "single",
+                    },
+                    columnAutoWidth:true,        
+                    allowColumnResizing: true,       
+                    columnResizingMode: "nextColumn",
+                    columns: [
+                        {
+                            dataField: "strUnickReference",
+                            caption: "Reference",
+                            visible: false,
+                        },{
+                            dataField: "strInstruction",
+                            caption: "Instruction",
+                        },{
+                            dataField: "strType",
+                            caption: "Type",
+                        },
                     ] ,
                     onRowPrepared(e) {
                         

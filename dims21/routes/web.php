@@ -1006,6 +1006,7 @@ Route::get('teamLeaderEquipmentAssign',[WarehouseController::class,'teamLeaderEq
 Route::get('teamLeaderGetPickingPlanData',[WarehouseController::class,'teamLeaderGetPickingPlanData']);
 Route::get('teamLeaderGetNotifications',[WarehouseController::class,'teamLeaderGetNotifications']);
 Route::get('teamLeaderApproveNotification',[WarehouseController::class,'teamLeaderApproveNotification']);
+Route::get('teamLeaderGetInstructions',[WarehouseController::class,'teamLeaderGetInstructions']);
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
 

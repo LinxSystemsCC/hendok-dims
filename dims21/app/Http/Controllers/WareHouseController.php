@@ -773,7 +773,39 @@ class WareHouseController extends Controller
 
     public function dashboard()
     {
-        return view('warehouse/dashboard');
+        if (Auth::guest())
+            return redirect()->route('login');
+        else{
+            $sessionUserId = Auth::user()->UserID;
+            $GroupId= Auth::user()->GroupId;
+                
+            if($this->getThings($GroupId,'Has Auto Redirect')){
+                $userDepartment =Auth::user()->strPickingTeams;
+                $departmentMachines = explode('|', $userDepartment);
+
+                $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '".$departmentMachines[0]."'");
+
+                $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
+                
+                return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
+            }else{
+                return view('warehouse/dashboard');
+            }
+        }
+    }
+
+    public function getThings($GroupId,$thing)
+    {
+        $things = 0;
+
+        //$GroupId = Auth::user()->GroupId;
+        $returnTrueOrFalse = DB::connection('sqlsrv3')
+            ->select("select [dbo].[fnGetGroupThings](".$GroupId.",'".$thing."',0) as things");
+        foreach ($returnTrueOrFalse as $val)
+        {
+            $things =  $val->things;
+        }
+        return $things;
     }
 
     public function departmentpage()
@@ -3062,10 +3094,10 @@ class WareHouseController extends Controller
     public function teamleadermanage($ref)
     {
         // Check if the user is authenticated
-        // if (!auth()->check()) {
-        //     // If not authenticated, redirect to the login page
-        //     return redirect()->route('login'); // 'login' should be replaced with your actual login route name
-        // }
+        if (!auth()->check()) {
+            // If not authenticated, redirect to the login page
+            return redirect()->route('login'); // 'login' should be replaced with your actual login route name
+        }
         
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         $horses = DB::connection('weights')->select("SELECT DISTINCT VEHICLE_REGISTRATION TruckId, VEHICLE_REGISTRATION TruckName FROM dims_trucks WHERE VEHICLE_TYPE = 'Horse'");
@@ -3134,6 +3166,16 @@ class WareHouseController extends Controller
         $data = DB::connection('sqlsrv3')->select("EXEC spTeamLeaderApproveNotification $id, $approvedBy");
         return response()->json($data);
     }
+
+    public function teamLeaderGetInstructions(Request $request){
+        $ref = $request->get('ref');
+
+        $data = DB::connection('sqlsrv3')->select("EXEC spTeamLeaderGetInstructions '$ref'");
+        return response()->json($data);
+    }
+
+    
+    
 
     private static function getTabs($tabcount)
     {

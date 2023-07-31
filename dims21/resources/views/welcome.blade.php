@@ -71,7 +71,7 @@
     @if (Route::has('login'))
         <div class="top-right links">
             @if (Auth::check())
-                <a href="{{ url('/home') }}">Home</a>
+                <a href="{{ url('/dashboard') }}">Dashboard</a>
             @else
                 <a href="{{ url('/login') }}">Login</a>
                 <a href="{{ url('/register') }}">Register</a>
@@ -87,7 +87,7 @@
         </div>
         @if (Auth::check())
 
-            <i class="icon-hand-right"></i> <h3><a href="{{ url('/home') }}">Continue</a></h3>
+            <i class="icon-hand-right"></i> <h3><a href="{{ url('/dashboard') }}">Continue</a></h3>
         @else
             <div class="links">
                 <div class="col-md-8 col-md-offset-2" style="color:black;font-weight: 900">
@@ -96,7 +96,7 @@
                         <div class="panel-body">
 
                             <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
-                                {{ csrf_field() }}
+                                @csrf
 
                                 <div class="form-group{{ $errors->has('UserName') ? ' has-error' : '' }}">
                                     <label for="email" class="col-md-4 control-label">User Name</label>

@@ -33,17 +33,37 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
      *
      * @return void
-     */
+     */ 
     public function __construct()
     {
         //DB::setDefaultConnection('sqlsrv3');
         $this->middleware('guest')->except('logout');
+    }
+
+    // Override the showLoginForm method to store the intended URL
+    public function showLoginForm()
+    {
+        if (!auth()->check()) {
+            session(['url.intended' => url()->previous()]);
+        }
+
+        return view('auth.login'); // Update this with your login view path
+    }
+
+    // Override the authenticated method to redirect back to the intended URL
+    protected function authenticated(Request $request, $user)
+    {
+        if (session()->has('url.intended')) {
+            return redirect(session('url.intended'));
+        }
+
+        return redirect($this->redirectTo);
     }
 
 }
