@@ -357,6 +357,14 @@
                             caption: "Machine",
                             //width: 350,
                         },{
+                            dataField: "MPATolerance",
+                            caption: "MPA Tolerance",
+                            //width:250,
+                        },{
+                            dataField: "ZincSpec",
+                            caption: "Zinc Spec",
+                            //width:250,
+                        },{
                             dataField: "WireSize",
                             caption: "Wire Size",
                             dataType: "number", 
@@ -364,6 +372,9 @@
                             type:"fixedPoint",  
                             precision:2,
                             //width:200,
+                        },{
+                            dataField: "SizeTolerance",
+                            caption: "Wire Tolerance",
                         },{
                             dataField: "MaxTDT",
                             caption: "Date",

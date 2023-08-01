@@ -29,131 +29,6 @@
     </div>
 </div>
 
-    {{-- <div title="Job Creation" id="createjob" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createjobTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="qc2TestTitle"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                
-                    <div class="col-md-6 mb-1">
-                        <label class="control-label" for="initmass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Initial Mass</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="initmass" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="stripmass"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Strip Mass</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="stripmass" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="stripsize"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Strip Size</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="stripsize" required>
-                    </div>
-
-                    <div class="form-group">
-                        <button class="btn btn-primary" id="calczinc" style="margin-top: 10px; margin-bottom: 10px;">
-                            Calculate Zinc
-                        </button>
-                        <br>
-                        <label class="control-label" for="zinc"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Zinc</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="zinc" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="mpa"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Tested</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="mpa" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="ticket"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tensile Ticket</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="ticket" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="wiresize"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="wiresize" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="stresstest"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">1 % Stress Test</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="stresstest" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="elongation"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Elongation at Break %</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="elongation" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="torsion"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Torsion Test</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="torsion" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="wraptest"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">1 Diameter Wrap Test</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="wraptest" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="coating"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Coating Uniformity</label>
-
-                        <select  class="form-control input-sm col-xs-1" id="coating" required>
-                            <option>
-                                PASS
-                            </option>
-
-                            <option>
-                                FAIL
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="CastNo"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Cast Number</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="CastNo" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="seq"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Seq Number</label>
-                        <input type="number"  class="form-control input-sm col-xs-1" id="seq" required disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="comment1"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Comment</label>
-                        <select  class="form-control input-sm col-xs-1" id="comment1" required>
-                            <option>
-                            </option>
-                        </select>
-                        <br>
-                        <select  class="form-control input-sm col-xs-1" id="comment2" required>
-                            <option>
-                            </option>
-                        </select>
-                        <br>
-                        <select  class="form-control input-sm col-xs-1" id="comment3" required>
-                            <option>
-                            </option>
-                        </select>
-                    </div>
-
-                </div>
-                
-                <br>
-                <div class="modal-footer">
-                    <button class="btn btn-success" id="testpass" style="width:50%">PASS</button>
-                    <button class="btn btn-danger" id="testfail" style="width:50%">FAIL</button>
-                </div>
-            </div>
-        </div>
-
-    </div> --}}
-
 <!-- Modal New Item -->
 <div class="modal modal-lg fade" id="createjob" aria-labelledby="createjob" aria-hidden="true">
     <div class="modal-dialog">
@@ -165,11 +40,6 @@
 
             <div class="modal-body">
                 <div class="row">
-                    {{-- <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="initmass">Initial Mass</label>
-                        <input type="number"  class="form-control" id="initmass" required>
-                    </div> --}}
-
                     <div class="col-md-6 mb-1">
                         <label class="col-form-label" for="initmass">Initial Mass</label>
                         <input type="number"  class="form-control" id="initmass" required>
@@ -434,6 +304,10 @@
                             caption: "Sequence Number",
                             //width:150,
                         },{
+                            dataField: "CustomerName",
+                            caption: "Customer Name",
+                            //width:150,
+                        },{
                             dataField: "ProductName",
                             caption: "Product",
                             //width:150,
@@ -446,6 +320,14 @@
                             caption: "Machine",
                             //width: 350,
                         },{
+                            dataField: "MPATolerance",
+                            caption: "MPA Tolerance",
+                            //width: 350,
+                        },{
+                            dataField: "ZincSpec",
+                            caption: "Zinc Spec",
+                            //width: 350,
+                        },{
                             dataField: "WireSize",
                             caption: "Wire Size",
                             dataType: "number", 
@@ -453,6 +335,10 @@
                             type:"fixedPoint",  
                             precision:2,
                             //width:200,
+                        },{
+                            dataField: "SizeTolerance",
+                            caption: "Wire Tolerance",
+                            //width:250,
                         },{
                             dataField: "TestDateTime",
                             caption: "Date",
