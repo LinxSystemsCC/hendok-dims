@@ -3100,8 +3100,8 @@ class WareHouseController extends Controller
         // }
         
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
-        $horses = DB::connection('weights')->select("SELECT DISTINCT VEHICLE_REGISTRATION TruckId, VEHICLE_REGISTRATION TruckName FROM dims_trucks WHERE VEHICLE_TYPE = 'Horse'");
-        $trailors = DB::connection('weights')->select("SELECT DISTINCT VEHICLE_REGISTRATION TruckId, VEHICLE_REGISTRATION TruckName FROM dims_trucks WHERE VEHICLE_TYPE = 'Trailer'");
+        $horses = DB::connection('weights')->select("SELECT * FROM viewHorses");
+        $trailors = DB::connection('weights')->select("SELECT * FROM viewTrailers");
         $pickers = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM tblDimsusers");
         $stagingAreas = DB::connection('sqlsrv2')->select("SELECT * FROM tblStagingAreas");
         $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL");

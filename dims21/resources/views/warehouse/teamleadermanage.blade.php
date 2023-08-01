@@ -221,7 +221,9 @@
                             <select class="form-select" type="text" id='horse'>
                                 <option>
                                 @foreach ($horses as $horse)
-                                    <option value="{{ $horse->TruckId }}">{{ $horse->TruckName }}</option>
+                                    <option value="{{ $horse->TruckId }}" @if ($horse->intInUse == 1) disabled @endif>
+                                        {{ $horse->TruckName }} @if ($horse->intInUse == 1) - IN USE @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -230,7 +232,9 @@
                             <select class="form-select" type="text" id='trailorOne'>
                                 <option></option>
                                 @foreach ($trailors as $trailorOne)
-                                    <option value="{{ $trailorOne->TruckId }}">{{ $trailorOne->TruckName }}</option>
+                                    <option value="{{ $trailorOne->TruckId }}" @if ($trailorOne->intInUse == 1) disabled @endif>
+                                        {{ $trailorOne->TruckName }} @if ($trailorOne->intInUse == 1) - IN USE @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -239,7 +243,9 @@
                             <select class="form-select" type="text" id='trailorTwo'>
                                 <option></option>
                                 @foreach ($trailors as $trailorTwo)
-                                    <option value="{{ $trailorTwo->TruckId }}">{{ $trailorTwo->TruckName }}</option>
+                                    <option value="{{ $trailorTwo->TruckId }}" @if ($trailorTwo->intInUse == 1) disabled @endif>
+                                        {{ $trailorTwo->TruckName }}  @if ($trailorTwo->intInUse == 1)- IN USE @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
