@@ -345,6 +345,10 @@
                             caption: "Reference",
                             //width:150,
                         },{
+                            dataField: "CustomerName",
+                            caption: "Customer Name",
+                            //width:150,
+                        },{
                             dataField: "ProductName",
                             caption: "Product",
                             //width:150,
