@@ -148,6 +148,10 @@ nav ul li a span.rotate{
   height: 100vh !important;
 }
 
+.col-custom-10 {
+  min-width: calc(220px - 100vw) !important;
+}
+
 .disabled {
   pointer-events:none;
   opacity:0.6;         

@@ -21,10 +21,10 @@
         </div>
     </div>
 
-    <div class="col p-3">
+    <div class="col-custom-10 p-3">
         <h3 style="flex-grow: 1;">QC Phase 2</h3>
 
-        <div id="gridContainer" style="max-width: 100% !important; height: 100%;">
+        <div id="gridContainer">
         </div>
     </div>
 </div>

@@ -71,7 +71,7 @@
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="col p-3" >
+    <div class="col-custom-10 p-3" >
         <h3>Daily Roofing Report</h3>
         
         <div id="gridContainer" style="max-width: 100% !important;"></div>

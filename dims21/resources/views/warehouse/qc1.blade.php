@@ -40,39 +40,14 @@
         </div>
     </div>
 
-    <div class="col p-3">
+    <div class="col-custom-10 p-3">
         <h3 style="flex-grow: 1;">QC Phase 1</h3>
 
         <div class="tablearea">
-            <div id="gridContainer" style="max-width: 100% !important; height: 100%;">
+            <div id="gridContainer">
         </div>
     </div>
 </div>
-
-    {{-- <div id="createjob" class="modal fade" tabindex="-1" aria-labelledby="createjobTitle" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="qc1TestTitle"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="row">
-
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-
-                </div>
-            </div>
-        </div>
-
-    </div> --}}
 
 <!-- Modal New Item -->
 <div class="modal modal-lg fade" id="createjob" aria-labelledby="createjob" aria-hidden="true">
