@@ -3104,7 +3104,7 @@ class WareHouseController extends Controller
         $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
         $pickers = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM tblDimsusers");
         $stagingAreas = DB::connection('sqlsrv2')->select("SELECT * FROM tblStagingAreas");
-        $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL");
+        $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL OR SECOND_WEIGH_OPERATOR = ''");
 
         return view('warehouse/teamleadermanage')->with('ref', $ref)->with('listproducts', $allproducts)->with('horses', $horses)->with('trailors', $trailors)->with('pickers', $pickers)->with('stagingAreas', $stagingAreas)->with('tickets', $tickets);
     }
