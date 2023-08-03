@@ -1202,4 +1202,6 @@ Route::get('printLabelPage/{department}',[PDFController::class,'printLabelPage']
 Route::post('printLabelByDepartment',[PDFController::class,'printLabelByDepartment']);
 
 
+Route::middleware('auth')->view('warehouse.teamleadermanage');
+
 
