@@ -48,11 +48,28 @@
             <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%" required>
         </div>
 
+        {{-- Quantity --}}
+        <div class="form-group">
+            <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity</label>
+            <input class="form-control input-sm col-xs-1" id="qty" style="width: 100%" required>
+        </div>
+
+        {{-- Product --}}
+        <div class="form-group">
+            <label class="control-label" for="printer"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Printer</label>
+            <select  class="form-control input-sm col-xs-1" id="printer" style="width: 100%" required>
+                <option></option>
+                @foreach ($printers as $printer)
+                    <option value="{{ $printer->intPrinterID }}">{{ $printer->strPrinterName }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <button class="btn btn-primary my-2 w-100" id="print">PRINT</button>
     </div>
-    <div class="col-4 p-3">
+    {{-- <div class="col-4 p-3">
         <iframe src="" width="100%" height="40%"></iframe>
-    </div>
+    </div> --}}
 </div>
 
 <!-- jQuery -->
@@ -87,6 +104,10 @@
             // dropdownParent: $('#tbc'),
         });
         $('#prodname').select2({
+            theme: 'bootstrap-5',
+            // dropdownParent: $('#tbc'),
+        });
+        $('#printer').select2({
             theme: 'bootstrap-5',
             // dropdownParent: $('#tbc'),
         });
@@ -183,6 +204,8 @@
                 }
             });
         });
+
+        
 
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');

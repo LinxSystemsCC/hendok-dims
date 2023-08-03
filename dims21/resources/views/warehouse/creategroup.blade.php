@@ -1,29 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.nset/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
-    <!-- DevExtreme library -->
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
+    <!-- DevExtreme theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
 </head>
 
 <div class="col-12 d-flex px-0"  style="background: white;">
@@ -32,116 +18,88 @@
             @include('warehouse.menu')
         </div>
     </div>
-    
-    <div class="col p-3">
-        <h3 style="flex-grow: 1;">Create Groups & Group Settings</h3>
-        <div style="display: inline-flex;">
-            <!-- For adding Group Name -->
-            <div class="col-lg-12" >
-                <div style="background: white; padding: 5px;">
-                    <h4></h4>
-                    <fieldset class="well">
-                        <form>
-                            Create Group
-                            <div class="form-group">
-                                <label class="control-label" for="groupname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group Name </label>
-                                <input  type="text" class="form-control input-sm col-xs-1" id="groupname" style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                            </div>
-                            <br>
-                            <button type="button" id="savesgroupname" class="btn-lg btn-success" >Save</button>
-                            <br>
+    <div class="col p-3" >
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">GROUPS</h3>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newGroup">
+                New Group
+            </button>
+        </div>
 
+        <div id="gridContainer" style=""></div>
 
-                        </form>
-                    </fieldset>
-                </div>
-                <div class="col-lg-12"  style="background: white;">
-                    <h4>Existing Group Names</h4>
-
-
-                    <div class="col-lg-12" id="afterFilter" >
-                        <div id="gridContainer" >
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-            <!-- For adding Settings to Groups >
-            <div class="col-lg-12" >
-                <div  style="background: white; padding: 5px;">
-                    <h4></h4>
-                    <fieldset class="well">
-                        <form>
-                            Create Group Setting
-                            <div class="form-group">
-                                <label class="control-label" for="group"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
-                                <select  class="form-control input-sm col-xs-1" id="group" required>
-                                    <option></option>
-                                    @foreach($groups as $group)
-                                        <option value="{{$group->GroupId}}">{{$group->GroupName}}</option>
-                                    @endforeach
-                                </select>
-
-
-                                <br>
-                                
-                                <label class="control-label" for="settingname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Setting Name </label>
-                                <select  class="form-control input-sm col-xs-1" id="settingname" required>
-                                    <option></option>
-                                    <option>areaspage</option>
-                                    <option>departmentpage</option>
-                                    <option>machines</option>
-                                    <option>createPalletConfig</option>
-                                    <option>mapmachinetoarea</option>
-                                    <option>mapmachinestodept</option>
-                                    <option>mapitemsmachinesdept</option>
-                                    <option>mapitemstopallet</option>
-                                    <option>location</option>
-                                    <option>createjobs</option>
-                                    <option>getJobStarted</option>
-                                    <option>stocklocation</option>
-                                    <option>getjobsdata</option>
-                                    <option>palletreversal</option>
-                                    <option>printpalletsselectdept</option>
-                                    <option>exceptionmovementreport</option>
-                                    <option>creategroup</option>
-                                    <option>createuser</option>
-
-                                </select>
-                            </div>
-                            <br>
-                            <button type="button" id="savessettingname" class="btn-lg btn-success" >Save</button>
-                            <br>
-
-
-                        </form>
-                    </fieldset>
-                </div>
-                <div class="col-lg-8"  style="background: white;">
-                    <h4>Existing Group Settings</h4>
-
-
-                    <div class="col-lg-12" id="afterFilter">
-                        <div id="gridContainer1" style="min-width: 50vh">
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div-->
+        {{-- <div id="gridContainer1" style=""></div> --}}
         
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="newGroup" tabindex="-1" aria-labelledby="newGroupLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newGroupLabel">Create New Group</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="groupname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group Name </label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="groupname">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="savesgroupname" class="btn btn-success" >Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
-
     .dx-datagrid-table{
         font-size:15px;
     }
+
+    .dx-datagrid .dx-link {
+        color: #df2413;
+    }
+
+    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+        font-weight: 500;
+        background-color: #df2413;
+        color: #fff;
+    }
+
+    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+        color: #df2413;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    .dx-datagrid {
+        height: calc(100vh - 83px);
+        max-height: calc(100vh - 83px);
+    }
 </style>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Multiselect -->
+<script src="{{ asset('js/jquery.multiselect.js') }}"></script>
+
+<!-- Excel Saver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+
+<!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
 
 <script>
     $.ajaxSetup({
@@ -190,9 +148,6 @@
                     showBorders: true,
                     filterRow: { visible: true },
                     allowColumnResizing: true,
-                    paging:{
-                        pageSize: 3,
-                    },
                     export: {
                         enabled: true
                     },
@@ -216,20 +171,14 @@
                         {
                             dataField: "GroupID",
                             caption: "ID",
-                            width: 50,
-
                         },  
                         {
                             dataField: "GroupName",
                             caption: "Group Name",
-                            width: 200,
-
                         },
                         {
                             dataField: "OptionDesc",
                             caption: "Description",
-                            width: 300,
-
                         }
                         
                     ],
@@ -307,15 +256,36 @@
                 $("#gridContainer").dxDataGrid({
 
                     dataSource:data, //as json
-
+                    hoverStateEnabled: true,
                     showBorders: true,
                     filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
                     allowColumnResizing: true,
-                    paging:{
-                        pageSize: 4,
+                    columnAutoWidth: true,
+                    scrolling: {
+                        rowRenderingMode: 'infinite',
+                    },
+                    // paging:{
+                    //     pageSize: 10,
+                    // },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [5, 10, 20, 50, 'all'],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true,
                     },
                     export: {
                         enabled: true
+                    },
+                    editing: {
+                        mode: 'batch',
+                        allowUpdating: true,
+                        allowDeleting: true,
+                    },
+                    selection: {
+                        mode: 'single',
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();

@@ -550,6 +550,7 @@ Route::get('printtripsheet/{ref}', [InvoicingController::class,'printtripsheet']
 Route::get('testWarehouseT/{ref}/{sonumber}/{ownerid}', [InvoicingController::class,'testWarehouseT']);
 Route::get('invManualAdj/{ref}/{sonumber}/{ownerid}/{autoindex}/{dates}', [InvoicingController::class,'invManualAdj']);
 Route::get('individualInvoicing', [InvoicingController::class,'individualInvoicing']);
+Route::get('individualInvoicingAPITest/{ownersId}/{SoNumber}/{invoiceid}/{ref}/{userid}/{userName}', [InvoicingController::class,'individualInvoicingAPITest']);
 Route::get('individualInvoicingAPI/{ownersId}/{SoNumber}/{invoiceid}/{ref}/{userid}/{userName}', [InvoicingController::class,'individualInvoicingAPI']);
 Route::get('processInvoce', [InvoicingController::class,'processInvoce']);
 Route::get('viewAwaitingtoinvoice', [InvoicingController::class,'viewAwaitingtoinvoice']);
@@ -1007,6 +1008,7 @@ Route::get('teamLeaderGetPickingPlanData',[WarehouseController::class,'teamLeade
 Route::get('teamLeaderGetNotifications',[WarehouseController::class,'teamLeaderGetNotifications']);
 Route::get('teamLeaderApproveNotification',[WarehouseController::class,'teamLeaderApproveNotification']);
 Route::get('teamLeaderGetInstructions',[WarehouseController::class,'teamLeaderGetInstructions']);
+Route::get('teamLeaderGetPickingPlanToInvoice',[WarehouseController::class,'teamLeaderGetPickingPlanToInvoice']);
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
 

@@ -138,7 +138,8 @@ class PDFController extends Controller
 
     public function printLabelPage($department)
     {
-        return view('warehouse/labels/printLabel')->with('department', $department);
+        $printers = DB::connection('sqlsrv2')->select("SELECT DISTINCT intPrinterID, strPrinterName FROM viewPrintersInDepartment WHERE strDeptName = '$department'");
+        return view('warehouse/labels/printLabel')->with('department', $department)->with('printers', $printers);
     }
 
     public function printLabelByDepartment(Request $request)

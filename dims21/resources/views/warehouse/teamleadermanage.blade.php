@@ -271,8 +271,8 @@
                         <div class="col mb-3">
                             <label for="loader" class="col-form-label">Loaders</label>
                             <select class="form-select" type="text" id='loader' multiple="multiple" >
-                                @foreach ($pickers as $picker)
-                                    <option value="{{ $picker->UserID }}">{{ $picker->UserName }}</option>
+                                @foreach ($loaders as $loader)
+                                    <option value="{{ $loader->UserID }}">{{ $loader->UserName }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -443,7 +443,6 @@
             const staging = $('#staging').val();
             const ticket = $('#ticket').val();
             const prompt = 'update';
-
             const stringPickers = picker.join(',');
             const stringLoaders = loader.join(',');
             const stringStaging = staging.join(',');
@@ -569,12 +568,54 @@
                                 container.addClass("customPadding"); // Add the no-padding class to the container
 
                                 if (value == 0) {
-                                    const button = $("<button class='btn btn-primary btn-sm w-100' disabled>").text("invoice").on("click", function() {});
+                                    const button = $("<button class='btn btn-primary btn-sm w-100' disabled >").text("invoice").on("click", function() {});
                                     container.append(button);
 
                                 } else {
                                     const button = $("<button class='btn btn-primary btn-sm w-100'>").text("invoice").on("click", function() {
-                                        console.log(options.data.strUnickReference);
+                                        // console.log(options.data.strUnickReference);
+                                        getPickingPlanToInvoice(options.data.strUnickReference)
+                                        .then(function(pickingplan) {
+                                            // console.log(pickingplan);
+                                            var invoiceList = $.map(pickingplan, function (item) {
+                                                return {
+                                                    intOwnerID: item.intOwnerID,
+                                                    OrderNum: item.OrderNum,
+                                                    OrderId: item.OrderId,
+                                                    strUnickReference: item.strUnickReference,
+                                                    UserId: {{ Auth::user()->UserID; }},
+                                                    UserName: '{{ Auth::user()->UserName; }}'
+                                                };
+                                            });
+
+                                            // Function to check if all properties in the objects are the same
+                                            function areAllPropertiesEqual(obj1, obj2) {
+                                            for (const key in obj1) {
+                                                if (obj1.hasOwnProperty(key)) {
+                                                if (obj1[key] !== obj2[key]) {
+                                                    return false;
+                                                }
+                                                }
+                                            }
+                                            return true;
+                                            }
+
+                                            // Function to remove rows with all properties being the same
+                                            function removeDuplicateRows(arr) {
+                                            return arr.filter((item, index) => {
+                                                // Keep the first occurrence of each row
+                                                return index === arr.findIndex((obj) => areAllPropertiesEqual(obj, item));
+                                            });
+                                            }
+
+                                            // Call the function to remove duplicate rows from the data array
+                                            invoiceList = removeDuplicateRows(invoiceList);
+
+                                            invoiceOut(invoiceList);
+                                        }) 
+                                        .catch(function(error) {
+                                            console.error('Error:', error);
+                                        });
                                     });
                                     container.append(button);
                                 }
@@ -646,9 +687,16 @@
                     
                     $('#loadId').text('TL'+data[0]['intAutoPickingHeader']);
                     $('#date').val(data[0]['dtm']);
+
+                    $("#horse option[value='" + data[0].strTrailorNo + "']").prop('disabled', false);
                     $('#horse').val(data[0].strTrailorNo).trigger('change');
+
+                    $("#trailorOne option[value='" + data[0].strTrailorone + "']").prop('disabled', false);
                     $('#trailorOne').val(data[0]['strTrailorone']).trigger('change');
+
+                    $("#trailorTwo option[value='" + data[0].strTrailortwo + "']").prop('disabled', false);
                     $('#trailorTwo').val(data[0]['strTrailortwo']).trigger('change');
+
                     $('#staging').val(data[0]['']).trigger('change');
                     $('#ticket').val(data[0]['strTicket']).trigger('change');
                     $('#belts').val(data[0]['intBelts']);
@@ -930,7 +978,57 @@
                 getNotifications('{{ $ref }}');
             }
         });
+    };
+
+    function getPickingPlanToInvoice(ref) {
+        return new Promise(function(resolve, reject) {
+            $.ajax({
+                url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
+                type: "get",
+                data: {
+                    ref: ref,
+                },
+                success: function(data) {
+                    resolve(data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    reject(errorThrown);
+                }
+            });
+        });
     }
+
+    function invoiceOut(data){
+        $.each(data, function(index, item) {
+            // Access properties of the current item
+            var ownersId = item.intOwnerID;
+            var SoNumber = item.OrderNum; 
+            var invoiceid = item.OrderId; 
+            var ref = item.strUnickReference; 
+            var userid = item.UserId; 
+            var userName = item.UserName; 
+
+            $.ajax({
+                url: '{!!url("/individualInvoicingAPITest")!!}' + '/' + ownersId + '/' + SoNumber + '/' + invoiceid + '/' + ref + '/' + userid + '/' + userName,
+                type: "get",
+                data: {
+
+                },
+                success: function (data) {
+
+                    console.debug(data);
+
+                    // if(data =="Credit Limit")
+                    // {
+                    //     alert("CREDIT LIMIT ISSUES");
+
+                    // }else{
+
+                    // }
+                }
+            });
+        });
+    };
 
 </script>
 </body>

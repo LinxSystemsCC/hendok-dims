@@ -42,6 +42,7 @@ class InvoicingController extends Controller
             ->where('strUnickReference', $referenceno)
             ->update(['strTicket' => $nickname]);
     }
+
     public function individualInvoicing(Request $request){
 
         $ownersId = $request->get('ownerid');
@@ -167,6 +168,10 @@ class InvoicingController extends Controller
 
         }
 
+    }
+    public function individualInvoicingAPITest($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName)
+    {
+        dump($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName);
     }
     //{ownersId}/{SoNumber}/{invoiceid}/{ref}/{userid}/{userName}
     public function individualInvoicingAPI($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName)

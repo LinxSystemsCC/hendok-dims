@@ -3102,11 +3102,12 @@ class WareHouseController extends Controller
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses");
         $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
-        $pickers = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM tblDimsusers");
+        $pickers = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM viewPickers");
+        $loaders = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM viewLoaders");
         $stagingAreas = DB::connection('sqlsrv2')->select("SELECT * FROM tblStagingAreas");
         $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL OR SECOND_WEIGH_OPERATOR = ''");
 
-        return view('warehouse/teamleadermanage')->with('ref', $ref)->with('listproducts', $allproducts)->with('horses', $horses)->with('trailors', $trailors)->with('pickers', $pickers)->with('stagingAreas', $stagingAreas)->with('tickets', $tickets);
+        return view('warehouse/teamleadermanage')->with('ref', $ref)->with('listproducts', $allproducts)->with('horses', $horses)->with('trailors', $trailors)->with('pickers', $pickers)->with('loaders', $loaders)->with('stagingAreas', $stagingAreas)->with('tickets', $tickets);
     }
 
     public function getTeamLeaderPlans(Request $request){
@@ -3171,6 +3172,12 @@ class WareHouseController extends Controller
         $ref = $request->get('ref');
 
         $data = DB::connection('sqlsrv3')->select("EXEC spTeamLeaderGetInstructions '$ref'");
+        return response()->json($data);
+    }
+
+    public function teamLeaderGetPickingPlanToInvoice(Request $request){
+        $ref = $request->get('ref');
+        $data = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         return response()->json($data);
     }
 
