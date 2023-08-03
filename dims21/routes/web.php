@@ -1000,7 +1000,8 @@ Route::post('saveretest', [WareHouseController::class,'saveretest']);
 Route::post('regradeproduct', [WareHouseController::class,'regradeproduct']);
 Route::post('addproductspec', [WareHouseController::class,'addproductspec']);
 Route::post('editproductspec', [WareHouseController::class,'editproductspec']);
-Route::get('teamleadermanage/{ref}', [WareHouseController::class,'teamleadermanage']);
+// Route::get('teamleadermanage/{ref}', [WareHouseController::class,'teamleadermanage']);
+Route::middleware('auth')->get('teamleadermanage/{ref}', [WareHouseController::class, 'teamleadermanage']);
 Route::get('getTeamLeaderPlans',[WarehouseController::class,'getTeamLeaderPlans']);
 Route::get('teamLeaderAssign',[WarehouseController::class,'teamLeaderAssign']);
 Route::get('teamLeaderEquipmentAssign',[WarehouseController::class,'teamLeaderEquipmentAssign']);
@@ -1200,8 +1201,3 @@ Route::get('printNailsOuterLabel/{id}',[PDFController::class,'printNailsOuterLab
 Route::get('printBarbedWireLabel/{id}',[PDFController::class,'printBarbedWireLabel']);
 Route::get('printLabelPage/{department}',[PDFController::class,'printLabelPage']);
 Route::post('printLabelByDepartment',[PDFController::class,'printLabelByDepartment']);
-
-
-Route::middleware('auth')->view('warehouse.teamleadermanage');
-
-
