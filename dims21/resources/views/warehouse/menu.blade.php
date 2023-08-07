@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 if ((Auth::guest()))
 {
-    return redirect()->route('login');
+    
 }else{
     $v  =  new \App\Http\Controllers\SalesForm();
     /*$areaspage = $v->getThings(Auth::user()->GroupId,'areaspage');

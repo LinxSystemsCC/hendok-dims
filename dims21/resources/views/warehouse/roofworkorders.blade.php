@@ -952,12 +952,12 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                                                 displayExpr: "strMachineName",
                                             },
                                             cellTemplate: function(container, options) {
-                                            if (options.value === 0) {
-                                                container.text("Unassigned");
-                                            } else {
-                                                container.text(options.displayValue);
+                                                if (options.value === 0) {
+                                                    container.text("Unassigned");
+                                                } else {
+                                                    container.text(options.displayValue);
+                                                }
                                             }
-                                        }
                                         },
                                         {
                                             dataField: "intQty",

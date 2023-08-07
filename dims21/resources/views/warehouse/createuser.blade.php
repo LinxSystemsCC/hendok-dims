@@ -4,13 +4,53 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <link rel="icon" type="image/png" href="{{url('images/dimslogo.png')}}">
+    <title>Create Users</title>
+
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <!-- Multiselect --> 
+    <link href="{{ asset('css/jquery.multiselect.css') }}" rel="stylesheet"  type='text/css'>
+
+    <!-- DevExtreme theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
+
+    <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
-    <!-- DevExtreme theme -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    <style>
+        .dx-datagrid-table{
+            font-size:15px;
+        }
+    
+        .dx-datagrid .dx-link {
+            color: #df2413;
+        }
+    
+        .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+            font-weight: 500;
+            background-color: #df2413;
+            color: #fff;
+        }
+    
+        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+            color: #df2413;
+            font-size: 14px;
+            line-height: 18px;
+        }
+    
+        .dx-datagrid {
+            height: calc(100vh - 75px);
+            max-height: calc(100vh - 75px);
+        }
+
+        .customPadding {
+            padding: 3px !important;
+        }
+    </style>
 
 </head>
 
@@ -102,48 +142,47 @@
     </div>
 </div>
 
-<style>
-    .dx-datagrid-table{
-        font-size:15px;
-    }
+<!-- Modal -->
+<div class="modal fade" id="assignPrinter" tabindex="-1" aria-labelledby="assignPrinterLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="assignPrinterLabel">Assigned Printers</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div id="checkboxContainer">
 
-    .dx-datagrid .dx-link {
-        color: #df2413;
-    }
-
-    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
-        font-weight: 500;
-        background-color: #df2413;
-        color: #fff;
-    }
-
-    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
-        color: #df2413;
-        font-size: 14px;
-        line-height: 18px;
-    }
-
-    .dx-datagrid {
-        height: calc(100vh - 63px);
-        max-height: calc(100vh - 63px);
-    }
-</style>
+                    </div>
+                    <input id='userId' hidden>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="updatePrinters" class="btn btn-success" >Update</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Multiselect -->
+<script src="{{ asset('js/jquery.multiselect.js') }}"></script>
+
+<!-- Excel Saver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+
+<!-- Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-
-<!-- JavaScript Bundle with Popper -->
+<!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
 <!-- DevExtreme library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
-<script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
 
 <script>
     $.ajaxSetup({
@@ -178,6 +217,8 @@
 
         });
 
+        var groups = {!! json_encode($groups) !!};
+
         $.ajax({
 
             url: '{!!url("/getusers")!!}',
@@ -189,7 +230,6 @@
             success: function (data) {
 
                 $("#gridContainer").dxDataGrid({
-
                     dataSource:data, //as json
                     hoverStateEnabled: true,
                     showBorders: true,
@@ -215,7 +255,7 @@
                         enabled: true
                     },
                     editing: {
-                        mode: 'batch',
+                        mode: 'popup',
                         allowUpdating: true,
                         allowDeleting: true,
                     },
@@ -242,27 +282,57 @@
                         {
                             dataField: "UserID",
                             caption: "ID",
+                            allowEditing: false,
                         },{
                             dataField: "UserName",
                             caption: "Username",
                         },{
                             dataField: "Email",
                             caption: "Email",
-                        },{
+                        },
+                        {
                             dataField: "GroupId",
                             caption: "Group ID",
-                        },{
+                            lookup: {
+                                dataSource: groups,
+                                valueExpr: "GroupId",
+                                displayExpr: "GroupName",
+                            },
+                        },
+                        {
                             dataField: "TabletUser",
                             caption: "Tablet User",
-                        }
+                            lookup: {
+                                dataSource: [
+                                    {Id:"0", Prompt:'No',},
+                                    {Id:"1", Prompt:'Yes',}
+                                ],
+                                valueExpr: "Id",
+                                displayExpr: "Prompt",
+                            },
+                        },
+                        {
+                            dataField: "printerAssign",
+                            caption: "Printers",
+                            cellTemplate: function (container, options) {
+                                container.addClass("customPadding");
+                                const button = $("<button class='btn btn-secondary btn-sm w-100'>").text("View").on("click", function() {
+                                    // console.log(options.data);
+                                    $("#userId").val(options.data.UserID);
+                                    getUserPrinters(options.data.UserID);
+                                });
+                                container.append(button);
+                            },
+                            width: 100,
+                        },
                     ],
-                    onRowDblClick:function(e){
-                        console.log(e.data.intJobId);
+                    onRowDblClick:function(e){ 
                         var intUserID =  e.data.UserID;
 
                         window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID);
                     },
                     onRowRemoving: function(e) {
+
                         var UserID = e.data.UserID;
                         $.ajax({
                             url: '{!!url("/deleteUser")!!}',
@@ -274,12 +344,44 @@
                                 location.reload();
                             }
                         });
+                    },
+                    onRowUpdating: function(e) {
+                        var ID = e.oldData.UserID;
+                        var userName = e.newData.UserName || e.oldData.UserName;
+                        var email = e.newData.Email || e.oldData.Email;
+                        var groupId = e.newData.GroupId || e.oldData.GroupId;
+                        var tablet = e.newData.TabletUser || e.oldData.TabletUser;
+
+                        $.ajax({
+                            url: '{!!url("/updateUser")!!}',
+                            type: "GET",
+                            data: {
+                                ID : ID,
+                                userName : userName,
+                                email : email,
+                                groupId : groupId,
+                                tablet : tablet,
+                            },
+                            success: function (data) {
+                                location.reload();
+                            }
+                        });
                     }
-                    
                 });
 
             }
 
+        });
+
+        $('#updatePrinters').click(function(){  
+            var userId = $("#userId").val();
+            var checkedIds = [];
+            $("#checkboxContainer input[type='checkbox']:checked").each(function() {
+                checkedIds.push($(this).val());
+            });
+            
+            var printers = checkedIds.join(",");
+            updateUserPrinters(userId, printers);
         });
 
         $('.sidebar ul li a').click(function(){
@@ -292,7 +394,6 @@
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
-
     });
 
     function showDialog(tag,width,height){
@@ -322,7 +423,58 @@
             "minimize" : function(evt, dlg){  }, // event
             "restore" : function(evt, dlg){  } // event
         });
-    }
+    };
+
+    function getUserPrinters(ID){
+        $.ajax({
+            url: '{!!url("/getUserPrinters")!!}',
+            type: "GET",
+            data: {
+                ID : ID,
+            },
+            success: function (data) {
+                // console.log(data);
+                var checkboxContainer = $("#checkboxContainer");
+
+                // Loop through your data and append the HTML structure for each line
+                checkboxContainer.empty(); 
+                
+                data.forEach(function(item) {
+                    var checkboxDiv = $('<div class="form-check">');
+                    var checkboxInput = $('<input class="form-check-input" type="checkbox" value="'+item.intPrinterId+'" id="'+item.intPrinterId+'">');
+                    var checkboxLabel = $('<label class="form-check-label" for="flexCheckDefault">').text(item.strPrinter);
+
+                    if (item.intAssigned === '1') {
+                        checkboxInput.prop("checked", true);
+                    } else {
+                        checkboxInput.prop("checked", false);
+                    }
+
+                    checkboxDiv.append(checkboxInput);
+                    checkboxDiv.append(checkboxLabel);
+
+                    checkboxContainer.append(checkboxDiv);
+                });
+                
+                $("#assignPrinter").modal("toggle");
+            }
+        });
+    };
+
+    function updateUserPrinters(ID, printers){
+        $.ajax({
+            url: '{!!url("/updateUserPrinters")!!}',
+            type: "GET",
+            data: {
+                ID : ID,
+                printers : printers,
+            },
+            success: function (data) {
+                location.reload();
+            }
+        });
+    };
+
 
 
 </script>

@@ -154,153 +154,17 @@ if ((Auth::guest()))
                 $('#'+rowName+"_"+rowNum).prop('checked', false);
                 checked = false;
             }
-            //console.debug(checked);
 
             if (checked == true){
                 for (let index = 1; index <= rowNum.lenght; index++) {
                     $('#'+rowName+"_"+index).prop('checked', true);
                 }
             }
-
-            // if (rowNum = 1){
-            //     $('#'+rowName+"_1").css('background-color', '#eee');
-            // }
-
-            //console.debug(rowNum);
-            //console.debug(rowName);
         });
 
-/*
-        var jArray = JSON.stringify({!! json_encode($permissions) !!});
-    var finalUserGrid = $.map(JSON.parse(jArray), function (item) {
-        var booleanfromitem = (item.Selected ==1);
-        
-        return {
-            Type: item.Type,
-            UserID: item.UserID,
-            num1: item.num1,
-            num2: item.num2,
-            num3: item.num3,
-            num4: item.num4,
-            Selected: booleanfromitem
-        }
-
-    });
-        $("#usergrid").dxDataGrid({
-                    dataSource:finalUserGrid,
-                    showBorders: true,
-                    keyExpr:'Type',
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    hoverStateEnabled: true,
-                    allowColumnResizing: true,
-                    columnAutoWidth: true,
-                    editing: {
-                        mode: 'batch',
-                        allowUpdating: true,
-                        // allowAdding: true,
-                        // allowDeleting: true,
-                        useIcons: true,
-                    },
-                    paging:{
-                        pageSize: 10,
-                    }, 
-                    columns: [
-                        
-                    {
-                            dataField: "Type",
-                            caption: "ID",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        },
-                        {
-                            dataField: "num1",
-                            caption: "Section 1 Detail",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        },{
-                            dataField: "num2",
-                            caption: "Section 2 Detail",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        },{
-                            dataField: "num3",
-                            caption: "Section 3 Detail",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        },{
-                            dataField: "num4",
-                            caption: "Section 4 Detail",
-                            headerFilter: {
-                                allowSearch: true,
-                            }
-
-                        },
-                        {
-                            dataField: "Selected",
-                            caption: "Yes/No",
-                            dataType: "boolean",
-                            headerFilter: {
-                                allowSearch: true,
-                            }   
-                        },
-                        
-
-
-                    ],
-                    onRowUpdated: function(e) {
-                        var checkedLines = Array();
-                        var selectedRowsData =  $("#usergrid").dxDataGrid("getDataSource").store().load().done(function (data) {
-                        checkedLines= data;
-                        });
-                        var gridResults ="<xml>";
-        
-         
-
-                                $.each(checkedLines ,function(key,value) {
-                                gridResults= gridResults + "<result>";
-                                gridResults= gridResults + "<Type>"+value.Type+"</Type>";
-                                if(value.Selected ==true){
-                                gridResults= gridResults + "<Selected>1</Selected>";
-                                }else 
-                                {
-                                gridResults= gridResults + "<Selected>0</Selected>";
-                                }
-                                gridResults= gridResults+ "</result>";
-
-                            });
-                            gridResults= gridResults+"</xml>";
-                            console.log(gridResults);
-                            $.ajax({
-                                url: '{!!url("/xmlUserGridPermsPost")!!}',
-                                type: "POST",
-                                data: {
-                                    UserID:$('#userID').val(),
-                                    gridResult: gridResults
-                                },
-                                success: function (data) {
-                                    location.reload(true);
-                                    
-                                }
-                                });
-                            }
-                });
-        */
         $('#saveUserPermissions').click(function(){
                         
             var checkedBoxes = [];
-            /*$("input:checkbox[type=checkbox]:checked").each(function(){
-                checkedBoxes.push($(this).val());
-            });*/
 
             $.each($("input[type=checkbox]:checked"), function(){
                 checkedBoxes.push($(this).val());

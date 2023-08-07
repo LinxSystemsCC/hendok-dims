@@ -929,8 +929,6 @@
                         }
                     });
 
-                }else{
-                    console.log("Kyle Is an amazing Programmer :)");
                 }
         });
 

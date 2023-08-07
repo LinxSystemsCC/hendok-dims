@@ -24,6 +24,21 @@ class WareHouseController extends Controller
         return view('warehouse/createuser')->with('groups', $groups);
     }
 
+    public function getUserPrinters(Request $request)
+    {
+        $ID = $request->get('ID');
+        $printers = DB::connection('sqlsrv2')->select("select * from viewUserPrinters where UserID = $ID");
+        return response()->json($printers);
+    }
+
+    public function updateUserPrinters(Request $request)
+    {
+        $ID = $request->get('ID');
+        $printers = $request->get('printers');
+        $data = DB::connection('sqlsrv2')->select("EXEC spUserPrinterCrud $ID, '$printers'");
+        return response()->json($data);
+    }
+
     public function createuser(Request $request)
     {
         $username =  $request->get("username");
@@ -56,10 +71,16 @@ class WareHouseController extends Controller
         return response()->json($users);
     }
 
-    public function updateUser()
+    public function updateUser(Request $request)
     {
-        $users = DB::connection('sqlsrv2')->select("EXEC spUpdateUserInfo ");
-        return response()->json($users);
+        $ID = $request->get('ID');
+        $userName = $request->get('userName');
+        $email = $request->get('email');
+        $groupId = $request->get('groupId');
+        $tablet = $request->get('tablet');
+
+        $update = DB::connection('sqlsrv2')->select("EXEC spUpdateUserInfo $ID, '$userName', '$email', $groupId, $tablet");
+        return response()->json($update);
     }
 
     public function getqc1()

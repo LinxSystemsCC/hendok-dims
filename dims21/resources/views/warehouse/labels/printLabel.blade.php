@@ -54,14 +54,11 @@
             <input class="form-control input-sm col-xs-1" id="qty" style="width: 100%" required>
         </div>
 
-        {{-- Product --}}
+        {{-- Printer --}}
         <div class="form-group">
             <label class="control-label" for="printer"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Printer</label>
             <select  class="form-control input-sm col-xs-1" id="printer" style="width: 100%" required>
                 <option></option>
-                @foreach ($printers as $printer)
-                    <option value="{{ $printer->intPrinterID }}">{{ $printer->strPrinterName }}</option>
-                @endforeach
             </select>
         </div>
 
@@ -154,7 +151,22 @@
                     $("#prodname").append(toAppend);
 
                 }
+            });
+            $.ajax({
+                url: '{!!url("/getUserPrintersMappedToProductCategory")!!}',
+                type: "GET",
+                data: {
+                    category: $('#category').val(),
+                },
+                success: function (data) {
+                    var toAppend = '';
+                    $("#printer").empty();
+                    $.each(data,function(i,o){
+                        toAppend += '<option value="'+o.intLabelType+'">'+o.strPrinter+'</option>';
+                    });
+                    $("#printer").append(toAppend);
 
+                }
             });
         });
 
@@ -192,7 +204,9 @@
                     category: $('#category option:selected').text(),
                     product: $('#prodname option:selected').val(),
                     qty: $('#qty').val(),
-                    barcode: $('#barcode').val()
+                    barcode: $('#barcode').val(),
+                    printer: $('#printer option:selected').text(),
+                    labelType : $('#printer option:selected').val(),
                 },
                 success: function (data) {
                     if(data[0].Result =="SUCCESS")

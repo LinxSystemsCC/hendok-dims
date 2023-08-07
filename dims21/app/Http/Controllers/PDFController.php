@@ -7,6 +7,7 @@ use PDF;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PDFController extends Controller
 {
@@ -138,18 +139,31 @@ class PDFController extends Controller
 
     public function printLabelPage($department)
     {
-        $printers = DB::connection('sqlsrv2')->select("SELECT DISTINCT intPrinterID, strPrinterName FROM viewPrintersInDepartment WHERE strDeptName = '$department'");
-        return view('warehouse/labels/printLabel')->with('department', $department)->with('printers', $printers);
+        return view('warehouse/labels/printLabel')->with('department', $department);
     }
 
     public function printLabelByDepartment(Request $request)
     {
         $department = $request->get('department');
-        $productCategory = $request->get('productCategory');
-        $productName = $request->get('productName');
+        $productCategory = $request->get('category');
+        $productName = $request->get('product');
         $barcode = $request->get('barcode');
+        $qty = $request->get('qty');
+        $printer = $request->get('printer');
+        $labelType = $request->get('labelType');
+        $operator = Auth::user()->UserName;
 
-        $result = DB::connection('sqlsrv2')->select('exec spPrintLabelByDepartment ?', array($department, $productCategory, $productName, $barcode));
+        $result = DB::connection('sqlsrv2')->select("EXEC spPrintLabelByDepartment '$department', '$productCategory', '$productName', '$barcode', $qty, '$printer', '$operator', $labelType");
         return response()->json($result);
     }
+
+    public function getUserPrintersMappedToProductCategory(Request $request)
+    {
+        $category = $request->get('category');
+        $userId = Auth::user()->UserID;
+
+        $result = DB::connection('sqlsrv2')->select('exec spGetUserPrintersMappedToProductCategory ?, ?', array($category, $userId));
+        return response()->json($result);
+    }
+
 }
