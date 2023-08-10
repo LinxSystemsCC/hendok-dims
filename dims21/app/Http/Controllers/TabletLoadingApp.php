@@ -423,6 +423,21 @@ class TabletLoadingApp extends controller
         return response()->json($result);
     }
 
+    public function truckLoadUpdatePriortiyStatus(Request $request){
+        $intAutoPicking = $request->get('intAutoPicking');
+        $isPriorityLine = $request->get('isPriorityLine');
+        
+        $result = DB::connection('sqlsrv3')->select('exec spTruckLoadUpdatePriortiyStatus ?,?', array($intAutoPicking, $isPriorityLine));
+
+        return response()->json($result);
+    }
+
+    public function completeTruckLoad(Request $request){
+        $ref = $request->get('ref');
+        $result = DB::connection('sqlsrv3')->select("UPDATE tblPickingPlanHeader SET intStatus = 1 WHERE strUnickReference = '$ref'");
+        return response()->json($result);
+    }
+
     public function jsongetpickingplan(Request $request){
         $dateFrom = (new \DateTime($request->get('from')))->format('Y-m-d');
         $dateTo = (new \DateTime($request->get('to')))->format('Y-m-d');

@@ -346,6 +346,8 @@ Route::post('assignHorseToPickingTicket',[TabletLoadingApp::class,'assignHorseTo
 Route::post('assignTrailorToPickingTicket',[TabletLoadingApp::class,'assignTrailorToPickingTicket']);
 Route::post('assignDriversToPickingTicket',[TabletLoadingApp::class,'assignDriversToPickingTicket']);
 Route::post('assignTicketToPickingTicket',[TabletLoadingApp::class,'assignTicketToPickingTicket']);
+Route::post('truckLoadUpdatePriortiyStatus',[TabletLoadingApp::class,'truckLoadUpdatePriortiyStatus']);
+Route::post('completeTruckLoad',[TabletLoadingApp::class,'completeTruckLoad']);
 Route::post('sequencepickingplans',[TabletLoadingApp::class,'sequencepickingplans']);
 Route::get('jsongetpickingplan',[TabletLoadingApp::class,'jsongetpickingplan']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);

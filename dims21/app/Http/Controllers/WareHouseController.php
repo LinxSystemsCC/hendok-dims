@@ -3133,7 +3133,7 @@ class WareHouseController extends Controller
 
     public function getTeamLeaderPlans(Request $request){
         $date = $request->get('date');
-        $userID = 8;//Auth::user()->UserID;
+        $userID = Auth::user()->UserID;
         $data = DB::connection('sqlsrv3')->select("exec spGetTeamLeaderPlans '$date',$userID");
         return response()->json($data);
     }
@@ -3201,9 +3201,6 @@ class WareHouseController extends Controller
         $data = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         return response()->json($data);
     }
-
-    
-    
 
     private static function getTabs($tabcount)
     {

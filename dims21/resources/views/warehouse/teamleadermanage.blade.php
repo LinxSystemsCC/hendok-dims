@@ -152,16 +152,16 @@
                         </tr>
                         @endif
                         @if($val->isLineInvoiced == 1)
-                        <tr id="rtrr{{$ID}}">
+                        <tr id="rtrr{{$ID}}" @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
                         @else
-                        <tr id="rtrr{{$ID}}">
+                        <tr id="rtrr{{$ID}}" @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
                         @endif
                         <td>{{ $val->OrderDate}}</td>
                         <td>{{$val->OrderNum}}</td>
                         <td>{{ $val->PastelDescription}}</td>
-                        <td style="font-size: 14px; background: #cacaca">{{ floatval($val->mnyQty)}}</td>
-                        <td>{{ floatval($val->mnyPickedQuantity)}}</td>
-                        <td>{{ floatval($val->mnyLoadedQty)}}</td>
+                        <td>{{ floatval($val->mnyQty)}}</td>
+                        <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>{{ floatval($val->mnyPickedQuantity)}}</td>
+                        <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>{{ floatval($val->mnyLoadedQty)}}</td>
                         </tr>
                         <?php
                         $istrue = true;
@@ -171,7 +171,7 @@
                         $orderdate = $val->OrderDate;
                         ?>
                         @else
-                        <tr>
+                        <tr @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
                             @if($orderdate != $val->OrderDate)
                             <td>{{ $val->OrderDate}}</td>
                             @else
@@ -183,9 +183,9 @@
                             <td></td> 
                             @endif
                             <td>{{ $val->PastelDescription}}</td>
-                            <td style="font-size: 14px; background: #cacaca">{{ floatval($val->mnyQty)}}</td>
-                            <td>{{ floatval($val->mnyPickedQuantity)}}</td>
-                            <td>{{ floatval($val->mnyLoadedQty)}}</td>
+                            <td>{{ floatval($val->mnyQty)}}</td>
+                            <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>{{ floatval($val->mnyPickedQuantity)}}</td>
+                            <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>{{ floatval($val->mnyLoadedQty)}}</td>
                         </tr>
                         <?php
                         $storenames = $val->StoreName;
