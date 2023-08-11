@@ -55,15 +55,4 @@ class LoginController extends Controller
 
         return view('auth.login'); // Update this with your login view path
     }
-
-    // Override the authenticated method to redirect back to the intended URL
-    protected function authenticated(Request $request, $user)
-    {
-        if (session()->has('url.intended')) {
-            return redirect(session('url.intended'));
-        }
-
-        return redirect($this->redirectTo);
-    }
-
 }

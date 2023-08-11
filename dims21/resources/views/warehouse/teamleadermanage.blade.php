@@ -569,7 +569,7 @@
 
                                 if (value == 0) {
                                     const button = $("<button class='btn btn-primary btn-sm w-100' disabled >").text("invoice").on("click", function() {});
-                                    container.append(button);
+                                    container.append(button); 
 
                                 } else {
                                     const button = $("<button class='btn btn-primary btn-sm w-100'>").text("invoice").on("click", function() {
