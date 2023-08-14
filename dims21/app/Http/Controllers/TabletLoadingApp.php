@@ -448,6 +448,22 @@ class TabletLoadingApp extends controller
 
         return response()->json($allproducts);
     }
+
+    public function getInstructions(Request $request){
+        $ref = $request->get('ref');
+        $data = DB::connection('sqlsrv3')->select("SELECT * FROM tblInstructions WHERE strUnickReference = '$ref'");
+        return response()->json($data);
+    }
+
+    public function assignInstruction(Request $request){
+        $ref = $request->get('ref');
+        $instruction = $request->get('instruction');
+        $type = $request->get('type');
+        $userId = Auth::user()->UserID;
+        $data = DB::connection('sqlsrv3')->select("EXEC spAssignInstruction '$ref', '$instruction', '$type', $userId");
+        return response()->json($data);
+    }
+
     public function pickingticketslist($datefrom,$dateTo,$status)
     {
         $userId = Auth::user()->UserID;

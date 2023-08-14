@@ -344,7 +344,11 @@
 
             <!-- Instructions -->
             <div class="tab-pane fade" id="content6" role="tabpanel" aria-labelledby="tab6" style="height: calc(100vh - 150px); overflow-y: auto;">
-                <div id="instructionsTable"></div>
+                {{-- <div id="instructionsTable"></div> --}}
+                @foreach ($instructions as $instruction)
+                    <h4>{{ $instruction->strType }}</h4>
+                    <textarea class="form-control" id="{{ $instruction->strType }}" rows="5" readonly>{{ $instruction->strInstruction }}</textarea>
+                @endforeach
             </div>
             @endif
         </div>
@@ -858,67 +862,67 @@
         });
     };
 
-    function getInstructions(ref){
-        $.ajax({
-            url: '{!!url("/teamLeaderGetInstructions")!!}',
-            type: "GET",
-            data: {
-                ref: ref,
-            },
-            success: function (data) {
-                $("#instructionsTable").dxDataGrid({
-                    dataSource:data,
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    paging: {
-                        enabled: false
-                    },
-                    selection: {
-                        mode: "single",
-                    },
-                    columnAutoWidth:true,        
-                    allowColumnResizing: true,       
-                    columnResizingMode: "nextColumn",
-                    columns: [
-                        {
-                            dataField: "strUnickReference",
-                            caption: "Reference",
-                            visible: false,
-                        },{
-                            dataField: "strInstruction",
-                            caption: "Instruction",
-                        },{
-                            dataField: "strType",
-                            caption: "Type",
-                        },
-                    ] ,
-                    onRowPrepared(e) {
+    // function getInstructions(ref){
+    //     $.ajax({
+    //         url: '{!!url("/teamLeaderGetInstructions")!!}',
+    //         type: "GET",
+    //         data: {
+    //             ref: ref,
+    //         },
+    //         success: function (data) {
+    //             $("#instructionsTable").dxDataGrid({
+    //                 dataSource:data,
+    //                 showBorders: true,
+    //                 filterRow: { visible: true },
+    //                 filterPanel: { visible: true },
+    //                 headerFilter: { visible: true },
+    //                 paging: {
+    //                     enabled: false
+    //                 },
+    //                 selection: {
+    //                     mode: "single",
+    //                 },
+    //                 columnAutoWidth:true,        
+    //                 allowColumnResizing: true,       
+    //                 columnResizingMode: "nextColumn",
+    //                 columns: [
+    //                     {
+    //                         dataField: "strUnickReference",
+    //                         caption: "Reference",
+    //                         visible: false,
+    //                     },{
+    //                         dataField: "strInstruction",
+    //                         caption: "Instruction",
+    //                     },{
+    //                         dataField: "strType",
+    //                         caption: "Type",
+    //                     },
+    //                 ] ,
+    //                 onRowPrepared(e) {
                         
-                    },
-                    onRowClick: function (e) {
+    //                 },
+    //                 onRowClick: function (e) {
                         
-                    },
-                    onRowDblClick: function (e) {
+    //                 },
+    //                 onRowDblClick: function (e) {
                         
-                    },
-                    onInitNewRow: function(e) {
+    //                 },
+    //                 onInitNewRow: function(e) {
                         
-                    },
-                    onRowInserting: function(e) {
+    //                 },
+    //                 onRowInserting: function(e) {
                         
-                    },
-                    onRowInserted: function(e) {
+    //                 },
+    //                 onRowInserted: function(e) {
                         
-                    },
-                    onRowUpdating: function(e) {
+    //                 },
+    //                 onRowUpdating: function(e) {
                         
-                    }
-                });
-            }
-        });
-    };
+    //                 }
+    //             });
+    //         }
+    //     });
+    // };
 
     function AssignData(ref, horse, trailorOne, trailorTwo, picker, loader, staging, ticket, prompt){
         $.ajax({

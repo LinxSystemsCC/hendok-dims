@@ -350,6 +350,8 @@ Route::post('truckLoadUpdatePriortiyStatus',[TabletLoadingApp::class,'truckLoadU
 Route::post('completeTruckLoad',[TabletLoadingApp::class,'completeTruckLoad']);
 Route::post('sequencepickingplans',[TabletLoadingApp::class,'sequencepickingplans']);
 Route::get('jsongetpickingplan',[TabletLoadingApp::class,'jsongetpickingplan']);
+Route::get('getInstructions',[TabletLoadingApp::class,'getInstructions']);
+Route::post('assignInstruction',[TabletLoadingApp::class,'assignInstruction']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);
 Route::get('pickingticketslistnotdone/{ref}',[TabletLoadingApp::class,'pickingticketslistnotdone']);
 Route::get('topuppickingplan/{ref}',[TabletLoadingApp::class,'topuppickingplan']);

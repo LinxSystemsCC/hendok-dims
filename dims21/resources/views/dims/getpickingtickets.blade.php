@@ -80,6 +80,7 @@
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#trailorModal" id="btnTrailor" disabled>TRAILER</button>
                     <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#driverModal" id="btnDriver" disabled>DRIVER</button>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketModal" id="btnTicket" disabled>TICKET</button>
+                    <button class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#instructionsModal" id="btnInstructions" disabled>INSTRUCTIONS</button>
                     
                 </div>
             </div>
@@ -265,6 +266,35 @@
             </div>
         </div>
     </div>
+
+    <!-- Instructions -->
+    <div class="modal fade" id="instructionsModal" aria-labelledby="instructionsModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="instructionsModal">Assign Instructions</h1>
+                </div>
+    
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="notes" class="col-form-label">Notes</label>
+                            <textarea class="form-control" id="notes" rows="5"></textarea>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="deliveryInstructions" class="col-form-label">Delivery Instructions</label>
+                            <textarea class="form-control" id="deliveryInstructions" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeInstructionsModal">Close</button>
+                    <button type="button" id="saveInstructions" class="btn btn-success" >Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <!-- jQuery -->
@@ -296,7 +326,6 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
 
         $('#teamLeader').select2({
             theme: 'bootstrap-5',
@@ -359,7 +388,8 @@
                     teamLeader: $('#teamLeader').val(),
                 },
                 success: function (data) {
-                    location.reload();
+                    getData();
+                    $("#closeTeamLeaderModal").click();
                 }
             });
         });
@@ -375,7 +405,8 @@
                     horse: $('#horse').val(),
                 },
                 success: function (data) {
-                    location.reload();
+                    getData();
+                    $("#closeHorseModal").click();
                 }
             });
         });
@@ -392,7 +423,8 @@
                     trailorTwo: $('#trailorTwo').val(),
                 },
                 success: function (data) {
-                    location.reload();
+                    getData();
+                    $("#closeTrailorModal").click();
                 }
             });
         });
@@ -409,7 +441,8 @@
                     driverTwo: $('#driverTwo').val(),
                 },
                 success: function (data) {
-                    location.reload();
+                    getData();
+                    $("#closeDriverModal").click();
                 }
             });
         });
@@ -425,9 +458,26 @@
                     ticket: $('#ticket').val(),
                 },
                 success: function (data) {
-                    location.reload();
+                    getData();
+                    $("#closeTicketModal").click();
                 }
             });
+        });
+
+        $('#saveInstructions').click(function(){
+            var selectedItem = $("#gridContainer").dxDataGrid("instance").getSelectedRowsData()[0];
+            var ref = selectedItem.strUnickReference;
+            var notes = $("#notes").val();
+            var type = 'Notes';
+            assignInstruction(ref, notes, type)
+            var delivery = $("#deliveryInstructions").val();
+            type = 'Delivery';
+            assignInstruction(ref, delivery, type)
+        });
+
+        $("#closeInstructionsModal").click(function(){
+            $("#notes").val("");
+            $("#deliveryInstructions").val("");
         });
 
         $('.sidebar ul li a').on(function(){
@@ -448,6 +498,24 @@
             $(this).addClass("active").siblings().removeClass("active");
         });
     });
+
+    function getInstructions(ref) {
+        return new Promise(function(resolve, reject) {
+            $.ajax({
+                url: '{!!url("/getInstructions")!!}',
+                type: "GET",
+                data: {
+                    ref: ref,
+                },
+                success: function(data) {
+                    resolve(data); // Resolve the promise with the received data
+                },
+                error: function(xhr, status, error) {
+                    reject(error); // Reject the promise with the error message
+                }
+            });
+        });
+    }
 
     function getData(){
         var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
@@ -702,13 +770,32 @@
                         }
                     },
                     onRowClick: function (e) {
-                        console.log(e.data);
+                        // console.log(e.data);
+
+                        getInstructions(e.data.strUnickReference).then(function(instructions) {
+                            // console.log(instructions);
+                            instructions.forEach(function(instruction) {
+                                if (instruction.strType == 'Notes') {
+                                    $("#notes").val(instruction.strInstruction);
+                                }else if(instruction.strType == 'Delivery'){
+                                    $("#deliveryInstructions").val(instruction.strInstruction);
+                                }
+                            });
+                        });
+
                         var currentID = currentSelectedRow[0];
                         var clickedID = e.data.intAutoPickingHeader;
 
                         if (clickedID === currentID){
                             currentSelectedRow = [];
                             e.component.clearSelection();
+
+                            $("#btnTeamLeader").prop("disabled", true);
+                            $("#btnHorse").prop("disabled", true);
+                            $("#btnTrailor").prop("disabled", true);
+                            $("#btnDriver").prop("disabled", true);
+                            $("#btnTicket").prop("disabled", true);
+                            $("#btnInstructions").prop("disabled", true);
                         }else{
                             currentSelectedRow = [];
                             currentSelectedRow.push(clickedID);
@@ -718,6 +805,7 @@
                             $("#btnTrailor").prop("disabled", false);
                             $("#btnDriver").prop("disabled", false);
                             $("#btnTicket").prop("disabled", false);
+                            $("#btnInstructions").prop("disabled", false);
 
                             $('#teamLeader').val(e.data.intTeamLeaderId).trigger('change');
                             $('#horse').val(e.data.strTrailorNo).trigger('change');
@@ -764,6 +852,22 @@
             }
         });
     };
+
+    function assignInstruction(ref, instruction, type){
+        $.ajax({
+            url: '{!!url("/assignInstruction")!!}',
+            type: "POST",
+            data: {
+                ref: ref,
+                instruction: instruction,
+                type: type,
+            },
+            success: function (data) {
+                getData();
+                $("#closeInstructionsModal").click();
+            }
+        });
+    }
 
 </script>
 
