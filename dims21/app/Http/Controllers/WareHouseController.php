@@ -3114,12 +3114,6 @@ class WareHouseController extends Controller
 
     public function teamleadermanage($ref)
     {
-        // Check if the user is authenticated
-        // if (!auth()->check()) {
-        //     // If not authenticated, redirect to the login page
-        //     return redirect()->route('login'); // 'login' should be replaced with your actual login route name
-        // }
-        
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses");
         $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");

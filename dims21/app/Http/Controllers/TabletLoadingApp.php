@@ -389,7 +389,7 @@ class TabletLoadingApp extends controller
         $ID = $request->get('ID');
         $horse = $request->get('horse');
         // dd($ID,$horse);
-        $result = DB::connection('sqlsrv3')->select('exec spAssignHorseToPickingTicket ?,?,?,?', array($ID, $horse));
+        $result = DB::connection('sqlsrv3')->select('exec spAssignHorseToPickingTicket ?,?', array($ID, $horse));
 
         return response()->json($result);
     }

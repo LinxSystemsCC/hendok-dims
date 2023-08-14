@@ -132,9 +132,11 @@
                         <div class="col-md-12 mb-3">
                             <label for="horse" class="col-form-label">Horse</label>
                             <select class="form-select mx-2" type="text" id='horse'>
-                                <option>
+                                <option value=" ">UNASSIGN</option>
                                 @foreach ($horses as $horse)
-                                    <option value="{{ $horse->TruckId }}">{{ $horse->TruckName }}</option>
+                                    <option value="{{ $horse->TruckId }}">
+                                        {{ $horse->TruckName }} @if ($horse->intInUse == 1) - IN USE @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -162,9 +164,11 @@
                         <div class="col-md-12 mb-3">
                             <label for="trailorOne" class="col-form-label">Trailer One</label>
                             <select class="form-select mx-2" type="text" id='trailorOne'>
-                                <option></option>
+                                <option value=" ">UNASSIGN</option>
                                 @foreach ($trailors as $trailorOne)
-                                    <option value="{{ $trailorOne->TruckId }}">{{ $trailorOne->TruckName }}</option>
+                                    <option value="{{ $trailorOne->TruckId }}">
+                                        {{ $trailorOne->TruckName }} @if ($trailorOne->intInUse == 1) - IN USE @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -172,9 +176,11 @@
                         <div class="col-md-12 mb-3">
                             <label for="trailorTwo" class="col-form-label">Trailer Two</label>
                             <select class="form-select mx-2" type="text" id='trailorTwo'>
-                                <option></option>
+                                <option value=" ">UNASSIGN</option>
                                 @foreach ($trailors as $trailorTwo)
-                                    <option value="{{ $trailorTwo->TruckId }}">{{ $trailorTwo->TruckName }}</option>
+                                    <option value="{{ $trailorTwo->TruckId }}">
+                                        {{ $trailorTwo->TruckName }}  @if ($trailorTwo->intInUse == 1)- IN USE @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -366,9 +372,7 @@
                 type: "POST",
                 data: {
                     ID: ID,
-                    horse: $('#horse option:selected').text(),
-                    trailorOne: $('#trailorOne option:selected').text(),
-                    trailorTwo: $('#trailorTwo option:selected').text(),
+                    horse: $('#horse').val(),
                 },
                 success: function (data) {
                     location.reload();
@@ -384,8 +388,8 @@
                 type: "POST",
                 data: {
                     ID: ID,
-                    trailorOne: $('#trailorOne option:selected').text(),
-                    trailorTwo: $('#trailorTwo option:selected').text(),
+                    trailorOne: $('#trailorOne').val(),
+                    trailorTwo: $('#trailorTwo').val(),
                 },
                 success: function (data) {
                     location.reload();
@@ -447,6 +451,7 @@
 
     function getData(){
         var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
+
         $.ajax({
             url: '{!!url("/jsongetpickingplan")!!}',
             type: "GET",
@@ -494,6 +499,11 @@
                             caption: "Route Name",
                         },
                         {
+                            dataField: "intTeamLeaderId",
+                            caption: "Team Leader ID",
+                            visible: false,
+                        },
+                        {
                             dataField: "strTeamLeader",
                             caption: "Team Leader",
                         },
@@ -510,8 +520,18 @@
                             caption: "Trailor Two",
                         },
                         {
+                            dataField: "intDriverOne",
+                            caption: "Driver One",
+                            visible: false,
+                        },
+                        {
                             dataField: "strDriverOne",
                             caption: "Driver One",
+                        },
+                        {
+                            dataField: "intDriverTwo",
+                            caption: "Driver Two",
+                            visible: false,
                         },
                         {
                             dataField: "strDriverTwo",
@@ -535,7 +555,7 @@
                             caption: "Completed",
                             cellTemplate: function (container, options) {
                                 const value = options.data.intStatus;
-                                console.log(value);
+                                // console.log(value);
                                 container.addClass("customPadding"); // Add the no-padding class to the container
 
                                 if (value === "0") {
@@ -682,17 +702,13 @@
                         }
                     },
                     onRowClick: function (e) {
+                        console.log(e.data);
                         var currentID = currentSelectedRow[0];
                         var clickedID = e.data.intAutoPickingHeader;
 
                         if (clickedID === currentID){
                             currentSelectedRow = [];
                             e.component.clearSelection();
-                            $("#btnTeamLeader").prop("disabled", true);
-                            $("#btnHorse").prop("disabled", true);
-                            $("#btnTrailor").prop("disabled", true);
-                            $("#btnDriver").prop("disabled", true);
-                            $("#btnTicket").prop("disabled", true);
                         }else{
                             currentSelectedRow = [];
                             currentSelectedRow.push(clickedID);
@@ -702,7 +718,18 @@
                             $("#btnTrailor").prop("disabled", false);
                             $("#btnDriver").prop("disabled", false);
                             $("#btnTicket").prop("disabled", false);
+
+                            $('#teamLeader').val(e.data.intTeamLeaderId).trigger('change');
+                            $('#horse').val(e.data.strTrailorNo).trigger('change');
+                            $('#trailorOne').val(e.data.strTrailorone).trigger('change');
+                            $('#trailorTwo').val(e.data.strTrailortwo).trigger('change');
+                            $('#driverOne').val(e.data.intDriverOne).trigger('change');
+                            $('#driverTwo').val(e.data.intDriverTwo).trigger('change');
+                            $('#ticket').val(e.data.strTicket).trigger('change');
                         }
+                    },
+                    onSelectionChanged: function(e) {
+
                     },
                     onRowDblClick: function (e) {
                         window.open('{!!url("/pickingplanlist")!!}/'+e.data.strUnickReference, "strUnickReference", "location=1,status=1,scrollbars=1, width=1200,height=850");
