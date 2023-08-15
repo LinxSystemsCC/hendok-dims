@@ -431,7 +431,7 @@
         getData();
         getPickingPlanData('{{ $ref }}');
         getNotifications('{{ $ref }}');
-        getInstructions('{{ $ref }}');
+        // getInstructions('{{ $ref }}');
 
         $('#getdata').click(function(){
             getData();
