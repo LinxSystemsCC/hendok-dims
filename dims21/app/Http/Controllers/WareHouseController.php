@@ -335,6 +335,17 @@ class WareHouseController extends Controller
         $response = DB::connection('sqlsrv2')->select("exec spCheckForGalvUpdates ?", array($checker));
         return response()->json($response);
     }
+    public function genericqrcodereverse(Request $request){
+        $qrcodestring = $request->get("qrcode");
+        $SplitI = explode("|", $qrcodestring);
+        $jobId = $SplitI[0];
+        $jobItemId = $SplitI[1];
+        $response = DB::connection('sqlsrv2')->select("exec spReverseQrCode ?,?", array($jobId,$jobItemId));
+        return response()->json($response);
+    }
+    public function qrcodereverse(){
+        return view('warehouse/reversepickedorloadedqrcode');
+    }
 
     public function deleteGalvChecker(Request $request)
     {
@@ -402,7 +413,7 @@ class WareHouseController extends Controller
 
         DB::connection('sqlsrv2')->statement('exec spCheckUserPermissions ?', array($userid));
 
-        //dd($userid);        
+        //dd($userid);
         return view('warehouse/userpermissions')->with("username", $username)->with("id", $userid)->with("permissions", $permissions);
     }
 
@@ -529,7 +540,7 @@ class WareHouseController extends Controller
         $returndata = DB::connection('sqlsrv2')->select("exec spRetrieveDocumentUpliftment ? ",array($upliftmentnumber));
         foreach ($returndata as $row) {
             $base64Image = ($row->image);
-            
+
             // Generate the appropriate data URI scheme based on the MIME type of the image
                     $uriScheme = 'data:application/pdf;base64,';
 
@@ -799,7 +810,7 @@ class WareHouseController extends Controller
         else{
             $sessionUserId = Auth::user()->UserID;
             $GroupId= Auth::user()->GroupId;
-                
+
             if($this->getThings($GroupId,'Has Auto Redirect')){
                 $userDepartment =Auth::user()->strPickingTeams;
                 $departmentMachines = explode('|', $userDepartment);
@@ -807,7 +818,7 @@ class WareHouseController extends Controller
                 $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '".$departmentMachines[0]."'");
 
                 $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
-                
+
                 return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
             }else{
                 return view('warehouse/dashboard');
@@ -1712,9 +1723,9 @@ class WareHouseController extends Controller
     // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
     public function getOpenUpkeepWorkOrders(){
         $curl = curl_init();
-    
+
         $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
-    
+
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.onupkeep.com/api/v2/work-orders',
             CURLOPT_RETURNTRANSFER => true,
@@ -1729,15 +1740,15 @@ class WareHouseController extends Controller
                 'Cookie: upkeepsess=' . $token
             ),
         ));
-    
+
         $response = curl_exec($curl);
-    
+
         curl_close($curl);
-    
+
         $result = json_decode($response, true);
-    
+
         $openWorkOrders = array();
-    
+
         foreach ($result['results'] as $workOrder) {
             if ($workOrder['status'] !== 'complete') {
                 $openWorkOrders[] = $workOrder;
@@ -1766,11 +1777,11 @@ class WareHouseController extends Controller
                 'Cookie: upkeepsess=' . $token
             ),
         ));
-    
+
         $response = curl_exec($curl);
-        curl_close($curl);    
+        curl_close($curl);
         $result = json_decode($response, true);
-    
+
         return $result;
     }
 
@@ -1795,9 +1806,9 @@ class WareHouseController extends Controller
         ));
 
         $response = curl_exec($curl);
-        curl_close($curl);        
+        curl_close($curl);
         $result = json_decode($response, true);
-    
+
         return $result;
     }
 
@@ -1853,12 +1864,12 @@ class WareHouseController extends Controller
         $ID = $request->get("ID");
         $prompt = $request->get("prompt");
         print_r($ID, $prompt);
-        $data =  DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $ID, '$prompt'"); 
+        $data =  DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $ID, '$prompt'");
         return response()->json($data);
     }
 
     public function nailsInner(){
-        $nails =  DB::connection('sqlsrv3')->select("SELECT * FROM tblNailsInner"); 
+        $nails =  DB::connection('sqlsrv3')->select("SELECT * FROM tblNailsInner");
         return view('warehouse/nailsInner')->with('nails',$nails);
     }
 
@@ -1875,12 +1886,12 @@ class WareHouseController extends Controller
         $prompt = $request->get("prompt");
         $ID = $request->get("ID");
         $UserID = Auth::user()->UserID;
-        
+
         // dd($code,$description,$group,$labelDescription,$size,$packsize,$packaging,$coating,$barcode,$prompt,$ID,$UserID);
 
-        $nails =  DB::connection('sqlsrv3')->select("EXEC spNailsInnerCrud ?,?,?,?,?,?,?,?,?,?,?,?", 
+        $nails =  DB::connection('sqlsrv3')->select("EXEC spNailsInnerCrud ?,?,?,?,?,?,?,?,?,?,?,?",
         array($code,$description,$group,$labelDescription,$size,$packsize,$packaging,$coating,$barcode,$prompt,$ID,$UserID));
-        
+
         return response()->json($nails);
     }
 

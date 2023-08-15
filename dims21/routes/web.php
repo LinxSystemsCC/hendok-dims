@@ -1119,11 +1119,14 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('GetAreaDeptSubDeptByMachine', [WareHouseController::class,'GetAreaDeptSubDeptByMachine']);
     Route::get('bulkMapping', [WareHouseController::class,'bulkMapping']);
     Route::get('checkBulkMapping', [WareHouseController::class,'checkBulkMapping']);
-    Route::post('bulkMappingCRUD', [WareHouseController::class,'bulkMappingCRUD']);    
+    Route::post('bulkMappingCRUD', [WareHouseController::class,'bulkMappingCRUD']);
     Route::get('getBulkMappingAreaDeptSubDeptMachines', [WareHouseController::class,'getBulkMappingAreaDeptSubDeptMachines']);
-    Route::get('nailsInner', [WareHouseController::class,'nailsInner']);     
+    Route::get('nailsInner', [WareHouseController::class,'nailsInner']);
     Route::post('nailsInnerCrud', [WareHouseController::class,'nailsInnerCrud']);
+    Route::get('genericqrcodereverse', [WareHouseController::class,'genericqrcodereverse']);
+    Route::get('qrcodereverse', [WareHouseController::class,'qrcodereverse']);
 });
+
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
 
 //COMPANYAUTHCONTROLLER CONTROLLER STARTS HERE !!!
