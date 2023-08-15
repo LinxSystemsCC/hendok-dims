@@ -182,7 +182,7 @@ class InvoicingController extends Controller
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
-//dd();
+        //dd();
         $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId);
         $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
         if ($hasLimits == "Success")
@@ -218,10 +218,19 @@ class InvoicingController extends Controller
                             break;
                     }
 
-                    $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                        ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+                    if($ownersId == 3){
+                         //spGetOrderNumbersLinesToProcessUkhosi
+
+                        $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+                            ->select('exec spGetOrderNumbersLinesToProcessUkhosi ?,?,?',
                             array($ref, $SoNumber, $ownersId)
                         );
+                    }else{
+                        $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+                            ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+                            array($ref, $SoNumber, $ownersId)
+                        );
+                    }
                     $v = new \App\Http\Controllers\SalesForm();
                     $isCapeUser = $v->getThings($this->getusergroupid($userid), 'isCapeUser');
                     $x = $sdkHelper->GetSalesOrder($SoNumber);
@@ -292,8 +301,8 @@ class InvoicingController extends Controller
                     return $err;
                 }
             }
-    }else{
-           return $hasLimits;
+        }else{
+            return $hasLimits;
 
         }
 
