@@ -76,7 +76,7 @@
 
                     <div class="col-md-6 mb-1">
                         <label class="col-form-label" for="ticket">Tensile Ticket</label>
-                        <input type="number"  class="form-control" id="ticket" required>
+                        <input type="text"  class="form-control" id="ticket" required>
                     </div>
 
                     <div class="col-md-6 mb-1">

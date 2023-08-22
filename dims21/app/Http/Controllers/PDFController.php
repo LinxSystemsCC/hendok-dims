@@ -139,7 +139,8 @@ class PDFController extends Controller
 
     public function printLabelPage($department)
     {
-        return view('warehouse/labels/printLabel')->with('department', $department);
+        $scales = DB::connection('sqlsrv2')->select("exec spGetScalesByDeptName 'Warehouse'");
+        return view('warehouse/labels/printLabel')->with('department', $department)->with('scales', $scales);
     }
 
     public function printLabelByDepartment(Request $request)
@@ -152,8 +153,9 @@ class PDFController extends Controller
         $printer = $request->get('printer');
         $labelType = $request->get('labelType');
         $operator = Auth::user()->UserName;
+        $weight = $request->get('weight');
 
-        $result = DB::connection('sqlsrv2')->select("EXEC spPrintLabelByDepartment '$department', '$productCategory', '$productName', '$barcode', $qty, '$printer', '$operator', $labelType");
+        $result = DB::connection('sqlsrv2')->select("EXEC spPrintLabelByDepartment '$department', '$productCategory', '$productName', '$barcode', $qty, '$printer', '$operator', $labelType, $weight");
         return response()->json($result);
     }
 

@@ -24,39 +24,54 @@
             @include('warehouse.menu')
         </div>
     </div>
-    <div class="col-6 p-3">
+    <div class="col-4 p-3">
         <h3>Print {{ $department }} Lables</h3>
         {{-- Product Category --}}
-        <div class="form-group">
-            <label class="control-label" for="category"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
+        <div class="form-group mb-2">
+            <label class="control-label fw-bold" for="category">Product Category </label>
             <select  class="form-control input-sm col-xs-1" id="category" style="width: 100%" required>
                 <option></option>
             </select>
         </div>
 
         {{-- Product --}}
-        <div class="form-group">
-            <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
+        <div class="form-group mb-2">
+            <label class="control-label fw-bold" for="prodname">Product Name </label>
             <select  class="form-control input-sm col-xs-1" id="prodname" style="width: 100%" required>
                 <option></option>
             </select>
         </div>
 
+        <div class="form-group mb-2" id="scaleDiv">
+            <label class="control-label fw-bold" for="weight">Weight to Print </label>
+            <div class="w-100 d-inline-flex">
+                <select  class="form-select input-sm col-xs-1 w-75" id="scaleID">
+                    <option></option>
+                    @foreach($scales as $scale)
+                        <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
+                    @endforeach
+                    
+                </select>
+                <input  class="form-control input-sm col-xs-1 mx-2 w-25" id="weight" type="number" disabled>
+                <button class="btn btn-secondary" id="btnEditWeight">Edit</button>
+            </div>
+        </div>
+
         {{-- Barcode --}}
-        <div class="form-group">
-            <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
+        <div class="form-group mb-2">
+            <label class="control-label fw-bold" for="barcode">Barcode</label>
             <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%" required>
         </div>
 
         {{-- Quantity --}}
-        <div class="form-group">
-            <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity</label>
+        <div class="form-group mb-2">
+            <label class="control-label fw-bold" for="qty">Quantity</label>
             <input class="form-control input-sm col-xs-1" id="qty" style="width: 100%" required>
         </div>
 
         {{-- Printer --}}
-        <div class="form-group">
-            <label class="control-label" for="printer"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Printer</label>
+        <div class="form-group mb-2">
+            <label class="control-label fw-bold" for="printer">Printer</label>
             <select  class="form-control input-sm col-xs-1" id="printer" style="width: 100%" required>
                 <option></option>
             </select>
@@ -141,6 +156,7 @@
 
                 },
                 success: function (data) {
+                    console.log(data);
                     var toAppend = '';
                     $("#prodname").empty();
                     toAppend += '<option></option>';
@@ -173,25 +189,28 @@
         $('#prodname').change(function(){
             $.ajax({
 
-                url: '{!!url("/getProductBarcode")!!}',
+                url: '{!!url("/getProductInfo")!!}',
                 type: "GET",
                 data: {
                     productCode: $('#prodname option:selected').val(),
 
                 },
-                success: function (data) {
-                    var barcode = data[0]["BarCode"];
-                    console.debug(barcode);
+                success: function (product) {
+                    console.log(product[0]["Barcode"]);
+                    console.log(product[0]["weight"]);
 
-                    if (barcode == null){
+                    if (product[0]["Barcode"] == null){
                         $('#barcode').val("0000000000000");
                     }else{
-                        $('#barcode').val(barcode);
+                        $('#barcode').val(product[0]["Barcode"]);
                     }
-                    
 
+                    if (product[0]["weight"] == "1.0"){
+                        $('#scaleDiv').prop('hidden', false);
+                    }else{
+                        $('#scaleDiv').prop('hidden', true);
+                    }
                 }
-
             });
         });
 
@@ -207,11 +226,12 @@
                     barcode: $('#barcode').val(),
                     printer: $('#printer option:selected').text(),
                     labelType : $('#printer option:selected').val(),
+                    weight: $('#weight').val() !== "" ? $('#weight').val() : 0, // Set default value to 0 if empty
                 },
                 success: function (data) {
                     if(data[0].Result =="SUCCESS")
                     {
-                        
+                        location.reload();
                     }else{
                         alert(data[0].Result);
                     }
@@ -219,7 +239,19 @@
             });
         });
 
-        
+        $('#btnEditWeight').click(function(){
+            $('#weight').prop('disabled', function(i, val) {
+                return !val;
+            });
+
+            $('#scaleID').val('');
+
+            $('#scaleID').prop('disabled', function(i, val) {
+                return !val;
+            });
+        });
+
+        // toggleWeigh();
 
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');
@@ -268,4 +300,23 @@
             "restore" : function(evt, dlg){  } // event
         });
     }
+
+    function toggleWeigh(){
+        setInterval(fetchWeight,2000);
+    };
+
+    function fetchWeight(){
+        // console.debug("weigh");
+        $.ajax({
+            url: '{!!url("/listenToScale")!!}',
+            type: "GET",
+            data: {
+                scaleID: $('#scaleID option:selected').val(),
+            },
+            success: function (data) {
+                $('#weight').val(data);
+            }
+        });
+    };
+
 </script>
