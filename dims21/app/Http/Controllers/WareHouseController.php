@@ -232,16 +232,20 @@ class WareHouseController extends Controller
     }
     public function warehousepalletlabels()
     {
+        $userId =  Auth::user()->UserID;
+        
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
         $scales = DB::connection('sqlsrv2')->select("exec spGetScalesByDeptName 'Warehouse'");
         $forklifts = DB::connection('sqlsrv2')->select("select * from viewTransitLocations");
+        $printers = DB::connection('sqlsrv2')->select("EXEC spGetUserPrinters $userId");
         $areas = DB::connection('sqlsrv2')->select("select * from tblAreas");
         return view('warehouse/warehousepalletlabels')
             ->with('prodGroups', $prodGroups)
             ->with('dept', $dept)
             ->with('scales', $scales)
             ->with('forklifts', $forklifts)
+            ->with('printers', $printers)
             ->with('areas', $areas);
     }
 
@@ -256,18 +260,34 @@ class WareHouseController extends Controller
 
     public function printgenericpalletlabel(Request $request)
     {
-        $dept = $request->get('dept');
-        $prodcat = $request->get('prodcat');
-        $prodname = $request->get('prodname');
-        $palletconfid = $request->get('palletconfid');
-        $qty = $request->get('qty');
-        $weight = $request->get('weight');
-        $barcode = $request->get('barcode');
+        // $dept = $request->get('dept');
+        // $prodcat = $request->get('prodcat');
+        // $prodname = $request->get('prodname');
+        // $palletconfid = $request->get('palletconfid');
+        // $qty = $request->get('qty');
+        // $weight = $request->get('weight');
+        // $barcode = $request->get('barcode');
+        // $operator = Auth::user()->UserName;
+        // $drivername = $request->get('drivername');
+        // $forkliftnumber = $request->get('forkliftnumber');
+        // $area = $request->get('area');
+        // $returndata = DB::connection('sqlsrv2')->select('exec spInsertPrintForPalletLabels ?,?,?,?,?,?,?,?,?,?,?', array($dept, $prodcat, $prodname, $palletconfid, $qty, $weight, $barcode, $operator, $drivername, $forkliftnumber, $area));
+
+        $department = $request->get("department");
+        $category = $request->get("category");
+        $product = $request->get("product");
+        $labelType = $request->get("labelType");
+        $configuration = $request->get("configuration");
+        $quantity = $request->get("quantity");
+        $weight = $request->get("weight");
+        $barcode = $request->get("barcode");
+        $driver = $request->get("driver");
+        $forklift = $request->get("forklift");
+        $area = $request->get("area");
+        $printer = $request->get("printer");
         $operator = Auth::user()->UserName;
-        $drivername = $request->get('drivername');
-        $forkliftnumber = $request->get('forkliftnumber');
-        $area = $request->get('area');
-        $returndata = DB::connection('sqlsrv2')->select('exec spInsertPrintForPalletLabels ?,?,?,?,?,?,?,?,?,?,?', array($dept, $prodcat, $prodname, $palletconfid, $qty, $weight, $barcode, $operator, $drivername, $forkliftnumber, $area));
+
+        $returndata = DB::connection('sqlsrv2')->select("exec spInsertPrintForPalletLabels ?,?,?,?,?,?,?,?,?,?,?,?,?", array($department, $category, $product, $labelType, $configuration, $quantity, $weight, $barcode, $driver, $forklift, $area, $printer, $operator));
 
         return response()->json($returndata);
     }

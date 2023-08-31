@@ -251,7 +251,7 @@
             });
         });
 
-        // toggleWeigh();
+        toggleWeigh();
 
         $('.sidebar ul li a').on(function(){
             var id = $(this).attr('id');

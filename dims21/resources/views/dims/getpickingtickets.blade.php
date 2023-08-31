@@ -720,7 +720,8 @@
                                         allowEditing: false,
                                     },
                                     {
-                                        dataField: "ubARIBT",
+                                        // dataField: "ubARIBT",
+                                        dataField: "mnyLoadedQty",
                                         caption: "To Invoice",
                                         allowEditing: false,
                                     },{
