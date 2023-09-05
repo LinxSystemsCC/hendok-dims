@@ -229,160 +229,178 @@
         });
 
         var groups = {!! json_encode($groups) !!};
+        var users = {!! json_encode($users) !!};
 
-        $.ajax({
+        users.forEach(function(user) {
+            user.sageUserName = user.FirstName + " " + user.LastName;
+        });
 
-            url: '{!!url("/getusers")!!}',
-            type: "GET",
-            data: {
-                datefrom: $('#datefrom').val(),
-                dateto: $('#dateto').val()
+        //initiate datagrid
+        const gridUsers = $("#gridContainer").dxDataGrid({
+            dataSource: getUsers(), //as json
+            hoverStateEnabled: true,
+            showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            scrolling: {
+                rowRenderingMode: 'infinite',
             },
-            success: function (data) {
+            paging:{
+                pageSize: 10,
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [5, 10, 20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            export: {
+                enabled: true
+            },
+            editing: {
+                mode: 'popup',
+                allowUpdating: true,
+                allowDeleting: true,
+            },
+            selection: {
+                mode: 'single',
+            },
+            onExporting(e) {
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Users');
 
-                $("#gridContainer").dxDataGrid({
-                    dataSource:data, //as json
-                    hoverStateEnabled: true,
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    allowColumnResizing: true,
-                    columnAutoWidth: true,
-                    scrolling: {
-                        rowRenderingMode: 'infinite',
-                    },
-                    paging:{
-                        pageSize: 10,
-                    },
-                    pager: {
-                        visible: true,
-                        allowedPageSizes: [5, 10, 20, 50, 'all'],
-                        showPageSizeSelector: true,
-                        showInfo: true,
-                        showNavigationButtons: true,
-                    },
-                    export: {
-                        enabled: true
-                    },
-                    editing: {
-                        mode: 'popup',
-                        allowUpdating: true,
-                        allowDeleting: true,
-                    },
-                    selection: {
-                        mode: 'single',
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('Users');
+                DevExpress.excelExporter.exportDataGrid({
+                    component: e.component,
+                    worksheet,
+                    autoFilterEnabled: true,
+                }).then(() => {
+                    workbook.xlsx.writeBuffer().then((buffer) => {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Users.xlsx');
+                    });
+                });
+                e.cancel = true;
+            },
 
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Users.xlsx');
-                            });
+            columns: [
+                {
+                    dataField: "UserID",
+                    caption: "ID",
+                    allowEditing: false,
+                },{
+                    dataField: "UserName",
+                    caption: "Username",
+                },{
+                    dataField: "Email",
+                    caption: "Email",
+                },
+                {
+                    dataField: "GroupId",
+                    caption: "Group ID",
+                    lookup: {
+                        dataSource: groups,
+                        valueExpr: "GroupId",
+                        displayExpr: "GroupName",
+                    },
+                },{
+                    dataField: "strSageCode",
+                    caption: "Sage Name",
+                    lookup: {
+                        dataSource: users,
+                        valueExpr: "EmployeeCode",
+                        displayExpr: "sageUserName",
+                        searchExpr: ["EmployeeCode", "FirstName", "LastName"],
+                    },
+                },
+                {
+                    dataField: "TabletUser",
+                    caption: "Tablet User",
+                    lookup: {
+                        dataSource: [
+                            {Id:"0", Prompt:'No',},
+                            {Id:"1", Prompt:'Yes',}
+                        ],
+                        valueExpr: "Id",
+                        displayExpr: "Prompt",
+                    },
+                },
+                {
+                    dataField: "printerAssign",
+                    caption: "Printers",
+                    cellTemplate: function (container, options) {
+                        container.addClass("customPadding");
+                        const button = $("<button class='btn btn-secondary btn-sm w-100'>").text("View").on("click", function() {
+                            // console.log(options.data);
+                            $("#userId").val(options.data.UserID);
+                            getUserPrinters(options.data.UserID);
                         });
-                        e.cancel = true;
+                        container.append(button);
                     },
+                    width: 100,
+                    allowEditing: false,
+                },
+            ],
+            onRowDblClick:function(e){ 
+                var intUserID =  e.data.UserID;
 
-                    columns: [
-                        {
-                            dataField: "UserID",
-                            caption: "ID",
-                            allowEditing: false,
-                        },{
-                            dataField: "UserName",
-                            caption: "Username",
-                        },{
-                            dataField: "Email",
-                            caption: "Email",
-                        },
-                        {
-                            dataField: "GroupId",
-                            caption: "Group ID",
-                            lookup: {
-                                dataSource: groups,
-                                valueExpr: "GroupId",
-                                displayExpr: "GroupName",
-                            },
-                        },
-                        {
-                            dataField: "TabletUser",
-                            caption: "Tablet User",
-                            lookup: {
-                                dataSource: [
-                                    {Id:"0", Prompt:'No',},
-                                    {Id:"1", Prompt:'Yes',}
-                                ],
-                                valueExpr: "Id",
-                                displayExpr: "Prompt",
-                            },
-                        },
-                        {
-                            dataField: "printerAssign",
-                            caption: "Printers",
-                            cellTemplate: function (container, options) {
-                                container.addClass("customPadding");
-                                const button = $("<button class='btn btn-secondary btn-sm w-100'>").text("View").on("click", function() {
-                                    // console.log(options.data);
-                                    $("#userId").val(options.data.UserID);
-                                    getUserPrinters(options.data.UserID);
-                                });
-                                container.append(button);
-                            },
-                            width: 100,
-                        },
-                    ],
-                    onRowDblClick:function(e){ 
-                        var intUserID =  e.data.UserID;
+                window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID);
+            },
+            onRowRemoving: function(e) {
 
-                        window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID);
+                var UserID = e.data.UserID;
+                $.ajax({
+                    url: '{!!url("/deleteUser")!!}',
+                    type: "GET",
+                    data: {
+                        ID : UserID,
                     },
-                    onRowRemoving: function(e) {
-
-                        var UserID = e.data.UserID;
-                        $.ajax({
-                            url: '{!!url("/deleteUser")!!}',
-                            type: "GET",
-                            data: {
-                                ID : UserID,
-                            },
-                            success: function (data) {
-                                location.reload();
-                            }
-                        });
-                    },
-                    onRowUpdating: function(e) {
-                        var ID = e.oldData.UserID;
-                        var userName = e.newData.UserName || e.oldData.UserName;
-                        var email = e.newData.Email || e.oldData.Email;
-                        var groupId = e.newData.GroupId || e.oldData.GroupId;
-                        var tablet = e.newData.TabletUser || e.oldData.TabletUser;
-
-                        $.ajax({
-                            url: '{!!url("/updateUser")!!}',
-                            type: "GET",
-                            data: {
-                                ID : ID,
-                                userName : userName,
-                                email : email,
-                                groupId : groupId,
-                                tablet : tablet,
-                            },
-                            success: function (data) {
-                                location.reload();
-                            }
-                        });
+                    success: function (data) {
+                        location.reload();
                     }
                 });
+            },
+            onRowUpdating: function(e) {
+                var ID = e.oldData.UserID;
+                var userName = e.newData.UserName || e.oldData.UserName;
+                var email = e.newData.Email || e.oldData.Email;
+                var groupId = e.newData.GroupId || e.oldData.GroupId;
+                var sageCode = e.newData.strSageCode || e.oldData.strSageCode;
+                var tablet = e.newData.TabletUser || e.oldData.TabletUser;
 
+                $.ajax({
+                    url: '{!!url("/updateUser")!!}',
+                    type: "GET",
+                    data: {
+                        ID : ID,
+                        userName : userName,
+                        email : email,
+                        groupId : groupId,
+                        sageCode: sageCode,
+                        tablet : tablet,
+                    },
+                    success: function (data) {
+                        getUsers();
+                    }
+                });
             }
+        }).dxDataGrid('instance');
 
-        });
+        function getUsers(){
+            $.ajax({
+                url: '{!!url("/getusers")!!}',
+                type: "GET",
+                data: {
+                },
+                success: function (data) {
+                    // console.log(data);
+                    gridUsers.option('dataSource', data);
+                    gridUsers.refresh();
+                }
+            });
+        };
 
         $('#updatePrinters').click(function(){  
             var userId = $("#userId").val();
@@ -428,34 +446,7 @@
         });
     });
 
-    function showDialog(tag,width,height){
-        $( tag ).dialog({height: height, modal: false,
-            width: width,containment: false}).dialogExtend({
-            "closable" : true, // enable/disable close button
-            "maximizable" : false, // enable/disable maximize button
-            "minimizable" : true, // enable/disable minimize button
-            "collapsable" : true, // enable/disable collapse button
-            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar" : false, // false, 'none', 'transparent'
-            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-            "icons" : { // jQuery UI icon class
 
-                "maximize" : "ui-icon-circle-plus",
-                "minimize" : "ui-icon-circle-minus",
-                "collapse" : "ui-icon-triangle-1-s",
-                "restore" : "ui-icon-bullet"
-            },
-            "load" : function(evt, dlg){ }, // event
-            "beforeCollapse" : function(evt, dlg){ }, // event
-            "beforeMaximize" : function(evt, dlg){ }, // event
-            "beforeMinimize" : function(evt, dlg){ }, // event
-            "beforeRestore" : function(evt, dlg){ }, // event
-            "collapse" : function(evt, dlg){  }, // event
-            "maximize" : function(evt, dlg){ }, // event
-            "minimize" : function(evt, dlg){  }, // event
-            "restore" : function(evt, dlg){  } // event
-        });
-    };
 
     function getUserPrinters(ID){
         $.ajax({

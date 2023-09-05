@@ -53,8 +53,6 @@ class WareHouseController extends Controller
         $tabletuser =  $request->get("tabletuser");
         $encrypted = bcrypt($password);
 
-
-
         $returnuser = DB::connection('sqlsrv2')
             ->select(
                 'exec spCreateUsers ?,?,?,?,?,?,?,?',
@@ -83,9 +81,10 @@ class WareHouseController extends Controller
         $userName = $request->get('userName');
         $email = $request->get('email');
         $groupId = $request->get('groupId');
+        $sageCode = $request->get('sageCode');
         $tablet = $request->get('tablet');
 
-        $update = DB::connection('sqlsrv2')->select("EXEC spUpdateUserInfo $ID, '$userName', '$email', $groupId, $tablet");
+        $update = DB::connection('sqlsrv2')->select("EXEC spUpdateUserInfo $ID, '$userName', '$email', $groupId, '$sageCode', $tablet");
         return response()->json($update);
     }
 
@@ -252,7 +251,7 @@ class WareHouseController extends Controller
         $forklifts = DB::connection('sqlsrv2')->select("select * from viewTransitLocations");
         $printers = DB::connection('sqlsrv2')->select("EXEC spGetUserPrinters $userId");
         $areas = DB::connection('sqlsrv2')->select("select * from tblAreas");
-        return view('warehouse/warehousepalletlabels')
+        return view('warehouse/warehouse s')
             ->with('prodGroups', $prodGroups)
             ->with('dept', $dept)
             ->with('scales', $scales)
