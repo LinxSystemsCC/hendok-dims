@@ -756,7 +756,8 @@
                 $("#configurationBarcodeless optgroup[label='Single']").prop('hidden', false);
                 $("#configurationBarcodeless").val("1");
                 $("#configurationBarcodeless").prop('disabled', true);
-
+                var config = $('#configurationBarcodeless').val();
+                $('#inputConfigurationBarcodeless').val(config);
             }
         });
 
@@ -781,6 +782,8 @@
                 $("#configuration optgroup[label='Single']").prop('hidden', false);
                 $("#configuration").val("1");
                 $("#configuration").prop('disabled', true);
+                var config = $('#configuration').val();
+                $('#inputConfiguration').val(config);
 
             }
         });

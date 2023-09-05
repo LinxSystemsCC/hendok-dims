@@ -458,6 +458,8 @@
                 $("#configuration optgroup[label='Single']").prop('hidden', false);
                 $("#configuration").val("1");
                 $("#configuration").prop('disabled', true);
+                var config = $('#configuration').val();
+                $('#inputConfiguration').val(config);
 
             }
         });
