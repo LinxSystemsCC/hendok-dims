@@ -224,31 +224,31 @@
                     caption: "ID",
                     allowEditing: false,
                 }, {
-                    dataField: "strPastelCode",
+                    dataField: "Code",
                     caption: "Code",
                 }, {
-                    dataField: "strPastelDescription",
+                    dataField: "Description_1",
                     caption: "Description",
                 },{
-                    dataField: "strProductGroup",
+                    dataField: "ItemGroup",
                     caption: "Group",
                 },{
-                    dataField: "strLabelDescription",
+                    dataField: "ucIILabelHeader",
                     caption: "Label Description",
                 },{
-                    dataField: "strSize",
+                    dataField: "ucIILabelDescription",
                     caption: "Size",
                 },{
-                    dataField: "strPackSizeOuter",
+                    dataField: "ucIILabelDescription2",
                     caption: "Pack Size Outer",
                 },{
-                    dataField: "strNailPackaging",
-                    caption: "Nail Packaging",
+                    dataField: "ulIISingleLabel",
+                    caption: "Lable",
                 },{
-                    dataField: "strCoating",
+                    dataField: "ucIIZincCoating",
                     caption: "Coating",
                 },{
-                    dataField: "strBarcode",
+                    dataField: "Barcode",
                     caption: "Barcode",
                 },{
                     dataField: "dtmCreated",

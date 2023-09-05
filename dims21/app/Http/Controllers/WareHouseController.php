@@ -21,7 +21,10 @@ class WareHouseController extends Controller
     public function createuserpage()
     {
         $groups = DB::connection('sqlsrv2')->select("select * from tblDIMSGROUPS");
-        return view('warehouse/createuser')->with('groups', $groups);
+        $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName FROM viewSage300Employees WHERE EmployeeStatusCode = 'A' ");
+        return view('warehouse/createuser')
+            ->with('users', $users)
+            ->with('groups', $groups);
     }
 
     public function getUserPrinters(Request $request)
@@ -45,14 +48,17 @@ class WareHouseController extends Controller
         $email =  $request->get("email");
         $password =  $request->get("password");
         $groupID =  $request->get("groupID");
+        $sageCode =  $request->get("sageCode");
         $pincode =  $request->get("pincode");
         $tabletuser =  $request->get("tabletuser");
         $encrypted = bcrypt($password);
 
+
+
         $returnuser = DB::connection('sqlsrv2')
             ->select(
-                'exec spCreateUsers ?,?,?,?,?,?,?',
-                array($username, $email, $password, $groupID, $pincode, $tabletuser, $encrypted)
+                'exec spCreateUsers ?,?,?,?,?,?,?,?',
+                array($username, $email, $password, $groupID, $sageCode, $pincode, $tabletuser, $encrypted)
             );
         return response()->json($returnuser);
     }
@@ -225,10 +231,16 @@ class WareHouseController extends Controller
 
     public function genericproductlabels()
     {
+        $userId =  Auth::user()->UserID;
+        
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
+        $printers = DB::connection('sqlsrv2')->select("EXEC spGetUserPrinters $userId");
 
-        return view('warehouse/genericproductlabels')->with('prodGroups', $prodGroups)->with('dept', $dept);
+        return view('warehouse/genericproductlabels')
+            ->with('prodGroups', $prodGroups)
+            ->with('printers', $printers)
+            ->with('dept', $dept);
     }
     public function warehousepalletlabels()
     {
@@ -379,13 +391,16 @@ class WareHouseController extends Controller
         $department = $request->get("department");
         $category = $request->get("category");
         $product = $request->get("product");
-        $qty = $request->get("qty");
+        $labelType = $request->get("labelType");
+        $configuration = $request->get("configuration");
+        $quantity = $request->get("quantity");
         $barcode = $request->get("barcode");
+        $printer = $request->get("printer");
         $operator = Auth::user()->UserName;
 
-        //dd($product,$category,$department,$qty);
+        //dd($department, $category, $product, $labelType, $configuration, $quantity, $barcode, $printer, $operator);
 
-        $returndata = DB::connection('sqlsrv2')->select('exec spInsertPrintForGenericLabels ?,?,?,?,?,?', array($product, $category, $department, $qty, $operator, $barcode));
+        $returndata = DB::connection('sqlsrv2')->select('exec spInsertPrintForGenericLabels ?,?,?,?,?,?,?,?,?', array($department, $category, $product, $labelType, $configuration, $quantity, $barcode, $printer, $operator));
 
         return response()->json($returndata);
     }

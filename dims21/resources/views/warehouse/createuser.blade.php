@@ -15,7 +15,6 @@
 
     <!-- DevExtreme theme -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
@@ -84,22 +83,22 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">User Name </label>
+                    <label class="control-label fw-bold" for="username">User Name </label>
                     <input  type="text" class="form-control input-sm col-xs-1" id="username">
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="email"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Email </label>
+                    <label class="control-label fw-bold" for="email">Email </label>
                     <input  type="text" class="form-control input-sm col-xs-1" id="email">
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="password"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Password </label>
+                    <label class="control-label fw-bold" for="password">Password </label>
                     <input  type="password" class="form-control input-sm col-xs-1" id="password">
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="groupID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
+                    <label class="control-label fw-bold" for="groupID">Group </label>
                     <select  class="form-select input-sm col-xs-1" id="groupID" required>
                         <option></option>
                         @foreach($groups as $group)
@@ -109,12 +108,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="pincode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pincode </label>
+                    <label class="control-label fw-bold" for="issuedto">Employee Sage Code</label>
+
+                    <select class="form-select mx-2" type="text" id='sageCode'>
+                        <option value="None" selected disabled></option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->EmployeeCode }}">{{ $user->FirstName }} {{ $user->LastName }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label fw-bold" for="pincode">Pincode </label>
                     <input  type="number" class="form-control input-sm col-xs-1" id="pincode">
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="tabletuser"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tablet User </label>
+                    <label class="control-label fw-bold" for="tabletuser">Tablet User </label>
                     <div class="d-inline-flex w-100">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuseryes" checked value="1">
@@ -205,7 +215,8 @@
                     username: $('#username').val(),
                     email: $('#email').val(),
                     password: $('#password').val(),
-                    groupID: $('#groupID option:selected').val(),
+                    groupID: $('#groupID').val(),
+                    sageCode : $('#sageCode').val(),
                     pincode: $('#pincode').val(),
                     tabletuser: $("input[type='radio'][name='flexRadioDefault']:checked").val()
                 },
@@ -382,6 +393,27 @@
             
             var printers = checkedIds.join(",");
             updateUserPrinters(userId, printers);
+        });
+
+        $('#sageCode').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newuser'),
+            matcher: function(params, data) {
+                // If there's no search term, return all options
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                // Check if search term matches option value
+                if (data.id.toLowerCase().indexOf(params.term.toLowerCase()) >= 0) {
+                    return data;
+                }
+                // Check if search term matches option display text
+                if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) >= 0) {
+                    return data;
+                }
+                // Return null if there's no match
+                return null;
+            }
         });
 
         $('.sidebar ul li a').click(function(){

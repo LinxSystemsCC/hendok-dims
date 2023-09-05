@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-x0Jk5I2tJp2F5vzZ2jw5CzOaSj4Ck5l5eT5f5eI5V5Y3r5u5F5V5I5y5S5G5H5N5N5H5d5L5T5s5N5P5C5E5r5e5x5D5I5O5=" crossorigin="anonymous">
 </head>
 
 <body>
@@ -28,157 +30,17 @@
 
     <div class="col p-3 overflow-auto"  style="max-width:100% !important; height:100vh !important;">
         <ul class="nav nav-tabs">
-            <li class="nav-item">
-            <a class="nav-link active" onclick="openPage('barcodepage', this,'barcodetab')"id="barcodetab">Barcode</a>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="tab2" data-bs-toggle="tab" href="#content2" role="tab" aria-controls="content2" aria-selected="true">Barcodeless</a>
             </li>
-
-            <li class="nav-item">
-            <a class="nav-link" onclick="openPage('barcodelesspage', this, 'defaultOpen')"id="defaultOpen">Barcodeless</a>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="tab1" data-bs-toggle="tab" href="#content1" role="tab" aria-controls="content1" aria-selected="true">Barcode</a>
             </li>
         </ul>
 
-        {{-- Barcode --}}
-        <div class="tab-content">
-            <div class="tabcontent tab-pane" id="barcodepage" role="tabpanel">
-                {{-- Barcode Scan Page --}}
-                <div class="col-lg-4 col-sm-12 p-2 bd-highlight">
-
-                    {{--Input of Job ID--}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="jobid">Job ID </label>
-                        <input  class="form-control input-sm col-xs-1" id="jobid" >
-                    </div>
-
-                    {{-- Department --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="department">Department </label>
-                        <input  class="form-control input-sm col-xs-1" id="department" readonly>
-                    </div>
-
-                    {{-- Department HIDDEN FOR PURPOSES OF VALUE! --}}
-                    <div class="form-group mb-2">
-                        <input  class="form-control input-sm col-xs-1" id="departmentId" readonly hidden>
-                    </div>
-
-                    {{-- Product Category --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="category">Product Category </label>
-                        <input  class="form-control input-sm col-xs-1" id="category" readonly>
-                    </div>
-
-                    {{-- Category HIDDEN FOR PURPOSES OF VALUE! --}}
-                    <div class="form-group mb-2">
-                        <input  class="form-control input-sm col-xs-1" id="categoryID" readonly hidden>
-                    </div>
-
-                    {{-- Product HIDDEN FOR PURPOSES OF VALUE! --}}
-                    <div class="form-group mb-2">
-                        <input  class="form-control input-sm col-xs-1" id="productCode" readonly hidden>
-                    </div>
-
-                    {{-- Product --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="product">Product Name </label>
-                        <input class="form-control input-sm col-xs-1" id="product" readonly>
-                    </div>
-                    
-                    {{-- Label Type --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="labelType">Label Type</label>
-                        <select  class="form-select input-sm w-100" id="labelType" required>
-                            <option></option>
-                            <option value="Pallet">Pallet</option>
-                            <option value="Bundle">Bundle</option>
-                        </select>
-                    </div>
-
-                    {{-- Pallets --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="configuration">Pallet / Bundle Configuration</label>
-                        <select  class="form-control input-sm col-xs-1 " id="configuration" >
-                            <option></option>
-                            
-                            
-                        </select> 
-                    </div>
-
-                    {{-- Quantity --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="qty">Quantity to Print </label>
-                        <input  class="form-control input-sm col-xs-1" id="qty"type="number">
-                    </div>
-
-                    {{-- Weight --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="weight">Weight to Print </label>
-                        <div class="col-12 d-inline-flex">
-                            <div class="col-8">
-                                <select  class="form-select input-sm w-100" id="scaleID">
-                                    <option></option>
-                                    @foreach($scales as $scale)
-                                        <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
-                                    @endforeach
-                                    
-                                </select>
-                            </div>
-                            <div class="col-4">
-                                <input  class="form-control input-sm w-100" id="weight" type="number" disabled>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Barcode --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="barcode">Barcode</label>
-                        <input class="form-control input-sm col-xs-1" id="barcode"type="number">
-                    </div>
-
-                    {{-- Driver Name --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="driver">Driver Name</label>
-                        <input  class="form-control input-sm col-xs-1" id="driver" >
-                    </div>
-
-                    {{-- Driver Number --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="forklift">Forklift Number </label>
-                        <select  class="form-select input-sm w-100" id="forklift" readonly>
-                            <option></option>
-                            @foreach($forklifts as $forklift)
-                                <option value="{{$forklift->intLocationNameId}}">{{$forklift->strLocationName}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- Area --}}
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="area">Area</label>
-                        <select class="form-select input-sm w-100" id="area" readonly>
-                            <option></option>
-                            @foreach($areas as $area)
-                                <option value="{{$area->intAutoID}}">{{$area->strAreaName}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="printer">Printer</label>
-                        <select  class="form-select w-100" id="printer"  required>
-                            <option></option>
-                            @foreach($printers as $printer)
-                                <option value="{{$printer->intPrinterId}}">{{$printer->strPrinter}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <button class="btn btn-success w-100" id="print" >PRINT</button>
-                </div>
-            </div>
-        </div>
-
         {{-- Barcodeless --}}
         <div class="tab-content">
-            <div class="tabcontent tab-pane" id="barcodelesspage" role="tabpanel">
+            <div class="tab-pane fade show active" id="content2" role="tabpane2" aria-labelledby="tab2">
                 {{-- Barcode Scan Page --}}
                 <div class="col-lg-4 col-sm-12 p-2 bd-highlight">
                     {{-- Department --}}
@@ -214,18 +76,23 @@
                         <label class="control-label fw-bold" for="labelTypeBarcodeless">Label Type</label>
                         <select  class="form-select input-sm w-100" id="labelTypeBarcodeless" required>
                             <option></option>
-                            <option value="Single">Single</option>
-                            <option value="Pallet">Pallet</option>
-                            <option value="Bundle">Bundle</option>
                         </select>
                     </div>
 
                     {{-- Pallets --}}
                     <div class="form-group mb-2">
-                        <label class="control-label fw-bold" for="configurationBarcodeless">Pallet / Bundle Configuration</label>
-                        <select  class="form-select input-sm w-100 "id="configurationBarcodeless">
+                        <label class="control-label fw-bold" for="configurationBarcodeless">Pallet / Bundle Quantity</label>
+                        <div class="col-12 d-inline-flex">
+                            <div class="col-11">
+                                <select  class="form-select input-sm w-100 rounded-0 rounded-start" id="configurationBarcodeless">
 
-                        </select> 
+                                </select> 
+                                <input class="form-control input-sm w-100 rounded-0" id="inputConfigurationBarcodeless" type="number" hidden>
+                            </div>
+                            <div class="col-1">
+                                <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditConfigurationBarcodeless"><i class="fa fa-edit p-0"></i></button>
+                            </div>
+                        </div>
                     </div>
 
                     {{-- Quantity --}}
@@ -235,11 +102,11 @@
                     </div>
 
                     {{-- Weight --}}
-                    <div class="form-group mb-2">
+                    <div class="form-group mb-2" id="scaleDivBarcodeless">
                         <label class="control-label fw-bold" for="weightBarcodeless">Weight to Print </label>
                         <div class="col-12 d-inline-flex">
                             <div class="col-8">
-                                <select  class="form-select input-sm w-100" id="scaleIDBarcodeless">
+                                <select class="form-select input-sm w-100 rounded-0 rounded-start" id="scaleIDBarcodeless">
                                     <option></option>
                                     @foreach($scales as $scale)
                                         <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
@@ -247,8 +114,11 @@
                                     
                                 </select>
                             </div>
-                            <div class="col-4">
-                                <input  class="form-control input-sm w-100" id="weightBarcodeless" type="number" disabled>
+                            <div class="col-3">
+                                <input class="form-control input-sm w-100 rounded-0" id="weightBarcodeless" type="number" disabled>
+                            </div>
+                            <div class="col-1">
+                                <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditWeightBarcodeless"><i class="fa fa-edit p-0"></i></button>
                             </div>
                         </div>
                     </div>
@@ -302,6 +172,151 @@
             </div>
         </div>
 
+        {{-- Barcode --}}
+        <div class="tab-content">
+            <div class="tab-pane fade show" id="content1" role="tabpanel" aria-labelledby="tab1">
+                {{-- Barcode Scan Page --}}
+                <div class="col-lg-4 col-sm-12 p-2 bd-highlight">
+
+                    {{--Input of Job ID--}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="jobid">Job ID </label>
+                        <input  class="form-control input-sm col-xs-1" id="jobid" >
+                    </div>
+
+                    {{-- Department --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="department">Department </label>
+                        <input  class="form-control input-sm col-xs-1" id="department" readonly>
+                    </div>
+
+                    {{-- Department HIDDEN FOR PURPOSES OF VALUE! --}}
+                    <div class="form-group mb-2">
+                        <input  class="form-control input-sm col-xs-1" id="departmentId" readonly hidden>
+                    </div>
+
+                    {{-- Product Category --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="category">Product Category </label>
+                        <input  class="form-control input-sm col-xs-1" id="category" readonly>
+                    </div>
+
+                    {{-- Category HIDDEN FOR PURPOSES OF VALUE! --}}
+                    <div class="form-group mb-2">
+                        <input  class="form-control input-sm col-xs-1" id="categoryID" readonly hidden>
+                    </div>
+
+                    {{-- Product HIDDEN FOR PURPOSES OF VALUE! --}}
+                    <div class="form-group mb-2">
+                        <input  class="form-control input-sm col-xs-1" id="productCode" readonly hidden>
+                    </div>
+
+                    {{-- Product --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="product">Product Name </label>
+                        <input class="form-control input-sm col-xs-1" id="product" readonly>
+                    </div>
+                    
+                    {{-- Label Type --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="labelType">Label Type</label>
+                        <select  class="form-select input-sm w-100" id="labelType" required>
+                            <option></option>
+                        </select>
+                    </div>
+
+                    {{-- Pallets --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="configuration">Pallet / Bundle Quantity</label>
+                        <div class="col-12 d-inline-flex">
+                            <div class="col-11">
+                                <select  class="form-select input-sm w-100 rounded-0 rounded-start" id="configuration">
+
+                                </select> 
+                                <input class="form-control input-sm w-100 rounded-0" id="inputConfiguration" type="number" hidden>
+                            </div>
+                            <div class="col-1">
+                                <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditConfiguration"><i class="fa fa-edit p-0"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Quantity --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="qty">Quantity to Print </label>
+                        <input  class="form-control input-sm col-xs-1" id="qty" type="number">
+                    </div>
+
+                    {{-- Weight --}}
+                    <div class="form-group mb-2" id="scaleDiv">
+                        <label class="control-label fw-bold" for="weight">Weight to Print </label>
+                        <div class="col-12 d-inline-flex">
+                            <div class="col-8">
+                                <select class="form-select input-sm w-100 rounded-0 rounded-start" id="scaleID">
+                                    <option></option>
+                                    @foreach($scales as $scale)
+                                        <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
+                                    @endforeach
+                                    
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <input class="form-control input-sm w-100 rounded-0" id="weight" type="number" disabled>
+                            </div>
+                            <div class="col-1">
+                                <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditWeight"><i class="fa fa-edit p-0"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Barcode --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="barcode">Barcode</label>
+                        <input class="form-control input-sm col-xs-1" id="barcode"type="number">
+                    </div>
+
+                    {{-- Driver Name --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="driver">Driver Name</label>
+                        <input  class="form-control input-sm col-xs-1" id="driver" >
+                    </div>
+
+                    {{-- Driver Number --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="forklift">Forklift Number </label>
+                        <select  class="form-select input-sm w-100" id="forklift" readonly>
+                            <option></option>
+                            @foreach($forklifts as $forklift)
+                                <option value="{{$forklift->intLocationNameId}}">{{$forklift->strLocationName}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Area --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="area">Area</label>
+                        <select class="form-select input-sm w-100" id="area" readonly>
+                            <option></option>
+                            @foreach($areas as $area)
+                                <option value="{{$area->intAutoID}}">{{$area->strAreaName}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="printer">Printer</label>
+                        <select  class="form-select w-100" id="printer"  required>
+                            <option></option>
+                            @foreach($printers as $printer)
+                                <option value="{{$printer->strPrinter}}">{{$printer->strPrinter}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <button class="btn btn-success w-100" id="print" >PRINT</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -326,13 +341,13 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
 
 
     $(document).ready(function() {
-        document.getElementById("defaultOpen").click();
 
         $('.sidebar ul li a').click(function(){
             var id = $(this).attr('id');
@@ -357,7 +372,7 @@
                     $('#department').val(data[0]['DepartmentName']);
                     $('#departmentId').val(data[0]['DeptID']);
                     $('#category').val(data[0]['strItemGroup']);
-                    $('#categoryID').val(data[0]['intCategoryId']);
+                    $('#categoryID').val(data[0]['strCategoryId']);
                     $('#product').val(data[0]['ProductDescription']);
                     $('#productCode').val(data[0]['ItemCode']);
                     $('#barcode').val(data[0]['Barcode']);
@@ -386,13 +401,65 @@
                                     productCode: $('#productCode').val(),
                                 },
                                 success:function(data){
+                                    $('#barcode').val(data[0]['Barcode']);
+                                    var toAppend = '';
+                                    $("#configuration").empty();
 
-                                        $('#configuration').val(data[0]['intPackSize']);
+                                    toAppend += '<optgroup label="Single" hidden>';
+                                    toAppend += '<option></option>';
+                                    toAppend += '<option value = "1">1</option>';
+                                    toAppend += '</optgroup>';
+                                    
+                                    $.each(data,function(i,o){
+                                        if (o.strBundleSize !== null) {
+                                            var bundleSize = o.strBundleSize.split(';');
+
+                                            toAppend += '<optgroup label="Bundle" hidden>';
+                                            toAppend += '<option></option>';
+                                            $.each(bundleSize, function(index,value){
+                                                toAppend += '<option value="'+value+'">'+value+' / bundle</option>';
+                                            })
+                                            toAppend += '</optgroup>';
+                                        }
+
+                                        if (o.strPackSize !== null) {
+                                            var packSizes = o.strPackSize.split(';');
+
+                                            toAppend += '<optgroup label="Pallet" hidden>';
+                                            toAppend += '<option></option>';
+                                            $.each(packSizes, function(index,value){
+                                                toAppend += '<option value="'+value+'">'+value+' / pallet</option>';
+                                            })
+                                            toAppend += '</optgroup>';
+                                        }
+
+                                        // if (data[0]["weight"] == "1.0"){
+                                        //     $('#scaleDiv').prop('hidden', false);
+                                        // }else{
+                                        //     $('#scaleDiv').prop('hidden', true);
+                                        // }
                                         
-                                }});
-                                
-                            }
+                                    });
+                                    $("#configuration").append(toAppend);
 
+                                    var addType = '';
+                                    $("#labelType").empty();
+                                    addType += '<option></option>';
+
+                                    if (data[0]['intHasSingleLable'] == "1"){
+                                        addType += '<option value = "Single">Single</option>';
+                                    }
+                                    if (data[0]['intHasBundleLable'] == "1"){
+                                        addType += '<option value = "Bundle">Bundle</option>';
+                                    }
+                                    if (data[0]['intHasPalletLable'] == "1"){
+                                        addType += '<option value = "Pallet">Pallet</option>';
+                                    }
+
+                                    $("#labelType").append(addType);
+                                }
+                            });
+                        }
                     });
                 }
 
@@ -409,8 +476,8 @@
                     category: $('#categoryID').val(),
                     product: $('#productCode').val(),
                     labelType: $('#labelType').val(),
-                    configuration: $('#configuration').val(),
-                    qty: $('#qty').val(),
+                    configuration: $('#inputConfiguration').val(),
+                    quantity: $('#qty').val(),
                     weight: $('#weight').val(),
                     barcode: $('#barcode').val(),
                     driver: $('#driver').val(),
@@ -441,7 +508,7 @@
                     category: $('#categoryBarcodeless').val(),
                     product: $('#productBarcodeless').val(),
                     labelType: $('#labelTypeBarcodeless').val(),
-                    configuration: $('#configurationBarcodeless').val(),
+                    configuration: $('#inputConfigurationBarcodeless').val(),
                     quantity: $('#quantityBarcodeless').val(),
                     weight: $('#weightBarcodeless').val(),
                     barcode: $('#barcodeBarcodeless').val(),
@@ -510,6 +577,7 @@
             });
         });
 
+        // ROBINS PREVIOUS FUNCTION THAT ISNT NEEDED ---------------------------------------------------------------------
         // $('#productBarcodeless').change(function(){
         //     $.ajax({
 
@@ -541,6 +609,62 @@
         //         }
         //     });
         // });
+
+        $('#btnEditConfigurationBarcodeless').click(function() {
+            $('#configurationBarcodeless').prop("hidden", function(_, value) {
+                return !value;
+            });
+            $('#inputConfigurationBarcodeless').prop("hidden", function(_, value) {
+                return !value;
+            });
+
+            $('#configurationBarcodeless').val("");
+            $('#inputConfigurationBarcodeless').val("");
+        });
+
+        $('#btnEditWeightBarcodeless').click(function(){
+            $('#weightBarcodeless').prop("disabled", function(_, value) {
+                return !value;
+            });
+            $('#scaleIDBarcodeless').prop("disabled", function(_, value) {
+                return !value;
+            });
+            $('#scaleIDBarcodeless').val("");
+            $('#weightBarcodeless').val("");
+        });
+
+        $('#btnEditConfiguration').click(function() {
+            $('#configuration').prop("hidden", function(_, value) {
+                return !value;
+            });
+            $('#inputConfiguration').prop("hidden", function(_, value) {
+                return !value;
+            });
+
+            $('#configuration').val("");
+            $('#inputConfiguration').val("");
+        });
+
+        $('#btnEditWeight').click(function(){
+            $('#weight').prop("disabled", function(_, value) {
+                return !value;
+            });
+            $('#scaleID').prop("disabled", function(_, value) {
+                return !value;
+            });
+            $('#scaleID').val("");
+            $('#weight').val("");
+        });
+
+        $('#configurationBarcodeless').change(function(){
+            var config = $('#configurationBarcodeless').val();
+            $('#inputConfigurationBarcodeless').val(config);
+        });
+
+        $('#configuration').change(function(){
+            var config = $('#configuration').val();
+            $('#inputConfiguration').val(config);
+        });
 
         $('#productBarcodeless').change(function(){
             $.ajax({
@@ -583,7 +707,30 @@
                         }
                         
                     });
+
                     $("#configurationBarcodeless").append(toAppend);
+
+                    var addType = '';
+                    $("#labelTypeBarcodeless").empty();
+                    addType += '<option></option>';
+
+                    if (data[0]['intHasSingleLable'] == "1"){
+                        addType += '<option value = "Single">Single</option>';
+                    }
+                    if (data[0]['intHasBundleLable'] == "1"){
+                        addType += '<option value = "Bundle">Bundle</option>';
+                    }
+                    if (data[0]['intHasPalletLable'] == "1"){
+                        addType += '<option value = "Pallet">Pallet</option>';
+                    }
+
+                    $("#labelTypeBarcodeless").append(addType);
+
+                    // if (data[0]["weight"] == "1.0"){
+                    //     $('#scaleDivBarcodeless').prop('hidden', false);
+                    // }else{
+                    //     $('#scaleDivBarcodeless').prop('hidden', true);
+                    // }
                 }
             });
         });
@@ -613,24 +760,39 @@
             }
         });
 
+        $('#labelType').change(function(){
+            var type = $('#labelType').val();
+
+            if (type == 'Pallet'){
+                $("#configuration optgroup[label='Pallet']").prop('hidden', false);
+                $("#configuration optgroup[label='Bundle']").prop('hidden', true);
+                $("#configuration optgroup[label='Single']").prop('hidden', true);
+                $("#configuration").val("");
+                $("#configuration").prop('disabled', false);
+            }else if (type == 'Bundle'){
+                $("#configuration optgroup[label='Pallet']").prop('hidden', true);
+                $("#configuration optgroup[label='Bundle']").prop('hidden', false);
+                $("#configuration optgroup[label='Single']").prop('hidden', true);
+                $("#configuration").val("");
+                $("#configuration").prop('disabled', false);
+            }else{
+                $("#configuration optgroup[label='Pallet']").prop('hidden', true);
+                $("#configuration optgroup[label='Bundle']").prop('hidden', true);
+                $("#configuration optgroup[label='Single']").prop('hidden', false);
+                $("#configuration").val("1");
+                $("#configuration").prop('disabled', true);
+
+            }
+        });
+
         $('#scaleIDBarcodeless').change(function(){
-            fetchWeight();
-            fetchweightBarcodeless();
-            
-            toggleWeigh();
+
             toggleWeighBarcodeless();
         });
 
         $('#scaleID').change(function(){
-            fetchWeight();
-            fetchweightBarcodeless();
-            
             toggleWeigh();
-            toggleWeighBarcodeless();
         });
-
-        // setInterval(fetchWeight,1000);
-
     });
 
 function escapeHtml(unsafe) {
@@ -640,60 +802,6 @@ function escapeHtml(unsafe) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-}
-
-function openPage(pageName, elmnt, elementid) {
-    // Hide all elements with class="tabcontent" by default */
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    // Remove the background color of all tablinks/buttons
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].style.backgroundColor = "";
-    }
-
-    // Remove the upper tabs class active
-    var uppertabs = document.getElementsByClassName("nav-link active");
-    $('#'+uppertabs[0].id).removeClass("active");
-    $('#'+elementid).addClass("active");
-    // Show the specific tab content
-    document.getElementById(pageName).style.display = "block";
-    $('#weight').val('');
-    $('#weightBarcodeless').val('');
-
-}
-
-function showDialog(tag,width,height){
-    $( tag ).dialog({height: height, modal: false,
-        width: width,containment: false}).dialogExtend({
-        "closable" : true, // enable/disable close button
-        "maximizable" : false, // enable/disable maximize button
-        "minimizable" : true, // enable/disable minimize button
-        "collapsable" : true, // enable/disable collapse button
-        "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-        "titlebar" : false, // false, 'none', 'transparent'
-        "minimizeLocation" : "right", // sets alignment of minimized dialogues
-        "icons" : { // jQuery UI icon class
-
-            "maximize" : "ui-icon-circle-plus",
-            "minimize" : "ui-icon-circle-minus",
-            "collapse" : "ui-icon-triangle-1-s",
-            "restore" : "ui-icon-bullet"
-        },
-        "load" : function(evt, dlg){ }, // event
-        "beforeCollapse" : function(evt, dlg){ }, // event
-        "beforeMaximize" : function(evt, dlg){ }, // event
-        "beforeMinimize" : function(evt, dlg){ }, // event
-        "beforeRestore" : function(evt, dlg){ }, // event
-        "collapse" : function(evt, dlg){  }, // event
-        "maximize" : function(evt, dlg){ }, // event
-        "minimize" : function(evt, dlg){  }, // event
-        "restore" : function(evt, dlg){  } // event
-    });
 }
 
 function toggleWeigh(){

@@ -2,123 +2,144 @@
 <html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <link rel="stylesheet" href="{{ asset('resources\css\jobmodulestyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url('images/dimslogo.png') }}">
+    <title>Generic Printing</title>
+
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <!-- DevExtreme theme -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
-    <style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-x0Jk5I2tJp2F5vzZ2jw5CzOaSj4Ck5l5eT5f5eI5V5Y3r5u5F5V5I5y5S5G5H5N5N5H5d5L5T5s5N5P5C5E5r5e5x5D5I5O5=" crossorigin="anonymous">
 
-        select.input-sm, .input-sm {
-            height: 40px;
-            line-height: 30px;
-            font-size: 16px;
-            font-weight: 900;
+    <style>
+        .red-message{
+            color: red;
+            border-color: red;
         }
     </style>
-
 </head>
 
-
-<div class="col-12 d-inline-flex px-0"  style="background: white;">
+<body>
+<div class="col-12 d-flex px-0 vh-100"  style="background: white;">
     <div class="col-custom-2" style="background: white;">
-
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
-    
-    <div class="col-10 p-3">
 
-        <h3>PRODUCT LABEL PRINTING</h3>
+    <div class="col overflow-auto d-flex">
+        <div class="col-lg-4 col-sm-12 p-3">
 
-        {{-- Department --}}
-        <div>
-            <div class="form-group">
-                <label class="control-label" for="department"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
-                <select  class="form-control input-sm col-xs-1 " id="department" style="width: 100%" required>
+            <h3>PRODUCT LABEL PRINTING</h3>
+
+            {{-- Department --}}
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="department">Department</label>
+                <select  class="form-select" id="department"required>
                     <option></option>
-                            @foreach($dept as $val)
-                                <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
-                            @endforeach
-                    
+                    @foreach($dept as $val)
+                        <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
+                    @endforeach
                 </select>
             </div>
 
             {{-- Product Category --}}
-            <div class="form-group">
-                <label class="control-label" for="category"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Category </label>
-                <select  class="form-control input-sm col-xs-1" id="category" style="width: 100%" required>
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="category">Product Category </label>
+                <select  class="form-select" id="category"  required>
                     <option></option>
                 </select>
             </div>
 
             {{-- Product --}}
-            <div class="form-group">
-                <label class="control-label" for="prodname"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name </label>
-                <select  class="form-control input-sm col-xs-1" id="prodname" style="width: 100%" required>
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="product">Product Name </label>
+                <select  class="form-select" id="product" required>
                     <option></option>
                 </select>
             </div>
 
+            {{-- Label Type --}}
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="labelType">Label Type</label>
+                <select  class="form-select input-sm w-100" id="labelType" required>
+                    <option></option>
+                </select>
+            </div>
+
+            {{-- Pallets --}}
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="configuration">Pallet / Bundle Quantity</label>
+                <div class="col-12 d-inline-flex">
+                    <div class="col-11">
+                        <select  class="form-select input-sm w-100 rounded-0 rounded-start" id="configuration">
+
+                        </select> 
+                        <input class="form-control input-sm w-100 rounded-0" id="inputConfiguration" type="number" hidden>
+                    </div>
+                    <div class="col-1">
+                        <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditConfiguration" disabled><i class="fa fa-edit p-0"></i></button>
+                    </div>
+                </div>
+            </div>
+
             {{-- Quantity --}}
-            <div class="form-group">
-                <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Quantity to Print </label>
-                <input  class="form-control input-sm col-xs-1" id="qty" style="width: 100%" required>
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="quantity">Quantity to Print </label>
+                <input  class="form-control" id="quantity" required>
             </div>
 
             {{-- Barcode --}}
-            <div class="form-group">
-                <label class="control-label" for="barcode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Barcode</label>
-                <input class="form-control input-sm col-xs-1" id="barcode" style="width: 100%" required>
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="barcode">Barcode</label>
+                <input class="form-control" id="barcode" aria-describedby="barcodeHelp" required disabled>
+                <div id="barcodeHelp" class="form-text" hidden>Please Contact your manager to rectify missing barcode</div>
             </div>
 
-            <br>
-            <br>
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="printer">Printer</label>
+                <select  class="form-select w-100" id="printer"  required>
+                    <option></option>
+                    @foreach($printers as $printer)
+                        <option value="{{$printer->strPrinter}}">{{$printer->strPrinter}}</option>
+                    @endforeach
+                </select>
+            </div>
 
             <button class="btn btn-success" id="print" style="width: 100%; margin-right: 10px;">PRINT</button>
             
-            <br>
-            <br>
+            <br><br>
+
             <h3>LABEL PRINTING REPORT</h3>
             {{-- Date from --}}
-            <div class="form-group">
-                <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date From </label>
-                <input type="date" id="datefrom" style="float: right; width: 70%;">
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="datefrom">Date From </label>
+                <input type="date" class="form-control" id="datefrom" required>
             </div>
 
             {{-- Date To --}}
-            <div class="form-group">
-                <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date To </label>
-                <input type="date" id="dateto" style="float: right; width: 70%;">
+            <div class="form-group mb-2">
+                <label class="control-label fw-bold" for="dateto">Date To</label>
+                <input type="date" class="form-control" id="dateto" required>
             </div>
             
-            <button class="btn btn-info" id="report" style="width: 100%;">REPORT</button>
-            
-
+            <button class="btn btn-primary w-100" id="report" >REPORT</button>
         </div>
-        
-    </div>
-    <div class="col-10 bd-highlight" >
-        <h3 id="gridHeading"></h3>
-        <div id="gridContainer" style="width: 100% !important;">
+
+        <div class="col-lg-8 col-sm-12 p-3">
+            <h3 id="gridHeading"></h3>
+            <div id="gridContainer">
+        </div>
     </div>
 </div>
-
-
-<style>
-
-    .dx-datagrid-table{
-        font-size:15px;
-    }
-</style>
-
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -153,11 +174,14 @@
                 url: '{!!url("/printgenericlabel")!!}',
                 type: "POST",
                 data: {
-                    department: $('#department option:selected').val(),
-                    category: $('#category option:selected').text(),
-                    product: $('#prodname option:selected').val(),
-                    qty: $('#qty').val(),
-                    barcode: $('#barcode').val()
+                    department: $('#department').val(),
+                    category: $('#category').val(),
+                    product: $('#product').val(),
+                    labelType: $('#labelType').val(),
+                    configuration: $('#inputConfiguration').val(),
+                    quantity: $('#quantity').val(),
+                    barcode: $('#barcode').val(),
+                    printer: $('#printer').val(),
                 },
                 success: function (data) {
                     if(data[0].Result =="SUCCESS")
@@ -301,42 +325,158 @@
                 },
                 success: function (data) {
                     var toAppend = '';
-                    $("#prodname").empty();
+                    $("#product").empty();
                     toAppend += '<option></option>';
                     $.each(data,function(i,o){
 
                         toAppend += '<option value="'+o.strItemCode+'">'+o.strItemName+'</option>';
                     });
-                    $("#prodname").append(toAppend);
+                    $("#product").append(toAppend);
 
                 }
 
             });
         });
 
-        $('#prodname').change(function(){
-            $.ajax({
+        $('#product').change(function(){
+            // $.ajax({
 
-                url: '{!!url("/getProductBarcode")!!}',
-                type: "GET",
-                data: {
-                    productCode: $('#prodname option:selected').val(),
+            //     url: '{!!url("/getProductBarcode")!!}',
+            //     type: "GET",
+            //     data: {
+            //         productCode: $('#product option:selected').val(),
 
-                },
-                success: function (data) {
-                    var barcode = data[0]["BarCode"];
-                    console.debug(barcode);
+            //     },
+            //     success: function (data) {
+            //         var barcode = data[0]["BarCode"];
+            //         console.debug(barcode);
 
-                    if (barcode == null){
-                        $('#barcode').val("0000000000000");
-                    }else{
-                        $('#barcode').val(barcode);
-                    }
+            //         if (barcode == null){
+            //             $('#barcode').val("0000000000000");
+            //         }else{
+            //             $('#barcode').val(barcode);
+            //         }
                     
 
-                }
+            //     }
 
+            // });
+            $.ajax({
+                url: '{!!url("/getProductInfo")!!}',
+                type: "GET",
+                data: {
+                    productCode: $('#product option:selected').val(),
+                },
+                success:function(data){
+                    
+                    var toAppend = '';
+                    $("#configuration").empty();
+
+                    toAppend += '<optgroup label="Single" hidden>';
+                    toAppend += '<option></option>';
+                    toAppend += '<option value = "1">1</option>';
+                    toAppend += '</optgroup>';
+                    
+                    $.each(data,function(i,o){
+                        if (o.strBundleSize !== null) {
+                            var bundleSize = o.strBundleSize.split(';');
+
+                            toAppend += '<optgroup label="Bundle" hidden>';
+                            toAppend += '<option></option>';
+                            $.each(bundleSize, function(index,value){
+                                toAppend += '<option value="'+value+'">'+value+' / bundle</option>';
+                            })
+                            toAppend += '</optgroup>';
+                        }
+
+                        if (o.strPackSize !== null) {
+                            var packSizes = o.strPackSize.split(';');
+
+                            toAppend += '<optgroup label="Pallet" hidden>';
+                            toAppend += '<option></option>';
+                            $.each(packSizes, function(index,value){
+                                toAppend += '<option value="'+value+'">'+value+' / pallet</option>';
+                            })
+                            toAppend += '</optgroup>';
+                        }
+                        
+                    });
+
+                    $("#configuration").append(toAppend);
+
+                    var addType = '';
+                    $("#labelType").empty();
+                    addType += '<option></option>';
+
+                    if (data[0]['intHasSingleLable'] == "1"){
+                        addType += '<option value = "Single">Single</option>';
+                    }
+                    if (data[0]['intHasBundleLable'] == "1"){
+                        addType += '<option value = "Bundle">Bundle</option>';
+                    }
+                    if (data[0]['intHasPalletLable'] == "1"){
+                        addType += '<option value = "Pallet">Pallet</option>';
+                    }
+
+                    $("#labelType").append(addType);
+
+                    $('#barcode').val(data[0]['Barcode']);
+
+                    if (data[0]["Barcode"] == '0000000000000'){
+                        $('#barcode').addClass('red-message');
+                        $('#barcodeHelp').addClass('red-message');
+                        $('#barcodeHelp').prop('hidden', false);
+                        
+                    }else{
+                        $('#barcode').removeClass('red-message');
+                        $('#barcodeHelp').removeClass('red-message');
+                        $('#barcodeHelp').prop('hidden', true);
+                    }
+                    
+                }
             });
+        });
+
+        $('#labelType').change(function(){
+            var type = $('#labelType').val();
+
+            if (type == 'Pallet'){
+                $("#configuration optgroup[label='Pallet']").prop('hidden', false);
+                $("#configuration optgroup[label='Bundle']").prop('hidden', true);
+                $("#configuration optgroup[label='Single']").prop('hidden', true);
+                $("#configuration").val("");
+                $("#configuration").prop('disabled', false);
+            }else if (type == 'Bundle'){
+                $("#configuration optgroup[label='Pallet']").prop('hidden', true);
+                $("#configuration optgroup[label='Bundle']").prop('hidden', false);
+                $("#configuration optgroup[label='Single']").prop('hidden', true);
+                $("#configuration").val("");
+                $("#configuration").prop('disabled', false);
+            }else{
+                $("#configuration optgroup[label='Pallet']").prop('hidden', true);
+                $("#configuration optgroup[label='Bundle']").prop('hidden', true);
+                $("#configuration optgroup[label='Single']").prop('hidden', false);
+                $("#configuration").val("1");
+                $("#configuration").prop('disabled', true);
+
+            }
+        });
+
+        $('#btnEditConfiguration').click(function() {
+            $('#configuration').prop("hidden", function(_, value) {
+                return !value;
+            });
+            $('#inputConfiguration').prop("hidden", function(_, value) {
+                return !value;
+            });
+
+            $('#configuration').val("");
+            $('#inputConfiguration').val("");
+        });
+
+        $('#configuration').change(function(){
+            var config = $('#configuration').val();
+            $('#inputConfiguration').val(config);
         });
 
         $('.sidebar ul li a').on(function(){
