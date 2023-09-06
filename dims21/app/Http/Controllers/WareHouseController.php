@@ -251,7 +251,7 @@ class WareHouseController extends Controller
         $forklifts = DB::connection('sqlsrv2')->select("select * from viewTransitLocations");
         $printers = DB::connection('sqlsrv2')->select("EXEC spGetUserPrinters $userId");
         $areas = DB::connection('sqlsrv2')->select("select * from tblAreas");
-        return view('warehouse/warehouse s')
+        return view('warehouse/warehousepalletlabels')
             ->with('prodGroups', $prodGroups)
             ->with('dept', $dept)
             ->with('scales', $scales)
