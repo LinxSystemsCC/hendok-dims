@@ -1013,7 +1013,7 @@
             var userName = item.UserName; 
 
             $.ajax({
-                url: '{!!url("/individualInvoicingAPITest")!!}' + '/' + ownersId + '/' + SoNumber + '/' + invoiceid + '/' + ref + '/' + userid + '/' + userName,
+                url: '{!!url("/individualInvoicingAPI")!!}' + '/' + ownersId + '/' + SoNumber + '/' + invoiceid + '/' + ref + '/' + userid + '/' + userName,
                 type: "get",
                 data: {
 
