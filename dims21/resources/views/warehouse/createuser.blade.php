@@ -108,8 +108,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label fw-bold" for="issuedto">Employee Sage Code</label>
+                    <label class="control-label fw-bold" for="groupType">Group Type</label>
+                    <select  class="form-select input-sm col-xs-1" id="groupType" required>
+                        <option></option>
+                    </select>
+                </div>
 
+                <div class="form-group">
+                    <label class="control-label fw-bold" for="issuedto">Employee Sage Code</label>
                     <select class="form-select mx-2" type="text" id='sageCode'>
                         <option value="None" selected disabled></option>
                         @foreach ($users as $user)
@@ -204,7 +210,7 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
-        
+
         $('#savesusername').click(function(){
 
             $.ajax({
@@ -216,6 +222,7 @@
                     email: $('#email').val(),
                     password: $('#password').val(),
                     groupID: $('#groupID').val(),
+                    groupType: $('#groupType').val(),
                     sageCode : $('#sageCode').val(),
                     pincode: $('#pincode').val(),
                     tabletuser: $("input[type='radio'][name='flexRadioDefault']:checked").val()
@@ -229,13 +236,13 @@
         });
 
         var groups = {!! json_encode($groups) !!};
+        var groupTypes = {!! json_encode($groupTypes) !!};
         var users = {!! json_encode($users) !!};
 
         users.forEach(function(user) {
             user.sageUserName = user.FirstName + " " + user.LastName;
         });
 
-        //initiate datagrid
         const gridUsers = $("#gridContainer").dxDataGrid({
             dataSource: getUsers(), //as json
             hoverStateEnabled: true,
@@ -290,10 +297,12 @@
                     dataField: "UserID",
                     caption: "ID",
                     allowEditing: false,
-                },{
+                },
+                {
                     dataField: "UserName",
                     caption: "Username",
-                },{
+                },
+                {
                     dataField: "Email",
                     caption: "Email",
                 },
@@ -305,7 +314,25 @@
                         valueExpr: "GroupId",
                         displayExpr: "GroupName",
                     },
-                },{
+                },
+                {
+                    dataField: "intGroupType",
+                    caption: "Group Type",
+                    lookup: {
+                        dataSource: groupTypes,
+                        valueExpr: "intAutoId",
+                        displayExpr: "strGroupType",
+                        calculateFilterExpression: function(data) {
+                            // Check if 'data' is defined and contains 'GroupId'
+                            if (data && data.GroupId !== undefined) {
+                                return ["intGroupId", "=", data.GroupId];
+                            }
+                            // Return a default filter expression when 'data' is undefined or lacks 'GroupId'
+                            return null; // Or any other default filter expression as needed
+                        },
+                    },
+                },
+                {
                     dataField: "strSageCode",
                     caption: "Sage Name",
                     lookup: {
@@ -367,6 +394,7 @@
                 var userName = e.newData.UserName || e.oldData.UserName;
                 var email = e.newData.Email || e.oldData.Email;
                 var groupId = e.newData.GroupId || e.oldData.GroupId;
+                var groupType = e.newData.intGroupType || e.oldData.intGroupType;
                 var sageCode = e.newData.strSageCode || e.oldData.strSageCode;
                 var tablet = e.newData.TabletUser || e.oldData.TabletUser;
 
@@ -378,6 +406,7 @@
                         userName : userName,
                         email : email,
                         groupId : groupId,
+                        groupType : groupType,
                         sageCode: sageCode,
                         tablet : tablet,
                     },
@@ -434,18 +463,43 @@
             }
         });
 
+        $('#groupID').change(function(){
+            var groupId = $('#groupID').val();
+            getGroupTypesByGroupId(groupId);
+        });
+
         $('.sidebar ul li a').click(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
             $('nav ul li #'+id+' span').toggleClass("rotate");
             
         });
-        
+
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
+
     });
 
+    function getGroupTypesByGroupId(groupId){
+        $.ajax({
+            url: '{!!url("/getGroupTypesByGroupId")!!}',
+            type: "GET",
+            data: {
+                groupId : groupId,
+            },
+            success: function (data) {
+                var toAppend = '';
+                $("#groupType").empty();
+                toAppend += '<option></option>';
+                $.each(data,function(i,o){
+
+                    toAppend += '<option value="'+o.intAutoId+'">'+o.strGroupType+'</option>';
+                });
+                $("#groupType").append(toAppend);
+            }
+        });
+    };
 
 
     function getUserPrinters(ID){

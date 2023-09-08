@@ -862,68 +862,6 @@
         });
     };
 
-    // function getInstructions(ref){
-    //     $.ajax({
-    //         url: '{!!url("/teamLeaderGetInstructions")!!}',
-    //         type: "GET",
-    //         data: {
-    //             ref: ref,
-    //         },
-    //         success: function (data) {
-    //             $("#instructionsTable").dxDataGrid({
-    //                 dataSource:data,
-    //                 showBorders: true,
-    //                 filterRow: { visible: true },
-    //                 filterPanel: { visible: true },
-    //                 headerFilter: { visible: true },
-    //                 paging: {
-    //                     enabled: false
-    //                 },
-    //                 selection: {
-    //                     mode: "single",
-    //                 },
-    //                 columnAutoWidth:true,        
-    //                 allowColumnResizing: true,       
-    //                 columnResizingMode: "nextColumn",
-    //                 columns: [
-    //                     {
-    //                         dataField: "strUnickReference",
-    //                         caption: "Reference",
-    //                         visible: false,
-    //                     },{
-    //                         dataField: "strInstruction",
-    //                         caption: "Instruction",
-    //                     },{
-    //                         dataField: "strType",
-    //                         caption: "Type",
-    //                     },
-    //                 ] ,
-    //                 onRowPrepared(e) {
-                        
-    //                 },
-    //                 onRowClick: function (e) {
-                        
-    //                 },
-    //                 onRowDblClick: function (e) {
-                        
-    //                 },
-    //                 onInitNewRow: function(e) {
-                        
-    //                 },
-    //                 onRowInserting: function(e) {
-                        
-    //                 },
-    //                 onRowInserted: function(e) {
-                        
-    //                 },
-    //                 onRowUpdating: function(e) {
-                        
-    //                 }
-    //             });
-    //         }
-    //     });
-    // };
-
     function AssignData(ref, horse, trailorOne, trailorTwo, picker, loader, staging, ticket, prompt){
         $.ajax({
             url: '{!!url("/teamLeaderAssign")!!}',

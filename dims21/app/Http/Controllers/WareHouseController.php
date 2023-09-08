@@ -21,10 +21,12 @@ class WareHouseController extends Controller
     public function createuserpage()
     {
         $groups = DB::connection('sqlsrv2')->select("select * from tblDIMSGROUPS");
+        $groupTypes = DB::connection('sqlsrv2')->select("select * from tblGroupTypes");
         $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName FROM viewSage300Employees WHERE EmployeeStatusCode = 'A' ");
         return view('warehouse/createuser')
             ->with('users', $users)
-            ->with('groups', $groups);
+            ->with('groups', $groups)
+            ->with('groupTypes', $groupTypes);
     }
 
     public function getUserPrinters(Request $request)
@@ -48,6 +50,7 @@ class WareHouseController extends Controller
         $email =  $request->get("email");
         $password =  $request->get("password");
         $groupID =  $request->get("groupID");
+        $groupType =  $request->get("groupType");
         $sageCode =  $request->get("sageCode");
         $pincode =  $request->get("pincode");
         $tabletuser =  $request->get("tabletuser");
@@ -56,14 +59,14 @@ class WareHouseController extends Controller
         $returnuser = DB::connection('sqlsrv2')
             ->select(
                 'exec spCreateUsers ?,?,?,?,?,?,?,?',
-                array($username, $email, $password, $groupID, $sageCode, $pincode, $tabletuser, $encrypted)
+                array($username, $email, $password, $groupID, $groupType, $sageCode, $pincode, $tabletuser, $encrypted)
             );
         return response()->json($returnuser);
     }
 
     public function getusers()
     {
-        $users = DB::connection('sqlsrv2')->select("EXEC spGetUsers ");
+        $users = DB::connection('sqlsrv2')->select("EXEC spGetUsers");
         return response()->json($users);
     }
 
@@ -81,10 +84,11 @@ class WareHouseController extends Controller
         $userName = $request->get('userName');
         $email = $request->get('email');
         $groupId = $request->get('groupId');
+        $groupType = $request->get('groupType');
         $sageCode = $request->get('sageCode');
         $tablet = $request->get('tablet');
 
-        $update = DB::connection('sqlsrv2')->select("EXEC spUpdateUserInfo $ID, '$userName', '$email', $groupId, '$sageCode', $tablet");
+        $update = DB::connection('sqlsrv2')->select("EXEC spUpdateUserInfo $ID, '$userName', '$email', $groupId, $groupType, '$sageCode', $tablet");
         return response()->json($update);
     }
 
@@ -147,9 +151,9 @@ class WareHouseController extends Controller
 
     public function creategrouppage()
     {
-        $groups = DB::connection('sqlsrv2')
-            ->select("select * from tblDIMSGroups");
-        return view('warehouse/creategroup')->with('groups', $groups);
+        $groups = DB::connection('sqlsrv2')->select("select * from tblDIMSGroups");
+        $storageCategory = DB::connection('sqlsrv2')->select("SELECT DISTINCT ulIIStorageCat strStorageCategory FROM tblSageFullStock WHERE ulIIStorageCat IS NOT NULL AND ulIIStorageCat <> ''");
+        return view('warehouse/creategroup')->with('groups', $groups)->with('storageCategory', $storageCategory);
     }
 
     public function warehouseInvetoryItems()
@@ -2810,6 +2814,51 @@ class WareHouseController extends Controller
         return response()->json($groupsjson);
     }
 
+    public function getGroupTypeById(Request $request)
+    {
+        $groupId = $request->get('groupId');
+        $return = DB::connection('sqlsrv2')->select("SELECT * FROM tblGroupTypes WHERE intGroupId = $groupId");
+        return response()->json($return);
+    }
+
+    public function saveGroupTypeById(Request $request)
+    {
+        $groupId = $request->get('groupId');
+        $groupType = $request->get('groupType');
+        DB::table('tblGroupTypes')->insert([
+            'intGroupId' => $groupId,
+            'strGroupType' => $groupType,
+        ]);
+        return 'Data inserted successfully';
+    }
+
+    public function getProductsMappedToGroupType(Request $request)
+    {
+        $typeId = $request->get('typeId');
+        $return = DB::connection('sqlsrv2')->select("SELECT * FROM tblMappedCategoryToGroupType WHERE intGroupTypeId = $typeId");
+        return response()->json($return);
+    }
+
+    public function saveProductsMappedToGroupType(Request $request)
+    {
+        $typeId = $request->get('typeId');
+        $category = $request->get('category');
+        DB::table('tblMappedCategoryToGroupType')->insert([
+            'intGroupTypeId' => $typeId,
+            'strCategory' => $category,
+        ]);
+        return 'Data inserted successfully';
+    }
+
+    public function getGroupTypesByGroupId(Request $request)
+    {
+        $groupId = $request->get('groupId');
+        $return = DB::connection('sqlsrv2')->select("SELECT * FROM tblGroupTypes WHERE intGroupId = $groupId");
+        return response()->json($return);
+    }
+
+    
+
     public function getgroupsetting()
     {
         $groupsettingsjson = DB::connection('sqlsrv2')->select("EXEC spGetGroupSettings ");
@@ -3160,7 +3209,7 @@ class WareHouseController extends Controller
     public function teamleadermanage($ref)
     {
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
-        $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses");
+        $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses WHERE intTonnage = 8000");
         $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
         $pickers = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM viewPickers");
         $loaders = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM viewLoaders");
