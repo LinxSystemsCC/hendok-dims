@@ -1918,17 +1918,17 @@ class WareHouseController extends Controller
         $labelDescription = $request->get("labelDescription");
         $size = $request->get("size");
         $packsize = $request->get("packsize");
-        $packaging = $request->get("packaging");
+        $label = $request->get("label");
         $coating = $request->get("coating");
         $barcode = $request->get("barcode");
         $prompt = $request->get("prompt");
         $ID = $request->get("ID");
         $UserID = Auth::user()->UserID;
 
-        // dd($code,$description,$group,$labelDescription,$size,$packsize,$packaging,$coating,$barcode,$prompt,$ID,$UserID);
+        // dd($code,$description,$group,$labelDescription,$size,$packsize,$label,$coating,$barcode,$prompt,$ID,$UserID);
 
         $nails =  DB::connection('sqlsrv3')->select("EXEC spNailsInnerCrud ?,?,?,?,?,?,?,?,?,?,?,?",
-        array($code,$description,$group,$labelDescription,$size,$packsize,$packaging,$coating,$barcode,$prompt,$ID,$UserID));
+        array($code,$description,$group,$labelDescription,$size,$packsize,$label,$coating,$barcode,$prompt,$ID,$UserID));
 
         return response()->json($nails);
     }
