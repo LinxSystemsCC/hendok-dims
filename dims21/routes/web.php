@@ -860,6 +860,14 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getTare', [WareHouseController::class,'getTare']);
     Route::get('getMachines', [WareHouseController::class,'getMachines']);
     Route::get('getgroupname', [WareHouseController::class,'getgroupname']);
+
+    Route::get('getGroupTypeById', [WareHouseController::class,'getGroupTypeById']);
+    Route::post('saveGroupTypeById', [WareHouseController::class,'saveGroupTypeById']);
+    Route::get('getProductsMappedToGroupType', [WareHouseController::class,'getProductsMappedToGroupType']);
+    Route::post('saveProductsMappedToGroupType', [WareHouseController::class,'saveProductsMappedToGroupType']);
+    Route::get('getGroupTypesByGroupId', [WareHouseController::class,'getGroupTypesByGroupId']);
+
+
     Route::get('getgroupsetting', [WareHouseController::class,'getgroupsetting']);
     Route::get('getusers', [WareHouseController::class,'getusers']);
     Route::get('deleteUser', [WareHouseController::class,'deleteUser']);

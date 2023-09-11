@@ -67,8 +67,8 @@
                     <input  type="text" class="form-control input-sm col-xs-1" id="packsize">
                 </div> 
                 <div class="form-group">
-                    <label class="control-label" for="packaging"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Nail Packaging</label>
-                    <input  type="text" class="form-control input-sm col-xs-1" id="packaging">
+                    <label class="control-label" for="label"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Label</label>
+                    <input  type="text" class="form-control input-sm col-xs-1" id="label">
                 </div> 
                 <div class="form-group">
                     <label class="control-label" for="coating"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Coating</label>
@@ -156,7 +156,7 @@
                     labelDescription: $('#labelDescription').val(),
                     size: $('#size').val(),
                     packsize: $('#packsize').val(),
-                    packaging: $('#packaging').val(),
+                    label: $('#label').val(),
                     coating: $('#coating').val(),
                     barcode: $('#barcode').val(),
                     prompt: 'Insert',
@@ -224,31 +224,31 @@
                     caption: "ID",
                     allowEditing: false,
                 }, {
-                    dataField: "strPastelCode",
+                    dataField: "Code",
                     caption: "Code",
                 }, {
-                    dataField: "strPastelDescription",
+                    dataField: "Description_1",
                     caption: "Description",
                 },{
-                    dataField: "strProductGroup",
+                    dataField: "ItemGroup",
                     caption: "Group",
                 },{
-                    dataField: "strLabelDescription",
+                    dataField: "ucIILabelHeader",
                     caption: "Label Description",
                 },{
-                    dataField: "strSize",
+                    dataField: "ucIILabelDescription",
                     caption: "Size",
                 },{
-                    dataField: "strPackSizeOuter",
+                    dataField: "ucIILabelDescription2",
                     caption: "Pack Size Outer",
                 },{
-                    dataField: "strNailPackaging",
-                    caption: "Nail Packaging",
+                    dataField: "ulIISingleLabel",
+                    caption: "Lable",
                 },{
-                    dataField: "strCoating",
+                    dataField: "ucIIZincCoating",
                     caption: "Coating",
                 },{
-                    dataField: "strBarcode",
+                    dataField: "Barcode",
                     caption: "Barcode",
                 },{
                     dataField: "dtmCreated",
@@ -258,15 +258,15 @@
             ],
             onRowUpdating: function(e){
                 var ID = e.oldData.intAutoID;
-                var code = e.newData.strPastelCode || e.oldData.strPastelCode;
-                var description = e.newData.strPastelDescription || e.oldData.strPastelDescription;
-                var group = e.newData.strProductGroup || e.oldData.strProductGroup;
-                var labelDescription = e.newData.strLabelDescription || e.oldData.strLabelDescription;
-                var size = e.newData.strSize || e.oldData.strSize;
-                var packsize = e.newData.strPackSizeOuter || e.oldData.strPackSizeOuter;
-                var packaging = e.newData.strNailPackaging || e.oldData.strNailPackaging;
-                var coating = e.newData.strCoating || e.oldData.strCoating;
-                var barcode = e.newData.strBarcode || e.oldData.strBarcode;
+                var code = e.newData.Code || e.oldData.Code;
+                var description = e.newData.Description_1 || e.oldData.Description_1;
+                var group = e.newData.ItemGroup || e.oldData.ItemGroup;
+                var labelDescription = e.newData.ucIILabelHeader || e.oldData.ucIILabelHeader;
+                var size = e.newData.ucIILabelDescription || e.oldData.ucIILabelDescription;
+                var packsize = e.newData.ucIILabelDescription2 || e.oldData.ucIILabelDescription2;
+                var label = e.newData.ulIISingleLabel || e.oldData.ulIISingleLabel;
+                var coating = e.newData.ucIIZincCoating || e.oldData.ucIIZincCoating;
+                var barcode = e.newData.Barcode || e.oldData.Barcode;
                 
                 $.ajax({
                     url: '{!!url("/nailsInnerCrud")!!}',
@@ -278,7 +278,7 @@
                         labelDescription: labelDescription,  
                         size: size,  
                         packsize: packsize,  
-                        packaging: packaging,  
+                        label: label,  
                         coating: coating,  
                         barcode: barcode,  
                         prompt: 'Update',
@@ -304,7 +304,7 @@
                         labelDescription: 'NA',
                         size: 'NA',
                         packsize: 'NA',
-                        packaging: 'NA',
+                        label: 'NA',
                         coating: 'NA',
                         barcode: 'NA',
                         prompt: 'Delete',

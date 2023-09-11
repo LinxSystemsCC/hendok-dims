@@ -15,7 +15,6 @@
 
     <!-- DevExtreme theme -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
@@ -84,22 +83,22 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label" for="username"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">User Name </label>
+                    <label class="control-label fw-bold" for="username">User Name </label>
                     <input  type="text" class="form-control input-sm col-xs-1" id="username">
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="email"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Email </label>
+                    <label class="control-label fw-bold" for="email">Email </label>
                     <input  type="text" class="form-control input-sm col-xs-1" id="email">
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="password"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Password </label>
+                    <label class="control-label fw-bold" for="password">Password </label>
                     <input  type="password" class="form-control input-sm col-xs-1" id="password">
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="groupID"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Group </label>
+                    <label class="control-label fw-bold" for="groupID">Group </label>
                     <select  class="form-select input-sm col-xs-1" id="groupID" required>
                         <option></option>
                         @foreach($groups as $group)
@@ -109,12 +108,29 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="pincode"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Pincode </label>
+                    <label class="control-label fw-bold" for="groupType">Group Type</label>
+                    <select  class="form-select input-sm col-xs-1" id="groupType" required>
+                        <option></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label fw-bold" for="issuedto">Employee Sage Code</label>
+                    <select class="form-select mx-2" type="text" id='sageCode'>
+                        <option value="None" selected disabled></option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->EmployeeCode }}">{{ $user->FirstName }} {{ $user->LastName }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label fw-bold" for="pincode">Pincode </label>
                     <input  type="number" class="form-control input-sm col-xs-1" id="pincode">
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="tabletuser"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Tablet User </label>
+                    <label class="control-label fw-bold" for="tabletuser">Tablet User </label>
                     <div class="d-inline-flex w-100">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="tabletuseryes" checked value="1">
@@ -194,7 +210,7 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
     $(document).ready(function() {
-        
+
         $('#savesusername').click(function(){
 
             $.ajax({
@@ -205,7 +221,9 @@
                     username: $('#username').val(),
                     email: $('#email').val(),
                     password: $('#password').val(),
-                    groupID: $('#groupID option:selected').val(),
+                    groupID: $('#groupID').val(),
+                    groupType: $('#groupType').val(),
+                    sageCode : $('#sageCode').val(),
                     pincode: $('#pincode').val(),
                     tabletuser: $("input[type='radio'][name='flexRadioDefault']:checked").val()
                 },
@@ -218,160 +236,200 @@
         });
 
         var groups = {!! json_encode($groups) !!};
+        var groupTypes = {!! json_encode($groupTypes) !!};
+        var users = {!! json_encode($users) !!};
 
-        $.ajax({
+        users.forEach(function(user) {
+            user.sageUserName = user.FirstName + " " + user.LastName;
+        });
 
-            url: '{!!url("/getusers")!!}',
-            type: "GET",
-            data: {
-                datefrom: $('#datefrom').val(),
-                dateto: $('#dateto').val()
+        const gridUsers = $("#gridContainer").dxDataGrid({
+            dataSource: getUsers(), //as json
+            hoverStateEnabled: true,
+            showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            scrolling: {
+                rowRenderingMode: 'infinite',
             },
-            success: function (data) {
+            paging:{
+                pageSize: 10,
+            },
+            pager: {
+                visible: true,
+                allowedPageSizes: [5, 10, 20, 50, 'all'],
+                showPageSizeSelector: true,
+                showInfo: true,
+                showNavigationButtons: true,
+            },
+            export: {
+                enabled: true
+            },
+            editing: {
+                mode: 'popup',
+                allowUpdating: true,
+                allowDeleting: true,
+            },
+            selection: {
+                mode: 'single',
+            },
+            onExporting(e) {
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Users');
 
-                $("#gridContainer").dxDataGrid({
-                    dataSource:data, //as json
-                    hoverStateEnabled: true,
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    allowColumnResizing: true,
-                    columnAutoWidth: true,
-                    scrolling: {
-                        rowRenderingMode: 'infinite',
-                    },
-                    paging:{
-                        pageSize: 10,
-                    },
-                    pager: {
-                        visible: true,
-                        allowedPageSizes: [5, 10, 20, 50, 'all'],
-                        showPageSizeSelector: true,
-                        showInfo: true,
-                        showNavigationButtons: true,
-                    },
-                    export: {
-                        enabled: true
-                    },
-                    editing: {
-                        mode: 'popup',
-                        allowUpdating: true,
-                        allowDeleting: true,
-                    },
-                    selection: {
-                        mode: 'single',
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('Users');
+                DevExpress.excelExporter.exportDataGrid({
+                    component: e.component,
+                    worksheet,
+                    autoFilterEnabled: true,
+                }).then(() => {
+                    workbook.xlsx.writeBuffer().then((buffer) => {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Users.xlsx');
+                    });
+                });
+                e.cancel = true;
+            },
 
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Users.xlsx');
-                            });
-                        });
-                        e.cancel = true;
+            columns: [
+                {
+                    dataField: "UserID",
+                    caption: "ID",
+                    allowEditing: false,
+                },
+                {
+                    dataField: "UserName",
+                    caption: "Username",
+                },
+                {
+                    dataField: "Email",
+                    caption: "Email",
+                },
+                {
+                    dataField: "GroupId",
+                    caption: "Group ID",
+                    lookup: {
+                        dataSource: groups,
+                        valueExpr: "GroupId",
+                        displayExpr: "GroupName",
                     },
-
-                    columns: [
-                        {
-                            dataField: "UserID",
-                            caption: "ID",
-                            allowEditing: false,
-                        },{
-                            dataField: "UserName",
-                            caption: "Username",
-                        },{
-                            dataField: "Email",
-                            caption: "Email",
-                        },
-                        {
-                            dataField: "GroupId",
-                            caption: "Group ID",
-                            lookup: {
-                                dataSource: groups,
-                                valueExpr: "GroupId",
-                                displayExpr: "GroupName",
-                            },
-                        },
-                        {
-                            dataField: "TabletUser",
-                            caption: "Tablet User",
-                            lookup: {
-                                dataSource: [
-                                    {Id:"0", Prompt:'No',},
-                                    {Id:"1", Prompt:'Yes',}
-                                ],
-                                valueExpr: "Id",
-                                displayExpr: "Prompt",
-                            },
-                        },
-                        {
-                            dataField: "printerAssign",
-                            caption: "Printers",
-                            cellTemplate: function (container, options) {
-                                container.addClass("customPadding");
-                                const button = $("<button class='btn btn-secondary btn-sm w-100'>").text("View").on("click", function() {
-                                    // console.log(options.data);
-                                    $("#userId").val(options.data.UserID);
-                                    getUserPrinters(options.data.UserID);
-                                });
-                                container.append(button);
-                            },
-                            width: 100,
-                        },
-                    ],
-                    onRowDblClick:function(e){ 
-                        var intUserID =  e.data.UserID;
-
-                        window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID);
-                    },
-                    onRowRemoving: function(e) {
-
-                        var UserID = e.data.UserID;
-                        $.ajax({
-                            url: '{!!url("/deleteUser")!!}',
-                            type: "GET",
-                            data: {
-                                ID : UserID,
-                            },
-                            success: function (data) {
-                                location.reload();
+                },
+                {
+                    dataField: "intGroupType",
+                    caption: "Group Type",
+                    lookup: {
+                        dataSource: groupTypes,
+                        valueExpr: "intAutoId",
+                        displayExpr: "strGroupType",
+                        calculateFilterExpression: function(data) {
+                            // Check if 'data' is defined and contains 'GroupId'
+                            if (data && data.GroupId !== undefined) {
+                                return ["intGroupId", "=", data.GroupId];
                             }
-                        });
+                            // Return a default filter expression when 'data' is undefined or lacks 'GroupId'
+                            return null; // Or any other default filter expression as needed
+                        },
                     },
-                    onRowUpdating: function(e) {
-                        var ID = e.oldData.UserID;
-                        var userName = e.newData.UserName || e.oldData.UserName;
-                        var email = e.newData.Email || e.oldData.Email;
-                        var groupId = e.newData.GroupId || e.oldData.GroupId;
-                        var tablet = e.newData.TabletUser || e.oldData.TabletUser;
-
-                        $.ajax({
-                            url: '{!!url("/updateUser")!!}',
-                            type: "GET",
-                            data: {
-                                ID : ID,
-                                userName : userName,
-                                email : email,
-                                groupId : groupId,
-                                tablet : tablet,
-                            },
-                            success: function (data) {
-                                location.reload();
-                            }
+                },
+                {
+                    dataField: "strSageCode",
+                    caption: "Sage Name",
+                    lookup: {
+                        dataSource: users,
+                        valueExpr: "EmployeeCode",
+                        displayExpr: "sageUserName",
+                        searchExpr: ["EmployeeCode", "FirstName", "LastName"],
+                    },
+                },
+                {
+                    dataField: "TabletUser",
+                    caption: "Tablet User",
+                    lookup: {
+                        dataSource: [
+                            {Id:"0", Prompt:'No',},
+                            {Id:"1", Prompt:'Yes',}
+                        ],
+                        valueExpr: "Id",
+                        displayExpr: "Prompt",
+                    },
+                },
+                {
+                    dataField: "printerAssign",
+                    caption: "Printers",
+                    cellTemplate: function (container, options) {
+                        container.addClass("customPadding");
+                        const button = $("<button class='btn btn-secondary btn-sm w-100'>").text("View").on("click", function() {
+                            // console.log(options.data);
+                            $("#userId").val(options.data.UserID);
+                            getUserPrinters(options.data.UserID);
                         });
+                        container.append(button);
+                    },
+                    width: 100,
+                    allowEditing: false,
+                },
+            ],
+            onRowDblClick:function(e){ 
+                var intUserID =  e.data.UserID;
+
+                window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID);
+            },
+            onRowRemoving: function(e) {
+
+                var UserID = e.data.UserID;
+                $.ajax({
+                    url: '{!!url("/deleteUser")!!}',
+                    type: "GET",
+                    data: {
+                        ID : UserID,
+                    },
+                    success: function (data) {
+                        location.reload();
                     }
                 });
+            },
+            onRowUpdating: function(e) {
+                var ID = e.oldData.UserID;
+                var userName = e.newData.UserName || e.oldData.UserName;
+                var email = e.newData.Email || e.oldData.Email;
+                var groupId = e.newData.GroupId || e.oldData.GroupId;
+                var groupType = e.newData.intGroupType || e.oldData.intGroupType;
+                var sageCode = e.newData.strSageCode || e.oldData.strSageCode;
+                var tablet = e.newData.TabletUser || e.oldData.TabletUser;
 
+                $.ajax({
+                    url: '{!!url("/updateUser")!!}',
+                    type: "GET",
+                    data: {
+                        ID : ID,
+                        userName : userName,
+                        email : email,
+                        groupId : groupId,
+                        groupType : groupType,
+                        sageCode: sageCode,
+                        tablet : tablet,
+                    },
+                    success: function (data) {
+                        getUsers();
+                    }
+                });
             }
+        }).dxDataGrid('instance');
 
-        });
+        function getUsers(){
+            $.ajax({
+                url: '{!!url("/getusers")!!}',
+                type: "GET",
+                data: {
+                },
+                success: function (data) {
+                    // console.log(data);
+                    gridUsers.option('dataSource', data);
+                    gridUsers.refresh();
+                }
+            });
+        };
 
         $('#updatePrinters').click(function(){  
             var userId = $("#userId").val();
@@ -384,46 +442,65 @@
             updateUserPrinters(userId, printers);
         });
 
+        $('#sageCode').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newuser'),
+            matcher: function(params, data) {
+                // If there's no search term, return all options
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                // Check if search term matches option value
+                if (data.id.toLowerCase().indexOf(params.term.toLowerCase()) >= 0) {
+                    return data;
+                }
+                // Check if search term matches option display text
+                if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) >= 0) {
+                    return data;
+                }
+                // Return null if there's no match
+                return null;
+            }
+        });
+
+        $('#groupID').change(function(){
+            var groupId = $('#groupID').val();
+            getGroupTypesByGroupId(groupId);
+        });
+
         $('.sidebar ul li a').click(function(){
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-'+id).toggleClass("show");
             $('nav ul li #'+id+' span').toggleClass("rotate");
             
         });
-        
+
         $('nav ul li').click(function(){
             $(this).addClass("active").siblings().removeClass("active");
         });
+
     });
 
-    function showDialog(tag,width,height){
-        $( tag ).dialog({height: height, modal: false,
-            width: width,containment: false}).dialogExtend({
-            "closable" : true, // enable/disable close button
-            "maximizable" : false, // enable/disable maximize button
-            "minimizable" : true, // enable/disable minimize button
-            "collapsable" : true, // enable/disable collapse button
-            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar" : false, // false, 'none', 'transparent'
-            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-            "icons" : { // jQuery UI icon class
-
-                "maximize" : "ui-icon-circle-plus",
-                "minimize" : "ui-icon-circle-minus",
-                "collapse" : "ui-icon-triangle-1-s",
-                "restore" : "ui-icon-bullet"
+    function getGroupTypesByGroupId(groupId){
+        $.ajax({
+            url: '{!!url("/getGroupTypesByGroupId")!!}',
+            type: "GET",
+            data: {
+                groupId : groupId,
             },
-            "load" : function(evt, dlg){ }, // event
-            "beforeCollapse" : function(evt, dlg){ }, // event
-            "beforeMaximize" : function(evt, dlg){ }, // event
-            "beforeMinimize" : function(evt, dlg){ }, // event
-            "beforeRestore" : function(evt, dlg){ }, // event
-            "collapse" : function(evt, dlg){  }, // event
-            "maximize" : function(evt, dlg){ }, // event
-            "minimize" : function(evt, dlg){  }, // event
-            "restore" : function(evt, dlg){  } // event
+            success: function (data) {
+                var toAppend = '';
+                $("#groupType").empty();
+                toAppend += '<option></option>';
+                $.each(data,function(i,o){
+
+                    toAppend += '<option value="'+o.intAutoId+'">'+o.strGroupType+'</option>';
+                });
+                $("#groupType").append(toAppend);
+            }
         });
     };
+
 
     function getUserPrinters(ID){
         $.ajax({
