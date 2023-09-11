@@ -58,7 +58,7 @@ class WareHouseController extends Controller
 
         $returnuser = DB::connection('sqlsrv2')
             ->select(
-                'exec spCreateUsers ?,?,?,?,?,?,?,?',
+                'exec spCreateUsers ?,?,?,?,?,?,?,?,?',
                 array($username, $email, $password, $groupID, $groupType, $sageCode, $pincode, $tabletuser, $encrypted)
             );
         return response()->json($returnuser);
