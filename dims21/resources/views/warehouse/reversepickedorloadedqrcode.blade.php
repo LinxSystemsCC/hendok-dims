@@ -76,7 +76,7 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
         <h5><strong>Reverse Picked Qr Code</strong></h5><br>
         <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Scan Qr Code </label>
         <input  class="form-control input-sm col-xs-1" id="qrcode" style="width: 100%" required><br>
-        
+
         <button class="btn btn-lg btn-success" id="submitqrcode"> Submit </button>
     </div>
 
@@ -119,7 +119,7 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
                     success: function (data) {
                         if(data[0].Result =="SUCCESS")
                         {
-                            alert('Succesful Printout.');
+                            alert(' Reversed. ');
                             location.reload();
                         }else{
                             alert(data[0].Result);
