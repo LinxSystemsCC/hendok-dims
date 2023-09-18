@@ -399,7 +399,6 @@ class WareHouseController extends Controller
         $response = DB::connection('sqlsrv2')->select("exec spDeleteGalvChecker ?", array($checker));
         return response()->json($response);
     }
-
     public function printgenericlabel(Request $request)
     {
         $department = $request->get("department");
