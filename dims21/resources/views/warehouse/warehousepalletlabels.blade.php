@@ -360,15 +360,32 @@
             $(this).addClass("active").siblings().removeClass("active");
         });
 
-        $('#jobid').change(function(){
+        $('#jobid').on('input', function(){
+            var inputVal = $('#jobid').val();
+
+            var parts = inputVal.split("|"); // Split the data by the "|" character
+            var jobId = parts[0];
+            
             $.ajax({
 
                 url: '{!!url("/getproductbyjobid")!!}',
                 type: "GET",
                 data: {
-                    jobid: $('#jobid').val()
+                    jobid: jobId
                 },
                 success: function (data) {
+                    if ($.isEmptyObject(data)) {
+
+                        $('#department').val("");
+                        $('#departmentId').val("");
+                        $('#category').val("");
+                        $('#categoryID').val("");
+                        $('#product').val("");
+                        $('#productCode').val("");
+                        $('#barcode').val("");
+
+                    }
+
                     $('#department').val(data[0]['DepartmentName']);
                     $('#departmentId').val(data[0]['DeptID']);
                     $('#category').val(data[0]['strItemGroup']);

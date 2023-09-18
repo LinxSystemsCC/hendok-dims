@@ -367,7 +367,7 @@ class TabletLoadingApp extends controller
             ->with('ref',$ref);
     }
     public function viewpickingtickets(){
-        $teamleaders = DB::connection('sqlsrv2')->select("Select UserID, UserName from tblDimsusers where strPickingTeams='TeamLeader'");
+        $teamleaders = DB::connection('sqlsrv2')->select("SELECT * FROM viewTeamLeaders");
         $drivers = DB::connection('sqlsrv2')->select("select DriverId, DriverName from tblDrivers");
         $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses");
         $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
@@ -709,7 +709,7 @@ class TabletLoadingApp extends controller
             ->select('Select * from tblTrucks where intType=2' );
 
         $teamleaders = DB::connection('sqlsrv3')
-            ->select("Select * from tblDimsusers where strPickingTeams='TeamLeader'" );
+            ->select("SELECT * FROM viewTeamLeaders" );
 
 //dd($pickingheader);
 

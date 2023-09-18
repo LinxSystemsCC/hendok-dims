@@ -2,24 +2,25 @@
 <html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
-    <link rel="icon" type="image/png" href="{{url('images/dimslogo.png')}}">
+    <link rel="stylesheet" href="{{ asset('resources\css\jobmodulestyle.css') }}">
+    <link rel="icon" type="image/png" href="{{ url('images/dimslogo.png') }}">
     <title>Team Leader Dashboard</title>
 
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
-    <!-- Multiselect --> 
-    <link href="{{ asset('css/jquery.multiselect.css') }}" rel="stylesheet"  type='text/css'>
-
-
     <!-- DevExtreme theme -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Multiselect --> 
+    <link href="{{ asset('css/jquery.multiselect.css') }}" rel="stylesheet"  type='text/css'>
 
     <style>
         .red-cell {
@@ -160,8 +161,15 @@
                         <td>{{$val->OrderNum}}</td>
                         <td>{{ $val->PastelDescription}}</td>
                         <td>{{ floatval($val->mnyQty)}}</td>
-                        <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>{{ floatval($val->mnyPickedQuantity)}}</td>
-                        <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>{{ floatval($val->mnyLoadedQty)}}</td>
+                        <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
+                            {{ floatval($val->mnyPickedQuantity)}}
+                        </td>
+                        <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
+                            {{ floatval($val->mnyLoadedQty)}}
+                            @if($val->sageWeight == 1) 
+                                <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
+                            @endif
+                        </td>
                         </tr>
                         <?php
                         $istrue = true;
@@ -184,8 +192,15 @@
                             @endif
                             <td>{{ $val->PastelDescription}}</td>
                             <td>{{ floatval($val->mnyQty)}}</td>
-                            <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>{{ floatval($val->mnyPickedQuantity)}}</td>
-                            <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>{{ floatval($val->mnyLoadedQty)}}</td>
+                            <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
+                                {{ floatval($val->mnyPickedQuantity)}}
+                            </td>
+                            <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
+                                {{ floatval($val->mnyLoadedQty)}}
+                                @if($val->sageWeight == 1) 
+                                    <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
+                                @endif
+                            </td>
                         </tr>
                         <?php
                         $storenames = $val->StoreName;
@@ -264,7 +279,7 @@
                             <label for="picker" class="col-form-label">Pickers</label>
                             <select class="form-select" type="text" id='picker' multiple="multiple" >
                                 @foreach ($pickers as $picker)
-                                    <option value="{{ $picker->UserID }}">{{ $picker->UserName }}</option>
+                                    <option value="{{ $picker->UserID }}">{{ $picker->SageName }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -272,7 +287,7 @@
                             <label for="loader" class="col-form-label">Loaders</label>
                             <select class="form-select" type="text" id='loader' multiple="multiple" >
                                 @foreach ($loaders as $loader)
-                                    <option value="{{ $loader->UserID }}">{{ $loader->UserName }}</option>
+                                    <option value="{{ $loader->UserID }}">{{ $loader->SageName }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -359,9 +374,6 @@
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<!-- Multiselect -->
-<script src="{{ asset('js/jquery.multiselect.js') }}"></script>
-
 <!-- Excel Saver -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
 
@@ -373,6 +385,9 @@
 
 <!-- DevExtreme library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
+
+<!-- Multiselect -->
+<script src="{{ asset('js/jquery.multiselect.js') }}"></script>
 
 <script>
     $.ajaxSetup({
@@ -466,6 +481,11 @@
             const stands = $('#stands').val() || 'null';
 
             assignEquipment(ref, belts, ratchets, tarps, dunnages, pallets, plates, nets, stands);
+        });
+
+        $('.btnFinishPickingWeighted').click(function(){
+            var id = $(this).val();
+            completeLoad(id);
         });
     });
 
@@ -940,8 +960,8 @@
         });
     }
 
-    function invoiceOut(data){
-        $.each(data, function(index, item) {
+    function invoiceOut(inputdata){
+        $.each(inputdata, function(index, item) {
             // Access properties of the current item
             var ownersId = item.intOwnerID;
             var SoNumber = item.OrderNum; 
@@ -956,21 +976,39 @@
                 data: {
 
                 },
-                success: function (data) {
+                success: function (outputData) {
 
-                    console.debug(data);
+                    console.debug(outputData);
 
-                    // if(data =="Credit Limit")
-                    // {
-                    //     alert("CREDIT LIMIT ISSUES");
+                    if(outputData =="Credit Limit")
+                    {
+                        alert("CREDIT LIMIT ISSUES");
 
-                    // }else{
-
-                    // }
+                    }else{
+                        printTripSheet(ref);
+                    }
                 }
             });
         });
     };
+
+    function printTripSheet(ref){
+        alert(ref + "Will be printed");
+        // window.open('{!!url("/printtripsheet")!!}/' + ref, "tripsheet" + ref, "location=1,status=1,scrollbars=1, width=1200,height=850");
+    };
+
+    function completeLoad(id){
+        $.ajax({
+            url: '{!!url("/teamLeaderCompleteLoad")!!}',
+            type: "POST",
+            data: {
+                id: id,
+            },
+            success: function (data) {
+                location.reload();
+            }
+        });
+    }
 
 </script>
 </body>

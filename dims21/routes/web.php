@@ -1023,6 +1023,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('teamLeaderApproveNotification',[WarehouseController::class,'teamLeaderApproveNotification']);
     Route::get('teamLeaderGetInstructions',[WarehouseController::class,'teamLeaderGetInstructions']);
     Route::get('teamLeaderGetPickingPlanToInvoice',[WarehouseController::class,'teamLeaderGetPickingPlanToInvoice']);
+    Route::post('teamLeaderCompleteLoad',[WarehouseController::class,'teamLeaderCompleteLoad']);
     Route::get('getproductbyjobid',[WareHouseController::class,'getproductbyjobid']);
     Route::post('printgenericpalletlabel',[WareHouseController::class,'printgenericpalletlabel']);
     Route::get('updatestartdate', [WareHouseController::class,'updatestartdate']);

@@ -86,7 +86,7 @@
                         <input class="form-control input-sm w-100 rounded-0" id="inputConfiguration" type="number" hidden>
                     </div>
                     <div class="col-1">
-                        <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditConfiguration" disabled><i class="fa fa-edit p-0"></i></button>
+                        <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditConfiguration"><i class="fa fa-edit p-0"></i></button>
                     </div>
                 </div>
             </div>

@@ -105,7 +105,7 @@
                             <select class="form-select mx-2" type="text" id='teamLeader'>
                                 <option></option>
                                 @foreach ($teamleaders as $teamleader)
-                                    <option value="{{ $teamleader->UserID }}">{{ $teamleader->UserName }}</option>
+                                    <option value="{{ $teamleader->UserID }}">{{ $teamleader->FullName }}</option>
                                 @endforeach
                             </select>
                         </div>
