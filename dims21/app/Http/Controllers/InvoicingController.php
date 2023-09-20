@@ -1018,6 +1018,18 @@ class InvoicingController extends Controller
 
         return view('dims/printtrucksheet')->with('linesnotInvoiced',$checkifinvoicedbeforetripsheet)->with('isinvoicednot',$isfullyInvoiced);
     }
+
+    public function teamLeaderPrintTripSheet(Request $request){
+        $ref = $request->get("ref");
+        $userid = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+
+        $print = DB::connection('sqlsrv3')->select("exec spPrintingTripSheetApp ?,?,?",array($ref,$userid,$userName));
+
+        return response()->json($print);
+    }
+
+    
     public function reprintInvoice(){
 
     }

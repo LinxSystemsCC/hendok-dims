@@ -42,8 +42,15 @@
     <div class="col-md-12 p-3 h-100">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-6">
-                    <h3>Team Leader Management</h3>
+                <div class="col-md-6 d-flex">
+                    {{-- <a id="logout" class="text-nowrap p-2"><i class="fa fa-sign-out p-0 text-dark h5" aria-hidden="true"></i></a> --}}
+                    <a class="text-nowrap p-2" href= "{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> <i class="fa fa-sign-out p-0 text-dark h5"></i></a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+
+                    <h3 class="px-3">Team Leader Management</h3>
                 </div>
                 <div class="col-md-6">
                     <h4 id="loadId" class="float-end"></h4>
@@ -993,8 +1000,18 @@
     };
 
     function printTripSheet(ref){
-        alert(ref + "Will be printed");
-        // window.open('{!!url("/printtripsheet")!!}/' + ref, "tripsheet" + ref, "location=1,status=1,scrollbars=1, width=1200,height=850");
+        $.ajax({
+            url: '{!!url("/teamLeaderPrintTripSheet")!!}',
+            type: "GET",
+            data: {
+                ref: ref,
+            },
+            success: function (data) {
+                alert('Invoiced and printed sucessfully.');
+                getData();
+                getNotifications('{{ $ref }}');
+            }
+        });
     };
 
     function completeLoad(id){

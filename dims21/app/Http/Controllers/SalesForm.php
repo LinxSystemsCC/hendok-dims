@@ -55,6 +55,10 @@ class SalesForm extends Controller
             return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
         }
 
+        if($this->getThings($GroupId,'Teamleader Redirect')){
+            return redirect("/teamleadermanage/0");
+        }
+
            $queryCustomershendocpty =DB::connection('sqlsrv3')->table("viewtblCustomers" )
                ->select('CustomerId','StoreName','CustomerPastelCode','CreditLimit','BalanceDue','UserField5','Email','Routeid','Discount','OtherImportantNotes','strRoute','mnyCustomerGp','ID','Warehouse','PriceListName')
                ->where('StatusId',1)

@@ -868,7 +868,9 @@ class WareHouseController extends Controller
                 $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
 
                 return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
-            }else{
+            } else if($this->getThings($GroupId,'Teamleader Redirect')){
+                return redirect("/teamleadermanage/0");
+            } else{
                 return view('warehouse/dashboard');
             }
         }
