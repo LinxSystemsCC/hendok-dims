@@ -235,7 +235,7 @@ class WareHouseController extends Controller
     public function genericproductlabels()
     {
         $userId =  Auth::user()->UserID;
-        
+
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
         $printers = DB::connection('sqlsrv2')->select("EXEC spGetUserPrinters $userId");
@@ -248,7 +248,7 @@ class WareHouseController extends Controller
     public function warehousepalletlabels()
     {
         $userId =  Auth::user()->UserID;
-        
+
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
         $scales = DB::connection('sqlsrv2')->select("exec spGetScalesByDeptName 'Warehouse'");
@@ -378,8 +378,20 @@ class WareHouseController extends Controller
         $response = DB::connection('sqlsrv2')->select("exec spReverseQrCode ?,?", array($jobId,$jobItemId));
         return response()->json($response);
     }
+    public function jsongettrucksequencingbyteamleader(Request $request){
+        $date = $request->get("date");
+        $teamleaderId = $request->get("teamleaderId");
+
+        $response = DB::connection('sqlsrv2')->select("exec spGetTeamLeaderLoadSequence ?,?", array($date,$teamleaderId));
+        return response()->json($response);
+    }
     public function qrcodereverse(){
         return view('warehouse/reversepickedorloadedqrcode');
+    }
+    public function getloadstosequence(){
+
+
+        return view('warehouse/trucksequencing');
     }
 
     public function deleteGalvChecker(Request $request)
@@ -2856,7 +2868,7 @@ class WareHouseController extends Controller
         return response()->json($return);
     }
 
-    
+
 
     public function getgroupsetting()
     {
