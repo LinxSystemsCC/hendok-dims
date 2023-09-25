@@ -87,8 +87,19 @@ class WareHouseController extends Controller
         $groupType = $request->get('groupType');
         $sageCode = $request->get('sageCode');
         $tablet = $request->get('tablet');
-
-        $update = DB::connection('sqlsrv2')->select("EXEC spUpdateUserInfo $ID, '$userName', '$email', $groupId, $groupType, '$sageCode', $tablet");
+    
+        // Check if any of the variables is empty and set them to NULL
+        $userName = empty($userName) ? 'NULL' : "'$userName'";
+        $email = empty($email) ? 'NULL' : "'$email'";
+        $groupId = empty($groupId) ? 'NULL' : $groupId;
+        $groupType = empty($groupType) ? 'NULL' : $groupType;
+        $sageCode = empty($sageCode) ? 'NULL' : "'$sageCode'";
+        $tablet = empty($tablet) ? 'NULL' : $tablet;
+    
+        // Build and execute the SQL query
+        $query = "EXEC spUpdateUserInfo $ID, $userName, $email, $groupId, $groupType, $sageCode, $tablet";
+        $update = DB::connection('sqlsrv2')->select($query);
+    
         return response()->json($update);
     }
 
@@ -869,7 +880,9 @@ class WareHouseController extends Controller
                 $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
 
                 return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
-            }else{
+            } else if($this->getThings($GroupId,'Teamleader Redirect')){
+                return redirect("/teamleadermanage/0");
+            } else{
                 return view('warehouse/dashboard');
             }
         }
@@ -3222,8 +3235,8 @@ class WareHouseController extends Controller
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses WHERE intTonnage = 8000");
         $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
-        $pickers = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM viewPickers");
-        $loaders = DB::connection('sqlsrv2')->select("SELECT UserID, UserName FROM viewLoaders");
+        $pickers = DB::connection('sqlsrv2')->select("SELECT * FROM viewPickers");
+        $loaders = DB::connection('sqlsrv2')->select("SELECT * FROM viewLoaders");
         $stagingAreas = DB::connection('sqlsrv2')->select("SELECT * FROM tblStagingAreas");
         $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL OR SECOND_WEIGH_OPERATOR = ''");
         $instructions = DB::connection('sqlsrv3')->select("SELECT * FROM tblInstructions WHERE strUnickReference = '$ref'");
@@ -3299,6 +3312,12 @@ class WareHouseController extends Controller
     public function teamLeaderGetPickingPlanToInvoice(Request $request){
         $ref = $request->get('ref');
         $data = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
+        return response()->json($data);
+    }
+
+    public function teamLeaderCompleteLoad(Request $request){
+        $id = $request->get('id');
+        $data = DB::connection('sqlsrv3')->select('exec spTeamLeaderCompleteLoad ?', array($id));
         return response()->json($data);
     }
 

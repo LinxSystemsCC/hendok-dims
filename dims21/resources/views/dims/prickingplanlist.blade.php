@@ -367,7 +367,7 @@
     Team Leader<br>
     <select id="teamleaders">
         @foreach($teamleaders as $value)
-            <option value="{{$value->UserID}}">{{$value->UserName}}</option>
+            <option value="{{$value->UserID}}">{{$value->FullName}}</option>
             @endforeach
     </select><br>
     Trailor Type<br>
