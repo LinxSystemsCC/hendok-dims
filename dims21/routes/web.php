@@ -29,10 +29,13 @@ use App\Http\Controllers\PDFController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+/*
 Route::get('/', function () {
     return view('welcome');
-});
+});*/
+
+
+Route::get('/',[SalesForm::class, 'index']);
 Route::post('getLiveDriversInfo', [ExternalFunctions::class, 'getLiveDriversInfo'] );
 Auth::routes();
 
@@ -1133,6 +1136,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('nailsInnerCrud', [WareHouseController::class,'nailsInnerCrud']);
     Route::get('genericqrcodereverse', [WareHouseController::class,'genericqrcodereverse']);
     Route::get('qrcodereverse', [WareHouseController::class,'qrcodereverse']);
+    Route::get('getloadstosequence', [WareHouseController::class,'getloadstosequence']);
+    Route::get('jsongettrucksequencingbyteamleader', [WareHouseController::class,'jsongettrucksequencingbyteamleader']);
 });
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
