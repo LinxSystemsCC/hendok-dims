@@ -74,6 +74,13 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
 
     <div class="form-group">
         <h5><strong>Reverse Picked Qr Code</strong></h5><br>
+
+        <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Method </label><br>
+        <select class="form-control input-sm col-xs-1" id="method" style="width: 100%">
+            <option value="itemsonly">QR CODE ONLY</option>
+            <option value="withsoqty">WITH SALES ORDER</option>
+        </select><br>
+
         <label class="control-label" for="qty"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Scan Qr Code </label>
         <input  class="form-control input-sm col-xs-1" id="qrcode" style="width: 100%" required><br>
 
@@ -114,6 +121,7 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
                     type: "GET",
                     data: {
                         qrcode: $('#qrcode').val(),
+                        method: $('#method').val(),
 
                     },
                     success: function (data) {

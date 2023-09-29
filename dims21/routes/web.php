@@ -343,7 +343,7 @@ Route::get('plannickname/{ref}',[TabletLoadingApp::class,'plannickname']);
 Route::get('pickingplanlisttest/{ref}',[TabletLoadingApp::class,'pickingplanlisttest']);
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
-Route::get('viewpickingtickets',[TabletLoadingApp::class,'viewpickingtickets']);
+
 Route::post('assignTeamLeaderToPickingTicket',[TabletLoadingApp::class,'assignTeamLeaderToPickingTicket']);
 Route::post('assignHorseToPickingTicket',[TabletLoadingApp::class,'assignHorseToPickingTicket']);
 Route::post('assignTrailorToPickingTicket',[TabletLoadingApp::class,'assignTrailorToPickingTicket']);
@@ -864,6 +864,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getTare', [WareHouseController::class,'getTare']);
     Route::get('getMachines', [WareHouseController::class,'getMachines']);
     Route::get('getgroupname', [WareHouseController::class,'getgroupname']);
+    Route::get('viewpickingtickets',[TabletLoadingApp::class,'viewpickingtickets']);
 
     Route::get('getGroupTypeById', [WareHouseController::class,'getGroupTypeById']);
     Route::post('saveGroupTypeById', [WareHouseController::class,'saveGroupTypeById']);

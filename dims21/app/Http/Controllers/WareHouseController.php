@@ -87,7 +87,7 @@ class WareHouseController extends Controller
         $groupType = $request->get('groupType');
         $sageCode = $request->get('sageCode');
         $tablet = $request->get('tablet');
-    
+
         // Check if any of the variables is empty and set them to NULL
         $userName = empty($userName) ? 'NULL' : "'$userName'";
         $email = empty($email) ? 'NULL' : "'$email'";
@@ -95,11 +95,11 @@ class WareHouseController extends Controller
         $groupType = empty($groupType) ? 'NULL' : $groupType;
         $sageCode = empty($sageCode) ? 'NULL' : "'$sageCode'";
         $tablet = empty($tablet) ? 'NULL' : $tablet;
-    
+
         // Build and execute the SQL query
         $query = "EXEC spUpdateUserInfo $ID, $userName, $email, $groupId, $groupType, $sageCode, $tablet";
         $update = DB::connection('sqlsrv2')->select($query);
-    
+
         return response()->json($update);
     }
 
@@ -383,10 +383,11 @@ class WareHouseController extends Controller
     }
     public function genericqrcodereverse(Request $request){
         $qrcodestring = $request->get("qrcode");
+        $method = $request->get("method");
         $SplitI = explode("|", $qrcodestring);
         $jobId = $SplitI[0];
         $jobItemId = $SplitI[1];
-        $response = DB::connection('sqlsrv2')->select("exec spReverseQrCode ?,?", array($jobId,$jobItemId));
+        $response = DB::connection('sqlsrv2')->select("exec spReverseQrCode ?,?,?", array($jobId,$jobItemId,$method));
         return response()->json($response);
     }
     public function jsongettrucksequencingbyteamleader(Request $request){

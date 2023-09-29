@@ -150,7 +150,8 @@ class InvoicingController extends Controller
                             //If you need to do normal warehouse transfer
                             // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
                             $dates = date('Y-m-d H:i:s');
-                            $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId, $invoiceid, $ownersId, $dates);
+                            //FOR ADJUSTMENTS TEMPORARILY REMOVED
+                          //  $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId, $invoiceid, $ownersId, $dates);
                         }
 
                     }
@@ -287,7 +288,8 @@ class InvoicingController extends Controller
                                 //If you need to do normal warehouse transfer
                                 // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
                                 $dates = date('Y-m-d H:i:s');
-                                $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId, $invoiceid, $ownersId, $dates);
+                                //FOR ADJUSTMENTS TEMPORARILY REMOVED
+                               // $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId, $invoiceid, $ownersId, $dates);
                             }
 
                         }
@@ -1029,7 +1031,7 @@ class InvoicingController extends Controller
         return response()->json($print);
     }
 
-    
+
     public function reprintInvoice(){
 
     }
