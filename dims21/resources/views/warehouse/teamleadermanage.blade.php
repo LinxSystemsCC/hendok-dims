@@ -50,7 +50,7 @@
                         {{ csrf_field() }}
                     </form>
 
-                    <h3 class="px-3">Team Leader Management</h3>
+                    <h3 class="px-3">Team Leader Management - {{ Auth::user()->UserName }}</h3>
                 </div>
                 <div class="col-md-6">
                     <h4 id="loadId" class="float-end"></h4>
@@ -82,6 +82,9 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="tab6" data-bs-toggle="tab" href="#content6" role="tab" aria-controls="content6" aria-selected="false">Instructions</a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="tab7" data-bs-toggle="tab" href="#content7" role="tab" aria-controls="content7" aria-selected="false">Status</a>
+            </li>
             @endif
         </ul>
 
@@ -92,145 +95,32 @@
                 <div class="d-inline-flex mb-2">
                     <label class="d-flex align-items-center px-2" >Delivery Date</label> 
                     <input class="form-control px-2" type="date" id='date'>
-                    <button class="btn btn-success mx-2" id="getdata">SEARCH</button>
+                    <button class="btn btn-success ms-1" id="getdata">SEARCH</button>
                 </div>
 
-                <div id="managementTable"></div>
+                <div id='gridManagementTable'></div>
             </div>
             @else
             <!-- Management -->
             <div class="tab-pane fade show" id="content1" role="tabpanel" aria-labelledby="tab1" style="height: calc(100vh - 150px); overflow-y: auto;">
                 <div class="d-inline-flex mb-2">
-                    <label class="d-flex align-items-center px-2" >Delivery Date</label> 
+                    <label class="d-flex align-items-center px-2 text-nowrap" >Delivery Date</label> 
                     <input class="form-control px-2" type="date" id='date'>
-                    <button class="btn btn-success mx-2" id="getdata">SEARCH</button>
+                    <button class="btn btn-success ms-1" id="getdata">SEARCH</button>
+                    <button class="btn btn-success ms-1 text-nowrap" id="hold">HOLD</button>
+                    <button class="btn btn-secondary ms-1 text-nowrap" id="rollover" data-bs-toggle="modal" data-bs-target="#rolloverModal">ROLL OVER</button>
+                    <button class="btn btn-primary ms-1 text-nowrap" id="invoice">INVOICE</button>
                 </div>
 
-                <div id="managementTable"></div>
+                <div id='gridManagementTable'></div>
             </div>
             
             <!-- Pick Load -->
             <div class="tab-pane fade show active" id="content2" role="tabpanel" aria-labelledby="tab2" style="height: calc(100vh - 150px); overflow-y: auto;">
-                <table id="pickLoadTable" class="table">
-                    <thead class="sticky-top">
-                        <tr style="background: black; color: white;">
-                            <th class="col-xs-2">Order Date</th>
-                            <th class="col-xs-2">SO Number</th>
-                            <th class="col-xs-2">Description</th>
-                            <th class="col-xs-2">Qty</th>
-                            <th class="col-xs-2">Picked</th>
-                            <th class="col-xs-2">Loaded</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $storenames = "";
-                        $orderNumber = "";
-                        $Grandtotal = 0;
-                        $area = "";
-                        $orderdate = "";
-                        $istrue = true;
-                        $count = 0;
-                        ?>
-
-                        @foreach($listproducts as $val)
-
-                        <?php
-                        $externalCount = 0;
-                        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
-                        $t = time();
-                        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
-                        $ID = $t . $randomString;
-                        ?>
-                        
-                        @if($count == 0)
-                        <tr style="background: darkgray; color: white; font-weight: 900;" id="{{$ID}}">
-                            <td colspan="4">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        @endif
-                        <?php $Grandtotal = $Grandtotal + floatval($val->mnyPickedQuantity);?>
-                        @if($storenames != $val->StoreName)
-                        @if($count > 0)
-                        <tr style="background: darkgray; color: white; font-weight: 900;">
-                            <td colspan="4">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        @endif
-                        @if($val->isLineInvoiced == 1)
-                        <tr id="rtrr{{$ID}}" @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
-                        @else
-                        <tr id="rtrr{{$ID}}" @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
-                        @endif
-                        <td>{{ $val->OrderDate}}</td>
-                        <td>{{$val->OrderNum}}</td>
-                        <td>{{ $val->PastelDescription}}</td>
-                        <td>{{ floatval($val->mnyQty)}}</td>
-                        <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
-                            {{ floatval($val->mnyPickedQuantity)}}
-                        </td>
-                        <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
-                            {{ floatval($val->mnyLoadedQty)}}
-                            @if($val->sageWeight == 1) 
-                                <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
-                            @endif
-                        </td>
-                        </tr>
-                        <?php
-                        $istrue = true;
-                        $storenames = $val->StoreName;
-                        $orderNumber = $val->OrderNum;
-                        $area = $val->areas;
-                        $orderdate = $val->OrderDate;
-                        ?>
-                        @else
-                        <tr @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
-                            @if($orderdate != $val->OrderDate)
-                            <td>{{ $val->OrderDate}}</td>
-                            @else
-                            <td></td>
-                            @endif
-                            @if($orderNumber != $val->OrderNum)
-                            <td>{{$val->OrderNum}}</td>
-                            @else
-                            <td></td> 
-                            @endif
-                            <td>{{ $val->PastelDescription}}</td>
-                            <td>{{ floatval($val->mnyQty)}}</td>
-                            <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
-                                {{ floatval($val->mnyPickedQuantity)}}
-                            </td>
-                            <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
-                                {{ floatval($val->mnyLoadedQty)}}
-                                @if($val->sageWeight == 1) 
-                                    <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
-                                @endif
-                            </td>
-                        </tr>
-                        <?php
-                        $storenames = $val->StoreName;
-                        $orderNumber = $val->OrderNum;
-                        $orderdate = $val->OrderDate;
-                        $area = $val->areas;
-                        if ($storenames == $val->StoreName) {
-                            $istrue = true;
-                        }
-                        ?>
-                        @endif
-                        <?php $count++; ?>
-                        @endforeach
-                        <tr style="background: darkgray; color: white; font-weight: 900;">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div id="table-container">
+                    @include('warehouse/teamleaderpickloadtable')
+                </div>
+                <button class="btn btn-success mx-2" id="refresh-button" hidden>REFRESH</button>
             </div>
 
             <!-- Assign -->
@@ -239,7 +129,7 @@
                     <div class="row">
                         
                         <div class="col mb-3">
-                            <label for="horse" class="col-form-label">Horse</label>
+                            <label for="horse" class="col-form-label">Ridgid Horse</label>
                             <select class="form-select" type="text" id='horse'>
                                 <option>
                                 @foreach ($horses as $horse)
@@ -248,6 +138,10 @@
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="horse" class="col-form-label">Articulated Horse</label>
+                            <input class="form-control" type="text" id='horse' disabled/>
                         </div>
                         <div class="col mb-3">
                             <label for="trailorOne" class="col-form-label">Trailer One</label>
@@ -361,7 +255,7 @@
 
             <!-- Notifications -->
             <div class="tab-pane fade" id="content5" role="tabpanel" aria-labelledby="tab5" style="height: calc(100vh - 150px); overflow-y: auto;">
-                <div id="notificationsTable"></div>
+                <div id="gridNotificationsTable"></div>
             </div>
 
             <!-- Instructions -->
@@ -372,9 +266,70 @@
                     <textarea class="form-control" id="{{ $instruction->strType }}" rows="5" readonly>{{ $instruction->strInstruction }}</textarea>
                 @endforeach
             </div>
+
+            <!-- Status -->
+            <div class="tab-pane fade" id="content7" role="tabpanel" aria-labelledby="tab7" style="height: calc(100vh - 150px); overflow-y: auto;">
+                <div id="gridStatusTable"></div>
+            </div>
             @endif
         </div>
 
+    </div>
+</div>
+
+<!-- Modal Select Printer -->
+<div class="modal modal-xl fade" id="printerModal" aria-labelledby="printerModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="printerModal">Select Printer</h1>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="printer">Issued to</label>
+                    <select class="form-select mx-2" type="text" id='printer'>
+                        <option value="None" selected disabled></option>
+                        @foreach ($printers as $printer)
+                            <option value="{{ $printer->intPrinterId }}">{{ $printer->strPrinter }}</option>
+                        @endforeach
+                    </select>
+                </div>    
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closePrinterModal">Close</button>
+                <button type="button" id="btnPrint" class="btn btn-success" >Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Select Rollover Teamleader -->
+<div class="modal fade" id="rolloverModal" aria-labelledby="rolloverModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="rolloverModal">Roll Over</h1>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="printer">Team Leader</label>
+                    <select class="form-select" type="text" id='teamLeader'>
+                        <option value="None" selected disabled></option>
+                        @foreach ($teamleaders as $teamleader)
+                            <option value="{{ $teamleader->UserID }}">{{ $teamleader->FullName }}</option>
+                        @endforeach
+                    </select>
+                </div>    
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closePrinterModal">Close</button>
+                <button type="button" id="btnRolloverTeamleader" class="btn btn-success" >Save</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -407,6 +362,11 @@
         $( this ).attr( 'autocomplete', 'off' );
     });
 
+    var data = [];
+    let intInvoiceStatus;
+    let holdStatus;
+    let teamleadertwo;
+
     $(document).ready(function() {
         $('#horse').select2({
             theme: 'bootstrap-5',
@@ -418,6 +378,11 @@
 
         $('#trailorTwo').select2({
             theme: 'bootstrap-5',
+        });
+
+        $('#teamLeader').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#rolloverModal'),
         });
 
         $('#picker').multiselect({
@@ -442,6 +407,334 @@
             theme: 'bootstrap-5',
         });
 
+        var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
+
+        const gridManagementTable = $('#gridManagementTable').dxDataGrid({
+            dataSource: data, //as json
+            showBorders: true,
+            hoverStateEnabled: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            scrolling: {
+                mode: 'virtual', // Enable infinite scrolling
+            },
+            paging:{
+                pageSize: 10,
+            },
+            selection: {
+                mode: "single",
+            },
+            columns: [
+                {
+                    dataField: "strUnickReference",
+                    caption: "Reference",
+                    visible: false,
+                },
+                {
+                    dataField: "intLoadID",
+                    caption: "Assigned Loads",
+                    calculateCellValue: function(data) {
+                        return "TL" + data.intLoadID;
+                    },
+                },{
+                    dataField: "strRouteName",
+                    caption: "Route Name",
+                },
+                {
+                    dataField: "intItemsAssigned",
+                    caption: "Items Assigned",
+                    cellTemplate: function (container, options) {
+                        const value = options.data.intItemsAssigned;
+                        if (value == 0) {
+                            container.addClass("bg-danger text-white");
+                            container.text('Not Assigned');
+
+                        } else if (value == 1) {
+                            container.addClass("bg-success text-white");
+                            container.text('Assigned');
+                        }
+                        
+                    },
+                },
+                {
+                    dataField: "intEquipmentAssigned",
+                    caption: "Equipment Assigned",
+                    cellTemplate: function (container, options) {
+                        const value = options.data.intEquipmentAssigned;
+                        if (value == 0) {
+                            container.addClass("bg-danger text-white");
+                            container.text('Not Assigned');
+
+                        } else if (value == 1) {
+                            container.addClass("bg-success text-white");
+                            container.text('Assigned');
+                        }
+                        
+                    },
+                },
+                {
+                    dataField: "intNotifications",
+                    caption: "Outstanding Notifications",
+                    cellTemplate: function (container, options) {
+                        const value = options.data.intNotifications;
+                        if (value == 0) {
+                            container.addClass("bg-danger text-white");
+                            container.text('Outstanding');
+
+                        } else if (value == 1) {
+                            container.addClass("bg-success text-white");
+                            container.text('None Outstanding');
+                        }
+                        
+                    },
+                },
+                {
+                    dataField: "strLoadStatus",
+                    caption: "Status",
+                    // visible: false,
+                },
+                {
+                    dataField: "intStatus",
+                    caption: "Status",
+                    visible: false,
+                },
+                {
+                    dataField: "intInvoiceStatus",
+                    caption: "Status",
+                    dataType: "number",
+                    visible: false,
+                },
+                {
+                    dataField: "intTeamLeaderTwoId",
+                    caption: "team Leader Two",
+                    dataType: "number",
+                    visible: false,
+                },
+                
+
+            ] ,
+            onRowClick: function(e) {
+                
+            },
+            onRowDblClick: function (e) {
+                window.location.href = '{!!url("/teamleadermanage")!!}/' + e.data.strUnickReference;
+            },
+            onInitNewRow: function(e) {
+                console.debug(e);
+            },
+            onRowInserting: function(e) {
+                console.debug(e);
+            },
+            onRowInserted: function(e) {
+                console.debug(e);
+            },
+            onRowUpdating: function(e) {
+                console.debug(e);
+            },
+        }).dxDataGrid('instance');
+
+        const gridNotificationsTable = $("#gridNotificationsTable").dxDataGrid({
+            dataSource:data,
+            showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            paging: {
+                enabled: false
+            },
+            selection: {
+                mode: "single",
+            },
+            columnAutoWidth:true,        
+            allowColumnResizing: true,       
+            columnResizingMode: "nextColumn",
+            columns: [
+                {
+                    dataField: "intAutoID",
+                    caption: "ID",
+                    visible: false,
+                },{
+                    dataField: "strUnickReference",
+                    caption: "Reference",
+                    visible: false,
+                },{
+                    dataField: "intAutoPickingHeader",
+                    caption: "Truck Load",
+                    calculateCellValue: function(data) {
+                        return "TL" + data.intAutoPickingHeader;
+                    },
+                    visible: false,
+
+                },{
+                    dataField: "intOrderID",
+                    caption: "Order ID",
+                    visible: false,
+                },{
+                    dataField: "createdBy",
+                    caption: "Created By",
+                    
+                },{
+                    dataField: "dtmCreated",
+                    caption: "Date Created",
+                    
+                },{
+                    dataField: "strItemCode",
+                    caption: "Product Code",
+                    
+                },{
+                    dataField: "strStatus",
+                    caption: "Status",
+                    
+                },{
+                    dataField: "strSONumber",
+                    caption: "SO Number",
+                    
+                },{
+                    dataField: "mnyQty",
+                    caption: "Qty",
+                    
+                },{
+                    dataField: "strMessage",
+                    caption: "Message",
+                    
+                },{
+                    dataField: "approvedBy",
+                    caption: "Approved By",
+                    
+                },{
+                    dataField: "dtmApproved",
+                    caption: "Date Approved",
+                    
+                },{
+                    dataField: "bitApproved",
+                    caption: "Approved",
+                    cellTemplate: function (container, options) {
+                        const value = options.data.bitApproved;
+                        if (value != 1) {
+                            const button = $("<button class='btn btn-primary btn-sm w-100'>").text("Approve").on("click", function() {
+                                console.log(options.data.intAutoID);
+                                approveNotification(options.data.intAutoID);
+                            });
+                            container.append(button);
+
+                        } else{
+                            container.addClass("bg-success text-white");
+                            container.text('Approved');
+                        }
+                        
+                    },
+                },
+
+            ] ,
+            onRowPrepared(e) {
+                
+            },
+            onRowClick: function (e) {
+                
+            },
+            onRowDblClick: function (e) {
+                
+            },
+            onInitNewRow: function(e) {
+                
+            },
+            onRowInserting: function(e) {
+                
+            },
+            onRowInserted: function(e) {
+                
+            },
+            onRowUpdating: function(e) {
+                
+            }
+        }).dxDataGrid('instance');
+
+        const gridStatusTable = $('#gridStatusTable').dxDataGrid({
+            dataSource: [], //as json
+            showBorders: true,
+            hoverStateEnabled: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            scrolling: {
+                mode: 'virtual', // Enable infinite scrolling
+            },
+            paging:{
+                pageSize: 10,
+            },    
+            columns: [
+                {
+                    dataField: 'strLoadStatus',
+                    caption: 'Load Status',
+                },
+                {
+                    dataField: 'strPickingStatus',
+                    caption: 'Picking Status',
+                    dataType: 'number',
+                    cellTemplate: function (container, options) {
+                        $('<div>')
+                            .appendTo(container)
+                            .text(options.value.toFixed(2) + '%');
+                    }
+                },
+                {
+                    dataField: 'strPickingTimeRequired',
+                    caption: 'Picking Time Req',
+                },
+                {
+                    dataField: 'dtmStartPicking',
+                    caption: 'Picking Time Start',
+                },
+                {
+                    dataField: 'dtmEndPicking',
+                    caption: 'Picking Time Finish',
+                },
+                {
+                    dataField: 'strLoadingStatus',
+                    caption: 'Loading Status',
+                    dataType: 'number',
+                    cellTemplate: function (container, options) {
+                        $('<div>')
+                            .appendTo(container)
+                            .text(options.value.toFixed(2) + '%');
+                    }
+                },
+                {
+                    dataField: 'strLoadingTimeRequired',
+                    caption: 'Loading Time Req',
+                },
+                {
+                    dataField: 'dtmStartLoading',
+                    caption: 'Loading Time Start',
+                },
+                {
+                    dataField: 'dtmEndLoading',
+                    caption: 'Loading Time Finish',
+                },
+                
+            ],
+            onRowDblClick: function (e) {
+                console.debug(e);
+            },
+            onInitNewRow: function(e) {
+                console.debug(e);
+            },
+            onRowInserting: function(e) {
+                console.debug(e);
+            },
+            onRowInserted: function(e) {
+                console.debug(e);
+            },
+            onRowUpdating: function(e) {
+                console.debug(e);
+            },
+        }).dxDataGrid('instance');
+
         var currentDate = new Date();
         var year = currentDate.getFullYear();
         var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
@@ -450,13 +743,35 @@
         
         $('#date').val(formattedDate);
 
-        getData();
         getPickingPlanData('{{ $ref }}');
         getNotifications('{{ $ref }}');
-        // getInstructions('{{ $ref }}');
+        getStatus('{{ $ref }}');
 
         $('#getdata').click(function(){
             getData();
+        });
+
+        $('#invoice').click(function(){
+            var ref = '{{ $ref }}';
+            initInvoice(ref);
+        });
+
+        $('#rolloverBtn').click(function(){
+            var ref = '{{ $ref }}';
+            rollover(ref);
+        });
+
+        $('#hold').click(function(){
+            var ref = '{{ $ref }}';
+            var currentStatus = holdStatus;
+
+            if (currentStatus == 3){
+                var status = 0;
+            }else{
+                var status = 3;
+            }
+
+            updateHoldStatus(ref, status);
         });
 
         $('#assign').click(function(){
@@ -494,538 +809,433 @@
             var id = $(this).val();
             completeLoad(id);
         });
-    });
 
-    function getData(){
-        $.ajax({
-            url: '{!!url("/getTeamLeaderPlans")!!}',
-            type: "GET",
-            data: {
-                date: $('#date').val(),
-            },
-            success: function (data) {
-                $("#managementTable").dxDataGrid({
-                    dataSource:data,
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    paging: {
-                        enabled: false
-                    },
-                    selection: {
-                        mode: "single",
-                    },
-                    columnAutoWidth:true,        
-                    allowColumnResizing: true,       
-                    columnResizingMode: "nextColumn",
-                    columns: [
-                        {
-                            dataField: "strUnickReference",
-                            caption: "Reference",
-                            visible: false,
-                        },
-                        {
-                            dataField: "intLoadID",
-                            caption: "Assigned Loads",
-                            calculateCellValue: function(data) {
-                                return "TL" + data.intLoadID;
-                            },
-                        },{
-                            dataField: "strRouteName",
-                            caption: "Route Name",
-                        },
-                        {
-                            dataField: "intItemsAssigned",
-                            caption: "Items Assigned",
-                            cellTemplate: function (container, options) {
-                                const value = options.data.intItemsAssigned;
-                                if (value == 0) {
-                                    container.addClass("bg-danger text-white");
-                                    container.text('Not Assigned');
-
-                                } else if (value == 1) {
-                                    container.addClass("bg-success text-white");
-                                    container.text('Assigned');
-                                }
-                                
-                            },
-                        },
-                        {
-                            dataField: "intEquipmentAssigned",
-                            caption: "Equipment Assigned",
-                            cellTemplate: function (container, options) {
-                                const value = options.data.intEquipmentAssigned;
-                                if (value == 0) {
-                                    container.addClass("bg-danger text-white");
-                                    container.text('Not Assigned');
-
-                                } else if (value == 1) {
-                                    container.addClass("bg-success text-white");
-                                    container.text('Assigned');
-                                }
-                                
-                            },
-                        },
-                        {
-                            dataField: "strPickingStatus",
-                            caption: "Picking Status",
-                        },
-                        {
-                            dataField: "strLoadingStatus",
-                            caption: "Loading Status",
-                        },
-                        {
-                            dataField: "intNotifications",
-                            caption: "Outstanding Notifications",
-                            cellTemplate: function (container, options) {
-                                const value = options.data.intNotifications;
-                                if (value == 0) {
-                                    container.addClass("bg-danger text-white");
-                                    container.text('Outstanding');
-
-                                } else if (value == 1) {
-                                    container.addClass("bg-success text-white");
-                                    container.text('None Outstanding');
-                                }
-                                
-                            },
-                        },
-                        {
-                            dataField: "intInvoiceStatus",
-                            caption: "Invoice",
-                            cellTemplate: function (container, options) {
-                                const value = options.data.intInvoiceStatus;
-                                container.addClass("customPadding"); // Add the no-padding class to the container
-
-                                if (value == 0) {
-                                    const button = $("<button class='btn btn-primary btn-sm w-100' disabled >").text("invoice").on("click", function() {});
-                                    container.append(button); 
-
-                                } else {
-                                    const button = $("<button class='btn btn-primary btn-sm w-100'>").text("invoice").on("click", function() {
-                                        // console.log(options.data.strUnickReference);
-                                        getPickingPlanToInvoice(options.data.strUnickReference)
-                                        .then(function(pickingplan) {
-                                            // console.log(pickingplan);
-                                            var invoiceList = $.map(pickingplan, function (item) {
-                                                return {
-                                                    intOwnerID: item.intOwnerID,
-                                                    OrderNum: item.OrderNum,
-                                                    OrderId: item.OrderId,
-                                                    strUnickReference: item.strUnickReference,
-                                                    UserId: {{ Auth::user()->UserID; }},
-                                                    UserName: '{{ Auth::user()->UserName; }}'
-                                                };
-                                            });
-
-                                            // Function to check if all properties in the objects are the same
-                                            function areAllPropertiesEqual(obj1, obj2) {
-                                            for (const key in obj1) {
-                                                if (obj1.hasOwnProperty(key)) {
-                                                if (obj1[key] !== obj2[key]) {
-                                                    return false;
-                                                }
-                                                }
-                                            }
-                                            return true;
-                                            }
-
-                                            // Function to remove rows with all properties being the same
-                                            function removeDuplicateRows(arr) {
-                                            return arr.filter((item, index) => {
-                                                // Keep the first occurrence of each row
-                                                return index === arr.findIndex((obj) => areAllPropertiesEqual(obj, item));
-                                            });
-                                            }
-
-                                            // Call the function to remove duplicate rows from the data array
-                                            invoiceList = removeDuplicateRows(invoiceList);
-
-                                            invoiceOut(invoiceList);
-                                        }) 
-                                        .catch(function(error) {
-                                            console.error('Error:', error);
-                                        });
-                                    });
-                                    container.append(button);
-                                }
-                            },
-                        },
-                    ] ,
-                    onRowPrepared(e) {
-
-                    },
-                    onRowClick: function (e) {
-
-                    },
-                    onRowDblClick: function (e) {
-                        window.location.href = '{!!url("/teamleadermanage")!!}/' + e.data.strUnickReference;
-                    },
-                    onInitNewRow: function(e) {
-                        
-                    },
-                    onRowInserting: function(e) {
-                        
-                    },
-                    onRowInserted: function(e) {
-                        
-                    },
-                    onRowUpdating: function(e) {
-                        
-                    }
-                });
-                
-            },
-            error: function (error) {
-                console.error("Error loading data: ", error);
-            }
+        $('#refresh-button').on('click', function () {
+            updatePickingLoading('{{ $ref }}');
         });
-    };
 
-    function getPickingPlanData(ref){
-        $.ajax({
-            url: '{!!url("/teamLeaderGetPickingPlanData")!!}',
-            type: "GET",
-            data: {
-                ref: ref,
-            },
-            success: function (data) {
-                if(data[0]){
-                    let pickersList;
-                    if (data[0]['strPicking'] == null){
-                        pickersList = null;
-                    }else{
-                        const pickers = data[0]['strPicking'];
-                        pickersList = pickers.split(",");
-                    }
-
-                    let loadersList;
-                    if (data[0]['strLoading'] == null){
-                        loadersList = null;
-                    }else{
-                        const loaders = data[0]['strLoading'];
-                        loadersList = loaders.split(",");
-                    }
-                    
-                    let stagingList;
-                    if (data[0]['strStagingArea'] == null){
-                        stagingList = null;;
-                    }else{
-                        const staging = data[0]['strStagingArea'];
-                        stagingList = staging.split(",");
-                    }
-                    
-                    $('#loadId').text('TL'+data[0]['intAutoPickingHeader']);
-                    $('#date').val(data[0]['dtm']);
-
-                    $("#horse option[value='" + data[0].strTrailorNo + "']").prop('disabled', false);
-                    $('#horse').val(data[0].strTrailorNo).trigger('change');
-
-                    $("#trailorOne option[value='" + data[0].strTrailorone + "']").prop('disabled', false);
-                    $('#trailorOne').val(data[0]['strTrailorone']).trigger('change');
-
-                    $("#trailorTwo option[value='" + data[0].strTrailortwo + "']").prop('disabled', false);
-                    $('#trailorTwo').val(data[0]['strTrailortwo']).trigger('change');
-
-                    $('#staging').val(data[0]['']).trigger('change');
-                    $('#ticket').val(data[0]['strTicket']).trigger('change');
-                    $('#belts').val(data[0]['intBelts']);
-                    $('#ratchets').val(data[0]['intStraps']);
-                    $('#tarps').val(data[0]['intTarps']);
-                    $('#dunnages').val(data[0]['intDunnages']);
-                    $('#pallets').val(data[0]['intPallets']);
-                    $('#plates').val(data[0]['intPlasticCorners']);
-                    $('#nets').val(data[0]['intNets']);
-                    $('#stands').val(data[0]['intStans']);
-
-                    for(var i in pickersList) {
-                        var val = pickersList[i];
-                        $("#picker").find("option[value="+val+"]").prop("selected", "selected");
-                    }
-                    $("#picker").multiselect('reload');
-
-                    for(var i in loadersList) {
-                        var val = loadersList[i];
-                        $("#loader").find("option[value="+val+"]").prop("selected", "selected");
-                    }
-                    $("#loader").multiselect('reload');
-
-                    for(var i in stagingList) {
-                        var val = stagingList[i];
-                        $("#staging").find("option[value="+val+"]").prop("selected", "selected");
-                    }
-                    $("#staging").multiselect('reload');
-                    getData();
-                }
-            }
+        $('#btnRolloverTeamleader').click(function(){
+            var ref = '{{ $ref }}';
+            rollover(ref);
         });
-    };
 
-    function getNotifications(ref){
-        $.ajax({
-            url: '{!!url("/teamLeaderGetNotifications")!!}',
-            type: "GET",
-            data: {
-                ref: ref,
-            },
-            success: function (data) {
-                $("#notificationsTable").dxDataGrid({
-                    dataSource:data,
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    paging: {
-                        enabled: false
-                    },
-                    selection: {
-                        mode: "single",
-                    },
-                    columnAutoWidth:true,        
-                    allowColumnResizing: true,       
-                    columnResizingMode: "nextColumn",
-                    columns: [
-                        {
-                            dataField: "intAutoID",
-                            caption: "ID",
-                            visible: false,
-                        },{
-                            dataField: "strUnickReference",
-                            caption: "Reference",
-                            visible: false,
-                        },{
-                            dataField: "intAutoPickingHeader",
-                            caption: "Truck Load",
-                            calculateCellValue: function(data) {
-                                return "TL" + data.intAutoPickingHeader;
-                            },
-                            visible: false,
-
-                        },{
-                            dataField: "intOrderID",
-                            caption: "Order ID",
-                            visible: false,
-                        },{
-                            dataField: "createdBy",
-                            caption: "Created By",
-                            
-                        },{
-                            dataField: "dtmCreated",
-                            caption: "Date Created",
-                            
-                        },{
-                            dataField: "strItemCode",
-                            caption: "Product Code",
-                            
-                        },{
-                            dataField: "strStatus",
-                            caption: "Status",
-                            
-                        },{
-                            dataField: "strSONumber",
-                            caption: "SO Number",
-                            
-                        },{
-                            dataField: "mnyQty",
-                            caption: "Qty",
-                            
-                        },{
-                            dataField: "strMessage",
-                            caption: "Message",
-                            
-                        },{
-                            dataField: "approvedBy",
-                            caption: "Approved By",
-                            
-                        },{
-                            dataField: "dtmApproved",
-                            caption: "Date Approved",
-                            
-                        },{
-                            dataField: "bitApproved",
-                            caption: "Approved",
-                            cellTemplate: function (container, options) {
-                                const value = options.data.bitApproved;
-                                if (value != 1) {
-                                    const button = $("<button class='btn btn-primary btn-sm w-100'>").text("Approve").on("click", function() {
-                                        console.log(options.data.intAutoID);
-                                        approveNotification(options.data.intAutoID);
-                                    });
-                                    container.append(button);
-
-                                } else{
-                                    container.addClass("bg-success text-white");
-                                    container.text('Approved');
-                                }
-                                
-                            },
-                        },
-
-                    ] ,
-                    onRowPrepared(e) {
-                        
-                    },
-                    onRowClick: function (e) {
-                        
-                    },
-                    onRowDblClick: function (e) {
-                        
-                    },
-                    onInitNewRow: function(e) {
-                        
-                    },
-                    onRowInserting: function(e) {
-                        
-                    },
-                    onRowInserted: function(e) {
-                        
-                    },
-                    onRowUpdating: function(e) {
-                        
-                    }
-                });
-            }
-        });
-    };
-
-    function AssignData(ref, horse, trailorOne, trailorTwo, picker, loader, staging, ticket, prompt){
-        $.ajax({
-            url: '{!!url("/teamLeaderAssign")!!}',
-            type: "GET",
-            data: {
-                ref : ref,
-                horse : horse,
-                trailorOne : trailorOne,
-                trailorTwo : trailorTwo,
-                picker : picker,
-                loader : loader,
-                staging : staging,
-                ticket : ticket,
-                prompt : prompt,
-            },
-            success: function (data) {
-                // location.reload();
-                alert('Updated');
-                getData();
-            }
-        });
-    };
-
-    function assignEquipment(ref, belts, ratchets, tarps, dunnages, pallets, plates, nets, stands){
-        $.ajax({
-            url: '{!!url("/teamLeaderEquipmentAssign")!!}',
-            type: "GET",
-            data: {
-                ref: ref,
-                belts: belts,
-                ratchets: ratchets,
-                tarps: tarps,
-                dunnages: dunnages,
-                pallets: pallets,
-                plates: plates,
-                nets: nets,
-                stands: stands
-            },
-            success: function (data) {
-                alert('Updated');
-                getData();
-            }
-        });
-    };
-
-    function approveNotification(id){
-        $.ajax({
-            url: '{!!url("/teamLeaderApproveNotification")!!}',
-            type: "GET",
-            data: {
-                id: id,
-            },
-            success: function (data) {
-                alert('Updated');
-                getData();
-                getNotifications('{{ $ref }}');
-            }
-        });
-    };
-
-    function getPickingPlanToInvoice(ref) {
-        return new Promise(function(resolve, reject) {
+        function getData(){
             $.ajax({
-                url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
-                type: "get",
+                url: '{!!url("/getTeamLeaderPlans")!!}',
+                type: "GET",
+                data: {
+                    date: $('#date').val(),
+                },
+                success: function (data) {
+                    gridManagementTable.option('dataSource', data);
+                    gridManagementTable.refresh();
+
+                    var currentRef = '{{ $ref }}';
+
+                    var result = $.grep(data, function(obj) {
+                        return obj.strUnickReference === currentRef;
+                    });
+
+                    if (result.length > 0) {
+                        intInvoiceStatus = result[0].intInvoiceStatus;
+                        holdStatus = result[0].intStatus;
+                        teamLeadertwo = result[0].intTeamLeaderTwoId;
+                        $('#teamLeader').val(teamLeadertwo).trigger('change');
+                    }
+
+                    if (intInvoiceStatus == 1){
+                        $("#invoice").prop("disabled", false);
+                    }else{
+                        $("#invoice").prop("disabled", true);
+                    }
+
+                    if (holdStatus == 3){
+                        $("#hold").addClass("btn-danger", true);
+                        $("#hold").removeClass("btn-success", true);
+                        $("#hold").text('UNHOLD');
+                    }else{
+                        $("#hold").addClass("btn-success", true);
+                        $("#hold").removeClass("btn-danger", true);
+                        $("#hold").text('HOLD');
+                    }
+                },
+                error: function (error) {
+                    console.error("Error loading data: ", error);
+                }
+            });
+        };
+
+        function getStatus(ref){
+            $.ajax({
+                url: '{!!url("/teamLeaderGetStatus")!!}',
+                type: "GET",
                 data: {
                     ref: ref,
                 },
-                success: function(data) {
-                    resolve(data);
+                success: function (data) {
+                    // console.log(data);
+                    gridStatusTable.option('dataSource', data);
+                    gridStatusTable.refresh();
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    reject(errorThrown);
+                error: function (error) {
+                    console.error("Error loading data: ", error);
                 }
             });
-        });
-    }
+        };
 
-    function invoiceOut(inputdata){
-        $.each(inputdata, function(index, item) {
-            // Access properties of the current item
-            var ownersId = item.intOwnerID;
-            var SoNumber = item.OrderNum; 
-            var invoiceid = item.OrderId; 
-            var ref = item.strUnickReference; 
-            var userid = item.UserId; 
-            var userName = item.UserName; 
-
+        function updatePickingLoading(ref) {
             $.ajax({
-                url: '{!!url("/individualInvoicingAPI")!!}' + '/' + ownersId + '/' + SoNumber + '/' + invoiceid + '/' + ref + '/' + userid + '/' + userName,
-                type: "get",
+                url: '{!!url("/teamleaderUpdatePickingLoadingTable")!!}',
+                method: 'GET',
                 data: {
-
+                    ref: ref,
                 },
-                success: function (outputData) {
+                success: function (data) {
+                    // Update the $listproducts variable with the new data
+                    var newListProducts = data; // Assuming 'data' contains the new list of products
+                    
+                    // Update the included view with the new data
+                    $('#table-container').html(newListProducts);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
 
-                    console.debug(outputData);
+        function getPickingPlanData(ref){
+            $.ajax({
+                url: '{!!url("/teamLeaderGetPickingPlanData")!!}',
+                type: "GET",
+                data: {
+                    ref: ref,
+                },
+                success: function (data) {
+                    if(data[0]){
+                        let pickersList;
+                        if (data[0]['strPicking'] == null){
+                            pickersList = null;
+                        }else{
+                            const pickers = data[0]['strPicking'];
+                            pickersList = pickers.split(",");
+                        }
 
-                    if(outputData =="Credit Limit")
-                    {
-                        alert("CREDIT LIMIT ISSUES");
+                        let loadersList;
+                        if (data[0]['strLoading'] == null){
+                            loadersList = null;
+                        }else{
+                            const loaders = data[0]['strLoading'];
+                            loadersList = loaders.split(",");
+                        }
+                        
+                        let stagingList;
+                        if (data[0]['strStagingArea'] == null){
+                            stagingList = null;;
+                        }else{
+                            const staging = data[0]['strStagingArea'];
+                            stagingList = staging.split(",");
+                        }
+                        
+                        $('#loadId').text('TL'+data[0]['intAutoPickingHeader']);
+                        $('#date').val(data[0]['dtm']);
 
-                    }else{
-                        printTripSheet(ref);
+                        $("#horse option[value='" + data[0].strTrailorNo + "']").prop('disabled', false);
+                        $('#horse').val(data[0].strTrailorNo).trigger('change');
+
+                        $("#trailorOne option[value='" + data[0].strTrailorone + "']").prop('disabled', false);
+                        $('#trailorOne').val(data[0]['strTrailorone']).trigger('change');
+
+                        $("#trailorTwo option[value='" + data[0].strTrailortwo + "']").prop('disabled', false);
+                        $('#trailorTwo').val(data[0]['strTrailortwo']).trigger('change');
+
+                        $('#staging').val(data[0]['']).trigger('change');
+                        $('#ticket').val(data[0]['strTicket']).trigger('change');
+                        $('#belts').val(data[0]['intBelts']);
+                        $('#ratchets').val(data[0]['intStraps']);
+                        $('#tarps').val(data[0]['intTarps']);
+                        $('#dunnages').val(data[0]['intDunnages']);
+                        $('#pallets').val(data[0]['intPallets']);
+                        $('#plates').val(data[0]['intPlasticCorners']);
+                        $('#nets').val(data[0]['intNets']);
+                        $('#stands').val(data[0]['intStans']);
+
+                        for(var i in pickersList) {
+                            var val = pickersList[i];
+                            $("#picker").find("option[value="+val+"]").prop("selected", "selected");
+                        }
+                        $("#picker").multiselect('reload');
+
+                        for(var i in loadersList) {
+                            var val = loadersList[i];
+                            $("#loader").find("option[value="+val+"]").prop("selected", "selected");
+                        }
+                        $("#loader").multiselect('reload');
+
+                        for(var i in stagingList) {
+                            var val = stagingList[i];
+                            $("#staging").find("option[value="+val+"]").prop("selected", "selected");
+                        }
+                        $("#staging").multiselect('reload');
+                        getData();
                     }
                 }
             });
-        });
-    };
+        };
 
-    function printTripSheet(ref){
-        $.ajax({
-            url: '{!!url("/teamLeaderPrintTripSheet")!!}',
-            type: "GET",
-            data: {
-                ref: ref,
-            },
-            success: function (data) {
-                alert('Invoiced and printed sucessfully.');
-                getData();
-                getNotifications('{{ $ref }}');
-            }
-        });
-    };
+        function getNotifications(ref){
+            $.ajax({
+                url: '{!!url("/teamLeaderGetNotifications")!!}',
+                type: "GET",
+                data: {
+                    ref: ref,
+                },
+                success: function (data) {
+                    // console.log(gridNotificationsTable);
+                    gridNotificationsTable.option('dataSource', data);
+                    gridNotificationsTable.refresh();
 
-    function completeLoad(id){
-        $.ajax({
-            url: '{!!url("/teamLeaderCompleteLoad")!!}',
-            type: "POST",
-            data: {
-                id: id,
-            },
-            success: function (data) {
-                location.reload();
-            }
-        });
-    }
+                    var hasRowWithBitApprovedZero = false;
+
+                    // Iterate through your data array
+                    for (var i = 0; i < data.length; i++) {
+                        // Assuming 'bitApproved' is a property in each object
+                        var bitApproved = data[i].bitApproved;
+
+                        if (bitApproved != 1) {
+                            hasRowWithBitApprovedZero = true;
+                            break; // Exit the loop if we find a row with bitApproved equal to 0
+                        }
+                    }
+
+                    // Add or remove 'bg-warning' class based on the result
+                    if (hasRowWithBitApprovedZero) {
+                        $('#tab5').addClass('bg-warning');
+                    } else {
+                        $('#tab5').removeClass('bg-warning');
+                    }
+                }
+            });
+        };
+
+        function AssignData(ref, horse, trailorOne, trailorTwo, picker, loader, staging, ticket, prompt){
+            $.ajax({
+                url: '{!!url("/teamLeaderAssign")!!}',
+                type: "GET",
+                data: {
+                    ref : ref,
+                    horse : horse,
+                    trailorOne : trailorOne,
+                    trailorTwo : trailorTwo,
+                    picker : picker,
+                    loader : loader,
+                    staging : staging,
+                    ticket : ticket,
+                    prompt : prompt,
+                },
+                success: function (data) {
+                    // location.reload();
+                    alert('Updated');
+                    getData();
+                }
+            });
+        };
+
+        function assignEquipment(ref, belts, ratchets, tarps, dunnages, pallets, plates, nets, stands){
+            $.ajax({
+                url: '{!!url("/teamLeaderEquipmentAssign")!!}',
+                type: "GET",
+                data: {
+                    ref: ref,
+                    belts: belts,
+                    ratchets: ratchets,
+                    tarps: tarps,
+                    dunnages: dunnages,
+                    pallets: pallets,
+                    plates: plates,
+                    nets: nets,
+                    stands: stands
+                },
+                success: function (data) {
+                    alert('Updated');
+                    getData();
+                }
+            });
+        };
+
+        function approveNotification(id){
+            $.ajax({
+                url: '{!!url("/teamLeaderApproveNotification")!!}',
+                type: "GET",
+                data: {
+                    id: id,
+                },
+                success: function (data) {
+                    alert('Updated');
+                    getData();
+                    getNotifications('{{ $ref }}');
+                }
+            });
+        };
+
+        function getPickingPlanToInvoice(ref) {
+            return new Promise(function(resolve, reject) {
+                $.ajax({
+                    url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
+                    type: "get",
+                    data: {
+                        ref: ref,
+                    },
+                    success: function(data) {
+                        resolve(data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        reject(errorThrown);
+                    }
+                });
+            });
+        }
+
+        function initInvoice(strUnickReference){
+            getPickingPlanToInvoice(strUnickReference)
+            .then(function(pickingplan) {
+                $('#invoice').prop('disabled', true);
+                // console.log(pickingplan);
+                var invoiceList = $.map(pickingplan, function (item) { 
+                    return {
+                        intOwnerID: item.intOwnerID,
+                        OrderNum: item.OrderNum,
+                        OrderId: item.OrderId,
+                        strUnickReference: item.strUnickReference,
+                        UserId: {{ Auth::user()->UserID; }},
+                        UserName: '{{ Auth::user()->UserName; }}'
+                    };
+                });
+
+                // Function to check if all properties in the objects are the same
+                function areAllPropertiesEqual(obj1, obj2) {
+                for (const key in obj1) {
+                    if (obj1.hasOwnProperty(key)) {
+                    if (obj1[key] !== obj2[key]) {
+                        return false;
+                    }
+                    }
+                }
+                return true;
+                }
+
+                // Function to remove rows with all properties being the same
+                function removeDuplicateRows(arr) {
+                return arr.filter((item, index) => {
+                    // Keep the first occurrence of each row
+                    return index === arr.findIndex((obj) => areAllPropertiesEqual(obj, item));
+                });
+                }
+
+                // Call the function to remove duplicate rows from the data array
+                invoiceList = removeDuplicateRows(invoiceList);
+
+                invoiceOut(invoiceList);
+                // alert('Disabled by the developer for testing')
+            }) 
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+        }
+
+        function invoiceOut(inputdata){
+
+            $.each(inputdata, function(index, item) {
+                // Access properties of the current item
+                var ownersId = item.intOwnerID;
+                var SoNumber = item.OrderNum; 
+                var invoiceid = item.OrderId; 
+                var ref = item.strUnickReference; 
+                var userid = item.UserId; 
+                var userName = item.UserName; 
+
+                // alert(SoNumber);
+
+                $.ajax({
+                    url: '{!!url("/individualInvoicingAPI")!!}' + '/' + ownersId + '/' + SoNumber + '/' + invoiceid + '/' + ref + '/' + userid + '/' + userName,
+                    type: "get",
+                    data: {
+
+                    },
+                    success: function (outputData) {
+
+                        console.debug(outputData);
+
+                        if(outputData =="Credit Limit")
+                        {
+                            alert("CREDIT LIMIT ISSUES");
+
+                        }else{
+                            printTripSheet(ref);
+                        }
+                    }
+                });
+            });
+            
+        };
+
+        function printTripSheet(ref){
+            $.ajax({
+                url: '{!!url("/teamLeaderPrintTripSheet")!!}',
+                type: "GET",
+                data: {
+                    ref: ref,
+                },
+                success: function (data) {
+                    alert('Invoiced and printed sucessfully.');
+                    getData();
+                    getNotifications('{{ $ref }}');
+                }
+            });
+        };
+
+        function completeLoad(id){
+            $.ajax({
+                url: '{!!url("/teamLeaderCompleteLoad")!!}',
+                type: "POST",
+                data: {
+                    id: id,
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
+
+        function updateHoldStatus(ref,status){ 
+            $.ajax({
+                url: '{!!url("/teamleaderupdateholdstatus")!!}',
+                type: "GET",
+                data: {
+                    ref: ref,
+                    status: status,
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
+
+        function rollover(ref){
+            $.ajax({
+                url: '{!!url("/teamleaderollover")!!}',
+                type: "GET",
+                data: {
+                    ref: ref,
+                    teamLeader: $('#teamLeader').val(),
+
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
+
+    });
 
 </script>
 </body>

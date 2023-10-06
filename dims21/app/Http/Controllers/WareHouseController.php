@@ -3241,8 +3241,46 @@ class WareHouseController extends Controller
         $stagingAreas = DB::connection('sqlsrv2')->select("SELECT * FROM tblStagingAreas");
         $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL OR SECOND_WEIGH_OPERATOR = ''");
         $instructions = DB::connection('sqlsrv3')->select("SELECT * FROM tblInstructions WHERE strUnickReference = '$ref'");
+        $userId = Auth::user()->UserID;
+        $printers = DB::connection('sqlsrv3')->select("SELECT * FROM viewUserPrinters WHERE UserID = $userId");
+        $teamleaders = DB::connection('sqlsrv2')->select("SELECT * FROM viewTeamLeaders");
 
-        return view('warehouse/teamleadermanage')->with('ref', $ref)->with('listproducts', $allproducts)->with('horses', $horses)->with('trailors', $trailors)->with('pickers', $pickers)->with('loaders', $loaders)->with('stagingAreas', $stagingAreas)->with('tickets', $tickets)->with('instructions', $instructions);
+        return view('warehouse/teamleadermanage')
+            ->with('ref', $ref)
+            ->with('listproducts', $allproducts)
+            ->with('horses', $horses)
+            ->with('trailors', $trailors)
+            ->with('pickers', $pickers)
+            ->with('loaders', $loaders)
+            ->with('stagingAreas', $stagingAreas)
+            ->with('tickets', $tickets)
+            ->with('printers', $printers)
+            ->with('teamleaders', $teamleaders)
+            ->with('instructions', $instructions);
+    }
+
+    public function teamleaderUpdatePickingLoadingTable(Request $request)
+    {
+        $ref = $request->get('ref');
+        $newListProducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
+
+        return view('warehouse/teamleaderpickloadtable', ['listproducts' => $newListProducts]);
+    }
+
+    public function teamleaderupdateholdstatus(Request $request)
+    {
+        $ref = $request->get('ref');
+        $status = $request->get('status');
+        DB::connection('sqlsrv3')->statement("UPDATE tblPickingPlanHeader SET intStatus = $status WHERE strUnickReference = '$ref'");
+        return;
+    }
+
+    public function teamleaderollover(Request $request)
+    {
+        $ref = $request->get('ref');
+        $teamLeaderTwoId = $request->get('teamLeader');
+        $data = DB::connection('sqlsrv3')->statement("UPDATE tblPickingPlanHeader SET intTeamLeaderTwoId = $teamLeaderTwoId WHERE strUnickReference = '$ref'");
+        return response()->json($data);
     }
 
     public function getTeamLeaderPlans(Request $request){
@@ -3288,6 +3326,13 @@ class WareHouseController extends Controller
         $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderGetAssignmentEquipmentNotifications '$ref'");
         return response()->json($data);
     }
+
+    public function teamLeaderGetStatus(Request $request){
+        $ref = $request->get('ref');
+        $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderGetStatus '$ref'");
+        return response()->json($data);
+    }
+    
 
     public function teamLeaderGetNotifications(Request $request){
         $ref = $request->get('ref');

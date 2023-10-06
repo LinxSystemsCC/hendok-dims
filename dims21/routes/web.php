@@ -35,13 +35,14 @@ Route::get('/', function () {
 });*/
 
 
-Route::get('/',[SalesForm::class, 'index']);
+Route::get('/', [WareHouseController::class,'dashboard']);
 Route::post('getLiveDriversInfo', [ExternalFunctions::class, 'getLiveDriversInfo'] );
 Auth::routes();
 
 //Route::get('/home', 'SalesForm@index')->name('home');
-Route::get('home/',[SalesForm::class, 'index'])->name('home');
-Route::get('sales',[SalesForm::class, 'sales']);
+// Route::get('home/',[SalesForm::class, 'index'])->name('home');
+Route::get('home',[WareHouseController::class,'dashboard'])->name('home');
+Route::get('sales',[SalesForm::class, 'index']);
 Route::get('selectedCompany/{companyid}',[SalesForm::class, 'selectedCompany']);//STEEL
 Route::get('pl', [SalesForm::class,'pl']);
 Route::get('returns',[SalesForm::class,'returns']);
@@ -343,7 +344,7 @@ Route::get('plannickname/{ref}',[TabletLoadingApp::class,'plannickname']);
 Route::get('pickingplanlisttest/{ref}',[TabletLoadingApp::class,'pickingplanlisttest']);
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
-
+Route::post('assignTimeToPickingTicket',[TabletLoadingApp::class,'assignTimeToPickingTicket']);
 Route::post('assignTeamLeaderToPickingTicket',[TabletLoadingApp::class,'assignTeamLeaderToPickingTicket']);
 Route::post('assignHorseToPickingTicket',[TabletLoadingApp::class,'assignHorseToPickingTicket']);
 Route::post('assignTrailorToPickingTicket',[TabletLoadingApp::class,'assignTrailorToPickingTicket']);
@@ -354,6 +355,7 @@ Route::post('completeTruckLoad',[TabletLoadingApp::class,'completeTruckLoad']);
 Route::post('sequencepickingplans',[TabletLoadingApp::class,'sequencepickingplans']);
 Route::get('jsongetpickingplan',[TabletLoadingApp::class,'jsongetpickingplan']);
 Route::get('getInstructions',[TabletLoadingApp::class,'getInstructions']);
+Route::get('getTimeRequirements',[TabletLoadingApp::class,'getTimeRequirements']);
 Route::post('assignInstruction',[TabletLoadingApp::class,'assignInstruction']);
 Route::get('previewplan/{ref}',[TabletLoadingApp::class,'previewplan']);
 Route::get('pickingticketslistnotdone/{ref}',[TabletLoadingApp::class,'pickingticketslistnotdone']);
@@ -1020,11 +1022,15 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('addproductspec', [WareHouseController::class,'addproductspec']);
     Route::post('editproductspec', [WareHouseController::class,'editproductspec']);
     Route::get('teamleadermanage/{ref}', [WareHouseController::class, 'teamleadermanage']);
+    Route::get('teamleaderUpdatePickingLoadingTable', [WareHouseController::class, 'teamleaderUpdatePickingLoadingTable']);
+    Route::get('teamleaderupdateholdstatus', [WareHouseController::class, 'teamleaderupdateholdstatus']);
+    Route::get('teamleaderollover', [WareHouseController::class, 'teamleaderollover']);
     Route::get('getTeamLeaderPlans',[WarehouseController::class,'getTeamLeaderPlans']);
     Route::get('teamLeaderAssign',[WarehouseController::class,'teamLeaderAssign']);
     Route::get('teamLeaderEquipmentAssign',[WarehouseController::class,'teamLeaderEquipmentAssign']);
     Route::get('teamLeaderGetPickingPlanData',[WarehouseController::class,'teamLeaderGetPickingPlanData']);
     Route::get('teamLeaderGetNotifications',[WarehouseController::class,'teamLeaderGetNotifications']);
+    Route::get('teamLeaderGetStatus',[WarehouseController::class,'teamLeaderGetStatus']);
     Route::get('teamLeaderApproveNotification',[WarehouseController::class,'teamLeaderApproveNotification']);
     Route::get('teamLeaderGetInstructions',[WarehouseController::class,'teamLeaderGetInstructions']);
     Route::get('teamLeaderGetPickingPlanToInvoice',[WarehouseController::class,'teamLeaderGetPickingPlanToInvoice']);

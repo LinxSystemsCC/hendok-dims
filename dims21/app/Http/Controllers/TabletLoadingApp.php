@@ -376,11 +376,28 @@ class TabletLoadingApp extends controller
         return view('dims/getpickingtickets')->with('teamleaders', $teamleaders)->with('drivers', $drivers)->with('horses', $horses)->with('trailors', $trailors)->with('tickets', $tickets);
     }
 
+    public function assignTimeToPickingTicket(Request $request){
+        $ref = $request->get("ref");
+        $ID = $request->get("ID");
+        $pickingHours = $request->get("pickingHours");
+        $pickingMins = $request->get("pickingMins");
+        $loadingHours = $request->get("loadingHours");
+        $loadingMins = $request->get("loadingMins");
+        $totalHours = $request->get("totalHours");
+        $totalMins = $request->get("totalMins");
+        $userId = Auth::user()->UserID;
+        
+        $result = DB::connection('sqlsrv3')->select('exec spAssignTimeToPickingTicket ?,?,?,?,?,?,?,?,?', array($ref, $ID, $pickingHours, $pickingMins, $loadingHours, $loadingMins, $totalHours, $totalMins, $userId));
+
+        return response()->json($result);
+    }
+
     public function assignTeamLeaderToPickingTicket(Request $request){
         $ID = $request->get('ID');
-        $teamLeader = $request->get('teamLeader');
+        $teamLeaderOne = $request->get('teamLeaderOne');
+        $teamLeaderTwo = $request->get('teamLeaderTwo');
         // dd($ID,$teamLeader);
-        $result = DB::connection('sqlsrv3')->select('exec spAssignTeamLeaderToPickingTicket ?,?', array($ID,$teamLeader));
+        $result = DB::connection('sqlsrv3')->select('exec spAssignTeamLeaderToPickingTicket ?,?,?', array($ID,$teamLeaderOne, $teamLeaderTwo));
 
         return response()->json($result);
     }
@@ -452,6 +469,12 @@ class TabletLoadingApp extends controller
     public function getInstructions(Request $request){
         $ref = $request->get('ref');
         $data = DB::connection('sqlsrv3')->select("SELECT * FROM tblInstructions WHERE strUnickReference = '$ref'");
+        return response()->json($data);
+    }
+
+    public function getTimeRequirements(Request $request){
+        $ref = $request->get('ref');
+        $data = DB::connection('sqlsrv3')->select("SELECT * FROM tblPickLoadingLoadTimes WHERE strUnickReference = '$ref'");
         return response()->json($data);
     }
 
