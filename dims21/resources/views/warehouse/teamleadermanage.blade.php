@@ -428,6 +428,12 @@
                 mode: "single",
             },
             columns: [
+                
+                {
+                    dataField: "dtm",
+                    caption: "Date",
+                    // visible: false,
+                },
                 {
                     dataField: "strUnickReference",
                     caption: "Reference",
