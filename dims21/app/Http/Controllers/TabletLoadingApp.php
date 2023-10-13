@@ -392,6 +392,15 @@ class TabletLoadingApp extends controller
         return response()->json($result);
     }
 
+    public function assignDepartureTimeToPickingTicket(Request $request){
+        $ref = $request->get("ref");
+        $dateTime = $request->get("dateTime");
+        
+        $result = DB::connection('sqlsrv3')->statement("UPDATE tblPickingPlanHeader SET dtmDeparted = '$dateTime' WHERE strUnickReference = '$ref'");
+
+        return response()->json($result);
+    }
+
     public function assignTeamLeaderToPickingTicket(Request $request){
         $ID = $request->get('ID');
         $teamLeaderOne = $request->get('teamLeaderOne');

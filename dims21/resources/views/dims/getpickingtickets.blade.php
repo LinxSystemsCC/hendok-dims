@@ -3,6 +3,8 @@
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <link rel="icon" type="image/png" href="{{ url('images/dimslogo.png') }}">
+    <title>Truck Loads</title>
 
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -36,8 +38,8 @@
         }
     
         #gridTruckLoads{
-            height: calc(100vh - 129px);
-            max-height: calc(100vh - 129px);
+            height: calc(100vh - 152px);
+            max-height: calc(100vh - 152px);
         }
 
 
@@ -54,6 +56,10 @@
 
         .customPadding {
             padding: 3px !important;
+        }
+
+        .dx-header-row{
+            color: black;
         }
 
     </style>
@@ -88,10 +94,14 @@
                     <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#ticketModal" id="btnTicket" disabled>TICKET</button>
                     <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#instructionsModal" id="btnInstructions" disabled>INSTRUCTIONS</button>
                     <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#timeModal" id="btnTimeRequired" disabled>TIME REQ</button>
+                    <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#departureModal" id="btnDepartureTime" disabled>DEPARTURE TIME</button>
                     <button class="btn btn-success mb-2 w-100 ms-2" id="btnComplete" disabled>COMPLETE</button>
                 </div>
 
                 <div id="gridTruckLoads" class="col-lg-12"></div>
+
+                <div id="toggleCheckbox"></div>
+
             </div>
             
         </div>
@@ -347,6 +357,31 @@
             </div>
         </div>
     </div>
+
+    <!-- Departure -->
+    <div class="modal fade" id="departureModal" aria-labelledby="departureModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="departureModal">Departure Time</h1>
+                </div>
+
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="d-inline-flex w-100">
+                            <input type="date" class="form-control" id="dispatchDate">
+                            <input type="time" class="form-control ms-2" id="dispatchTime">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeDepartureModal">Close</button>
+                    <button type="button" id="saveDepartureTime" class="btn btn-success" >Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <!-- jQuery -->
@@ -399,8 +434,28 @@
             columnResizingMode: "nextColumn",
             columns: [
                 {
-                    dataField: "dtm",
+                    dataField: "bitHidden",
+                    caption: "is invoiced",
+                    dataType: "number",
+                    visible: false,
+                },
+                {
+                    dataField: "date",
+                    caption: "Date Created",
+                    calculateCellValue: function (rowData) {
+                        // Extract the date part from the "dtm" field
+                        const dtm = new Date(rowData.dtm);
+                        return dtm.toLocaleDateString("en-ZA");
+                    },
+                },
+                {
+                    dataField: "time",
                     caption: "Time Created",
+                    calculateCellValue: function (rowData) {
+                        // Extract the time part from the "dtm" field
+                        const dtm = new Date(rowData.dtm);
+                        return dtm.toLocaleTimeString();
+                    },
                 },
                 {
                     dataField: "intAutoPickingHeader",
@@ -666,6 +721,7 @@
                     $("#btnInstructions").prop("disabled", true);
                     $("#btnComplete").prop("disabled", true);
                     $("#btnTimeRequired").prop("disabled", true);
+                    $("#btnDepartureTime").prop("disabled", true);
                 }else{
                     currentSelectedRow = [];
                     currentSelectedRow.push(clickedID);
@@ -678,6 +734,7 @@
                     $("#btnInstructions").prop("disabled", false);
                     $("#btnComplete").prop("disabled", false);
                     $("#btnTimeRequired").prop("disabled", false);
+                    $("#btnDepartureTime").prop("disabled", false);
 
                     $('#teamLeaderOne').val(e.data.intTeamLeaderId).trigger('change');
                     $('#teamLeaderTwo').val(e.data.intTeamLeaderTwoId).trigger('change');
@@ -687,10 +744,41 @@
                     $('#driverOne').val(e.data.intDriverOne).trigger('change');
                     $('#driverTwo').val(e.data.intDriverTwo).trigger('change');
                     $('#ticket').val(e.data.strTicket).trigger('change');
+
+                    if (e.data.dtmDeparted != null) {
+                        var parts = e.data.dtmDeparted.split(' ');
+                        var datePart = parts[0];
+                        var timePart = parts[1];
+
+                        $('#dispatchDate').val(datePart);
+                        $('#dispatchTime').val(timePart);
+                    }
+                    else{
+                        var currentDate = new Date();
+
+                        // Extract date components
+                        var year = currentDate.getFullYear();
+                        var month = currentDate.getMonth() + 1; // Note: Month is zero-based
+                        var day = currentDate.getDate();
+
+                        // Extract time components
+                        var hours = currentDate.getHours();
+                        var minutes = currentDate.getMinutes();
+                        var seconds = currentDate.getSeconds();
+
+                        // Format date and time as needed
+                        var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+                        var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+
+                        $('#dispatchDate').val(formattedDate);
+                        $('#dispatchTime').val(formattedTime);
+                    }
+
+                    // console.log(e.data);
                 }
             },
             onSelectionChanged: function(e) {
-
+                // console.debug("");
             },
             onRowDblClick: function (e) {
                 window.open('{!!url("/pickingplanlist")!!}/'+e.data.strUnickReference, "strUnickReference", "location=1,status=1,scrollbars=1, width=1200,height=850");
@@ -706,8 +794,29 @@
             },
             onRowUpdating: function(e) {
                 console.debug("RowUpdating");
+            },
+            onContentReady: function(e) {
+                // Hide rows where bitHidden is equal to 1 initially
+                e.component.beginUpdate();
+                e.component.getDataSource().filter(["bitHidden", "=", 0]);
+                e.component.endUpdate();
             }
         }).dxDataGrid('instance');
+
+        $("#toggleCheckbox").dxCheckBox({
+            text: "View Invoiced Loads",
+            onValueChanged: function(e) {
+                if (e.value) {
+                    // Show rows where bitHidden is equal to 1
+                    gridTruckLoads.getDataSource().filter(["bitHidden", "=", 1]);
+                    gridTruckLoads.refresh();
+                } else {
+                    // Hide rows where bitHidden is equal to 1
+                    gridTruckLoads.getDataSource().filter(["bitHidden", "=", 0]);
+                    gridTruckLoads.refresh();
+                }
+            }
+        });
 
         $('#teamLeaderOne').select2({
             theme: 'bootstrap-5',
@@ -880,6 +989,29 @@
             });
         });
 
+        $('#saveDepartureTime').click(function(){
+            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+            var ref = selectedItem.strUnickReference;
+            
+            var date = $('#dispatchDate').val();
+            var time = $('#dispatchTime').val();
+
+            var dateTime = date + ' ' + time;
+            console.log(dateTime)
+
+            $.ajax({
+                url: '{!!url("/assignDepartureTimeToPickingTicket")!!}',
+                type: "POST",
+                data: {
+                    ref: ref,
+                    dateTime: dateTime,
+                },
+                success: function (data) {
+                    getData();
+                }
+            });
+        });
+
         $('#getdata').click(function(){
             getData();
         });
@@ -970,6 +1102,12 @@
                     $("#closeTicketModal").click();
                 }
             });
+        });
+
+        $('#btnComplete').click(function(){
+            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+            var ref = selectedItem.strUnickReference;
+            completeTruckLoad(ref)
         });
 
         $('#saveInstructions').click(function(){

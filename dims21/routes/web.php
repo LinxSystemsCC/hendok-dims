@@ -345,6 +345,7 @@ Route::get('pickingplanlisttest/{ref}',[TabletLoadingApp::class,'pickingplanlist
 Route::get('pickingticketslist/{from}/{to}/{status}',[TabletLoadingApp::class,'pickingticketslist']);
 Route::get('getProductToSelect',[TabletLoadingApp::class,'getProductToSelect']);
 Route::post('assignTimeToPickingTicket',[TabletLoadingApp::class,'assignTimeToPickingTicket']);
+Route::post('assignDepartureTimeToPickingTicket',[TabletLoadingApp::class,'assignDepartureTimeToPickingTicket']);
 Route::post('assignTeamLeaderToPickingTicket',[TabletLoadingApp::class,'assignTeamLeaderToPickingTicket']);
 Route::post('assignHorseToPickingTicket',[TabletLoadingApp::class,'assignHorseToPickingTicket']);
 Route::post('assignTrailorToPickingTicket',[TabletLoadingApp::class,'assignTrailorToPickingTicket']);
