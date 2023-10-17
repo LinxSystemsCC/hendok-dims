@@ -134,12 +134,21 @@
                     },
                     {
                         dataField: "intTeamLeaderId",
-                        caption: "Team Leader",
+                        caption: "Team Leader 1",
                         visible: false,
                     },
                     {
                         dataField: "strTeamLeader",
-                        caption: "Team Leader",
+                        caption: "Team Leader 1",
+                    },
+                    {
+                        dataField: "intTeamLeaderTwoId",
+                        caption: "Team Leader 2",
+                        visible: false,
+                    },
+                    {
+                        dataField: "strTeamLeaderTwo",
+                        caption: "Team Leader 2",
                     },
                     {
                         dataField: "intSequenceLoad",
