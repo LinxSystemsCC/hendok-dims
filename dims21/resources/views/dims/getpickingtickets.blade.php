@@ -1,110 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
-    <link rel="icon" type="image/png" href="{{ url('images/dimslogo.png') }}">
-    <title>Truck Loads</title>
+@extends('layouts.base')
 
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
-    <!-- DevExtreme theme -->
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
-    <!-- Select2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
-
-    <style>
-        .dx-datagrid-table{
-            font-size:15px;
-        }
-    
-        .dx-datagrid .dx-link {
-            color: #df2413;
-        }
-    
-        .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
-            font-weight: 500;
-            background-color: #df2413;
-            color: #fff;
-        }
-    
-        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
-            color: #df2413;
-            font-size: 14px;
-            line-height: 18px;
-        }
-    
-        #gridTruckLoads{
-            height: calc(100vh - 152px);
-            max-height: calc(100vh - 152px);
-        }
+{{-- Set the Title --}}
+@section('title', 'Truck Loads')
 
 
-        .dx-selection {
-            font-weight: 700;
-            /* Additional styles */
-        }
+{{-- Set to show navbar --}}
+@php
+    $includeMenu = true;
+@endphp
 
-        .master-detail-caption {
-            padding: 0 0 5px 10px;
-            font-size: 14px;
-            font-weight: bold;
-        }
+@section('page')
 
-        .customPadding {
-            padding: 3px !important;
-        }
+    <div class="col-lg-12">
+        <div class="col-lg-12 d-inline-flex mb-2" >
+            <h3 class="col-6 text-nowrap">Truck Loads</h3>
 
-        .dx-header-row{
-            color: black;
-        }
-
-    </style>
-
-</head>
-<body>
-    <div class="col-12 d-flex px-0"  style="background: white;">
-        <div class="col-custom-2"  style="background: white;">
-            <div class="vertical-menu">
-                @include('warehouse.menu')
+            <div class="col-6 d-flex justify-content-end">
+                <label class="d-flex align-items-center px-2 text-nowrap" >Date From</label> 
+                <input class="form-control px-2" type="date" id='from'>
+                <label class="d-flex align-items-center px-2 text-nowrap" >Date To</label>
+                <input class="form-control px-2" type="date" id='to'>
+                <button class="btn btn-success w-100 ms-2" id="getdata">SEARCH</button>
             </div>
         </div>
-        <div class="col-custom-10 p-3" >
-            <div class="col-lg-12">
-                <div class="col-lg-12 d-inline-flex mb-2" >
-                    <h3 class="col-6 text-nowrap">Truck Loads</h3>
-    
-                    <div class="col-6 d-flex justify-content-end">
-                        <label class="d-flex align-items-center px-2 text-nowrap" >Date From</label> 
-                        <input class="form-control px-2" type="date" id='from'>
-                        <label class="d-flex align-items-center px-2 text-nowrap" >Date To</label>
-                        <input class="form-control px-2" type="date" id='to'>
-                        <button class="btn btn-success w-100 ms-2" id="getdata">SEARCH</button>
-                    </div>
-                </div>
 
-                <div class="col-lg-12 d-inline-flex">
-                    <button class="btn btn-primary mb-2 w-100" data-bs-toggle="modal" data-bs-target="#teamLeaderModal" id="btnTeamLeader" disabled>TEAM LEADER</button>
-                    <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#horseModal" id="btnHorse" disabled>HORSE</button>
-                    <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#trailorModal" id="btnTrailor" disabled>TRAILER</button>
-                    <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#driverModal" id="btnDriver" disabled>DRIVER</button>
-                    <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#ticketModal" id="btnTicket" disabled>TICKET</button>
-                    <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#instructionsModal" id="btnInstructions" disabled>INSTRUCTIONS</button>
-                    <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#timeModal" id="btnTimeRequired" disabled>TIME REQ</button>
-                    <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#departureModal" id="btnDepartureTime" disabled>DEPARTURE TIME</button>
-                    <button class="btn btn-success mb-2 w-100 ms-2" id="btnComplete" disabled>COMPLETE</button>
-                </div>
-
-                <div id="gridTruckLoads" class="col-lg-12"></div>
-
-                <div id="toggleCheckbox"></div>
-
-            </div>
-            
+        <div class="col-lg-12 d-inline-flex">
+            <button class="btn btn-primary mb-2 w-100" data-bs-toggle="modal" data-bs-target="#teamLeaderModal" id="btnTeamLeader" disabled>TEAM LEADER</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#horseModal" id="btnHorse" disabled>HORSE</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#trailorModal" id="btnTrailor" disabled>TRAILER</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#driverModal" id="btnDriver" disabled>DRIVER</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#ticketModal" id="btnTicket" disabled>TICKET</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#instructionsModal" id="btnInstructions" disabled>INSTRUCTIONS</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#timeModal" id="btnTimeRequired" disabled>TIME REQ</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#departureModal" id="btnDepartureTime" disabled>DEPARTURE TIME</button>
+            <button class="btn btn-success mb-2 w-100 ms-2" id="btnComplete" disabled>COMPLETE</button>
         </div>
+
+        <div id="gridTruckLoads" class="col-lg-12"></div>
+
+        <div id="toggleCheckbox"></div>
+
     </div>
 
     <!-- Team Leader Modal -->
@@ -382,853 +317,845 @@
             </div>
         </div>
     </div>
-</body>
 
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@endsection
 
-<!-- Excel Saver -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+@section('scripts')
 
-<!-- Select2 -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <style>
+        #gridTruckLoads{
+            height: calc(100vh - 152px);
+            max-height: calc(100vh - 152px);
+        }
 
-<!-- Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        .master-detail-caption {
+            padding: 0 0 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
 
-<!-- DevExtreme library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
-<script src="https://cdn3.devexpress.com/jslib/22.2.3/js/dx.aspnet.data.js"></script>
+        .customPadding {
+            padding: 3px !important;
+        }
 
+        .dx-header-row{
+            color: black;
+        }
 
-<script>
+    </style>
 
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'off' );
-    });
+    <script>
+        $(document).ready(function() {
+            var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
 
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
-
-        const gridTruckLoads = $("#gridTruckLoads").dxDataGrid({
-            dataSource:[],
-            keyExpr: 'strUnickReference',
-            showBorders: true,
-            filterRow: { visible: true },
-            filterPanel: { visible: true },
-            headerFilter: { visible: true },
-            paging: {
-                enabled: false
-            },
-            selection: {
-                mode: "single",
-            },
-            columnAutoWidth:true,        
-            allowColumnResizing: true,       
-            columnResizingMode: "nextColumn",
-            columns: [
-                {
-                    dataField: "bitHidden",
-                    caption: "is invoiced",
-                    dataType: "number",
-                    visible: false,
+            const gridTruckLoads = $("#gridTruckLoads").dxDataGrid({
+                dataSource:[],
+                keyExpr: 'strUnickReference',
+                showBorders: true,
+                filterRow: { visible: true },
+                filterPanel: { visible: true },
+                headerFilter: { visible: true },
+                paging: {
+                    enabled: false
                 },
-                {
-                    dataField: "date",
-                    caption: "Date Created",
-                    calculateCellValue: function (rowData) {
-                        // Extract the date part from the "dtm" field
-                        const dtm = new Date(rowData.dtm);
-                        return dtm.toLocaleDateString("en-ZA");
+                selection: {
+                    mode: "single",
+                },
+                columnAutoWidth:true,        
+                allowColumnResizing: true,       
+                columnResizingMode: "nextColumn",
+                columns: [
+                    {
+                        dataField: "bitHidden",
+                        caption: "is invoiced",
+                        dataType: "number",
+                        visible: false,
                     },
-                },
-                {
-                    dataField: "time",
-                    caption: "Time Created",
-                    calculateCellValue: function (rowData) {
-                        // Extract the time part from the "dtm" field
-                        const dtm = new Date(rowData.dtm);
-                        return dtm.toLocaleTimeString();
-                    },
-                },
-                {
-                    dataField: "intAutoPickingHeader",
-                    caption: "Load No.",
-                    calculateCellValue: function(data) {
-                        return "TL" + data.intAutoPickingHeader;
-                    },
-                },
-                {
-                    dataField: "strUnickReference",
-                    caption: "Ref No.",
-                    visible: false,
-                },
-                {
-                    width: 150,
-                    dataField: "strPickingNickname",
-                    caption: "Route Name",
-                },
-                {
-                    dataField: "intTeamLeaderId",
-                    caption: "Team Leader One ID",
-                    visible: false,
-                },
-                {
-                    dataField: "intTeamLeaderTwoId",
-                    caption: "Team Leader ID",
-                    visible: false,
-                },
-                {
-                    dataField: "strTeamLeaderOne",
-                    caption: "Team Leader One",
-                },
-                {
-                    dataField: "strTeamLeaderTwo",
-                    caption: "Team Leader Two",
-                },
-                {
-                    dataField: "strTrailorNo",
-                    caption: "Horse",
-                },
-                {
-                    dataField: "strTrailorone",
-                    caption: "Trailor One",
-                },
-                {
-                    dataField: "strTrailortwo",
-                    caption: "Trailor Two",
-                },
-                {
-                    dataField: "intDriverOne",
-                    caption: "Driver One",
-                    visible: false,
-                },
-                {
-                    dataField: "strDriverOne",
-                    caption: "Driver One",
-                },
-                {
-                    dataField: "intDriverTwo",
-                    caption: "Driver Two",
-                    visible: false,
-                },
-                {
-                    dataField: "strDriverTwo",
-                    caption: "Driver Two",
-                },
-                {
-                    dataField: "strTicket",
-                    caption: "Ticket Number",
-                },
-                {
-                    dataField: "statustext",
-                    caption: "Status",
-                    cellTemplate: function(element, info) {
-                        element.append("<div>" + info.text + "</div>")
-                            .css("font-size", "16px")
-                            .css("font-weight", "900");
-                    }
-                },
-            ],
-            masterDetail: {
-                enabled: true,
-                template(container, options) {
-                    const lineData = options.data;
-                    const detailGrid = $('<div>')
-                    .dxDataGrid({
-                        dataSource: {
-                            load: function(loadOptions) {
-                                return $.ajax({
-                                    url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
-                                    method: 'GET',
-                                    data: { ref: options.data.strUnickReference },
-                                    xhrFields: { withCredentials: true },
-                                });
-                            },
-                            update: function (key, values) {
-                                detailGrid.dxDataGrid('instance').refresh();
-                            },
-                        },                        
-                        editing: {
-                            mode: 'batch',
-                            allowUpdating: true,
+                    {
+                        dataField: "date",
+                        caption: "Date Created",
+                        calculateCellValue: function (rowData) {
+                            // Extract the date part from the "dtm" field
+                            const dtm = new Date(rowData.dtm);
+                            return dtm.toLocaleDateString("en-ZA");
                         },
-                        showBorders: true,     
-                        columns: [
-                            {
-                                dataField: "intAutoPicking",
-                                caption: "ID",
-                                visible: false,
-                            },
-                            {
-                                dataField: "StoreName",
-                                caption: "Store Name",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "areas",
-                                caption: "Area",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "OrderDate",
-                                caption: "Order Date",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "OrderNum",
-                                caption: "SO Number",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "ExtOrderNum",
-                                caption: "Instructions",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "iLineID",
-                                caption: "Line No",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "PastelCode",
-                                caption: "Code",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "PastelDescription",
-                                caption: "Description",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "mnyQty",
-                                caption: "Quantity",
-                                allowEditing: false,
-                            },
-                            {
-                                dataField: "weightPlanned",
-                                caption: "Weight",
-                                allowEditing: false,
-                            },
-                            {
-                                // dataField: "ubARIBT",
-                                dataField: "mnyLoadedQty",
-                                caption: "To Invoice",
-                                allowEditing: false,
-                            },{
-                                dataField: "isPriorityLine",
-                                caption: "Priority",
-                                lookup: {
-                                    dataSource: [
-                                        { value: '1', text: 'Yes' },
-                                        { value: '0', text: 'No' },
-                                    ],
-                                    valueExpr: "value",
-                                    displayExpr: "text",
+                    },
+                    {
+                        dataField: "time",
+                        caption: "Time Created",
+                        calculateCellValue: function (rowData) {
+                            // Extract the time part from the "dtm" field
+                            const dtm = new Date(rowData.dtm);
+                            return dtm.toLocaleTimeString();
+                        },
+                    },
+                    {
+                        dataField: "intAutoPickingHeader",
+                        caption: "Load No.",
+                        calculateCellValue: function(data) {
+                            return "TL" + data.intAutoPickingHeader;
+                        },
+                    },
+                    {
+                        dataField: "strUnickReference",
+                        caption: "Ref No.",
+                        visible: false,
+                    },
+                    {
+                        width: 150,
+                        dataField: "strPickingNickname",
+                        caption: "Route Name",
+                    },
+                    {
+                        dataField: "intTeamLeaderId",
+                        caption: "Team Leader One ID",
+                        visible: false,
+                    },
+                    {
+                        dataField: "intTeamLeaderTwoId",
+                        caption: "Team Leader ID",
+                        visible: false,
+                    },
+                    {
+                        dataField: "strTeamLeaderOne",
+                        caption: "Team Leader One",
+                    },
+                    {
+                        dataField: "strTeamLeaderTwo",
+                        caption: "Team Leader Two",
+                    },
+                    {
+                        dataField: "strTrailorNo",
+                        caption: "Horse",
+                    },
+                    {
+                        dataField: "strTrailorone",
+                        caption: "Trailor One",
+                    },
+                    {
+                        dataField: "strTrailortwo",
+                        caption: "Trailor Two",
+                    },
+                    {
+                        dataField: "intDriverOne",
+                        caption: "Driver One",
+                        visible: false,
+                    },
+                    {
+                        dataField: "strDriverOne",
+                        caption: "Driver One",
+                    },
+                    {
+                        dataField: "intDriverTwo",
+                        caption: "Driver Two",
+                        visible: false,
+                    },
+                    {
+                        dataField: "strDriverTwo",
+                        caption: "Driver Two",
+                    },
+                    {
+                        dataField: "strTicket",
+                        caption: "Ticket Number",
+                    },
+                    {
+                        dataField: "statustext",
+                        caption: "Status",
+                        cellTemplate: function(element, info) {
+                            element.append("<div>" + info.text + "</div>")
+                                .css("font-size", "16px")
+                                .css("font-weight", "900");
+                        }
+                    },
+                ],
+                masterDetail: {
+                    enabled: true,
+                    template(container, options) {
+                        const lineData = options.data;
+                        const detailGrid = $('<div>')
+                        .dxDataGrid({
+                            dataSource: {
+                                load: function(loadOptions) {
+                                    return $.ajax({
+                                        url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
+                                        method: 'GET',
+                                        data: { ref: options.data.strUnickReference },
+                                        xhrFields: { withCredentials: true },
+                                    });
                                 },
+                                update: function (key, values) {
+                                    detailGrid.dxDataGrid('instance').refresh();
+                                },
+                            },                        
+                            editing: {
+                                mode: 'batch',
+                                allowUpdating: true,
                             },
-                        ],
-                        onRowPrepared: function(e) {
-                            
-                            if (e.rowType === "data") {
-                                if (e.rowIndex % 2 === 0) {
-                                    e.rowElement.css("background-color", "#e6e6e6"); // Even row background color
-                                } else {
-                                    e.rowElement.css("background-color", "#c3c3c3"); // Odd row background color
+                            showBorders: true,     
+                            columns: [
+                                {
+                                    dataField: "intAutoPicking",
+                                    caption: "ID",
+                                    visible: false,
+                                },
+                                {
+                                    dataField: "StoreName",
+                                    caption: "Store Name",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "areas",
+                                    caption: "Area",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "OrderDate",
+                                    caption: "Order Date",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "OrderNum",
+                                    caption: "SO Number",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "ExtOrderNum",
+                                    caption: "Instructions",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "iLineID",
+                                    caption: "Line No",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "PastelCode",
+                                    caption: "Code",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "PastelDescription",
+                                    caption: "Description",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "mnyQty",
+                                    caption: "Quantity",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "weightPlanned",
+                                    caption: "Weight",
+                                    allowEditing: false,
+                                },
+                                {
+                                    // dataField: "ubARIBT",
+                                    dataField: "mnyLoadedQty",
+                                    caption: "To Invoice",
+                                    allowEditing: false,
+                                },{
+                                    dataField: "isPriorityLine",
+                                    caption: "Priority",
+                                    lookup: {
+                                        dataSource: [
+                                            { value: '1', text: 'Yes' },
+                                            { value: '0', text: 'No' },
+                                        ],
+                                        valueExpr: "value",
+                                        displayExpr: "text",
+                                    },
+                                },
+                            ],
+                            onRowPrepared: function(e) {
+                                
+                                if (e.rowType === "data") {
+                                    if (e.rowIndex % 2 === 0) {
+                                        e.rowElement.css("background-color", "#e6e6e6"); // Even row background color
+                                    } else {
+                                        e.rowElement.css("background-color", "#c3c3c3"); // Odd row background color
+                                    }
                                 }
+                            },
+                            onRowUpdating: function(e) {
+
+                                $.ajax({
+                                    url: '{!!url("/truckLoadUpdatePriortiyStatus")!!}',
+                                    method: 'POST', // or 'POST' depending on your API design
+                                    data: {
+                                        intAutoPicking: e.oldData.intAutoPicking,
+                                        isPriorityLine:  e.newData.isPriorityLine,
+                                    },
+                                    success: function(response) {
+                                        
+                                    },
+                                });
+
                             }
-                        },
-                        onRowUpdating: function(e) {
-
-                            $.ajax({
-                                url: '{!!url("/truckLoadUpdatePriortiyStatus")!!}',
-                                method: 'POST', // or 'POST' depending on your API design
-                                data: {
-                                    intAutoPicking: e.oldData.intAutoPicking,
-                                    isPriorityLine:  e.newData.isPriorityLine,
-                                },
-                                success: function(response) {
-                                    
-                                },
-                            });
-
-                        }
-                    }).appendTo(container);
+                        }).appendTo(container);
+                    },
                 },
-            },
-            onRowPrepared(e) {
-                if (e.rowType == 'data' && e.data.isCancelled ==1) {
-                    e.rowElement.css('background', 'red');
-                }
-            },
-            onRowClick: function (e) {
-                // console.log(e.data);
-
-                getTimeRequirements(e.data.strUnickReference).then(function(times) {
-                    // console.log(times);
-                    $("#pickingHours").val('');
-                    $("#pickingMins").val('');
-                    
-                    $("#loadingHours").val('');
-                    $("#loadingMins").val('');
-                    
-                    $("#totalHours").val('');
-                    $("#totalMins").val('');
-
-                    times.forEach(function(time) {
-                        if (time){
-                            $("#pickingHours").val(time.intPickingHour);
-                            $("#pickingMins").val(time.intPickingMin);
-                            
-                            $("#loadingHours").val(time.intLoadingHour);
-                            $("#loadingMins").val(time.intLoadingMin);
-                            
-                            $("#totalHours").val(time.intTotalHour);
-                            $("#totalMins").val(time.intTotalMin);
-                        }e
-                    });
-                });
-
-                getInstructions(e.data.strUnickReference).then(function(instructions) {
-                    // console.log(instructions);
-                    instructions.forEach(function(instruction) {
-                        if (instruction.strType == 'Notes') {
-                            $("#notes").val(instruction.strInstruction);
-                        }else if(instruction.strType == 'Delivery'){
-                            $("#deliveryInstructions").val(instruction.strInstruction);
-                        }
-                    });
-                });
-
-                var currentID = currentSelectedRow[0];
-                var clickedID = e.data.intAutoPickingHeader;
-
-                if (clickedID === currentID){
-                    currentSelectedRow = [];
-                    e.component.clearSelection();
-
-                    $("#btnTeamLeader").prop("disabled", true);
-                    $("#btnHorse").prop("disabled", true);
-                    $("#btnTrailor").prop("disabled", true);
-                    $("#btnDriver").prop("disabled", true);
-                    $("#btnTicket").prop("disabled", true);
-                    $("#btnInstructions").prop("disabled", true);
-                    $("#btnComplete").prop("disabled", true);
-                    $("#btnTimeRequired").prop("disabled", true);
-                    $("#btnDepartureTime").prop("disabled", true);
-                }else{
-                    currentSelectedRow = [];
-                    currentSelectedRow.push(clickedID);
-
-                    $("#btnTeamLeader").prop("disabled", false);
-                    $("#btnHorse").prop("disabled", false);
-                    $("#btnTrailor").prop("disabled", false);
-                    $("#btnDriver").prop("disabled", false);
-                    $("#btnTicket").prop("disabled", false);
-                    $("#btnInstructions").prop("disabled", false);
-                    $("#btnComplete").prop("disabled", false);
-                    $("#btnTimeRequired").prop("disabled", false);
-                    $("#btnDepartureTime").prop("disabled", false);
-
-                    $('#teamLeaderOne').val(e.data.intTeamLeaderId).trigger('change');
-                    $('#teamLeaderTwo').val(e.data.intTeamLeaderTwoId).trigger('change');
-                    $('#horse').val(e.data.strTrailorNo).trigger('change');
-                    $('#trailorOne').val(e.data.strTrailorone).trigger('change');
-                    $('#trailorTwo').val(e.data.strTrailortwo).trigger('change');
-                    $('#driverOne').val(e.data.intDriverOne).trigger('change');
-                    $('#driverTwo').val(e.data.intDriverTwo).trigger('change');
-                    $('#ticket').val(e.data.strTicket).trigger('change');
-
-                    if (e.data.dtmDeparted != null) {
-                        var parts = e.data.dtmDeparted.split(' ');
-                        var datePart = parts[0];
-                        var timePart = parts[1];
-
-                        $('#dispatchDate').val(datePart);
-                        $('#dispatchTime').val(timePart);
+                onRowPrepared(e) {
+                    if (e.rowType == 'data' && e.data.isCancelled ==1) {
+                        e.rowElement.css('background', 'red');
                     }
-                    else{
-                        var currentDate = new Date();
-
-                        // Extract date components
-                        var year = currentDate.getFullYear();
-                        var month = currentDate.getMonth() + 1; // Note: Month is zero-based
-                        var day = currentDate.getDate();
-
-                        // Extract time components
-                        var hours = currentDate.getHours();
-                        var minutes = currentDate.getMinutes();
-                        var seconds = currentDate.getSeconds();
-
-                        // Format date and time as needed
-                        var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-                        var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
-
-                        $('#dispatchDate').val(formattedDate);
-                        $('#dispatchTime').val(formattedTime);
-                    }
-
+                },
+                onRowClick: function (e) {
                     // console.log(e.data);
-                }
-            },
-            onSelectionChanged: function(e) {
-                // console.debug("");
-            },
-            onRowDblClick: function (e) {
-                window.open('{!!url("/pickingplanlist")!!}/'+e.data.strUnickReference, "strUnickReference", "location=1,status=1,scrollbars=1, width=1200,height=850");
-            },
-            onInitNewRow: function(e) {
-                console.debug("InitNewRow");
-            },
-            onRowInserting: function(e) {
-                console.debug("RowInserting");
-            },
-            onRowInserted: function(e) {
-                console.debug("RowInserted");
-            },
-            onRowUpdating: function(e) {
-                console.debug("RowUpdating");
-            },
-            onContentReady: function(e) {
-                // Hide rows where bitHidden is equal to 1 initially
-                e.component.beginUpdate();
-                e.component.getDataSource().filter(["bitHidden", "=", 0]);
-                e.component.endUpdate();
-            }
-        }).dxDataGrid('instance');
 
-        $("#toggleCheckbox").dxCheckBox({
-            text: "View Invoiced Loads",
-            onValueChanged: function(e) {
-                if (e.value) {
-                    // Show rows where bitHidden is equal to 1
-                    gridTruckLoads.getDataSource().filter(["bitHidden", "=", 1]);
-                    gridTruckLoads.refresh();
-                } else {
-                    // Hide rows where bitHidden is equal to 1
-                    gridTruckLoads.getDataSource().filter(["bitHidden", "=", 0]);
-                    gridTruckLoads.refresh();
-                }
-            }
-        });
+                    getTimeRequirements(e.data.strUnickReference).then(function(times) {
+                        // console.log(times);
+                        $("#pickingHours").val('');
+                        $("#pickingMins").val('');
+                        
+                        $("#loadingHours").val('');
+                        $("#loadingMins").val('');
+                        
+                        $("#totalHours").val('');
+                        $("#totalMins").val('');
 
-        $('#teamLeaderOne').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#teamLeaderModal'),
-        });
+                        times.forEach(function(time) {
+                            if (time){
+                                $("#pickingHours").val(time.intPickingHour);
+                                $("#pickingMins").val(time.intPickingMin);
+                                
+                                $("#loadingHours").val(time.intLoadingHour);
+                                $("#loadingMins").val(time.intLoadingMin);
+                                
+                                $("#totalHours").val(time.intTotalHour);
+                                $("#totalMins").val(time.intTotalMin);
+                            }e
+                        });
+                    });
 
-        $('#teamLeaderTwo').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#teamLeaderModal'),
-        });
+                    getInstructions(e.data.strUnickReference).then(function(instructions) {
+                        // console.log(instructions);
+                        instructions.forEach(function(instruction) {
+                            if (instruction.strType == 'Notes') {
+                                $("#notes").val(instruction.strInstruction);
+                            }else if(instruction.strType == 'Delivery'){
+                                $("#deliveryInstructions").val(instruction.strInstruction);
+                            }
+                        });
+                    });
 
-        $('#horse').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#horseModal'),
-        });
+                    var currentID = currentSelectedRow[0];
+                    var clickedID = e.data.intAutoPickingHeader;
 
-        $('#trailorOne').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#trailorModal'),
-        });
+                    if (clickedID === currentID){
+                        currentSelectedRow = [];
+                        e.component.clearSelection();
 
-        $('#trailorTwo').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#trailorModal'),
-        });
+                        $("#btnTeamLeader").prop("disabled", true);
+                        $("#btnHorse").prop("disabled", true);
+                        $("#btnTrailor").prop("disabled", true);
+                        $("#btnDriver").prop("disabled", true);
+                        $("#btnTicket").prop("disabled", true);
+                        $("#btnInstructions").prop("disabled", true);
+                        $("#btnComplete").prop("disabled", true);
+                        $("#btnTimeRequired").prop("disabled", true);
+                        $("#btnDepartureTime").prop("disabled", true);
+                    }else{
+                        currentSelectedRow = [];
+                        currentSelectedRow.push(clickedID);
 
-        $('#driverOne').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#driverModal'),
-        });
+                        $("#btnTeamLeader").prop("disabled", false);
+                        $("#btnHorse").prop("disabled", false);
+                        $("#btnTrailor").prop("disabled", false);
+                        $("#btnDriver").prop("disabled", false);
+                        $("#btnTicket").prop("disabled", false);
+                        $("#btnInstructions").prop("disabled", false);
+                        $("#btnComplete").prop("disabled", false);
+                        $("#btnTimeRequired").prop("disabled", false);
+                        $("#btnDepartureTime").prop("disabled", false);
 
-        $('#driverTwo').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#driverModal'),
-        });
+                        $('#teamLeaderOne').val(e.data.intTeamLeaderId).trigger('change');
+                        $('#teamLeaderTwo').val(e.data.intTeamLeaderTwoId).trigger('change');
+                        $('#horse').val(e.data.strTrailorNo).trigger('change');
+                        $('#trailorOne').val(e.data.strTrailorone).trigger('change');
+                        $('#trailorTwo').val(e.data.strTrailortwo).trigger('change');
+                        $('#driverOne').val(e.data.intDriverOne).trigger('change');
+                        $('#driverTwo').val(e.data.intDriverTwo).trigger('change');
+                        $('#ticket').val(e.data.strTicket).trigger('change');
 
-        $('#ticket').select2({
-            theme: 'bootstrap-5',
-            dropdownParent: $('#ticketModal'),
-        });
+                        if (e.data.dtmDeparted != null) {
+                            var parts = e.data.dtmDeparted.split(' ');
+                            var datePart = parts[0];
+                            var timePart = parts[1];
 
-        var currentDate = new Date();
-        var year = currentDate.getFullYear();
-        var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
-        var day = ("0" + currentDate.getDate()).slice(-2);
-        var formattedDate = year + "-" + month + "-" + day;
-        
-        $('#from').val(formattedDate);
-        $('#to').val(formattedDate);
+                            $('#dispatchDate').val(datePart);
+                            $('#dispatchTime').val(timePart);
+                        }
+                        else{
+                            var currentDate = new Date();
 
-        getData();
+                            // Extract date components
+                            var year = currentDate.getFullYear();
+                            var month = currentDate.getMonth() + 1; // Note: Month is zero-based
+                            var day = currentDate.getDate();
 
-        $('#pickingMins').on('blur', function() {
-            // Get the current values for hours and minutes
-            var hours = parseInt($('#pickingHours').val()) || 0;
-            var minutes = parseInt($(this).val()) || 0;
+                            // Extract time components
+                            var hours = currentDate.getHours();
+                            var minutes = currentDate.getMinutes();
+                            var seconds = currentDate.getSeconds();
 
-            // Calculate the total number of minutes
-            var totalMinutes = hours * 60 + minutes;
+                            // Format date and time as needed
+                            var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+                            var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
 
-            // Calculate the remainder when dividing by 5 (5-minute increments)
-            var remainder = totalMinutes % 5;
+                            $('#dispatchDate').val(formattedDate);
+                            $('#dispatchTime').val(formattedTime);
+                        }
 
-            // Determine whether to round up or down based on the remainder
-            var roundedValue;
-            if (remainder <= 2.5) {
-                // Round down to the nearest multiple of 5
-                roundedValue = totalMinutes - remainder;
-            } else {
-                // Round up to the nearest multiple of 5
-                roundedValue = totalMinutes + (5 - remainder);
-            }
-
-            // Update hours and minutes fields with the adjusted values
-            hours = Math.floor(roundedValue / 60);
-            minutes = roundedValue % 60;
-
-            $('#pickingHours').val(hours);
-            $(this).val(minutes);
-        });
-
-        $('#loadingMins').on('blur', function() {
-            // Get the current values for hours and minutes
-            var hours = parseInt($('#loadingHours').val()) || 0;
-            var minutes = parseInt($(this).val()) || 0;
-
-            // Calculate the total number of minutes
-            var totalMinutes = hours * 60 + minutes;
-
-            // Calculate the remainder when dividing by 5 (5-minute increments)
-            var remainder = totalMinutes % 5;
-
-            // Determine whether to round up or down based on the remainder
-            var roundedValue;
-            if (remainder <= 2.5) {
-                // Round down to the nearest multiple of 5
-                roundedValue = totalMinutes - remainder;
-            } else {
-                // Round up to the nearest multiple of 5
-                roundedValue = totalMinutes + (5 - remainder);
-            }
-
-            // Update hours and minutes fields with the adjusted values
-            hours = Math.floor(roundedValue / 60);
-            minutes = roundedValue % 60;
-
-            $('#loadingHours').val(hours);
-            $(this).val(minutes);
-        });
-
-        $('#totalMins').on('blur', function() {
-            // Get the current values for hours and minutes
-            var hours = parseInt($('#totalHours').val()) || 0;
-            var minutes = parseInt($(this).val()) || 0;
-
-            // Calculate the total number of minutes
-            var totalMinutes = hours * 60 + minutes;
-
-            // Calculate the remainder when dividing by 5 (5-minute increments)
-            var remainder = totalMinutes % 5;
-
-            // Determine whether to round up or down based on the remainder
-            var roundedValue;
-            if (remainder <= 2.5) {
-                // Round down to the nearest multiple of 5
-                roundedValue = totalMinutes - remainder;
-            } else {
-                // Round up to the nearest multiple of 5
-                roundedValue = totalMinutes + (5 - remainder);
-            }
-
-            // Update hours and minutes fields with the adjusted values
-            hours = Math.floor(roundedValue / 60);
-            minutes = roundedValue % 60;
-
-            $('#totalHours').val(hours);
-            $(this).val(minutes);
-        });
-
-        $('#saveTimeRequirements').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ref = selectedItem.strUnickReference;
-            var ID = selectedItem.intAutoPickingHeader;
-            
-            var pickingHours = $('#pickingHours').val();
-            var pickingMins = $('#pickingMins').val();
-
-            var loadingHours = $('#loadingHours').val();
-            var loadingMins = $('#loadingMins').val();
-
-            var totalHours = $('#totalHours').val();
-            var totalMins = $('#totalMins').val();
-
-            $.ajax({
-                url: '{!!url("/assignTimeToPickingTicket")!!}',
-                type: "POST",
-                data: {
-                    ref: ref,
-                    ID: ID,
-                    pickingHours: pickingHours,
-                    pickingMins: pickingMins,
-                    loadingHours: loadingHours,
-                    loadingMins: loadingMins,
-                    totalHours: totalHours,
-                    totalMins: totalMins,
+                        // console.log(e.data);
+                    }
                 },
-                success: function (data) {
-                    getData();
+                onSelectionChanged: function(e) {
+                    // console.debug("");
+                },
+                onRowDblClick: function (e) {
+                    window.open('{!!url("/pickingplanlist")!!}/'+e.data.strUnickReference, "strUnickReference", "location=1,status=1,scrollbars=1, width=1200,height=850");
+                },
+                onInitNewRow: function(e) {
+                    console.debug("InitNewRow");
+                },
+                onRowInserting: function(e) {
+                    console.debug("RowInserting");
+                },
+                onRowInserted: function(e) {
+                    console.debug("RowInserted");
+                },
+                onRowUpdating: function(e) {
+                    console.debug("RowUpdating");
+                },
+                onContentReady: function(e) {
+                    // Hide rows where bitHidden is equal to 1 initially
+                    e.component.beginUpdate();
+                    e.component.getDataSource().filter(["bitHidden", "=", 0]);
+                    e.component.endUpdate();
+                }
+            }).dxDataGrid('instance');
+
+            $("#toggleCheckbox").dxCheckBox({
+                text: "View Invoiced Loads",
+                onValueChanged: function(e) {
+                    if (e.value) {
+                        // Show rows where bitHidden is equal to 1
+                        gridTruckLoads.getDataSource().filter(["bitHidden", "=", 1]);
+                        gridTruckLoads.refresh();
+                    } else {
+                        // Hide rows where bitHidden is equal to 1
+                        gridTruckLoads.getDataSource().filter(["bitHidden", "=", 0]);
+                        gridTruckLoads.refresh();
+                    }
                 }
             });
-        });
 
-        $('#saveDepartureTime').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ref = selectedItem.strUnickReference;
-            
-            var date = $('#dispatchDate').val();
-            var time = $('#dispatchTime').val();
-
-            var dateTime = date + ' ' + time;
-            console.log(dateTime)
-
-            $.ajax({
-                url: '{!!url("/assignDepartureTimeToPickingTicket")!!}',
-                type: "POST",
-                data: {
-                    ref: ref,
-                    dateTime: dateTime,
-                },
-                success: function (data) {
-                    getData();
-                }
+            $('#teamLeaderOne').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#teamLeaderModal'),
             });
-        });
 
-        $('#getdata').click(function(){
+            $('#teamLeaderTwo').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#teamLeaderModal'),
+            });
+
+            $('#horse').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#horseModal'),
+            });
+
+            $('#trailorOne').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#trailorModal'),
+            });
+
+            $('#trailorTwo').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#trailorModal'),
+            });
+
+            $('#driverOne').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#driverModal'),
+            });
+
+            $('#driverTwo').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#driverModal'),
+            });
+
+            $('#ticket').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#ticketModal'),
+            });
+
+            var currentDate = new Date();
+            var year = currentDate.getFullYear();
+            var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+            var day = ("0" + currentDate.getDate()).slice(-2);
+            var formattedDate = year + "-" + month + "-" + day;
+            
+            $('#from').val(formattedDate);
+            $('#to').val(formattedDate);
+
             getData();
-        });
 
-        $('#saveTeamLeader').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ID = selectedItem.intAutoPickingHeader;
-            $.ajax({
-                url: '{!!url("/assignTeamLeaderToPickingTicket")!!}',
-                type: "POST",
-                data: {
-                    ID: ID,
-                    teamLeaderOne: $('#teamLeaderOne').val(),
-                    teamLeaderTwo: $('#teamLeaderTwo').val(),
-                },
-                success: function (data) {
-                    $("#closeTeamLeaderModal").click();
-                    getData();
+            $('#pickingMins').on('blur', function() {
+                // Get the current values for hours and minutes
+                var hours = parseInt($('#pickingHours').val()) || 0;
+                var minutes = parseInt($(this).val()) || 0;
+
+                // Calculate the total number of minutes
+                var totalMinutes = hours * 60 + minutes;
+
+                // Calculate the remainder when dividing by 5 (5-minute increments)
+                var remainder = totalMinutes % 5;
+
+                // Determine whether to round up or down based on the remainder
+                var roundedValue;
+                if (remainder <= 2.5) {
+                    // Round down to the nearest multiple of 5
+                    roundedValue = totalMinutes - remainder;
+                } else {
+                    // Round up to the nearest multiple of 5
+                    roundedValue = totalMinutes + (5 - remainder);
                 }
-            });
-        });
 
-        $('#saveHorse').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ID = selectedItem.intAutoPickingHeader;
-            $.ajax({
-                url: '{!!url("/assignHorseToPickingTicket")!!}',
-                type: "POST",
-                data: {
-                    ID: ID,
-                    horse: $('#horse').val(),
-                },
-                success: function (data) {
-                    getData();
-                    $("#closeHorseModal").click();
+                // Update hours and minutes fields with the adjusted values
+                hours = Math.floor(roundedValue / 60);
+                minutes = roundedValue % 60;
+
+                $('#pickingHours').val(hours);
+                $(this).val(minutes);
+            });
+
+            $('#loadingMins').on('blur', function() {
+                // Get the current values for hours and minutes
+                var hours = parseInt($('#loadingHours').val()) || 0;
+                var minutes = parseInt($(this).val()) || 0;
+
+                // Calculate the total number of minutes
+                var totalMinutes = hours * 60 + minutes;
+
+                // Calculate the remainder when dividing by 5 (5-minute increments)
+                var remainder = totalMinutes % 5;
+
+                // Determine whether to round up or down based on the remainder
+                var roundedValue;
+                if (remainder <= 2.5) {
+                    // Round down to the nearest multiple of 5
+                    roundedValue = totalMinutes - remainder;
+                } else {
+                    // Round up to the nearest multiple of 5
+                    roundedValue = totalMinutes + (5 - remainder);
                 }
-            });
-        });
 
-        $('#saveTrailor').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ID = selectedItem.intAutoPickingHeader;
-            $.ajax({
-                url: '{!!url("/assignTrailorToPickingTicket")!!}',
-                type: "POST",
-                data: {
-                    ID: ID,
-                    trailorOne: $('#trailorOne').val(),
-                    trailorTwo: $('#trailorTwo').val(),
-                },
-                success: function (data) {
-                    getData();
-                    $("#closeTrailorModal").click();
+                // Update hours and minutes fields with the adjusted values
+                hours = Math.floor(roundedValue / 60);
+                minutes = roundedValue % 60;
+
+                $('#loadingHours').val(hours);
+                $(this).val(minutes);
+            });
+
+            $('#totalMins').on('blur', function() {
+                // Get the current values for hours and minutes
+                var hours = parseInt($('#totalHours').val()) || 0;
+                var minutes = parseInt($(this).val()) || 0;
+
+                // Calculate the total number of minutes
+                var totalMinutes = hours * 60 + minutes;
+
+                // Calculate the remainder when dividing by 5 (5-minute increments)
+                var remainder = totalMinutes % 5;
+
+                // Determine whether to round up or down based on the remainder
+                var roundedValue;
+                if (remainder <= 2.5) {
+                    // Round down to the nearest multiple of 5
+                    roundedValue = totalMinutes - remainder;
+                } else {
+                    // Round up to the nearest multiple of 5
+                    roundedValue = totalMinutes + (5 - remainder);
                 }
+
+                // Update hours and minutes fields with the adjusted values
+                hours = Math.floor(roundedValue / 60);
+                minutes = roundedValue % 60;
+
+                $('#totalHours').val(hours);
+                $(this).val(minutes);
             });
-        });
 
-        $('#saveDriver').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ID = selectedItem.intAutoPickingHeader;
-            $.ajax({
-                url: '{!!url("/assignDriversToPickingTicket")!!}',
-                type: "POST",
-                data: {
-                    ID: ID,
-                    driverOne: $('#driverOne').val(),
-                    driverTwo: $('#driverTwo').val(),
-                },
-                success: function (data) {
-                    getData();
-                    $("#closeDriverModal").click();
-                }
-            });
-        });
+            $('#saveTimeRequirements').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ref = selectedItem.strUnickReference;
+                var ID = selectedItem.intAutoPickingHeader;
+                
+                var pickingHours = $('#pickingHours').val();
+                var pickingMins = $('#pickingMins').val();
 
-        $('#saveTicket').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ID = selectedItem.intAutoPickingHeader;
-            $.ajax({
-                url: '{!!url("/assignTicketToPickingTicket")!!}',
-                type: "POST",
-                data: {
-                    ID: ID,
-                    ticket: $('#ticket').val(),
-                },
-                success: function (data) {
-                    getData();
-                    $("#closeTicketModal").click();
-                }
-            });
-        });
+                var loadingHours = $('#loadingHours').val();
+                var loadingMins = $('#loadingMins').val();
 
-        $('#btnComplete').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ref = selectedItem.strUnickReference;
-            completeTruckLoad(ref)
-        });
+                var totalHours = $('#totalHours').val();
+                var totalMins = $('#totalMins').val();
 
-        $('#saveInstructions').click(function(){
-            var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
-            var ref = selectedItem.strUnickReference;
-            var notes = $("#notes").val();
-            var type = 'Notes';
-            assignInstruction(ref, notes, type)
-            var delivery = $("#deliveryInstructions").val();
-            type = 'Delivery';
-            assignInstruction(ref, delivery, type)
-        });
-
-        $("#closeInstructionsModal").click(function(){
-            $("#notes").val("");
-            $("#deliveryInstructions").val("");
-        });
-
-        $('.sidebar ul li a').on(function(){
-            var id = $(this).attr('id');
-            $('nav ul li ul.item-show-'+id).toggleClass("show");
-            $('nav ul li #'+id+' span').toggleClass("rotate");
-            
-        });
-
-        $('.sidebar ul li a').click(function(){
-            var id = $(this).attr('id');
-            $('nav ul li ul.item-show-'+id).toggleClass("show");
-            $('nav ul li #'+id+' span').toggleClass("rotate");
-            
-        });
-
-        $('nav ul li').click(function(){
-            $(this).addClass("active").siblings().removeClass("active");
-        });
-
-        function getInstructions(ref) {
-            return new Promise(function(resolve, reject) {
                 $.ajax({
-                    url: '{!!url("/getInstructions")!!}',
-                    type: "GET",
+                    url: '{!!url("/assignTimeToPickingTicket")!!}',
+                    type: "POST",
                     data: {
                         ref: ref,
+                        ID: ID,
+                        pickingHours: pickingHours,
+                        pickingMins: pickingMins,
+                        loadingHours: loadingHours,
+                        loadingMins: loadingMins,
+                        totalHours: totalHours,
+                        totalMins: totalMins,
                     },
-                    success: function(data) {
-                        resolve(data); // Resolve the promise with the received data
-                    },
-                    error: function(xhr, status, error) {
-                        reject(error); // Reject the promise with the error message
+                    success: function (data) {
+                        getData();
                     }
                 });
             });
-        }
 
-        function getTimeRequirements(ref) {
-            return new Promise(function(resolve, reject) {
+            $('#saveDepartureTime').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ref = selectedItem.strUnickReference;
+                
+                var date = $('#dispatchDate').val();
+                var time = $('#dispatchTime').val();
+
+                var dateTime = date + ' ' + time;
+                console.log(dateTime)
+
                 $.ajax({
-                    url: '{!!url("/getTimeRequirements")!!}',
-                    type: "GET",
+                    url: '{!!url("/assignDepartureTimeToPickingTicket")!!}',
+                    type: "POST",
                     data: {
                         ref: ref,
+                        dateTime: dateTime,
                     },
-                    success: function(data) {
-                        resolve(data); // Resolve the promise with the received data
-                    },
-                    error: function(xhr, status, error) {
-                        reject(error); // Reject the promise with the error message
+                    success: function (data) {
+                        getData();
                     }
                 });
             });
-        }
 
-        function getData(){
-            $.ajax({
-                url: '{!!url("/jsongetpickingplan")!!}',
-                type: "GET",
-                data: {
-                    from: $('#from').val(),
-                    to: $('#to').val()
-                },
-                success: function (data) {
-                    gridTruckLoads.option('dataSource', data);
-                    gridTruckLoads.refresh();
-                }
+            $('#getdata').click(function(){
+                getData();
             });
-        };
 
-        function completeTruckLoad(ref){
-            $.ajax({
-                url: '{!!url("/completeTruckLoad")!!}',
-                type: "POST",
-                data: {
-                    ref: ref,
-                },
-                success: function (data) {
-                    getData();
-                }
+            $('#saveTeamLeader').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ID = selectedItem.intAutoPickingHeader;
+                $.ajax({
+                    url: '{!!url("/assignTeamLeaderToPickingTicket")!!}',
+                    type: "POST",
+                    data: {
+                        ID: ID,
+                        teamLeaderOne: $('#teamLeaderOne').val(),
+                        teamLeaderTwo: $('#teamLeaderTwo').val(),
+                    },
+                    success: function (data) {
+                        $("#closeTeamLeaderModal").click();
+                        getData();
+                    }
+                });
             });
-        };
 
-        function assignInstruction(ref, instruction, type){
-            $.ajax({
-                url: '{!!url("/assignInstruction")!!}',
-                type: "POST",
-                data: {
-                    ref: ref,
-                    instruction: instruction,
-                    type: type,
-                },
-                success: function (data) {
-                    getData();
-                    $("#closeInstructionsModal").click();
-                }
+            $('#saveHorse').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ID = selectedItem.intAutoPickingHeader;
+                $.ajax({
+                    url: '{!!url("/assignHorseToPickingTicket")!!}',
+                    type: "POST",
+                    data: {
+                        ID: ID,
+                        horse: $('#horse').val(),
+                    },
+                    success: function (data) {
+                        getData();
+                        $("#closeHorseModal").click();
+                    }
+                });
             });
-        }
-    });
 
+            $('#saveTrailor').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ID = selectedItem.intAutoPickingHeader;
+                $.ajax({
+                    url: '{!!url("/assignTrailorToPickingTicket")!!}',
+                    type: "POST",
+                    data: {
+                        ID: ID,
+                        trailorOne: $('#trailorOne').val(),
+                        trailorTwo: $('#trailorTwo').val(),
+                    },
+                    success: function (data) {
+                        getData();
+                        $("#closeTrailorModal").click();
+                    }
+                });
+            });
 
+            $('#saveDriver').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ID = selectedItem.intAutoPickingHeader;
+                $.ajax({
+                    url: '{!!url("/assignDriversToPickingTicket")!!}',
+                    type: "POST",
+                    data: {
+                        ID: ID,
+                        driverOne: $('#driverOne').val(),
+                        driverTwo: $('#driverTwo').val(),
+                    },
+                    success: function (data) {
+                        getData();
+                        $("#closeDriverModal").click();
+                    }
+                });
+            });
 
-</script>
+            $('#saveTicket').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ID = selectedItem.intAutoPickingHeader;
+                $.ajax({
+                    url: '{!!url("/assignTicketToPickingTicket")!!}',
+                    type: "POST",
+                    data: {
+                        ID: ID,
+                        ticket: $('#ticket').val(),
+                    },
+                    success: function (data) {
+                        getData();
+                        $("#closeTicketModal").click();
+                    }
+                });
+            });
 
-</div>
-</body>
-</html>
+            $('#btnComplete').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ref = selectedItem.strUnickReference;
+                completeTruckLoad(ref)
+            });
+
+            $('#saveInstructions').click(function(){
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ref = selectedItem.strUnickReference;
+                var notes = $("#notes").val();
+                var type = 'Notes';
+                assignInstruction(ref, notes, type)
+                var delivery = $("#deliveryInstructions").val();
+                type = 'Delivery';
+                assignInstruction(ref, delivery, type)
+            });
+
+            $("#closeInstructionsModal").click(function(){
+                $("#notes").val("");
+                $("#deliveryInstructions").val("");
+            });
+
+            $('.sidebar ul li a').on(function(){
+                var id = $(this).attr('id');
+                $('nav ul li ul.item-show-'+id).toggleClass("show");
+                $('nav ul li #'+id+' span').toggleClass("rotate");
+                
+            });
+
+            $('.sidebar ul li a').click(function(){
+                var id = $(this).attr('id');
+                $('nav ul li ul.item-show-'+id).toggleClass("show");
+                $('nav ul li #'+id+' span').toggleClass("rotate");
+                
+            });
+
+            $('nav ul li').click(function(){
+                $(this).addClass("active").siblings().removeClass("active");
+            });
+
+            function getInstructions(ref) {
+                return new Promise(function(resolve, reject) {
+                    $.ajax({
+                        url: '{!!url("/getInstructions")!!}',
+                        type: "GET",
+                        data: {
+                            ref: ref,
+                        },
+                        success: function(data) {
+                            resolve(data); // Resolve the promise with the received data
+                        },
+                        error: function(xhr, status, error) {
+                            reject(error); // Reject the promise with the error message
+                        }
+                    });
+                });
+            }
+
+            function getTimeRequirements(ref) {
+                return new Promise(function(resolve, reject) {
+                    $.ajax({
+                        url: '{!!url("/getTimeRequirements")!!}',
+                        type: "GET",
+                        data: {
+                            ref: ref,
+                        },
+                        success: function(data) {
+                            resolve(data); // Resolve the promise with the received data
+                        },
+                        error: function(xhr, status, error) {
+                            reject(error); // Reject the promise with the error message
+                        }
+                    });
+                });
+            }
+
+            function getData(){
+                $.ajax({
+                    url: '{!!url("/jsongetpickingplan")!!}',
+                    type: "GET",
+                    data: {
+                        from: $('#from').val(),
+                        to: $('#to').val()
+                    },
+                    success: function (data) {
+                        gridTruckLoads.option('dataSource', data);
+                        gridTruckLoads.refresh();
+                    }
+                });
+            };
+
+            function completeTruckLoad(ref){
+                $.ajax({
+                    url: '{!!url("/completeTruckLoad")!!}',
+                    type: "POST",
+                    data: {
+                        ref: ref,
+                    },
+                    success: function (data) {
+                        getData();
+                    }
+                });
+            };
+
+            function assignInstruction(ref, instruction, type){
+                $.ajax({
+                    url: '{!!url("/assignInstruction")!!}',
+                    type: "POST",
+                    data: {
+                        ref: ref,
+                        instruction: instruction,
+                        type: type,
+                    },
+                    success: function (data) {
+                        getData();
+                        $("#closeInstructionsModal").click();
+                    }
+                });
+            }
+        });
+    </script>
+
+@endsection

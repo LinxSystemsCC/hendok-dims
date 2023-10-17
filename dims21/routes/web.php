@@ -1146,8 +1146,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('nailsInnerCrud', [WareHouseController::class,'nailsInnerCrud']);
     Route::get('genericqrcodereverse', [WareHouseController::class,'genericqrcodereverse']);
     Route::get('qrcodereverse', [WareHouseController::class,'qrcodereverse']);
-    Route::get('getloadstosequence', [WareHouseController::class,'getloadstosequence']);
-    Route::get('jsongettrucksequencingbyteamleader', [WareHouseController::class,'jsongettrucksequencingbyteamleader']);
+    Route::get('trucksequencing', [WareHouseController::class,'trucksequencing']);
+    Route::get('getTruckSequencingByTeamleader', [WareHouseController::class,'getTruckSequencingByTeamleader']);
+    Route::post('updateTruckLoadingSequence', [WareHouseController::class,'updateTruckLoadingSequence']);
 });
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!

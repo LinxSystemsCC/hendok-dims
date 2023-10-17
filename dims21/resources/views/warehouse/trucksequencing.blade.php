@@ -1,477 +1,258 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+@extends('layouts.base')
 
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+{{-- Set the Title --}}
+@section('title', 'Load Sequencing')
 
-    <!-- DevExtreme theme -->
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
-    <!-- Select2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+{{-- Set to show navbar --}}
+@php
+    $includeMenu = true;
+@endphp
+
+@section('page')
+
+<div class="col-lg-12 d-inline-flex mb-2" >
+    <h3 class="col-5 text-nowrap">Truck Load Sequencing</h3>
+
+    <div class="col-7 d-flex justify-content-end">
+        <div class="col-5 d-inline-flex">
+            <label class="d-flex align-items-center px-2 text-nowrap" >Date</label> 
+            <input class="form-control" type="date" id='date'>
+        </div>
+
+        <div class="col-5 d-inline-flex">
+            <label class="d-flex align-items-center px-2 text-nowrap" >Team Leader</label>
+            <select class="form-select" style="width:100% !important;" id='teamLeader'>
+                <option></option>
+                @foreach ($teamleaders as $teamleader)
+                    <option value="{{ $teamleader->UserID }}">{{ $teamleader->FullName }}</option>
+                @endforeach
+            </select>
+        </div>
+        
+        <div class="col-2 d-inline-flex">
+            <button class="btn btn-success w-100 ms-2" id="btnGetTruckLoads">SEARCH</button>
+        </div>
+    </div>
+</div>
+
+<div id="gridTruckSequencing"></div>
+
+@endsection
+
+@section('scripts')
 
     <style>
-        .dx-datagrid-table{
-            font-size:15px;
-        }
-
-        .dx-datagrid .dx-link {
-            color: #df2413;
-        }
-
-        .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
-            font-weight: 500;
-            background-color: #df2413;
-            color: #fff;
-        }
-
-        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
-            color: #df2413;
-            font-size: 14px;
-            line-height: 18px;
-        }
-
-        #gridContainer{
+        #gridTruckSequencing{
             height: calc(100vh - 87px);
             max-height: calc(100vh - 87px);
         }
-
-        .dx-selection {
-            font-weight: 700;
-            /* Additional styles */
-        }
-
-        .master-detail-caption {
-            padding: 0 0 5px 10px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .customPadding {
-            padding: 3px !important;
-        }
-
     </style>
 
-</head>
-<body>
-    <div class="col-12 d-flex px-0"  style="background: white;">
-        <div class="col-custom-2"  style="background: white;">
-            <div class="vertical-menu">
-                @include('warehouse.menu')
-            </div>
-        </div>
-        <div class="col p-3" >
-            <div class="col-lg-12 d-inline-flex mb-1" >
-                <h3 style="flex-grow: 1; padding-left: 15px;">Truck Loads</h3>
+    <script>
+        $(document).ready(function() {
+            $('#teamLeader').select2({
+                theme: 'bootstrap-5',
+                // width: 100,
+            });
 
+            var today = new Date().toISOString().split('T')[0];
+            $('#date').val(today);
 
-            </div>
+            let gridData = [];
 
-            <div id="gridContainer"></div>
+            const gridTruckSequencing = $("#gridTruckSequencing").dxDataGrid({
+                dataSource: gridData,
+                keyExpr: 'strUnickReference',
+                showBorders: true,
+                showRowLines: true,
+                showColumnLines: true,
+                rowAlternationEnabled: true,
+                filterRow: { visible: true },
+                filterPanel: { visible: true },
+                headerFilter: { visible: true },
+                paging: {
+                    enabled: false
+                },
+                rowDragging: {
+                    allowReordering: true,
+                    onReorder(e) {
+                        const visibleRows = e.component.getVisibleRows();
+                        const toIndex = gridData.findIndex((item) => item.intAutoPickingHeader === visibleRows[e.toIndex].data.intAutoPickingHeader);
+                        const fromIndex = gridData.findIndex((item) => item.intAutoPickingHeader === e.itemData.intAutoPickingHeader);
 
-        </div>
-    </div>
+                        gridData.splice(fromIndex, 1);
+                        gridData.splice(toIndex, 0, e.itemData);
 
-
-</body>
-
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<!-- Excel Saver -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-
-<!-- Select2 -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-
-<!-- DevExtreme library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
-<script src="https://cdn3.devexpress.com/jslib/22.2.3/js/dx.aspnet.data.js"></script>
-
-
-<script>
-
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'off' );
-    });
-
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $('#getdata').click(function(){
-            getData();
-        });
-
-
-    });
-
-    function getData(){
-        var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
-
-        $.ajax({
-            url: '{!!url("/jsongettrucksequencingbyteamleader")!!}',
-            type: "GET",
-            data: {
-                date: $('#from').val(),
-                teamleaderId: $('#to').val()
-            },
-            success: function (data) {
-                $("#gridContainer").dxDataGrid({
-                    dataSource:data,
-                    keyExpr: 'strUnickReference',
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    paging: {
-                        enabled: false
+                        e.component.refresh();
                     },
-                    selection: {
-                        mode: "single",
-                    },
-                    columnAutoWidth:true,
-                    allowColumnResizing: true,
-                    columnResizingMode: "nextColumn",
-                    columns: [
-                        {
-                            dataField: "dtm",
-                            caption: "Time Created",
+                },
+                selection: {
+                    mode: "single",
+                },
+                columnFixing: {
+                    enabled: true,
+                },
+                columnAutoWidth:true,
+                allowColumnResizing: true,
+                
+                columnResizingMode: "nextColumn",
+                columns: [
+                    {
+                        dataField: "date",
+                        caption: "Date Created",
+                        calculateCellValue: function (rowData) {
+                            // Extract the date part from the "dtm" field
+                            const dtm = new Date(rowData.dtm);
+                            return dtm.toLocaleDateString("en-ZA");
                         },
-                        {
-                            dataField: "intAutoPickingHeader",
-                            caption: "Load No.",
-                            calculateCellValue: function(data) {
-                                return "TL" + data.intAutoPickingHeader;
+                    },
+                    {
+                        dataField: "time",
+                        caption: "Time Created",
+                        calculateCellValue: function (rowData) {
+                            // Extract the time part from the "dtm" field
+                            const dtm = new Date(rowData.dtm);
+                            return dtm.toLocaleTimeString();
+                        },
+                    },
+                    {
+                        dataField: "intAutoPickingHeader",
+                        caption: "Truck Load",
+                        fixed: true,
+                        calculateCellValue: function(data) {
+                            return "TL" + data.intAutoPickingHeader;
+                        },
+                    },
+                    {
+                        dataField: "strUnickReference",
+                        caption: "Reference",
+                    },
+                    {
+                        dataField: "strPickingNickname",
+                        caption: "Route",
+                    },
+                    {
+                        dataField: "intTeamLeaderId",
+                        caption: "Team Leader",
+                        visible: false,
+                    },
+                    {
+                        dataField: "strTeamLeader",
+                        caption: "Team Leader",
+                    },
+                    {
+                        dataField: "intSequenceLoad",
+                        caption: "Sequence",
+                        dataType: "number",
+                    },
+                ],
+                onRowPrepared(e) {
+                    //console.debug("RowPrepared");
+                },
+                onRowClick: function (e) {
+                    //console.debug("RowClick");
+                },
+                onSelectionChanged: function(e) {
+                    //console.debug("SelectionChanged");
+                },
+                onRowDblClick: function (e) {
+                    //console.debug("RowDblClick");
+                },
+                onInitNewRow: function(e) {
+                    //console.debug("InitNewRow");
+                },
+                onRowInserting: function(e) {
+                    //console.debug("RowInserting");
+                },
+                onRowInserted: function(e) {
+                    //console.debug("RowInserted");
+                },
+                onRowUpdating: function(e) {
+                    //console.debug("RowUpdating");
+                },
+                onToolbarPreparing: function (e) {
+                    const toolbarItems = e.toolbarOptions.items;
+                    
+                    // Add a custom button to the toolbar
+                    toolbarItems.push({
+                        widget: "dxButton",
+                        location: "before",
+                        options: {
+                            icon: "fa-solid fa-arrow-down-1-9",
+                            text: "SEQUENCE",
+                            onClick: function (args) {
+                                // Handle button click event
+                                // console.log(gridData);
+                                updateSequence();
                             },
                         },
-                        {
-                            dataField: "strUnickReference",
-                            caption: "Ref No.",
-                            visible: false,
-                        },
-                        {
-                            width: 150,
-                            dataField: "strPickingNickname",
-                            caption: "Route Name",
-                        },
-                        {
-                            dataField: "intTeamLeaderId",
-                            caption: "Team Leader ID",
-                            visible: false,
-                        },
-                        {
-                            dataField: "strTeamLeader",
-                            caption: "Team Leader",
-                        },
-                        {
-                            dataField: "strTrailorNo",
-                            caption: "Horse",
-                        },
-                        {
-                            dataField: "strTrailorone",
-                            caption: "Trailor One",
-                        },
-                        {
-                            dataField: "strTrailortwo",
-                            caption: "Trailor Two",
-                        },
-                        {
-                            dataField: "intDriverOne",
-                            caption: "Driver One",
-                            visible: false,
-                        },
-                        {
-                            dataField: "strDriverOne",
-                            caption: "Driver One",
-                        },
-                        {
-                            dataField: "intDriverTwo",
-                            caption: "Driver Two",
-                            visible: false,
-                        },
-                        {
-                            dataField: "strDriverTwo",
-                            caption: "Driver Two",
-                        },
-                        {
-                            dataField: "strTicket",
-                            caption: "Ticket Number",
-                        },
-                        {
-                            dataField: "statustext",
-                            caption: "Status",
-                            cellTemplate: function(element, info) {
-                                element.append("<div>" + info.text + "</div>")
-                                    .css("font-size", "16px")
-                                    .css("font-weight", "900");
-                            }
-                        },
-                        {
-                            dataField: "intStatus",
-                            caption: "Completed",
-                            cellTemplate: function (container, options) {
-                                const value = options.data.intStatus;
-                                // console.log(value);
-                                container.addClass("customPadding"); // Add the no-padding class to the container
+                    });
+                },
+            }).dxDataGrid('instance');
 
-                                if (value === "0") {
-                                    const button = $("<button class='btn btn-secondary btn-sm w-100'>").text("Complete").on("click", function() {
-                                        completeTruckLoad(options.data.strUnickReference);
-                                    });
-                                    container.append(button);
-                                } else {
-                                    const button = $("<button class='btn btn-secondary btn-sm w-100' disabled>").text("Complete")
-                                    container.append(button);
-                                }
-                            },
-                            width: 100,
-                        },
-                    ],
-                    masterDetail: {
-                        enabled: true,
-                        template(container, options) {
-                            const lineData = options.data;
-                            const detailGrid = $('<div>')
-                            .dxDataGrid({
-                                dataSource: {
-                                    load: function(loadOptions) {
-                                        return $.ajax({
-                                            url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
-                                            method: 'GET',
-                                            data: { ref: options.data.strUnickReference },
-                                            xhrFields: { withCredentials: true },
-                                        });
-                                    },
-                                    update: function (key, values) {
-                                        detailGrid.dxDataGrid('instance').refresh();
-                                    },
-                                },
-                                editing: {
-                                    mode: 'batch',
-                                    allowUpdating: true,
-                                },
-                                showBorders: true,
-                                columns: [
-                                    {
-                                        dataField: "intAutoPicking",
-                                        caption: "ID",
-                                        visible: false,
-                                    },
-                                    {
-                                        dataField: "StoreName",
-                                        caption: "Store Name",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "areas",
-                                        caption: "Area",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "OrderDate",
-                                        caption: "Order Date",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "OrderNum",
-                                        caption: "SO Number",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "ExtOrderNum",
-                                        caption: "Instructions",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "iLineID",
-                                        caption: "Line No",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "PastelCode",
-                                        caption: "Code",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "PastelDescription",
-                                        caption: "Description",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "mnyQty",
-                                        caption: "Quantity",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        dataField: "weightPlanned",
-                                        caption: "Weight",
-                                        allowEditing: false,
-                                    },
-                                    {
-                                        // dataField: "ubARIBT",
-                                        dataField: "mnyLoadedQty",
-                                        caption: "To Invoice",
-                                        allowEditing: false,
-                                    },{
-                                        dataField: "isPriorityLine",
-                                        caption: "Priority",
-                                        lookup: {
-                                            dataSource: [
-                                                { value: '1', text: 'Yes' },
-                                                { value: '0', text: 'No' },
-                                            ],
-                                            valueExpr: "value",
-                                            displayExpr: "text",
-                                        },
-                                    },
-                                ],
-                                onRowPrepared: function(e) {
+            $('#btnGetTruckLoads').click(function(){
+                getTruckLoads();
+            });
 
-                                    if (e.rowType === "data") {
-                                        if (e.rowIndex % 2 === 0) {
-                                            e.rowElement.css("background-color", "#e6e6e6"); // Even row background color
-                                        } else {
-                                            e.rowElement.css("background-color", "#c3c3c3"); // Odd row background color
-                                        }
-                                    }
-                                },
-                                onRowUpdating: function(e) {
-
-                                    $.ajax({
-                                        url: '{!!url("/truckLoadUpdatePriortiyStatus")!!}',
-                                        method: 'POST', // or 'POST' depending on your API design
-                                        data: {
-                                            intAutoPicking: e.oldData.intAutoPicking,
-                                            isPriorityLine:  e.newData.isPriorityLine,
-                                        },
-                                        success: function(response) {
-
-                                        },
-                                    });
-
-                                }
-                            }).appendTo(container);
-                        },
+            function getTruckLoads(){
+                $.ajax({
+                    url: '{!!url("/getTruckSequencingByTeamleader")!!}',
+                    type: "GET",
+                    data: {
+                        date: $('#date').val(),
+                        teamleaderId: $('#teamLeader').val()
                     },
-                    onRowPrepared(e) {
-                        if (e.rowType == 'data' && e.data.isCancelled ==1) {
-                            e.rowElement.css('background', 'red');
-                        }
-                    },
-                    onRowClick: function (e) {
-                        // console.log(e.data);
+                    success: function (data) {
+                        gridTruckSequencing.option('dataSource', data);
+                        gridTruckSequencing.refresh();
 
-                        getInstructions(e.data.strUnickReference).then(function(instructions) {
-                            // console.log(instructions);
-                            instructions.forEach(function(instruction) {
-                                if (instruction.strType == 'Notes') {
-                                    $("#notes").val(instruction.strInstruction);
-                                }else if(instruction.strType == 'Delivery'){
-                                    $("#deliveryInstructions").val(instruction.strInstruction);
-                                }
-                            });
-                        });
+                        gridData = gridTruckSequencing.option("dataSource");
 
-                        var currentID = currentSelectedRow[0];
-                        var clickedID = e.data.intAutoPickingHeader;
-
-                        if (clickedID === currentID){
-                            currentSelectedRow = [];
-                            e.component.clearSelection();
-
-                            $("#btnTeamLeader").prop("disabled", true);
-                            $("#btnHorse").prop("disabled", true);
-                            $("#btnTrailor").prop("disabled", true);
-                            $("#btnDriver").prop("disabled", true);
-                            $("#btnTicket").prop("disabled", true);
-                            $("#btnInstructions").prop("disabled", true);
-                        }else{
-                            currentSelectedRow = [];
-                            currentSelectedRow.push(clickedID);
-
-                            $("#btnTeamLeader").prop("disabled", false);
-                            $("#btnHorse").prop("disabled", false);
-                            $("#btnTrailor").prop("disabled", false);
-                            $("#btnDriver").prop("disabled", false);
-                            $("#btnTicket").prop("disabled", false);
-                            $("#btnInstructions").prop("disabled", false);
-
-                            $('#teamLeader').val(e.data.intTeamLeaderId).trigger('change');
-                            $('#horse').val(e.data.strTrailorNo).trigger('change');
-                            $('#trailorOne').val(e.data.strTrailorone).trigger('change');
-                            $('#trailorTwo').val(e.data.strTrailortwo).trigger('change');
-                            $('#driverOne').val(e.data.intDriverOne).trigger('change');
-                            $('#driverTwo').val(e.data.intDriverTwo).trigger('change');
-                            $('#ticket').val(e.data.strTicket).trigger('change');
-                        }
-                    },
-                    onSelectionChanged: function(e) {
-
-                    },
-                    onRowDblClick: function (e) {
-                        window.open('{!!url("/pickingplanlist")!!}/'+e.data.strUnickReference, "strUnickReference", "location=1,status=1,scrollbars=1, width=1200,height=850");
-                    },
-                    onInitNewRow: function(e) {
-                        console.debug("InitNewRow");
-                    },
-                    onRowInserting: function(e) {
-                        console.debug("RowInserting");
-                    },
-                    onRowInserted: function(e) {
-                        console.debug("RowInserted");
-                    },
-                    onRowUpdating: function(e) {
-                        console.debug("RowUpdating");
+                        showLoadingIndicatorBriefly(gridTruckSequencing);
                     }
                 });
+            };
 
+            function updateSequence(){
+                gridData = gridTruckSequencing.option("dataSource");
+
+                var newSequence = new Array();
+
+                var seq = 0;
+
+                gridData.forEach((element, index, value) => {
+                    
+                    newSequence.push({
+                        'intAutoPickingHeader':element["intAutoPickingHeader"],
+                        'seq' : seq,
+                    });
+
+                    seq += 1;
+                });
+
+                $.ajax({
+                    url: '{!!url("/updateTruckLoadingSequence")!!}',
+                    type: "POST",
+                    data: {
+                        newSequence: newSequence,
+                    },
+                    success: function (data) {
+                        getTruckLoads();
+                    }
+                });
+            };
+
+            function showLoadingIndicatorBriefly(dataGrid) {
+                // Show the loading indicator
+                dataGrid.beginCustomLoading();
+
+                // Set a timeout to hide the loading indicator after a brief delay (e.g., 2 seconds)
+                setTimeout(function () {
+                    dataGrid.endCustomLoading();
+                }, 1000); // Adjust the delay time as needed
             }
         });
-    };
+    </script>
 
-    function completeTruckLoad(ref){
-        $.ajax({
-            url: '{!!url("/completeTruckLoad")!!}',
-            type: "POST",
-            data: {
-                ref: ref,
-            },
-            success: function (data) {
-                getData();
-            }
-        });
-    };
-
-    function assignInstruction(ref, instruction, type){
-        $.ajax({
-            url: '{!!url("/assignInstruction")!!}',
-            type: "POST",
-            data: {
-                ref: ref,
-                instruction: instruction,
-                type: type,
-            },
-            success: function (data) {
-                getData();
-                $("#closeInstructionsModal").click();
-            }
-        });
-    }
-
-</script>
-
-</div>
-</body>
-</html>
+@endsection

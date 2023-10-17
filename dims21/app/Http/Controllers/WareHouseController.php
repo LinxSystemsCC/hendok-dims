@@ -390,20 +390,41 @@ class WareHouseController extends Controller
         $response = DB::connection('sqlsrv2')->select("exec spReverseQrCode ?,?,?", array($jobId,$jobItemId,$method));
         return response()->json($response);
     }
-    public function jsongettrucksequencingbyteamleader(Request $request){
+    public function getTruckSequencingByTeamleader(Request $request){
         $date = $request->get("date");
         $teamleaderId = $request->get("teamleaderId");
 
         $response = DB::connection('sqlsrv2')->select("exec spGetTeamLeaderLoadSequence ?,?", array($date,$teamleaderId));
         return response()->json($response);
     }
+
+    public function updateTruckLoadingSequence(Request $request){
+        $newSequence = $request->get("newSequence");
+
+        // dd($newSequence);
+
+        $i = 0;
+        foreach ($newSequence as $value) {
+            if (strlen($value['intAutoPickingHeader']) > 1) {
+                $sequence = DB::connection('sqlsrv')->select("EXEC spUpdateTruckLoadingSequence " . $value['intAutoPickingHeader'] . "," . $value['seq']);
+                $array[$i] = $sequence;
+            }
+            $i++;
+        }
+        
+        $outPut['count'] = count($array);
+
+        return $outPut;
+    }
+
     public function qrcodereverse(){
         return view('warehouse/reversepickedorloadedqrcode');
     }
-    public function getloadstosequence(){
+    public function trucksequencing(){
 
-
-        return view('warehouse/trucksequencing');
+        $teamleaders = DB::connection('sqlsrv2')->select("SELECT * FROM viewTeamLeaders");
+        return view('warehouse/trucksequencing')
+            ->with('teamleaders', $teamleaders);
     }
 
     public function deleteGalvChecker(Request $request)
