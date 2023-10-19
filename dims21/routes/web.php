@@ -354,7 +354,7 @@ Route::post('assignTicketToPickingTicket',[TabletLoadingApp::class,'assignTicket
 Route::post('truckLoadUpdatePriortiyStatus',[TabletLoadingApp::class,'truckLoadUpdatePriortiyStatus']);
 Route::post('completeTruckLoad',[TabletLoadingApp::class,'completeTruckLoad']);
 Route::post('sequencepickingplans',[TabletLoadingApp::class,'sequencepickingplans']);
-Route::get('jsongetpickingplan',[TabletLoadingApp::class,'jsongetpickingplan']);
+Route::get('getIncompletePickingTickets',[TabletLoadingApp::class,'getIncompletePickingTickets']);
 Route::get('getInstructions',[TabletLoadingApp::class,'getInstructions']);
 Route::get('getTimeRequirements',[TabletLoadingApp::class,'getTimeRequirements']);
 Route::post('assignInstruction',[TabletLoadingApp::class,'assignInstruction']);
@@ -1033,6 +1033,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('teamLeaderGetNotifications',[WarehouseController::class,'teamLeaderGetNotifications']);
     Route::get('teamLeaderGetStatus',[WarehouseController::class,'teamLeaderGetStatus']);
     Route::get('teamLeaderApproveNotification',[WarehouseController::class,'teamLeaderApproveNotification']);
+    Route::get('teamLeaderUnapproveNotification',[WarehouseController::class,'teamLeaderUnapproveNotification']);
+    Route::get('teamLeaderReveseApprovedNotification',[WarehouseController::class,'teamLeaderReveseApprovedNotification']);
     Route::get('teamLeaderGetInstructions',[WarehouseController::class,'teamLeaderGetInstructions']);
     Route::get('teamLeaderGetPickingPlanToInvoice',[WarehouseController::class,'teamLeaderGetPickingPlanToInvoice']);
     Route::post('teamLeaderCompleteLoad',[WarehouseController::class,'teamLeaderCompleteLoad']);
@@ -1147,7 +1149,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('genericqrcodereverse', [WareHouseController::class,'genericqrcodereverse']);
     Route::get('qrcodereverse', [WareHouseController::class,'qrcodereverse']);
     Route::get('trucksequencing', [WareHouseController::class,'trucksequencing']);
-    Route::get('getTruckSequencingByTeamleader', [WareHouseController::class,'getTruckSequencingByTeamleader']);
+    Route::get('getTruckSequencing', [WareHouseController::class,'getTruckSequencing']);
     Route::post('updateTruckLoadingSequence', [WareHouseController::class,'updateTruckLoadingSequence']);
 });
 

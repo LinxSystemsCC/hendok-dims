@@ -1,4 +1,4 @@
-<table id="pickLoadTable" class="table">
+<table id="pickLoadTable" class="table mb-0">
     <thead class="sticky-top">
         <tr class="bg-dark text-white fw-bold">
             <th class="col-xs-2">Order Date</th>
@@ -69,10 +69,10 @@
         <td>{{ $val->PastelDescription }}</td>
         <td>{{ floatval($val->weightPlanned) }}</td>
         <td>{{ floatval($val->mnyQty)}}</td>
-        <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
+        <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
             {{ floatval($val->mnyPickedQuantity)}}
         </td>
-        <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
+        <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
             {{ floatval($val->mnyLoadedQty)}}
             @if($val->sageWeight == 1) 
                 <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
@@ -105,10 +105,10 @@
             <td>{{ $val->PastelDescription}}</td>
             <td>{{ floatval($val->weightPlanned) }}</td>
             <td>{{ floatval($val->mnyQty)}}</td>
-            <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
+            <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
                 {{ floatval($val->mnyPickedQuantity)}}
             </td>
-            <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success bg-success text-white' @endif>
+            <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
                 {{ floatval($val->mnyLoadedQty)}}
                 @if($val->sageWeight == 1) 
                     <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
@@ -138,8 +138,8 @@
             <td class="text-white fw-bold">{{$totalPickedQty}}</td>
             <td class="text-white fw-bold">{{$totalLoadedQty}}</td>
         </tr>
-        <tr class="bg-secondary text-white fw-bold">
+        {{-- <tr class="bg-secondary text-white fw-bold">
             <td colspan="7" class="text-secondary">Easter Egg</td>
-        </tr>
+        </tr> --}}
     </tbody>
 </table>

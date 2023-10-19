@@ -16,11 +16,11 @@
             <h3 class="col-6 text-nowrap">Truck Loads</h3>
 
             <div class="col-6 d-flex justify-content-end">
-                <label class="d-flex align-items-center px-2 text-nowrap" >Date From</label> 
+                {{-- <label class="d-flex align-items-center px-2 text-nowrap" >Date From</label> 
                 <input class="form-control px-2" type="date" id='from'>
                 <label class="d-flex align-items-center px-2 text-nowrap" >Date To</label>
                 <input class="form-control px-2" type="date" id='to'>
-                <button class="btn btn-success w-100 ms-2" id="getdata">SEARCH</button>
+                <button class="btn btn-success w-100 ms-2" id="getdata">SEARCH</button> --}}
             </div>
         </div>
 
@@ -344,7 +344,130 @@
 
     </style>
 
+    
+
     <script>
+
+        // const detailGrid = $('<div>')
+        // .dxDataGrid({
+        //     dataSource: {
+        //         load: function(loadOptions) {
+        //             return $.ajax({
+        //                 url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
+        //                 method: 'GET',
+        //                 data: { ref: options.data.strUnickReference },
+        //                 xhrFields: { withCredentials: true },
+        //             });
+        //         },
+        //         update: function (key, values) {
+        //             detailGrid.dxDataGrid('instance').refresh();
+        //         },
+        //     },                        
+        //     editing: {
+        //         mode: 'batch',
+        //         allowUpdating: true,
+        //     },
+        //     showBorders: true,     
+        //     columns: [
+        //         {
+        //             dataField: "intAutoPicking",
+        //             caption: "ID",
+        //             visible: false,
+        //         },
+        //         {
+        //             dataField: "StoreName",
+        //             caption: "Store Name",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "areas",
+        //             caption: "Area",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "OrderDate",
+        //             caption: "Order Date",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "OrderNum",
+        //             caption: "SO Number",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "ExtOrderNum",
+        //             caption: "Instructions",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "iLineID",
+        //             caption: "Line No",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "PastelCode",
+        //             caption: "Code",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "PastelDescription",
+        //             caption: "Description",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "mnyQty",
+        //             caption: "Quantity",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             dataField: "weightPlanned",
+        //             caption: "Weight",
+        //             allowEditing: false,
+        //         },
+        //         {
+        //             // dataField: "ubARIBT",
+        //             dataField: "mnyLoadedQty",
+        //             caption: "To Invoice",
+        //             allowEditing: false,
+        //         },{
+        //             dataField: "isPriorityLine",
+        //             caption: "Priority",
+        //             lookup: {
+        //                 dataSource: [
+        //                     { value: '1', text: 'Yes' },
+        //                     { value: '0', text: 'No' },
+        //                 ],
+        //                 valueExpr: "value",
+        //                 displayExpr: "text",
+        //             },
+        //         },
+        //     ],
+        //     onRowPrepared: function(e) {
+                
+        //         if (e.rowType === "data") {
+        //             if (e.rowIndex % 2 === 0) {
+        //                 e.rowElement.css("background-color", "#e6e6e6"); // Even row background color
+        //             } else {
+        //                 e.rowElement.css("background-color", "#c3c3c3"); // Odd row background color
+        //             }
+        //         }
+        //     },
+        //     onRowUpdating: function(e) {
+
+        //         $.ajax({
+        //             url: '{!!url("/truckLoadUpdatePriortiyStatus")!!}',
+        //             method: 'POST', // or 'POST' depending on your API design
+        //             data: {
+        //                 intAutoPicking: e.oldData.intAutoPicking,
+        //                 isPriorityLine:  e.newData.isPriorityLine,
+        //             },
+        //             success: function(response) {
+                        
+        //             },
+        //         });
+
+        //     }
+        // }).appendTo(container);
         $(document).ready(function() {
             var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
 
@@ -352,6 +475,9 @@
                 dataSource:[],
                 keyExpr: 'strUnickReference',
                 showBorders: true,
+                showRowLines: true,
+                showColumnLines: true,
+                rowAlternationEnabled: true,
                 filterRow: { visible: true },
                 filterPanel: { visible: true },
                 headerFilter: { visible: true },
@@ -392,6 +518,7 @@
                     {
                         dataField: "intAutoPickingHeader",
                         caption: "Load No.",
+                        fixed: true,
                         calculateCellValue: function(data) {
                             return "TL" + data.intAutoPickingHeader;
                         },
@@ -470,129 +597,28 @@
                 ],
                 masterDetail: {
                     enabled: true,
-                    template(container, options) {
-                        const lineData = options.data;
-                        const detailGrid = $('<div>')
-                        .dxDataGrid({
-                            dataSource: {
-                                load: function(loadOptions) {
-                                    return $.ajax({
-                                        url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
-                                        method: 'GET',
-                                        data: { ref: options.data.strUnickReference },
-                                        xhrFields: { withCredentials: true },
-                                    });
-                                },
-                                update: function (key, values) {
-                                    detailGrid.dxDataGrid('instance').refresh();
-                                },
-                            },                        
-                            editing: {
-                                mode: 'batch',
-                                allowUpdating: true,
-                            },
-                            showBorders: true,     
-                            columns: [
-                                {
-                                    dataField: "intAutoPicking",
-                                    caption: "ID",
-                                    visible: false,
-                                },
-                                {
-                                    dataField: "StoreName",
-                                    caption: "Store Name",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "areas",
-                                    caption: "Area",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "OrderDate",
-                                    caption: "Order Date",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "OrderNum",
-                                    caption: "SO Number",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "ExtOrderNum",
-                                    caption: "Instructions",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "iLineID",
-                                    caption: "Line No",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "PastelCode",
-                                    caption: "Code",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "PastelDescription",
-                                    caption: "Description",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "mnyQty",
-                                    caption: "Quantity",
-                                    allowEditing: false,
-                                },
-                                {
-                                    dataField: "weightPlanned",
-                                    caption: "Weight",
-                                    allowEditing: false,
-                                },
-                                {
-                                    // dataField: "ubARIBT",
-                                    dataField: "mnyLoadedQty",
-                                    caption: "To Invoice",
-                                    allowEditing: false,
-                                },{
-                                    dataField: "isPriorityLine",
-                                    caption: "Priority",
-                                    lookup: {
-                                        dataSource: [
-                                            { value: '1', text: 'Yes' },
-                                            { value: '0', text: 'No' },
-                                        ],
-                                        valueExpr: "value",
-                                        displayExpr: "text",
-                                    },
-                                },
-                            ],
-                            onRowPrepared: function(e) {
-                                
-                                if (e.rowType === "data") {
-                                    if (e.rowIndex % 2 === 0) {
-                                        e.rowElement.css("background-color", "#e6e6e6"); // Even row background color
-                                    } else {
-                                        e.rowElement.css("background-color", "#c3c3c3"); // Odd row background color
-                                    }
-                                }
-                            },
-                            onRowUpdating: function(e) {
+                    template: function (container, options) {
+                        const detailGridContainer = $("<div>");
 
-                                $.ajax({
-                                    url: '{!!url("/truckLoadUpdatePriortiyStatus")!!}',
-                                    method: 'POST', // or 'POST' depending on your API design
-                                    data: {
-                                        intAutoPicking: e.oldData.intAutoPicking,
-                                        isPriorityLine:  e.newData.isPriorityLine,
-                                    },
-                                    success: function(response) {
-                                        
-                                    },
-                                });
-
+                        // Load the external HTML content into the detailGridContainer
+                        $.ajax({
+                            url: '{!!url("/teamleaderUpdatePickingLoadingTable")!!}', // Replace with the actual URL
+                            dataType: 'html',
+                            method: 'GET',
+                            data: {
+                                ref: options.data.strUnickReference,
+                            },
+                            success: function (data) {
+                                detailGridContainer.html(data);
+                            },
+                            error: function (error) {
+                                console.error('Error loading content: ' + error);
                             }
-                        }).appendTo(container);
-                    },
+                        });
+
+                        // Append the loaded content to the detail grid's container
+                        container.append(detailGridContainer);
+                    }
                 },
                 onRowPrepared(e) {
                     if (e.rowType == 'data' && e.data.isCancelled ==1) {
@@ -1114,7 +1140,7 @@
 
             function getData(){
                 $.ajax({
-                    url: '{!!url("/jsongetpickingplan")!!}',
+                    url: '{!!url("/getIncompletePickingTickets")!!}',
                     type: "GET",
                     data: {
                         from: $('#from').val(),

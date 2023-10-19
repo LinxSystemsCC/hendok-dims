@@ -464,13 +464,12 @@ class TabletLoadingApp extends controller
         return response()->json($result);
     }
 
-    public function jsongetpickingplan(Request $request){
-        $dateFrom = (new \DateTime($request->get('from')))->format('Y-m-d');
-        $dateTo = (new \DateTime($request->get('to')))->format('Y-m-d');
+    public function getIncompletePickingTickets(Request $request){
+        // $dateFrom = (new \DateTime($request->get('from')))->format('Y-m-d');
+        // $dateTo = (new \DateTime($request->get('to')))->format('Y-m-d');
+
         $allproducts = DB::connection('sqlsrv3')
-            ->select('exec spGetPickingTicketsToPrint ?,?',
-                array($dateFrom,$dateTo)
-            );//[spGetInProgressPlanningProducts]
+            ->select("SELECT * FROM viewIncompletePickingTickets ORDER BY intSequenceLoad, intAutoPickingHeader");
 
         return response()->json($allproducts);
     }

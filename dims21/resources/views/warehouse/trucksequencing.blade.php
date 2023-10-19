@@ -11,9 +11,7 @@
 
 @section('page')
 
-<div class="col-lg-12 d-inline-flex mb-2" >
-    <h3 class="col-5 text-nowrap">Truck Load Sequencing</h3>
-
+{{-- <div class="col-lg-12 d-inline-flex mb-2" >
     <div class="col-7 d-flex justify-content-end">
         <div class="col-5 d-inline-flex">
             <label class="d-flex align-items-center px-2 text-nowrap" >Date</label> 
@@ -34,7 +32,7 @@
             <button class="btn btn-success w-100 ms-2" id="btnGetTruckLoads">SEARCH</button>
         </div>
     </div>
-</div>
+</div> --}}
 
 <div id="gridTruckSequencing"></div>
 
@@ -44,8 +42,8 @@
 
     <style>
         #gridTruckSequencing{
-            height: calc(100vh - 87px);
-            max-height: calc(100vh - 87px);
+            height: calc(100vh - 2rem);
+            max-height: calc(100vh - 2rem);
         }
     </style>
 
@@ -60,6 +58,8 @@
             $('#date').val(today);
 
             let gridData = [];
+
+            var currentSelectedRow = [];
 
             const gridTruckSequencing = $("#gridTruckSequencing").dxDataGrid({
                 dataSource: gridData,
@@ -118,7 +118,7 @@
                     },
                     {
                         dataField: "intAutoPickingHeader",
-                        caption: "Truck Load",
+                        caption: "Load No.",
                         fixed: true,
                         calculateCellValue: function(data) {
                             return "TL" + data.intAutoPickingHeader;
@@ -156,11 +156,47 @@
                         dataType: "number",
                     },
                 ],
+                masterDetail: {
+                    enabled: true,
+                    template: function (container, options) {
+                        const detailGridContainer = $("<div>");
+
+                        // Load the external HTML content into the detailGridContainer
+                        $.ajax({
+                            url: '{!!url("/teamleaderUpdatePickingLoadingTable")!!}', // Replace with the actual URL
+                            dataType: 'html',
+                            method: 'GET',
+                            data: {
+                                ref: options.data.strUnickReference,
+                            },
+                            success: function (data) {
+                                detailGridContainer.html(data);
+                            },
+                            error: function (error) {
+                                console.error('Error loading content: ' + error);
+                            }
+                        });
+
+                        // Append the loaded content to the detail grid's container
+                        container.append(detailGridContainer);
+                    }
+                },
                 onRowPrepared(e) {
                     //console.debug("RowPrepared");
                 },
                 onRowClick: function (e) {
-                    //console.debug("RowClick");
+                    var currentID = currentSelectedRow[0];
+                    var clickedID = e.data.intAutoPickingHeader;
+
+                    if (clickedID === currentID){
+                        currentSelectedRow = [];
+                        e.component.clearSelection();
+                        $("#btnHold").prop("diabled", true);
+                    } else {
+                        currentSelectedRow = [];
+                        currentSelectedRow.push(clickedID);
+                        $("#btnHold").prop("diabled", false);
+                    }
                 },
                 onSelectionChanged: function(e) {
                     //console.debug("SelectionChanged");
@@ -181,32 +217,59 @@
                     //console.debug("RowUpdating");
                 },
                 onToolbarPreparing: function (e) {
-                    const toolbarItems = e.toolbarOptions.items;
-                    
-                    // Add a custom button to the toolbar
-                    toolbarItems.push({
-                        widget: "dxButton",
-                        location: "before",
-                        options: {
-                            icon: "fa-solid fa-arrow-down-1-9",
-                            text: "SEQUENCE",
-                            onClick: function (args) {
-                                // Handle button click event
-                                // console.log(gridData);
-                                updateSequence();
+                    // Create a custom header on the left side
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: 'before',
+                            template: function () {
+                                return $('<h3>').text('Truck Load Sequencing');
+                            }
+                        }
+                    );
+
+                    // Create a button on the right side
+                    e.toolbarOptions.items.push(
+                        {
+                            location: 'after',
+                            widget: "dxButton",
+                            options: {
+                                icon: "fa-solid fa-arrow-down-1-9",
+                                text: "SEQUENCE",
+                                onClick: function (args) {
+                                    // Handle button click event
+                                    // console.log(gridData);
+                                    updateSequence();
+                                },
                             },
-                        },
-                    });
-                },
+                        }
+                    );
+
+                    e.toolbarOptions.items.push(
+                        {
+                            location: 'after',
+                            widget: "dxButton",
+                            options: {
+                                icon: "fa-regular fa-hand",
+                                text: "HOLD",
+                                id: "btnHold",
+                                onClick: function (args) {
+                                    // Handle button click event
+                                    holdTruckLoad();
+                                    // updateSequence();
+                                },
+                            },
+                        }
+                    );
+
+                    $("#btnHold").prop("diabled", true);
+                }
             }).dxDataGrid('instance');
 
-            $('#btnGetTruckLoads').click(function(){
-                getTruckLoads();
-            });
+            getTruckLoads();
 
             function getTruckLoads(){
                 $.ajax({
-                    url: '{!!url("/getTruckSequencingByTeamleader")!!}',
+                    url: '{!!url("/getTruckSequencing")!!}',
                     type: "GET",
                     data: {
                         date: $('#date').val(),
@@ -251,6 +314,29 @@
                     }
                 });
             };
+
+            function holdTruckLoad(){
+                if (gridTruckSequencing.getSelectedRowsData()[0]){
+                    var selectedItem = gridTruckSequencing.getSelectedRowsData()[0];
+                    var ref = selectedItem.strUnickReference;
+
+                    $.ajax({
+                        url: '{!!url("/teamleaderupdateholdstatus")!!}',
+                        type: "GET",
+                        data: {
+                            ref: ref,
+                            status: 2,
+                        },
+                        success: function (data) {
+                            getTruckLoads();
+                        }
+                    });
+                }else{
+                    alert('Please select a row');
+                }
+                
+
+            }
 
             function showLoadingIndicatorBriefly(dataGrid) {
                 // Show the loading indicator

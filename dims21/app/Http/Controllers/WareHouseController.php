@@ -390,11 +390,11 @@ class WareHouseController extends Controller
         $response = DB::connection('sqlsrv2')->select("exec spReverseQrCode ?,?,?", array($jobId,$jobItemId,$method));
         return response()->json($response);
     }
-    public function getTruckSequencingByTeamleader(Request $request){
-        $date = $request->get("date");
-        $teamleaderId = $request->get("teamleaderId");
+    public function getTruckSequencing(Request $request){
+        // $date = $request->get("date");
+        // $teamleaderId = $request->get("teamleaderId");
 
-        $response = DB::connection('sqlsrv2')->select("exec spGetTeamLeaderLoadSequence ?,?", array($date,$teamleaderId));
+        $response = DB::connection('sqlsrv2')->select(" SELECT * FROM viewLoadSequence ORDER BY intSequenceLoad, intAutoPickingHeader");
         return response()->json($response);
     }
 
@@ -3307,7 +3307,7 @@ class WareHouseController extends Controller
     public function getTeamLeaderPlans(Request $request){
         $date = $request->get('date');
         $userID = Auth::user()->UserID;
-        $data = DB::connection('sqlsrv3')->select("exec spGetTeamLeaderPlans '$date',$userID");
+        $data = DB::connection('sqlsrv3')->select("exec spGetTeamLeaderPlans $userID"); //'$date',
         return response()->json($data);
     }
 
@@ -3369,6 +3369,24 @@ class WareHouseController extends Controller
         return response()->json($data);
     }
 
+    public function teamLeaderUnapproveNotification(Request $request){
+        $id = $request->get('id');
+        $approvedBy = Auth::user()->UserID;
+
+        $data = DB::connection('sqlsrv3')->statement("UPDATE tblNotifications SET bitApproved = 0, dtmApproved = GETDATE(), approvedBy = $approvedBy WHERE intAutoId = $id");
+        return response()->json($data);
+    }
+
+    public function teamLeaderReveseApprovedNotification(Request $request){
+        $id = $request->get('id');
+        $approvedBy = Auth::user()->UserID;
+
+        $data = DB::connection('sqlsrv3')->select("EXEC spTeamLeaderReverseApprovedNotification $id, $approvedBy");
+        return response()->json($data);
+    }
+
+    
+
     public function teamLeaderGetInstructions(Request $request){
         $ref = $request->get('ref');
 
@@ -3387,7 +3405,7 @@ class WareHouseController extends Controller
         $data = DB::connection('sqlsrv3')->select('exec spTeamLeaderCompleteLoad ?', array($id));
         return response()->json($data);
     }
-
+    
     private static function getTabs($tabcount)
     {
         $tabs = '';
