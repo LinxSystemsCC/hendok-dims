@@ -1161,7 +1161,11 @@
                         ref: ref,
                     },
                     success: function (data) {
-                        getData();
+                        if(data[0].Result == "Success"){
+                            getData();
+                        }else{
+                            alert(data[0].Result);
+                        }
                     }
                 });
             };

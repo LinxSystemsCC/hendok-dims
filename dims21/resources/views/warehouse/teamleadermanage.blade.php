@@ -24,6 +24,10 @@
             padding: 3px !important;
         }
 
+        .gridManagementTable{
+            height: 100%;
+        }
+
     </style>
 
     <div class="col-md-12 h-100">
@@ -420,11 +424,11 @@
                         cellTemplate: function (container, options) {
                             const value = options.data.intItemsAssigned;
                             if (value == 0) {
-                                container.addClass("bg-danger text-white");
+                                container.addClass("text-red");
                                 container.text('Not Assigned');
 
                             } else if (value == 1) {
-                                container.addClass("bg-success text-white");
+                                container.addClass("text-green");
                                 container.text('Assigned');
                             }
                             
@@ -436,11 +440,11 @@
                         cellTemplate: function (container, options) {
                             const value = options.data.intEquipmentAssigned;
                             if (value == 0) {
-                                container.addClass("bg-danger text-white");
+                                container.addClass("text-red");
                                 container.text('Not Assigned');
 
                             } else if (value == 1) {
-                                container.addClass("bg-success text-white");
+                                container.addClass("text-green");
                                 container.text('Assigned');
                             }
                             
@@ -452,11 +456,11 @@
                         cellTemplate: function (container, options) {
                             const value = options.data.intNotifications;
                             if (value == 0) {
-                                container.addClass("bg-danger text-white");
+                                container.addClass("text-red");
                                 container.text('Outstanding');
 
                             } else if (value == 1) {
-                                container.addClass("bg-success text-white");
+                                container.addClass("text-green");
                                 container.text('None Outstanding');
                             }
                             
@@ -513,11 +517,14 @@
                 filterRow: { visible: true },
                 filterPanel: { visible: true },
                 headerFilter: { visible: true },
-                paging: {
-                    enabled: false
-                },
                 selection: {
                     mode: "single",
+                },
+                scrolling: {
+                    rowRenderingMode: 'infinite',
+                },
+                paging:{
+                    pageSize: 2000,
                 },
                 columnAutoWidth:true,        
                 allowColumnResizing: true,       
@@ -610,13 +617,13 @@
 
                                 container.text('Approved').css("margin", "auto");
                                 container.append(buttonReverse);
-                                container.addClass("bg-success text-white");
+                                container.addClass("text-green");
 
                                 buttonReverse.css("float", "right");
                                 
                             } else if (value == 0){
                                 container.text('Unaproved');
-                                container.addClass("bg-danger text-white");
+                                container.addClass("text-red");
                             }
                             
                         },
@@ -1247,7 +1254,11 @@
                         ref: ref,
                     },
                     success: function (data) {
-                        location.reload();
+                        if(data[0].Result == "Success"){
+                            location.reload();
+                        }else{
+                            alert(data[0].Result);
+                        }
                     }
                 });
             }

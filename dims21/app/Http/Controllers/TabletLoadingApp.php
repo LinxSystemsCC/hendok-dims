@@ -460,7 +460,7 @@ class TabletLoadingApp extends controller
 
     public function completeTruckLoad(Request $request){
         $ref = $request->get('ref');
-        $result = DB::connection('sqlsrv3')->statement("UPDATE tblPickingPlanHeader SET intStatus = 1 WHERE strUnickReference = '$ref'");
+        $result = DB::connection('sqlsrv3')->select("EXEC spCompleteTruckLoad '$ref'");
         return response()->json($result);
     }
 
