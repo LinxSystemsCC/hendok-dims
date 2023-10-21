@@ -66,7 +66,7 @@
         @endif
         <td>{{ $val->OrderDate}}</td>
         <td>{{$val->OrderNum}}</td>
-        <td>{{ $val->PastelDescription }}</td>
+        <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
         <td>{{ floatval($val->weightPlanned) }}</td>
         <td>{{ floatval($val->mnyQty)}}</td>
         <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
@@ -74,7 +74,7 @@
         </td>
         <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
             {{ floatval($val->mnyLoadedQty)}}
-            @if($val->sageWeight == 1) 
+            @if($val->sageWeight == 1)
                 <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
             @endif
         </td>
@@ -102,7 +102,7 @@
             @else
             <td></td>
             @endif
-            <td>{{ $val->PastelDescription}}</td>
+            <td>{{ $val->PastelDescription}}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
             <td>{{ floatval($val->weightPlanned) }}</td>
             <td>{{ floatval($val->mnyQty)}}</td>
             <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
@@ -110,7 +110,7 @@
             </td>
             <td @if($val->mnyLoadedQty < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
                 {{ floatval($val->mnyLoadedQty)}}
-                @if($val->sageWeight == 1) 
+                @if($val->sageWeight == 1)
                     <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
                 @endif
             </td>

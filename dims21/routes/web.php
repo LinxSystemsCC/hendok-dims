@@ -1021,6 +1021,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('saveretest', [WareHouseController::class,'saveretest']);
     Route::post('regradeproduct', [WareHouseController::class,'regradeproduct']);
     Route::post('addproductspec', [WareHouseController::class,'addproductspec']);
+    Route::post('updatemanualloadingifitemhasnolabelatall', [WareHouseController::class,'updatemanualloadingifitemhasnolabelatall']);
     Route::post('editproductspec', [WareHouseController::class,'editproductspec']);
     Route::get('teamleadermanage/{ref}', [WareHouseController::class, 'teamleadermanage']);
     Route::get('teamleaderUpdatePickingLoadingTable', [WareHouseController::class, 'teamleaderUpdatePickingLoadingTable']);

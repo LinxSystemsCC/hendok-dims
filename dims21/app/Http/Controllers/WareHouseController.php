@@ -411,7 +411,7 @@ class WareHouseController extends Controller
             }
             $i++;
         }
-        
+
         $outPut['count'] = count($array);
 
         return $outPut;
@@ -3280,6 +3280,16 @@ class WareHouseController extends Controller
             ->with('instructions', $instructions);
     }
 
+    public function updatemanualloadingifitemhasnolabelatall(Request $request){
+        $userInput = $request->get('userInput');
+        $intAutoPickinghidden = $request->get('intAutoPickinghidden');
+        $userId = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+        $updated = DB::connection('sqlsrv3')->select("exec spManuallyAdjustQty ?,?,?,?",array($intAutoPickinghidden,$userInput,$userId,$userName));
+
+        return response()->json($updated);
+    }
+
     public function teamleaderUpdatePickingLoadingTable(Request $request)
     {
         $ref = $request->get('ref');
@@ -3353,7 +3363,7 @@ class WareHouseController extends Controller
         $data = DB::connection('sqlsrv3')->select("exec spTeamLeaderGetStatus '$ref'");
         return response()->json($data);
     }
-    
+
 
     public function teamLeaderGetNotifications(Request $request){
         $ref = $request->get('ref');
@@ -3385,7 +3395,7 @@ class WareHouseController extends Controller
         return response()->json($data);
     }
 
-    
+
 
     public function teamLeaderGetInstructions(Request $request){
         $ref = $request->get('ref');
@@ -3405,7 +3415,7 @@ class WareHouseController extends Controller
         $data = DB::connection('sqlsrv3')->select('exec spTeamLeaderCompleteLoad ?', array($id));
         return response()->json($data);
     }
-    
+
     private static function getTabs($tabcount)
     {
         $tabs = '';
