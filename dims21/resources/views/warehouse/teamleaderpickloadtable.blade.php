@@ -66,7 +66,11 @@
         @endif
         <td>{{ $val->OrderDate}}</td>
         <td>{{$val->OrderNum}}</td>
+            @if(Auth::user()->Administrator == 8)
         <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
+            @else
+                <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value="0"></td>
+            @endif
         <td>{{ floatval($val->weightPlanned) }}</td>
         <td>{{ floatval($val->mnyQty)}}</td>
         <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
@@ -102,7 +106,11 @@
             @else
             <td></td>
             @endif
-            <td>{{ $val->PastelDescription}}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
+                @if(Auth::user()->Administrator == 8)
+                    <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
+                @else
+                    <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value="0"></td>
+                @endif
             <td>{{ floatval($val->weightPlanned) }}</td>
             <td>{{ floatval($val->mnyQty)}}</td>
             <td @if($val->mnyPickedQuantity < $val->mnyQty) class='bg-warning  text-black' @else class='bg-success text-white' @endif>
