@@ -3284,8 +3284,13 @@ class WareHouseController extends Controller
     {
         $ref = $request->get('ref');
         $newListProducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
-
-        return view('warehouse/teamleaderpickloadtable', ['listproducts' => $newListProducts]);
+    
+        $includePriority = true;
+    
+        return view('warehouse/teamleaderpickloadtable', [
+            'listproducts' => $newListProducts,
+            'includePriority' => $includePriority,
+        ]);
     }
 
     public function teamleaderupdateholdstatus(Request $request)

@@ -9,6 +9,10 @@
     $includeMenu = false;
 @endphp
 
+@php
+    $includePriority = false;
+@endphp
+
 @section('page')
     
     <!-- Multiselect --> 
@@ -24,8 +28,9 @@
             padding: 3px !important;
         }
 
-        .gridManagementTable{
+        #gridManagementTable{
             height: 100%;
+            max-height: 100%;
         }
 
     </style>
@@ -94,15 +99,16 @@
             @else
             <!-- Management -->
             <div class="tab-pane fade show" id="content1" role="tabpanel" aria-labelledby="tab1" style="height: calc(100vh - 150px); overflow-y: auto;">
-                <div class="d-inline-flex mb-2">
+                <!--div class="d-inline-flex mb-2">
                     {{-- <label class="d-flex align-items-center px-2 text-nowrap" >Delivery Date</label> 
                     <input class="form-control px-2" type="date" id='date'>
                     <button class="btn btn-success ms-1" id="getdata">SEARCH</button> --}}
+                    
                     <button class="btn btn-success ms-1 text-nowrap" id="hold">HOLD</button>
                     <button class="btn btn-secondary ms-1 text-nowrap" id="rollover" data-bs-toggle="modal" data-bs-target="#rolloverModal">ROLL OVER</button>
                     <button class="btn btn-success ms-1 text-nowrap" id="complete">COMPLETE</button>
                     <button class="btn btn-primary ms-1 text-nowrap" id="invoice">INVOICE</button>
-                </div>
+                </div-->
 
                 <div id='gridManagementTable'></div>
             </div>
@@ -397,11 +403,27 @@
                     mode: "single",
                 },
                 columns: [
-                    
                     {
-                        dataField: "dtm",
-                        caption: "Date",
-                        // visible: false,
+                        dataField: "intSequenceLoad",
+                        caption: "Seq",
+                    },
+                    {
+                        dataField: "date",
+                        caption: "Date Created",
+                        calculateCellValue: function (rowData) {
+                            // Extract the date part from the "dtm" field
+                            const dtm = new Date(rowData.dtm);
+                            return dtm.toLocaleDateString("en-ZA");
+                        },
+                    },
+                    {
+                        dataField: "time",
+                        caption: "Time Created",
+                        calculateCellValue: function (rowData) {
+                            // Extract the time part from the "dtm" field
+                            const dtm = new Date(rowData.dtm);
+                            return dtm.toLocaleTimeString();
+                        },
                     },
                     {
                         dataField: "strUnickReference",
@@ -424,11 +446,11 @@
                         cellTemplate: function (container, options) {
                             const value = options.data.intItemsAssigned;
                             if (value == 0) {
-                                container.addClass("text-red");
+                                container.addClass("bg-danger text-white");
                                 container.text('Not Assigned');
 
                             } else if (value == 1) {
-                                container.addClass("text-green");
+                                container.addClass("bg-success text-white");
                                 container.text('Assigned');
                             }
                             
@@ -440,11 +462,11 @@
                         cellTemplate: function (container, options) {
                             const value = options.data.intEquipmentAssigned;
                             if (value == 0) {
-                                container.addClass("text-red");
+                                container.addClass("bg-danger text-white");
                                 container.text('Not Assigned');
 
                             } else if (value == 1) {
-                                container.addClass("text-green");
+                                container.addClass("bg-success text-white");
                                 container.text('Assigned');
                             }
                             
@@ -456,11 +478,11 @@
                         cellTemplate: function (container, options) {
                             const value = options.data.intNotifications;
                             if (value == 0) {
-                                container.addClass("text-red");
+                                container.addClass("bg-danger text-white");
                                 container.text('Outstanding');
 
                             } else if (value == 1) {
-                                container.addClass("text-green");
+                                container.addClass("bg-success text-white");
                                 container.text('None Outstanding');
                             }
                             
@@ -509,6 +531,52 @@
                 onRowUpdating: function(e) {
                     console.debug(e);
                 },
+                onToolbarPreparing: function (e) {
+                    e.toolbarOptions.items.push({
+                        location: 'before',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa-regular fa-circle-pause",
+                            text: "hold",
+                            elementAttr: {
+                                id: "hold",
+                            },
+                        },
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'before',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa-solid fa-right-left",
+                            text: "ROLL OVER",
+                            onClick: function(e) {
+                                $('#rolloverModal').modal('show');
+                            },
+                        },
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'before',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa-regular fa-circle-check",
+                            text: "COMPLETE",
+                            elementAttr: {
+                                id: "complete",
+                            },
+                        },
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'before',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa-regular fa-file-lines",
+                            text: "INVOICE",
+                            elementAttr: {
+                                id: "invoice",
+                            },
+                        },
+                    });
+                }
             }).dxDataGrid('instance');
 
             const gridNotificationsTable = $("#gridNotificationsTable").dxDataGrid({
@@ -617,13 +685,13 @@
 
                                 container.text('Approved').css("margin", "auto");
                                 container.append(buttonReverse);
-                                container.addClass("text-green");
+                                container.addClass("bg-success text-white");
 
                                 buttonReverse.css("float", "right");
                                 
                             } else if (value == 0){
                                 container.text('Unaproved');
-                                container.addClass("text-red");
+                                container.addClass("bg-danger text-white");
                             }
                             
                         },
@@ -756,6 +824,7 @@
 
             $('#invoice').click(function(){
                 var ref = '{{ $ref }}';
+                // alert('invoicing');
                 initInvoice(ref);
             });
 
@@ -813,8 +882,6 @@
                 completeTruckLoad(ref);
             });
 
-            completeTruckLoad
-
             $('.btnFinishPickingWeighted').click(function(){
                 var id = $(this).val();
                 completeLoad(id);
@@ -860,13 +927,15 @@
                         }
 
                         if (holdStatus == 2){
-                            $("#hold").addClass("btn-danger", true);
-                            $("#hold").removeClass("btn-success", true);
-                            $("#hold").text('UNHOLD');
+                            var holdButton = $("#hold").dxButton("instance");
+                            holdButton.option("text", "UNHOLD");
+                            holdButton.option("icon", "fa-regular fa-circle-play");
+                            
+
                         }else{
-                            $("#hold").addClass("btn-success", true);
-                            $("#hold").removeClass("btn-danger", true);
-                            $("#hold").text('HOLD');
+                            var holdButton = $("#hold").dxButton("instance");
+                            holdButton.option("text", "HOLD");
+                            holdButton.option("icon", "fa-regular fa-circle-pause");
                         }
                     },
                     error: function (error) {
@@ -1115,7 +1184,7 @@
                         getNotifications('{{ $ref }}');
                     }
                 });
-            }
+            };
 
             function getPickingPlanToInvoice(ref) {
                 return new Promise(function(resolve, reject) {
@@ -1133,7 +1202,7 @@
                         }
                     });
                 });
-            }
+            };
 
             function initInvoice(strUnickReference){
                 getPickingPlanToInvoice(strUnickReference)
@@ -1155,9 +1224,9 @@
                     function areAllPropertiesEqual(obj1, obj2) {
                     for (const key in obj1) {
                         if (obj1.hasOwnProperty(key)) {
-                        if (obj1[key] !== obj2[key]) {
-                            return false;
-                        }
+                            if (obj1[key] !== obj2[key]) {
+                                return false;
+                            }
                         }
                     }
                     return true;
@@ -1180,7 +1249,7 @@
                 .catch(function(error) {
                     console.error('Error:', error);
                 });
-            }
+            };
 
             function invoiceOut(inputdata){
 
@@ -1244,7 +1313,7 @@
                         location.reload();
                     }
                 });
-            }
+            };
 
             function completeTruckLoad(ref){
                 $.ajax({
@@ -1261,7 +1330,7 @@
                         }
                     }
                 });
-            }
+            };
 
             function updateHoldStatus(ref,status){ 
                 $.ajax({
@@ -1275,7 +1344,7 @@
                         location.reload();
                     }
                 });
-            }
+            };
 
             function rollover(ref){
                 $.ajax({
@@ -1290,7 +1359,7 @@
                         location.reload();
                     }
                 });
-            }
+            };
 
         });
     </script>
