@@ -14,8 +14,8 @@
 @endphp
 
 @section('page')
-    
-    <!-- Multiselect --> 
+
+    <!-- Multiselect -->
     <link href="{{ asset('css/jquery.multiselect.css') }}" rel="stylesheet"  type='text/css'>
 
     <style>
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        
+
         <ul class="nav nav-tabs" id="myTabs" role="tablist">
             @if ($ref == 0)
             <li class="nav-item" role="presentation">
@@ -89,7 +89,7 @@
             <!-- Management -->
             <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1" style="height: calc(100vh - 150px); overflow-y: auto;">
                 {{-- <div class="d-inline-flex mb-2">
-                    <label class="d-flex align-items-center px-2" >Delivery Date</label> 
+                    <label class="d-flex align-items-center px-2" >Delivery Date</label>
                     <input class="form-control px-2" type="date" id='date'>
                     <button class="btn btn-success ms-1" id="getdata">SEARCH</button>
                 </div> --}}
@@ -99,8 +99,8 @@
             @else
             <!-- Management -->
             <div class="tab-pane fade show" id="content1" role="tabpanel" aria-labelledby="tab1" style="height: calc(100vh - 150px); overflow-y: auto;">
-                <!--div class="d-inline-flex mb-2">
-                    {{-- <label class="d-flex align-items-center px-2 text-nowrap" >Delivery Date</label> 
+                <div class="d-inline-flex mb-2">
+                    {{-- <label class="d-flex align-items-center px-2 text-nowrap" >Delivery Date</label>
                     <input class="form-control px-2" type="date" id='date'>
                     <button class="btn btn-success ms-1" id="getdata">SEARCH</button> --}}
                     
@@ -108,11 +108,11 @@
                     <button class="btn btn-secondary ms-1 text-nowrap" id="rollover" data-bs-toggle="modal" data-bs-target="#rolloverModal">ROLL OVER</button>
                     <button class="btn btn-success ms-1 text-nowrap" id="complete">COMPLETE</button>
                     <button class="btn btn-primary ms-1 text-nowrap" id="invoice">INVOICE</button>
-                </div-->
+                </div>
 
                 <div id='gridManagementTable'></div>
             </div>
-            
+
             <!-- Pick Load -->
             <div class="tab-pane fade show active" id="content2" role="tabpanel" aria-labelledby="tab2" style="height: calc(100vh - 150px); overflow-y: auto;">
                 <div id="table-container">
@@ -125,7 +125,7 @@
             <div class="tab-pane fade" id="content3" role="tabpanel" aria-labelledby="tab3">
                 <div class="container-fluid">
                     <div class="row">
-                        
+
                         <div class="col mb-3">
                             <label for="horse" class="col-form-label">Ridgid Horse</label>
                             <select class="form-select" type="text" id='horse'>
@@ -169,7 +169,7 @@
                                 <option></option>
                                 @foreach ($tickets as $ticket)
                                     <option value="{{ $ticket->strTicket }}">{{ $ticket->strTicket }}</option>
-                                @endforeach 
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -209,7 +209,7 @@
             <div class="tab-pane fade" id="content4" role="tabpanel" aria-labelledby="tab4">
                 <div class="container-fluid">
                     <div class="row">
-                        
+
                         <div class="col mb-3">
                             <label for="belts" class="col-form-label">Belts</label>
                             <input id="belts" class="form-control" type="number">
@@ -291,7 +291,7 @@
                                 <option value="{{ $printer->intPrinterId }}">{{ $printer->strPrinter }}</option>
                             @endforeach
                         </select>
-                    </div>    
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -319,7 +319,7 @@
                                 <option value="{{ $teamleader->UserID }}">{{ $teamleader->FullName }}</option>
                             @endforeach
                         </select>
-                    </div>    
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -453,7 +453,7 @@
                                 container.addClass("bg-success text-white");
                                 container.text('Assigned');
                             }
-                            
+
                         },
                     },
                     {
@@ -469,7 +469,7 @@
                                 container.addClass("bg-success text-white");
                                 container.text('Assigned');
                             }
-                            
+
                         },
                     },
                     {
@@ -485,7 +485,7 @@
                                 container.addClass("bg-success text-white");
                                 container.text('None Outstanding');
                             }
-                            
+
                         },
                     },
                     {
@@ -510,11 +510,11 @@
                         dataType: "number",
                         visible: false,
                     },
-                    
+
 
                 ] ,
                 onRowClick: function(e) {
-                    
+
                 },
                 onRowDblClick: function (e) {
                     window.location.href = '{!!url("/teamleadermanage")!!}/' + e.data.strUnickReference;
@@ -531,52 +531,52 @@
                 onRowUpdating: function(e) {
                     console.debug(e);
                 },
-                onToolbarPreparing: function (e) {
-                    e.toolbarOptions.items.push({
-                        location: 'before',
-                        widget: "dxButton",
-                        options: {
-                            icon: "fa-regular fa-circle-pause",
-                            text: "hold",
-                            elementAttr: {
-                                id: "hold",
-                            },
-                        },
-                    });
-                    e.toolbarOptions.items.push({
-                        location: 'before',
-                        widget: "dxButton",
-                        options: {
-                            icon: "fa-solid fa-right-left",
-                            text: "ROLL OVER",
-                            onClick: function(e) {
-                                $('#rolloverModal').modal('show');
-                            },
-                        },
-                    });
-                    e.toolbarOptions.items.push({
-                        location: 'before',
-                        widget: "dxButton",
-                        options: {
-                            icon: "fa-regular fa-circle-check",
-                            text: "COMPLETE",
-                            elementAttr: {
-                                id: "complete",
-                            },
-                        },
-                    });
-                    e.toolbarOptions.items.push({
-                        location: 'before',
-                        widget: "dxButton",
-                        options: {
-                            icon: "fa-regular fa-file-lines",
-                            text: "INVOICE",
-                            elementAttr: {
-                                id: "invoice",
-                            },
-                        },
-                    });
-                }
+                // onToolbarPreparing: function (e) {
+                //     e.toolbarOptions.items.push({
+                //         location: 'before',
+                //         widget: "dxButton",
+                //         options: {
+                //             icon: "fa-regular fa-circle-pause",
+                //             text: "hold",
+                //             elementAttr: {
+                //                 id: "hold",
+                //             },
+                //         },
+                //     });
+                //     e.toolbarOptions.items.push({
+                //         location: 'before',
+                //         widget: "dxButton",
+                //         options: {
+                //             icon: "fa-solid fa-right-left",
+                //             text: "ROLL OVER",
+                //             onClick: function(e) {
+                //                 $('#rolloverModal').modal('show');
+                //             },
+                //         },
+                //     });
+                //     e.toolbarOptions.items.push({
+                //         location: 'before',
+                //         widget: "dxButton",
+                //         options: {
+                //             icon: "fa-regular fa-circle-check",
+                //             text: "COMPLETE",
+                //             elementAttr: {
+                //                 id: "complete",
+                //             },
+                //         },
+                //     });
+                //     e.toolbarOptions.items.push({
+                //         location: 'before',
+                //         widget: "dxButton",
+                //         options: {
+                //             icon: "fa-regular fa-file-lines",
+                //             text: "INVOICE",
+                //             elementAttr: {
+                //                 id: "invoice",
+                //             },
+                //         },
+                //     });
+                // }
             }).dxDataGrid('instance');
 
             const gridNotificationsTable = $("#gridNotificationsTable").dxDataGrid({
@@ -594,8 +594,8 @@
                 paging:{
                     pageSize: 2000,
                 },
-                columnAutoWidth:true,        
-                allowColumnResizing: true,       
+                columnAutoWidth:true,
+                allowColumnResizing: true,
                 columnResizingMode: "nextColumn",
                 columns: [
                     {
@@ -621,39 +621,39 @@
                     },{
                         dataField: "createdBy",
                         caption: "Created By",
-                        
+
                     },{
                         dataField: "dtmCreated",
                         caption: "Date Created",
-                        
+
                     },{
                         dataField: "strItemCode",
                         caption: "Product Code",
-                        
+
                     },{
                         dataField: "strStatus",
                         caption: "Status",
-                        
+
                     },{
                         dataField: "strSONumber",
                         caption: "SO Number",
-                        
+
                     },{
                         dataField: "mnyQty",
                         caption: "Qty",
-                        
+
                     },{
                         dataField: "strMessage",
                         caption: "Message",
-                        
+
                     },{
                         dataField: "approvedBy",
                         caption: "Team Leader",
-                        
+
                     },{
                         dataField: "dtmApproved",
                         caption: "Date Approved",
-                        
+
                     },{
                         dataField: "bitApproved",
                         caption: "Approved / Unaprove",
@@ -688,36 +688,36 @@
                                 container.addClass("bg-success text-white");
 
                                 buttonReverse.css("float", "right");
-                                
+
                             } else if (value == 0){
                                 container.text('Unaproved');
                                 container.addClass("bg-danger text-white");
                             }
-                            
+
                         },
                     },
 
                 ] ,
                 onRowPrepared(e) {
-                    
+
                 },
                 onRowClick: function (e) {
-                    
+
                 },
                 onRowDblClick: function (e) {
-                    
+
                 },
                 onInitNewRow: function(e) {
-                    
+
                 },
                 onRowInserting: function(e) {
-                    
+
                 },
                 onRowInserted: function(e) {
-                    
+
                 },
                 onRowUpdating: function(e) {
-                    
+
                 }
             }).dxDataGrid('instance');
 
@@ -735,7 +735,7 @@
                 },
                 paging:{
                     pageSize: 10,
-                },    
+                },
                 columns: [
                     {
                         dataField: 'strLoadStatus',
@@ -785,7 +785,7 @@
                         dataField: 'dtmEndLoading',
                         caption: 'Loading Time Finish',
                     },
-                    
+
                 ],
                 onRowDblClick: function (e) {
                     console.debug(e);
@@ -809,7 +809,7 @@
             var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
             var day = ("0" + currentDate.getDate()).slice(-2);
             var formattedDate = year + "-" + month + "-" + day;
-            
+
             $('#date').val(formattedDate);
 
             getPickingPlanData('{{ $ref }}');
@@ -895,6 +895,40 @@
                 var ref = '{{ $ref }}';
                 rollover(ref);
             });
+            $('#pickLoadTable tbody').on('dblclick', 'tr', function () {
+                var intAutoPickinghidden = $(this).find('.intAutoPickinghidden').val();
+                var producutDescr = $(this).closest("tr").find('td:eq(2)').text();
+                var hasLabel = $(this).find('.hasLabel').val();
+                console.debug("intAutoPickinghidden++++"+ intAutoPickinghidden);
+                console.debug("hasLabel++++"+ hasLabel);
+                if (hasLabel==0){
+                    //Basic manual input
+                    const userInput = prompt(producutDescr, "");
+                    if (userInput !== null && userInput.trim() !== "" && intAutoPickinghidden !== null && intAutoPickinghidden.trim() !== "") {
+                        $.ajax({
+                            url: '{!!url("/updatemanualloadingifitemhasnolabelatall")!!}',
+                            type: "POST",
+                            data: {
+                                userInput: userInput,
+                                intAutoPickinghidden:intAutoPickinghidden
+
+                            },
+                            success: function (data) {
+                                // console.log(data);
+                                if (data.Result =="SUCCESS"){
+                                    location.reload();
+                                }
+
+                            },
+                            error: function (error) {
+                                console.error("Error loading data: ", error);
+                            }
+                        });
+                    } else {
+                        console.debug("You clicked Cancel or closed the dialog.");
+                    }
+                }
+            });
 
             function getData(){
                 $.ajax({
@@ -926,16 +960,26 @@
                             $("#invoice").prop("disabled", true);
                         }
 
-                        if (holdStatus == 2){
-                            var holdButton = $("#hold").dxButton("instance");
-                            holdButton.option("text", "UNHOLD");
-                            holdButton.option("icon", "fa-regular fa-circle-play");
+                        // if (holdStatus == 2){
+                        //     var holdButton = $("#hold").dxButton("instance");
+                        //     holdButton.option("text", "UNHOLD");
+                        //     holdButton.option("icon", "fa-regular fa-circle-play");
                             
 
+                        // }else{
+                        //     var holdButton = $("#hold").dxButton("instance");
+                        //     holdButton.option("text", "HOLD");
+                        //     holdButton.option("icon", "fa-regular fa-circle-pause");
+                        // }
+
+                        if (holdStatus == 2){
+                            $("#hold").addClass("btn-danger", true);
+                            $("#hold").removeClass("btn-success", true);
+                            $("#hold").text('UNHOLD');
                         }else{
-                            var holdButton = $("#hold").dxButton("instance");
-                            holdButton.option("text", "HOLD");
-                            holdButton.option("icon", "fa-regular fa-circle-pause");
+                            $("#hold").addClass("btn-success", true);
+                            $("#hold").removeClass("btn-danger", true);
+                            $("#hold").text('HOLD');
                         }
                     },
                     error: function (error) {
@@ -962,6 +1006,7 @@
                 });
             };
 
+
             function updatePickingLoading(ref) {
                 $.ajax({
                     url: '{!!url("/teamleaderUpdatePickingLoadingTable")!!}',
@@ -972,7 +1017,7 @@
                     success: function (data) {
                         // Update the $listproducts variable with the new data
                         var newListProducts = data; // Assuming 'data' contains the new list of products
-                        
+
                         // Update the included view with the new data
                         $('#table-container').html(newListProducts);
                     },
@@ -1006,7 +1051,7 @@
                                 const loaders = data[0]['strLoading'];
                                 loadersList = loaders.split(",");
                             }
-                            
+
                             let stagingList;
                             if (data[0]['strStagingArea'] == null){
                                 stagingList = null;;
@@ -1014,7 +1059,7 @@
                                 const staging = data[0]['strStagingArea'];
                                 stagingList = staging.split(",");
                             }
-                            
+
                             $('#loadId').text('TL'+data[0]['intAutoPickingHeader']);
                             $('#date').val(data[0]['dtm']);
 
@@ -1209,7 +1254,7 @@
                 .then(function(pickingplan) {
                     $('#invoice').prop('disabled', true);
                     // console.log(pickingplan);
-                    var invoiceList = $.map(pickingplan, function (item) { 
+                    var invoiceList = $.map(pickingplan, function (item) {
                         return {
                             intOwnerID: item.intOwnerID,
                             OrderNum: item.OrderNum,
@@ -1245,7 +1290,7 @@
 
                     invoiceOut(invoiceList);
                     // alert('Disabled by the developer for testing')
-                }) 
+                })
                 .catch(function(error) {
                     console.error('Error:', error);
                 });
@@ -1256,11 +1301,11 @@
                 $.each(inputdata, function(index, item) {
                     // Access properties of the current item
                     var ownersId = item.intOwnerID;
-                    var SoNumber = item.OrderNum; 
-                    var invoiceid = item.OrderId; 
-                    var ref = item.strUnickReference; 
-                    var userid = item.UserId; 
-                    var userName = item.UserName; 
+                    var SoNumber = item.OrderNum;
+                    var invoiceid = item.OrderId;
+                    var ref = item.strUnickReference;
+                    var userid = item.UserId;
+                    var userName = item.UserName;
 
                     // alert(SoNumber);
 
@@ -1284,7 +1329,7 @@
                         }
                     });
                 });
-                
+
             };
 
             function printTripSheet(ref){
@@ -1332,7 +1377,7 @@
                 });
             };
 
-            function updateHoldStatus(ref,status){ 
+            function updateHoldStatus(ref,status){
                 $.ajax({
                     url: '{!!url("/teamleaderupdateholdstatus")!!}',
                     type: "GET",
