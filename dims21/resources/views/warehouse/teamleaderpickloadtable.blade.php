@@ -66,7 +66,7 @@
         @endif
         <td>{{ $val->OrderDate}}</td>
         <td>{{$val->OrderNum}}</td>
-            @if(Auth::user()->Administrator == 8)
+            @if(Auth::user()->DefaultRoute == 8)
         <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
             @else
                 <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value="0"></td>
@@ -106,7 +106,7 @@
             @else
             <td></td>
             @endif
-                @if(Auth::user()->Administrator == 8)
+                @if(Auth::user()->DefaultRoute == 8)
                     <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
                 @else
                     <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value="0"></td>

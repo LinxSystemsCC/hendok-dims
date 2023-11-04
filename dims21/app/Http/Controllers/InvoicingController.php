@@ -67,7 +67,7 @@ class InvoicingController extends Controller
                 );
             return response()->json($returnGetsalesorderNoLines);
         }else{
-
+            sleep(3);
             $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
             try {
                 //Initialise
@@ -127,9 +127,10 @@ class InvoicingController extends Controller
                     //isLineInvoiced
                     // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";
                 }
+
                 $reference = $x->Save();
                 //Now invoice
-
+                sleep(1);
                 $x->Process();
                 //  echo "************* INV CREATED***".$reference."<br>";
                 $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
@@ -196,10 +197,11 @@ class InvoicingController extends Controller
                     );
                 return response()->json($returnGetsalesorderNoLines);
             } else {
-
+                sleep(2);
                 $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
                 try {
                     //Initialise
+
                     $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
                     $sdkHelper->SetLicense("DE12111039", "4626921");
                     switch ($ownersId) {
@@ -254,20 +256,34 @@ class InvoicingController extends Controller
                         //TO TEST
                         // echo "Line Quantity ".  $x->Detail[$lineno]->Quantity;
                         // dd($innverVal->soldByWeight);
-                        if ($innverVal->soldByWeight == "SoldByWeight" && $x->Detail[$lineno]->Quantity < floatval($innverVal->Toinvoice)) {
+                        if($innverVal->soldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity < floatval($innverVal->Toinvoice) &&  $x->Detail[$lineno]->Quantity == $x->Detail[$lineno]->Processed  ){
 
                             $x->Detail[$lineno]->Quantity = floatval($innverVal->Toinvoice);
                             //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
                         }
+                        if($innverVal->soldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity - $x->Detail[$lineno]->Processed<floatval($innverVal->Toinvoice ) && $x->Detail[$lineno]->Quantity - $x->Detail[$lineno]->Processed !=0 ){
+                            //dd( $lineno."---". $x->Detail[$lineno]->Processed. "tttt ".$x->Detail[$lineno]->Quantity ." ---- ".floatval($innverVal->Toinvoice));
+
+                            $x->Detail[$lineno]->Quantity =$x->Detail[$lineno]->Quantity+ (floatval($innverVal->Toinvoice)-($x->Detail[$lineno]->Quantity - $x->Detail[$lineno]->Processed)) ;
+                            //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
+                        }
+
+                      /*old sway of doing it
+                       *   if ($innverVal->soldByWeight == "SoldByWeight" && $x->Detail[$lineno]->Quantity < floatval($innverVal->Toinvoice)) {
+
+                            $x->Detail[$lineno]->Quantity = floatval($innverVal->Toinvoice);
+                            //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
+                        }*/
 
                         $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
 
                         //isLineInvoiced
                         // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";
                     }
+
                     $reference = $x->Save();
                     //Now invoice
-
+                    sleep(2);
                     $x->Process();
                     //  echo "************* INV CREATED***".$reference."<br>";
                     $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
