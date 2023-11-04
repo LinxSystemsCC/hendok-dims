@@ -260,8 +260,6 @@
                             },
                         }
                     );
-
-                    $("#btnHold").prop("diabled", true);
                 }
             }).dxDataGrid('instance');
 

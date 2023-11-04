@@ -74,7 +74,7 @@
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeCreateNewStockIssue">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseTeamLeader">Close</button>
                     <button type="button" id="saveTeamLeader" class="btn btn-success" >Save</button>
                 </div>
             </div>
@@ -106,7 +106,7 @@
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeCreateNewStockIssue">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseHorse">Close</button>
                     <button type="button" id="saveHorse" class="btn btn-success" >Save</button>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeCreateNewStockIssue">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseTrailor">Close</button>
                     <button type="button" id="saveTrailor" class="btn btn-success" >Save</button>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeCreateNewStockIssue">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseDriver">Close</button>
                     <button type="button" id="saveDriver" class="btn btn-success" >Save</button>
                 </div>
             </div>
@@ -221,7 +221,7 @@
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeCreateNewStockIssue">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseTicket">Close</button>
                     <button type="button" id="saveTicket" class="btn btn-success" >Save</button>
                 </div>
             </div>
@@ -250,7 +250,7 @@
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeInstructionsModal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseInstructions">Close</button>
                     <button type="button" id="saveInstructions" class="btn btn-success" >Save</button>
                 </div>
             </div>
@@ -286,7 +286,7 @@
                 </div>
     
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeTimeModal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseTime">Close</button>
                     <button type="button" id="saveTimeRequirements" class="btn btn-success" >Save</button>
                 </div>
             </div>
@@ -311,7 +311,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeDepartureModal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseDepartureTime">Close</button>
                     <button type="button" id="saveDepartureTime" class="btn btn-success" >Save</button>
                 </div>
             </div>
@@ -341,133 +341,11 @@
         .dx-header-row{
             color: black;
         }
-
     </style>
 
     
 
     <script>
-
-        // const detailGrid = $('<div>')
-        // .dxDataGrid({
-        //     dataSource: {
-        //         load: function(loadOptions) {
-        //             return $.ajax({
-        //                 url: '{!!url("/teamLeaderGetPickingPlanToInvoice")!!}',
-        //                 method: 'GET',
-        //                 data: { ref: options.data.strUnickReference },
-        //                 xhrFields: { withCredentials: true },
-        //             });
-        //         },
-        //         update: function (key, values) {
-        //             detailGrid.dxDataGrid('instance').refresh();
-        //         },
-        //     },                        
-        //     editing: {
-        //         mode: 'batch',
-        //         allowUpdating: true,
-        //     },
-        //     showBorders: true,     
-        //     columns: [
-        //         {
-        //             dataField: "intAutoPicking",
-        //             caption: "ID",
-        //             visible: false,
-        //         },
-        //         {
-        //             dataField: "StoreName",
-        //             caption: "Store Name",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "areas",
-        //             caption: "Area",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "OrderDate",
-        //             caption: "Order Date",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "OrderNum",
-        //             caption: "SO Number",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "ExtOrderNum",
-        //             caption: "Instructions",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "iLineID",
-        //             caption: "Line No",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "PastelCode",
-        //             caption: "Code",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "PastelDescription",
-        //             caption: "Description",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "mnyQty",
-        //             caption: "Quantity",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             dataField: "weightPlanned",
-        //             caption: "Weight",
-        //             allowEditing: false,
-        //         },
-        //         {
-        //             // dataField: "ubARIBT",
-        //             dataField: "mnyLoadedQty",
-        //             caption: "To Invoice",
-        //             allowEditing: false,
-        //         },{
-        //             dataField: "isPriorityLine",
-        //             caption: "Priority",
-        //             lookup: {
-        //                 dataSource: [
-        //                     { value: '1', text: 'Yes' },
-        //                     { value: '0', text: 'No' },
-        //                 ],
-        //                 valueExpr: "value",
-        //                 displayExpr: "text",
-        //             },
-        //         },
-        //     ],
-        //     onRowPrepared: function(e) {
-                
-        //         if (e.rowType === "data") {
-        //             if (e.rowIndex % 2 === 0) {
-        //                 e.rowElement.css("background-color", "#e6e6e6"); // Even row background color
-        //             } else {
-        //                 e.rowElement.css("background-color", "#c3c3c3"); // Odd row background color
-        //             }
-        //         }
-        //     },
-        //     onRowUpdating: function(e) {
-
-        //         $.ajax({
-        //             url: '{!!url("/truckLoadUpdatePriortiyStatus")!!}',
-        //             method: 'POST', // or 'POST' depending on your API design
-        //             data: {
-        //                 intAutoPicking: e.oldData.intAutoPicking,
-        //                 isPriorityLine:  e.newData.isPriorityLine,
-        //             },
-        //             success: function(response) {
-                        
-        //             },
-        //         });
-
-        //     }
-        // }).appendTo(container);
         $(document).ready(function() {
             var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
 
@@ -761,6 +639,35 @@
                 }
             }).dxDataGrid('instance');
 
+            $(document).on("click", ".btnSetPriority", function(e) {
+                // Handle button click logic here
+                var id = $(this).attr('name');
+                var currentPriority = $(this).val();
+
+                if (currentPriority == "1") {
+                    var newPriority = "0";
+                } else if (currentPriority == "0") {
+                    var newPriority = "1";
+                }
+
+                $.ajax({
+                    url: '{!!url("/truckLoadUpdatePriortiyStatus")!!}',
+                    type: "POST",
+                    data: {
+                        intAutoPicking: id,
+                        isPriorityLine: newPriority,
+                    },
+                    success: function (data) {
+                        getData();
+                    }
+                });
+
+
+                
+                // Prevent the click event from propagating to the parent row
+                e.stopPropagation();
+            });
+
             $("#toggleCheckbox").dxCheckBox({
                 text: "View Invoiced Loads",
                 onValueChanged: function(e) {
@@ -943,6 +850,7 @@
                     },
                     success: function (data) {
                         getData();
+                        $("#btnCloseTime").click();
                     }
                 });
             });
@@ -966,6 +874,7 @@
                     },
                     success: function (data) {
                         getData();
+                        $("#btnCloseDepartureTime").click();
                     }
                 });
             });
@@ -986,7 +895,7 @@
                         teamLeaderTwo: $('#teamLeaderTwo').val(),
                     },
                     success: function (data) {
-                        $("#closeTeamLeaderModal").click();
+                        $("#btnCloseTeamLeader").click();
                         getData();
                     }
                 });
@@ -1004,7 +913,7 @@
                     },
                     success: function (data) {
                         getData();
-                        $("#closeHorseModal").click();
+                        $("#btnCloseHorse").click();
                     }
                 });
             });
@@ -1022,7 +931,7 @@
                     },
                     success: function (data) {
                         getData();
-                        $("#closeTrailorModal").click();
+                        $("#btnCloseTrailor").click();
                     }
                 });
             });
@@ -1040,7 +949,7 @@
                     },
                     success: function (data) {
                         getData();
-                        $("#closeDriverModal").click();
+                        $("#btnCloseDriver").click();
                     }
                 });
             });
@@ -1057,7 +966,7 @@
                     },
                     success: function (data) {
                         getData();
-                        $("#closeTicketModal").click();
+                        $("#btnCloseTicket").click();
                     }
                 });
             });
@@ -1079,27 +988,9 @@
                 assignInstruction(ref, delivery, type)
             });
 
-            $("#closeInstructionsModal").click(function(){
+            $("#btnCloseInstructions").click(function(){
                 $("#notes").val("");
                 $("#deliveryInstructions").val("");
-            });
-
-            $('.sidebar ul li a').on(function(){
-                var id = $(this).attr('id');
-                $('nav ul li ul.item-show-'+id).toggleClass("show");
-                $('nav ul li #'+id+' span').toggleClass("rotate");
-                
-            });
-
-            $('.sidebar ul li a').click(function(){
-                var id = $(this).attr('id');
-                $('nav ul li ul.item-show-'+id).toggleClass("show");
-                $('nav ul li #'+id+' span').toggleClass("rotate");
-                
-            });
-
-            $('nav ul li').click(function(){
-                $(this).addClass("active").siblings().removeClass("active");
             });
 
             function getInstructions(ref) {
@@ -1181,7 +1072,7 @@
                     },
                     success: function (data) {
                         getData();
-                        $("#closeInstructionsModal").click();
+                        $("#btnCloseInstructions").click();
                     }
                 });
             }

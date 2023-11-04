@@ -8,6 +8,9 @@
             <th class="col-xs-2">Qty</th>
             <th class="col-xs-2">Picked</th>
             <th class="col-xs-2">Loaded</th>
+            @if(isset($includePriority) && $includePriority)
+                <th class="col-xs-2">Priority</th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -36,7 +39,7 @@
 
         @if($count == 0)
         <tr class="bg-secondary text-white fw-bold" id="{{$ID}}">
-            <td colspan="7">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
+            <td colspan="8">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
         </tr>
         @endif
         @if($storenames != $val->StoreName)
@@ -47,9 +50,14 @@
             <td class="text-white fw-bold">{{$totalQty}}</td>
             <td class="text-white fw-bold">{{$totalPickedQty}}</td>
             <td class="text-white fw-bold">{{$totalLoadedQty}}</td>
+            @if(isset($includePriority) && $includePriority)
+                <td class="fw-bold">
+                    
+                </td>
+            @endif
         </tr>
         <tr class="bg-secondary text-white fw-bold">
-            <td colspan="7">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
+            <td colspan="8">STOP: {{$val->intSequence}} - {{ $val->StoreName}}</td>
         </tr>
         @endif
         <?php
@@ -82,6 +90,12 @@
                 <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
             @endif
         </td>
+        @if(isset($includePriority) && $includePriority)
+            <td class="fw-bold">
+                <button class="btn btn-sm btn-secondary w-100 btnSetPriority" value={{ $val->isPriorityLine}} name={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i>PRIORITY</button>
+            </td>
+        @endif
+        
         </tr>
         <?php
         $istrue = true;
@@ -122,6 +136,11 @@
                     <button class="btn btn-outline-dark btn-sm float-end btnFinishPickingWeighted" value={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i></button>
                 @endif
             </td>
+            @if(isset($includePriority) && $includePriority)
+                <td class="fw-bold">
+                    <button class="btn btn-sm btn-secondary w-100 btnSetPriority" value={{ $val->isPriorityLine}} name={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i>PRIORITY</button>
+                </td>
+            @endif
         </tr>
         <?php
         $storenames = $val->StoreName;
@@ -145,6 +164,11 @@
             <td class="text-white fw-bold">{{$totalQty}}</td>
             <td class="text-white fw-bold">{{$totalPickedQty}}</td>
             <td class="text-white fw-bold">{{$totalLoadedQty}}</td>
+            @if(isset($includePriority) && $includePriority)
+                <td class="fw-bold">
+                    
+                </td>
+            @endif
         </tr>
         {{-- <tr class="bg-secondary text-white fw-bold">
             <td colspan="7" class="text-secondary">Easter Egg</td>
