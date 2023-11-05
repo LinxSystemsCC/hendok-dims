@@ -103,7 +103,7 @@
                     {{-- <label class="d-flex align-items-center px-2 text-nowrap" >Delivery Date</label>
                     <input class="form-control px-2" type="date" id='date'>
                     <button class="btn btn-success ms-1" id="getdata">SEARCH</button> --}}
-                    
+
                     <button class="btn btn-success ms-1 text-nowrap" id="hold">HOLD</button>
                     <button class="btn btn-secondary ms-1 text-nowrap" id="rollover" data-bs-toggle="modal" data-bs-target="#rolloverModal">ROLL OVER</button>
                     <button class="btn btn-success ms-1 text-nowrap" id="complete">COMPLETE</button>
@@ -930,6 +930,39 @@
                 }
             });
 
+            $('#loadId').on('dblclick', function(){
+                // Code to be executed when the element is double-clicked
+
+                var tls =$('#loadId').text();
+                tls =  tls.replace("TL", '');
+
+                const userInputYesNo = prompt("Please Type in the word YES for "+$('#loadId').text(), "");
+                if (userInputYesNo !== null && userInputYesNo.trim() !== "" && userInputYesNo.trim().toUpperCase() ==="YES") {
+                    $.ajax({
+                        url: '{!!url("/printtripsheetmobile")!!}',
+                        type: "POST",
+                        data: {
+                            userInput: userInputYesNo,
+                            truckloadno:tls
+
+                        },
+                        success: function (data) {
+                            // console.log(data);
+                            if (data[0].Result =="SUCCESS"){
+                                alert("Check your printer");
+                                location.reload();
+                            }
+
+                        },
+                        error: function (error) {
+                            console.error("Error loading data: ", error);
+                        }
+                    });
+                } else {
+                    console.debug("You clicked Cancel or closed the dialog.");
+                }
+            });
+
             function getData(){
                 $.ajax({
                     url: '{!!url("/getTeamLeaderPlans")!!}',
@@ -964,7 +997,7 @@
                         //     var holdButton = $("#hold").dxButton("instance");
                         //     holdButton.option("text", "UNHOLD");
                         //     holdButton.option("icon", "fa-regular fa-circle-play");
-                            
+
 
                         // }else{
                         //     var holdButton = $("#hold").dxButton("instance");

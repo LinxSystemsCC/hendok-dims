@@ -3280,6 +3280,19 @@ class WareHouseController extends Controller
             ->with('instructions', $instructions);
     }
 
+    public function printtripsheetmobile(Request $request){
+        $userInput = $request->get('userInput');
+        $truckloadno = $request->get('truckloadno');
+        $userId = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+
+        $printtripsheet = DB::connection('sqlsrv3')->select('exec spPrintingTripSheetAppForce ?,?,?,?', array($truckloadno,$userId,$userName,'Default printer'));
+
+        return response()->json($printtripsheet);
+
+//
+    }
+
     public function updatemanualloadingifitemhasnolabelatall(Request $request){
         $userInput = $request->get('userInput');
         $intAutoPickinghidden = $request->get('intAutoPickinghidden');
@@ -3294,9 +3307,9 @@ class WareHouseController extends Controller
     {
         $ref = $request->get('ref');
         $newListProducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
-    
+
         $includePriority = true;
-    
+
         return view('warehouse/teamleaderpickloadtable', [
             'listproducts' => $newListProducts,
             'includePriority' => $includePriority,

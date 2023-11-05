@@ -1028,6 +1028,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('teamleaderupdateholdstatus', [WareHouseController::class, 'teamleaderupdateholdstatus']);
     Route::get('teamleaderollover', [WareHouseController::class, 'teamleaderollover']);
     Route::get('getTeamLeaderPlans',[WarehouseController::class,'getTeamLeaderPlans']);
+    Route::post('printtripsheetmobile',[WarehouseController::class,'printtripsheetmobile']);
     Route::get('teamLeaderAssign',[WarehouseController::class,'teamLeaderAssign']);
     Route::get('teamLeaderEquipmentAssign',[WarehouseController::class,'teamLeaderEquipmentAssign']);
     Route::get('teamLeaderGetPickingPlanData',[WarehouseController::class,'teamLeaderGetPickingPlanData']);
