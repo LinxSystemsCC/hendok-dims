@@ -18,8 +18,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PDFController;
-use App\Http\Controllers\Warehouse\GalvController;
-use App\Http\Controllers\Warehouse\WarehouseSetupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -870,11 +868,14 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getMachines', [WareHouseController::class,'getMachines']);
     Route::get('getgroupname', [WareHouseController::class,'getgroupname']);
     Route::get('viewpickingtickets',[TabletLoadingApp::class,'viewpickingtickets']);
+
     Route::get('getGroupTypeById', [WareHouseController::class,'getGroupTypeById']);
     Route::post('saveGroupTypeById', [WareHouseController::class,'saveGroupTypeById']);
     Route::get('getProductsMappedToGroupType', [WareHouseController::class,'getProductsMappedToGroupType']);
     Route::post('saveProductsMappedToGroupType', [WareHouseController::class,'saveProductsMappedToGroupType']);
     Route::get('getGroupTypesByGroupId', [WareHouseController::class,'getGroupTypesByGroupId']);
+
+
     Route::get('getgroupsetting', [WareHouseController::class,'getgroupsetting']);
     Route::get('getusers', [WareHouseController::class,'getusers']);
     Route::get('deleteUser', [WareHouseController::class,'deleteUser']);
@@ -927,6 +928,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('removemapping', [WareHouseController::class,'removemapping']);
     Route::post('unmapmachinefromdept', [WareHouseController::class,'unmapmachinefromdept']);
     Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
+    Route::post('saveLocationType', [WareHouseController::class,'saveLocationType']);
+    Route::post('saveLocationName', [WareHouseController::class,'saveLocationName']);
     Route::post('savepermissions', [WareHouseController::class,'savepermissions']);
     Route::post('printgenericlabel', [WareHouseController::class,'printgenericlabel']);
     Route::post('printgalvlabel', [WareHouseController::class,'printgalvlabel']);
@@ -986,6 +989,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('doneprintingpallet', [WareHouseController::class,'doneprintingpallet']);
     Route::get('getBinLocationsJson', [WareHouseController::class,'getBinLocationsJson']);
     Route::get('qrcodeimage/{binlocation}', [WareHouseController::class,'qrcodeimage']);
+    Route::post('savenewbin', [WareHouseController::class,'savenewbin']);
     Route::get('customergridlookup', [WareHouseController::class,'customergridlookup']);
     Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
     Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
@@ -1061,7 +1065,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('insertUpliftmentAll',[WareHouseController::class,'insertUpliftmentAll']);
     Route::post('updateUpliftmentPost',[WareHouseController::class,'updateUpliftmentPost']);
     Route::post('approveUpliftmentPost',[WareHouseController::class,'approveUpliftmentPost']);
-    Route::get('getUpliftmentSalesOrderLines',[WareHouseController::class,'getUpliftmentSalesOrderLines']);
     Route::get('getUpliftmentRecords',[WareHouseController::class,'getUpliftmentRecords']);
     Route::post('getCustomerForSelectedCompany',[WareHouseController::class,'getCustomerForSelectedCompany']);
     Route::post('getAreaAddressInvoiceInfoParam',[WarehouseController::class,'getAreaAddressInvoiceInfoParam']);
@@ -1153,25 +1156,6 @@ Route::group(['middleware' => 'auth'], function() {
 });
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
-
-//GALV CONTROLLER STARTS HERE !!!
-Route::group(['middleware' => 'auth'], function() {
-    Route::get('galvjumbocoilsprint', [GalvController::class,'galvjumbocoilsprint']);
-    Route::get('getWmaxTickets', [GalvController::class,'getWmaxTickets']);
-    Route::get('galvPrintJumboCoil', [GalvController::class,'galvPrintJumboCoil']);
-});
-//GALV CONTROLLER ENDS HERE !!!
-
-//WAREHOUSE SETUP CONTROLLER STARTS HERE !!!
-Route::group(['middleware' => 'auth'], function() {
-    Route::get('stockLocations', [WarehouseSetupController::class,'stockLocations']);
-    Route::post('stockLocationCrud', [WarehouseSetupController::class,'stockLocationCrud']);
-    Route::post('stockLocationTypesCrud', [WarehouseSetupController::class,'stockLocationTypesCrud']);
-    Route::post('stockLocationAttributesCrud', [WarehouseSetupController::class,'stockLocationAttributesCrud']);
-    Route::post('binCrud', [WarehouseSetupController::class,'binCrud']);
-    Route::post('binAttributesCrud', [WarehouseSetupController::class,'binAttributesCrud']);
-});
-//WAREHOUSE SETUP CONTROLLER ENDS HERE !!!
 
 //COMPANYAUTHCONTROLLER CONTROLLER STARTS HERE !!!
 Route::get('getBlockedAccountToAuth', [CompanyAuthController::class,'getBlockedAccountToAuth']);

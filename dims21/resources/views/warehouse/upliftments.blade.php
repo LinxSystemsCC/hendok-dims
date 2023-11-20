@@ -14,1056 +14,1283 @@ if ((Auth::guest()))
     $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Print Upliftment Voucher');
     $complete = $v->getThingsUserPermissions(Auth::user()->UserID,'Complete Upliftment Voucher');
     $viewimage = $v->getThingsUserPermissions(Auth::user()->UserID,'View Image Upliftment Voucher');
+    
 }   
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="icon" type="image/png" href="{{url('images/dimslogo.png')}}">
+    <title>Upliftments</title>
+    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+
+    <!-- DevExtreme theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
 
 
+</head>
 
-@extends('layouts.base')
-
-{{-- Set the Title --}}
-@section('title', 'Upliftments')
-
-
-{{-- Set to show navbar --}}
-@php
-    $includeMenu = true;
-@endphp
-
-@section('page')
-    <!-- Flexdatalist -->
-    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>  
-
-    <style>
-        .grid{
-            height: 100%;
-            max-height: 100%;
-        }
-    </style>
-
-    <div class="col-md-12 h-100">
-        <div class="grid" id="gridUpliftment"></div>
-
-        <!-- Upliftment Modal -->
-        <div class="modal fade modal-xl" id="upliftmentModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="newuserLabel">Create/Edit Upliftment</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputDate">Date</label>
-                                    <input type="date" class="form-control w-100" id="inputDate">
-                                </div>
-                            </div>
-
-                            <div class="col-6">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="selectCompany">Company</label>
-                                    <select  class="form-select w-100" id="selectCompany" style="width: 60%" >
-                                        <option></option>
-                                        @foreach($companies as $val)
-                                        <option value="{{$val->companyname}}">{{$val->companyname}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+<div class="col-12 d-flex px-0"  style="background: white;">
+    <div class="col-custom-2"  style="background: white;">
+        <div class="vertical-menu">
+            @include('warehouse.menu')
+        </div>
+    </div>
+    <div class="col p-3" >
+        <div class="col-lg-12 d-inline-flex" >
+            <h3 style="flex-grow: 1; padding-left: 15px;">Upliftments</h3>
+            <!-- Button trigger modal -->
+            @if($make !="0")
+            <button type="button" id="newupliftmentbutton"class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newarea">
+                New Upliftment
+            </button>  
+            @else
+            <button type="button" id="newupliftmentbutton"class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newarea"disabled>
+                New Upliftment
+            </button>  
+            @endif
+        </div>
         
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputArea">Selected Area</label>
-                                    <input readonly  class="form-control w-100" id="inputArea" required>
-                                </div>
-
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="selectAddress">Address Name</label>
-                                    <select  class="form-select" id="selectAddress" required>
-                                        <option></option>
-                                    </select>
-                                </div>
-                            </div>
-    
-                            <div class="col-6">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputCustomer">Customer Name</label>
-                                    <input  class="form-control w-100" id="inputCustomer" required>
-                                </div>
-                                
-
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="selectAltArea">Alternative Area Selection</label>
-                                    {{-- <input  class="form-control w-100" id="selectAltArea" required> --}}
-                                    <select  class="form-select" id="selectAltArea" required>
-                                        <option></option>
-                                    </select>
-                                </div>
+        <div id="gridContainer" style=""></div>
         
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputAltAddress">Alternative Address Name</label>
-                                    <input type="text" class="form-control w-100" id="inputAltAddress" required>
-                                </div>
-                            </div>
-                        </div>
+    </div>
+</div>
 
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputInvoice">Invoice</label>
-                                    <input  class="form-control w-100" id="inputInvoice" required>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputAltInvoice">Alternative Invoice</label>
-                                    <input  class="form-control w-100" id="inputAltInvoice" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-2">
-                            <label class="control-label fw-bold" for="inputPickupReason">Reason for Pickup</label>
-                            <textarea class="form-control w-100" id="inputPickupReason"></textarea>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputPhoto1">Upload a First Photo</label>
-                                    <input type="file" name="photo" class="form-control w-100" id="inputPhoto1">
-                                </div>
-                            </div>
-                            <div class="col-4 px-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputPhoto2">Upload a Second Photo</label>
-                                    <input type="file" name="photo" class="form-control w-100" id="inputPhoto2">
-                                </div>
-                            </div>  
-                            <div class="col-4">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputPhoto3">Upload a Third Photo</label>
-                                    <input type="file" name="photo" class="form-control w-100" id="inputPhoto3">
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div class="row d-inline-flex border bg-light">
-                            <label class="control-label fw-bold">By Products</label>
-                            <div class="col-2 pe-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="inputProductCode">Code</label>
-                                    <input type="text" class="form-control rounded-0 rounded-start" id="inputProductCode">
-                                </div>
-                            </div>
-                            <div class="col-4 p-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="inputProductDescription">Description</label>
-                                    <input type="text" class="form-control rounded-0" id="inputProductDescription">
-                                </div>
-                            </div>
-                            <div class="col-1 p-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="inputProductQty">Qty</label>
-                                    <input type="number" class="form-control rounded-0" id="inputProductQty">
-                                </div>
-                            </div>
-                            <div class="col-1 p-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="inputProductWeight">Weight</label>
-                                    <input type="number" class="form-control rounded-0" id="inputProductWeight" readonly>
-                                </div>
-                            </div>
-                            <div class="col-3 p-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="inputProductComment">Comment</label>
-                                    <input type="text" class="form-control rounded-0" id="inputProductComment">
-                                </div>
-                            </div>
-                            <div class="col-1 ps-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label">&nbsp;</label>
-                                    <button class="btn btn-success rounded-0 rounded-end w-100" id="btnAddProduct">ADD</button>
-                                </div>
-                            </div>
-
-                            <label class="control-label fw-bold">By Sales Order</label>
-                            <div class="col-2 pe-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="selectSONumber">SO Number</label>
-                                    <select type="text" class="form-select rounded-0 rounded-start" id="selectSONumber">
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-4 p-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="selectSOProductCode">Product</label>
-                                    <select type="text" class="form-select rounded-0" id="selectSOProductCode">
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-1 p-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="inputSOProductQty">Qty</label>
-                                    <input type="number" class="form-control rounded-0" id="inputSOProductQty">
-                                </div>
-                            </div>
-                            <div class="col-1 p-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="inputSOProductWeight">Weight</label>
-                                    <input type="number" class="form-control rounded-0" id="inputSOProductWeight" readonly>
-                                </div>
-                            </div>
-                            <div class="col-3 p-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label" for="inputSOProductComment">Comment</label>
-                                    <input type="text" class="form-control rounded-0" id="inputSOProductComment">
-                                </div>
-                            </div>
-                            <div class="col-1 ps-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label">&nbsp;</label>
-                                    <button class="btn btn-success rounded-0 rounded-end w-100" id="btnAddSOProduct">ADD</button>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group mb-2">
-                            <div id="gridProducts"></div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        @if($complete !="0")
-                            <button type="button" id="btnCompleteUpliftment" class="btn btn-success" hidden>Complete</button>
-                        @else
-                            <button type="button" id="btnCompleteUpliftment" class="btn btn-success" hidden disabled>Complete</button>
-                        @endif
-
-                        @if($print !="0")
-                            <button type="button" id="btnPrintUpliftment" class="btn btn-success" hidden>Print</button>
-                        @else
-                            <button type="button" id="btnPrintUpliftment" class="btn btn-success" hidden disabled>Print</button>
-                        @endif
-
-                        @if($approve !="0")
-                            <button type="button" id="btnApproveUpliftment" class="btn btn-success" hidden>Approve</button>
-                        @else
-                            <button type="button" id="btnApproveUpliftment" class="btn btn-success" hidden disabled>Approve</button>
-                        @endif
-
-                        @if($approve !="0")
-                            <button type="button" id="btnDenyUpliftment" class="btn btn-success" hidden>Deny</button>
-                        @else
-                            <button type="button" id="btnDenyUpliftment" class="btn btn-success" hidden disabled>Deny</button>
-                        @endif
-                        
-                        @if($update !="0")
-                            <button type="button" id="btnUpdateUpliftment" class="btn btn-success" hidden>Update</button>
-                        @else
-                            <button type="button" id="btnUpdateUpliftment" class="btn btn-success" hidden disabled>Update</button>
-                        @endif
-                        
-                        @if($viewimage !="0")
-                            <button type="button" id="btnUpliftmentImages" class="btn btn-success" hidden>Images</button>
-                        @else
-                            <button type="button" id="btnUpliftmentImages" class="btn btn-success" hidden disabled>Images</button>
-                        @endif
-                        
-                        @if($enquiry !="0")
-                            <button type="button" id="btnEnquireUpliftment" class="btn btn-success" hidden>Enquiry</button>
-                        @else
-                            <button type="button" id="btnEnquireUpliftment" class="btn btn-success" hidden disabled>Enquiry</button>
-                        @endif
-
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="btnSaveUpliftment" class="btn btn-success" >Save</button>
-
-                    </div>
+<!-- Modal -->
+<div class="modal fade modal-xl" id="newarea" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newuserLabel">Create/Edit Upliftment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="d-inline-flex w-100 px-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="upliftmentactioncollect" checked value="Collect Stock">
+                    <label class="form-check-label" for="upliftmentactioncollect">
+                        Collect
+                    </label>
                 </div>
+
+                <div class="form-check" style="padding-left: 50px;">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="upliftmentactiondeliver" value="Deliver Stock">
+                    <label class="form-check-label" for="upliftmentactiondeliver"> 
+                        Deliver
+                    </label>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="upliftreason"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upliftment Reason</label>
+                    <select  class="form-select input-sm col-xs-1 " id="upliftreason" style="width: 60%" >
+                        <option value="Upliftment">Upliftment</option>
+                        <option value="Misc">Miscellaneous</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="date"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Date</label>
+                    <input  type="date" class="form-control input-sm col-xs-1" id="date">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="company"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Company</label>
+                    <select  class="form-select input-sm col-xs-1 " id="company" style="width: 60%" >
+                        <option></option>
+                        @foreach($companies as $val)
+                        <option value="{{$val->companyname}}">{{$val->companyname}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="customers"style="font-weight: 700;">Customer Name</label>
+                    <input  class="form-control input-sm col-xs-1" id="customers" style="width: 100%" required>
+                    
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="selectedarea"style="font-weight: 700;">Selected Area</label>
+                    <input readonly  class="form-control input-sm col-xs-1" id="selectedarea" style="width: 100%" required>
+                    
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="area"style="font-weight: 700;">Alternative Area Selection</label>
+                    <input  class="form-control input-sm col-xs-1" id="area" style="width: 100%" required>
+                </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="address"style="font-weight: 700;">Address Name</label>
+                    <select  class="form-select" id="address" style="width: 100%" required>
+                    <option></option>
+                </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="altaddress"style="font-weight: 700;">Alternative Address Name</label>
+                    <textarea  class="form-control input-sm col-xs-1" id="altaddress" style="width: 100%" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="invoice"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Invoice</label>
+                    <input  class="form-control input-sm col-xs-1" id="invoice" style="width: 100%" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="control-label" for="altinvoice"style="font-weight: 700;">Alternative Invoice</label>
+                    <input  class="form-control input-sm col-xs-1" id="altinvoice" style="width: 100%" required>
+                </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="reasonpickup"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Reason for Pickup</label>
+                    <textarea   class="form-control input-sm col-xs-1" id="reasonpickup"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="uploadphoto1"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a First Photo</label>
+                    <input type="file" name="photo" class="form-control-file" id="uploadphoto1">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="uploadphoto2"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Second Photo</label>
+                    <input type="file" name="photo" class="form-control-file" id="uploadphoto2">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="uploadphoto3"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Upload a Third Photo</label>
+                    <input type="file" name="photo" class="form-control-file" id="uploadphoto3">
+                </div>
+                <div class="form-group form-inline">
+                    <label class="control-label" for="inputProdCode" style="margin-right: 10px;font-weight: 700;font-size: 15px;">Add Product</label>
+                    <br>
+                    <input class="form-control input-sm" id="inputProdCode" placeholder="Product Code"  required style="width: 10%">
+                    <input class="form-control input-sm" id="inputProdDesc" placeholder="Product Description"  required style="width: 30%">
+                    <input readonly type="number" class="form-control input-sm" id="inputProdWeight" placeholder="Weight"  required style="width: 15%">
+                    <input readonly type="number" class="form-control input-sm" id="inputProdWeightHidden" placeholder="Weight"  required style="width: 15%" hidden>
+                    <input type="number" class="form-control input-sm" id="inputProdQty" placeholder="Quantity" required style="width: 20%">
+                    <input  class="form-control input-sm" id="inputProdComment" placeholder="Comment" required style="width: 20%">
+                </div>
+                
+                <button type="button" id="savetempproducts" class="btn btn-success" >Add</button>
+                <button type="button" id="savetempproductsCurrent" class="btn btn-success" hidden >Add</button>
+                <div style="width: 100%; height: 5%;" id="gridBox"></div>
+                <div style="width: 100%; height: 5%;" id="gridBoxCurrent"></div>
+
+            <div class="modal-footer">
+
+            @if($complete !="0")
+                <button type="button" id="completeupliftment" class="btn btn-success" hidden>Complete</button>
+                @else
+                
+                <button type="button" id="completeupliftment" class="btn btn-success" hidden disabled>Complete</button>
+            @endif
+
+            @if($print !="0")
+                <button type="button" id="printupliftment" class="btn btn-success" hidden>Print</button>
+                @else
+                
+                <button type="button" id="printupliftment" class="btn btn-success" hidden disabled>Print</button>
+            @endif
+
+            @if($approve !="0")
+                <button type="button" id="approveupliftment" class="btn btn-success" hidden>Approve</button>
+                @else
+                
+                <button type="button" id="approveupliftment" class="btn btn-success" hidden disabled>Approve</button>
+            @endif
+            @if($approve !="0")
+                <button type="button" id="denyupliftment" class="btn btn-success" hidden>Deny</button>
+                @else
+                
+                <button type="button" id="denyupliftment" class="btn btn-success" hidden disabled>Deny</button>
+            @endif
+            
+            @if($update !="0")
+                <button type="button" id="updateupliftment" class="btn btn-success" hidden>Update</button>
+                @else
+                
+                <button type="button" id="updateupliftment" class="btn btn-success" hidden disabled>Update</button>
+            @endif
+            
+            @if($viewimage !="0")
+                <button type="button" id="imageupliftment" class="btn btn-success" hidden>Images</button>
+                @else
+                
+                <button type="button" id="imageupliftment" class="btn btn-success" hidden disabled>Images</button>
+            @endif
+            
+            @if($enquiry !="0")
+                <button type="button" id="enquireupliftment" class="btn btn-success" hidden>Enquiry</button>
+                @else
+                
+                <button type="button" id="enquireupliftment" class="btn btn-success" hidden disabled>Enquiry</button>
+            @endif
+            
+            @if($backlog !="0")
+                <button type="button" id="backlogupliftment" class="btn btn-success" hidden>Backlog</button>
+                @else
+                
+                <button type="button" id="backlogupliftment" class="btn btn-success" hidden disabled>Backlog</button>
+            @endif
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                <button type="button" id="savesupliftment" class="btn btn-success" >Save</button>
+
             </div>
         </div>
     </div>
-@endsection
+</div>
 
-@section('scripts')
+<style>
+    .dx-datagrid-table{
+        font-size:15px;
+    }
 
-    <!-- Flexdatalist -->  
-    <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
+    .dx-datagrid .dx-link {
+        color: #df2413;
+    }
 
-    <script>
+    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+        font-weight: 500;
+        background-color: #df2413;
+        color: #fff;
+    }
 
-        // Parse the JSON string into a JavaScript object
-        var products = JSON.parse(JSON.stringify({!! json_encode($products) !!}));
+    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+        color: #df2413;
+        font-size: 14px;
+        line-height: 18px;
+    }
 
-        // Map the products array to a new array with selected properties
-        var productsList = $.map(products, function (item) {
-            return {
-                PastelCode: item.PastelCode,
-                PastelDescription: item.PastelDescription,
-                Weight: item.Weight
-            };
+    .dx-datagrid {
+        height: calc(100vh - 63px);
+        max-height: calc(100vh - 63px);
+    }
+    .form-inline .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+    }
+</style>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>    
+<script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
+
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $( document ).on( 'focus', ':input', function(){
+        $( this ).attr( 'autocomplete', 'off' );
+    });
+    
+    var jArray = JSON.stringify({!! json_encode($products) !!});
+    var finalDataProduct = $.map(JSON.parse(jArray), function (item) {
+        return {
+            PastelCode: item.PastelCode,
+            PastelDescription: item.PastelDescription,
+            Weight: item.Weight,
+        }
+
+    });
+    $(document).ready(function() {
+        var SelectedUpliftmentNumber = 0;
+        $("#savetempproducts").click(function() {
+            if ($('#inputProdCode').val().length>0 && $('#inputProdDesc').val().length>0 && $('#inputProdWeight').val()!=0 && $('#inputProdQty').val()!=0 )
+                {
+                    // retrieve the input values and create a new row object
+                    var Code = $('#inputProdCode').val();
+                    $('#inputProdCode').val('');
+                    var Name = $('#inputProdDesc').val();
+                    $('#inputProdDesc').val('');
+                    var Weight = $('#inputProdWeight').val();
+                    $('#inputProdWeight').val(0);
+                    var Quantity = $('#inputProdQty').val();
+                    $('#inputProdQty').val(0);
+                    var Comment = $('#inputProdComment').val();
+                    $('#inputProdComment').val('');
+                    var newRow = { Code: Code, Name: Name, Quantity:Quantity,Weight: Weight,Comment:Comment};
+
+                    // add the new row to the data source and refresh the Datagrid
+                    var grid = $("#gridBox").dxDataGrid("instance");
+                    if (grid) {
+                        var dataSource = grid.getDataSource();
+                        console.log(dataSource);
+                        dataSource.store().insert(newRow);
+                        dataSource.reload();
+                    } else {
+                        console.log('Datagrid not found.');
+                    }
+                }
         });
+        $("#savetempproductsCurrent").click(function() {
+            if ($('#inputProdCode').val().length>0 && $('#inputProdDesc').val().length>0 && $('#inputProdWeight').val()!=0 && $('#inputProdQty').val()!=0 )
+                {
+                    // retrieve the input values and create a new row object
+                    var Code = $('#inputProdCode').val();
+                    $('#inputProdCode').val('');
+                    var Name = $('#inputProdDesc').val();
+                    $('#inputProdDesc').val('');
+                    var Weight = $('#inputProdWeight').val();
+                    $('#inputProdWeight').val(0);
+                    var Quantity = $('#inputProdQty').val();
+                    $('#inputProdQty').val(0);
+                    var Comment = $('#inputProdComment').val();
+                    $('#inputProdComment').val('');
+                    var newRow = { PastelCode: Code, PastelDescription: Name, Qty:Quantity,Weight: Weight,Comment:Comment};
 
-        $(document).ready(function() {
+                    // add the new row to the data source and refresh the Datagrid
+                    var grid = $("#gridBoxCurrent").dxDataGrid("instance");
+                    if (grid) {
+                        var dataSource = grid.getDataSource();
+                        console.log(dataSource);
+                        dataSource.store().insert(newRow);
+                        dataSource.reload();
+                    } else {
+                        console.log('Datagrid not found.');
+                    }
+                }
+        });
+        var inputProduct = $('#inputProdCode').flexdatalist({
+            minLength: 1,
+            valueProperty: '*',
+            selectionRequired: true,
+            focusFirstResult: true,
+            searchContain:true,
+            visibleProperties: ["PastelCode","PastelDescription"],
+            searchIn: ["PastelCode","PastelDescription"],
+            data: finalDataProduct
+        });
+        inputProduct.on('select:flexdatalist', function (event, data) {
+            //fill in inputs of code desc weight, empty qty empty comment..
+            $('#inputProdCode').val(data.PastelCode);
+            $('#inputProdDesc').val(data.PastelDescription);
+            $('#inputProdWeightHidden').val(data.Weight);
+        });
+        var inputProductDesc = $('#inputProdDesc').flexdatalist({
+            minLength: 1,
+            valueProperty: '*',
+            selectionRequired: true,
+            focusFirstResult: true,
+            searchContain:true,
+            visibleProperties: ["PastelCode","PastelDescription"],
+            searchIn: ["PastelCode","PastelDescription"],
+            data: finalDataProduct
+        });
+        inputProductDesc.on('select:flexdatalist', function (event, data) {
+            //fill in inputs of code desc weight, empty qty empty comment..
+            $('#inputProdCode').val(data.PastelCode);
+            $('#inputProdDesc').val(data.PastelDescription);
+            $('#inputProdWeightHidden').val(data.Weight);
+        });
+                    $("#company").change(function () {
+                        var jArrayCustomers="";
+                        $.ajax({
+                        
+                            url: '{!!url("/getCustomerForSelectedCompany")!!}',
+                            type: "POST",
+                            data: {
+                                company: $("#company").val()
+                            },
+                            success: function (datacustomerdata) {
+                                $("#customers").empty();
+                                $("#invoice").empty();
+                                $("#address").empty();
+                                $("#area").empty();
+                                $("#selectedarea").empty();
+                                
+                                jArrayCustomers = JSON.stringify(datacustomerdata);
+                                var finalDataCustomer = $.map(JSON.parse(jArrayCustomers), function (item) {
+                                    return {
+                                        CustomerCode: item.CustomerPastelCode,
+                                        StoreName: item.StoreName,
+                                    }
 
-            const gridUpliftment = $("#gridUpliftment").dxDataGrid({
-                dataSource:[], //as json
-                hoverStateEnabled: true,
-                showBorders: true,
-                filterRow: { visible: true },
-                filterPanel: { visible: true },
-                headerFilter: { visible: true },
-                allowColumnResizing: true,
-                columnAutoWidth: true,
-                scrolling: {
-                    rowRenderingMode: 'infinite',
-                },
-                paging:{
-                    pageSize: 10,
-                },
-                pager: {
-                    visible: true,
-                    allowedPageSizes: [5, 10, 20, 50, 'all'],
-                    showPageSizeSelector: true,
-                    showInfo: true,
-                    showNavigationButtons: true,
-                },
-                export: {
-                    enabled: true
-                },
-                onExporting(e) {
-                    const workbook = new ExcelJS.Workbook();
-                    const worksheet = workbook.addWorksheet('Upliftments');
+                                });
 
-                    DevExpress.excelExporter.exportDataGrid({
-                        component: e.component,
-                        worksheet,
-                        autoFilterEnabled: true,
-                    }).then(() => {
-                        workbook.xlsx.writeBuffer().then((buffer) => {
-                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Upliftments.xlsx');
+                                var inputCustomerCompany = $('#customers').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["CustomerCode","StoreName"],
+                                    searchIn: ["CustomerCode","StoreName"],
+                                    data: finalDataCustomer
+                                });
+                                $('#customers').val('').trigger('reset');
+                                inputCustomerCompany.on('select:flexdatalist', function (event, data) {
+                                    console.log("using flexlist within company change");
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#customers').val(data.CustomerCode);
+                                    $.ajax({
+
+                            url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
+                            type: "POST",
+                            data: {
+                                customer: $("#customers").val(),
+                                company: $("#company").val()
+                            },
+                            success: function (data) {
+
+                                var jArrayAreas = JSON.stringify(data.routes);
+                                var finalDataAreas = $.map(JSON.parse(jArrayAreas), function (item) {
+                                    return {
+                                        routeID: item.routeID,
+                                        Route: item.Route,
+                                    }
+
+                                });
+                                var inputAreas = $('#area').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["routeID","Route"],
+                                    searchIn: ["routeID","Route"],
+                                    data: finalDataAreas
+                                });
+                                
+                                inputAreas.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#area').val(data.Route);
+                                });
+
+                                $("#address").empty();
+                                var toAppend='';
+                                $.each(data.addresses,function(i,o){
+
+                                    toAppend += '<option value="'+o.strAddress+'">'+o.strAddress+'</option>';
+                                });
+                                $("#address").append(toAppend);
+
+                                $("#invoice").empty();
+                                var jArrayInvoices = JSON.stringify(data.invoices);
+                                
+                                var finalDataInvoices = $.map(JSON.parse(jArrayInvoices), function (item) {
+                                    return {
+                                        InvNumber: item.InvNumber
+                                    }
+
+                                });
+                                var inputInvoices = $('#invoice').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["InvNumber"],
+                                    searchIn: ["InvNumber"],
+                                    data: finalDataInvoices
+                                });
+                                
+                                inputInvoices.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#invoice').val(data.InvNumber);
+                                });
+
+                                $("#selectedarea").val();
+                                $.each(data.areas,function(i,o){
+
+                                    $("#selectedarea").val(o.Route);
+                                });
+
+                                
+                            }
                         });
+
+                        
+                                });
+                                
+                            }
+                        });
+
                     });
-                    e.cancel = true;
-                },
+                    $("#inputProdQty").change(function(){
+                        $('#inputProdWeight').val($('#inputProdQty').val()*$('#inputProdWeightHidden').val())
+                    });
+                    
+                    $('#newupliftmentbutton').click(function(){
 
-                columns: [
-                    {
-                        dataField: "intUpliftmentNumber",
-                        caption: "Uplift ID",
-                    }, 
-                    {
-                        dataField: "dteUpliftDate",
-                        caption: "Uplift Date",
-                    }, 
-                    {
-                        dataField: "strReasonPickup",
-                        caption: "Upliftment Description",
-                    },
-                    {
-                        dataField: "strCompany",
-                        caption: "Company",
-                    },
-                    {
-                        dataField: "strCustomer",
-                        caption: "Customer",
-                    },
-                    {
-                        dataField: "strArea",
-                        caption: "Area",
-                    },
-                    {
-                        dataField: "strInvoice",
-                        caption: "Invoice Number",
-                    },
-                    {
-                        dataField: "strUpliftmentStatus",
-                        caption: "Upliftment Status",
-                    },
-                    {
-                        dataField: "Username",
-                        caption: "User",
-                    },
-                ],
-                onRowRemoving: function(e) {
+                        $('#savetempproductsCurrent').prop('hidden',true);
+                        $('#savetempproducts').prop('hidden',false);
+                        createDataGrid();
+                        $('#imageupliftment').prop('hidden',true);
+                        $('#updateupliftment').prop('hidden',true);
+                        $('#printupliftment').prop('hidden',true);
+                        $('#completeupliftment').prop('hidden',true);
+                        $('#approveupliftment').prop('hidden',true);
+                        $('#denyupliftment').prop('hidden',true);
+                        $('#enquireupliftment').prop('hidden',true);
+                        $('#backlogupliftment').prop('hidden',true);
+                        $('#savesupliftment').prop('hidden',false);
+                        
+                        $('#invoice').val('');
+                        $('#reasonpickup').val('');
+                        $('#area').val('');
+                        $('#selectedarea').val('');
+                        $('#altaddress').val('');
+                        $('#altinvoice').val('');
+                        $('#address').val('');
+                        $('#customers').val('');
+                        $('#company').val('');
+                        $('#date').val('');
+                        $('#upliftreason').val('');
+                    });
+                    $('#savesupliftment').click(function(){
+            var checkedLines = Array();
+            var grid = $("#gridBox").dxDataGrid("getDataSource").store().load().done(function (data) {
+                checkedLines= data;
+                });
+                var gridResults = '<xml>';
+                $.each(checkedLines ,function(key,value) {
+                    if (value.Quantity !=undefined || value.Quantity !=null){
+                    gridResults= gridResults + "<result>";
+                    gridResults= gridResults + "<PastelCode>"+value.Code+"</PastelCode>";
+                    gridResults= gridResults + "<PastelDescription>"+value.Name+"</PastelDescription>";
+                    gridResults= gridResults + "<Qty>"+value.Quantity+"</Qty>";
+                    gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
+                    gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
+                    gridResults= gridResults+ "</result>";
+                }
+                });
+                    gridResults= gridResults+"</xml>";
+                    var selectedaction="";
+                    var upliftmentAction = $('input[name="flexRadioDefault"]:checked').val();
 
-                },
-                onRowDblClick: function(e) {
+
+                    if (upliftmentAction === "Collect Stock") {
+                        selectedaction="Collect";
+                    } else if (upliftmentAction === "Deliver Stock") {
+                        selectedaction="Deliver";  
+                    }
+                    var formData = new FormData();
+
+                        // Append the file to the FormData object
+                        formData.append('file1', $('#uploadphoto1')[0].files[0]);
+                        formData.append('file2', $('#uploadphoto2')[0].files[0]);
+                        formData.append('file3', $('#uploadphoto3')[0].files[0]);
+
+                        // Append the other form data to the FormData object
+                        formData.append('dataxml', gridResults);
+                        formData.append('reasonpickup', $('#reasonpickup').val());
+                        if ($('#area').val().length > 0){
+                        formData.append('area', $('#area').val());
+                        }
+                        else {
+                        formData.append('area', $('#selectedarea').val());
+                        }
+                        
+                        if ($('#altaddress').val().length > 0){
+                        formData.append('address', $('#altaddress').val());
+                        }
+                        else {
+                        formData.append('address', $('#address').val());
+                        }
+                        if ($('#altinvoice').val().length > 0){
+                        formData.append('invoice', $('#altinvoice').val());
+                        }
+                        else {
+                        formData.append('invoice', $('#invoice').val());
+                        }
+                        
+                        formData.append('customers', $('#customers').val());
+                        formData.append('company', $('#company').val());
+                        formData.append('date', $('#date').val());
+                        formData.append('upliftreason', $('#upliftreason').val());
+                        formData.append('upliftmentaction', selectedaction); 
+            $.ajax({
+
+                url: '{!!url("/insertUpliftmentAll")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        $('#approveupliftment').click(function(){
+
+            var formData = new FormData();
+
+            formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/approveUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        
+        $('#printupliftment').click(function(){
+
+            var formData = new FormData();
+
+            formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/printUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    window.open('{!!url("/retrieveUpliftmentPrint")!!}/'+SelectedUpliftmentNumber, 'width=800,height=600,resizable=yes,scrollbars=yes,status=yes');
+
+                }
+            });
+        });
+        
+        $('#completeupliftment').click(function(){
+
+            var formData = new FormData();
+
+            formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/completeUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        $('#denyupliftment').click(function(){
+
+            var formData = new FormData();
+
+            formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/denyUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        $('#updateupliftment').click(function(){
+            var checkedLines = Array();
+            var grid = $("#gridBoxCurrent").dxDataGrid("getDataSource").store().load().done(function (data) {
+                checkedLines= data;
+                });
+                var gridResults = '<xml>';
+                $.each(checkedLines ,function(key,value) {
+                    if (value.Qty !=undefined || value.Qty !=null){
+                    gridResults= gridResults + "<result>";
+                    gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
+                    gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
+                    gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
+                    gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
+                    gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
+                    gridResults= gridResults+ "</result>";
+                }
+                });
+                    gridResults= gridResults+"</xml>";
+                    
+                    var selectedaction="";
+                    var upliftmentAction = $('input[name="flexRadioDefault"]:checked').val();
+
+
+                    if (upliftmentAction === "Collect Stock") {
+                        selectedaction="Collect";
+                    } else if (upliftmentAction === "Deliver Stock") {
+                        selectedaction="Deliver";  
+                    }
+                    var formData = new FormData();
+
+                        // Append the file to the FormData object
+                        formData.append('file1', $('#uploadphoto1')[0].files[0]);
+                        formData.append('file2', $('#uploadphoto2')[0].files[0]);
+                        formData.append('file3', $('#uploadphoto3')[0].files[0]);
+
+                        // Append the other form data to the FormData object
+                        formData.append('dataxml', gridResults);
+                        formData.append('reasonpickup', $('#reasonpickup').val());
+                        if ($('#area').val().length > 0){
+                        formData.append('area', $('#area').val());
+                        }
+                        else {
+                        formData.append('area', $('#selectedarea').val());
+                        }
+                        
+                        if ($('#altaddress').val().length > 0){
+                        formData.append('address', $('#altaddress').val());
+                        }
+                        else {
+                        formData.append('address', $('#address').val());
+                        }
+                        if ($('#altinvoice').val().length > 0){
+                        formData.append('invoice', $('#altinvoice').val());
+                        }
+                        else {
+                        formData.append('invoice', $('#invoice').val());
+                        }
+                        formData.append('customers', $('#customers').val());
+                        formData.append('company', $('#company').val());
+                        formData.append('date', $('#date').val());
+                        formData.append('upliftreason', $('#upliftreason').val());
+                        formData.append('upliftmentaction', selectedaction); 
+                        formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
+            $.ajax({
+
+                url: '{!!url("/updateUpliftmentPost")!!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    location.reload();
+
+                }
+            });
+        });
+        
+    var viewPermission = <?php echo json_encode($view); ?>;
+    console.log("viewperms " + viewPermission);
+        $.ajax({
+
+            url: '{!!url("/getUpliftmentRecords")!!}',
+            type: "GET",
+            success: function (data) {
+
+                $("#gridContainer").dxDataGrid({
+
+                    dataSource:data, //as json
+                    hoverStateEnabled: true,
+                    showBorders: true,
+                    filterRow: { visible: true },
+                    filterPanel: { visible: true },
+                    headerFilter: { visible: true },
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    scrolling: {
+                        rowRenderingMode: 'infinite',
+                    },
+                    editing: {
+                        mode: "row", // enable row editing
+                        allowDeleting: true, // enable row deletion
+                        confirmDelete: true, // show confirmation dialog before deletion
+                        texts: {
+                            deleteRow: "Delete row", // customize the delete button text
+                            confirmDeleteMessage: "Are you sure you want to delete this row?" // customize the confirmation message
+                        }
+                    },
+                    paging:{
+                        pageSize: 10,
+                    },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [5, 10, 20, 50, 'all'],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true,
+                    },
+                    export: {
+                        enabled: true
+                    },
+                    onExporting(e) {
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('Upliftments');
+
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Upliftments.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
+
+                    columns: [
+                        {
+                            dataField: "intUpliftmentNumber",
+                            caption: "Uplift ID",
+                        }, {
+                            dataField: "dteUpliftDate",
+                            caption: "Uplift Date",
+                        }
+                        , {
+                            dataField: "strUpliftAction",
+                            caption: "Uplift Action",
+                        },{
+                            dataField: "strReasonUpliftment",
+                            caption: "Upliftment Reason",
+                        },{
+                            dataField: "strReasonPickup",
+                            caption: "Upliftment Description",
+                        },{
+                            dataField: "strCompany",
+                            caption: "Company",
+                        },{
+                            dataField: "strCustomer",
+                            caption: "Customer",
+                        },{
+                            dataField: "strArea",
+                            caption: "Area",
+                        },{
+                            dataField: "strAddress",
+                            caption: "Address",
+                        },{
+                            dataField: "strInvoice",
+                            caption: "Invoice Number",
+                        },{
+                            dataField: "strUpliftmentStatus",
+                            caption: "Upliftment Status",
+                        },{
+                            dataField: "Username",
+                            caption: "User",
+                        },
+                        
+                    ],
+                    onRowRemoving: function(e) {
+                        console.log("DELETING"); // log the deleting action
+                        $.ajax({
+                            url: '{!!url("/deleteUpliftmentPost")!!}',
+                            type: 'POST',
+                            data: {
+                                intUpliftmentNumber: e.data.intUpliftmentNumber // pass the selected row data as data
+                            },
+                            success: function(data) {
+                                alert('Deleted');
+                            }
+                        });
+                    },
+                    
+                    onRowDblClick: function(e) {
+                        
                     if (viewPermission) {
                         var upliftmentNumber = e.data.intUpliftmentNumber;
                         var statusupliftment = e.data.strUpliftmentStatus;
                         SelectedUpliftmentNumber = e.data.intUpliftmentNumber;
-                        $('#upliftmentModal').modal('toggle');
-
-                        if(statusupliftment !="Denied" && statusupliftment !="Enquired" &&statusupliftment !="Pending")
+                        $('#newarea').modal('toggle');
+                        if(statusupliftment !="Denied" &&statusupliftment !="Enquired" &&statusupliftment !="Pending")
                         {
-                            $('#printupliftment').prop('hidden',false); //can only appear from approved
+                            console.log("hiding");
+                        $('#printupliftment').prop('hidden',false); //can only appear from approved
                         }
                         
                         if(statusupliftment =="Printed" || statusupliftment =="Completed"|| statusupliftment =="Approved")
                         {
-                            $('#completeupliftment').prop('hidden',false); // can only appear from printed
+                            console.log("hiding");
+                        $('#completeupliftment').prop('hidden',false); // can only appear from printed
                         }
-
-                        $('#btnUpdateUpliftment').prop('hidden',false);
-                        $('#btnApproveUpliftment').prop('hidden',false);
-                        $('#btnDenyUpliftment').prop('hidden',false);
-                        $('#btnUpliftmentImages').prop('hidden',false);
-                        $('#btnEnquireUpliftment').prop('hidden',false);
-                        $('#btnSaveUpliftment').prop('hidden',true);
+                        $('#updateupliftment').prop('hidden',false);
                         
-                        $('#inputDate').val(e.data.dteUpliftDate);
-                        $('#selectCompany').val(e.data.strCompany).trigger('change');
-                        $('#inputCustomer').val(e.data.strCustomer);
-                        $('#inputAltAddress').val(e.data.strAddress);
+                        $('#approveupliftment').prop('hidden',false);
+                        $('#denyupliftment').prop('hidden',false);
+                        $('#imageupliftment').prop('hidden',false);
+                        $('#enquireupliftment').prop('hidden',false);
+                        $('#backlogupliftment').prop('hidden',false);
+                        $('#savesupliftment').prop('hidden',true);
+                        $('#savetempproductsCurrent').prop('hidden',false);
+                        $('#savetempproducts').prop('hidden',true);
 
-                        $('#inputArea').val(e.data.strArea);
-                        $('#inputAltInvoice').val(e.data.strInvoice).trigger('change');
-                        $('#inputPickupReason').val(e.data.strReasonPickup);
-                        
-                        getGridProducts(upliftmentNumber);
-                    }
-                },
-                onToolbarPreparing: function (e) {
-                    e.toolbarOptions.items.unshift(
-                        {
-                            location: 'before',
-                            template: function () {
-                                return $('<h3>').text('UPLIFTMENTS');
+                        $('#invoice').val(e.data.strInvoice);
+                        $('#reasonpickup').val(e.data.strReasonPickup);
+                        $('#area').val(e.data.strArea);
+                        $('#selectedarea').val(e.data.strArea);
+                        $('#altaddress').val(e.data.strAddress);
+                        $('#customers').val('').trigger('reset');
+                        $('#customers').val(e.data.strCustomer);
+                        console.log("double click filled in the box");
+                        $('#company').val(e.data.strCompany);
+                        $('#date').val(e.data.dteUpliftDate);
+                        $('#upliftreason').val(e.data.strReasonUpliftment);
+                        const collectRadio = document.getElementById("upliftmentactioncollect");
+                        const deliverRadio = document.getElementById("upliftmentactiondeliver");
+                        $.ajax({
+
+                            url: '{!!url("/getCustomerForSelectedCompany")!!}',
+                            type: "POST",
+                            data: {
+                                company: $("#company").val()
+                            },
+                            success: function (datacustomerdata) {
+                                
+                                var jArrayCustomers = JSON.stringify(datacustomerdata);
+                                var finalDataCustomer = $.map(JSON.parse(jArrayCustomers), function (item) {
+                                    return {
+                                        CustomerCode: item.CustomerPastelCode,
+                                        StoreName: item.StoreName,
+                                    }
+
+                                });
+                                var inputCustomerInner = $('#customers').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["CustomerCode","StoreName"],
+                                    searchIn: ["CustomerCode","StoreName"],
+                                    data: finalDataCustomer
+                                });
+                                
+                                inputCustomerInner.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#customers').val(data.CustomerCode);
+                                    
+                                    console.log("Flex data list called within double click");
+                                    $.ajax({
+
+                            url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
+                            type: "POST",
+                            data: {
+                                customer: $("#customers").val(),
+                                company: $("#company").val()
+                            },
+                            success: function (data) {
+
+                                var jArrayAreas = JSON.stringify(data.routes);
+                                var finalDataAreas = $.map(JSON.parse(jArrayAreas), function (item) {
+                                    return {
+                                        routeID: item.routeID,
+                                        Route: item.Route,
+                                    }
+
+                                });
+                                var inputAreas = $('#area').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["routeID","Route"],
+                                    searchIn: ["routeID","Route"],
+                                    data: finalDataAreas
+                                });
+                                
+                                inputAreas.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#area').val(data.Route);
+                                });
+
+                                var toAppend='';
+                                $.each(data.addresses,function(i,o){
+
+                                    toAppend += '<option value="'+o.strAddress+'">'+o.strAddress+'</option>';
+                                });
+                                $("#address").append(toAppend);
+
+                                var jArrayInvoices = JSON.stringify(data.invoices);
+                                
+                                var finalDataInvoices = $.map(JSON.parse(jArrayInvoices), function (item) {
+                                    return {
+                                        InvNumber: item.InvNumber
+                                    }
+
+                                });
+                                var inputInvoices = $('#invoice').flexdatalist({
+                                    minLength: 1,
+                                    valueProperty: '*',
+                                    selectionRequired: true,
+                                    focusFirstResult: true,
+                                    searchContain:true,
+                                    visibleProperties: ["InvNumber"],
+                                    searchIn: ["InvNumber"],
+                                    data: finalDataInvoices
+                                });
+                                
+                                inputInvoices.on('select:flexdatalist', function (event, data) {
+                                    //fill in inputs of code desc weight, empty qty empty comment..
+                                    $('#invoice').val(data.InvNumber);
+                                });
+
+                                $("#selectedarea").val();
+                                $.each(data.areas,function(i,o){
+
+                                    $("#selectedarea").val(o.Route);
+                                });
+
+                                
                             }
-                        }
-                    );
-                    if (makeUpliftment != 0){
-                        e.toolbarOptions.items.push(
-                            {
-                                location: 'after',
-                                widget: "dxButton",
-                                options: {
-                                    icon: "fa fa-plus",
-                                    text: "ADD",
-                                    onClick: function (args) {
-                                        $('#upliftmentModal').modal('show');
-                                    },
-                                },
-                            }
-                        );
-                    }
-                }
-            }).dxDataGrid('instance');
-
-            const gridProducts = $("#gridProducts").dxDataGrid({
-                dataSource:[], //as json
-                hoverStateEnabled: true,
-                showBorders: true,
-                allowColumnResizing: true,
-                columnAutoWidth: true,
-                scrolling: {
-                    rowRenderingMode: 'infinite',
-                },
-                paging:{
-                    pageSize: 10,
-                },
-                editing: {
-                    mode: "row",
-                    allowDeleting: true,
-                },
-                columns: [
-                    {
-                        dataField: "PastelCode",
-                        caption: "Item Code",
-                        allowEditing: false,
-                    },
-                    {
-                        dataField: "PastelDescription",
-                        caption: "Item Description",
-                        allowEditing: false,
-                    },
-                    {
-                        dataField: "Qty",
-                        caption: "Qty",
-                    },
-                    {
-                        dataField: "Weight",
-                        caption: "Weight",
-                        allowEditing: false,
-                        dataType: 'number',
-                    },
-                    {
-                        dataField: "Comment",
-                        caption: "Comment",
-                    }, 
-                ],
-                onRowRemoving: function(e) {
-                    
-                },
-                onRowDblClick: function(e) {
-                    
-                },
-                onToolbarPreparing: function (e) {
-                    e.toolbarOptions.items.unshift(
-                        {
-                            location: 'before',
-                            template: function () {
-                                return $('<h5>').text('PRODUCTS');
-                            }
-                        }
-                    );
-                }
-            }).dxDataGrid('instance');
-
-            var SelectedUpliftmentNumber = 0;
-
-            setProductsDataList(productsList);
-
-            $("#selectCompany").change(function () {
-                $.ajax({
-                    url: '{!!url("/getCustomerForSelectedCompany")!!}',
-                    type: "POST",
-                    data: {
-                        company: $("#selectCompany").val()
-                    },
-                    success: function (data) {
-                        setCustomersDataList(data);
-                    }
-                });
-            });
-
-            $('#inputCustomer').on('change:flexdatalist', function(event, set, options) {
-                var customerDetails = $('#inputCustomer').flexdatalist('value');
-                $.ajax({
-                    url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
-                    type: "POST",
-                    data: {
-                        customer: customerDetails.CustomerCode,
-                        company: $("#selectCompany").val()
-                    },
-                    success: function (data) {
-
-                        $.each(data.areas,function(i,o){
-                            $("#inputArea").val(o.Route);
                         });
 
-                        setAlternativeAreaList(data.routes);
-                        setCustomerAddressList(data.addresses)
-                        setInvoiceDataList(data.invoices);
-                        setSalesOrderDataList(data.salesorders);
+                                });
+                                
+                            }
+                        });
+                        $('#address').val(e.data.strAddress);
+                        if (e.data.strUpliftAction =="Collect"){
+                            deliverRadio.checked = false;
+                            collectRadio.checked = true;
+                        }
+                        else
+                        {
+                            deliverRadio.checked = true;
+                            collectRadio.checked = false;
+                        }
+                        
+                        const imagebutton = document.getElementById("imageupliftment");
+                        const enquirebutton = document.getElementById("enquireupliftment");
+                        const backlogbutton = document.getElementById("backlogupliftment");
+
+                        enquirebutton.setAttribute("href", '{!!url("/upliftEnquiry")!!}/' + upliftmentNumber);
+                        imagebutton.setAttribute("href", '{!!url("/upliftImageGetter")!!}/' + upliftmentNumber);
+                        backlogbutton.setAttribute("href", '{!!url("/upliftmentBacklog")!!}/' + upliftmentNumber);
+
+                        imagebutton.addEventListener("click", function() {
+                            window.open('{!!url("/upliftImageGetter")!!}/'+upliftmentNumber, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        });
+                        
+                        backlogbutton.addEventListener("click", function() {
+                            window.open('{!!url("/upliftmentBacklog")!!}/'+upliftmentNumber, 'upliftmentbackloggetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        });
+
+                        enquirebutton.addEventListener("click", function() {
+                            window.open('{!!url("/upliftEnquiry")!!}/'+upliftmentNumber, 'upliftenquirygetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        });
+                        
+                        $.ajax({
+                            url: '{!!url("/getUpliftmentDetails")!!}',
+                            type: 'GET',
+                            data: {
+                                upliftmentNumber: upliftmentNumber
+                            },
+                            success: function(data) {
+                                populateDataGrid(data);
+
+                        }});
                     }
-                });
-            });
-
-            function setProductsDataList(products){
-                var inputProductCode = $('#inputProductCode').flexdatalist({
-                    minLength: 1,
-                    valueProperty: '*',
-                    selectionRequired: true,
-                    focusFirstResult: true,
-                    searchContain:true,
-                    visibleProperties: ["PastelCode","PastelDescription"],
-                    searchIn: ["PastelCode","PastelDescription"],
-                    data: products
-                });
-                inputProductCode.on('select:flexdatalist', function (event, data) {
-                    //fill in inputs of code desc weight, empty qty empty comment..
-                    $('#inputProductCode').flexdatalist('value', data.PastelCode);
-                    $('#inputProductDescription').flexdatalist('value', data.PastelDescription);
-                    $('#inputProductQty').val(1);
-                    $('#inputProductWeight').val(parseFloat(data.Weight).toFixed(3));
-                });
-                
-                var inputProductDescription = $('#inputProductDescription').flexdatalist({
-                    minLength: 1,
-                    valueProperty: '*',
-                    selectionRequired: true,
-                    focusFirstResult: true,
-                    searchContain:true,
-                    visibleProperties: ["PastelCode","PastelDescription"],
-                    searchIn: ["PastelCode","PastelDescription"],
-                    data: products
-                });
-                inputProductDescription.on('select:flexdatalist', function (event, data) {
-                    //fill in inputs of code desc weight, empty qty empty comment..
-                    $('#inputProductCode').flexdatalist('value', data.PastelCode);
-                    $('#inputProductDescription').flexdatalist('value', data.PastelDescription);
-                    $('#inputProductQty').val(1);
-                    $('#inputProductWeight').val(parseFloat(data.Weight).toFixed(3));
-                });
-            }
-
-            function setCustomersDataList(customers){
-                var customerList = $.map(JSON.parse(JSON.stringify(customers)), function (item) {
-                    return {
-                        CustomerCode: item.CustomerPastelCode,
-                        StoreName: item.StoreName,
                     }
-                });
-
-                $('#inputCustomer').flexdatalist({
-                    minLength: 1,
-                    valueProperty: '*',
-                    selectionRequired: true,
-                    focusFirstResult: true,
-                    searchContain:true,
-                    visibleProperties: ["CustomerCode","StoreName"],
-                    searchIn: ["CustomerCode","StoreName"],
-                    data: customerList
-                });
-            };
-
-            function setCustomerAddressList(addresses){
-                $('#selectAddress').empty();
-                var toAppend='';
-                $.each(addresses,function(i,o){
-                    toAppend += '<option value="'+o.strAddress+'">'+o.strAddress+'</option>';
-                });
-                $("#selectAddress").append(toAppend);
-            };
-
-            function setAlternativeAreaList(areas){
-                var alternativeAreasList = $.map(JSON.parse(JSON.stringify(areas)), function (item) {
-                    return {
-                        // routeID: item.routeID,
-                        // Route: item.Route,
-                        id: item.Route,
-                        text: item.Route
-                    }
-                });
-
-                alternativeAreasList.unshift({ id: '', text: '' });
-
-                $('#selectAltArea').empty().select2({
-                    data: alternativeAreasList,
-                    theme: 'bootstrap-5',
-                    dropdownParent: $('#upliftmentModal'),
-                });
-
-                // $('#selectAltArea').flexdatalist({
-                //     minLength: 1,
-                //     valueProperty: '*',
-                //     selectionRequired: true,
-                //     focusFirstResult: true,
-                //     searchContain:true,
-                //     visibleProperties: ["routeID","Route"],
-                //     searchIn: ["routeID","Route"],
-                //     data: alternativeAreasList
-                // });
-            };
-
-            function setInvoiceDataList(invoices){
-                var invoiceList = $.map(JSON.parse(JSON.stringify(invoices)), function (item) {
-                    return {
-                        InvNumber: item.InvNumber
-                    }
-                });
-
-                $('#inputInvoice').flexdatalist({
-                    minLength: 1,
-                    valueProperty: '*',
-                    selectionRequired: true,
-                    focusFirstResult: true,
-                    searchContain:true,
-                    visibleProperties: ["InvNumber"],
-                    searchIn: ["InvNumber"],
-                    data: invoiceList
-                });
-            };
-
-            function setSalesOrderDataList(salesorders){
-                var soList = $.map(JSON.parse(JSON.stringify(salesorders)), function (item) {
-                    return {
-                        value: item.OrderNum,
-                        id: item.OrderNum,
-                        text: item.OrderNum
-                    };
-                });
-
-                soList.unshift({ value: '', id: '', text: '' });
-
-                $('#selectSONumber').empty().select2({
-                    data: soList,
-                    theme: 'bootstrap-5',
-                    dropdownParent: $('#upliftmentModal'),
-                });
-            };
-
-            function setSalesOrderProductDataList(soProducts){
-                var soProductList = $.map(JSON.parse(JSON.stringify(soProducts)), function (item) {
-                    return {
-                        id: item.Code,
-                        text: item.Description_1
-                    };
-                });
-
-                soProductList.unshift({ value: '', id: '', text: '' });
-
-                $('#selectSOProductCode').empty().select2({
-                    data: soProductList,
-                    theme: 'bootstrap-5',
-                    dropdownParent: $('#upliftmentModal'),
-                });
-
-            };
-
-            $('#inputProductQty').on('change', function() {
-                var qty = parseFloat($('#inputProductQty').val()) || 0; // Ensure qty is a valid number
-                var selectedProductCode = $('#inputProductCode').flexdatalist('value');
-
-                // Find the corresponding product based on the selected PastelCode
-                var selectedProduct = products.find(item => item.PastelCode === selectedProductCode);
-
-                if (selectedProduct) {
-                    // Calculate the new weight based on the quantity
-                    var calculatedWeight = qty * selectedProduct.Weight;
-
-                    // Set the calculated weight in the input field
-                    $('#inputProductWeight').val(calculatedWeight.toFixed(3));
-                }
             });
-
-            $('#selectSONumber').on('change', function() {
-                var SalesOrder = $('#selectSONumber').val();
-                $.ajax({
-                    url: '{!!url("/getUpliftmentSalesOrderLines")!!}',
-                    type: "GET",
-                    data: {
-                        SalesOrder: SalesOrder,
-                    },
-                    success: function (data) {
-                        // console.log(data)
-
-                        setSalesOrderProductDataList(data);
-                    }
-                });
-            });
-
-            $('#selectSOProductCode').on('change', function() {
-                var selectedProductCode = $('#selectSOProductCode').val();
-                var selectedProduct = products.find(item => item.PastelCode === selectedProductCode);
-                $('#inputSOProductQty').val(1);
-                $('#inputSOProductWeight').val(parseFloat(selectedProduct.Weight).toFixed(3));
-            });
-
-            $('#inputSOProductQty').on('change', function() {
-                var qty = parseFloat($('#inputSOProductQty').val()) || 0; // Ensure qty is a valid number
-                var selectedProductCode = $('#selectSOProductCode').val();
-
-                // Find the corresponding product based on the selected PastelCode
-                var selectedProduct = products.find(item => item.PastelCode === selectedProductCode);
-
-                if (selectedProduct) {
-                    // Calculate the new weight based on the quantity
-                    var calculatedWeight = qty * selectedProduct.Weight;
-
-                    // Set the calculated weight in the input field
-                    $('#inputSOProductWeight').val(calculatedWeight.toFixed(3));
-                }
-            });
-
-            $('#btnAddProduct').click(function(){
-                // retrieve the input values and create a new row object
-                var PastelCode = $('#inputProductCode').val();
-                $('#inputProductCode').val('');
-                var PastelDescription = $('#inputProductDescription').val();
-                $('#inputProductDescription').val('');
-                var Weight = $('#inputProductWeight').val();
-                $('#inputProductWeight').val(0);
-                var Qty = $('#inputProductQty').val();
-                $('#inputProductQty').val(0);
-                var Comment = $('#inputProductComment').val();
-                $('#inputProductComment').val('');
-
-                var newRow = { 
-                    PastelCode: PastelCode, 
-                    PastelDescription: PastelDescription, 
-                    Qty: Qty,
-                    Weight: Weight,
-                    Comment: Comment
-                };
-
-                if (gridProducts) {
-                    var dataSource = gridProducts.getDataSource();
-                    dataSource.store().insert(newRow);
-                    dataSource.reload();
-                } else {
-                    console.log('Datagrid not found.');
-                }
-            });
-
-            $('#btnAddSOProduct').click(function(){
-                // retrieve the input values and create a new row object
-                var PastelCode = $('#selectSOProductCode').val("");
-                var PastelDescription = $('#selectSOProductCode option:selected').text("");
-                $('#selectSOProductCode').val('');
-                
-                var Weight = $('#inputSOProductWeight').val();
-                $('#inputSOProductWeight').val(0);
-                var Qty = $('#inputSOProductQty').val();
-                $('#inputSOProductQty').val(0);
-                var Comment = $('#inputSOProductComment').val();
-                $('#inputSOProductComment').val('');
-
-                var newRow = { 
-                    PastelCode: PastelCode, 
-                    PastelDescription: PastelDescription, 
-                    Qty: Qty,
-                    Weight: Weight,
-                    Comment: Comment
-                };
-
-                if (gridProducts) {
-                    var dataSource = gridProducts.getDataSource();
-                    dataSource.store().insert(newRow);
-                    dataSource.reload();
-                } else {
-                    console.log('Datagrid not found.');
-                }
-            });
-
-            $('#btnSaveUpliftment').click(function(){
-                var checkedLines = Array();
-                checkedLines = gridProducts.option('dataSource');
-
-                var gridResults = '<xml>';
-                $.each(checkedLines ,function(key,value) {
-                    if (value.Qty !=undefined || value.Qty !=null){
-                        gridResults= gridResults + "<result>";
-                        gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
-                        gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
-                        gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
-                        gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
-                        gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
-                        gridResults= gridResults+ "</result>";
-                    }
-                });
-                gridResults= gridResults+"</xml>";
-
-                var formData = new FormData();
-
-                // Append the file to the FormData object
-                formData.append('file1', $('#inputPhoto1')[0].files[0]);
-                formData.append('file2', $('#inputPhoto2')[0].files[0]);
-                formData.append('file3', $('#inputPhoto3')[0].files[0]);
-
-                // Append the other form data to the FormData object
-                formData.append('dataxml', gridResults);
-                formData.append('reasonpickup', $('#inputPickupReason').val());
-                if ($('#selectAltArea').val().length > 0){
-                    formData.append('area', $('#selectAltArea').val());
-                }
-                else{
-                    formData.append('area', $('#inputArea').val());
-                }
-                
-                if ($('#inputAltAddress').val().length > 0){
-                    formData.append('address', $('#inputAltAddress').val());
-                }
-                else{
-                    formData.append('address', $('#selectAddress').val());
-                }
-                if ($('#inputAltInvoice').val().length > 0){
-                    formData.append('invoice', $('#inputAltInvoice').val());
-                }
-                else{
-                    var invoice = $('#inputInvoice').flexdatalist('value');
-                    formData.append('invoice', invoice.InvNumber);
-                }
-                
-                var customer = $('#inputCustomer').flexdatalist('value');
-
-                formData.append('customers', customer.CustomerCode);
-                formData.append('company', $('#selectCompany').val());
-                formData.append('date', $('#inputDate').val());
-
-                $.ajax({
-                    url: '{!!url("/insertUpliftmentAll")!!}',
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        location.reload();
-                    }
-                });
-            });
-
-            $('#btnUpdateUpliftment').click(function(){
-                var checkedLines = Array();
-                checkedLines = gridProducts.option('dataSource');
-
-                console.log(checkedLines);
-
-                var gridResults = '<xml>';
-                $.each(checkedLines ,function(key,value) {
-                    if (value.Qty !=undefined || value.Qty !=null){
-                        gridResults= gridResults + "<result>";
-                        gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
-                        gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
-                        gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
-                        gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
-                        gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
-                        gridResults= gridResults+ "</result>";
-                    }
-                });
-                gridResults= gridResults+"</xml>";
-
-                var formData = new FormData();
-
-                // Append the file to the FormData object
-                formData.append('file1', $('#inputPhoto1')[0].files[0]);
-                formData.append('file2', $('#inputPhoto2')[0].files[0]);
-                formData.append('file3', $('#inputPhoto3')[0].files[0]);
-
-                // Append the other form data to the FormData object
-                formData.append('dataxml', gridResults);
-                formData.append('reasonpickup', $('#inputPickupReason').val());
-                if ($('#selectAltArea').val().length > 0){
-                    formData.append('area', $('#selectAltArea').val());
-                }
-                else{
-                    formData.append('area', $('#inputArea').val());
-                }
-                
-                if ($('#inputAltAddress').val().length > 0){
-                    formData.append('address', $('#inputAltAddress').val());
-                }
-                else{
-                    formData.append('address', $('#selectAddress').val());
-                }
-                if ($('#inputAltInvoice').val().length > 0){
-                    formData.append('invoice', $('#inputAltInvoice').val());
-                }
-                else{
-                    var invoice = $('#inputInvoice').flexdatalist('value');
-                    formData.append('invoice', invoice.InvNumber);
-                }
-                
-                var customer = $('#inputCustomer').flexdatalist('value');
-
-                formData.append('customers', customer.CustomerCode);
-                formData.append('company', $('#selectCompany').val());
-                formData.append('date', $('#inputDate').val());
-
-                $.ajax({
-                    url: '{!!url("/updateUpliftmentPost")!!}',
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        location.reload();
-                    }
-                });
-            });
-
-            $('#btnApproveUpliftment').click(function(){
-                var formData = new FormData();
-                formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
-
-                $.ajax({
-                    url: '{!!url("/approveUpliftmentPost")!!}',
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        location.reload();
-                    }
-                });
-            });
-            
-            $('#btnPrintUpliftment').click(function(){
-
-                var formData = new FormData();
-
-                formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
-                $.ajax({
-
-                    url: '{!!url("/printUpliftmentPost")!!}',
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        window.open('{!!url("/retrieveUpliftmentPrint")!!}/'+SelectedUpliftmentNumber, 'width=800,height=600,resizable=yes,scrollbars=yes,status=yes');
-                    }
-                });
-            });
-            
-            $('#btnCompleteUpliftment').click(function(){
-
-                var formData = new FormData();
-
-                formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
-                $.ajax({
-                    url: '{!!url("/completeUpliftmentPost")!!}',
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        location.reload();
-                    }
-                });
-            });
-
-            $('#btnDenyUpliftment').click(function(){
-
-                var formData = new FormData();
-
-                formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
-                $.ajax({
-
-                    url: '{!!url("/denyUpliftmentPost")!!}',
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        location.reload();
-
-                    }
-                });
-            });
-
-            $('#btnUpliftmentImages').click(function(){
-                window.open('{!!url("/upliftImageGetter")!!}/'+SelectedUpliftmentNumber, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
-            });
-
-            $('#btnEnquireUpliftment').click(function(){
-                window.open('{!!url("/upliftEnquiry")!!}/'+SelectedUpliftmentNumber, 'upliftenquirygetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
-            });
-
-            var viewPermission = '{{ $view }}';
-            var makeUpliftment = '{{ $make }}';
-
-            $.ajax({
-                url: '{!!url("/getUpliftmentRecords")!!}',
-                type: "GET",
-                success: function (data) {
-                    gridUpliftment.option('dataSource', data);
-                    gridUpliftment.refresh();
-                }
-            });
-
-            function getGridProducts(upliftmentNumber){
-                $.ajax({
-                    url: '{!!url("/getUpliftmentDetails")!!}',
-                    type: 'GET',
-                    data: {
-                        upliftmentNumber: upliftmentNumber
-                    },
-                    success: function(data) {
-                        gridProducts.option('dataSource', data);
-                        gridProducts.refresh();
-                    }
-                });
-            }
-
+        }
         });
-    </script>
-@endsection
+
+        $('.sidebar ul li a').on(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+
+        $('.sidebar ul li a').click(function(){
+            var id = $(this).attr('id');
+            $('nav ul li ul.item-show-'+id).toggleClass("show");
+            $('nav ul li #'+id+' span').toggleClass("rotate");
+            
+        });
+        
+        $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+        });
+
+        
+    });
+
+
+    function createDataGrid() {
+        $('#gridBoxCurrent').hide();
+        $('#gridBox').show();
+        var dataSource = new DevExpress.data.DataSource({
+        store: [],
+        paginate: true
+    });
+    $("#gridBox").dxDataGrid({
+        dataSource: dataSource,
+        
+        columns: [
+            { dataField: 'Code', caption: 'Item Code' },
+            { dataField: 'Name', caption: 'Item Description' },
+            { dataField: 'Quantity', caption: 'Quantity' },
+            { dataField: 'Weight', caption: 'Weight' },
+            { dataField: 'Comment', caption: 'Comment' }
+        ],
+        editing: {
+            mode: 'batch',
+            allowDeleting: true
+        },
+        onRowInserted: function(e) {
+            var newRecord = e.data;
+            // retrieve the new record and perform any necessary processing
+        },
+        onRowUpdated: function(e) {
+            var updatedRecord = e.data;
+            // retrieve the updated record and perform any necessary processing
+        }
+    });
+    
+
+}
+function populateDataGrid(datagriddata) {
+        $('#gridBox').hide();
+        $('#gridBoxCurrent').show();
+    $("#gridBoxCurrent").dxDataGrid({
+        dataSource: datagriddata,
+        
+        columns: [
+            { dataField: 'PastelCode', caption: 'Item Code' },
+            { dataField: 'PastelDescription', caption: 'Item Description' },
+            { dataField: 'Qty', caption: 'Quantity' },
+            { dataField: 'Weight', caption: 'Weight' },
+            { dataField: 'Comment', caption: 'Comment' }
+        ],
+        editing: {
+            mode: 'batch',
+            allowDeleting: true
+        },
+        onRowInserted: function(e) {
+            var newRecord = e.data;
+            // retrieve the new record and perform any necessary processing
+        },
+        onRowUpdated: function(e) {
+            var updatedRecord = e.data;
+            // retrieve the updated record and perform any necessary processing
+        }
+    });
+    
+
+}
+
+    function showDialog(tag,width,height)
+    {
+        $( tag ).dialog({height: height, modal: false,
+            width: width,containment: false}).dialogExtend({
+            "closable" : true, // enable/disable close button
+            "maximizable" : false, // enable/disable maximize button
+            "minimizable" : true, // enable/disable minimize button
+            "collapsable" : true, // enable/disable collapse button
+            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+            "titlebar" : false, // false, 'none', 'transparent'
+            "minimizeLocation" : "right", // sets alignment of minimized dialogues
+            "icons" : { // jQuery UI icon class
+
+                "maximize" : "ui-icon-circle-plus",
+                "minimize" : "ui-icon-circle-minus",
+                "collapse" : "ui-icon-triangle-1-s",
+                "restore" : "ui-icon-bullet"
+            },
+            "load" : function(evt, dlg){ }, // event
+            "beforeCollapse" : function(evt, dlg){ }, // event
+            "beforeMaximize" : function(evt, dlg){ }, // event
+            "beforeMinimize" : function(evt, dlg){ }, // event
+            "beforeRestore" : function(evt, dlg){ }, // event
+            "collapse" : function(evt, dlg){  }, // event
+            "maximize" : function(evt, dlg){ }, // event
+            "minimize" : function(evt, dlg){  }, // event
+            "restore" : function(evt, dlg){  } // event
+        });
+    }
+  /*   function showPopup(data, extradata) {
+    // Create a new div to hold the popup content
+    var content = $("<div>");
+
+    // Create a new instance of the dxPopup widget
+    
+    var intUpliftForImage = data[0].intUpliftmentNumber;
+    console.log(intUpliftForImage);
+    var popup = $("<div>").appendTo(document.body).dxPopup({
+    title: "Upliftment Details",
+    width: 800,
+    height: 600,
+    toolbarItems: [
+        {
+        widget: "dxButton",
+        location: "before",
+        options: {
+            text: "Upliftment Image",
+            onClick: function() {
+                window.open('{!!url("/upliftImageGetter")!!}/'+intUpliftForImage, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+            }
+        }
+    },
+    {
+        widget: "dxButton",
+        location: "before",
+        options: {
+            text: "Enquiry",
+            onClick: function() {
+                window.open('{!!url("/upliftEnquiry")!!}/'+intUpliftForImage, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+            }
+        }
+    },
+    {
+        widget: "dxButton",
+        location: "after",
+        options: {
+            text: "Delete",
+            onClick: function() {
+                
+            }
+        }
+    },
+    {
+        widget: "dxButton",
+        location: "after",
+        options: {
+            text: "Close",
+            onClick: function() {
+                popup.hide();
+            }
+        }
+    }
+],
+
+    contentTemplate: function(contentElement) {
+        // Add the content to the popup
+        $("<div>").appendTo(contentElement).text("Upliftment ID: " + extradata.intUpliftmentNumber);
+        $("<div>").appendTo(contentElement).text("Upliftment Date: " + extradata.dteUpliftDate);
+        $("<div>").appendTo(contentElement).text("Upliftment Action: " + extradata.strUpliftAction);
+        $("<div>").appendTo(contentElement).text("Upliftment Reason: " + extradata.strReasonPickup);
+        $("<div>").appendTo(contentElement).text("Company: " + extradata.strCompany);
+        $("<div>").appendTo(contentElement).text("Customer: " + extradata.strCustomer);
+        $("<div>").appendTo(contentElement).text("Area: " + extradata.strArea);
+        $("<div>").appendTo(contentElement).text("Address: " + extradata.strAddress);
+        $("<div>").appendTo(contentElement).text("Invoice Number: " + extradata.strInvoice);
+
+        $("<div>").appendTo(contentElement).text("Invoice Number: " + extradata.strInvoice);
+    
+        content.appendTo(contentElement);
+        
+        
+    }
+}).dxPopup("instance");
+
+
+  
+
+    // Show the popup
+    popup.show();
+} */
+
+</script>
