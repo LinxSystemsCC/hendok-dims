@@ -617,6 +617,14 @@ class WareHouseController extends Controller
         $returndata = DB::connection('sqlsrv2')->select("select * from viewtblUpliftmentData");
         return response()->json($returndata);
     }
+
+    public function getUpliftmentSalesOrderLines(Request $request)
+    {
+        $SalesOrder = $request->get('SalesOrder');
+        $returndata = DB::connection('sqlsrv2')->select("SELECT * FROM viewOrderlinesForPickingWithReferences WHERE OrderNum = '$SalesOrder'");
+        return response()->json($returndata);
+    }
+    
     public function getUpliftmentPrintPDFEmbed($upliftmentnumber)
     {
         $returndata = DB::connection('sqlsrv2')->select("exec spRetrieveDocumentUpliftment ? ",array($upliftmentnumber));
@@ -736,8 +744,6 @@ class WareHouseController extends Controller
     }
     public function getCustomerForSelectedCompany(Request $request)
     {
-
-
         $company = $request->get("company");
         $customers = DB::connection('sqlsrv2')->select("exec spGetCustomersCompanyName ?", array($company));
         return response()->json($customers);
@@ -766,12 +772,19 @@ class WareHouseController extends Controller
                 array($Customer, $company)
             );
 
+        $salesOrders = DB::connection('sqlsrv3')
+            ->select(
+                "Exec spReturnCustomerSalesOrderList ?,?",
+                array($Customer, $company)
+            );
+
         $i = 0;
 
         $output = array();
         $output2 = array();
         $output3 = array();
         $output4 = array();
+        $output5 = array();
 
         foreach ($areas as $val) {
             $output[$i]['Route'] = $val->Route;
@@ -796,10 +809,17 @@ class WareHouseController extends Controller
 
             $i++;
         }
+        $i = 0;
+        foreach ($salesOrders as $val) {
+            $output5[$i]['OrderNum'] = $val->OrderNum;
+
+            $i++;
+        }
         $results['areas'] = $output;
         $results['addresses'] = $output2;
         $results['invoices'] = $output3;
         $results['routes'] = $output4;
+        $results['salesorders'] = $output5;
         return $results;
     }
     public function aauptest($userid)
@@ -961,17 +981,7 @@ class WareHouseController extends Controller
     {
         return view('warehouse/palletbreak');
     }
-    public function savenewbin(Request $request)
-    {
 
-        $binname = $request->get("binname");
-        $intRowNumber = $request->get("intRowNumber");
-        $intLevelNumber = $request->get("intLevelNumber");
-        $locations = $request->get("locations");
-        DB::connection('sqlsrv2')->table('tblBinNames')->insert(
-            ['strBin' => $binname, 'intRowNumber' => $intRowNumber, 'intLevelNumber' => $intLevelNumber, 'intLocationId' => $locations]
-        );
-    }
     public function getLocationNamesAndTypes()
     {
         $locationname = DB::connection('sqlsrv2')
@@ -1026,27 +1036,6 @@ class WareHouseController extends Controller
         $prodCategory = DB::connection('sqlsrv2')
             ->select("select * from viewItemCategory where ItemGroup ='" . $ItemGroup . "' and strProductCategory='" . $strProductCategory . "' order by strProductCategory");
         return response()->json($prodCategory);
-    }
-
-
-    public function saveLocationType(Request $request)
-    {
-        $locationtype = $request->get("locationtype");
-
-        $result = DB::connection('sqlsrv3')->table('tblLocationTypes')->insert(
-            ['strLocationType' => $locationtype]
-        );
-        return response()->json($result);
-    }
-    public function saveLocationName(Request $request)
-    {
-        $locationtype = $request->get("locationtypeid");
-        $strLocationName = $request->get("strLocationName");
-
-        $result = DB::connection('sqlsrv3')->table('tblLocationNames')->insert(
-            ['strLocationName' => $strLocationName, 'intLocationTypeId' => $locationtype]
-        );
-        return response()->json($result);
     }
 
     public function savepermissions(Request $request)
