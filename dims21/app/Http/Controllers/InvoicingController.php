@@ -145,22 +145,22 @@ class InvoicingController extends Controller
 
                             $adjustQty=$innverVal->Toinvoice;
                             //$orderHeadersLines .= "<QtyAdjust>".$adjustQty."</QtyAdjust>";
-                           // $x->Detail[$lineno]->Quantity = floatval($innverVal->Toinvoice);
+                            $x->Detail[$lineno]->Quantity = floatval($innverVal->Toinvoice);
                             //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
 
                         }
                         $toprocess = round($innverVal->Toinvoice, 4);
                         $orderHeadersLines .= "<QtyAdjust>". str_replace(".", ",", $adjustQty)."</QtyAdjust>";
                         $orderHeadersLines .= "<ToProcess>".str_replace(".",",", $toprocess)."</ToProcess>";
-                        //$x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
+                        $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
                         $orderHeadersLines .= "</Line>";
                         //isLineInvoiced
                         // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";
                     }
                     $orderHeadersLines .= "</Details></Order>";//SO016190
-                   /* if ($SoNumber != "SO016191" && $SoNumber != "SO016190" && $SoNumber != "SO016192")
+                   if ($isCapeUser == "1")
                     {
-                        echo "Test1".$SoNumber;
+
                         $reference = $x->Save();
 
                         //Now invoice
@@ -174,12 +174,12 @@ class InvoicingController extends Controller
                                 array($userid, $invoiceid, $SoNumber, $ownersId, $userName)
                             );
                     }
-                    else{*/
+                    else {
                         DB::connection('sqlsrv3')
                             ->select('exec spInsertXmlOrder ?,?,?',
-                                array($orderHeadersLines,$invoiceid.'_'.$ref,$invoiceid)
+                                array($orderHeadersLines, $invoiceid . '_' . $ref, $invoiceid)
                             );
-                    //}
+                    }
                     if ($isCapeUser == "1" && $mustStockAdjust == 1) {
                         if ($returnGetsalesorderNoLines[0]->result) {
                             //$itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2
