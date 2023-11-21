@@ -141,6 +141,7 @@ class InvoicingController extends Controller
                         //TO TEST
                         // echo "Line Quantity ".  $x->Detail[$lineno]->Quantity;
                         // dd($innverVal->soldByWeight);
+                        $adjustQty=$x->Detail[$lineno]->Quantity;
                         if($innverVal->soldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity<floatval($innverVal->Toinvoice) ){
 
                             $adjustQty=$innverVal->Toinvoice;
