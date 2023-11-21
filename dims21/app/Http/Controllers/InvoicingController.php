@@ -330,7 +330,7 @@ class InvoicingController extends Controller
                         }
 
                         $orderHeadersLines .= "<Warehouse>".$warehouse."</Warehouse>";
-                        $adjustQty = $x->Detail[$lineno]->Quantity ;
+                        $adjustQty = $x->Detail[$lineno]->Quantity;
                         //TO TEST
                         // echo "Line Quantity ".  $x->Detail[$lineno]->Quantity;
                         // dd($innverVal->soldByWeight);
