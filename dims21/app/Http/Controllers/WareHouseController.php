@@ -3255,6 +3255,7 @@ class WareHouseController extends Controller
         $userId = Auth::user()->UserID;
         $printers = DB::connection('sqlsrv3')->select("SELECT * FROM viewUserPrinters WHERE UserID = $userId");
         $teamleaders = DB::connection('sqlsrv2')->select("SELECT * FROM viewTeamLeaders");
+        $pickedreasons = DB::connection('sqlsrv2')->select("SELECT  intReasonId,strReason FROM tblPickLoadingReason order by strReason");
 
         return view('warehouse/teamleadermanage')
             ->with('ref', $ref)
@@ -3267,6 +3268,7 @@ class WareHouseController extends Controller
             ->with('tickets', $tickets)
             ->with('printers', $printers)
             ->with('teamleaders', $teamleaders)
+            ->with('stockreasons', $pickedreasons)
             ->with('instructions', $instructions);
     }
 
@@ -3280,7 +3282,18 @@ class WareHouseController extends Controller
 
         return response()->json($printtripsheet);
 
-//
+    }
+    public function savestockreason(Request $request){
+        $reasonId = $request->get('reasonId');
+        $intAutoPickinghidden = $request->get('intAutoPickinghidden');
+        $picked = $request->get('picked');
+        $userId = Auth::user()->UserID;
+        $userName = Auth::user()->UserName;
+dd("Exec spPostLinePickedReason $intAutoPickinghidden,$reasonId,$userId,$picked");
+      //  $printtripsheet = DB::connection('sqlsrv3')->select('exec spPostLinePickedReason ?,?,?,?', array($intAutoPickinghidden,$reasonId,$userId,'Default printer'));
+
+        //return response()->json($printtripsheet);
+
     }
 
     public function updatemanualloadingifitemhasnolabelatall(Request $request){
