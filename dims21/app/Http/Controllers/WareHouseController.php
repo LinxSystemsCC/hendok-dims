@@ -812,6 +812,7 @@ class WareHouseController extends Controller
         $i = 0;
         foreach ($salesOrders as $val) {
             $output5[$i]['OrderNum'] = $val->OrderNum;
+            $output5[$i]['InvNumber'] = $val->InvNumber;
 
             $i++;
         }
