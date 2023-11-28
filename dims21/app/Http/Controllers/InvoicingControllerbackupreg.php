@@ -235,15 +235,37 @@ class InvoicingController extends Controller
             if (strlen(trim($invnum)) > 4) {
                 //dd($userid."-".$invoiceid."-".$SoNumber."".$ownersId."-".$userName) ;
                 $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                    ->select('exec spRePrintProcessedInvoiceNo ?,?,?,?,?',
+                    ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
                         array($userid, $invoiceid, $SoNumber, $ownersId, $userName)
                     );
                 return response()->json($returnGetsalesorderNoLines);
             } else {
-
-
+                sleep(2);
+                $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
                 try {
                     //Initialise
+
+                    $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
+                    $sdkHelper->SetLicense("DE12111039", "4626921");
+                    switch ($ownersId) {
+                        case 1:
+                            $sdkHelper->CreateConnection(env('HENDOK'));
+                            $refDescription = "Hendok";
+                            break;
+                        case 2:
+                            $sdkHelper->CreateConnection(env('HENROOF'));
+                            $refDescription = "Henroof";
+                            $mustStockAdjust = 1;
+                            break;
+                        case 3:
+                            $sdkHelper->CreateConnection(env('UKHOSI'));
+                            $refDescription = "Ukhosi";
+                            $mustStockAdjust = 1;
+                            break;
+                    }
+
+
+
 
                     $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
                         ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
@@ -279,7 +301,13 @@ class InvoicingController extends Controller
 
                     $v = new \App\Http\Controllers\SalesForm();
                     $isCapeUser = $v->getThings($this->getusergroupid($userid), 'isCapeUser');
+                    $x = $sdkHelper->GetSalesOrder($SoNumber);
+                    // $salesOrder = new \COM("Pastel.Evolution.SalesOrder");
+                    $x->InvoiceDate = date('Y-m-d H:i:s');
 
+
+                    // theSalesOrder.UserDefinedFields.Item("ucIDSOrdXXXXFieldName").Value = "xxxxx"
+                    //  $salesOrder->Save();
 
                     $orderlinexml = "<Lines>";
 
@@ -294,23 +322,53 @@ class InvoicingController extends Controller
                         $orderHeadersLines .= "<ItemCode>".$innverVal->ItemCode."</ItemCode>";
                         $orderHeadersLines .= "<OrderDetails>".$innverVal->intorderdetailId."</OrderDetails>";
                         if ($isCapeUser == "1") {
+                          //  $orderlinexml .= "<Warehouse>". $sdkHelper->GetWarehouseByCode("CPT")."</Warehouse>";
+                          //  $orderlinexml .= "<Price>". floatval($innverVal->Price)."</Price>";
+
+                         //   $x->Detail[$lineno]->Warehouse = $sdkHelper->GetWarehouseByCode("CPT");
+                          //  $x->Detail[$lineno]->UnitSellingPrice = floatval($innverVal->Price);
+                           // echo "Line--" . $sdkHelper->GetWarehouseByCode("CPT");
                             $warehouse = "CPT";
                         }
 
                         $orderHeadersLines .= "<Warehouse>".$warehouse."</Warehouse>";
-                        $adjustQty = $innverVal->qtyonorder;
-                        if($innverVal->soldByWeight =="SoldByWeight" &&  floatval($innverVal->remaining)<floatval($innverVal->Toinvoice ) &&  floatval($innverVal->remaining) !=0 ){
-                            $QuantityAdj =$adjustQty+ (floatval($innverVal->Toinvoice)-(floatval($innverVal->remaining)));
+                        $adjustQty = $x->Detail[$lineno]->Quantity;
+                        //TO TEST
+                        // echo "Line Quantity ".  $x->Detail[$lineno]->Quantity;
+                        // dd($innverVal->soldByWeight);
+                        if($innverVal->soldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity < floatval($innverVal->Toinvoice) &&  $x->Detail[$lineno]->Quantity == $x->Detail[$lineno]->Processed  ){
+
+                           // $x->Detail[$lineno]->Quantity = floatval($innverVal->Toinvoice);
+
+                            //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
+                        }
+                        if($innverVal->soldByWeight =="SoldByWeight" &&  $x->Detail[$lineno]->Quantity - $x->Detail[$lineno]->Processed<floatval($innverVal->Toinvoice ) && $x->Detail[$lineno]->Quantity - $x->Detail[$lineno]->Processed !=0 ){
+                            //dd( $lineno."---". $x->Detail[$lineno]->Processed. "tttt ".$x->Detail[$lineno]->Quantity ." ---- ".floatval($innverVal->Toinvoice));
+
+                           // $x->Detail[$lineno]->Quantity =$x->Detail[$lineno]->Quantity+ (floatval($innverVal->Toinvoice)-($x->Detail[$lineno]->Quantity - $x->Detail[$lineno]->Processed)) ;
+                            $QuantityAdj = $x->Detail[$lineno]->Quantity+ (floatval($innverVal->Toinvoice)-($x->Detail[$lineno]->Quantity - $x->Detail[$lineno]->Processed));
+
                             $adjustQty=$QuantityAdj;
+                            //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
                         }
 
+                      /*old sway of doing it
+                       *   if ($innverVal->soldByWeight == "SoldByWeight" && $x->Detail[$lineno]->Quantity < floatval($innverVal->Toinvoice)) {
+
+                            $x->Detail[$lineno]->Quantity = floatval($innverVal->Toinvoice);
+                            //dd($x->Detail[$lineno]->Quantity ." after ".$innverVal->Toinvoice);
+                        }*/
                         $orderHeadersLines .= "<QtyAdjust>". str_replace(".", ",", $adjustQty)."</QtyAdjust>";
                         $orderHeadersLines .= "<ToProcess>".str_replace(".",",", $innverVal->Toinvoice)."</ToProcess>";
+                        //$x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
                         $orderHeadersLines .= "</Line>";
+
+                        //isLineInvoiced
+                        // echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice*******".$innverVal->Toinvoice."<br>";
                     }
                     $orderHeadersLines .= "</Details></Order>";
 
-                   $xmlresponse =  DB::connection('sqlsrv3')
+                    DB::connection('sqlsrv3')
                         ->select('exec spInsertXmlOrder ?,?,?',
                             array($orderHeadersLines,$invoiceid.'_'.$ref,$invoiceid)
                         );
@@ -345,7 +403,7 @@ class InvoicingController extends Controller
                     }*/
 
 
-                    return response()->json($xmlresponse);
+                    return "Success";//response()->json($returnGetsalesorderNoLines);
 
                 } catch (Error $err) {
                     echo "<h3 style='color: darkred'>__________Errors_________</h3>";
