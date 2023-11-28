@@ -50,7 +50,7 @@ if ((Auth::guest()))
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="newuserLabel">Create/Edit Upliftment</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close closeUpliftmentModal" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
@@ -189,10 +189,10 @@ if ((Auth::guest()))
                                 </div>
                             </div>
 
-                            <label class="control-label fw-bold">By Sales Order</label>
+                            <label class="control-label fw-bold">By Invoice Number</label>
                             <div class="col-2 pe-0">
                                 <div class="form-group mb-2">
-                                    <label class="control-label" for="selectSONumber">SO Number</label>
+                                    <label class="control-label" for="selectSONumber">Invoice Number</label>
                                     <select type="text" class="form-select rounded-0 rounded-start" id="selectSONumber">
 
                                     </select>
@@ -281,7 +281,7 @@ if ((Auth::guest()))
                             <button type="button" id="btnEnquireUpliftment" class="btn btn-success" hidden disabled>Enquiry</button>
                         @endif
 
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary closeUpliftmentModal" data-bs-dismiss="modal">Close</button>
                         <button type="button" id="btnSaveUpliftment" class="btn btn-success" >Save</button>
 
                     </div>
@@ -522,6 +522,7 @@ if ((Auth::guest()))
             setProductsDataList(productsList);
 
             $("#selectCompany").change(function () {
+                $('#overlay').prop('hidden', false);
                 $.ajax({
                     url: '{!!url("/getCustomerForSelectedCompany")!!}',
                     type: "POST",
@@ -530,6 +531,7 @@ if ((Auth::guest()))
                     },
                     success: function (data) {
                         setCustomersDataList(data);
+                        $('#overlay').prop('hidden', true);
                     }
                 });
             });
@@ -678,7 +680,7 @@ if ((Auth::guest()))
                     return {
                         value: item.OrderNum,
                         id: item.OrderNum,
-                        text: item.OrderNum
+                        text: item.InvNumber
                     };
                 });
 
@@ -1063,6 +1065,20 @@ if ((Auth::guest()))
                     }
                 });
             }
+
+            // To clear and close the upliftment modal
+            var upliftmentModal = $('#upliftmentModal');
+            $('.closeUpliftmentModal', upliftmentModal).on('click', function () {
+                upliftmentModal.hide();
+                
+                $('.form-control', upliftmentModal).val('');
+                $('.form-select', upliftmentModal).val('default');
+                $('.form-select', upliftmentModal).trigger('change.select2');
+                $('.form-select', upliftmentModal).empty();
+
+                gridProducts.option('dataSource', []);
+                gridProducts.refresh();
+            });
 
         });
     </script>

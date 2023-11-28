@@ -80,10 +80,80 @@
             font-weight: 500;
         }
 
+        .map-icon-label i {
+            font-size: 24px;
+            color: #FFFFFF;
+            line-height: 55px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it's above other content */
+            color: white;
+        }
+
+        :root {
+            --point-color: White;
+            --size: 5px;
+        }
+
+        .loader {
+            background-color: var(--main-color);
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0; left: 0;
+            display: flex;
+            align-items: center;
+            align-content: center; 
+            justify-content: center;  
+            z-index: 100000;
+        }
+
+        .loader__element {
+            border-radius: 100%;
+            border: var(--size) solid var(--point-color);
+            margin: calc(var(--size)*1);
+        }
+
+        .loader__element:nth-child(1) {
+            animation: preloader .6s ease-in-out alternate infinite;
+        }
+        .loader__element:nth-child(2) {
+            animation: preloader .6s ease-in-out alternate .2s infinite;
+        }
+
+        .loader__element:nth-child(3) {
+            animation: preloader .6s ease-in-out alternate .4s infinite;
+        }
+
+        @keyframes preloader {
+            100% { transform: scale(1.3); }
+        }
+
     </style>
 
 </head>
-<body>
+<body class="vh-100 h-100">
+    <div id="overlay" hidden>
+        <div class="loader d-flex">
+            <span class="loader__element"></span>
+            <span class="loader__element"></span>
+            <span class="loader__element"></span>
+        </div>
+    </div>
+
     <div class="col-12 d-flex px-0"  style="background: white;">
         @if(isset($includeMenu) && $includeMenu)
             <div class="col-custom-2"  style="background: white;">
