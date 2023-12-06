@@ -109,10 +109,18 @@ if ((Auth::guest()))
                         </div>
 
                         <div class="row">
-                            <div class="col-6">
+                            {{-- <div class="col-6">
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="inputInvoice">Invoice</label>
                                     <input  class="form-control w-100" id="inputInvoice" required>
+                                </div>
+                            </div> --}}
+                            <div class="col-6">
+                                <div class="form-group mb-2">
+                                    <label class="control-label fw-bold" for="selectInvoice">Invoice</label>
+                                    <select type="text" class="form-select" id="selectInvoice">
+
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -192,8 +200,8 @@ if ((Auth::guest()))
                             <label class="control-label fw-bold">By Invoice Number</label>
                             <div class="col-2 pe-0">
                                 <div class="form-group mb-2">
-                                    <label class="control-label" for="selectSONumber">Invoice Number</label>
-                                    <select type="text" class="form-select rounded-0 rounded-start" id="selectSONumber">
+                                    <label class="control-label" for="selectSOInvoice">Invoice Number</label>
+                                    <select type="text" class="form-select rounded-0 rounded-start" id="selectSOInvoice">
 
                                     </select>
                                 </div>
@@ -538,25 +546,26 @@ if ((Auth::guest()))
 
             $('#inputCustomer').on('change:flexdatalist', function(event, set, options) {
                 var customerDetails = $('#inputCustomer').flexdatalist('value');
-                $.ajax({
-                    url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
-                    type: "POST",
-                    data: {
-                        customer: customerDetails.CustomerCode,
-                        company: $("#selectCompany").val()
-                    },
-                    success: function (data) {
+                if (customerDetails != ''){
+                    $.ajax({
+                        url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
+                        type: "POST",
+                        data: {
+                            customer: customerDetails.CustomerCode,
+                            company: $("#selectCompany").val()
+                        },
+                        success: function (data) {
 
-                        $.each(data.areas,function(i,o){
-                            $("#inputArea").val(o.Route);
-                        });
+                            $.each(data.areas,function(i,o){
+                                $("#inputArea").val(o.Route);
+                            });
 
-                        setAlternativeAreaList(data.routes);
-                        setCustomerAddressList(data.addresses)
-                        setInvoiceDataList(data.invoices);
-                        setSalesOrderDataList(data.salesorders);
-                    }
-                });
+                            setAlternativeAreaList(data.routes);
+                            setCustomerAddressList(data.addresses)
+                            setInvoiceDataList(data.invoices);
+                        }
+                    });
+                }
             });
 
             function setProductsDataList(products){
@@ -659,35 +668,22 @@ if ((Auth::guest()))
             function setInvoiceDataList(invoices){
                 var invoiceList = $.map(JSON.parse(JSON.stringify(invoices)), function (item) {
                     return {
-                        InvNumber: item.InvNumber
-                    }
-                });
-
-                $('#inputInvoice').flexdatalist({
-                    minLength: 1,
-                    valueProperty: '*',
-                    selectionRequired: true,
-                    focusFirstResult: true,
-                    searchContain:true,
-                    visibleProperties: ["InvNumber"],
-                    searchIn: ["InvNumber"],
-                    data: invoiceList
-                });
-            };
-
-            function setSalesOrderDataList(salesorders){
-                var soList = $.map(JSON.parse(JSON.stringify(salesorders)), function (item) {
-                    return {
-                        value: item.OrderNum,
-                        id: item.OrderNum,
+                        value: item.InvNumber,
+                        id: item.InvNumber,
                         text: item.InvNumber
                     };
                 });
 
-                soList.unshift({ value: '', id: '', text: '' });
+                invoiceList.unshift({ value: '', id: '', text: '' });
 
-                $('#selectSONumber').empty().select2({
-                    data: soList,
+                $('#selectInvoice').empty().select2({
+                    data: invoiceList,
+                    theme: 'bootstrap-5',
+                    dropdownParent: $('#upliftmentModal'),
+                });
+
+                $('#selectSOInvoice').empty().select2({
+                    data: invoiceList,
                     theme: 'bootstrap-5',
                     dropdownParent: $('#upliftmentModal'),
                 });
@@ -696,8 +692,8 @@ if ((Auth::guest()))
             function setSalesOrderProductDataList(soProducts){
                 var soProductList = $.map(JSON.parse(JSON.stringify(soProducts)), function (item) {
                     return {
-                        id: item.Code,
-                        text: item.Description_1
+                        id: item.PartNumber,
+                        text: item.PDesc
                     };
                 });
 
@@ -727,13 +723,17 @@ if ((Auth::guest()))
                 }
             });
 
-            $('#selectSONumber').on('change', function() {
-                var SalesOrder = $('#selectSONumber').val();
+            $('#selectInvoice').on('change', function() {
+                $('#selectSOInvoice').val($(this).val()).trigger('change');
+            });
+
+            $('#selectSOInvoice').on('change', function() {
+                var InvNum = $('#selectInvoice').val();
                 $.ajax({
                     url: '{!!url("/getUpliftmentSalesOrderLines")!!}',
                     type: "GET",
                     data: {
-                        SalesOrder: SalesOrder,
+                        InvNum: InvNum,
                     },
                     success: function (data) {
                         // console.log(data)
@@ -745,10 +745,12 @@ if ((Auth::guest()))
 
             $('#selectSOProductCode').on('change', function() {
                 var selectedProductCode = $('#selectSOProductCode').val();
-                var selectedProduct = products.find(item => item.PastelCode === selectedProductCode);
-                $('#inputSOProductQty').val(1);
-                $('#inputSOProductWeight').val(parseFloat(selectedProduct.Weight).toFixed(3));
-            });
+                if (selectedProductCode != ''){
+                    var selectedProduct = products.find(item => item.PastelCode === selectedProductCode);
+                    $('#inputSOProductQty').val(1);
+                    $('#inputSOProductWeight').val(parseFloat(selectedProduct.Weight).toFixed(3));
+                }
+            }); 
 
             $('#inputSOProductQty').on('change', function() {
                 var qty = parseFloat($('#inputSOProductQty').val()) || 0; // Ensure qty is a valid number
@@ -798,17 +800,12 @@ if ((Auth::guest()))
 
             $('#btnAddSOProduct').click(function(){
                 // retrieve the input values and create a new row object
-                var PastelCode = $('#selectSOProductCode').val("");
-                var PastelDescription = $('#selectSOProductCode option:selected').text("");
-                $('#selectSOProductCode').val('');
-                
+                var PastelCode = $('#selectSOProductCode').val();
+                var PastelDescription = $('#selectSOProductCode option:selected').text();
                 var Weight = $('#inputSOProductWeight').val();
-                $('#inputSOProductWeight').val(0);
                 var Qty = $('#inputSOProductQty').val();
-                $('#inputSOProductQty').val(0);
                 var Comment = $('#inputSOProductComment').val();
-                $('#inputSOProductComment').val('');
-
+                
                 var newRow = { 
                     PastelCode: PastelCode, 
                     PastelDescription: PastelDescription, 
@@ -824,6 +821,11 @@ if ((Auth::guest()))
                 } else {
                     console.log('Datagrid not found.');
                 }
+                
+                $('#selectSOProductCode').val('').trigger('change');
+                $('#inputSOProductWeight').val(0);
+                $('#inputSOProductQty').val(0);
+                $('#inputSOProductComment').val('');
             });
 
             $('#btnSaveUpliftment').click(function(){
@@ -1074,7 +1076,7 @@ if ((Auth::guest()))
                 $('.form-control', upliftmentModal).val('');
                 $('.form-select', upliftmentModal).val('default');
                 $('.form-select', upliftmentModal).trigger('change.select2');
-                $('.form-select', upliftmentModal).empty();
+                $('.form-select:not(#selectCompany)', upliftmentModal).empty();
 
                 gridProducts.option('dataSource', []);
                 gridProducts.refresh();

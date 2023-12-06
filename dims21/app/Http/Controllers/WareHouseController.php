@@ -621,7 +621,9 @@ class WareHouseController extends Controller
     public function getUpliftmentSalesOrderLines(Request $request)
     {
         $SalesOrder = $request->get('SalesOrder');
-        $returndata = DB::connection('sqlsrv2')->select("SELECT * FROM viewOrderlinesForPickingWithReferences WHERE OrderNum = '$SalesOrder'");
+        $InvNum = $request->get('InvNum');
+        $returndata = DB::connection('sqlsrv2')->select("SELECT * FROM viewOrderlines WHERE DocNumber = '$InvNum'");
+        // $returndata = DB::connection('sqlsrv2')->select("SELECT * FROM viewOrderlinesForPickingWithReferences WHERE OrderNum = '$SalesOrder'");
         return response()->json($returndata);
     }
     
@@ -772,19 +774,12 @@ class WareHouseController extends Controller
                 array($Customer, $company)
             );
 
-        $salesOrders = DB::connection('sqlsrv3')
-            ->select(
-                "Exec spReturnCustomerSalesOrderList ?,?",
-                array($Customer, $company)
-            );
-
         $i = 0;
 
         $output = array();
         $output2 = array();
         $output3 = array();
         $output4 = array();
-        $output5 = array();
 
         foreach ($areas as $val) {
             $output[$i]['Route'] = $val->Route;
@@ -809,18 +804,10 @@ class WareHouseController extends Controller
 
             $i++;
         }
-        $i = 0;
-        foreach ($salesOrders as $val) {
-            $output5[$i]['OrderNum'] = $val->OrderNum;
-            $output5[$i]['InvNumber'] = $val->InvNumber;
-
-            $i++;
-        }
         $results['areas'] = $output;
         $results['addresses'] = $output2;
         $results['invoices'] = $output3;
         $results['routes'] = $output4;
-        $results['salesorders'] = $output5;
         return $results;
     }
     public function aauptest($userid)
