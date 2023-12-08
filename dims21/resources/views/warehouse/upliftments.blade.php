@@ -365,6 +365,12 @@ if ((Auth::guest()))
                     {
                         dataField: "intUpliftmentNumber",
                         caption: "Uplift ID",
+                        customizeText: function (cellInfo) {
+                            // Customize the text for the 'intUpliftmentNumber' column
+                            var upliftmentnumber = cellInfo.value;
+                            var numericPart = (1000000 + upliftmentnumber).toString().slice(-6);
+                            return 'UPL#' + numericPart;
+                        },
                     }, 
                     {
                         dataField: "dteUpliftDate",
@@ -873,8 +879,8 @@ if ((Auth::guest()))
                     formData.append('invoice', $('#inputAltInvoice').val());
                 }
                 else{
-                    var invoice = $('#inputInvoice').flexdatalist('value');
-                    formData.append('invoice', invoice.InvNumber);
+                    var invoice = $('#selectInvoice').val();
+                    formData.append('invoice', invoice);
                 }
                 
                 var customer = $('#inputCustomer').flexdatalist('value');
@@ -942,8 +948,8 @@ if ((Auth::guest()))
                     formData.append('invoice', $('#inputAltInvoice').val());
                 }
                 else{
-                    var invoice = $('#inputInvoice').flexdatalist('value');
-                    formData.append('invoice', invoice.InvNumber);
+                    var invoice = $('#selectInvoice').val();
+                    formData.append('invoice', invoice);
                 }
                 
                 var customer = $('#inputCustomer').flexdatalist('value');

@@ -3,7 +3,6 @@
 {{-- Set the Title --}}
 @section('title', 'Stock Locations')
 
-
 {{-- Set to show navbar --}}
 @php
     $includeMenu = true;
@@ -32,15 +31,19 @@
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="tab1" data-bs-toggle="tab" href="#content1" role="tab" aria-controls="content1" aria-selected="true">Locations</a>
             </li>
+
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="tab2" data-bs-toggle="tab" href="#content2" role="tab" aria-controls="content2" aria-selected="true">Location Types</a>
             </li>
+
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="tab3" data-bs-toggle="tab" href="#content3" role="tab" aria-controls="content3" aria-selected="true">Location Attributes</a>
             </li>
+
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="tab4" data-bs-toggle="tab" href="#content4" role="tab" aria-controls="content4" aria-selected="true">Bins</a>
             </li>
+
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="tab5" data-bs-toggle="tab" href="#content5" role="tab" aria-controls="content5" aria-selected="true">Bin Attributes</a>
             </li>
@@ -82,6 +85,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Location Types -->
             <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2" style="height: calc(100vh - 110px); overflow-y: auto;">
                 <div class="grid" id="gridLocationTypes"></div>
@@ -107,6 +111,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Location Attributes -->
             <div class="tab-pane fade" id="content3" role="tabpanel" aria-labelledby="tab3" style="height: calc(100vh - 110px); overflow-y: auto;">
                 <div class="grid" id="gridLocationAttributes"></div>
@@ -132,6 +137,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Bins -->
             <div class="tab-pane fade" id="content4" role="tabpanel" aria-labelledby="tab4" style="height: calc(100vh - 110px); overflow-y: auto;">
                 <div class="grid" id="gridBins"></div>
@@ -159,6 +165,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Bin Attributes -->
             <div class="tab-pane fade" id="content5" role="tabpanel" aria-labelledby="tab5" style="height: calc(100vh - 110px); overflow-y: auto;">
                 <div class="grid" id="gridBinAttributes"></div>
@@ -189,12 +196,10 @@
                 </div>
             </div>
         </div>
-
     </div>
 @endsection
 
 @section('scripts')
-
     <script>
         let binName = '';
         $(document).ready(function() {
@@ -685,6 +690,7 @@
 
                                     if (successfulRequests === binAttributeData.length) {
                                         getBinAttributes();
+                                        getBins();
                                     }
                                 },
                                 error: function(xhr, status, error) {
@@ -1041,8 +1047,6 @@
 
                 $('#inputBinName').val(location + '-' + binName);
             });
-
         });
     </script>
-
 @endsection

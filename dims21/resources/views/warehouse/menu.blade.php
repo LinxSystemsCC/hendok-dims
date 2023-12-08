@@ -497,7 +497,7 @@ if ((Auth::guest()))
                     <ul class="item-show-3b">
                         <!-- Item Links -->
                         <li>
-                            <a href='{!!url("/getUpliftmentPage")!!}'>Upliftment Report</a>
+                            <a href='{!!url("/getUpliftmentPage")!!}'>Upliftments</a>
                         </li>
                     </ul>
 
