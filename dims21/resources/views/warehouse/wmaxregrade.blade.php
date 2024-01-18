@@ -214,6 +214,10 @@
 
                     columns: [
                         {
+                            dataField: "DateTime",
+                            caption: "Date",
+                            //width:100,
+                        },{
                             dataField: "Reference",
                             caption: "Reference",
                             //width:100,
@@ -290,6 +294,11 @@
                             caption: "Weight",
                             //width:100,
                         },
+                        {
+                            dataField: "TensileTicket",
+                            caption: "Tensile Ticket",
+                            //width:100,
+                        },
                     ],
 
 
@@ -350,7 +359,7 @@
             var mpa = selectedRowsData[0].TreatedMPA;
             var wire = selectedRowsData[0].WireSize;
             var sequm = selectedRowsData[0].SequenceNo;
-            var tensile = selectedRowsData[0].TicketNo;
+            var tensile = selectedRowsData[0].TensileTicket;
 
             $.ajax({
                 
@@ -373,12 +382,23 @@
                 },
                 success: function (data) {
                     
+                    // if (data[0].Result = "Success"){
+                    //     var customer =  data[0].CustomerName;
+                    //     var product =  data[0].ProductName;
+                    //     var ticket =  data[0].TicketNo;
+
+                    //     window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket + '/Regrade' , "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+
+                    //     location.reload();
+                    // }
+
                     if (data[0].Result = "Success"){
                         var customer =  data[0].CustomerName;
                         var product =  data[0].ProductName;
                         var ticket =  data[0].TicketNo;
 
-                        window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket + '/Regrade' , "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        // window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket +'/Accept', "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        window.open('{!!url("/printGalvLabel")!!}/'+ticket,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
 
                         location.reload();
                     }

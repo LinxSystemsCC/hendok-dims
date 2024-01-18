@@ -82,8 +82,6 @@ Route::get('createTransfer',[MachinesAndTransfers::class,'createTransfer']);
 Route::post('saveTransfer',[MachinesAndTransfers::class,'saveTransfer']);
 Route::get('receiveTransfer',[MachinesAndTransfers::class,'receiveTransfer']);
 
-
-
 //MACHINESANDTRANSFERS ENDS HERE!!!!
 
 //DIMS COMMON STARTS HERE!!!!
@@ -909,6 +907,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
     Route::post('deleteCustomerName', [WareHouseController::class,'deleteCustomerName']);
     Route::post('updateGalvCustomer', [WareHouseController::class,'updateGalvCustomer']);
+    
+    Route::get('getgalvcreateproductspecsheet', [WareHouseController::class,'getgalvcreateproductspecsheet']);
     Route::post('deletesalesorders', [WareHouseController::class,'deletesalesorders']);
     Route::post('deleteScale', [WareHouseController::class,'deleteScale']);
     Route::post('updateMachineName', [WareHouseController::class,'updateMachineName']);
@@ -973,6 +973,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
     Route::get('wmaxlanding', [WareHouseController::class,'wmaxlanding']);
     Route::get('wmaxreprint', [WareHouseController::class,'wmaxreprint']);
+    Route::post('galvReprintEdit', [WareHouseController::class,'galvReprintEdit']);
     Route::get('roofingreprint', [WareHouseController::class,'roofingreprint']);
     Route::get('wmaxgetcustomerproduct', [WareHouseController::class,'wmaxgetcustomerproduct']);
     Route::get('wmaxgetproductinfo', [WareHouseController::class,'wmaxgetproductinfo']);
@@ -1150,6 +1151,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('trucksequencing', [WareHouseController::class,'trucksequencing']);
     Route::get('getTruckSequencing', [WareHouseController::class,'getTruckSequencing']);
     Route::post('updateTruckLoadingSequence', [WareHouseController::class,'updateTruckLoadingSequence']);
+    Route::get('failedInvoices', [WareHouseController::class,'failedInvoices']);
 });
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
@@ -1164,10 +1166,11 @@ Route::group(['middleware' => 'auth'], function() {
 
 //WAREHOUSE SETUP CONTROLLER STARTS HERE !!!
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('stockLocations', [WarehouseSetupController::class,'stockLocations']);
+    Route::get('LocationsAndBins', [WarehouseSetupController::class,'LocationsAndBins']);
     Route::post('stockLocationCrud', [WarehouseSetupController::class,'stockLocationCrud']);
     Route::post('stockLocationTypesCrud', [WarehouseSetupController::class,'stockLocationTypesCrud']);
     Route::post('stockLocationAttributesCrud', [WarehouseSetupController::class,'stockLocationAttributesCrud']);
+    Route::post('dcCRUD', [WarehouseSetupController::class,'dcCRUD']);
     Route::post('binCrud', [WarehouseSetupController::class,'binCrud']);
     Route::post('binAttributesCrud', [WarehouseSetupController::class,'binAttributesCrud']);
 });

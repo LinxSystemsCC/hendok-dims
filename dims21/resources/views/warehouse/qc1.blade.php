@@ -275,15 +275,15 @@
                         rowRenderingMode: 'infinite',
                     },
                     paging:{
-                        pageSize: 10,
+                        enabled: false
                     },
-                    pager: {
-                        visible: true,
-                        allowedPageSizes: [5, 10, 20, 50, 'all'],
-                        showPageSizeSelector: true,
-                        showInfo: true,
-                        showNavigationButtons: true,
-                    },
+                    // pager: {
+                    //     visible: true,
+                    //     allowedPageSizes: [5, 10, 20, 50, 'all'],
+                    //     showPageSizeSelector: true,
+                    //     showInfo: true,
+                    //     showNavigationButtons: true,
+                    // },
                     export: {
                         enabled: true
                     },

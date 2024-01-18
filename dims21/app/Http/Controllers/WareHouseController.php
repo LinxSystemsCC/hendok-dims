@@ -1167,7 +1167,7 @@ class WareHouseController extends Controller
         $grossMass = 0;
         $tareMass = 0;
 
-        //dd($Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3, $seqNo, $tensile, $buttonMethod, $weight, $grossMass, $tareMass);
+        // dd("exec spPassOrFailQCPhase2 '$Reference', '$CustomerName', '$ProductName', '$DepartmentName', '$MachineName', '$JobNo', '$WireSize', '$MassRequired', '$zincTested', '$mpaTested', '$castNo', '$wireSizeTested', '$stressTest', '$elongBreakTest', '$torsionTest', '$wrapTest', '$coating', '$comment1', '$massProduced', '$zincInitialMass', '$zincStripMass', '$zincStripSize', '$operator', '$comment2', '$comment3', '$seqNo', '$tensile', '$buttonMethod', '$weight', '$grossMass', '$tareMass'");
 
         $testQC2 = DB::connection('sqlsrv2')->select(
             'exec spPassOrFailQCPhase2 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
@@ -1175,6 +1175,7 @@ class WareHouseController extends Controller
                 $Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3, $seqNo, $tensile, $buttonMethod, $weight, $grossMass, $tareMass
             )
         );
+
 
         return response()->json($testQC2);
     }
@@ -1411,10 +1412,12 @@ class WareHouseController extends Controller
             ->select("select * from tblDepartments");
         return view('warehouse/printpalletcodes')->with('departments', $dept);
     }
+
     public function qrcodetracker()
     {
         return view('warehouse/qrcodetracker');
     }
+
     public function stocklocation()
     {
         /*$dept = DB::connection('sqlsrv2')
@@ -1541,14 +1544,26 @@ class WareHouseController extends Controller
     public function wmaxlanding()
     {
         $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax ");
-        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments Where strDeptName in ('Galv Line 1','Galv Line 2')"); //TODO This could be refactored to work with Modules
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments Where strDeptName in ('Galv Line 1','Galv Line 2')");
         return view('warehouse/wmax')->with('customers', $customers)->with('dept', $dept);
     }
 
     public function wmaxreprint()
     {
-        $jobs = DB::connection('sqlsrv2')->select("select * from tblCompletedJobs order by [DateTime] desc");
+        $jobs = DB::connection('sqlsrv2')->select("SELECT * FROM viewGalvReprint ORDER BY [DateTime] DESC");
         return view('warehouse/wmaxreprint')->with('jobs',$jobs);
+    }
+
+    public function galvReprintEdit(Request $request)
+    {
+        $TicketNo = $request->get("TicketNo");
+        $ActualWireSize = $request->get("ActualWireSize");
+        $TreatedMPA = $request->get("TreatedMPA");
+        $TestedZinc = $request->get("TestedZinc");
+        $Weight = $request->get("Weight");
+
+        $result = DB::connection('sqlsrv2')->select("EXEC spUpdateGalvCompletedJob '$TicketNo', $ActualWireSize, $TreatedMPA, $TestedZinc, $Weight");
+        return response()->json($result);
     }
 
     public function roofingreprint()
@@ -3372,7 +3387,6 @@ dd("Exec spPostLinePickedReason $intAutoPickinghidden,$reasonId,$userId,$picked"
         return response()->json($data);
     }
 
-
     public function teamLeaderGetNotifications(Request $request){
         $ref = $request->get('ref');
         $data = DB::connection('sqlsrv3')->select("select * from viewTeamLeaderNotifications WHERE strUnickReference = '$ref'");
@@ -3403,8 +3417,6 @@ dd("Exec spPostLinePickedReason $intAutoPickinghidden,$reasonId,$userId,$picked"
         return response()->json($data);
     }
 
-
-
     public function teamLeaderGetInstructions(Request $request){
         $ref = $request->get('ref');
 
@@ -3422,6 +3434,11 @@ dd("Exec spPostLinePickedReason $intAutoPickinghidden,$reasonId,$userId,$picked"
         $id = $request->get('id');
         $data = DB::connection('sqlsrv3')->select('exec spTeamLeaderCompleteLoad ?', array($id));
         return response()->json($data);
+    }
+
+    public function failedInvoices(){
+        $failures = DB::connection('sqlsrv3')->select("SELECT * FROM viewFailedInvoices ORDER BY intXmlOrder DESC");
+        return view('warehouse.reports.failedInvoices')->with('failures', $failures);
     }
 
     private static function getTabs($tabcount)

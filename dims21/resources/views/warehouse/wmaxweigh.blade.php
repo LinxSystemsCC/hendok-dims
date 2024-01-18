@@ -308,15 +308,15 @@
                         rowRenderingMode: 'infinite',
                     },
                     paging:{
-                        pageSize: 10,
+                        enabled: false
                     },
-                    pager: {
-                        visible: true,
-                        allowedPageSizes: [5, 10, 20, 50, 'all'],
-                        showPageSizeSelector: true,
-                        showInfo: true,
-                        showNavigationButtons: true,
-                    },
+                    // pager: {
+                    //     visible: true,
+                    //     allowedPageSizes: [5, 10, 20, 50, 'all'],
+                    //     showPageSizeSelector: true,
+                    //     showInfo: true,
+                    //     showNavigationButtons: true,
+                    // },
                     export: {
                         enabled: true
                     },
@@ -577,7 +577,8 @@
                         var product =  data[0].ProductName;
                         var ticket =  data[0].TicketNo;
                         
-                        window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket +'/Hold', "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        // window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket +'/Hold', "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        window.open('{!!url("/printGalvLabel")!!}/'+ticket,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
 
                         location.reload();
                     }
