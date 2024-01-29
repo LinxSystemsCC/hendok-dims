@@ -2393,7 +2393,7 @@ class WareHouseController extends Controller
 
     public function getgalvcreateproductspecsheet()
     {
-        //$jobdata = DB::connection('sqlsrv3')->select('exec spGetFullProductPlannedDetails');
+        $jobdata = DB::connection('sqlsrv3')->select('exec spGetFullProductPlannedDetails');
         //dd($jobdata);
         return view('warehouse/galvproductspecsheet');
     }
@@ -3437,8 +3437,15 @@ dd("Exec spPostLinePickedReason $intAutoPickinghidden,$reasonId,$userId,$picked"
     }
 
     public function failedInvoices(){
-        $failures = DB::connection('sqlsrv3')->select("SELECT * FROM viewFailedInvoices ORDER BY intXmlOrder DESC");
-        return view('warehouse.reports.failedInvoices')->with('failures', $failures);
+        // $failures = DB::connection('sqlsrv3')->select("SELECT * FROM viewFailedInvoices ORDER BY intXmlOrder DESC");
+        return view('warehouse.reports.failedInvoices');//->with('failures', $failures);
+    }
+
+    public function getFailedInvoices(Request $request){
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+        $failures = DB::connection('sqlsrv3')->select("EXEC spFailedInvoices '$dateFrom','$dateTo'");
+        return response()->json($failures);
     }
 
     private static function getTabs($tabcount)

@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 {{-- Set the Title --}}
-@section('title', 'Failed Invoices')
+@section('title', 'Check Scanned Lines')
 
 
 {{-- Set to show navbar --}}

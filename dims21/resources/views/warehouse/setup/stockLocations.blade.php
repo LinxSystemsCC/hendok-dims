@@ -76,6 +76,15 @@
                                         <option value="None" selected disabled></option>
                                     </select>
                                 </div>
+                                <div class="form-group mb-2">
+                                    <label class="control-label" for="selLocationType">Sage Warehouse</label>
+                                    <select class="form-select" type="text" id="selSageLocation">
+                                        <option value="" selected>None</option>
+                                        @foreach ($sageWarehouses as $sageWarehouse)
+                                            <option value="{{ $sageWarehouse->Code }}">{{ $sageWarehouse->Name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -153,6 +162,9 @@
                                 <div class="form-group mb-2" id="locationForBin">
 
                                 </div>
+                                <div class="form-group mb-2" id="dcForBin">
+
+                                </div>
                                 <div class="form-group mb-2" id="attributesForBin">
 
                                 </div>
@@ -201,7 +213,12 @@
 
 @section('scripts')
     <script>
+
+        var sageWarehouses = JSON.parse(JSON.stringify({!! json_encode($sageWarehouses) !!}));
+        sageWarehouses.unshift({ Code: '', Name: "None" });
+
         let binName = '';
+
         $(document).ready(function() {
             let LocationTypes = [];
 
@@ -244,6 +261,15 @@
                         caption: "Location Name",
                     },
                     {
+                        dataField: "strSageWhsCode",
+                        caption: "Sage Warehouse",
+                        lookup: {
+                            dataSource: sageWarehouses,
+                            valueExpr: "Code",
+                            displayExpr: "Name",
+                        },
+                    },
+                    {
                         dataField: "intLocationTypeId",
                         caption: "Location Type",
                         lookup: {
@@ -283,6 +309,7 @@
                             strLocationName: e.newData.strLocationName || e.oldData.strLocationName,
                             strLocationAbv: e.newData.strLocationAbv || e.oldData.strLocationAbv,
                             intLocationTypeId: e.newData.intLocationTypeId || e.oldData.intLocationTypeId,
+                            strSageWhsCode: e.newData.strSageWhsCode || e.oldData.strSageWhsCode,
                             command: 'UPDATE'
                         },
                         success: function (data) {
@@ -617,6 +644,8 @@
                     e.component.columnOption('intBinId', 'allowEditing', false);
                     e.component.columnOption('strLocationName', 'caption', 'Location Name');
                     e.component.columnOption('strLocationName', 'allowEditing', false);
+                    e.component.columnOption('strDCName', 'caption', 'DC Name');
+                    e.component.columnOption('strDCName', 'allowEditing', false);
                     e.component.columnOption('strBin', 'caption', 'Bin Name');
                     e.component.columnOption('strBin', 'allowEditing', false);
                     e.component.columnOption('mnyBinCapacity', 'caption', 'Capacity');
@@ -809,6 +838,7 @@
                 getLocations();
                 getLocationTypes();
                 getLocationAttributes();
+                getDCs();
                 getBins();
                 getBinAttributes();
             };
@@ -893,6 +923,37 @@
                 });
             };
 
+            function getDCs(){
+                $.ajax({
+                    url: '{!!url("/dcCRUD")!!}',
+                    type: "POST",
+                    data: {
+                        command: 'READ'
+                    },
+                    success: function (data) {
+                        // gridDC.option('dataSource', data);
+                        // gridDC.refresh();
+
+                        var dcForBin = $('#dcForBin');
+                        dcForBin.empty();
+
+                        // Append a select element with options to dcForBin
+                        var select = $('<select>').addClass('form-select mb-2').attr('id', 'selectDC');
+
+                        // Append an empty option as a default
+                        select.append($('<option>').text('-- Select DC --').val(''));
+
+                        // Append options based on the data
+                        data.forEach(function (item) {
+                            select.append($('<option>').text(item.strDCName).val(item.intAutoId).attr('name', item.strDCAbv));
+                        });
+
+                        // Append the select element to dcForBin
+                        dcForBin.append(select);
+                    }
+                });
+            };
+
             function getBins(){
                 $.ajax({
                     url: '{!!url("/binCrud")!!}',
@@ -929,7 +990,8 @@
                                 .text(item.strAttributeName);
 
                             var input = $('<input>').attr({
-                                type: 'number',
+                                type: 'text',
+                                pattern: "[0-9-]+",
                                 name: item.strDefaultChar // Set the name attribute
                             }).addClass('form-control mb-2 binInput');
 
@@ -956,6 +1018,7 @@
                         strLocationName: $("#txtLocationName").val(),
                         strLocationAbv: $("#txtLocationAbreviation").val(),
                         intLocationTypeId: $("#selLocationType").val(),
+                        strSageWhsCode: $("#selSageLocation").val(),
                         command: 'CREATE'
                     },
                     success: function (data) {
@@ -996,19 +1059,24 @@
             });
 
             $("#btnSaveBin").click(function () {
-                $.ajax({
-                    url: '{!!url("/binCrud")!!}',
-                    type: "POST",
-                    data: {
-                        strBinName: binName,
-                        intLocationId: $("#selectLocation").val(),
-                        mnyBinCapacity: $("#inputBinCapacity").val(),
-                        command: 'CREATE'
-                    },
-                    success: function (data) {
-                        $('#modalBins').modal('hide');
-                        getBins();
-                    }
+                var binListArray = binName.split(';');
+
+                binListArray.forEach(function(bin) {
+                    $.ajax({
+                        url: '{!!url("/binCrud")!!}',
+                        type: "POST",
+                        data: {
+                            strBinName: bin,
+                            intLocationId: $("#selectLocation").val(),
+                            intDCId: $("#selectDC").val(),
+                            mnyBinCapacity: $("#inputBinCapacity").val(),
+                            command: 'CREATE'
+                        },
+                        success: function (data) {
+                            $('#modalBins').modal('hide');
+                            getBins();
+                        }
+                    });
                 });
             });
 
@@ -1032,20 +1100,37 @@
             $('#attributesForBin').on('input', '.binInput', function() {
                 binName = '';
                 var location = $("#selectLocation option:selected").attr('name');
+                var dc = $("#selectDC option:selected").attr('name');
 
                 $('.binInput').each(function() {
-                    
                     var code = $(this).attr('name');
-                    var input = $(this).val();
+                    var input = $(this).val().toString();
 
                     if (input !== '') {
-                        binName += code + input + '-';
+                        if (input.includes('-')) {
+                            var range = input.split('-');
+                            var start = parseInt(range[0]);
+                            var end = parseInt(range[1]);
+
+                            // binName += code + input + '-';
+                            var concatName = '';
+
+                            for (var i = start; i <= end; i++) {
+                                // Perform your action for each number in the range
+                                concatName += (binName + code +i + ';');
+                            }
+                            binName = concatName;
+                            
+                            // binName += code + input + '-';
+                        } else {
+                            binName += code + input + '-';
+                        }
                     }
                 });
 
                 binName = binName.slice(0, -1);
 
-                $('#inputBinName').val(location + '-' + binName);
+                $('#inputBinName').val(location + '-' + dc + '-' + binName);
             });
         });
     </script>

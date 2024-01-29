@@ -1152,6 +1152,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getTruckSequencing', [WareHouseController::class,'getTruckSequencing']);
     Route::post('updateTruckLoadingSequence', [WareHouseController::class,'updateTruckLoadingSequence']);
     Route::get('failedInvoices', [WareHouseController::class,'failedInvoices']);
+    Route::get('getFailedInvoices', [WareHouseController::class,'getFailedInvoices']);
 });
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!

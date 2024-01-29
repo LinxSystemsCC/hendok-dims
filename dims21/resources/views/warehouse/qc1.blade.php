@@ -1,56 +1,38 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="csrf-token" content="{{ csrf_token() }}" />
-        <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
-        <link rel="icon" type="image/png" href="{{url('images/dimslogo.png')}}">
-        <title>QC Phase 1</title>
+@extends('layouts.base')
+
+{{-- Set the Title --}}
+@section('title', 'QC Phase1')
+
+
+
+{{-- Set to show navbar --}}
+@php
+    if ((Auth::guest()))
+    {
+
+    }else{
+        $v  =  new \App\Http\Controllers\SalesForm();
+        // $permission = $v->getThingsUserPermissions(Auth::user()->UserID,'Permission');
+    }
+
+    $includeMenu = true;
     
-        <!-- CSS only -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-        
-        <!-- DevExtreme theme -->
-        {{-- <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/22.2.3/css/dx.light.css"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.carmine.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.contrast.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.dark.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkmoon.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.darkviolet.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.greenmist.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.light.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.dark.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.blue.light.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.dark.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.lime.light.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.dark.css" rel="stylesheet"> --}}
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.css" rel="stylesheet">
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.dark.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.purple.light.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.dark.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.teal.light.css" rel="stylesheet"> --}}
-        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.softblue.css" rel="stylesheet"> --}}
-    
-    </head>
+@endphp
 
-<div class="col-12 d-flex px-0"  style="background: white;">
-    <div class="col-custom-2" style="background: white;">
+@section('page')
 
-        <div class="vertical-menu">
-            @include('warehouse.menu')
-        </div>
-    </div>
+<style>
+    #gridQcPhase1{
+        height: calc(100vh - 2rem);
+        max-height: calc(100vh - 2rem);
+    }
 
-    <div class="col-custom-10 p-3">
-        <h3 style="flex-grow: 1;">QC Phase 1</h3>
+</style>
 
-        <div class="tablearea">
-            <div id="gridContainer">
-        </div>
-    </div>
-</div>
+<div id="gridQcPhase1"></div>
 
 <!-- Modal New Item -->
-<div class="modal modal-lg fade" id="createjob" aria-labelledby="createjob" aria-hidden="true">
+<div class="modal modal-lg fade" id="modalPassOrFail" aria-labelledby="modalPassOrFail" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -173,55 +155,12 @@
     </div>
 </div>
 
-</div>
-    
+@endsection
 
-<style>
-    .dx-datagrid-table{
-        font-size:15px;
-    }
-
-    .dx-datagrid .dx-link {
-        color: #df2413;
-    }
-
-    .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
-        font-weight: 500;
-        background-color: #df2413;
-        color: #fff;
-    }
-
-    .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
-        color: #df2413;
-        font-size: 14px;
-        line-height: 18px;
-    }
-
-    .dx-datagrid {
-        height: calc(100vh - 63px);
-        max-height: calc(100vh - 63px);
-    }
-</style>
-
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-
-<!-- DevExtreme library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
+@section('scripts')
 
 <script>
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'off' );
-    });
+
     $(document).ready(function() {
 
         $('#zinc').prop( "disabled", true );
@@ -248,152 +187,138 @@
         });
         
         // Clear inputs and selects within the modal
-        $("#createjob").on("hidden.bs.modal", function () {
-            $("#createjob input, #createjob select").val("");
+        $("#modalPassOrFail").on("hidden.bs.modal", function () {
+            $("#modalPassOrFail input, #modalPassOrFail select").val("");
         });
 
-        $.ajax({
-
-            url: '{!!url("/getqc1")!!}',
-            type: "GET",
-            data: {
-        
+        const gridQcPhase1 = $("#gridQcPhase1").dxDataGrid({
+            dataSource:[], //as json
+            hoverStateEnabled: true,
+            showBorders: true,
+            filterRow: { visible: true },
+            filterPanel: { visible: true },
+            headerFilter: { visible: true },
+            allowColumnResizing: true,
+            columnAutoWidth: true,
+            scrolling: {
+                rowRenderingMode: 'infinite',
             },
-            success: function (data) {
+            paging:{
+                enabled: false
+            },
+            export: {
+                enabled: true
+            },
+            selection: {
+                mode: 'single',
+            },
+            onExporting(e) {
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('qc1');
 
-                $("#gridContainer").dxDataGrid({
-
-                    dataSource:data, //as json
-                    hoverStateEnabled: true,
-                    showBorders: true,
-                    filterRow: { visible: true },
-                    filterPanel: { visible: true },
-                    headerFilter: { visible: true },
-                    allowColumnResizing: true,
-                    columnAutoWidth: true,
-                    scrolling: {
-                        rowRenderingMode: 'infinite',
-                    },
-                    paging:{
-                        enabled: false
-                    },
-                    // pager: {
-                    //     visible: true,
-                    //     allowedPageSizes: [5, 10, 20, 50, 'all'],
-                    //     showPageSizeSelector: true,
-                    //     showInfo: true,
-                    //     showNavigationButtons: true,
-                    // },
-                    export: {
-                        enabled: true
-                    },
-                    selection: {
-                        mode: 'single',
-                    },
-                    onExporting(e) {
-                        const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('qc1');
-
-                        DevExpress.excelExporter.exportDataGrid({
-                            component: e.component,
-                            worksheet,
-                            autoFilterEnabled: true,
-                        }).then(() => {
-                            workbook.xlsx.writeBuffer().then((buffer) => {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'qc1.xlsx');
-                            });
-                        });
-                        e.cancel = true;
-                    },
-
-                    columns: [
-                        {
-                            dataField: "JobNo",
-                            caption: "Job No",
-                            //width:100,
-                        },{
-                            dataField: "TestNo",
-                            caption: "Test No",
-                            //width:100,
-                        },{
-                            dataField: "Reference",
-                            caption: "Reference",
-                            //width:150,
-                        },{
-                            dataField: "CustomerName",
-                            caption: "Customer Name",
-                            //width:150,
-                        },{
-                            dataField: "ProductName",
-                            caption: "Product",
-                            //width:150,
-                        },{
-                            dataField: "DepartmentName",
-                            caption: "Department",
-                            //width: 450,
-                        },{
-                            dataField: "MachineName",
-                            caption: "Machine",
-                            //width: 350,
-                        },{
-                            dataField: "MPATolerance",
-                            caption: "MPA Tolerance",
-                            //width:250,
-                        },{
-                            dataField: "ZincSpec",
-                            caption: "Zinc Spec",
-                            //width:250,
-                        },{
-                            dataField: "WireSize",
-                            caption: "Wire Size",
-                            dataType: "number", 
-                            alignment: "left",
-                            type:"fixedPoint",  
-                            precision:2,
-                            //width:200,
-                        },{
-                            dataField: "SizeTolerance",
-                            caption: "Wire Tolerance",
-                        },{
-                            dataField: "MaxTDT",
-                            caption: "Date",
-                            //width:250,
-                        },
-                        {
-                            dataField: "MassRequired",
-                            caption: "Required",
-                            //width:100,
-                        },{
-                            dataField: "count",
-                            caption: "Count",
-                            visible: false,
-                            //width:100,
-                        },
-
-                    ],
-
-                    onRowDblClick:function(e){
-                        $('#createjob').modal('toggle');
-                        var dataGrid = $("#gridContainer").dxDataGrid("instance");
-                        var selectedRowsData = dataGrid.getSelectedRowsData();
-                        var dept = selectedRowsData[0].DepartmentName;
-                        var mach = selectedRowsData[0].MachineName;
-                        var title = dept + ", " + mach;
-                        var testNo = selectedRowsData[0].TestNo;
-
-                        $('#qc1TestTitle').text(title);
-                        $('#test').val(testNo);
-                    },
-
-                    onRowClick:function(e){
-
-                    },
+                DevExpress.excelExporter.exportDataGrid({
+                    component: e.component,
+                    worksheet,
+                    autoFilterEnabled: true,
+                }).then(() => {
+                    workbook.xlsx.writeBuffer().then((buffer) => {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'qc1.xlsx');
+                    });
                 });
+                e.cancel = true;
+            },
+            columns: [
+                {
+                    dataField: "JobNo",
+                    caption: "Job No",
+                    //width:100,
+                },{
+                    dataField: "TestNo",
+                    caption: "Test No",
+                    //width:100,
+                },{
+                    dataField: "Reference",
+                    caption: "Reference",
+                    //width:150,
+                },{
+                    dataField: "CustomerName",
+                    caption: "Customer Name",
+                    //width:150,
+                },{
+                    dataField: "ProductName",
+                    caption: "Product",
+                    //width:150,
+                },{
+                    dataField: "DepartmentName",
+                    caption: "Department",
+                    //width: 450,
+                },{
+                    dataField: "MachineName",
+                    caption: "Machine",
+                    //width: 350,
+                },{
+                    dataField: "MPATolerance",
+                    caption: "MPA Tolerance",
+                    //width:250,
+                },{
+                    dataField: "ZincSpec",
+                    caption: "Zinc Spec",
+                    //width:250,
+                },{
+                    dataField: "WireSize",
+                    caption: "Wire Size",
+                    dataType: "number", 
+                    alignment: "left",
+                    type:"fixedPoint",  
+                    precision:2,
+                    //width:200,
+                },{
+                    dataField: "SizeTolerance",
+                    caption: "Wire Tolerance",
+                },{
+                    dataField: "MaxTDT",
+                    caption: "Date",
+                    //width:250,
+                },
+                {
+                    dataField: "MassRequired",
+                    caption: "Required",
+                    //width:100,
+                },{
+                    dataField: "count",
+                    caption: "Count",
+                    visible: false,
+                    //width:100,
+                },
+            ],
+            onRowDblClick:function(e){
+                $('#modalPassOrFail').modal('toggle');
+                var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
+                var selectedRowsData = dataGrid.getSelectedRowsData();
+                var dept = selectedRowsData[0].DepartmentName;
+                var mach = selectedRowsData[0].MachineName;
+                var title = dept + ", " + mach;
+                var testNo = selectedRowsData[0].TestNo;
 
-            }
+                $('#qc1TestTitle').text(title);
+                $('#test').val(testNo);
+            },
+            onToolbarPreparing: function (e) {
+                // Create a custom header on the left side
+                e.toolbarOptions.items.unshift(
+                    {
+                        location: 'before',
+                        template: function () {
+                            return $('<h3>').text('QC PHASE 1');
+                        }
+                    }
+                );
+            },
 
-        });
-        
+        }).dxDataGrid('instance');
+
+        getQc1Data();
+
         // Update Comments Lists
         $.ajax({
 
@@ -421,7 +346,7 @@
         });
 
         $('#testpass').click(function(){
-            var dataGrid = $("#gridContainer").dxDataGrid("instance");
+            var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
             $.ajax({
@@ -458,17 +383,18 @@
 
                 },
                 success: function (data) {
-                    console.debug(data[0]);
                     if (data[0].Result != "Success"){
                         alert(data[0].Result);
                     }
                     else{
                         if (data[0].Warnings != "Warning:"){
                             alert(data[0].Warnings);
-                            location.reload();
+                            getQc1Data();
+                            $('#modalPassOrFail').modal('hide');
                         }
                         else{
-                            location.reload();
+                            getQc1Data();
+                            $('#modalPassOrFail').modal('hide');
                         }
                     }
                 }
@@ -478,18 +404,8 @@
         });
 
         $('#testfail').click(function(){
-            var dataGrid = $("#gridContainer").dxDataGrid("instance");
+            var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
-
-            // if ((selectedRowsData.lenght) < 1){
-            //     alert("No Data Selected0");
-            //     console.debug("no item selected");
-            //     console.log(selectedRowsData.lenght);
-            // }
-                
-            console.debug(selectedRowsData);
-            console.debug(selectedRowsData[0]);
-            //console.debug(reference);
 
             $.ajax({
                 
@@ -526,17 +442,18 @@
 
                 },
                 success: function (data) {
-                    console.debug(data[0]);
                     if (data[0].Result != "Success"){
                         alert(data[0].Result);
                     }
                     else{
                         if (data[0].Warnings != "Warning:"){
                             alert(data[0].Warnings);
-                            location.reload();
+                            getQc1Data();
+                            $('#modalPassOrFail').modal('hide');
                         }
                         else{
-                            location.reload();
+                            getQc1Data();
+                            $('#modalPassOrFail').modal('hide');
                         }
                     }
                 }
@@ -545,7 +462,7 @@
         });
 
         $('#calczinc').click(function(){
-            var dataGrid = $("#gridContainer").dxDataGrid("instance");
+            var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
             var zincInitialMass = $("#initmass").val();
@@ -559,85 +476,54 @@
 
         });
 
-        
-        $('.sidebar ul li a').click(function(){
-            var id = $(this).attr('id');
-            $('nav ul li ul.item-show-'+id).toggleClass("show");
-            $('nav ul li #'+id+' span').toggleClass("rotate");
+        function getQc1Data(){
+            $.ajax({
+                url: '{!!url("/getqc1")!!}',
+                type: "GET",
+                data: {
 
-        });
+                },
+                success: function (data) {
+                    gridQcPhase1.option('dataSource', data);
+                    gridQcPhase1.refresh();
 
-        $('nav ul li').click(function(){
-            $(this).addClass("active").siblings().removeClass("active");
-        });
+                    gridData = gridQcPhase1.option("dataSource");
+                }
+            });
+        }
 
         doacheck();
 
+        function doacheck(){
+            setInterval(checkforchanges,10000);
+        };
+
+        function checkforchanges(){
+            $.ajax({
+                url: '{!!url("/checkForGalvUpdates")!!}',
+                type: "GET",
+                data: {
+                    checker: "QC1",
+                },
+                success: function (data) {
+                    // console.log(data[0].Result);
+                    if (data[0].Result == "Reload"){
+                        $.ajax({
+                            url: '{!!url("/deleteGalvChecker")!!}',
+                            type: "GET",
+                            data: {
+                                checker: "QC1",
+                            },
+                            success: function (data) {
+                                getQc1Data();
+                            }
+                        });
+                    }
+                }
+            });
+        };
     });
 
-
-    function showDialog(tag,width,height)
-    {
-        $( tag ).dialog({height: height, modal: false,
-            width: width,containment: false}).dialogExtend({
-            "closable" : true, // enable/disable close button
-            "maximizable" : false, // enable/disable maximize button
-            "minimizable" : true, // enable/disable minimize button
-            "collapsable" : true, // enable/disable collapse button
-            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar" : false, // false, 'none', 'transparent'
-            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-            "icons" : { // jQuery UI icon class
-
-                "maximize" : "ui-icon-circle-plus",
-                "minimize" : "ui-icon-circle-minus",
-                "collapse" : "ui-icon-triangle-1-s",
-                "restore" : "ui-icon-bullet"
-            },
-            "load" : function(evt, dlg){ }, // event
-            "beforeCollapse" : function(evt, dlg){ }, // event
-            "beforeMaximize" : function(evt, dlg){ }, // event
-            "beforeMinimize" : function(evt, dlg){ }, // event
-            "beforeRestore" : function(evt, dlg){ }, // event
-            "collapse" : function(evt, dlg){  }, // event
-            "maximize" : function(evt, dlg){ }, // event
-            "minimize" : function(evt, dlg){  }, // event
-            "restore" : function(evt, dlg){  } // event
-        });
-    };
-
-    function doacheck(){
-        setInterval(checkforchanges,10000);
-    };
-
-    function checkforchanges(){
-        $.ajax({
-            url: '{!!url("/checkForGalvUpdates")!!}',
-            type: "GET",
-            data: {
-                checker: "QC1",
-            },
-            success: function (data) {
-                // console.log(data[0].Result);
-                if (data[0].Result == "Reload"){
-                    console.log("deleting record and reloading");
-                    //runs store procedure to delete the record
-                    $.ajax({
-                        url: '{!!url("/deleteGalvChecker")!!}',
-                        type: "GET",
-                        data: {
-                            checker: "QC1",
-                        },
-                        success: function (data) {
-                            location.reload();
-                        }
-                    });
-                }
-                else{
-                    // console.log("as you where young lad");
-                }
-            }
-        });
-    };
-
 </script>
+
+@endsection

@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class WarehouseSetupController extends Controller
 {
-    public function stockLocations()
+    public function LocationsAndBins()
     {
-        return view('warehouse.setup.stockLocations');
+        $sageWarehouses = DB::connection('sqlsrv2')->select("SELECT Code, [Name] FROM [Hendok Distribution].dbo.WhseMst");
+        return view('warehouse.setup.stockLocations')
+            ->with('sageWarehouses', $sageWarehouses);
     }
 
     public function stockLocationCrud(Request $request){
@@ -19,9 +21,10 @@ class WarehouseSetupController extends Controller
         $strLocationName = $request->get("strLocationName");
         $strLocationAbv = $request->get("strLocationAbv");
         $intLocationTypeId = $request->get("intLocationTypeId");
+        $strSageWhsCode = $request->get("strSageWhsCode");
         $command = $request->get("command");
 
-        $result = DB::connection('sqlsrv2')->select("EXEC spStockLocationCrud '$intLocationId', '$strLocationName', '$strLocationAbv', '$intLocationTypeId', '$command'");
+        $result = DB::connection('sqlsrv2')->select("EXEC spStockLocationCrud '$intLocationId', '$strLocationName', '$strLocationAbv', '$intLocationTypeId', '$strSageWhsCode', '$command'");
 
         return response()->json($result);
     }
@@ -45,14 +48,25 @@ class WarehouseSetupController extends Controller
         return response()->json($result);
     }
 
+    public function dcCrud(Request $request){
+        $intAutoId = $request->get("intAutoId"); 
+        $strDCName = $request->get("strDCName");
+        $strDCAbv = $request->get("strDCAbv");
+        $command = $request->get("command");
+
+        $result = DB::connection('sqlsrv2')->select("EXEC spDcCrud '$intAutoId', '$strDCName', '$strDCAbv', '$command'");
+        return response()->json($result);
+    }
+
     public function binCrud(Request $request){
         $intBinId = $request->get("intBinId"); 
         $strBinName = $request->get("strBinName");
-        $intLocationId = $request->get("intLocationId");
+        $intLocationId = $request->get("intLocationId");+
+        $intDCId = $request->get("intDCId");
         $mnyBinCapacity = $request->get("mnyBinCapacity");
         $command = $request->get("command");
 
-        $result = DB::connection('sqlsrv2')->select("EXEC spBinCrud '$intBinId', '$strBinName', '$intLocationId', '$mnyBinCapacity', '$command'");
+        $result = DB::connection('sqlsrv2')->select("EXEC spBinCrud '$intBinId', '$strBinName', '$intLocationId', '$intDCId','$mnyBinCapacity', '$command'");
         return response()->json($result);
     }
 
@@ -67,8 +81,4 @@ class WarehouseSetupController extends Controller
 
         return response()->json($result);
     }
-
-    
-
-    
 }

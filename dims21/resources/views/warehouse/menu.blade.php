@@ -656,7 +656,7 @@ if ((Auth::guest()))
                         </li>
                         <li>
                             @if($locations !="0")
-                            <a href='{!!url("/location")!!}'>Locations</a>
+                            <a href='{!!url("/LocationsAndBins")!!}'>Locations & Bins</a>
                             @endif
                         </li>
                         <li>
@@ -785,6 +785,11 @@ if ((Auth::guest()))
         <ul>
             <li>
                 <a href= "{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> <i class="fa fa-sign-out"></i>Logout
+                </a>
+                <a class="text-light"> <i class="fa fa-user"></i>
+                    @if(Auth::check())
+                        Welcome {{ Auth::user()->UserName }}
+                    @endif
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
