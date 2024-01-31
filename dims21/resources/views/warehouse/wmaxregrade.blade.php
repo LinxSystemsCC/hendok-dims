@@ -28,14 +28,12 @@
 
     <div id="gridRegrade"></div>
 
-    <div title="Job Creation" id="modalRegrade" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRegradeTitle" aria-hidden="true">
+    <div title="Regrade" id="modalRegrade" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRegradeTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="weighTestTitle">Regrade Product</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="CloseModal"></button>
                 </div>
 
                 <div class="modal-body">
@@ -93,7 +91,10 @@
                         toAppend += '<option value="'+o.ProductID+'">'+o.ProductName+'</option>';
                     });
                     $("#product").append(toAppend);
-                    $("#product").select2();
+                    $("#product").select2({
+                        theme: 'bootstrap-5',
+                        dropdownParent: $('#modalRegrade'),
+                    });
                 }
             });
         });
