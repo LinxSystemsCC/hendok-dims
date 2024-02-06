@@ -405,63 +405,71 @@
         });
 
         $('#testfail').click(function(){
-            $(this).prop("disabled", true);
-            var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
-            var selectedRowsData = dataGrid.getSelectedRowsData();
+            var comment1 = $("#comment1 option:selected").text();
+            var comment2 = $("#comment2 option:selected").text();
+            var comment3 = $("#comment3 option:selected").text();
 
-            $.ajax({
-                
-                url: '{!!url("/qc1pf")!!}',
-                type: "POST",
-                data: {
-                    Reference: selectedRowsData[0].Reference,
-                    CustomerName: selectedRowsData[0].CustomerName,
-                    ProductName: selectedRowsData[0].ProductName,
-                    DepartmentName: selectedRowsData[0].DepartmentName,
-                    MachineName: selectedRowsData[0].MachineName,
-                    JobNo: selectedRowsData[0].JobNo,
-                    WireSize: selectedRowsData[0].WireSize,
-                    MassRequired: selectedRowsData[0].MassRequired,
-                    testNo: $("#test").val(),
-                    zincTested: $("#zinc").val(),
-                    mpaTested: $("#mpa").val(),
-                    castNo: $("#CastNo").val(),
-                    wireSizeTested: $("#wiresize").val(),
-                    stressTest: $("#stresstest").val(),
-                    elongBreakTest: $("#elongation").val(),
-                    torsionTest: $("#torsion").val(),
-                    wrapTest: $("#wraptest").val(), 
-                    coating: $("#coating option:selected").text(), 
-                    comment1: $("#comment1 option:selected").text(),
-                    massProduced: selectedRowsData[0].MassProduced,
-                    zincInitialMass: $("#initmass").val(),
-                    zincStripMass: $("#stripmass").val(),
-                    zincStripSize: $("#stripsize").val(),
-                    comment2: $("#comment2 option:selected").text(),
-                    comment3: $("#comment3 option:selected").text(),
-                    testpf: "F",
+            if (comment1.trim() == "" && comment2.trim() == "" && comment3.trim() == "") {
+                alert("You need to select at least one comment.");
+            } else {
+                $(this).prop("disabled", true);
+                var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
+                var selectedRowsData = dataGrid.getSelectedRowsData();
+
+                $.ajax({
+                    
+                    url: '{!!url("/qc1pf")!!}',
+                    type: "POST",
+                    data: {
+                        Reference: selectedRowsData[0].Reference,
+                        CustomerName: selectedRowsData[0].CustomerName,
+                        ProductName: selectedRowsData[0].ProductName,
+                        DepartmentName: selectedRowsData[0].DepartmentName,
+                        MachineName: selectedRowsData[0].MachineName,
+                        JobNo: selectedRowsData[0].JobNo,
+                        WireSize: selectedRowsData[0].WireSize,
+                        MassRequired: selectedRowsData[0].MassRequired,
+                        testNo: $("#test").val(),
+                        zincTested: $("#zinc").val(),
+                        mpaTested: $("#mpa").val(),
+                        castNo: $("#CastNo").val(),
+                        wireSizeTested: $("#wiresize").val(),
+                        stressTest: $("#stresstest").val(),
+                        elongBreakTest: $("#elongation").val(),
+                        torsionTest: $("#torsion").val(),
+                        wrapTest: $("#wraptest").val(), 
+                        coating: $("#coating option:selected").text(), 
+                        comment1: $("#comment1 option:selected").text(),
+                        massProduced: selectedRowsData[0].MassProduced,
+                        zincInitialMass: $("#initmass").val(),
+                        zincStripMass: $("#stripmass").val(),
+                        zincStripSize: $("#stripsize").val(),
+                        comment2: $("#comment2 option:selected").text(),
+                        comment3: $("#comment3 option:selected").text(),
+                        testpf: "F",
 
 
-                },
-                success: function (data) {
-                    if (data[0].Result != "Success"){
-                        alert(data[0].Result);
-                        getQc1Data();
-                    }
-                    else{
-                        if (data[0].Warnings != "Warning:"){
-                            alert(data[0].Warnings);
-                            $('#modalPassOrFail').modal('hide');
+                    },
+                    success: function (data) {
+                        if (data[0].Result != "Success"){
+                            alert(data[0].Result);
                             getQc1Data();
                         }
                         else{
-                            $('#modalPassOrFail').modal('hide');
-                            getQc1Data();
+                            if (data[0].Warnings != "Warning:"){
+                                alert(data[0].Warnings);
+                                $('#modalPassOrFail').modal('hide');
+                                getQc1Data();
+                            }
+                            else{
+                                $('#modalPassOrFail').modal('hide');
+                                getQc1Data();
+                            }
                         }
                     }
-                }
 
-            });
+                });
+            }
         });
 
         $('#calczinc').click(function(){
