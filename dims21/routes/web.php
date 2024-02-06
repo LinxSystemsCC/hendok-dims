@@ -974,6 +974,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('wmaxlanding', [WareHouseController::class,'wmaxlanding']);
     Route::get('wmaxreprint', [WareHouseController::class,'wmaxreprint']);
     Route::post('galvReprintEdit', [WareHouseController::class,'galvReprintEdit']);
+    Route::get('getGalvReprints', [WareHouseController::class,'getGalvReprints']);
     Route::get('roofingreprint', [WareHouseController::class,'roofingreprint']);
     Route::get('wmaxgetcustomerproduct', [WareHouseController::class,'wmaxgetcustomerproduct']);
     Route::get('wmaxgetproductinfo', [WareHouseController::class,'wmaxgetproductinfo']);
@@ -1153,6 +1154,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateTruckLoadingSequence', [WareHouseController::class,'updateTruckLoadingSequence']);
     Route::get('failedInvoices', [WareHouseController::class,'failedInvoices']);
     Route::get('getFailedInvoices', [WareHouseController::class,'getFailedInvoices']);
+    Route::get('checkScanned', [WareHouseController::class,'checkScanned']);
+    Route::get('getCheckScanned', [WareHouseController::class,'getCheckScanned']);
 });
 
 //WAREHOUSECONTROLLER CONTROLLER ENDS HERE !!!
@@ -1256,4 +1259,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('printLabelPage/{department}',[PDFController::class,'printLabelPage']);
     Route::post('printLabelByDepartment',[PDFController::class,'printLabelByDepartment']);
     Route::get('getUserPrintersMappedToProductCategory', [PDFController::class,'getUserPrintersMappedToProductCategory']);
+    Route::get('galvQCJobCard/{id}', [PDFController::class,'galvQCJobCard']);
 });

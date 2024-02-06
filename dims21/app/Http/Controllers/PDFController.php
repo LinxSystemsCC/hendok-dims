@@ -168,4 +168,20 @@ class PDFController extends Controller
         return response()->json($result);
     }
 
+    public function galvQCJobCard($id)
+    {
+        $job = DB::connection('sqlsrv2')->select("EXEC spGetGalvQCJobCard $id");
+        $data = ['intJobId' => $id, 'job' => $job[0]];
+
+        // dd($job);
+        $pdf = PDF::loadView('warehouse.galv.galvQCJobCard', $data);
+
+        $pdf->setPaper('a3', 'landscape');
+        $pdf->render();
+        return $pdf->stream('galvQCJobCard.pdf');
+        // return $pdf->download('galvQCJobCard.pdf');
+        // return view('warehouse.galv.galvQCJobCard')->with('job', $job[0])->with('intJobId', $id);
+    }
+
+
 }

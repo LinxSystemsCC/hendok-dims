@@ -346,6 +346,7 @@
         });
 
         $('#testpass').click(function(){
+            $(this).prop("disabled", true);
             var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
@@ -389,12 +390,12 @@
                     else{
                         if (data[0].Warnings != "Warning:"){
                             alert(data[0].Warnings);
-                            getQc1Data();
                             $('#modalPassOrFail').modal('hide');
+                            getQc1Data();
                         }
                         else{
-                            getQc1Data();
                             $('#modalPassOrFail').modal('hide');
+                            getQc1Data();
                         }
                     }
                 }
@@ -404,6 +405,7 @@
         });
 
         $('#testfail').click(function(){
+            $(this).prop("disabled", true);
             var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
@@ -444,16 +446,17 @@
                 success: function (data) {
                     if (data[0].Result != "Success"){
                         alert(data[0].Result);
+                        getQc1Data();
                     }
                     else{
                         if (data[0].Warnings != "Warning:"){
                             alert(data[0].Warnings);
-                            getQc1Data();
                             $('#modalPassOrFail').modal('hide');
+                            getQc1Data();
                         }
                         else{
-                            getQc1Data();
                             $('#modalPassOrFail').modal('hide');
+                            getQc1Data();
                         }
                     }
                 }
@@ -477,6 +480,8 @@
         });
 
         function getQc1Data(){
+            $('#testpass').prop("disabled", false);
+            $('#testfail').prop("disabled", false);
             $.ajax({
                 url: '{!!url("/getqc1")!!}',
                 type: "GET",

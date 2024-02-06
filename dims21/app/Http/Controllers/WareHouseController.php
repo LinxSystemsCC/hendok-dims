@@ -1550,8 +1550,8 @@ class WareHouseController extends Controller
 
     public function wmaxreprint()
     {
-        $jobs = DB::connection('sqlsrv2')->select("SELECT * FROM viewGalvReprint ORDER BY [DateTime] DESC");
-        return view('warehouse/wmaxreprint')->with('jobs',$jobs);
+        // $jobs = DB::connection('sqlsrv2')->select("SELECT * FROM viewGalvReprint ORDER BY [DateTime] DESC");
+        return view('warehouse/wmaxreprint');//->with('jobs',$jobs);
     }
 
     public function galvReprintEdit(Request $request)
@@ -1561,9 +1561,16 @@ class WareHouseController extends Controller
         $TreatedMPA = $request->get("TreatedMPA");
         $TestedZinc = $request->get("TestedZinc");
         $Weight = $request->get("Weight");
+        $Table = $request->get("Table");
 
-        $result = DB::connection('sqlsrv2')->select("EXEC spUpdateGalvCompletedJob '$TicketNo', $ActualWireSize, $TreatedMPA, $TestedZinc, $Weight");
+        $result = DB::connection('sqlsrv2')->select("EXEC spUpdateGalvCompletedJob '$TicketNo', $ActualWireSize, $TreatedMPA, $TestedZinc, $Weight, '$Table'");
         return response()->json($result);
+    }
+
+    public function getGalvReprints(Request $request)
+    {
+        $reprints = DB::connection('sqlsrv2')->select("SELECT * FROM viewGalvReprint ORDER BY [DateTime] DESC");
+        return response()->json($reprints);
     }
 
     public function roofingreprint()
@@ -3446,6 +3453,17 @@ dd("Exec spPostLinePickedReason $intAutoPickinghidden,$reasonId,$userId,$picked"
         $dateTo = $request->get('dateTo');
         $failures = DB::connection('sqlsrv3')->select("EXEC spFailedInvoices '$dateFrom','$dateTo'");
         return response()->json($failures);
+    }
+
+    public function checkScanned(){
+        // $scanned = DB::connection('sqlsrv3')->select(EXEC spCheckScanned");
+        return view('warehouse.reports.checkScanned');//->with('scanned', $scanned);
+    }
+
+    public function getCheckScanned(Request $request){
+        $tlno = $request->get("tlno");
+        $scanned = DB::connection('sqlsrv3')->select("EXEC spCheckScanned $tlno");
+        return response()->json($scanned);
     }
 
     private static function getTabs($tabcount)

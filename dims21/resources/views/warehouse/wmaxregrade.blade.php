@@ -254,6 +254,7 @@
         getRegrade();
 
         function getRegrade(){
+            $('#regrade').prop("disabled", false);
             $.ajax({
                 url: '{!!url("/getregrade")!!}',
                 type: "GET",
@@ -295,6 +296,7 @@
         });
 
         $('#regrade').click(function(){
+            $(this).prop("disabled", true);
             var selectedRowsData = gridRegrade.getSelectedRowsData();
 
             var ref = selectedRowsData[0].Reference;
@@ -338,8 +340,8 @@
                         // window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket +'/Accept', "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
                         window.open('{!!url("/printGalvLabel")!!}/'+ticket,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
 
-                        getRegrade();
                         $('#modalRegrade').modal('hide');
+                        getRegrade();
                     }
                 }
 

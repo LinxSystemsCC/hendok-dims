@@ -261,7 +261,15 @@
 
                 },
                 success: function (data) {
-                    location.reload();
+                    if (data[0].Result = "Success"){
+                        var ticket =  data[0].TicketNo;
+
+                        window.open('{!!url("/printGalvLabel")!!}/'+ticket,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
+                        location.reload();
+                    }else{
+                        alert("error saving re-test. Please try again.");
+                        location.reload();
+                    }
                 }
 
                 });

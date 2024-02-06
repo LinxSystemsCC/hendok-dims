@@ -60,24 +60,20 @@
                         caption: "Unique ID",
                     },
                     {
+                        dataField: "OrderNo",
+                        caption: "Order No",
+                    },
+                    {
                         dataField: "intFlag",
                         caption: "Flag",
                     },
                     {
-                        dataField: "intOrderID",
-                        caption: "Order Id",
+                        dataField: "strErrorMessage",
+                        caption: "Error",
                     },
                     {
                         dataField: "dteCreated",
                         caption: "Date Created",
-                    },
-                    {
-                        dataField: "SoNumber",
-                        caption: "SO Number",
-                    },
-                    {
-                        dataField: "Compnay",
-                        caption: "Company",
                     },
                 ],
                 onToolbarPreparing: function (e) {

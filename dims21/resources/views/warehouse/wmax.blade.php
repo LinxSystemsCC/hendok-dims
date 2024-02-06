@@ -43,6 +43,12 @@
             Complete Job
         </button>
         @endif
+
+        @if($nwo !="0")
+        <button type="button" id="jobCard" class="btn btn-success" disabled>
+            QC Job Card
+        </button>
+        @endif
     </div>
 
     <div id="gridShiftData" style="width: 100% !important;"></div>
@@ -265,6 +271,7 @@
         });
 
         $('#saveGalvJob').click(function(){
+            $(this).prop("disabled", true);
             var textbox = $('#reference').val();
             length = textbox.length;
 
@@ -305,9 +312,6 @@
                 }
             });
             }
-            
-            
-
         });
 
         var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
@@ -403,6 +407,7 @@
                     currentSelectedRow = [];
                     e.component.clearSelection();
                     $("#completejob").prop("disabled", true);
+                    $("#jobCard").prop("disabled", true);
                 }else{
                     currentSelectedRow = [];
                     currentSelectedRow.push(clickedID);
@@ -410,6 +415,7 @@
                     $("#JobEndTextMessage").css("white-space", "pre-wrap");
                     $("#JobEndTextMessage").text("ARE YOU SURE YOU WANT TO COMPLETE JOB: "+clickedID+"? \nTHE JOB WILL NO LONGER BE ACCESSABLE ANYMORE");
                     $("#completejob").prop("disabled", false);
+                    $("#jobCard").prop("disabled", false);
                 }
 
             },
@@ -466,6 +472,8 @@
         getShiftData();
 
         function getWorkInProgress(){
+            $('#saveGalvJob').prop("disabled", false);
+            
             $.ajax({
                 url: '{!!url("/getGalvWIP")!!}',
                 type: "GET",
@@ -480,7 +488,14 @@
                 },
 
             });
-        }
+        };
+
+        $('#jobCard').click(function(){
+            var selectedRowsData = gridWorkInProgress.getSelectedRowsData();
+                        
+            var JobNo = selectedRowsData[0].JobNo;
+            window.open('{!!url("/galvQCJobCard")!!}/'+JobNo,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
+        });
 
         function getShiftData(){
             $.ajax({
@@ -494,7 +509,7 @@
                 },
 
             });
-        }
+        };
 
         doacheck();
 

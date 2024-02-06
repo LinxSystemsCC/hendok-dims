@@ -219,6 +219,7 @@
         });
 
         $('#save').click(function(){
+            $(this).prop("disabled", true);
             $.ajax({
                 url: '{!!url("/savestockchangewmax")!!}',
                 type: "POST",

@@ -359,6 +359,7 @@
         });
 
         $('#testpass').click(function(){
+            $(this).prop("disabled", true);
             var dataGrid = $("#gridQcPhase2").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
@@ -396,19 +397,19 @@
                     buttonMethod: "PASS",
                 },
                 success: function (data) {
-                    console.debug(data[0]);
                     if (data[0].Result != "Success"){
                         alert(data[0].Result);
+                        getQc2Data();
                     }
                     else{
                         if (data[0].Warnings != "Warning:"){
                             alert(data[0].Warnings);
-                            getQc2Data();
                             $('#modalPassOrFail').modal('hide');
+                            getQc2Data();
                         }
                         else{
-                            getQc2Data();
                             $('#modalPassOrFail').modal('hide');
+                            getQc2Data();
                         }
                     }
                 }
@@ -419,6 +420,7 @@
         });
 
         $('#testfail').click(function(){
+            $(this).prop("disabled", true);
             var dataGrid = $("#gridQcPhase2").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
             
@@ -456,19 +458,19 @@
                     buttonMethod: "FAIL",
                 },
                 success: function (data) {
-                    console.debug(data[0]);
                     if (data[0].Result != "Success"){
                         alert(data[0].Result);
+                        getQc2Data();
                     }
                     else{
                         if (data[0].Warnings != "Warning:"){
                             alert(data[0].Warnings);
-                            getQc2Data();
                             $('#modalPassOrFail').modal('hide');
+                            getQc2Data();
                         }
                         else{
-                            getQc2Data();
                             $('#modalPassOrFail').modal('hide');
+                            getQc2Data();
                         }
                     }
                 }
@@ -492,6 +494,8 @@
         });
 
         function getQc2Data(){
+            $('#testpass').prop("disabled", false);
+            $('#testfail').prop("disabled", false);
             $.ajax({
                 url: '{!!url("/getqc2")!!}',
                 type: "GET",

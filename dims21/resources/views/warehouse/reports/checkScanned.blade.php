@@ -11,14 +11,14 @@
 
 @section('page')
 
-<div id="gridFailedInvoices"></div>
+<div id="gridCheckScanned"></div>
 
 @endsection
 
 @section('scripts')
 
     <style>
-        #gridFailedInvoices{
+        #gridCheckScanned{
             height: calc(100vh - 2rem);
             max-height: calc(100vh - 2rem);
         }
@@ -29,7 +29,7 @@
 
             var failures = [];
 
-            const gridFailedInvoices = $("#gridFailedInvoices").dxDataGrid({
+            const gridCheckScanned = $("#gridCheckScanned").dxDataGrid({
                 dataSource: failures,
                 showBorders: true,
                 showRowLines: true,
@@ -52,32 +52,41 @@
                 columnResizingMode: "nextColumn",
                 columns: [
                     {
-                        dataField: "intXMLOrder",
-                        caption: "XML Order",
-                    },
-                    {
-                        dataField: "strUniqueID",
-                        caption: "Unique ID",
-                    },
-                    {
-                        dataField: "intFlag",
-                        caption: "Flag",
-                    },
-                    {
-                        dataField: "intOrderID",
-                        caption: "Order Id",
-                    },
-                    {
-                        dataField: "dteCreated",
-                        caption: "Date Created",
-                    },
-                    {
-                        dataField: "SoNumber",
-                        caption: "SO Number",
-                    },
-                    {
-                        dataField: "Compnay",
+                        dataField: "Company",
                         caption: "Company",
+                        groupIndex: 1
+                    },
+                    {
+                        dataField: "Code",
+                        caption: "Item Code",
+                    },
+                    {
+                        dataField: "Description_1",
+                        caption: "Item Description",
+                    },
+                    {
+                        dataField: "PickedTime",
+                        caption: "Picked Time",
+                    },
+                    {
+                        dataField: "strAppName",
+                        caption: "App",
+                    },
+                    {
+                        dataField: "Loader",
+                        caption: "Loader",
+                    },
+                    {
+                        dataField: "Picker",
+                        caption: "Picker",
+                    },
+                    {
+                        dataField: "OrderNum",
+                        caption: "Order No.",
+                    },
+                    {
+                        dataField: "InvNumber",
+                        caption: "Invoice No.",
                     },
                 ],
                 onToolbarPreparing: function (e) {
@@ -86,20 +95,19 @@
                         {
                             location: 'before',
                             template: function () {
-                                return $('<h3>').text('Failed Invoices');
+                                return $('<h3>').text('Check Scanned');
                             }
                         }
                     );
                     e.toolbarOptions.items.push(
                         {
                             location: 'after',
-                            widget: "dxDateRangeBox",
+                            widget: "dxTextBox",
                             options: {
+                                placeholder: 'Enter TL number',
                                 width: 300,
-                                class: "myDateRangeBox",
-                                displayFormat: 'yyyy-MM-dd',
                                 elementAttr: {
-                                    id: "dateRange"
+                                    id: "txtTruckload"
                                 },
                             }
                         }
@@ -111,36 +119,27 @@
                             icon: "fa-solid fa-search",
                             text: "SEARCH",
                             onClick: function (args) {
-                                getFailedInvoices();
+                                getCheckScanned();
                             },
                         },
                     });
                 }
             }).dxDataGrid('instance');
 
-            function getFailedInvoices(){
-                // Get the dxDateRangeBox widget instance using the CSS class
-                var dateRangeBox = $("#dateRange").dxDateRangeBox("instance");
-                var selectedValues = dateRangeBox.option("value");
-
-                var dateFrom = selectedValues[0].toLocaleDateString("en-ZA", { year: 'numeric', month: '2-digit', day: '2-digit' });
-                var dateTo = selectedValues[1].toLocaleDateString("en-ZA", { year: 'numeric', month: '2-digit', day: '2-digit' });
-
-                dateFrom = dateFrom.replace(/\//g, '-');
-                dateTo = dateTo.replace(/\//g, '-');
-
+            function getCheckScanned(){
+                var txtTruckload = $("#txtTruckload").dxTextBox("instance");
+                var tlno = txtTruckload.option("value");
                 $.ajax({
-                    url: '{!!url("/getFailedInvoices")!!}',
+                    url: '{!!url("/getCheckScanned")!!}',
                     type: "GET",
                     data: {
-                        dateFrom: dateFrom,
-                        dateTo: dateTo
+                        tlno: tlno,
                     },
                     success: function (data) {
-                        gridFailedInvoices.option('dataSource', data);
-                        gridFailedInvoices.refresh();
+                        gridCheckScanned.option('dataSource', data);
+                        gridCheckScanned.refresh();
 
-                        gridData = gridFailedInvoices.option("dataSource");
+                        gridData = gridCheckScanned.option("dataSource");
                     }
                 });
             }

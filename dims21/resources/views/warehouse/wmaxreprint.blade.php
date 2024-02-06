@@ -52,10 +52,9 @@
         });
 
         $(document).ready(function() {
-            var jobs = ({!! json_encode($jobs) !!});
 
-            const reprint = $("#gridReprint").dxDataGrid({
-                dataSource:jobs, //as json
+            const gridReprint = $("#gridReprint").dxDataGrid({
+                dataSource:[], //as json
                 hoverStateEnabled: true,
                 showBorders: true,
                 filterRow: { visible: true },
@@ -153,7 +152,12 @@
                     {
                         dataField: "TestedZinc",
                         caption: "Tested Zinc",
+                        dataType: "number",
                         alignment: "center",
+                        format: {
+                            type: "fixedPoint",
+                            precision: 2
+                        },
                     },
                     {
                         dataField: "Weight",
@@ -174,9 +178,13 @@
                         dataField: "strStatus",
                         caption: "Status",
                         allowEditing: false,
-                    }
+                    },
+                    {
+                        dataField: "strTable",
+                        caption: "Table",
+                        allowEditing: false,
+                    },
                 ],
-
                 onRowDblClick:function(e){
                     window.open('{!!url("/printGalvLabel")!!}/'+e.data.TicketNo,"_blank", "location=1, status=1,s crollbars=1, width=1200, height=850");
                 },
@@ -190,9 +198,11 @@
                             TreatedMPA: e.data.TreatedMPA,
                             TestedZinc: e.data.TestedZinc,
                             Weight: e.data.Weight,
+                            Table: e.data.strTable,
                         },
                         success: function (data) {
                             alert(data[0].Result);
+                            getReprints();
                         }
                     });
                 },
@@ -206,8 +216,24 @@
                             }
                         }
                     );
-                }
-            });
+                },
+            }).dxDataGrid('instance');
+
+            getReprints();
+
+            function getReprints(){
+                $.ajax({
+                    url: '{!!url("/getGalvReprints")!!}',
+                    type: "GET",
+                    success: function (data) {
+                        gridReprint.option('dataSource', data);
+                        gridReprint.refresh();
+
+                        gridData = gridReprint.option("dataSource");
+                    },
+
+                });
+            };
         });
 
     </script>
