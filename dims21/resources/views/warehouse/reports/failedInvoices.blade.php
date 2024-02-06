@@ -52,7 +52,7 @@
                 columnResizingMode: "nextColumn",
                 columns: [
                     {
-                        dataField: "intXMLOrder",
+                        dataField: "intXmlOrder",
                         caption: "XML Order",
                     },
                     {
