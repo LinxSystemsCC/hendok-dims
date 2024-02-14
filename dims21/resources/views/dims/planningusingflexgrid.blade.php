@@ -114,11 +114,18 @@ Ref: <input id="ref" >
                         var qty = value.qtyPlan;
                         var newvalue = new Number(value.qtyPlan);
                         if(qty !="0"){
+                            var pickingType = '';
+                            if (value.instruct == 'Upliftment-DIMS'){
+                                pickingType = 'upliftment'
+                            }else{
+                                pickingType = 'priority'
+                            }
+
                             console.log("no zero"+ value.qtyPlan);
                             checkedLines.push({
                                 'orderdetail': value.OrderDetailId,
                                 'qty': newvalue.toFixed(4),
-                                'pickingtype':'priority',
+                                'pickingtype': pickingType,
                                 'ownerId':value.OwnerID,
                                 'referenceNo':$('#ref').val()
                             });
