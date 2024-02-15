@@ -92,7 +92,7 @@
                     </td>
                     @if(isset($includePriority) && $includePriority)
                         <td class="fw-bold">
-                            <button class="btn btn-sm btn-secondary w-100 btnSetPriority" value={{ $val->isPriorityLine}} name={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i>PRIORITY</button>
+                            <button class="btn btn-sm btn-secondary w-100 btnSetPriority" value="{{ $val->isPriorityLine }}" name="{{ $val->intAutoPicking }}"><i class="fa fa-check p-0"></i>PRIORITY</button>
                         </td>
                     @endif
 
@@ -138,7 +138,7 @@
                         </td>
                         @if(isset($includePriority) && $includePriority)
                             <td class="fw-bold">
-                                <button class="btn btn-sm btn-secondary w-100 btnSetPriority" value={{ $val->isPriorityLine}} name={{ $val->intAutoPicking }}><i class="fa fa-check p-0"></i>PRIORITY</button>
+                                <button class="btn btn-sm btn-secondary w-100 btnSetPriority" value="{{ $val->isPriorityLine }}" name="{{ $val->intAutoPicking }}"><i class="fa fa-check p-0"></i>PRIORITY</button>
                             </td>
                         @endif
                     </tr>
