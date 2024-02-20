@@ -1301,64 +1301,6 @@ class WareHouseController extends Controller
         $diametertolerancemin = $request->get("diametertolerancemin");
         $diametertolerancemax = $request->get("diametertolerancemax");
 
-        $diametertolerance = "{$diametertolerancemin} - {$diametertolerancemax}";
-
-        $tensilestrenghtmin = $request->get("tensilestrenghtmin");
-        $tensilestrenghtmax = $request->get("tensilestrenghtmax");
-
-        $tensilestrenght = "{$tensilestrenghtmin} - {$tensilestrenghtmax}";
-
-        $stresstest = $request->get("stresstest");
-        $elongation = $request->get("elongation");
-        $leadbathdip = $request->get("leadbathdip");
-        $zinccoatingtype = $request->get("zinccoatingtype");
-        $zinccoatingmin = $request->get("zinccoatingmin");
-        $zinccoatingmax = $request->get("zinccoatingmax");
-
-        $zinccoating = "{$zinccoatingmin} - {$zinccoatingmax}";
-
-        $coatinguniformity = $request->get("coatinguniformity");
-        $coatingadhesion = $request->get("coatingadhesion");
-        $speed = $request->get("speed");
-        $mmcenitrosetting = $request->get("mmcenitrosetting");
-        $nitrodiesize = $request->get("nitrodiesize");
-        $labelling = $request->get("labelling");
-        $maxwelds = $request->get("maxwelds");
-        $packagingrequirements = $request->get("packagingrequirements");
-        $specialinstructions = $request->get("specialinstructions");
-        $diametertolerancestrict = $request->get("diametertolerancestrict");
-        $tensilestrenghtstrict = $request->get("tensilestrenghtstrict");
-        $stressteststrict = $request->get("stressteststrict");
-        $elongationstrict = $request->get("elongationstrict");
-        $zinccoatingstrict = $request->get("zinccoatingstrict");
-        $maxweldsstrict = $request->get("maxweldsstrict");
-
-        //dd($cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict);
-
-
-
-        $add = DB::connection('sqlsrv2')->select(
-            'exec spAddgalvproduct ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
-            array(
-                $cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict
-            )
-        );
-
-        return response()->json($add);
-    }
-
-    public function editproductspec(Request $request)
-    {
-        $cutomername = $request->get("cutomername");
-        $productname = $request->get("productname");
-        $productapplication = $request->get("productapplication");
-        $roddiameter = $request->get("roddiameter");
-        $rodgrade = $request->get("rodgrade");
-        $rodtreatment = $request->get("rodtreatment");
-        $diametergalvwire = $request->get("diametergalvwire");
-        $diametertolerancemin = $request->get("diametertolerancemin");
-        $diametertolerancemax = $request->get("diametertolerancemax");
-
         $diametertolerance = "{$diametertolerancemin}-{$diametertolerancemax}";
 
         $tensilestrenghtmin = $request->get("tensilestrenghtmin");
@@ -1391,14 +1333,105 @@ class WareHouseController extends Controller
         $zinccoatingstrict = $request->get("zinccoatingstrict");
         $maxweldsstrict = $request->get("maxweldsstrict");
 
-        //dd($cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict);
+        // Added 20240220
+        $strStressTestGreaterLess = $request->get("strStressTestGreaterLess");
+        $strHDWMin = $request->get("strHDWMinMax");
+        $strHDWMax = $request->get("strHDWMax");
+        $strHDWMinMax = "{$strHDWMin}-{$strHDWMax}";
+
+        $strCoilIDMin = $request->get("strCoilIDMin");
+        $strCoilIDMax = $request->get("strCoilIDMax");
+        $strCoilIDMinMax = "{$strCoilIDMin}-{$strCoilIDMax}";
+
+        $strCoilODMin = $request->get("strCoilODMin");
+        $strCoilODMax = $request->get("strCoilODMax");
+        $strCoilODMinMax = "{$strCoilODMin}-{$strCoilODMax}";
+
+        $boolStrictCoilID = $request->get("boolStrictCoilID");
+        $boolStrictCoilOD = $request->get("boolStrictCoilOD");
+
+        //dd($cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict, $strStressTestGreaterLess, $strHDWMinMax, $strCoilIDMinMax, $strCoilODMinMax, $boolStrictCoilID, $boolStrictCoilOD);
+
+
+
+        $add = DB::connection('sqlsrv2')->select(
+            'exec spAddgalvproduct ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+            array(
+                $cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict, $strStressTestGreaterLess, $strHDWMinMax, $strCoilIDMinMax, $strCoilODMinMax, $boolStrictCoilID, $boolStrictCoilOD
+            )
+        );
+
+        return response()->json($add);
+    }
+
+    public function editproductspec(Request $request)
+    {
+        $cutomername = $request->get("cutomername");
+        $productname = $request->get("productname");
+        $productapplication = $request->get("productapplication");
+        $roddiameter = $request->get("roddiameter");
+        $rodgrade = $request->get("rodgrade");
+        $rodtreatment = $request->get("rodtreatment");
+        $diametergalvwire = $request->get("diametergalvwire");
+
+        $diametertolerancemin = $request->get("diametertolerancemin");
+        $diametertolerancemax = $request->get("diametertolerancemax");
+        $diametertolerance = "{$diametertolerancemin}-{$diametertolerancemax}";
+
+        $tensilestrenghtmin = $request->get("tensilestrenghtmin");
+        $tensilestrenghtmax = $request->get("tensilestrenghtmax");
+        $tensilestrenght = "{$tensilestrenghtmin}-{$tensilestrenghtmax}";
+
+        $stresstest = $request->get("stresstest");
+        $elongation = $request->get("elongation");
+        $leadbathdip = $request->get("leadbathdip");
+        $zinccoatingtype = $request->get("zinccoatingtype");
+        
+        $zinccoatingmin = $request->get("zinccoatingmin");
+        $zinccoatingmax = $request->get("zinccoatingmax");
+        $zinccoating = "{$zinccoatingmin}-{$zinccoatingmax}";
+
+        $coatinguniformity = $request->get("coatinguniformity");
+        $coatingadhesion = $request->get("coatingadhesion");
+        $speed = $request->get("speed");
+        $mmcenitrosetting = $request->get("mmcenitrosetting");
+        $nitrodiesize = $request->get("nitrodiesize");
+        $labelling = $request->get("labelling");
+        $maxwelds = $request->get("maxwelds");
+        $packagingrequirements = $request->get("packagingrequirements");
+        $specialinstructions = $request->get("specialinstructions");
+        $diametertolerancestrict = $request->get("diametertolerancestrict");
+        $tensilestrenghtstrict = $request->get("tensilestrenghtstrict");
+        $stressteststrict = $request->get("stressteststrict");
+        $elongationstrict = $request->get("elongationstrict");
+        $zinccoatingstrict = $request->get("zinccoatingstrict");
+        $maxweldsstrict = $request->get("maxweldsstrict");
+
+        // Added 20240220
+        $strStressTestGreaterLess = $request->get("strStressTestGreaterLess");
+        $strHDWMin = $request->get("strHDWMinMax");
+        $strHDWMax = $request->get("strHDWMax");
+        $strHDWMinMax = "{$strHDWMin}-{$strHDWMax}";
+
+        $strCoilIDMin = $request->get("strCoilIDMin");
+        $strCoilIDMax = $request->get("strCoilIDMax");
+        $strCoilIDMinMax = "{$strCoilIDMin}-{$strCoilIDMax}";
+
+        $strCoilODMin = $request->get("strCoilODMin");
+        $strCoilODMax = $request->get("strCoilODMax");
+        $strCoilODMinMax = "{$strCoilODMin}-{$strCoilODMax}";
+
+        $boolStrictCoilID = $request->get("boolStrictCoilID");
+        $boolStrictCoilOD = $request->get("boolStrictCoilOD");
+
+        // dd($cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict, $strStressTestGreaterLess, $strHDWMinMax, $strCoilIDMinMax, $strCoilODMinMax, $boolStrictCoilID, $boolStrictCoilOD);
 
 
 
         $edit = DB::connection('sqlsrv2')->select(
-            'exec spEditgalvproduct ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+            'exec spEditgalvproduct ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
             array(
-                $cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict
+                $cutomername, $productname, $productapplication, $roddiameter, $rodgrade, $rodtreatment, $diametergalvwire, $diametertolerance, $tensilestrenght, $stresstest, $elongation, $leadbathdip, $zinccoatingtype, $zinccoating, $coatinguniformity, $coatingadhesion, $speed, $mmcenitrosetting, $nitrodiesize, $labelling, $maxwelds, $packagingrequirements, $specialinstructions, $diametertolerancestrict, $tensilestrenghtstrict, $stressteststrict, $elongationstrict, $zinccoatingstrict, $maxweldsstrict, $strStressTestGreaterLess, $strHDWMinMax, $strCoilIDMinMax, $strCoilODMinMax, $boolStrictCoilID, $boolStrictCoilOD
             )
         );
 

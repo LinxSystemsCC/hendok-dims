@@ -119,7 +119,7 @@
             {{-- Tensile Ticket--}}
             <div class="form-group">
                 <label class="control-label fw-bold" for="tensileticket">Tensile Ticket No</label>
-                <input type="number" class="form-control input-sm col-xs-1" id="tensileticket" required>
+                <input type="text" class="form-control input-sm col-xs-1" id="tensileticket" required>
             </div>
             
             {{-- Wire Size --}}

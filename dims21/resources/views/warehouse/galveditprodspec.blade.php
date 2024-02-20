@@ -1,84 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+@extends('layouts.base')
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{{-- Set the Title --}}
+@section('title', 'Edit Galv Products')
 
+{{-- Set to show navbar --}}
+@php
+    if ((Auth::guest()))
+    {
 
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
+    }else{
+        $v  =  new \App\Http\Controllers\SalesForm();
+        // $permission = $v->getThingsUserPermissions(Auth::user()->UserID,'Permission');
+    }
 
-    <!-- Select2 JS -->
-
-    <!-- DevExtreme library -->
-
-    <!-- jQuery --> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-
-    <style>
-        .control-label{
-            margin-bottom: 0px !important;
-            font-weight: 700 !important;
-            font-size: 15px !important;
-        }
-        .check {
-            margin-right: 10px;
-        }
-
-        .minmax{
-            display: flex;
-            align-items: center;
-        }
-
-        .minmax > :first-child{
-            margin-right: 10px;
-        }
-
-        .form-group {
-            background-color: rgb(240, 240, 240);
-            border: solid 1px rgb(221, 221, 221);
-            padding: 8px;
-            /* margin: 1rem; */
-        }
-
-        .select2-selection {
-            height: 38px !important;
-            display: flex;
-            vertical-align: middle;
-            align-items: center;
-        }
-
-    </style>
-
-</head>
-
-<body>
-
-
-<div class="col-12 d-flex px-0"  style="background: white;">
-    <div class="col-custom-2" style="background: white;">
-
-        <div class="vertical-menu">
-            @include('warehouse.menu')
-        </div>
-    </div>
+    $includeMenu = true;
     
-    
-    
-    <div class="col p-3">
+@endphp
+
+@section('page')
+
+        <style>
+            .control-label{
+                margin-bottom: 0px !important;
+                font-weight: 700 !important;
+                font-size: 15px !important;
+            }
+            .check {
+                margin-right: 10px;
+            }
+
+            .minmax{
+                display: flex;
+                align-items: center;
+            }
+
+            .minmax > :first-child{
+                margin-right: 10px;
+            }
+
+            .form-group {
+                background-color: rgb(240, 240, 240);
+                border: solid 1px rgb(221, 221, 221);
+                padding: 8px;
+                /* margin: 1rem; */
+            }
+
+            .select2-selection {
+                height: 38px !important;
+                display: flex;
+                vertical-align: middle;
+                align-items: center;
+            }
+
+        </style>
 
         <h3>Edit Product Specifications</h3>
         
@@ -103,11 +77,6 @@
                 </select>
             </div>
 
-            {{-- Product Application --}}
-            <div class="form-group">
-                <label class="control-label" for="productapplication">Product Application </label>
-                <input type="text" class="form-control input-sm col-xs-1" id="productapplication" required>
-            </div>
 
             {{-- Side To side Divs --}}
             <div style="display:inline-flex;height: 100%;width: 100%;">
@@ -169,6 +138,18 @@
                     <div class="form-group">
                         <label class="control-label" for="stresstest">1% Stress Test </label>
                         <div style="display: inline-flex; float:right;">
+                            <div class="form-check mr-2">
+                                <input class="form-check-input" type="radio" name="flexRadioStressTest" id="stresstestless">
+                                <label class="control-label" for="stresstestless">
+                                    Less Than
+                                </label>
+                            </div>
+                            <div class="form-check mr-2">
+                                <input class="form-check-input" type="radio" name="flexRadioStressTest" id="stresstestgreater">
+                                <label class="control-label" for="stresstestgreater">
+                                    Greater Than
+                                </label>
+                            </div>
                             <input class="check" type="checkbox" id="stressteststrict" name="stressteststrict">
                             <label class="control-label">QC Strict</label>
                         </div>
@@ -189,6 +170,32 @@
                     <div class="form-group">
                         <label class="control-label" for="leadbathdip">Lead Bath Dip </label>
                         <input type="text" class="form-control input-sm col-xs-1" id="leadbathdip" required>
+                    </div>
+
+                    {{-- Coil ID Tolerance --}}
+                    <div class="form-group">
+                        <label class="control-label" for="coilidtolerance">Coil ID Tolerance </label>
+                        <div style="display: inline-flex; float:right;">
+                            <input class="check" type="checkbox" id="coilidtolerancestrict" name="coilidtolerancestrict">
+                            <label class="control-label">QC Strict</label>
+                        </div>
+                        <div class="minmax">
+                            <input type="number" Value="MIN" class="form-control input-sm col-xs-1" id="coilidtolerancemin" required>
+                            <input type="number" Value="MAX" class="form-control input-sm col-xs-1" id="coilidtolerancemax" required>
+                        </div>
+                    </div>
+
+                    {{-- Coil OD Tolerance --}}
+                    <div class="form-group">
+                        <label class="control-label" for="coilodtolerance">Coil OD Tolerance </label>
+                        <div style="display: inline-flex; float:right;">
+                            <input class="check" type="checkbox" id="coilodtolerancestrict" name="coilodtolerancestrict">
+                            <label class="control-label">QC Strict</label>
+                        </div>
+                        <div class="minmax">
+                            <input type="number" Value="MIN" class="form-control input-sm col-xs-1" id="coilodtolerancemin" required>
+                            <input type="number" Value="MAX" class="form-control input-sm col-xs-1" id="coilodtolerancemax" required>
+                        </div>
                     </div>
                 </div>
 
@@ -256,7 +263,26 @@
                             <label class="control-label">QC Strict</label>
                         </div>
                         <input type="number" class="form-control input-sm col-xs-1" id="maxwelds" required>
-                    </div>            
+                    </div> 
+
+                    {{-- HDW Tolerance --}}
+                    <div class="form-group">
+                        <label class="control-label" for="diametertolerance">HDW Tolerance </label>
+                        {{-- <div style="display: inline-flex; float:right;">
+                            <input class="check" type="checkbox" id="diametertolerancestrict" name="diametertolerancestrict">
+                            <label class="control-label">QC Strict</label>
+                        </div> --}}
+                        <div class="minmax">
+                            <input type="number" Value="MIN" class="form-control input-sm col-xs-1" id="hdwtolerancemin" required>
+                            <input type="number" Value="MAX" class="form-control input-sm col-xs-1" id="hdwtolerancemax" required>
+                        </div>
+                    </div>
+                    
+                    {{-- Product Application --}}
+                    <div class="form-group">
+                        <label class="control-label" for="productapplication">Product Application </label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="productapplication" required>
+                    </div>
                 </div>
             </div>
 
@@ -276,29 +302,12 @@
                 <button class="btn btn-success" id="edit" style="width: 100%; margin-right:10px;">EDIT</button>
             </div>
         </div>
-    </div>
 
-</div>
+@endsection
 
-
-<style>
-
-    .dx-datagrid-table{
-        font-size:15px;
-    }
-</style>
+@section('scripts')
 
 <script>
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'off' );
-    });
-
     $(document).ready(function() {
         
         $("#customers").select2();
@@ -317,7 +326,6 @@
         });
 
         $("#customers").change(function () {
-
             $.ajax({
 
                 url: '{!!url("/wmaxgetcustomerproduct")!!}',
@@ -337,7 +345,6 @@
                     $("#prodname").select2();
                 }
             });
-
         });
         
         $("#prodname").change(function () {
@@ -355,19 +362,30 @@
                     $("#rodgrade").val(data[0].RodType);
                     $("#rodtreatment").val(data[0].strRodTreatment);
                     $("#diametergalvwire").val(data[0].WireSize);
-                    var tolerance = data[0].SizeTolerance.split("-");
-                    $("#diametertolerancemin").val(tolerance[0]);
-                    $("#diametertolerancemax").val(tolerance[1]);
-                    var tensile = data[0].MPATolerance.split("-");
-                    $("#tensilestrenghtmin").val(tensile[0]);
-                    $("#tensilestrenghtmax").val(tensile[1]);
+
+                    if (data[0].SizeTolerance !== null) {
+                        var tolerance = data[0].SizeTolerance.split("-");
+                        $("#diametertolerancemin").val(tolerance[0]);
+                        $("#diametertolerancemax").val(tolerance[1]);
+                    }
+
+                    if (data[0].MPATolerance !== null) {
+                        var tensile = data[0].MPATolerance.split("-");
+                        $("#tensilestrenghtmin").val(tensile[0]);
+                        $("#tensilestrenghtmax").val(tensile[1]);
+                    }
+
                     $("#stresstest").val(data[0].intStressTest);
                     $("#elongation").val(data[0].intElongation);
                     $("#leadbathdip").val(data[0].strLeadBathDip);
                     $("#zinccoatingtype").val(data[0].Type);
-                    var coating = data[0].strZincCoatingMinMax.split("-");
-                    $("#zinccoatingmin").val(coating[0]);
-                    $("#zinccoatingmax").val(coating[1]);
+
+                    if (data[0].strZincCoatingMinMax !== null) {
+                        var coating = data[0].strZincCoatingMinMax.split("-");
+                        $("#zinccoatingmin").val(coating[0]);
+                        $("#zinccoatingmax").val(coating[1]);
+                    }
+
                     $("#coatinguniformity").val(data[0].strCoatingUniformity);
                     $("#coatingadhesion").val(data[0].strCoatingAdhesion);
                     $("#speed").val(data[0].GalvRPM);
@@ -377,6 +395,25 @@
                     $("#maxwelds").val(data[0].intMaxWelds);
                     $("#packagingrequirements").val(data[0].strPackagingRequirements);
                     $("#specialinstructions").val(data[0].strSpecialInstructions);
+
+                    // Added 20240220
+                    if (data[0].strHDWMinMax !== null) {
+                        var hdw = data[0].strHDWMinMax.split("-");
+                        $("#hdwtolerancemin").val(hdw[0]);
+                        $("#hdwtolerancemax").val(hdw[1]);
+                    }
+
+                    if (data[0].strCoilIDMinMax !== null) {
+                        var coilID = data[0].strCoilIDMinMax.split("-");
+                        $("#coilidtolerancemin").val(coilID[0]);
+                        $("#coilidtolerancemax").val(coilID[1]);
+                    }
+
+                    if (data[0].strCoilODMinMax !== null) {
+                        var coilOD = data[0].strCoilODMinMax.split("-");
+                        $("#coilodtolerancemin").val(hdw[0]);
+                        $("#coilodtolerancemax").val(hdw[1]);
+                    }
                     
                     // Strict Checkboxes
                     $("#diametertolerancestrict").prop( "checked", parseInt(data[0].boolStrictDiameterTolerance));
@@ -385,12 +422,39 @@
                     $("#elongationstrict").prop( "checked", parseInt(data[0].boolStrictElongation));
                     $("#zinccoatingstrict").prop( "checked", parseInt(data[0].boolStrictZincCoatingMinMax));
                     $("#maxweldsstrict").prop( "checked", parseInt(data[0].boolStrictMaxWelds));
+                    
+                    // Added 20240220
+                    $("#coilidtolerancestrict").prop( "checked", parseInt(data[0].boolStrictCoilID));
+                    $("#coilodtolerancestrict").prop( "checked", parseInt(data[0].boolStrictCoilOD));
+
+                    var greaterLessValue = data[0].strStressTestGreaterLess;
+
+                    $('input[name="flexRadioStressTest"]').prop('checked', false);
+
+                    if (greaterLessValue === 'greater') {
+                        $('#stresstestgreater').prop('checked', true);
+                    } else if (greaterLessValue === 'less') {
+                        $('#stresstestless').prop('checked', true);
+                    }
+                    $('input[name="flexRadioStressTest"]').change(function(){
+                        var selectedValue = $('input[name="flexRadioStressTest"]:checked').attr('id');
+                        if (selectedValue === 'stresstestgreater') {
+                            data[0].strStressTestGreaterLess = 'greater';
+                        } else if (selectedValue === 'stresstestless') {
+                            data[0].strStressTestGreaterLess = 'less';
+                        } else {
+                            data[0].strStressTestGreaterLess = null;
+                        }
+                    });
+
+
                 }
             });
         });
         
         $('#edit').click(function(){
-            console.debug()
+            var selectedValue = $('input[name="flexRadioStressTest"]:checked').attr('id');
+            var strStressTestGreaterLess = selectedValue === 'stresstestgreater' ? 'greater' : 'less';
             $.ajax({
                 url: '{!!url("/editproductspec")!!}',
                 type: "POST",
@@ -431,7 +495,17 @@
                     zinccoatingstrict: $("#zinccoatingstrict").is(':checked'),
                     maxweldsstrict: $("#maxweldsstrict").is(':checked'),
 
-                    
+
+                    // ADDED 20240220
+                    strStressTestGreaterLess: strStressTestGreaterLess,
+                    strHDWMinMax: $("#hdwtolerancemin").val(),
+                    strHDWMax: $("#hdwtolerancemax").val(),
+                    strCoilIDMin: $("#coilidtolerancemin").val(),
+                    strCoilIDMax: $("#coilidtolerancemax").val(),
+                    strCoilODMin: $("#coilodtolerancemin").val(),
+                    strCoilODMax: $("#coilodtolerancemax").val(),
+                    boolStrictCoilID: $("#coilidtolerancestrict").is(':checked'),
+                    boolStrictCoilOD: $("#coilodtolerancestrict").is(':checked'),
 
                 },
                 success: function (data) {
@@ -440,60 +514,8 @@
 
                 });
         });
-
-        $('.sidebar ul li a').on(function(){
-            var id = $(this).attr('id');
-            $('nav ul li ul.item-show-'+id).toggleClass("show");
-            $('nav ul li #'+id+' span').toggleClass("rotate");
-            
-        });
-
-        $('.sidebar ul li a').click(function(){
-            var id = $(this).attr('id');
-            $('nav ul li ul.item-show-'+id).toggleClass("show");
-            $('nav ul li #'+id+' span').toggleClass("rotate");
-            
-        });
-        
-        $('nav ul li').click(function(){
-            $(this).addClass("active").siblings().removeClass("active");
-        });
     });
 
-    function showDialog(tag,width,height)
-    {
-        $( tag ).dialog({height: height, modal: false,
-            width: width,containment: false}).dialogExtend({
-            "closable" : true, // enable/disable close button
-            "maximizable" : false, // enable/disable maximize button
-            "minimizable" : true, // enable/disable minimize button
-            "collapsable" : true, // enable/disable collapse button
-            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar" : false, // false, 'none', 'transparent'
-            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-            "icons" : { // jQuery UI icon class
-
-                "maximize" : "ui-icon-circle-plus",
-                "minimize" : "ui-icon-circle-minus",
-                "collapse" : "ui-icon-triangle-1-s",
-                "restore" : "ui-icon-bullet"
-            },
-            "load" : function(evt, dlg){ }, // event
-            "beforeCollapse" : function(evt, dlg){ }, // event
-            "beforeMaximize" : function(evt, dlg){ }, // event
-            "beforeMinimize" : function(evt, dlg){ }, // event
-            "beforeRestore" : function(evt, dlg){ }, // event
-            "collapse" : function(evt, dlg){  }, // event
-            "maximize" : function(evt, dlg){ }, // event
-            "minimize" : function(evt, dlg){  }, // event
-            "restore" : function(evt, dlg){  } // event
-        });
-    }
-
-
-
-
-
-
 </script>
-</body>
+
+@endsection
