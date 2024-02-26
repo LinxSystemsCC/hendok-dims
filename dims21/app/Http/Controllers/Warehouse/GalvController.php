@@ -44,4 +44,24 @@ class GalvController extends Controller
 
         return response()->json($result);
     }
+
+    public function wmaxscrap(){
+        $scales = DB::connection('sqlsrv2')->select("exec spGetScalesByDeptName 'Galv Line 1 and 2'");
+        $scrapBins = DB::connection('sqlsrv2')->select("SELECT * FROM tblScrapBins ORDER BY strBinName");
+        return view('warehouse.galv.wmaxscrap')
+            ->with('scales', $scales)
+            ->with('scrapBins', $scrapBins);
+    }
+
+    public function postScrapWeigh(Request $request)
+    {
+        $id =  $request->get("id");
+        $bin =  $request->get("bin");
+        $weight =  $request->get("weight");
+        $command =  $request->get("command");
+        
+        $result = DB::connection('sqlsrv2')->select("EXEC spGalvScrapWeighCRUD $id, $bin, $weight, '$command'");
+
+        return response()->json($result);
+    }
 }

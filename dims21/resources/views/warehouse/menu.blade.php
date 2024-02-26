@@ -77,6 +77,7 @@ if ((Auth::guest()))
     $regrade = $v->getThingsUserPermissions(Auth::user()->UserID,'Regrade');
     $sc = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock Change');
     $retest = $v->getThingsUserPermissions(Auth::user()->UserID,'Retest');
+    $scrapWeigh = $v->getThingsUserPermissions(Auth::user()->UserID,'Scrap Weigh');
 
     //Work Orders Roofing
     $roofcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Create Work Order');
@@ -227,6 +228,12 @@ if ((Auth::guest()))
                         <li>
                             @if($retest !="0")
                             <a href='{!!url("/wmaxretest")!!}'>Retest</a>
+                            @endif
+                        </li>
+
+                        <li>
+                            @if($scrapWeigh !="0")
+                            <a href='{!!url("/wmaxscrap")!!}'>Scrap Weigh</a>
                             @endif
                         </li>
 
