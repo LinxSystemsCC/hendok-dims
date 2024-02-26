@@ -411,8 +411,8 @@
 
                     if (data[0].strCoilODMinMax !== null) {
                         var coilOD = data[0].strCoilODMinMax.split("-");
-                        $("#coilodtolerancemin").val(hdw[0]);
-                        $("#coilodtolerancemax").val(hdw[1]);
+                        $("#coilodtolerancemin").val(coilOD[0]);
+                        $("#coilodtolerancemax").val(coilOD[1]);
                     }
                     
                     // Strict Checkboxes

@@ -346,7 +346,10 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
                     dataField: "PartialCut",
                     caption: "Partial Cut",
                     visible: false,
-                },
+                },{
+                    dataField: "LineID",
+                    caption: "Line ID",
+                }
 
             ],
             summary: {
@@ -661,7 +664,15 @@ $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Print');
 
                 for (var i = 0; i < toPlan.length; i++) {
                     var rowKey = toPlan[i];
-                    orderlines.push({'SOnumbers': toPlan[i]['OrderNumber'],'IOnumbers': toPlan[i]['idInvoiceLines'],'CompanyName': toPlan[i]['Company']});
+                    orderlines.push(
+                        {
+                            'SOnumbers': toPlan[i]['OrderNumber'],
+                            'IOnumbers': toPlan[i]['idInvoiceLines'],
+                            'CompanyName': toPlan[i]['Company'],
+                            'LineID': toPlan[i]['LineID'],
+                            'ProductCode': toPlan[i]['ProductCode']
+                        }
+                    );
                 }
 
                 $.ajax({
