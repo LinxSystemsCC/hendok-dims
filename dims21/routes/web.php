@@ -1118,7 +1118,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('qc1', [WareHouseController::class,'qc1']);
     Route::get('qc2', [WareHouseController::class,'qc2']);
     Route::get('wmaxweigh', [WareHouseController::class,'wmaxweigh']);
-    Route::get('wmaxscrap', [WareHouseController::class,'wmaxscrap']);
     Route::get('wmaxregrade', [WareHouseController::class,'wmaxregrade']);
     Route::get('wmaxstockchange', [WareHouseController::class,'wmaxstockchange']);
     Route::get('wmaxretest', [WareHouseController::class,'wmaxretest']);
@@ -1165,6 +1164,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('galvjumbocoilsprint', [GalvController::class,'galvjumbocoilsprint']);
     Route::get('getWmaxTickets', [GalvController::class,'getWmaxTickets']);
     Route::get('galvPrintJumboCoil', [GalvController::class,'galvPrintJumboCoil']);
+    Route::get('wmaxscrap', [GalvController::class,'wmaxscrap']);
+    Route::post('postScrapWeigh', [GalvController::class,'postScrapWeigh']);
+    
 });
 //GALV CONTROLLER ENDS HERE !!!
 
