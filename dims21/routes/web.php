@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Warehouse\GalvController;
 use App\Http\Controllers\Warehouse\WarehouseSetupController;
+use App\Http\Controllers\ApisController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1262,4 +1263,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('printLabelByDepartment',[PDFController::class,'printLabelByDepartment']);
     Route::get('getUserPrintersMappedToProductCategory', [PDFController::class,'getUserPrintersMappedToProductCategory']);
     Route::get('galvQCJobCard/{id}', [PDFController::class,'galvQCJobCard']);
+});
+
+// API's Controller
+Route::group(['middleware' => 'auth'], function() { 
+    Route::get('getOpenUpkeepWorkOrders', [ApisController::class,'getOpenUpkeepWorkOrders']);
 });
