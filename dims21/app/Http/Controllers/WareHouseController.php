@@ -1850,6 +1850,7 @@ class WareHouseController extends Controller
             CURLOPT_TIMEOUT => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
                 'Session-Token: ' . $token,
@@ -1859,17 +1860,38 @@ class WareHouseController extends Controller
 
         $response = curl_exec($curl);
 
+        if ($response === false) {
+            // Handle cURL error
+            $error = curl_error($curl);
+            // Log or handle the error
+            return []; // Return an empty array or handle the error differently
+        }
+
         curl_close($curl);
 
         $result = json_decode($response, true);
 
-        $openWorkOrders = array();
+        if ($result === null) {
+            // Handle JSON decoding error
+            $jsonError = json_last_error_msg();
+            // Log or handle the error
+            return []; // Return an empty array or handle the error differently
+        }
+
+        // Check if the expected structure exists in the result
+        if (!isset($result['results'])) {
+            // Handle unexpected response format
+            return []; // Return an empty array or handle the error differently
+        }
+
+        $openWorkOrders = [];
 
         foreach ($result['results'] as $workOrder) {
             if ($workOrder['status'] !== 'complete') {
                 $openWorkOrders[] = $workOrder;
             }
         }
+
         // dd($openWorkOrders);
         return $openWorkOrders;
     }
