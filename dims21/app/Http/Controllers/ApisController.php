@@ -21,7 +21,7 @@ class ApisController extends Controller
             CURLOPT_TIMEOUT => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_CAINFO => 'C:\Users\dims\Documents\New folder\245d85cb30ffc5a4.crt',
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
                 'Session-Token: ' . $token,
