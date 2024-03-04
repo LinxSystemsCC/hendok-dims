@@ -39,6 +39,8 @@ class ApisController extends Controller
 
         curl_close($curl);
 
+        dump($response);
+
         $result = json_decode($response, true);
 
         // if ($result === null) {
@@ -53,6 +55,8 @@ class ApisController extends Controller
         //     // Handle unexpected response format
         //     return []; // Return an empty array or handle the error differently
         // }
+
+        dump($result);
 
         $openWorkOrders = [];
 
