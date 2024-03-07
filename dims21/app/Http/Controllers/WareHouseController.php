@@ -2008,6 +2008,14 @@ class WareHouseController extends Controller
         return response()->json($data);
     }
 
+    public function getProductsMappedToDepartment(Request $request){
+        $ID = $request->get("ID");
+        $data =  DB::connection('sqlsrv3')->select("EXEC spGetProductsMappedToDepartment $ID");
+        return response()->json($data);
+    }
+
+    
+
     public function nailsInner(){
         $nails =  DB::connection('sqlsrv3')->select("SELECT * FROM tblNailsInner");
         return view('warehouse/nailsInner')->with('nails',$nails);

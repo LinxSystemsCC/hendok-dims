@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Warehouse\GalvController;
 use App\Http\Controllers\Warehouse\WarehouseSetupController;
+use App\Http\Controllers\Warehouse\ProductionController;
 use App\Http\Controllers\ApisController;
 
 /*
@@ -1145,6 +1146,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('checkBulkMapping', [WareHouseController::class,'checkBulkMapping']);
     Route::post('bulkMappingCRUD', [WareHouseController::class,'bulkMappingCRUD']);
     Route::get('getBulkMappingAreaDeptSubDeptMachines', [WareHouseController::class,'getBulkMappingAreaDeptSubDeptMachines']);
+    Route::get('getProductsMappedToDepartment', [WareHouseController::class,'getProductsMappedToDepartment']);
     Route::get('nailsInner', [WareHouseController::class,'nailsInner']);
     Route::post('nailsInnerCrud', [WareHouseController::class,'nailsInnerCrud']);
     Route::get('genericqrcodereverse', [WareHouseController::class,'genericqrcodereverse']);
@@ -1268,4 +1270,10 @@ Route::group(['middleware' => 'auth'], function() {
 // API's Controller
 Route::group(['middleware' => 'auth'], function() { 
     Route::get('getOpenUpkeepWorkOrders', [ApisController::class,'getOpenUpkeepWorkOrders']);
+});
+
+// Production Controller
+Route::group(['middleware' => 'auth'], function() { 
+    Route::get('productionCapture', [ProductionController::class,'productionCapture']);
+    Route::post('postProductionCaptureCRUD', [ProductionController::class,'postProductionCaptureCRUD']);
 });
