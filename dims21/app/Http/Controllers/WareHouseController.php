@@ -3319,7 +3319,7 @@ class WareHouseController extends Controller
     public function teamleadermanage($ref)
     {
         $allproducts = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
-        $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses WHERE intTonnage = 8000");
+        $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewTeamLeaderHorses");
         $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
         $pickers = DB::connection('sqlsrv2')->select("SELECT * FROM viewPickers");
         $loaders = DB::connection('sqlsrv2')->select("SELECT * FROM viewLoaders");
