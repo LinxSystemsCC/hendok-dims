@@ -42,6 +42,7 @@ if ((Auth::guest()))
     $barbed = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Wire');
     $galv = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv');
     $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
+    $productioncapture = $v->getThingsUserPermissions(Auth::user()->UserID,'Production Capture');
 
     //Dispatch Options
     $loadplanning = $v->getThingsUserPermissions(Auth::user()->UserID,'Load Planning');
@@ -385,6 +386,9 @@ if ((Auth::guest()))
                         </li>
                     </ul>
 
+                    @if($productioncapture !="0")
+                    <a class="secondmenu" id="4c" href='{!!url("/productionCapture")!!}'>Production Capture</a>
+                    @endif
                 </li>
 			</ul>
 		</li>
