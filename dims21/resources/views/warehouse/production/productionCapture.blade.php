@@ -4,10 +4,21 @@
 @section('title', 'Production Capture')
 
 
-{{-- Set to show navbar --}}
 @php
+    if ((Auth::guest()))
+    {
+
+    }else{
+        $v  =  new \App\Http\Controllers\SalesForm();
+        $Delete = $v->getThingsUserPermissions(Auth::user()->UserID,'Production Capture Delete');
+
+        $canDelete = ($Delete == 1) ? true : false;
+    }
+
     $includeMenu = true;
+    
 @endphp
+
 
 @section('page')
 
@@ -287,9 +298,14 @@
             columnFixing: {
                 enabled: true,
             },
+            editing: {
+                mode: 'row',
+                // allowUpdating: true,
+                allowDeleting: '{{ $canDelete }}',
+            },
             columnAutoWidth: true,
             allowColumnResizing: true,
-            columnResizingMode: "nextColumn",
+            columnResizingMode: "widget",
             columns: [{
                     dataField: "intAutoId",
                     caption: "intAutoId",
@@ -412,6 +428,19 @@
                     caption: "Comment 4",
                 },
             ],
+            onRowRemoved: function (e) {
+                $.ajax({
+                    url: '{!!url("/postProductionCaptureCRUD")!!}',
+                    type: "POST",
+                    data: {
+                        intAutoId: e.data.intAutoId,
+                        command: "DELETE"
+                    },
+                    success: function (data) {
+                        getProductionCapture();
+                    }
+                });
+            },
             onToolbarPreparing: function (e) {
                 // Create a custom header on the left side
                 e.toolbarOptions.items.unshift({
