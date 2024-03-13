@@ -93,6 +93,7 @@ if ((Auth::guest()))
     //Dispatch - Picking Slips
     $pickingstatus = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Status');
     $pickingtickets = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Tickets');
+    $loadTracking = $v->getThingsUserPermissions(Auth::user()->UserID,'Load Tracking');
     $assignweighttickets = $v->getThingsUserPermissions(Auth::user()->UserID,'Assign Weight Tickets');
     $authorisepicking = $v->getThingsUserPermissions(Auth::user()->UserID,'Authorise Picking');
 
@@ -442,6 +443,11 @@ if ((Auth::guest()))
                         <li>
                             @if($pickingtickets !="0")
                             <a href='{!!url("/viewpickingtickets")!!}'>Truck Loading</a>
+                            @endif
+                        </li>
+                        <li>
+                            @if($loadTracking !="0")
+                            <a href='{!!url("/loadTracking")!!}'>Truck Load Tracker</a>
                             @endif
                         </li>
                         {{-- <li>
