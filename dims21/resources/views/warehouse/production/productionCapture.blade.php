@@ -85,22 +85,22 @@
 
                         <div class="form-group mb-2 col-6">
                             <label class="control-label fw-bold" for="inputSageWeight">Product Weight</label>
-                            <input type="number" class="form-control w-100" id="inputSageWeight" disabled>
+                            <input type="number" step="any" class="form-control w-100" id="inputSageWeight" disabled>
                         </div>
 
                         <div class="form-group mb-2 col-6">
                             <label class="control-label fw-bold" for="inputActualWeight">Actual Weight</label>
-                            <input type="number" class="form-control w-100" id="inputActualWeight" required>
+                            <input type="number" step="any" class="form-control w-100" id="inputActualWeight" required>
                         </div>
 
                         <div class="form-group mb-2 col-6">
                             <label class="control-label fw-bold" for="inputQty">Quantity</label>
-                            <input type="number" class="form-control w-100" id="inputQty" required>
+                            <input type="number" step="any" class="form-control w-100" id="inputQty" required>
                         </div>
 
                         <div class="form-group mb-2 col-6">
                             <label class="control-label fw-bold" for="inputScrap">Scrap</label>
-                            <input type="number" class="form-control w-100" id="inputScrap" required>
+                            <input type="number" step="any" class="form-control w-100" id="inputScrap" required>
                         </div>
 
                         <div class="form-group mb-2 col-3">
