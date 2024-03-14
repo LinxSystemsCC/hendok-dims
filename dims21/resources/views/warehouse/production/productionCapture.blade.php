@@ -350,7 +350,7 @@
                     precision: 2,
                 },
                 {
-                    dataField: "intQty",
+                    dataField: "fltQty",
                     caption: "Qty",
                     dataType: "number",
                     type: "fixedPoint",
@@ -585,7 +585,7 @@
             var intMachineId = $("#selectMachine").val();
             var strProductCode = $("#selectProduct").val();
             var fltWeight = $("#inputActualWeight").val();
-            var intQty = $("#inputQty").val();
+            var fltQty = $("#inputQty").val();
             var strOperator1 = $("#selectOperator1").val();
             var strOperator2 = $("#selectOperator2").val();
             var strOperator3 = $("#selectOperator3").val();
@@ -645,7 +645,7 @@
             var strComment4 = $("#inputComment4").val();
 
             insertProductCapture(dteOccured, intShiftId, intDepartmentId, intMachineId, strProductCode,
-                fltWeight, intQty, strOperator1, strOperator2, strOperator3, strOperator4, fltScrap,
+                fltWeight, fltQty, strOperator1, strOperator2, strOperator3, strOperator4, fltScrap,
                 strDowntime1, intReason1, strComment1, strDowntime2, intReason2, strComment2,
                 strDowntime3, intReason3, strComment3, strDowntime4, intReason4, strComment4);
         });
@@ -773,7 +773,7 @@
         }
 
         function insertProductCapture(dteOccured, intShiftId, intDepartmentId, intMachineId, strProductCode,
-            fltWeight, intQty, strOperator1, strOperator2, strOperator3, strOperator4, fltScrap, strDowntime1,
+            fltWeight, fltQty, strOperator1, strOperator2, strOperator3, strOperator4, fltScrap, strDowntime1,
             intReason1, strComment1, strDowntime2, intReason2, strComment2, strDowntime3, intReason3,
             strComment3, strDowntime4, intReason4, strComment4) {
             $.ajax({
@@ -786,7 +786,7 @@
                     intMachineId: intMachineId,
                     strProductCode: strProductCode,
                     fltWeight: fltWeight,
-                    intQty: intQty,
+                    fltQty: fltQty,
                     strOperator1: strOperator1,
                     strOperator2: strOperator2,
                     strOperator3: strOperator3,

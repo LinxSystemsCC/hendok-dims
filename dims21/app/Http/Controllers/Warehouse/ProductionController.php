@@ -30,7 +30,7 @@ class ProductionController extends Controller
         $intMachineId = $request->get("intMachineId");
         $strProductCode = $request->get("strProductCode");
         $fltWeight = $request->get("fltWeight");
-        $intQty = $request->get("intQty");
+        $fltQty = $request->get("fltQty");
         $strOperator1 = $request->get("strOperator1");
         $strOperator2 = $request->get("strOperator2");
         $strOperator3 = $request->get("strOperator3");
@@ -50,9 +50,9 @@ class ProductionController extends Controller
         $strComment4 = $request->get("strComment4");
         $command = $request->get("command");
 
-        // dd("'$intAutoId', '$dteOccured', '$intShiftId', '$intDepartmentId', '$intMachineId', '$strProductCode', '$fltWeight', '$intQty', '$strOperator1', '$strOperator2', '$strOperator3', '$strOperator4', '$fltScrap', '$strDowntime1', '$intReason1', '$strComment1', '$strDowntime2', '$intReason2', '$strComment2', '$strDowntime3', '$intReason3', '$strComment3', '$strDowntime4', '$intReason4', '$strComment4', '$command'");
+        // dd("'$intAutoId', '$dteOccured', '$intShiftId', '$intDepartmentId', '$intMachineId', '$strProductCode', '$fltWeight', '$fltQty', '$strOperator1', '$strOperator2', '$strOperator3', '$strOperator4', '$fltScrap', '$strDowntime1', '$intReason1', '$strComment1', '$strDowntime2', '$intReason2', '$strComment2', '$strDowntime3', '$intReason3', '$strComment3', '$strDowntime4', '$intReason4', '$strComment4', '$command'");
 
-        $data = DB::connection('sqlsrv2')->select("EXEC spProductionCaptureCRUD '$intAutoId', '$dteOccured', '$intShiftId', '$intDepartmentId', '$intMachineId', '$strProductCode', '$fltWeight', '$intQty', '$strOperator1', '$strOperator2', '$strOperator3', '$strOperator4', '$fltScrap', '$strDowntime1', '$intReason1', '$strComment1', '$strDowntime2', '$intReason2', '$strComment2', '$strDowntime3', '$intReason3', '$strComment3', '$strDowntime4', '$intReason4', '$strComment4', '$command'");
+        $data = DB::connection('sqlsrv2')->select("EXEC spProductionCaptureCRUD '$intAutoId', '$dteOccured', '$intShiftId', '$intDepartmentId', '$intMachineId', '$strProductCode', '$fltWeight', '$fltQty', '$strOperator1', '$strOperator2', '$strOperator3', '$strOperator4', '$fltScrap', '$strDowntime1', '$intReason1', '$strComment1', '$strDowntime2', '$intReason2', '$strComment2', '$strDowntime3', '$intReason3', '$strComment3', '$strDowntime4', '$intReason4', '$strComment4', '$command'");
         return response()->json($data);
     }
 }

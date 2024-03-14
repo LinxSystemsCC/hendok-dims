@@ -18,7 +18,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="newuserLabel">PLANNED DEPARTURE</h1>
-                    <button type="button" class="btn-close closePlanDepartureModal" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close closePlanDepartureModal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
@@ -44,7 +45,8 @@
         </div>
     </div>
 
-    <div class="modal fade modal-md" id="actualDepartureModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+    <div class="modal fade modal-md" id="actualDepartureModal" tabindex="-1" aria-labelledby="newuserLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,7 +127,8 @@
                                 <select type="date" class="form-select w-100" id="selectReasonType" required>
                                     <option></option>
                                     @foreach ($reasonTypes as $reasonType)
-                                        <option value="{{ $reasonType->intAutoId }}"> {{ $reasonType->strReasonTypes }} </option>
+                                        <option value="{{ $reasonType->intAutoId }}"> {{ $reasonType->strReasonTypes }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -172,23 +175,29 @@
             });
 
             const gridLoadTracking = $("#gridLoadTracking").dxDataGrid({
-                dataSource:[],
+                dataSource: [],
                 keyExpr: 'strUnickReference',
                 showBorders: true,
                 showRowLines: true,
                 showColumnLines: true,
                 rowAlternationEnabled: true,
-                filterRow: { visible: true },
-                filterPanel: { visible: true },
-                headerFilter: { visible: true },
+                filterRow: {
+                    visible: true
+                },
+                filterPanel: {
+                    visible: true
+                },
+                headerFilter: {
+                    visible: true
+                },
                 paging: {
                     enabled: false
                 },
                 selection: {
                     mode: "single",
                 },
-                columnAutoWidth:true,        
-                allowColumnResizing: true,       
+                columnAutoWidth: true,
+                allowColumnResizing: true,
                 columnResizingMode: "widget",
                 columnFixing: {
                     enabled: true,
@@ -196,8 +205,7 @@
                 scrolling: {
                     mode: 'overflow'
                 },
-                columns: [
-                    {
+                columns: [{
                         dataField: "intAutoPickingHeader",
                         caption: "Load No.",
                         // fixed: true,
@@ -229,7 +237,7 @@
                         visible: false,
                     },
                     {
-                        
+
                         width: 150,
                         dataField: "strPickingNickname",
                         caption: "Route Name",
@@ -309,20 +317,20 @@
                         visible: false,
                     },
                 ],
-                onRowClick: function (e) {
+                onRowClick: function(e) {
                     // console.log(e.data);
 
                     var currentID = currentSelectedRow[0];
                     var clickedID = e.data.intAutoPickingHeader;
 
-                    if (clickedID === currentID){
+                    if (clickedID === currentID) {
                         currentSelectedRow = [];
                         e.component.clearSelection();
                         // disableToolbarButtons(true);
 
                         this.isBtnDisabled = true;
                         gridLoadTracking.repaint();
-                    }else{
+                    } else {
                         currentSelectedRow = [];
                         currentSelectedRow.push(clickedID);
                         // disableToolbarButtons(true);
@@ -335,7 +343,7 @@
 
                         // $("#inputActualDate").val(e.data.dtmActualDeparture);
                         // $("#inputActualTime").val(e.data.dtmActualDeparture);
-                        
+
                         // $("#selectStatus").text(e.data.strLoadStatus).trigger("change");;
                         // $("#selectReasonType").val(e.data.intReasonType).trigger("change");;
 
@@ -421,7 +429,7 @@
             }
 
             // Event listener for modal dismiss
-            $('.modal').on('hidden.bs.modal', function (e) {
+            $('.modal').on('hidden.bs.modal', function(e) {
                 clearInputsAndSelect();
             });
 
@@ -441,13 +449,11 @@
                         gridLoadTracking.refresh();
 
                         gridData = gridLoadTracking.option("dataSource");
-
-                        
                     }
                 });
             }
 
-            $("#btnPlanDeparture").click(function(){
+            $("#btnPlanDeparture").click(function() {
                 var selectedItem = gridLoadTracking.getSelectedRowsData()[0];
                 var strUnickReference = selectedItem.strUnickReference;
 
@@ -469,7 +475,7 @@
                 });
             });
 
-            $("#btnActualDeparture").click(function(){
+            $("#btnActualDeparture").click(function() {
                 var selectedItem = gridLoadTracking.getSelectedRowsData()[0];
                 var strUnickReference = selectedItem.strUnickReference;
 
@@ -490,8 +496,8 @@
                     }
                 });
             });
-            
-            $("#btnTripStatus").click(function(){
+
+            $("#btnTripStatus").click(function() {
                 var selectedItem = gridLoadTracking.getSelectedRowsData()[0];
                 var strUnickReference = selectedItem.strUnickReference;
 
@@ -511,8 +517,8 @@
                     }
                 });
             });
-            
-            $("#btnReason").click(function(){
+
+            $("#btnReason").click(function() {
                 var selectedItem = gridLoadTracking.getSelectedRowsData()[0];
                 var strUnickReference = selectedItem.strUnickReference;
 
