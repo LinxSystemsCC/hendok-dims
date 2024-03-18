@@ -545,7 +545,7 @@ if ((Auth::guest()))
                         <!-- Item Links -->
                         <li>
                             @if($stocklocation !="0")
-                            <a href='{!!url("/stocklocation")!!}'>Stock Location</a>
+                            <a href='{!!url("/stockLocation")!!}'>Stock Location</a>
                             @endif
                         </li>
                     </ul>

@@ -22,6 +22,7 @@ use App\Http\Controllers\Warehouse\GalvController;
 use App\Http\Controllers\Warehouse\WarehouseSetupController;
 use App\Http\Controllers\Warehouse\ProductionController;
 use App\Http\Controllers\Warehouse\LoadingController;
+use App\Http\Controllers\Warehouse\StockControlController;
 use App\Http\Controllers\ApisController;
 
 /*
@@ -1284,5 +1285,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('loadTracking', [LoadingController::class,'loadTracking']);
     Route::get('getLoadTracking', [LoadingController::class,'getLoadTracking']);
     Route::post('postLoadTrackingUpdate', [LoadingController::class,'postLoadTrackingUpdate']);
+});
+
+// Stock Control Controller
+Route::group(['middleware' => 'auth'], function() { 
+    Route::get('stockLocation', [StockControlController::class,'stockLocation']);
+    Route::get('getStockLocationSummary', [StockControlController::class,'getStockLocationSummary']);
+    Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
+
 });
 

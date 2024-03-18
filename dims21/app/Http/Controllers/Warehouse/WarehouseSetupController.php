@@ -12,7 +12,7 @@ class WarehouseSetupController extends Controller
     public function LocationsAndBins()
     {
         $sageWarehouses = DB::connection('sqlsrv2')->select("SELECT Code, [Name] FROM [Hendok Distribution].dbo.WhseMst");
-        return view('warehouse.setup.stockLocations')
+        return view('warehouse.setup.LocationsAndBins')
             ->with('sageWarehouses', $sageWarehouses);
     }
 
