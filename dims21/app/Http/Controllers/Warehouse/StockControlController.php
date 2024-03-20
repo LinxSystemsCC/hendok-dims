@@ -27,4 +27,10 @@ class StockControlController extends Controller
         $data = DB::connection('sqlsrv2')->select("select * from viewStockDetailsSummary where strErpItemCode ='" . $ItemCode . "' order by strErpItemCode");
         return response()->json($data);
     }
+
+    public function getIssuedStock(Request $request){
+        $data = DB::connection('sqlsrv2')->select("SELECT * FROM viewIssuedStock");
+        return response()->json($data);
+        
+    }
 }

@@ -1292,6 +1292,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('stockLocation', [StockControlController::class,'stockLocation']);
     Route::get('getStockLocationSummary', [StockControlController::class,'getStockLocationSummary']);
     Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
-
+    Route::get('getIssuedStock', [StockControlController::class,'getIssuedStock']);
 });
 

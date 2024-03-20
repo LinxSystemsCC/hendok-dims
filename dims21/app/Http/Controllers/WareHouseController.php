@@ -1843,7 +1843,7 @@ class WareHouseController extends Controller
         $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/work-orders',
+            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/work-orders?isComplete=0',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -1887,9 +1887,7 @@ class WareHouseController extends Controller
         $openWorkOrders = [];
 
         foreach ($result['results'] as $workOrder) {
-            if ($workOrder['status'] !== 'complete') {
-                $openWorkOrders[] = $workOrder;
-            }
+            $openWorkOrders[] = $workOrder;
         }
 
         // dd($openWorkOrders);
