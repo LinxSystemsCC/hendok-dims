@@ -554,6 +554,15 @@
                     dataField: "strPastelDescription",
                     caption: "Item Description",
                 }, {
+                    dataField: "fltTotalAvgCost",
+                    caption: "Total Avg Cost",
+                    dataType: "number",
+                    alignment: "center",
+                    format: {
+                        type: "fixedPoint",
+                        precision: 2
+                    },
+                },{
                     dataField: "strStockGroup",
                     caption: "Item Group",
                 }, {
