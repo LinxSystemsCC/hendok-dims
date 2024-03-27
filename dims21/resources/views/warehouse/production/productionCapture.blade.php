@@ -323,16 +323,44 @@
                 paging: {
                     enabled: false
                 },
-                selection: {
-                    mode: "single",
-                },
+                // selection: {
+                //     mode: "single",
+                // },
                 columnFixing: {
                     enabled: true,
                 },
                 editing: {
-                    mode: 'row',
-                    // allowUpdating: true,
+                    mode: 'batch',
+                    allowUpdating: true,
                     allowDeleting: '{{ $canDelete }}',
+                },
+                    paging:{
+                    pageSize: 50,
+                },
+                pager: {
+                    visible: true,
+                    allowedPageSizes: [5, 10, 20, 50, 'all'],
+                    showPageSizeSelector: true,
+                    showInfo: true,
+                    showNavigationButtons: true,
+                },
+                export: {
+                    enabled: true
+                },
+                onExporting(e) {
+                    const workbook = new ExcelJS.Workbook();
+                    const worksheet = workbook.addWorksheet('ProductionCapture');
+
+                    DevExpress.excelExporter.exportDataGrid({
+                        component: e.component,
+                        worksheet,
+                        autoFilterEnabled: true,
+                    }).then(() => {
+                        workbook.xlsx.writeBuffer().then((buffer) => {
+                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Production Capture.xlsx');
+                        });
+                    });
+                    e.cancel = true;
                 },
                 columnAutoWidth: true,
                 allowColumnResizing: true,
@@ -341,30 +369,37 @@
                         dataField: "intAutoId",
                         caption: "intAutoId",
                         visible: false,
+                        allowEditing: false,
                     },
                     {
                         dataField: "dteOccured",
                         caption: "Date",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strShiftName",
                         caption: "Shift",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strDeptName",
                         caption: "Department",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strMachineName",
                         caption: "Machine",
+                        allowEditing: false,
                     },
                     {
                         dataField: "ProductCode",
                         caption: "Product Code",
+                        allowEditing: false,
                     },
                     {
                         dataField: "ProductDescription",
                         caption: "Product Description",
+                        allowEditing: false,
                     },
                     {
                         dataField: "fltSageWeight",
@@ -372,6 +407,7 @@
                         dataType: "number",
                         type: "fixedPoint",
                         precision: 2,
+                        allowEditing: false,
                     },
                     {
                         dataField: "fltWeight",
@@ -379,6 +415,7 @@
                         dataType: "number",
                         type: "fixedPoint",
                         precision: 2,
+                        allowEditing: true,
                     },
                     {
                         dataField: "fltQty",
@@ -386,22 +423,27 @@
                         dataType: "number",
                         type: "fixedPoint",
                         precision: 2,
+                        allowEditing: true,
                     },
                     {
                         dataField: "strOperator1",
                         caption: "Operator 1",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strOperator2",
                         caption: "Operator 2",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strOperator3",
                         caption: "Operator 3",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strOperator4",
                         caption: "Operator 4",
+                        allowEditing: false,
                     },
                     {
                         dataField: "fltScrap",
@@ -409,59 +451,88 @@
                         dataType: "number",
                         type: "fixedPoint",
                         precision: 2,
+                        allowEditing: true,
                     },
                     {
                         dataField: "strDowntime1",
                         caption: "Downtime 1",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strReason1",
                         caption: "Reason 1",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strComment1",
                         caption: "Comment 1",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strDowntime2",
                         caption: "Downtime 2",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strReason2",
                         caption: "Reason 2",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strComment2",
                         caption: "Comment 2",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strDowntime3",
                         caption: "Downtime 3",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strReason3",
                         caption: "Reason 3",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strComment3",
                         caption: "Comment 3",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strDowntime4",
                         caption: "Downtime 4",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strReason4",
                         caption: "Reason 4",
+                        allowEditing: false,
                     },
                     {
                         dataField: "strComment4",
                         caption: "Comment 4",
+                        allowEditing: false,
                     },
                 ],
+                onRowUpdated: function(e) {
+                    $.ajax({
+                        url: "{!! url('/postProductionCaptureCRUD') !!}",
+                        type: "POST",
+                        data: {
+                            intAutoId: e.data.intAutoId,
+                            fltWeight: e.data.fltWeight,
+                            fltQty: e.data.fltQty,
+                            fltScrap: e.data.fltScrap,
+                            command: "UPDATE"
+                        },
+                        success: function(data) {
+                            getProductionCapture();
+                        }
+                    });
+                },
                 onRowRemoved: function(e) {
                     $.ajax({
-                        url: '{!! url('/postProductionCaptureCRUD') !!}',
+                        url: "{!! url('/postProductionCaptureCRUD') !!}",
                         type: "POST",
                         data: {
                             intAutoId: e.data.intAutoId,
@@ -698,7 +769,7 @@
                     $('#overlay').prop('hidden', false);
                     $.ajax({
 
-                        url: '{!! url('/getBulkMappingAreaDeptSubDeptMachines') !!}',
+                        url: "{!! url('/getBulkMappingAreaDeptSubDeptMachines') !!}",
                         type: "GET",
                         data: {
                             ID: $('#selectDepartment').val(),
@@ -740,7 +811,7 @@
 
                     $('#overlay').prop('hidden', false);
                     $.ajax({
-                        url: '{!! url('/getProductsMappedToDepartment') !!}',
+                        url: "{!! url('/getProductsMappedToDepartment') !!}",
                         type: "GET",
                         data: {
                             ID: $('#selectDepartment').val(),
@@ -811,7 +882,7 @@
 
             function getProductionCapture() {
                 $.ajax({
-                    url: '{!! url('/postProductionCaptureCRUD') !!}',
+                    url: "{!! url('/postProductionCaptureCRUD') !!}",
                     type: "POST",
                     data: {
                         command: "READ"
@@ -830,7 +901,7 @@
                 intReason1, strComment1, strDowntime2, intReason2, strComment2, strDowntime3, intReason3,
                 strComment3, strDowntime4, intReason4, strComment4) {
                 $.ajax({
-                    url: '{!! url('/postProductionCaptureCRUD') !!}',
+                    url: "{!! url('/postProductionCaptureCRUD') !!}",
                     type: "POST",
                     data: {
                         dteOccured: dteOccured,
