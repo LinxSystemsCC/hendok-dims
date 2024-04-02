@@ -427,6 +427,7 @@ if ((Auth::guest()))
 
                         $('#btnUpdateUpliftment').prop('hidden',false);
                         $('#btnApproveUpliftment').prop('hidden',false);
+                        $('#btnPrintUpliftment').prop('hidden',false);
                         $('#btnDenyUpliftment').prop('hidden',false);
                         $('#btnUpliftmentImages').prop('hidden',false);
                         $('#btnEnquireUpliftment').prop('hidden',false);
