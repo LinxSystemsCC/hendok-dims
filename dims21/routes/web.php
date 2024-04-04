@@ -1081,6 +1081,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('denyUpliftmentPost',[WareHouseController::class,'denyUpliftmentPost']);
     Route::get('upliftImageGetter/{upliftmentnumber}',[WareHouseController::class,'upliftImageGetter']);
     Route::get('upliftmentBacklog/{upliftmentnumber}',[WareHouseController::class,'upliftmentBacklog']);
+    Route::get('upliftmentUploads/{upliftmentnumber}',[WareHouseController::class,'upliftmentUploads']);
     Route::get('upliftEnquiry/{upliftmentnumber}',[WareHouseController::class,'upliftEnquiry']);
     Route::post('upliftmentMessagePost',[WarehouseController::class,'upliftmentMessagePost']);
     Route::post('mapLabelToProdCat', [WareHouseController::class,'mapLabelToProdCat']);
@@ -1294,4 +1295,3 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
     Route::get('getIssuedStock', [StockControlController::class,'getIssuedStock']);
 });
-

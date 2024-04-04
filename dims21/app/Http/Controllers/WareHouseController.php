@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 
 class WareHouseController extends Controller
@@ -584,8 +585,25 @@ class WareHouseController extends Controller
             // Replace the binary image data with the data URI in the row object
             $row->image = $dataURI;
         }
-        return view('warehouse/upliftmentimagepage')->with('imagedata', $returndata);
+        return view('warehouse/upliftmentimagepage')->with('imagedata', $returndata)->with('upliftmentnumber', $upliftmentnumber);
     }
+
+    public function upliftmentUploads($upliftmentnumber){
+        $directory = "upliftments/$upliftmentnumber";
+    
+        // Get the list of files from the specified directory
+        $files = Storage::files($directory);
+        $files = array_map(function($file) use ($upliftmentnumber) {
+            $filename = str_replace('+', '%2B', basename($file));
+            return "/storage/app/upliftments/{$upliftmentnumber}/" . $filename;
+        }, $files);
+
+        // dd(($files));
+    
+        // No need to prepend the storage/app/ path, use the relative path directly
+        return view('warehouse.upliftmentUploads')->with('upliftmentnumber', $upliftmentnumber)->with('files', $files);
+    }
+    
     public function upliftEnquiry($upliftmentID)
     {
 
@@ -644,35 +662,10 @@ class WareHouseController extends Controller
         }
         return view('warehouse/upliftmentpdfpage')->with('imagedata', $returndata);
     }
+
+
     public function insertUpliftmentAll(Request $request)
     {
-        $file = $request->file('file1');
-
-        if ($request->hasFile('file1') && $file->isValid()) {
-            $varbinaryData = $file->get();
-            $hexString1 = bin2hex($varbinaryData);
-        } else {
-            $hexString1 = null;
-        }
-
-        $file = $request->file('file2');
-
-        if ($request->hasFile('file2') && $file->isValid()) {
-            $varbinaryData = $file->get();
-            $hexString2 = bin2hex($varbinaryData);
-        } else {
-            $hexString2 = null;
-        }
-
-        $file = $request->file('file3');
-
-        if ($request->hasFile('file3') && $file->isValid()) {
-            $varbinaryData = $file->get();
-            $hexString3 = bin2hex($varbinaryData);
-        } else {
-            $hexString3 = null;
-        }
-
 
         $dataxml = $request->input('dataxml');
 
@@ -687,37 +680,33 @@ class WareHouseController extends Controller
         $date = (new \DateTime($date))->format('Y-m-d');
         $upliftmentaction = $request->input('upliftmentaction');
         $upliftreason = $request->input('upliftreason');
+        $collectionType = $request->input('collectionType');
 
-        DB::connection('sqlsrv2')->statement("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml, $date, $address, $area, $company, $customers, $invoice, $upliftmentaction, $reasonpickup, $upliftreason, $hexString1, $hexString2, $hexString3, $UserID));
+        $result = DB::connection('sqlsrv2')->select("exec spInsertUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml, $date, $address, $area, $company, $customers, $invoice, $upliftmentaction, $reasonpickup, $upliftreason, $UserID, $collectionType));
+
+        $request->validate([
+            'uploaded.*' => 'required|mimes:pdf,jpg,jpeg,png,tmp|max:2048',
+        ]);
+
+        // dd($result);
+
+        if ($request->hasFile('uploaded')) {
+            foreach ($request->file('uploaded') as $file) {
+                $fileName = $file->getClientOriginalName(); // Get the original filename
+                $fileType = $file->getClientOriginalExtension(); // Get the file extension
+        
+                // Determine the destination directory based on the file extension
+                $destinationDirectory = $result[0]->intUpliftmentNumber;
+        
+                // Move the file to the appropriate directory
+                $file->move(env('UPLIFTMENT_STORAGE_PATH', storage_path("app/upliftments")) . '/' . $destinationDirectory, $fileName);
+            }
+        }
+
+        return response()->json(['success' => true]);
     }
     public function updateUpliftmentPost(Request $request)
     {
-        $file = $request->file('file1');
-
-        if ($request->hasFile('file1') && $file->isValid()) {
-            $varbinaryData = $file->get();
-            $hexString1 = bin2hex($varbinaryData);
-        } else {
-            $hexString1 = null;
-        }
-
-        $file = $request->file('file2');
-
-        if ($request->hasFile('file2') && $file->isValid()) {
-            $varbinaryData = $file->get();
-            $hexString2 = bin2hex($varbinaryData);
-        } else {
-            $hexString2 = null;
-        }
-
-        $file = $request->file('file3');
-
-        if ($request->hasFile('file3') && $file->isValid()) {
-            $varbinaryData = $file->get();
-            $hexString3 = bin2hex($varbinaryData);
-        } else {
-            $hexString3 = null;
-        }
 
         $dataxml = $request->input('dataxml');
 
@@ -733,8 +722,30 @@ class WareHouseController extends Controller
         $upliftmentaction = $request->input('upliftmentaction');
         $upliftreason = $request->input('upliftreason');
         $SelectedUpliftmentNumber = $request->input('SelectedUpliftmentNumber');
+        $collectionType = $request->input('collectionType');
 
-        DB::connection('sqlsrv2')->statement("exec spUpdateUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml, $date, $address, $area, $company, $customers, $invoice, $upliftmentaction, $reasonpickup, $upliftreason, $hexString1, $hexString2, $hexString3, $UserID, $SelectedUpliftmentNumber));
+        $result = DB::connection('sqlsrv2')->select("exec spUpdateUpliftmentAll ?,?,?,?,?,?,?,?,?,?,?,?,?", array($dataxml, $date, $address, $area, $company, $customers, $invoice, $upliftmentaction, $reasonpickup, $upliftreason, $UserID, $SelectedUpliftmentNumber, $collectionType));
+
+        $request->validate([
+            'uploaded.*' => 'required|mimes:pdf,jpg,jpeg,png,tmp|max:2048',
+        ]);
+
+        // dd($result);
+
+        if ($request->hasFile('uploaded')) {
+            foreach ($request->file('uploaded') as $file) {
+                $fileName = $file->getClientOriginalName(); // Get the original filename
+                $fileType = $file->getClientOriginalExtension(); // Get the file extension
+        
+                // Determine the destination directory based on the file extension
+                $destinationDirectory = $SelectedUpliftmentNumber;
+        
+                // Move the file to the appropriate directory
+                $file->move(env('UPLIFTMENT_STORAGE_PATH', storage_path("app/upliftments")) . '/' . $destinationDirectory, $fileName);
+            }
+        }
+
+        return response()->json(['success' => true]);
     }
     public function approveUpliftmentPost(Request $request)
     {

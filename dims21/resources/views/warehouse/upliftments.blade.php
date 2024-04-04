@@ -42,6 +42,7 @@ if ((Auth::guest()))
     </style>
 
     <div class="col-md-12 h-100">
+        
         <div class="grid" id="gridUpliftment"></div>
 
         <!-- Upliftment Modal -->
@@ -55,10 +56,21 @@ if ((Auth::guest()))
 
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-6">
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="inputDate">Date</label>
                                     <input type="date" class="form-control w-100" id="inputDate">
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="form-group mb-2">
+                                    <label class="control-label fw-bold" for="selectType">Collection Type</label>
+                                    <select class="form-select w-100" id="selectType">
+                                        <option value=""></option>
+                                        <option value="Hendok Fleet">Hendok Fleet</option>
+                                        <option value="Rep Collection">Rep Collection</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -79,10 +91,11 @@ if ((Auth::guest()))
                                 </div>
 
                                 <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="selectAddress">Address Name</label>
-                                    <select  class="form-select" id="selectAddress" required>
+                                    <label class="control-label fw-bold" for="inputAddress">Address Name</label>
+                                    <input  class="form-control w-100" id="inputAddress" required disabled>
+                                    {{-- <select  class="form-select" id="inputAddress" required>
                                         <option></option>
-                                    </select>
+                                    </select> --}}
                                 </div>
                             </div>
     
@@ -137,7 +150,7 @@ if ((Auth::guest()))
                         </div>
 
                         <div class="row">
-                            <div class="col-4">
+                            {{-- <div class="col-4">
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="inputPhoto1">Upload a First Photo</label>
                                     <input type="file" name="photo" class="form-control w-100" id="inputPhoto1">
@@ -154,7 +167,15 @@ if ((Auth::guest()))
                                     <label class="control-label fw-bold" for="inputPhoto3">Upload a Third Photo</label>
                                     <input type="file" name="photo" class="form-control w-100" id="inputPhoto3">
                                 </div>
+                            </div> --}}
+                            <div class="col-12">
+                                <div class="form-group mb-2">
+                                    <label class="control-label fw-bold" for="inputPhoto3">Upload documents</label>
+                                    {{-- <input type="file" name="photo" class="form-control w-100" id="inputPhoto3"> --}}
+                                    <input type="file" name="uploaded[]" class="form-control w-100" id="uploads" multiple accept="image/jpeg,image/gif,image/png,application/pdf">
+                                </div>
                             </div>
+                            
                         </div>
 
                         
@@ -278,9 +299,9 @@ if ((Auth::guest()))
                         @endif
                         
                         @if($viewimage !="0")
-                            <button type="button" id="btnUpliftmentImages" class="btn btn-success" hidden>Images</button>
+                            <button type="button" id="btnUpliftmentImages" class="btn btn-success" hidden>Images & Docs</button>
                         @else
-                            <button type="button" id="btnUpliftmentImages" class="btn btn-success" hidden disabled>Images</button>
+                            <button type="button" id="btnUpliftmentImages" class="btn btn-success" hidden disabled>Images & Docs</button>
                         @endif
                         
                         @if($enquiry !="0")
@@ -297,6 +318,7 @@ if ((Auth::guest()))
             </div>
         </div>
     </div>
+
 @endsection
 
 @section('scripts')
@@ -319,6 +341,10 @@ if ((Auth::guest()))
         });
 
         $(document).ready(function() {
+            let selectedCustomer = '';
+            let selectedInvoice = '';
+            let selectedAltAddress = '';
+            let selectedId = '';
 
             const gridUpliftment = $("#gridUpliftment").dxDataGrid({
                 dataSource:[], //as json
@@ -404,6 +430,10 @@ if ((Auth::guest()))
                         dataField: "Username",
                         caption: "User",
                     },
+                    {
+                        dataField: "strCollectionType",
+                        caption: "Collection Type",
+                    },
                 ],
                 onRowRemoving: function(e) {
 
@@ -434,13 +464,20 @@ if ((Auth::guest()))
                         $('#btnSaveUpliftment').prop('hidden',true);
                         
                         $('#inputDate').val(e.data.dteUpliftDate);
+                        selectedCustomer = e.data.strCustomer;
+                        selectedInvoice = e.data.strInvoice;
+                        selectedId = e.data.intUpliftmentNumber;
+
                         $('#selectCompany').val(e.data.strCompany).trigger('change');
-                        $('#inputCustomer').val(e.data.strCustomer);
-                        $('#inputAltAddress').val(e.data.strAddress);
+
+                        // $('#inputAltAddress').val(e.data.strAddress);
+                        selectedAltAddress = e.data.strAddress;
 
                         $('#inputArea').val(e.data.strArea);
-                        $('#inputAltInvoice').val(e.data.strInvoice).trigger('change');
+                        // $('#inputAltInvoice').val(e.data.strInvoice).trigger('change');
+                        
                         $('#inputPickupReason').val(e.data.strReasonPickup);
+                        $('#selectType').val(e.data.strCollectionType);
                         
                         getGridProducts(upliftmentNumber);
                     }
@@ -532,6 +569,16 @@ if ((Auth::guest()))
                 }
             }).dxDataGrid('instance');
 
+            $('#inputCustomer').flexdatalist({
+                minLength: 1,
+                valueProperty: 'CustomerCode',
+                selectionRequired: true,
+                focusFirstResult: true,
+                searchContain:true,
+                visibleProperties: ["CustomerCode","StoreName"],
+                searchIn: ["CustomerCode","StoreName"],
+            });
+
             var SelectedUpliftmentNumber = 0;
 
             setProductsDataList(productsList);
@@ -551,14 +598,17 @@ if ((Auth::guest()))
                 });
             });
 
-            $('#inputCustomer').on('change:flexdatalist', function(event, set, options) {
+            $('#inputCustomer').on('change:flexdatalist', function(event, strInvoice) {
+                
                 var customerDetails = $('#inputCustomer').flexdatalist('value');
+                var selectedCustomer = customerDetails;
+                
                 if (customerDetails != ''){
                     $.ajax({
                         url: '{!!url("/getAreaAddressInvoiceInfoParam")!!}',
                         type: "POST",
                         data: {
-                            customer: customerDetails.CustomerCode,
+                            customer: customerDetails,
                             company: $("#selectCompany").val()
                         },
                         success: function (data) {
@@ -570,6 +620,10 @@ if ((Auth::guest()))
                             setAlternativeAreaList(data.routes);
                             setCustomerAddressList(data.addresses)
                             setInvoiceDataList(data.invoices);
+
+                            if (strInvoice) {
+                                $('#selectInvoice').val(strInvoice).trigger('change');
+                            }
                         }
                     });
                 }
@@ -621,25 +675,24 @@ if ((Auth::guest()))
                     }
                 });
 
-                $('#inputCustomer').flexdatalist({
-                    minLength: 1,
-                    valueProperty: '*',
-                    selectionRequired: true,
-                    focusFirstResult: true,
-                    searchContain:true,
-                    visibleProperties: ["CustomerCode","StoreName"],
-                    searchIn: ["CustomerCode","StoreName"],
-                    data: customerList
-                });
+                $('#inputCustomer').flexdatalist('data', customerList);
+                $('#inputCustomer').flexdatalist('value', selectedCustomer).trigger('change:flexdatalist');
             };
 
             function setCustomerAddressList(addresses){
-                $('#selectAddress').empty();
-                var toAppend='';
-                $.each(addresses,function(i,o){
-                    toAppend += '<option value="'+o.strAddress+'">'+o.strAddress+'</option>';
-                });
-                $("#selectAddress").append(toAppend);
+                // $('#inputAddress').empty();
+                // var toAppend='';
+                // $.each(addresses,function(i,o){
+                //     toAppend += '<option value="'+o.strAddress+'">'+o.strAddress+'</option>';
+                // });
+                // $("#inputAddress").append(toAppend);
+
+                if (selectedAltAddress != ''){
+                    $("#inputAddress").val(selectedAltAddress);
+                }else{
+                    $("#inputAddress").val(addresses[0]["strAddress"]);
+                }
+                
             };
 
             function setAlternativeAreaList(areas){
@@ -660,16 +713,6 @@ if ((Auth::guest()))
                     dropdownParent: $('#upliftmentModal'),
                 });
 
-                // $('#selectAltArea').flexdatalist({
-                //     minLength: 1,
-                //     valueProperty: '*',
-                //     selectionRequired: true,
-                //     focusFirstResult: true,
-                //     searchContain:true,
-                //     visibleProperties: ["routeID","Route"],
-                //     searchIn: ["routeID","Route"],
-                //     data: alternativeAreasList
-                // });
             };
 
             function setInvoiceDataList(invoices){
@@ -694,6 +737,13 @@ if ((Auth::guest()))
                     theme: 'bootstrap-5',
                     dropdownParent: $('#upliftmentModal'),
                 });
+
+                if (!invoiceList.some(item => item.value === selectedInvoice)) {
+                    $('#inputAltInvoice').val(selectedInvoice);
+                }else{
+                    $('#selectInvoice').val(selectedInvoice).trigger('change');
+                }
+
             };
 
             function setSalesOrderProductDataList(soProducts){
@@ -843,11 +893,11 @@ if ((Auth::guest()))
                 $.each(checkedLines ,function(key,value) {
                     if (value.Qty !=undefined || value.Qty !=null){
                         gridResults= gridResults + "<result>";
-                        gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
-                        gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
+                        gridResults= gridResults + "<PastelCode>"+escapeHtml(value.PastelCode)+"</PastelCode>";
+                        gridResults= gridResults + "<PastelDescription>"+escapeHtml(value.PastelDescription)+"</PastelDescription>";
                         gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
                         gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
-                        gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
+                        gridResults= gridResults + "<Comment>"+escapeHtml(value.Comment)+"</Comment>";
                         gridResults= gridResults+ "</result>";
                     }
                 });
@@ -856,9 +906,14 @@ if ((Auth::guest()))
                 var formData = new FormData();
 
                 // Append the file to the FormData object
-                formData.append('file1', $('#inputPhoto1')[0].files[0]);
-                formData.append('file2', $('#inputPhoto2')[0].files[0]);
-                formData.append('file3', $('#inputPhoto3')[0].files[0]);
+                // formData.append('file1', $('#inputPhoto1')[0].files[0]);
+                // formData.append('file2', $('#inputPhoto2')[0].files[0]);
+                // formData.append('file3', $('#inputPhoto3')[0].files[0]);
+
+                var files = $('#uploads')[0].files;
+                for (var i = 0; i < files.length; i++) {
+                    formData.append('uploaded[]', files[i]);
+                }
 
                 // Append the other form data to the FormData object
                 formData.append('dataxml', gridResults);
@@ -874,7 +929,7 @@ if ((Auth::guest()))
                     formData.append('address', $('#inputAltAddress').val());
                 }
                 else{
-                    formData.append('address', $('#selectAddress').val());
+                    formData.append('address', $('#inputAddress').val());
                 }
                 if ($('#inputAltInvoice').val().length > 0){
                     formData.append('invoice', $('#inputAltInvoice').val());
@@ -886,9 +941,11 @@ if ((Auth::guest()))
                 
                 var customer = $('#inputCustomer').flexdatalist('value');
 
-                formData.append('customers', customer.CustomerCode);
+                formData.append('customers', customer);
                 formData.append('company', $('#selectCompany').val());
                 formData.append('date', $('#inputDate').val());
+                formData.append('collectionType', $('#selectType').val());
+                
 
                 $.ajax({
                     url: '{!!url("/insertUpliftmentAll")!!}',
@@ -906,28 +963,32 @@ if ((Auth::guest()))
                 var checkedLines = Array();
                 checkedLines = gridProducts.option('dataSource');
 
-                console.log(checkedLines);
-
                 var gridResults = '<xml>';
                 $.each(checkedLines ,function(key,value) {
                     if (value.Qty !=undefined || value.Qty !=null){
                         gridResults= gridResults + "<result>";
-                        gridResults= gridResults + "<PastelCode>"+value.PastelCode+"</PastelCode>";
-                        gridResults= gridResults + "<PastelDescription>"+value.PastelDescription+"</PastelDescription>";
+                        gridResults= gridResults + "<PastelCode>"+escapeHtml(value.PastelCode)+"</PastelCode>";
+                        gridResults= gridResults + "<PastelDescription>"+escapeHtml(value.PastelDescription)+"</PastelDescription>";
                         gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
                         gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
-                        gridResults= gridResults + "<Comment>"+value.Comment+"</Comment>";
+                        gridResults= gridResults + "<Comment>"+escapeHtml(value.Comment)+"</Comment>";
                         gridResults= gridResults+ "</result>";
                     }
                 });
                 gridResults= gridResults+"</xml>";
 
                 var formData = new FormData();
+                formData.append('SelectedUpliftmentNumber',SelectedUpliftmentNumber);
 
                 // Append the file to the FormData object
-                formData.append('file1', $('#inputPhoto1')[0].files[0]);
-                formData.append('file2', $('#inputPhoto2')[0].files[0]);
-                formData.append('file3', $('#inputPhoto3')[0].files[0]);
+                // formData.append('file1', $('#inputPhoto1')[0].files[0]);
+                // formData.append('file2', $('#inputPhoto2')[0].files[0]);
+                // formData.append('file3', $('#inputPhoto3')[0].files[0]);
+
+                var files = $('#uploads')[0].files;
+                for (var i = 0; i < files.length; i++) {
+                    formData.append('uploaded[]', files[i]);
+                }
 
                 // Append the other form data to the FormData object
                 formData.append('dataxml', gridResults);
@@ -943,7 +1004,7 @@ if ((Auth::guest()))
                     formData.append('address', $('#inputAltAddress').val());
                 }
                 else{
-                    formData.append('address', $('#selectAddress').val());
+                    formData.append('address', $('#inputAddress').val());
                 }
                 if ($('#inputAltInvoice').val().length > 0){
                     formData.append('invoice', $('#inputAltInvoice').val());
@@ -955,9 +1016,10 @@ if ((Auth::guest()))
                 
                 var customer = $('#inputCustomer').flexdatalist('value');
 
-                formData.append('customers', customer.CustomerCode);
+                formData.append('customers', customer);
                 formData.append('company', $('#selectCompany').val());
                 formData.append('date', $('#inputDate').val());
+                formData.append('collectionType', $('#selectType').val());
 
                 $.ajax({
                     url: '{!!url("/updateUpliftmentPost")!!}',
@@ -1042,7 +1104,7 @@ if ((Auth::guest()))
             });
 
             $('#btnUpliftmentImages').click(function(){
-                window.open('{!!url("/upliftImageGetter")!!}/'+SelectedUpliftmentNumber, 'upliftimagegetter', "location=1,status=1,scrollbars=1, width=1200,height=850");
+                window.open('{!!url("/upliftmentUploads")!!}/'+SelectedUpliftmentNumber, 'upliftmentUploads', "location=1,status=1,scrollbars=1, width=1200,height=850");
             });
 
             $('#btnEnquireUpliftment').click(function(){
@@ -1079,15 +1141,38 @@ if ((Auth::guest()))
             var upliftmentModal = $('#upliftmentModal');
             $('.closeUpliftmentModal', upliftmentModal).on('click', function () {
                 upliftmentModal.hide();
-                
+
+                $('#btnUpdateUpliftment').prop('hidden',true);
+                $('#btnApproveUpliftment').prop('hidden',true);
+                $('#btnPrintUpliftment').prop('hidden',true);
+                $('#btnDenyUpliftment').prop('hidden',true);
+                $('#btnUpliftmentImages').prop('hidden',true);
+                $('#btnEnquireUpliftment').prop('hidden',true);
+                $('#btnSaveUpliftment').prop('hidden',false);
+
                 $('.form-control', upliftmentModal).val('');
                 $('.form-select', upliftmentModal).val('default');
                 $('.form-select', upliftmentModal).trigger('change.select2');
-                $('.form-select:not(#selectCompany)', upliftmentModal).empty();
+                $('.form-select:not(#selectCompany,#selectType)', upliftmentModal).empty();
+                selectedCustomer = '';
+                $('#inputCustomer').flexdatalist('value', selectedCustomer).trigger('change:flexdatalist');
+
+                selectedInvoice = '';
+                selectedAltAddress = '';
+                selectedId = '';
 
                 gridProducts.option('dataSource', []);
                 gridProducts.refresh();
             });
+
+            function escapeHtml(unsafe) {
+                return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+            };
 
         });
     </script>
