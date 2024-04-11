@@ -455,6 +455,13 @@ if ((Auth::guest()))
                             $('#completeupliftment').prop('hidden',false); // can only appear from printed
                         }
 
+                        if(statusupliftment =="Printed" || statusupliftment =="Completed"|| statusupliftment =="Approved")
+                        {
+                            $('#btnPrintUpliftment').prop('disabled',false);
+                        }else{
+                            $('#btnPrintUpliftment').prop('disabled',true);
+                        }
+
                         $('#btnUpdateUpliftment').prop('hidden',false);
                         $('#btnApproveUpliftment').prop('hidden',false);
                         $('#btnPrintUpliftment').prop('hidden',false);
