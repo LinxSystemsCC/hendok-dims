@@ -3,15 +3,21 @@
 <head>
     <title>WIMS Qr CODE</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-
-    <script src="{{ asset('js/jquery.classyqr.js') }}"></script>
+    <script src="{{ asset('js/qrcode.js') }}"></script>
+    <style>
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="visible-print text-center" style="text-align: center;">
-    <input id="hiddenqrmessages" type="hidden" value="{{$ID}}">
 
-    <div id="barcode" style="margin-top:-10px;" ></div>
+    <div id="qrcode"></div>
     <strong style=" font-size:65px;margin-top:-30px">{{$ID}}</strong>
 
 
@@ -19,14 +25,17 @@
 <script>
     $(document).ready(function() {
 
-        $("#barcode").ClassyQR({
-            create: true,
-            type: 'text',
-            text:  $('#hiddenqrmessages').val(),
-            size: 400
+        console.log($('#hiddenqrmessages').val())
+
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: "{{$ID}}",
+            width: 400,
+            height: 400,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
         });
     });
-
 
 </script>
 </body>

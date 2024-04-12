@@ -41,11 +41,15 @@
             </li>
 
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="tab4" data-bs-toggle="tab" href="#content4" role="tab" aria-controls="content4" aria-selected="true">Bins</a>
+                <a class="nav-link" id="tab4" data-bs-toggle="tab" href="#content4" role="tab" aria-controls="content4" aria-selected="true">Distribution Centers</a>
             </li>
 
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="tab5" data-bs-toggle="tab" href="#content5" role="tab" aria-controls="content5" aria-selected="true">Bin Attributes</a>
+                <a class="nav-link" id="tab5" data-bs-toggle="tab" href="#content5" role="tab" aria-controls="content5" aria-selected="true">Bins</a>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="tab6" data-bs-toggle="tab" href="#content6" role="tab" aria-controls="content6" aria-selected="true">Bin Attributes</a>
             </li>
         </ul>
 
@@ -147,8 +151,38 @@
                 </div>
             </div>
 
-            <!-- Bins -->
+            <!-- DCs -->
             <div class="tab-pane fade" id="content4" role="tabpanel" aria-labelledby="tab4" style="height: calc(100vh - 110px); overflow-y: auto;">
+                <div class="grid" id="gridDCs"></div>
+
+                <!-- Modal Add Location Attributes -->
+                <div class="modal fade" id="modalDCs" aria-labelledby="modalDCs" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="modalDCs">Add a Distibution Center</h1>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group mb-2">
+                                    <label class="control-label" for="printer">DC Abreviation</label>
+                                    <input type="text" class="form-control" id="txtDCAbv"/>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label class="control-label" for="printer">DC Name</label>
+                                    <input type="text" class="form-control" id="txtDCName"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" id="btnSaveDC" class="btn btn-success" >Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bins -->
+            <div class="tab-pane fade" id="content5" role="tabpanel" aria-labelledby="tab5" style="height: calc(100vh - 110px); overflow-y: auto;">
                 <div class="grid" id="gridBins"></div>
 
                 <!-- Modal Add Bins -->
@@ -179,7 +213,7 @@
             </div>
 
             <!-- Bin Attributes -->
-            <div class="tab-pane fade" id="content5" role="tabpanel" aria-labelledby="tab5" style="height: calc(100vh - 110px); overflow-y: auto;">
+            <div class="tab-pane fade" id="content6" role="tabpanel" aria-labelledby="tab6" style="height: calc(100vh - 110px); overflow-y: auto;">
                 <div class="grid" id="gridBinAttributes"></div>
 
                 <!-- Modal Add Bin Attributes -->
@@ -571,6 +605,119 @@
                 }
             }).dxDataGrid('instance');
 
+            const gridDCs = $('#gridDCs').dxDataGrid({
+                dataSource: [], //as json
+                showBorders: true,
+                hoverStateEnabled: true,
+                filterRow: { visible: true },
+                filterPanel: { visible: true },
+                headerFilter: { visible: true },
+                allowColumnResizing: true,
+                columnAutoWidth: true,
+                scrolling: {
+                    rowRenderingMode: 'infinite',
+                },
+                paging:{
+                    pageSize: 1000,
+                },
+                selection: {
+                    mode: "single",
+                },
+                editing: {
+                    mode: 'batch',
+                    allowUpdating: true,
+                    allowDeleting: true,
+                },
+                columns: [
+                    {
+                        dataField: "intAutoId",
+                        caption: "ID",
+                        allowEditing: false,
+                        visible: false,
+                    },
+                    {
+                        dataField: "strDCAbv",
+                        caption: "DC Abv.",
+                    },
+                    {
+                        dataField: "strDCName",
+                        caption: "DC Name",
+                    },
+                    {
+                        dataField: "dtmCreated",
+                        caption: "Date Created",
+                        allowEditing: false
+                    },
+
+                ] ,
+                onRowClick: function(e) {
+                    // console.debug(e);
+                },
+                onRowDblClick: function (e) {
+                    // console.debug(e);
+                },
+                onInitNewRow: function(e) {
+                    // console.debug(e);
+                },
+                onRowInserting: function(e) {
+                    // console.debug(e);
+                },
+                onRowInserted: function(e) {
+                    // console.debug(e);
+                },
+                onRowUpdated: function(e) {
+                    $.ajax({
+                        url: '{!!url("/dcCRUD")!!}',
+                        type: "POST",
+                        data: {
+                            intAutoId: e.data.intAutoId,
+                            strDCAbv: e.data.strDCAbv,
+                            strDCName: e.data.strDCName,
+                            command: 'UPDATE'
+                        },
+                        success: function (data) {
+                            getDCs();
+                        }
+                    });
+                },
+                onRowRemoved: function(e) {
+                    $.ajax({
+                        url: '{!!url("/dcCRUD")!!}',
+                        type: "POST",
+                        data: {
+                            intAutoId: e.data.intAutoId,
+                            command: 'DELETE'
+                        },
+                        success: function (data) {
+                            getDCs();
+                        }
+                    });
+                },
+                onToolbarPreparing: function (e) {
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: 'before',
+                            template: function () {
+                                return $('<h3>').text('DISTRIBUTION CENTERS');
+                            }
+                        }
+                    );
+                    e.toolbarOptions.items.push(
+                        {
+                            location: 'after',
+                            widget: "dxButton",
+                            options: {
+                                icon: "fa fa-plus",
+                                text: "ADD",
+                                onClick: function (args) {
+                                    $('#modalDCs').modal('show');
+                                },
+                            },
+                        }
+                    );
+                }
+            }).dxDataGrid('instance');
+
             const gridBins = $('#gridBins').dxDataGrid({
                 dataSource: [], //as json
                 showBorders: true,
@@ -931,8 +1078,8 @@
                         command: 'READ'
                     },
                     success: function (data) {
-                        // gridDC.option('dataSource', data);
-                        // gridDC.refresh();
+                        gridDCs.option('dataSource', data);
+                        gridDCs.refresh();
 
                         var dcForBin = $('#dcForBin');
                         dcForBin.empty();
@@ -998,6 +1145,16 @@
                             attributesForBin.append(label).append(input);
                         });
 
+                        var label1 = $('<label>').addClass('control-label')
+                            .text("OTHER");
+
+                        var input1 = $('<input>').attr({
+                            type: 'text',
+                            name: '' // Set the name attribute
+                        }).addClass('form-control mb-2 binInput');
+
+                        attributesForBin.append(label1).append(input1);
+
                         var label = $('<label>').addClass('control-label').text("Bin Capacity");
                         var input = $('<input>').attr({type: 'number', id: 'inputBinCapacity'}).addClass('form-control mb-2');
                         attributesForBin.append(label).append(input);
@@ -1054,6 +1211,22 @@
                     success: function (data) {
                         $('#modalLocationAttributes').modal('hide');
                         getLocationAttributes();
+                    }
+                });
+            });
+
+            $("#btnSaveDC").click(function () {
+                $.ajax({
+                    url: '{!!url("/dcCRUD")!!}',
+                    type: "POST",
+                    data: {
+                        strDCAbv: $("#txtDCAbv").val(),
+                        strDCName: $("#txtDCName").val(),
+                        command: 'CREATE'
+                    },
+                    success: function (data) {
+                        $('#modalDCs').modal('hide');
+                        getDCs();
                     }
                 });
             });
@@ -1132,6 +1305,17 @@
 
                 $('#inputBinName').val(location + '-' + dc + '-' + binName);
             });
+
+            function clearInputsAndSelect() {
+                $('.form-control').val('');
+                $('.form-select').val('').trigger('change');
+            }
+
+            // Event listener for modal dismiss
+            $('#modalBins').on('hidden.bs.modal', function(e) {
+                clearInputsAndSelect();
+            });
         });
     </script>
 @endsection
+
