@@ -589,13 +589,13 @@ class WareHouseController extends Controller
     }
 
     public function upliftmentUploads($upliftmentnumber){
-        $directory = "upliftments/$upliftmentnumber";
+        $directory = "public/upliftments/$upliftmentnumber";
     
         // Get the list of files from the specified directory
         $files = Storage::files($directory);
         $files = array_map(function($file) use ($upliftmentnumber) {
             $filename = str_replace('+', '%2B', basename($file));
-            return "/storage/app/upliftments/{$upliftmentnumber}/" . $filename;
+            return "/storage/app/public/upliftments/{$upliftmentnumber}/" . $filename;
         }, $files);
 
         // dd(($files));
@@ -699,7 +699,7 @@ class WareHouseController extends Controller
                 $destinationDirectory = $result[0]->intUpliftmentNumber;
         
                 // Move the file to the appropriate directory
-                $file->move(env('UPLIFTMENT_STORAGE_PATH', storage_path("app/upliftments")) . '/' . $destinationDirectory, $fileName);
+                $file->move(env('UPLIFTMENT_STORAGE_PATH', storage_path("app/public/upliftments")) . '/' . $destinationDirectory, $fileName);
             }
         }
 
@@ -741,7 +741,7 @@ class WareHouseController extends Controller
                 $destinationDirectory = $SelectedUpliftmentNumber;
         
                 // Move the file to the appropriate directory
-                $file->move(env('UPLIFTMENT_STORAGE_PATH', storage_path("app/upliftments")) . '/' . $destinationDirectory, $fileName);
+                $file->move(env('UPLIFTMENT_STORAGE_PATH', storage_path("app/public/upliftments")) . '/' . $destinationDirectory, $fileName);
             }
         }
 
