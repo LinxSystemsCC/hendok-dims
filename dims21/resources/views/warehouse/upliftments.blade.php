@@ -51,7 +51,7 @@ if ((Auth::guest()))
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="newuserLabel">Create/Edit Upliftment</h1>
-                        <button type="button" class="btn-close closeUpliftmentModal" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h3 class="modal-title fs-5" id="txtUpliftNumber"></h3>
                     </div>
 
                     <div class="modal-body">
@@ -445,6 +445,9 @@ if ((Auth::guest()))
                         SelectedUpliftmentNumber = e.data.intUpliftmentNumber;
                         $('#upliftmentModal').modal('toggle');
 
+                        var numericPart = (1000000 + SelectedUpliftmentNumber).toString().slice(-6);
+                        $('#txtUpliftNumber').text('UPL#' + numericPart);
+
                         if(statusupliftment !="Denied" && statusupliftment !="Enquired" &&statusupliftment !="Pending")
                         {
                             $('#printupliftment').prop('hidden',false); //can only appear from approved
@@ -579,6 +582,7 @@ if ((Auth::guest()))
             $('#inputCustomer').flexdatalist({
                 minLength: 1,
                 valueProperty: 'CustomerCode',
+                textProperty: 'StoreName',
                 selectionRequired: true,
                 focusFirstResult: true,
                 searchContain:true,
@@ -1148,6 +1152,8 @@ if ((Auth::guest()))
             var upliftmentModal = $('#upliftmentModal');
             $('.closeUpliftmentModal', upliftmentModal).on('click', function () {
                 upliftmentModal.hide();
+
+                $('#txtUpliftNumber').text('');
 
                 $('#btnUpdateUpliftment').prop('hidden',true);
                 $('#btnApproveUpliftment').prop('hidden',true);
