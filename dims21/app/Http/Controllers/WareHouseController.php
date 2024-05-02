@@ -640,7 +640,8 @@ class WareHouseController extends Controller
     {
         $SalesOrder = $request->get('SalesOrder');
         $InvNum = $request->get('InvNum');
-        $returndata = DB::connection('sqlsrv2')->select("SELECT * FROM viewOrderlines WHERE DocNumber = '$InvNum'");
+        $strCompany = $request->get('strCompany');
+        $returndata = DB::connection('sqlsrv2')->select("SELECT * FROM viewOrderLinesUpliftments WHERE DocNumber = '$InvNum' AND strCompany = '$strCompany'");
         // $returndata = DB::connection('sqlsrv2')->select("SELECT * FROM viewOrderlinesForPickingWithReferences WHERE OrderNum = '$SalesOrder'");
         return response()->json($returndata);
     }

@@ -797,18 +797,25 @@ if ((Auth::guest()))
 
             $('#selectSOInvoice').on('change', function() {
                 var InvNum = $('#selectInvoice').val();
-                $.ajax({
-                    url: '{!!url("/getUpliftmentSalesOrderLines")!!}',
-                    type: "GET",
-                    data: {
-                        InvNum: InvNum,
-                    },
-                    success: function (data) {
-                        // console.log(data)
+                var strCompany = $('#selectCompany').val();
 
-                        setSalesOrderProductDataList(data);
-                    }
-                });
+                console.log(InvNum);
+                
+                if (InvNum != "" && InvNum){
+                    $.ajax({
+                        url: '{!!url("/getUpliftmentSalesOrderLines")!!}',
+                        type: "GET",
+                        data: {
+                            InvNum: InvNum,
+                            strCompany: strCompany,
+                        },
+                        success: function (data) {
+                            // console.log(data)
+
+                            setSalesOrderProductDataList(data);
+                        }
+                    });
+                }
             });
 
             $('#selectSOProductCode').on('change', function() {
@@ -863,7 +870,7 @@ if ((Auth::guest()))
                     dataSource.reload();
                 } else {
                     console.log('Datagrid not found.');
-                }
+                } 
             });
 
             $('#btnAddSOProduct').click(function(){
