@@ -11,20 +11,24 @@ class StockControlController extends Controller
     public function stockLocation()
     {
         $sageWarehouses = DB::connection('sqlsrv2')->select("SELECT Code, [Name] FROM [Hendok Distribution].dbo.WhseMst");
+        $DCs = DB::connection('sqlsrv2')->select("SELECT intAutoId, strDCName FROM tblDCNames");
         return view('warehouse.stockcontrol.stockLocation')
-            ->with('sageWarehouses', $sageWarehouses);
+            ->with('sageWarehouses', $sageWarehouses)
+            ->with('DCs', $DCs);
     }
 
     public function getStockLocationSummary(Request $request)
     {
-        $data = DB::connection('sqlsrv2')->select("select * from  viewWareHouseTransferStockQty");
+        $intDCId = $request->get('intDCid');
+        $data = DB::connection('sqlsrv2')->select("EXEC spGetStockSummary $intDCId");
         return response()->json($data);
     }
 
     public function getStockDetailsSummary(Request $request)
     {
         $ItemCode = $request->get("ItemCode");
-        $data = DB::connection('sqlsrv2')->select("select * from viewStockDetailsSummary where strErpItemCode ='" . $ItemCode . "' order by strErpItemCode");
+        $intDCId = $request->get('intDCid');
+        $data = DB::connection('sqlsrv2')->select("EXEC spGetStockDetailSummary '$ItemCode', $intDCId");
         return response()->json($data);
     }
 

@@ -28,6 +28,14 @@
         $(document).ready(function() {
             let loadTracking = [];
 
+            let dcs = {!! json_encode($DCs) !!};
+            let selectedDC = -1;
+
+            dcs.unshift({
+                'intAutoId': -1,
+                'strDCName': 'All',
+            });
+
             const gridStockLocationSummary = $("#gridStockLocationSummary").dxDataGrid({
                 dataSource: [],
                 showBorders: true,
@@ -56,19 +64,19 @@
                     enabled: true,
                 },
                 scrolling: {
-                    mode: 'overflow'
+                    mode: 'virtual'
                 },
                 columns: [
                     {
-                        dataField: "strErpItemCode",
+                        dataField: "strItemCode",
                         caption: "Item Code",
 
                     }, {
-                        dataField: "Description_1",
+                        dataField: "strItemDescription",
                         caption: "Item Name",
 
                     }, {
-                        dataField: "ItemGroupDescription",
+                        dataField: "strItemGroupDescription",
                         caption: "Item Group",
 
                     }, {
@@ -98,7 +106,7 @@
                 masterDetail: {
                     enabled: true,
                     template(container, options) {
-                        const ItemCode = options.data.strErpItemCode;
+                        const ItemCode = options.data.strItemCode;
                         const gridStockDetailSummary = $('<div>')
                         .dxDataGrid({
                             dataSource: {
@@ -106,7 +114,10 @@
                                     return $.ajax({
                                         url: '{!!url("/getStockDetailsSummary")!!}',
                                         method: 'GET',
-                                        data: { ItemCode: ItemCode},
+                                        data: { 
+                                            ItemCode: ItemCode,
+                                            intDCid: selectedDC,
+                                        },
                                         xhrFields: { withCredentials: true },
                                     });
                                 },
@@ -160,6 +171,21 @@
                             return $('<h3 class="ps-3">').text('Stock Location Summary');
                         }
                     });
+                    e.toolbarOptions.items.push({
+                        location: 'after',
+                        widget: 'dxSelectBox',
+                        options: {
+                            dataSource: dcs,
+                            displayExpr: 'strDCName',
+                            valueExpr: 'intAutoId',
+                            value: -1,
+                            onValueChanged: function (e) {
+                                selectedDC = e.value;
+                                getStockLocationSummary();
+                            }
+                        },
+                        locateInMenu: 'auto', // Adjust as needed
+                    });
                 }
             }).dxDataGrid('instance');
 
@@ -179,9 +205,21 @@
                 $.ajax({
                     url: "{!! url('/getStockLocationSummary') !!}",
                     type: "GET",
-                    data: {},
+                    data: {
+                        intDCid: selectedDC,
+                    },
                     success: function(data) {
-                        gridStockLocationSummary.option('dataSource', data);
+                        const gridData = {
+                            store: new DevExpress.data.CustomStore({
+                                key: "strItemCode",
+                                loadMode: "raw",
+                                load: function () {
+                                    return data;
+                                }
+                            }),
+                            paginate: true,
+                        };
+                        gridStockLocationSummary.option('dataSource', gridData);
                         gridStockLocationSummary.refresh();
                     }
                 });

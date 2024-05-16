@@ -24,6 +24,7 @@ use App\Http\Controllers\Warehouse\ProductionController;
 use App\Http\Controllers\Warehouse\LoadingController;
 use App\Http\Controllers\Warehouse\StockControlController;
 use App\Http\Controllers\ApisController;
+use App\Http\Controllers\StockTakeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1294,4 +1295,16 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getStockLocationSummary', [StockControlController::class,'getStockLocationSummary']);
     Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
     Route::get('getIssuedStock', [StockControlController::class,'getIssuedStock']);
+});
+
+// Stock Control Controller
+Route::group(['middleware' => 'auth'], function() { 
+    Route::get('stockTake', [StockTakeController::class,'stockTake']);
+    Route::get('getStockTakes', [StockTakeController::class,'getStockTakes']);
+    Route::post('saveStockTake', [StockTakeController::class,'saveStockTake']);
+    Route::get('getStockTakeLines', [StockTakeController::class,'getStockTakeLines']);
+    Route::get('selectStockTake', [StockTakeController::class,'selectStockTake']);
+    Route::post('updateStockTakeStatus', [StockTakeController::class,'updateStockTakeStatus']);
+    Route::get('productStockCountMapping', [StockTakeController::class,'productStockCountMapping']);
+    Route::post('postMappedItems', [StockTakeController::class,'postMappedItems']);
 });
