@@ -37,6 +37,7 @@
 @section('page')
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>
 
     <style>
         .vertical-menu {
@@ -171,6 +172,8 @@
 @endsection
 
 @section('scripts')
+
+    <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
 
     <script>
         var jArray = JSON.stringify({!! json_encode($products) !!});
