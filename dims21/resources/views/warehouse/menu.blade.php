@@ -83,7 +83,8 @@ if ((Auth::guest()))
     //Work Orders Roofing
     $roofcreateworkorder = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof Create Work Order');
 
-
+    //Work Orders Roofing
+    $diamondMeshCreateWorkOrder = $v->getThingsUserPermissions(Auth::user()->UserID,'Diamond Mesh Create Work Order');
     
     //Dispatch - Load Planning
     $customergridlookup=$v->getThingsUserPermissions(Auth::user()->UserID,'Customer Grid Lookup');
@@ -355,10 +356,16 @@ if ((Auth::guest()))
                     <ul class="item-show-1j">
                         <!-- Item Links -->
                         <li>
+                            {{-- @if($diamondMeshCreateWorkOrder !="0") --}}
+                            <a href='{!!url("/diamondMeshWorkOrders")!!}'>Create Work Orders</a> <!-- TODO add userpermission for printing label -->
+                            {{-- @endif --}}
+                        </li>
+                        <li>
                             {{-- @if($roofcreateworkorder !="0") --}}
                             <a href='{!!url("/printLabelPage/Diamond Mesh")!!}'>Print Label</a> <!-- TODO add userpermission for printing label -->
                             {{-- @endif --}}
                         </li>
+                        
                     </ul>
 
                     {{-- @if($roof !="0") --}}

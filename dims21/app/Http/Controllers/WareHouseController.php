@@ -910,18 +910,24 @@ class WareHouseController extends Controller
         if (Auth::guest())
             return redirect()->route('login');
         else{
-            $sessionUserId = Auth::user()->UserID;
+            $sessionUserId = Auth::user()->UserID; 
             $GroupId= Auth::user()->GroupId;
 
             if($this->getThings($GroupId,'Has Auto Redirect')){
                 $userDepartment =Auth::user()->strPickingTeams;
                 $departmentMachines = explode('|', $userDepartment);
 
-                $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '".$departmentMachines[0]."'");
+                if (isset($departmentMachines[1])){
+                    $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '".$departmentMachines[0]."'");
+                    $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
 
-                $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
-
-                return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
+                    return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
+                } else {
+                    $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '".$departmentMachines[0]."'");
+                    
+                    $logoutButton = '0';
+                    return redirect('/printpalletchoosemachine/'.$deptartmentID[0]->intAutoID);
+                }
             } else if($this->getThings($GroupId,'Teamleader Redirect')){
                 return redirect("/teamleadermanage/0");
             } else{
@@ -1751,6 +1757,8 @@ class WareHouseController extends Controller
 
         $machines = DB::connection('sqlsrv2')
             ->select("select strMachineName,intAutoMachineID intMachineID from tblMachines where intAutoMachineID =" . $machine);
+
+            // dd($dept);
         /* $machines = DB::connection('sqlsrv2')
             ->select('exec spGetMachinesByDept ?',
                 array($deparment)
@@ -2662,16 +2670,14 @@ class WareHouseController extends Controller
     }
 
     //Start Generating The Qr code
-    public function startgenratingqrcodeforpallet($jobId, $isroofing = "None")
+    public function startgenratingqrcodeforpallet($jobId, $department = "None")
     {
-        $returnmach = DB::connection('sqlsrv2')
-            ->select(
-                'exec spInsertNewPalletPrint ?,?',
-                array($jobId, $isroofing)
-            );
+        $response = DB::connection('sqlsrv2')
+            ->select('exec spInsertNewPalletPrint ?,?', array($jobId, $department));
+
         $htmlqrcode = "";
         $dept = 0;
-        foreach ($returnmach as $val) {
+        foreach ($response as $val) {
             /*$htmlqrcode .="Item Code :".$val->strItemCode."<br>";
             $htmlqrcode .="Required :".$val->mnyQtyRequired."<br>";
             $htmlqrcode .="Machine  :".$val->strMachineName."<br>";
@@ -2682,14 +2688,26 @@ class WareHouseController extends Controller
             $dept = $val->strDeptName;
         }
 
-        switch ($dept) {
+        switch ($department) {
             case ('Roofing'):
-                return view('warehouse/roofingjoblabel')->with('qrcodeothers', $returnmach)->with('qrcode', $htmlqrcode)->with('jobid', $jobId);
+                return view('warehouse.roofingjoblabel')
+                    ->with('qrcodeothers', $response)
+                    ->with('qrcode', $htmlqrcode)
+                    ->with('jobid', $jobId);
+                break;
 
+            case ('Diamond Mesh'):
+                return view('warehouse.diamondMesh.diamondMeshJobLabel')
+                    ->with('qrcodeothers', $response)
+                    ->with('qrcode', $htmlqrcode)
+                    ->with('jobid', $jobId);
                 break;
 
             default:
-                return view('warehouse/palletjoblabel')->with('qrcodeothers', $returnmach)->with('qrcode', $htmlqrcode)->with('jobid', $jobId);
+                return view('warehouse.palletjoblabel')
+                    ->with('qrcodeothers', $response)
+                    ->with('qrcode', $htmlqrcode)
+                    ->with('jobid', $jobId);
         }
     }
 

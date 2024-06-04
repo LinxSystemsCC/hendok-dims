@@ -1,25 +1,25 @@
 <?php
-if ((Auth::guest()))
-{
-
-}else{
-    $v  =  new \App\Http\Controllers\SalesForm();
+if (Auth::guest()) {
+} else {
+    $v = new \App\Http\Controllers\SalesForm();
 }
-$barbed = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Wire');
-$galv = $v->getThingsUserPermissions(Auth::user()->UserID,'Galv');
-$roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
+$barbed = $v->getThingsUserPermissions(Auth::user()->UserID, 'Barbed Wire');
+$galv = $v->getThingsUserPermissions(Auth::user()->UserID, 'Galv');
+$roof = $v->getThingsUserPermissions(Auth::user()->UserID, 'Roof');
 
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -69,34 +69,34 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
 
 </head>
 
-<div class="col-lg-12"  style="padding:20px; min-height: 100vh; min-width: 100%;">
+<div class="col-lg-12" style="padding:20px; min-height: 100vh; min-width: 100%;">
     <div style="padding-bottom: 20px; width: 100%;text-align:center; position:relative; margin: auto;">
         <span style="font-size: 65px; font-weight:700;">PICK DEPARTMENT</span>
 
-        <a class="btn btn-dark" href= "{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style=" font-size: 41px; position:absolute; left: 0px;
-        top: 15px;" >
-        <i class="bi bi-door-open"></i>
-        </a>
+        <button class="btn btn-dark d-flex justify-content-center align-items-center" style="width:75px;"
+            onclick="document.getElementById('logout-form').submit()">
+            <i class="bi bi-door-open h4"></i>
+        </button>
 
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
     </div>
-    
-    @foreach($departments as $val)
 
-    <button class="btn btn-danger" onclick="location.href='{!!url("/printpalletchoosemachine")!!}/{{$val->intAutoID}}'" type="button" style="width: 100% !important;font-size: 85px;">{{$val->strDeptName}}
-    </button>
-
+    @foreach ($departments as $val)
+        <button class="btn btn-danger" onclick="location.href='{!! url('/printpalletchoosemachine') !!}/{{ $val->intAutoID }}'"
+            type="button" style="width: 100% !important;font-size: 85px;">{{ $val->strDeptName }}
+        </button>
     @endforeach
 
-    
+
 
 </div>
 
 
 <style>
-
-    .dx-datagrid-table{
-        font-size:15px;
+    .dx-datagrid-table {
+        font-size: 15px;
     }
 </style>
 
@@ -106,17 +106,17 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'off' );
+    $(document).on('focus', ':input', function() {
+        $(this).attr('autocomplete', 'off');
     });
     $(document).ready(function() {
 
 
-        $('#selecteddept').click(function(){
+        $('#selecteddept').click(function() {
 
             var selecteddept = $(this).val();
 
-            window.location.replace('{!!url("/printpalletchoosemachine")!!}/' +selecteddept);
+            window.location.replace('{!! url('/printpalletchoosemachine') !!}/' + selecteddept);
 
         });
 
@@ -127,39 +127,36 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID,'Roof');
     });
 
 
-    function showDialog(tag,width,height)
-    {
-        $( tag ).dialog({height: height, modal: false,
-            width: width,containment: false}).dialogExtend({
-            "closable" : true, // enable/disable close button
-            "maximizable" : false, // enable/disable maximize button
-            "minimizable" : true, // enable/disable minimize button
-            "collapsable" : true, // enable/disable collapse button
-            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar" : false, // false, 'none', 'transparent'
-            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-            "icons" : { // jQuery UI icon class
+    function showDialog(tag, width, height) {
+        $(tag).dialog({
+            height: height,
+            modal: false,
+            width: width,
+            containment: false
+        }).dialogExtend({
+            "closable": true, // enable/disable close button
+            "maximizable": false, // enable/disable maximize button
+            "minimizable": true, // enable/disable minimize button
+            "collapsable": true, // enable/disable collapse button
+            "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
+            "titlebar": false, // false, 'none', 'transparent'
+            "minimizeLocation": "right", // sets alignment of minimized dialogues
+            "icons": { // jQuery UI icon class
 
-                "maximize" : "ui-icon-circle-plus",
-                "minimize" : "ui-icon-circle-minus",
-                "collapse" : "ui-icon-triangle-1-s",
-                "restore" : "ui-icon-bullet"
+                "maximize": "ui-icon-circle-plus",
+                "minimize": "ui-icon-circle-minus",
+                "collapse": "ui-icon-triangle-1-s",
+                "restore": "ui-icon-bullet"
             },
-            "load" : function(evt, dlg){ }, // event
-            "beforeCollapse" : function(evt, dlg){ }, // event
-            "beforeMaximize" : function(evt, dlg){ }, // event
-            "beforeMinimize" : function(evt, dlg){ }, // event
-            "beforeRestore" : function(evt, dlg){ }, // event
-            "collapse" : function(evt, dlg){  }, // event
-            "maximize" : function(evt, dlg){ }, // event
-            "minimize" : function(evt, dlg){  }, // event
-            "restore" : function(evt, dlg){  } // event
+            "load": function(evt, dlg) {}, // event
+            "beforeCollapse": function(evt, dlg) {}, // event
+            "beforeMaximize": function(evt, dlg) {}, // event
+            "beforeMinimize": function(evt, dlg) {}, // event
+            "beforeRestore": function(evt, dlg) {}, // event
+            "collapse": function(evt, dlg) {}, // event
+            "maximize": function(evt, dlg) {}, // event
+            "minimize": function(evt, dlg) {}, // event
+            "restore": function(evt, dlg) {} // event
         });
     }
-
-
-
-
-
-
 </script>

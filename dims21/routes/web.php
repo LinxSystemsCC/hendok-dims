@@ -25,6 +25,7 @@ use App\Http\Controllers\Warehouse\LoadingController;
 use App\Http\Controllers\Warehouse\StockControlController;
 use App\Http\Controllers\ApisController;
 use App\Http\Controllers\StockTakeController;
+use App\Http\Controllers\Warehouse\DiamondMeshController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1307,4 +1308,22 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateStockTakeStatus', [StockTakeController::class,'updateStockTakeStatus']);
     Route::get('productStockCountMapping', [StockTakeController::class,'productStockCountMapping']);
     Route::post('postMappedItems', [StockTakeController::class,'postMappedItems']);
+});
+
+// Diamond Mesh Controller
+Route::group(['middleware' => 'auth'], function() { 
+    Route::get('diamondMeshWorkOrders', [DiamondMeshController::class,'diamondMeshWorkOrders']);
+    Route::get('getDiamondMeshSalesOrders', [DiamondMeshController::class,'getDiamondMeshSalesOrders']);
+    Route::post('createDiamondMeshPlan', [DiamondMeshController::class,'createDiamondMeshPlan']);
+    Route::get('getDiamondMeshHeaders', [DiamondMeshController::class,'getDiamondMeshHeaders']);
+    Route::get('getDiamondMeshLines', [DiamondMeshController::class,'getDiamondMeshLines']);
+    Route::get('getDiamondMeshWorkInProgress', [DiamondMeshController::class,'getDiamondMeshWorkInProgress']);
+    Route::post('updateDiamondMeshLines', [DiamondMeshController::class,'updateDiamondMeshLines']);
+
+    Route::get('updateDiamondMeshJobStatus/{reference}/{machine}', [DiamondMeshController::class,'updateDiamondMeshJobStatus']);
+    Route::get('getDiamondMeshLinesByReference', [DiamondMeshController::class,'getDiamondMeshLinesByReference']);
+    Route::get('changeDiamondMeshJobStatus', [DiamondMeshController::class,'changeDiamondMeshJobStatus']);
+    Route::post('updateDiamondMeshLinesSequence', [DiamondMeshController::class,'updateDiamondMeshLinesSequence']);
+
+    Route::get('sendDiamondMeshLabelToThePrinter', [DiamondMeshController::class,'sendDiamondMeshLabelToThePrinter']);
 });
