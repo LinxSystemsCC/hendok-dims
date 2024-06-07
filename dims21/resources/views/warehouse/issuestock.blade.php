@@ -233,19 +233,40 @@
 
                             <div id='upkeeparea' class="col-md-6 mb-3">
                                 <label for="upkeepNewArea" class="col-form-label">Area</label>
-                                <input type="text" class="form-control" id="upkeepNewArea" disabled>
+                                <select class="form-select mx-2" type="text" id='upkeepNewArea' disabled>
+                                    <option></option>
+                                    @foreach ($areas as $area)
+                                        <option value="{{ $area->intAutoID }}">{{ $area->strAreaName }}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <input type="text" class="form-control" id="upkeepNewArea" disabled> --}}
                             </div>
                             <div id='upkeepdepartment' class="col-md-6 mb-3">
                                 <label for="upkeepNewDepartment" class="col-form-label">Department</label>
-                                <input type="text" class="form-control" id="upkeepNewDepartment" disabled>
+                                <select class="form-select mx-2" type="text" id='upkeepNewDepartment' disabled>
+                                    @foreach ($departments as $dept)
+                                    <option value="{{ $dept->intAutoID }}">{{ $dept->strDeptName }}</option>
+                                @endforeach
+                                </select>
+                                {{-- <input type="text" class="form-control" id="upkeepNewDepartment" disabled> --}}
                             </div>
                             <div id='upkeepsubdepartment' class="col-md-6 mb-3">
                                 <label for="upkeepNewSubDepartment" class="col-form-label">Sub Department</label>
-                                <input type="text" class="form-control" id="upkeepNewSubDepartment" disabled>
+                                <select class="form-select mx-2" type="text" id='upkeepNewSubDepartment' disabled>
+                                    @foreach ($subdepartments as $subdept)
+                                    <option value="{{ $subdept->intAutoID }}">{{ $subdept->strSubDeptName }}</option>
+                                @endforeach
+                                </select>
+                                {{-- <input type="text" class="form-control" id="upkeepNewSubDepartment" disabled> --}}
                             </div>
                             <div id='upkeepmachine' class="col-md-6 mb-3">
                                 <label for="upkeepNewMachine" class="col-form-label">Machine</label>
-                                <input type="text" class="form-control" id="upkeepNewMachine" disabled>
+                                <select class="form-select mx-2" type="text" id='upkeepNewMachine' disabled>
+                                    @foreach ($machines as $machine)
+                                    <option value="{{ $machine->intAutoMachineID }}">{{ $machine->strMachineName }}</option>
+                                @endforeach
+                                </select>
+                                {{-- <input type="text" class="form-control" id="upkeepNewMachine" disabled> --}}
                             </div>
 
                         </div>
@@ -587,8 +608,6 @@
 
                     itemsGrid.option('dataSource', issuedStock);
                     itemsGrid.refresh();
-
-                    console.log(issuedStock)
                     
                     $('#reference').val(e.data.strReference);
                     $("#issuedto").prop('disabled', false);
@@ -795,11 +814,21 @@
                 var mnyQty = $("#newQtyRequired").val();
                 var strUpkeep = $("#newUpkeepJob").val();
                 var strPastelProjectJob = $("#newPastelProject").val();
-                var intArea = $("#newArea").val();
-                var intDept = $("#newDepartment").val();
-                var intSubDept = $("#newSubDepartment").val();
-                var intMachine = $("#newMachine").val();
 
+                console.log($("#yesUpkeep").val())
+
+                if ($("#yesUpkeep").val()){
+                    var intArea = $("#upkeepNewArea").val();
+                    var intDept = $("#upkeepNewDepartment").val();
+                    var intSubDept = $("#upkeepNewSubDepartment").val();
+                    var intMachine = $("#upkeepNewMachine").val();
+                }else{
+                    var intArea = $("#newArea").val();
+                    var intDept = $("#newDepartment").val();
+                    var intSubDept = $("#newSubDepartment").val();
+                    var intMachine = $("#newMachine").val();
+                }
+                
                 // Create an object that represents the new row
                 var newRow = {
                     intType: intType,
@@ -1037,7 +1066,12 @@
                                 alert(data.message);
                             }
 
-                            $('#upkeepNewMachine').val(MachineName);
+                            // $('#upkeepNewMachine').val(MachineName);
+                            var selectBox = $('#upkeepNewMachine');
+
+                            selectBox.val(selectBox.find('option').filter(function() {
+                                return $(this).text() === MachineName;
+                            }).val()).change();
 
                             $.ajax({
                                 url: '{!! url('/GetAreaDeptSubDeptByMachine') !!}',
@@ -1049,13 +1083,13 @@
                                     // alert(data.length);
                                     if (data.length !== 0) {
                                         $('#upkeepNewArea').val(data[0][
-                                            'strAreaName'
+                                            'intAreaID'
                                         ]);
                                         $('#upkeepNewDepartment').val(data[0][
-                                            'strDeptName'
+                                            'intDeptID'
                                         ]);
                                         $('#upkeepNewSubDepartment').val(data[0][
-                                            'strSubDeptName'
+                                            'intSubDeptID'
                                         ]);
                                     } else {
                                         alert(
