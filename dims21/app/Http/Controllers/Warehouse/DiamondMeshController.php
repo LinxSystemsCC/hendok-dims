@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Svg\Tag\Rect;
 
 class DiamondMeshController extends Controller
 {
     public function diamondMeshWorkOrders()
     {
-        $machines = DB::connection('sqlsrv2')->select("select * from viewDiamondMeshMachines");
+        $machines = DB::connection('sqlsrv2')
+            ->select("select * from viewDiamondMeshMachines");
+
         return view('warehouse.diamondMesh.diamondMeshWorkOrders')->with('machines', $machines);
     }
 
@@ -19,6 +22,7 @@ class DiamondMeshController extends Controller
     {
         $salesOrders = DB::connection('sqlsrv2')
             ->select('EXEC spGetDiamondMeshSalesOrdersToPlan');
+
         return response()->json($salesOrders);
     }
 
@@ -34,7 +38,8 @@ class DiamondMeshController extends Controller
 
         // dd($orderlinesxml);
 
-        $data = DB::connection('sqlsrv2')->select('exec spXMLCreateDiamondMeshPlan ?,?,?', array($orderlinesxml, $operator, $reference));
+        $data = DB::connection('sqlsrv2')
+            ->select('exec spXMLCreateDiamondMeshPlan ?,?,?', array($orderlinesxml, $operator, $reference));
 
         return response()->json($data);
     }
@@ -43,20 +48,26 @@ class DiamondMeshController extends Controller
     {
         $datefrom = $request->get("datefrom");
         $dateto = $request->get("dateto");
-        $headers = DB::connection('sqlsrv3')->select("exec spGetDiamondMeshHeaders ?,?", array($datefrom, $dateto));
+        $headers = DB::connection('sqlsrv3')
+            ->select("exec spGetDiamondMeshHeaders ?,?", array($datefrom, $dateto));
+
         return response()->json($headers);
     }
 
     public function getDiamondMeshLines(Request $request)
     {
         $ID = $request->get("ID");
-        $lines = DB::connection('sqlsrv3')->select("exec spGetDiamondMeshLines ?", array($ID));
+        $lines = DB::connection('sqlsrv3')
+            ->select("exec spGetDiamondMeshLines ?", array($ID));
+
         return response()->json($lines);
     }
 
     public function getDiamondMeshWorkInProgress(Request $request)
     {
-        $wip = DB::connection('sqlsrv2')->select('exec spGetDiamondMeshWorkInProgress');
+        $wip = DB::connection('sqlsrv2')
+            ->select('exec spGetDiamondMeshWorkInProgress');
+
         return response()->json($wip);
     }
 
@@ -71,7 +82,8 @@ class DiamondMeshController extends Controller
             $orderlinesxml = $this->toxml($workOrders, "xml", array("result"));
 
             // dd($orderlinesxml);
-            $data = DB::connection('sqlsrv2')->select("EXEC spUpdateDiamondMeshLines '$orderlinesxml', $userID, $batchID,'$batchReference'");
+            $data = DB::connection('sqlsrv2')
+                ->select("EXEC spUpdateDiamondMeshLines '$orderlinesxml', $userID, $batchID,'$batchReference'");
         }
 
         return response()->json($data);
@@ -79,18 +91,23 @@ class DiamondMeshController extends Controller
 
     public function updateDiamondMeshJobStatus($reference, $machine)
     {
-        return view('warehouse.DiamondMesh.updateDiamondMeshJobStatus')->with("reference", $reference)->with("machine", $machine);
+        return view('warehouse.DiamondMesh.updateDiamondMeshJobStatus')
+            ->with("reference", $reference)
+            ->with("machine", $machine);
     }
 
     public function getDiamondMeshLinesByReference(Request $request)
     {
         $reference = $request->get("reference");
         $machine = $request->get("machine");
-        $jobdata = DB::connection('sqlsrv3')->select("exec spGetDiamondMeshLinesByReferenceAndMachine '$reference', '$machine'");
+        $jobdata = DB::connection('sqlsrv3')
+            ->select("exec spGetDiamondMeshLinesByReferenceAndMachine '$reference', '$machine'");
+
         return response()->json($jobdata);
     }
 
-    public function changeDiamondMeshJobStatus(Request $request){
+    public function changeDiamondMeshJobStatus(Request $request)
+    {
         $reference = $request->get("reference");
         $machine = $request->get("machine");
         $SONumber = $request->get("SONumber");
@@ -99,7 +116,9 @@ class DiamondMeshController extends Controller
 
         // dd("exec spUpdateDiamondMeshJobStatus '$reference', '$machine', '$SONumber','$InvNumber', '$status'");
 
-        $data = DB::connection('sqlsrv3')->select("exec spUpdateDiamondMeshJobStatus '$reference', '$machine', '$SONumber','$InvNumber', '$status'");
+        $data = DB::connection('sqlsrv3')
+            ->select("exec spUpdateDiamondMeshJobStatus '$reference', '$machine', '$SONumber','$InvNumber', '$status'");
+
         return response()->json($data);
     }
 
@@ -111,7 +130,8 @@ class DiamondMeshController extends Controller
             $orderlinesxml = $this->toxml($workOrders, "xml", array("result"));
 
             // dd($orderlinesxml);
-            $data = DB::connection('sqlsrv2')->select("EXEC spUpdateDiamondMeshLinesSequence '$orderlinesxml'");
+            $data = DB::connection('sqlsrv2')
+                ->select("EXEC spUpdateDiamondMeshLinesSequence '$orderlinesxml'");
         }
         // dd($data);
 
@@ -131,9 +151,41 @@ class DiamondMeshController extends Controller
 
         // dd($deptname,$jobId,$operator,$ID,$qty);
 
-        $print = DB::connection('sqlsrv2')->statement('exec spInsertPrintDiamondMeshLabels ?,?,?,?,?', array($deptname, $jobId, $operator, $ID, $qty));
+        $print = DB::connection('sqlsrv2')
+            ->statement('exec spInsertPrintDiamondMeshLabels ?,?,?,?,?', array($deptname, $jobId, $operator, $ID, $qty));
 
         return response()->json($print);
+    }
+
+    public function diamondMeshReprint()
+    {
+        $userId = Auth::user()->UserID;
+        $printers = DB::connection('sqlsrv3')->select("SELECT * FROM viewUserPrinters WHERE UserID = $userId");
+        $jobs = DB::connection('sqlsrv2')->select("select * from viewDiamondMeshJobsPrinted");
+
+        // dd($printers);
+        
+        return view('warehouse.diamondMesh.diamondMeshReprint')
+            ->with('jobs',$jobs)
+            ->with('printers',$printers);
+    }
+
+    public function diamondMeshInsertReprint(Request $request)
+    {
+        $intJobId = $request->get('intJobId');
+        $intPrinterId = $request->get('intPrinterId');
+        $qty = $request->get('qty');
+        $userId = Auth::user()->UserID;
+
+        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $t = time();
+        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+        $ID = $t . $randomString;
+
+        // dd("EXEC spReprintDiamondMeshLabel $intJobId, $intPrinterId, $qty, '$ID', $userId");
+
+        $request = DB::connection('sqlsrv2')->select("EXEC spReprintDiamondMeshLabel $intJobId, $intPrinterId, $qty, '$ID', $userId");
+        return response()->json($request);
     }
 
     private static function getTabs($tabcount)

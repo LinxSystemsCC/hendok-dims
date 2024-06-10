@@ -1326,4 +1326,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateDiamondMeshLinesSequence', [DiamondMeshController::class,'updateDiamondMeshLinesSequence']);
 
     Route::get('sendDiamondMeshLabelToThePrinter', [DiamondMeshController::class,'sendDiamondMeshLabelToThePrinter']);
+
+    Route::get('diamondMeshReprint', [DiamondMeshController::class,'diamondMeshReprint']);
+    Route::post('diamondMeshInsertReprint', [DiamondMeshController::class,'diamondMeshInsertReprint']);
 });
