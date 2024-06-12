@@ -164,7 +164,7 @@ class DiamondMeshController extends Controller
         $jobs = DB::connection('sqlsrv2')->select("select * from viewDiamondMeshJobsPrinted");
 
         // dd($printers);
-        
+
         return view('warehouse.diamondMesh.diamondMeshReprint')
             ->with('jobs',$jobs)
             ->with('printers',$printers);
@@ -185,6 +185,7 @@ class DiamondMeshController extends Controller
         // dd("EXEC spReprintDiamondMeshLabel $intJobId, $intPrinterId, $qty, '$ID', $userId");
 
         $request = DB::connection('sqlsrv2')->select("EXEC spReprintDiamondMeshLabel $intJobId, $intPrinterId, $qty, '$ID', $userId");
+
         return response()->json($request);
     }
 

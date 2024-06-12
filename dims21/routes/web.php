@@ -26,6 +26,7 @@ use App\Http\Controllers\Warehouse\StockControlController;
 use App\Http\Controllers\ApisController;
 use App\Http\Controllers\StockTakeController;
 use App\Http\Controllers\Warehouse\DiamondMeshController;
+use App\Http\Controllers\Warehouse\RoofingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -981,7 +982,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('wmaxreprint', [WareHouseController::class,'wmaxreprint']);
     Route::post('galvReprintEdit', [WareHouseController::class,'galvReprintEdit']);
     Route::get('getGalvReprints', [WareHouseController::class,'getGalvReprints']);
-    Route::get('roofingreprint', [WareHouseController::class,'roofingreprint']);
     Route::get('wmaxgetcustomerproduct', [WareHouseController::class,'wmaxgetcustomerproduct']);
     Route::get('wmaxgetproductinfo', [WareHouseController::class,'wmaxgetproductinfo']);
     Route::get('wmaxgetproductwiresize', [WareHouseController::class,'wmaxgetproductwiresize']);
@@ -1329,4 +1329,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('diamondMeshReprint', [DiamondMeshController::class,'diamondMeshReprint']);
     Route::post('diamondMeshInsertReprint', [DiamondMeshController::class,'diamondMeshInsertReprint']);
+});
+
+// Roofing Controller
+Route::group(['middleware' => 'auth'], function() { 
+    Route::get('roofingReprint', [RoofingController::class,'roofingReprint']);
+    Route::post('roofingInsertReprint', [RoofingController::class,'roofingInsertReprint']);
 });

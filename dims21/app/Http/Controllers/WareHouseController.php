@@ -1624,12 +1624,6 @@ class WareHouseController extends Controller
         return response()->json($reprints);
     }
 
-    public function roofingreprint()
-    {
-        $jobs = DB::connection('sqlsrv2')->select("select * from viewRoofingJobsPrinted");
-        return view('warehouse/roofingreprint')->with('jobs',$jobs);
-    }
-
     public function wmaxgetcustomerproduct(Request $request)
     {
         $cust = $request->get("customers");

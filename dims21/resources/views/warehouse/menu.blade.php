@@ -266,7 +266,7 @@ if ((Auth::guest()))
                         </li>
                         <li>
                             @if($roofcreateworkorder !="0")
-                            <a href='{!!url("/roofingreprint")!!}'>Reprint Label</a> <!-- TODO add userpermission for roofing reprint -->
+                            <a href='{!!url("/roofingReprint")!!}'>Reprint Label</a> <!-- TODO add userpermission for roofing reprint -->
                             @endif
                         </li>
                     </ul>
