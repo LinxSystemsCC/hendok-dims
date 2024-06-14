@@ -877,11 +877,6 @@ class WareHouseController extends Controller
         return view('warehouse/wmaxweigh')->with('scales', $scales);
     }
 
-    public function wmaxscrap()
-    {
-        return view('warehouse/wmaxscrap');
-    }
-
     public function wmaxregrade()
     {
         $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax ");
@@ -1185,12 +1180,15 @@ class WareHouseController extends Controller
         $grossMass = 0;
         $tareMass = 0;
 
-        // dd("exec spPassOrFailQCPhase2 '$Reference', '$CustomerName', '$ProductName', '$DepartmentName', '$MachineName', '$JobNo', '$WireSize', '$MassRequired', '$zincTested', '$mpaTested', '$castNo', '$wireSizeTested', '$stressTest', '$elongBreakTest', '$torsionTest', '$wrapTest', '$coating', '$comment1', '$massProduced', '$zincInitialMass', '$zincStripMass', '$zincStripSize', '$operator', '$comment2', '$comment3', '$seqNo', '$tensile', '$buttonMethod', '$weight', '$grossMass', '$tareMass'");
+        $coilID = $request->get("coilID");
+        $coilOD = $request->get("coilOD");
+
+        // dd("exec spPassOrFailQCPhase2 '$Reference', '$CustomerName', '$ProductName', '$DepartmentName', '$MachineName', '$JobNo', '$WireSize', '$MassRequired', '$zincTested', '$mpaTested', '$castNo', '$wireSizeTested', '$stressTest', '$elongBreakTest', '$torsionTest', '$wrapTest', '$coating', '$comment1', '$massProduced', '$zincInitialMass', '$zincStripMass', '$zincStripSize', '$operator', '$comment2', '$comment3', '$seqNo', '$tensile', '$buttonMethod', '$weight', '$grossMass', '$tareMass', $coilID, $coilOD");
 
         $testQC2 = DB::connection('sqlsrv2')->select(
-            'exec spPassOrFailQCPhase2 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+            'exec spPassOrFailQCPhase2 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
             array(
-                $Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3, $seqNo, $tensile, $buttonMethod, $weight, $grossMass, $tareMass
+                $Reference, $CustomerName, $ProductName, $DepartmentName, $MachineName, $JobNo, $WireSize, $MassRequired, $zincTested, $mpaTested, $castNo, $wireSizeTested, $stressTest, $elongBreakTest, $torsionTest, $wrapTest, $coating, $comment1, $massProduced, $zincInitialMass, $zincStripMass, $zincStripSize, $operator, $comment2, $comment3, $seqNo, $tensile, $buttonMethod, $weight, $grossMass, $tareMass, $coilID, $coilOD
             )
         );
 

@@ -121,8 +121,18 @@
                     </div>
 
                     <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="coilID">Coil ID</label>
+                        <input type="number"  class="form-control" id="coilID" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <label class="col-form-label" for="coilOD">Coil OD</label>
+                        <input type="number"  class="form-control" id="coilOD" required>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
                         <label class="col-form-label" for="CastNo">Cast Number</label>
-                        <input type="number"  class="form-control" id="CastNo" required>
+                        <input type="text"  class="form-control" id="CastNo" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
@@ -395,6 +405,10 @@
                     comment2: $("#comment2 option:selected").text(),
                     comment3: $("#comment3 option:selected").text(),
                     buttonMethod: "PASS",
+
+                    // Added 20240220
+                    coilID:  $("#coilID").val(),
+                    coilOD:  $("#coilOD").val(),
                 },
                 success: function (data) {
                     if (data[0].Result != "Success"){
@@ -464,6 +478,10 @@
                         comment2: $("#comment2 option:selected").text(),
                         comment3: $("#comment3 option:selected").text(),
                         buttonMethod: "FAIL",
+
+                        // Added 20240220
+                        coilID:  $("#coilID").val(),
+                        coilOD:  $("#coilOD").val(),
                     },
                     success: function (data) {
                         if (data[0].Result != "Success"){

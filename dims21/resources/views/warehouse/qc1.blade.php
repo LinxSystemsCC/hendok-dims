@@ -117,7 +117,7 @@
 
                     <div class="col-md-6 mb-1">
                         <label class="col-form-label" for="CastNo">Cast Number</label>
-                        <input type="number"  class="form-control" id="CastNo" required>
+                        <input type="text"  class="form-control" id="CastNo" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
