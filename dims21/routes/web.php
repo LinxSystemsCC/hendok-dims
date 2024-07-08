@@ -1337,6 +1337,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('diamondMeshReprint', [DiamondMeshController::class,'diamondMeshReprint']);
     Route::post('diamondMeshInsertReprint', [DiamondMeshController::class,'diamondMeshInsertReprint']);
     Route::get('diamondMeshReport', [DiamondMeshController::class,'diamondMeshReport']);
+
+    Route::post('deleteDiamondMeshBatch', [DiamondMeshController::class,'deleteDiamondMeshBatch']);
+    Route::post('deleteDiamondMeshSO', [DiamondMeshController::class,'deleteDiamondMeshSO']);
 });
 
 // Roofing Controller

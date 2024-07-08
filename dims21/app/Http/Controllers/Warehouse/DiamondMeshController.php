@@ -195,6 +195,22 @@ class DiamondMeshController extends Controller
         return view('warehouse.diamondMesh.diamondMeshReport')->with('data', $data);
     }
 
+    public function deleteDiamondMeshBatch(Request $request){
+        $ID = $request->get("ID");
+        $userid =  Auth::user()->UserID;
+
+        $result = DB::connection('sqlsrv3')->statement("exec spDeleteDiamondMeshBatch ?,?", array($ID, $userid));
+        return response()->json($result);
+    }
+
+    public function deleteDiamondMeshSO(Request $request){
+        $ID = $request->get("ID");
+        $userid =  Auth::user()->UserID;
+
+        $result = DB::connection('sqlsrv3')->statement("exec spDeleteDiamondMeshSO ?,?", array($ID, $userid));
+        return response()->json($result);
+    }
+
     private static function getTabs($tabcount)
     {
         $tabs = '';
