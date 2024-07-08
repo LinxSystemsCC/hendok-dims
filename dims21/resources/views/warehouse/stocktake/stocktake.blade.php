@@ -1,615 +1,576 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.base')
 
-<head>
-
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+{{-- Set the Title --}}
+@section('title', 'Stock Take')
 
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+{{-- Set to show navbar --}}
+@php
+    $includeMenu = true;
+@endphp
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.common.css">
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/20.1.7/css/dx.light.css">
+@section('page')
 
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.dialogextend.js') }}"></script>
-    <!-- DevExtreme library -->
-    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/20.1.7/js/dx.all.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-
-    <style>
-        .vertical-menu {
-            width: 200px;
-        }
-
-        .vertical-menu a {
-            background-color: #eee;
-            color: black;
-            display: block;
-            padding: 12px;
-            text-decoration: none;
-        }
-
-        .vertical-menu a:hover {
-            background-color: #ccc;
-        }
-
-        .vertical-menu a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-    </style>
-
-
-
-</head>
-<div class="col-lg-12" style="background: white;">
-    <div class="col-lg-12" style="background: white;">
-        <div class="col-lg-2" style="background: white;border-right: 2px solid black;height: 10000px;">
-
-            <div class="vertical-menu">
-                <a href='{!! url('/LocationsAndBins') !!}'>Locations and Bins</a>
-                <a href='{!! url('/stockTake') !!}' class="active">Stock Take</a>
-                <a href='{!! url('/productStockCountMapping') !!}'>Product Mapping</a>
-                <a href='{!! url('/exceptionmovementreport') !!}'>Stock Movement</a>
+    <div id="gridStockTake" class="col-lg-12"></div>
+    <div id="popupCreate">
+        <div class="dx-field">
+            <div class="dx-field-label">Reference</div>
+            <div class="dx-field-value">
+                <div id="inputReference"></div>
             </div>
         </div>
-        <div class="col-lg-10" style="background: white;">
-
-            <div class="col-lg-4" style="background: white;">
-                <fieldset class="well">
-                    <form>
-                        Create New Stock Take
-
-                        <div class="form-group">
-                            <label class="control-label" for="stocktakename"
-                                style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Stock Take Name</label>
-                            <input type="text" class="form-control input-sm col-xs-1" id="stocktakename"
-                                style="height:22px;font-size: 10px;font-family: sans-serif;font-weight: 900;">
-                        </div>
-                        <div class="form-group ">
-                            <label class="control-label" for="InventoryLocation"
-                                style="margin-bottom: 2px;font-weight: 700;font-size: 11px;">
-                                <h4>Inventory Location Id</h4>
-                            </label>
-
-                            <select id="InventoryLocation">
-                                <option value="0">-- Please Choose an Inventory Location--</option>
-                                @foreach ($locations as $values)
-                                    <option value="{{ $values->strLocationName }}">{{ $values->strLocationName }}</option>
-                                @endforeach
-                            </select>
-
-                        </div>
-                        <br>
-                        <button type="button" id="savestocktake" class="btn-lg btn-success">Save</button>
-                        <br>
-                    </form>
-                </fieldset>
+        <div class="dx-field">
+            <div class="dx-field-label">Select Location</div>
+            <div class="dx-field-value">
+                <div id="selectLocations"></div>
             </div>
-            <div class="col-lg-8" style="background: white;border-left: 2px solid black;">
-                <div class="form-group">
-                    <label class="control-label" for="datefrom"
-                        style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">FROM</label>
-                    <input type="text" class="form-control input-sm " id="datefrom">
-
-                    <label class="control-label" for="dateto"
-                        style="margin-bottom: 0px;font-weight: 700;font-size: 11px;">TO</label>
-                    <input type="text" class="form-control input-sm " id="dateto">
-                </div>
-
-
-                <button type="button" id="getstocktake" class="btn-lg btn-primary">Get Stock Takes</button>
-                <hr style="border: 1px solid black;">
-
-                <div class="col-lg-12" id="afterFilter">
-                    <div id="gridContainer">
-                    </div>
-                    <input id="selectstocktk">
-                    <div id="gridContainerLines">
-                    </div>
-                    <hr>
-                    <h5>Combined Quantities Per Item</h5>
-                    <div id="gridContainerLinescombined">
-                    </div>
-                </div>
-
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Select Bins</div>
+            <div class="dx-field-value">
+                <div id="selectBins"></div>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Select Product Groups</div>
+            <div class="dx-field-value">
+                <div id="selectProductGroups"></div>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Select Stock Take Teams</div>
+            <div class="dx-field-value">
+                <div id="selectTeams"></div>
             </div>
         </div>
     </div>
-</div>
 
-<style>
-    .dx-datagrid-table {
-        font-size: 15px;
-    }
-</style>
+@endsection
 
-<script>
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+@section('scripts')
+
+    <style>
+        #gridStockTake {
+            height: calc(100vh - 2rem);
+            max-height: calc(100vh - 2rem);
         }
-    });
-    $(document).on('focus', ':input', function() {
-        $(this).attr('autocomplete', 'off');
-    });
-    $(document).ready(function() {
+    </style>
 
-        $('#orderListing').hide();
-        $('#pricing').hide();
-        $('#pricingOnCustomer').hide();
-        $('#callList').hide();
-        $('#tabletLoadingApp').hide();
-        $('#copyOrdersBtn').hide();
-        $('#salesOnOrder').hide();
-        $('#salesInvoiced').hide();
-        $('#posCashUp').hide();
-        $('#popUpdateLine').hide();
-        $('#updatedspecials').hide();
-        $('#extend').hide();
-        $('#extedingspecial').hide();
+    <script>
+        $(document).ready(function() {
 
-        $("#datefrom").datepicker({
-            changeMonth: true, //this option for allowing user to select month
-            changeYear: true, //this option for allowing user to select from year range
-            dateFormat: 'yy-mm-dd'
-        });
+            let locations = {!! json_encode($locations) !!};
+            let bins = []
+            let productGroups = {!! json_encode($productGroups) !!};
+            let locationIds;
 
-        $("#dateto").datepicker({
-            changeMonth: true, //this option for allowing user to select month
-            changeYear: true, //this option for allowing user to select from year range
-            dateFormat: 'yy-mm-dd'
-        });
-
-        $('#savestocktake').click(function() {
-            $.ajax({
-                url: '{!! url('/saveStockTake') !!}',
-                type: "POST",
-                data: {
-                    stocktakename: $('#stocktakename').val(),
-                    inventoryloc: $('#InventoryLocation').val()
+            const inputReference = $("#inputReference").dxAutocomplete({
+                dataSource: [],
+                valueExpr: 'InvoiceNo',
+                showClearButton: true,
+                searchEnabled: true,
+                onValueChanged: function(e) {
                 },
-                success: function(data) {
-                    location.reload();
-                }
-            });
-        });
+            }).dxAutocomplete("instance");
 
-        $('#getstocktake').click(function() {
+            // const selectLocations = $("#selectLocations").dxTagBox({
+            //     dataSource: locations,
+            //     valueExpr: 'intLocationNameId',
+            //     displayExpr: 'strLocationName',
+            //     applyValueMode: 'useButtons',
+            //     showSelectionControls: true,
+            //     showClearButton: true,
+            //     searchEnabled: true,
+            //     onValueChanged: function(e) {
+            //         locationIds = e.value.join(',');
+            //         getBinsForLocations();
+            //     },
+            // }).dxTagBox("instance");
 
-            $.ajax({
-
-                url: '{!! url('/getStockTakes') !!}',
-                type: "GET",
-                data: {
-                    datefrom: $('#datefrom').val(),
-                    dateto: $('#dateto').val()
+            const selectLocations = $("#selectLocations").dxSelectBox({
+                dataSource: locations,
+                valueExpr: 'intLocationNameId',
+                displayExpr: 'strLocationName',
+                applyValueMode: 'useButtons',
+                showSelectionControls: true,
+                showClearButton: true,
+                searchEnabled: true,
+                onValueChanged: function(e) {
+                    locationIds = e.value;
+                    getBinsForLocations();
                 },
-                success: function(data) {
+            }).dxSelectBox("instance");
 
-                    $("#gridContainer").dxDataGrid({
+            const selectBins = $("#selectBins").dxTagBox({
+                dataSource: bins,
+                valueExpr: 'intBinId',
+                displayExpr: 'strBin',
+                applyValueMode: 'useButtons',
+                showSelectionControls: true,
+                showClearButton: true,
+                searchEnabled: true,
+                onValueChanged: function(e) {
 
-                        dataSource: data, //as json
+                },
+            }).dxTagBox("instance");
 
-                        showBorders: true,
-                        filterRow: {
-                            visible: true
+            const selectProductGroups = $("#selectProductGroups").dxTagBox({
+                dataSource: productGroups,
+                valueExpr: 'ItemGroup',
+                displayExpr: 'ItemGroupDescription',
+                applyValueMode: 'useButtons',
+                showSelectionControls: true,
+                showClearButton: true,
+                searchEnabled: true,
+                onValueChanged: function(e) {
+
+                },
+            }).dxTagBox("instance");
+
+            const selectTeams = $("#selectTeams").dxTagBox({
+                dataSource: {
+                    store: [{
+                        'strTeamName': 'RedTeam',
+                        'strDisplayName': 'Red Team',
+                    }, {
+                        'strTeamName': 'BlueTeam',
+                        'strDisplayName': 'Blue Team',
+                    }],
+                    paginate: true,
+                    pageSize: 100
+                },
+                valueExpr: 'strTeamName',
+                displayExpr: 'strDisplayName',
+                applyValueMode: 'useButtons',
+                showSelectionControls: true,
+                showClearButton: true,
+                searchEnabled: true,
+                onValueChanged: function(e) {
+
+                },
+            }).dxTagBox("instance");
+
+            // Note from Kyle - If you add to the popup, make sure you initialize the components before the popup
+            const popupCreate = $("#popupCreate").dxPopup({
+                showTitle: true,
+                title: 'Create Stock Take',
+                hideOnOutsideClick: true,
+                showCloseButton: true,
+                width: 500,
+                height: 'auto',
+                toolbarItems: [{
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        icon: "fa-solid fa-add",
+                        text: "CREATE STOCK TAKE",
+                        onClick: function(args) {
+                            var reference = inputReference.option('value');
+                            var locations = selectLocations.option('value');
+                            var bins = selectBins.option('value');
+                            var productGroups = selectProductGroups.option('value');
+                            var teams = selectTeams.option('value');
+
+                            console.log(reference);
+                            // console.log(locations.join(','));
+                            console.log(locations);
+                            console.log(bins.join(','));
+                            console.log(productGroups.join(','));
+                            console.log(teams.join(','));
+
+                            createStockTake(reference, locations, bins.join(','), productGroups.join(','), teams.join(','))
                         },
-                        allowColumnResizing: true,
-                        paging: {
-                            pageSize: 50,
-                        },
+                    },
+                }],
+            }).dxPopup("instance");
 
-
-                        columns: [{
-                            dataField: "intAutoId",
-                            caption: "ID",
-                            width: 50,
-
-                        }, {
-                            dataField: "strStockTakeName",
-                            caption: "Stock Take Name",
-                            width: 300,
-
-                        }, {
-                            dataField: "stockTakeLocation",
-                            caption: "Stock Take Location",
-                            width: 150,
-
-                        }, {
-                            dataField: "dtmCreated",
-                            caption: "Date Created",
-                            width: 190,
-
-                        }, {
-                            dataField: "activeornot",
-                            caption: "Is Active",
-                            width: 125,
-
-                        }, ],
-                        onRowDblClick: function(e) {
-
-                            // console.debug(e.row,cells[e.columnIndex]);
-                            console.log(e.data.strStockTakeName);
-                            $.ajax({
-
-                                url: '{!! url('/selectStockTake') !!}',
-                                type: "GET",
-                                data: {
-                                    strStockTakeName: e.data
-                                        .strStockTakeName
-                                },
-                                success: function(data) {
-                                    //data[0].sendto
-                                    var dialog = $(
-                                        '<p> Selected Stock Take Name<br> Stock Take Name: ' +
-                                        data[0]
-                                        .strStockTakeName +
-                                        ' <br> ID: ' + data[0]
-                                        .intAutoId +
-                                        '<br>Status<select id="statusselect"><option value="' +
-                                        data[0].blnIsOpened +
-                                        '"selected disabled>' +
-                                        data[0].activeornot +
-                                        '</option><option value="0">Expires</option><option value="1">Active</option></select></p>'
-                                    ).dialog({
-                                        height: 300,
-                                        width: 700,
-                                        modal: true,
-                                        containment: false,
-                                        buttons: {
-                                            "Update": function() {
-
-                                                // console.log($('#statusselect').val());
-                                                $.ajax({
-
-                                                    url: '{!! url('/updateStockTakeStatus') !!}',
-                                                    type: "POST",
-                                                    data: {
-                                                        status: $(
-                                                                '#statusselect'
-                                                            )
-                                                            .val(),
-                                                        stocktakeid: data[
-                                                                0
-                                                            ]
-                                                            .intAutoId
-                                                    },
-                                                    success: function(
-                                                        data
-                                                    ) {
-
-                                                    },
-
-                                                });
-
-                                            }
-                                        }
+            const gridStockTake = $("#gridStockTake").dxDataGrid({
+                dataSource: [],
+                showBorders: true,
+                showRowLines: true,
+                showColumnLines: true,
+                rowAlternationEnabled: true,
+                filterRow: {
+                    visible: true
+                },
+                filterPanel: {
+                    visible: true
+                },
+                headerFilter: {
+                    visible: true
+                },
+                paging: {
+                    enabled: false
+                },
+                selection: {
+                    mode: "single",
+                },
+                editing: {
+                    mode: 'cell',
+                    allowUpdating: true,
+                },
+                columnAutoWidth: true,
+                allowColumnResizing: true,
+                columnResizingMode: "widget",
+                columnFixing: {
+                    enabled: true,
+                },
+                scrolling: {
+                    mode: 'virtual'
+                },
+                columns: [{
+                    dataField: "intAutoId",
+                    caption: "ID",
+                    allowEditing: false,
+                }, {
+                    dataField: "strStockTakeName",
+                    caption: "Stock Take Name",
+                    allowEditing: false,
+                }, {
+                    dataField: "stockTakeLocation",
+                    caption: "Stock Take Location",
+                    allowEditing: false,
+                }, {
+                    dataField: "dtmCreated",
+                    caption: "Date Created",
+                    allowEditing: false,
+                }, {
+                    dataField: "blnIsOpened",
+                    caption: "Is Active",
+                    lookup: {
+                        dataSource: [
+                            {
+                                "value": "1", "display": "Active"
+                            },{
+                                "value": "0", "display": "In-Active"
+                            },
+                        ],
+                        valueExpr: 'value',
+                        displayExpr: 'display',
+                    },
+                }, ],
+                masterDetail: {
+                    enabled: true,
+                    template(container, options) {
+                        const ID = options.data.intAutoId;
+                        const gridStockDetailSummary = $('<div>')
+                        .dxDataGrid({
+                            dataSource: {
+                                load: function(loadOptions) {
+                                    return $.ajax({
+                                        url: '{!!url("/getStockCounts")!!}',
+                                        method: 'GET',
+                                        data: { 
+                                            ID: ID,
+                                        },
+                                        xhrFields: { withCredentials: true },
                                     });
                                 },
-                            });
-
-
-                        },
-                        onRowClick: function(e) {
-                            console.log("***************************" + e.data
-                                .strStockTakeName);
-                            $('#selectstocktk').val(e.data.strStockTakeName);
-                            $.ajax({
-
-                                url: '{!! url('/getStockTakeLines') !!}',
-                                type: "GET",
-                                data: {
-                                    stocktakename: e.data
-                                        .strStockTakeName,
-                                    invloc: e.data.stockTakeLocation
+                                update: function (key, values) {
+                                    gridStockDetailSummary.dxDataGrid('instance').refresh();
                                 },
-                                success: function(datagrids) {
+                                insert: function (key, values) {
+                                    gridStockDetailSummary.dxDataGrid('instance').refresh();
+                                },
+                            },                        
+                            showBorders: true,     
+                            filterRow: {
+                                visible: true
+                            },
+                            filterPanel: {
+                                visible: true
+                            },
+                            headerFilter: {
+                                visible: true
+                            },
+                            editing: {
+                                mode: 'row',
+                                allowUpdating: true,
+                            },
+                            paging: {
+                                enabled: false
+                            },
+                            columns:[
+                                {
+                                    dataField: "intMainStockCountID",
+                                    caption: "intMainStockCountID",
+                                    visible: false,
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "strStockTakeName",
+                                    caption: "strStockTakeName",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "strItemCode",
+                                    caption: "strItemCode",
+                                    allowEditing: false,
+                                },
+                                
+                                {
+                                    dataField: "intBinId",
+                                    caption: "Bin ID",
+                                    visible: false,
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "strBinName",
+                                    caption: "Bin Name",
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "mnyBlueSingle",
+                                    caption: "Blue Single",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "mnyRedSingle",
+                                    caption: "Red Single",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "mnyManagerSingle",
+                                    caption: "Manager Single",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                },
+                                {
+                                    dataField: "mnyBluePallet",
+                                    caption: "Blue Pallet",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "mnyRedPallet",
+                                    caption: "Red Pallet",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "mnyManagerPallet",
+                                    caption: "Manager Pallet",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                },
+                                {
+                                    dataField: "mnyBlueTotal",
+                                    caption: "Blue Total",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "mnyRedTotal",
+                                    caption: "Red Total",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "mnyManagerTotal",
+                                    caption: "Manager Total",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                },
+                                {
+                                    dataField: "mnyOnHand",
+                                    caption: "OnHand",
+                                    dataType: 'number',
+                                    alignment: 'center',
+                                    allowEditing: false,
+                                },
+                                {
+                                    dataField: "strRowColor",
+                                    caption: "strRowColor",
+                                    visible: false,
+                                    allowEditing: false,
+                                },
+                            ],
+                            onContentReady: function (e) {
 
-                                    $("#gridContainerLines")
-                                        .dxDataGrid({
-                                            dataSource: datagrids
-                                                .datalines, //as json
-                                            showBorders: true,
-                                            filterRow: {
-                                                visible: true
-                                            },
-                                            allowColumnResizing: true,
-                                            paging: {
-                                                pageSize: 50,
-                                            },
-                                            export: {
-                                                enabled: true
-                                            },
-                                            onExporting(e) {
-                                                const workbook =
-                                                    new ExcelJS
-                                                    .Workbook();
-                                                const
-                                                    worksheet =
-                                                    workbook
-                                                    .addWorksheet(
-                                                        'Stocktakelines'
-                                                    );
-
-                                                DevExpress
-                                                    .excelExporter
-                                                    .exportDataGrid({
-                                                        component: e
-                                                            .component,
-                                                        worksheet,
-                                                        autoFilterEnabled: true,
-                                                    }).then(
-                                                        () => {
-                                                            workbook
-                                                                .xlsx
-                                                                .writeBuffer()
-                                                                .then(
-                                                                    (
-                                                                        buffer
-                                                                    ) => {
-                                                                        saveAs
-                                                                            (new Blob(
-                                                                                    [
-                                                                                        buffer
-                                                                                    ], {
-                                                                                        type: 'application/octet-stream'
-                                                                                    }
-                                                                                ),
-                                                                                'Stocktakelines.xlsx'
-                                                                            );
-                                                                    }
-                                                                );
-                                                        });
-                                                e.cancel = true;
-                                            },
-
-
-                                            columns: [{
-                                                dataField: "intAutoCountId",
-                                                caption: "ID",
-                                                width: 50,
-
-                                            }, {
-                                                dataField: "strItemCode",
-                                                caption: "Item Code",
-                                                width: 300,
-
-                                            }, {
-                                                dataField: "PastelDescription",
-                                                caption: "Item Description",
-                                                width: 250,
-
-                                            }, {
-                                                dataField: "strStockTakeName",
-                                                caption: "Stock Take Name",
-                                                width: 250,
-
-                                            }, {
-                                                dataField: "mnyQty",
-                                                caption: "Quantity",
-                                                width: 100,
-                                                dataType: "number"
-
-                                            }, {
-                                                dataField: "mnyCarton",
-                                                caption: "Cartons",
-                                                width: 80,
-                                                dataType: "number"
-
-                                            }, {
-                                                dataField: "dteExpiryDate",
-                                                caption: "Expiry",
-                                                width: 120,
-
-                                            }, {
-                                                dataField: "intUserId",
-                                                caption: "User ID",
-                                                width: 100,
-
-                                            }, {
-                                                dataField: "dteDeviceTime",
-                                                caption: "Device Time",
-                                                width: 200,
-
-                                            }, {
-                                                dataField: "strTransactionType",
-                                                caption: "Transaction Type",
-                                                width: 200,
-
-                                            }, {
-                                                dataField: "strSubScriber",
-                                                caption: "Subscriber",
-                                                width: 250,
-
-                                            }, {
-                                                dataField: "strBinLocation",
-                                                caption: "Bin Location",
-                                                width: 200,
-
-                                            }, {
-                                                dataField: "dteTimeSaved",
-                                                caption: "Time Saved",
-                                                width: 200,
-
-                                            }, ],
-
-
-                                        });
-
-                                    $("#gridContainerLinescombined")
-                                        .dxDataGrid({
-                                            dataSource: datagrids
-                                                .datalinesperitems, //as json
-                                            showBorders: true,
-                                            filterRow: {
-                                                visible: true
-                                            },
-                                            allowColumnResizing: true,
-                                            paging: {
-                                                pageSize: 50,
-                                            },
-                                            export: {
-                                                enabled: true
-                                            },
-                                            onExporting(e) {
-                                                const workbook =
-                                                    new ExcelJS
-                                                    .Workbook();
-                                                const
-                                                    worksheet =
-                                                    workbook
-                                                    .addWorksheet(
-                                                        'Stocktakelinesgrouped'
-                                                    );
-
-                                                DevExpress
-                                                    .excelExporter
-                                                    .exportDataGrid({
-                                                        component: e
-                                                            .component,
-                                                        worksheet,
-                                                        autoFilterEnabled: true,
-                                                    }).then(
-                                                        () => {
-                                                            workbook
-                                                                .xlsx
-                                                                .writeBuffer()
-                                                                .then(
-                                                                    (
-                                                                        buffer
-                                                                    ) => {
-                                                                        saveAs
-                                                                            (new Blob(
-                                                                                    [
-                                                                                        buffer
-                                                                                    ], {
-                                                                                        type: 'application/octet-stream'
-                                                                                    }
-                                                                                ),
-                                                                                'Stocktakelinesgrouped.xlsx'
-                                                                            );
-                                                                    }
-                                                                );
-                                                        });
-                                                e.cancel = true;
-                                            },
-
-
-                                            columns: [{
-                                                    dataField: "strItemCode",
-                                                    caption: "Item Code",
-                                                    width: 300,
-
-                                                }, {
-                                                    dataField: "PastelDescription",
-                                                    caption: "Item Description",
-                                                    width: 250,
-
-                                                }, {
-                                                    dataField: "strStockTakeName",
-                                                    caption: "Stock Take Name",
-                                                    width: 250,
-
-                                                }, {
-                                                    dataField: "UnitSize",
-                                                    caption: "UnitSize",
-                                                    width: 70,
-
-                                                }, {
-                                                    dataField: "mnyQty",
-                                                    caption: "Quantity",
-                                                    width: 100,
-                                                    dataType: "number"
-
-                                                }, {
-                                                    dataField: "mnyCarton",
-                                                    caption: "Cartons",
-                                                    width: 80,
-                                                    dataType: "number"
-
-                                                }, {
-                                                    dataField: "Tot .Count",
-                                                    caption: "totCount",
-                                                    width: 80,
-                                                    dataType: "number"
-
-                                                }, {
-                                                    dataField: "strTransactionType",
-                                                    caption: "Transaction Type",
-                                                    width: 200,
-
-                                                }, {
-                                                    dataField: "variance",
-                                                    caption: "variance",
-                                                    width: 250,
-                                                    dataType: "number",
-                                                    format: "#0.##"
-
-                                                }, {
-                                                    dataField: "Instock",
-                                                    caption: "Instock",
-                                                    width: 100,
-
-                                                }
-
-                                            ],
-
-
-                                        });
-
+                            },
+                            onCellPrepared: function(e) {
+                                if(e.rowType === "data" && (e.column.dataField === "mnyManagerSingle" || e.column.dataField === "mnyManagerPallet" || e.column.dataField === "mnyManagerTotal")) {
+                                    e.cellElement.css("background-color", "#4287f5");
+                                    e.cellElement.css("color", "white");
                                 }
-                            });
+                            },
+                            onRowPrepared: function (e){
+                                if (e.data){
+                                    // console.log(e.data.strRowColor);
+                                    if (e.data.strRowColor != null) {
+                                        e.rowElement.css("background-color", e.data.strRowColor);
+                                        e.rowElement.css("color", "white");
+                                    }
+                                }
+                            },
+                            onToolbarPreparing: function(e) {
+                                e.toolbarOptions.items.push({
+                                    location: 'after',
+                                    widget: "dxButton",
+                                    options: {
+                                        icon: "fa fa-plus-circle",
+                                        text: "SET MANAGERS QTYS",
+                                        type: 'default',
+                                        stylingMode: 'contained',
+                                        onClick: function(args) {
+                                            // $('#modalAddgroupspecial').modal('show');
+                                        },
+                                    },
+                                });
+                                e.toolbarOptions.items.push({
+                                    location: 'after',
+                                    widget: "dxButton",
+                                    options: {
+                                        icon: "fa fa-plus-circle",
+                                        text: "APPROVE",
+                                        type: 'default',
+                                        stylingMode: 'contained',
+                                        onClick: function(args) {
+                                            // $('#modalAddgroupspecial').modal('show');
+                                        },
+                                    },
+                                });
+                            }
+                        }).appendTo(container);
+                    },
+                },
+                onRowUpdated: function(e) {
+                    var stockTakeId = e.data.intAutoId;
+                    var statusId = e.data.blnIsOpened;
+                    updateStockTakeStatus(stockTakeId, statusId)
+                },
+                onToolbarPreparing: function(e) {
+                    // Create a custom header on the left side
+                    e.toolbarOptions.items.unshift({
+                        location: 'before',
+                        template: function() {
+                            return $('<h3 class="ps-3">').text('Stock Takes');
+                        }
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'after',
+                        widget: "dxDateRangeBox",
+                        options: {
+                            width: 300,
+                            class: "myDateRangeBox",
+                            displayFormat: 'yyyy-MM-dd',
+                            elementAttr: {
+                                id: "dateRange"
+                            },
+                        }
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'after',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa-solid fa-search",
+                            text: "SEARCH",
+                            onClick: function(args) {
+                                getStockTakes();
+                            },
                         },
                     });
-
+                    e.toolbarOptions.items.push({
+                        location: 'after',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa-solid fa-add",
+                            text: "ADD",
+                            onClick: function(args) {
+                                popupCreate.show();
+                            },
+                        },
+                    });
                 }
+            }).dxDataGrid('instance');
 
-            });
+            function getStockTakes() {
+                // Get the dxDateRangeBox widget instance using the CSS class
+                var dateRangeBox = $("#dateRange").dxDateRangeBox("instance");
+                var selectedValues = dateRangeBox.option("value");
 
+                var dateFrom = formatDate(selectedValues[0]);
+                var dateTo = formatDate(selectedValues[1]);
+
+                $.ajax({
+                    url: '{!! url('/getStockTakes') !!}',
+                    type: "GET",
+                    data: {
+                        datefrom: dateFrom,
+                        dateto: dateTo
+                    },
+                    success: function(gridData) {
+                        gridStockTake.option('dataSource', gridData);
+                        gridStockTake.refresh();
+                    }
+                });
+            }
+
+            // formats date to yyyy-MM-dd
+            function formatDate(date) {
+                returnFormat = date.toLocaleDateString("en-ZA", {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+
+                return returnFormat.replace(/\//g, '-');
+            }
+
+            function getBinsForLocations() {
+                $.ajax({
+                    url: '{!! url('/getBinsForLocations') !!}',
+                    type: "GET",
+                    data: {
+                        locationIds: locationIds,
+                    },
+                    success: function(binsData) {
+                        selectBins.option('dataSource', binsData);
+                        selectBins.repaint();
+                    }
+                });
+            }
+
+            function createStockTake(reference, locations, bins, productGroups, teams){
+                $.ajax({
+                    url: '{!! url('/createStockTake') !!}',
+                    type: "POST",
+                    data: {
+                        reference: reference,
+                        locations: locations,
+                        bins: bins,
+                        productGroups: productGroups,
+                        teams: teams,
+                    },
+                    success: function(data) {
+                        getStockTakes();
+                    }
+                });
+            }
+
+            function updateStockTakeStatus(stockTakeId, statusId){
+                $.ajax({
+                    url: '{!! url('/updateStockTakeStatus') !!}',
+                    type: "POST",
+                    data: {
+                        stockTakeId: stockTakeId,
+                        statusId: statusId,
+                    },
+                    success: function(data) {
+                        getStockTakes();
+                    }
+                });
+            }
         });
+    </script>
 
-    });
-
-    function showDialog(tag, width, height) {
-        $(tag).dialog({
-            height: height,
-            modal: false,
-            width: width,
-            containment: false
-        }).dialogExtend({
-            "closable": true, // enable/disable close button
-            "maximizable": false, // enable/disable maximize button
-            "minimizable": true, // enable/disable minimize button
-            "collapsable": true, // enable/disable collapse button
-            "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar": false, // false, 'none', 'transparent'
-            "minimizeLocation": "right", // sets alignment of minimized dialogues
-            "icons": { // jQuery UI icon class
-
-                "maximize": "ui-icon-circle-plus",
-                "minimize": "ui-icon-circle-minus",
-                "collapse": "ui-icon-triangle-1-s",
-                "restore": "ui-icon-bullet"
-            },
-            "load": function(evt, dlg) {}, // event
-            "beforeCollapse": function(evt, dlg) {}, // event
-            "beforeMaximize": function(evt, dlg) {}, // event
-            "beforeMinimize": function(evt, dlg) {}, // event
-            "beforeRestore": function(evt, dlg) {}, // event
-            "collapse": function(evt, dlg) {}, // event
-            "maximize": function(evt, dlg) {}, // event
-            "minimize": function(evt, dlg) {}, // event
-            "restore": function(evt, dlg) {} // event
-        });
-    }
-</script>
+@endsection

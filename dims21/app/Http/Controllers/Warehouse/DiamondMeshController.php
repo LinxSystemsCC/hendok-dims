@@ -189,6 +189,12 @@ class DiamondMeshController extends Controller
         return response()->json($request);
     }
 
+    public function diamondMeshReport(Request $request)
+    {
+        $data = DB::connection('sqlsrv2')->select('SELECT * FROM viewDiamondMeshReport');
+        return view('warehouse.diamondMesh.diamondMeshReport')->with('data', $data);
+    }
+
     private static function getTabs($tabcount)
     {
         $tabs = '';

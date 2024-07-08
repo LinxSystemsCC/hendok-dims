@@ -1300,14 +1300,21 @@ Route::group(['middleware' => 'auth'], function() {
 
 // Stock Control Controller
 Route::group(['middleware' => 'auth'], function() { 
-    Route::get('stockTake', [StockTakeController::class,'stockTake']);
-    Route::get('getStockTakes', [StockTakeController::class,'getStockTakes']);
+    
     Route::post('saveStockTake', [StockTakeController::class,'saveStockTake']);
     Route::get('getStockTakeLines', [StockTakeController::class,'getStockTakeLines']);
     Route::get('selectStockTake', [StockTakeController::class,'selectStockTake']);
-    Route::post('updateStockTakeStatus', [StockTakeController::class,'updateStockTakeStatus']);
     Route::get('productStockCountMapping', [StockTakeController::class,'productStockCountMapping']);
     Route::post('postMappedItems', [StockTakeController::class,'postMappedItems']);
+    Route::get('getBinsForLocations', [StockTakeController::class,'getBinsForLocations']);
+
+    // New And imporved methods
+    Route::get('stockTake', [StockTakeController::class,'stockTake']);
+    Route::get('getStockTakes', [StockTakeController::class,'getStockTakes']);
+    Route::post('createStockTake', [StockTakeController::class,'createStockTake']);
+    Route::post('updateStockTakeStatus', [StockTakeController::class,'updateStockTakeStatus']);
+    Route::get('getStockCounts', [StockTakeController::class,'getStockCounts']);
+
 });
 
 // Diamond Mesh Controller
@@ -1329,6 +1336,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('diamondMeshReprint', [DiamondMeshController::class,'diamondMeshReprint']);
     Route::post('diamondMeshInsertReprint', [DiamondMeshController::class,'diamondMeshInsertReprint']);
+    Route::get('diamondMeshReport', [DiamondMeshController::class,'diamondMeshReport']);
 });
 
 // Roofing Controller
