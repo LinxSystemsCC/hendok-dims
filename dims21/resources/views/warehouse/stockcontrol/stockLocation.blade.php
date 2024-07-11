@@ -68,7 +68,7 @@
                 },
                 columns: [
                     {
-                        dataField: "strItemCode",
+                        dataField: "strPartNumber",
                         caption: "Item Code",
 
                     }, {
@@ -80,14 +80,36 @@
                         caption: "Item Group",
 
                     }, {
-                        dataField: "mnyEstimatedPallets",
-                        caption: "Qty",
+                        dataField: "mnyOnHand",
+                        caption: "On Hand",
+                        dataType:"number",
+                        format: "#0",
+
+                    },{
+                        dataField: "mnyOnHandPallet",
+                        caption: "On Hand Pallet",
+                        dataType:"number",
+                        format: "#0",
+
+                    },{
+                        dataField: "mnyAvail",
+                        caption: "Avail.",
+                        dataType:"number",
+                        format: "#0",
+
+                    },{
+                        dataField: "mnyAvailPallet",
+                        caption: "Avail Pallet",
                         dataType:"number",
                         format: "#0",
 
                     }, {
-                        dataField: "mnyWeight",
-                        caption: "Weight",
+                        dataField: "mnyOnHandWeight",
+                        caption: "On Hand Weight",
+
+                    }, {
+                        dataField: "mnyAvailWeight",
+                        caption: "Avail Weight",
 
                     },{
                         dataField: "MinLevel",
@@ -98,7 +120,7 @@
                         caption: "Max Level",
 
                     }, {
-                        dataField: "QtyInStock",
+                        dataField: "mnySageInStock",
                         caption: "Sage Qty",
 
                     }
@@ -106,7 +128,7 @@
                 masterDetail: {
                     enabled: true,
                     template(container, options) {
-                        const ItemCode = options.data.strItemCode;
+                        const ItemCode = options.data.strPartNumber;
                         const gridStockDetailSummary = $('<div>')
                         .dxDataGrid({
                             dataSource: {
@@ -155,10 +177,14 @@
                                 e.component.columnOption('strBin', 'allowEditing', false);
                                 e.component.columnOption('mnyBinCapacity', 'caption', 'Capacity');
                                 e.component.columnOption('mnyBinCapacity', 'dataType', 'number');
-                                e.component.columnOption('mnyEstimatedPallets', 'caption', 'Qty');
-                                e.component.columnOption('mnyEstimatedPallets', 'allowEditing', false);
-                                e.component.columnOption('strErpItemCode', 'caption', 'Item Code');
-                                e.component.columnOption('strErpItemCode', 'allowEditing', false);
+                                e.component.columnOption('mnyOnHand', 'caption', 'On Hand Qty');
+                                e.component.columnOption('mnyOnHandPallet', 'caption', 'On Hand Pallet Qty');
+                                e.component.columnOption('mnyAvail', 'caption', 'Avail Qty');
+                                e.component.columnOption('mnyAvailPallet', 'caption', 'Avail Pallet Qty');
+                                e.component.columnOption('mnyOnHandWeight', 'caption', 'On Hand Weigh');
+                                e.component.columnOption('mnyAvailWeight', 'caption', 'Avail Weight');
+                                e.component.columnOption('strPartNumber', 'caption', 'Item Code');
+                                e.component.columnOption('strPartNumber', 'allowEditing', false);
                             },
                         }).appendTo(container);
                     },
@@ -211,7 +237,7 @@
                     success: function(data) {
                         const gridData = {
                             store: new DevExpress.data.CustomStore({
-                                key: "strItemCode",
+                                key: "strPartNumber",
                                 loadMode: "raw",
                                 load: function () {
                                     return data;

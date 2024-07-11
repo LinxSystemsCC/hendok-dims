@@ -2888,37 +2888,25 @@ class WareHouseController extends Controller
             $port =  $scales[0]->strPort;
 
             // dd($host,$port);
-            // $host = "192.168.100.232";
-            // $port = 23;
             set_time_limit(0);
 
             $socket = socket_create(AF_INET, SOCK_STREAM, 0);
             socket_connect($socket, $host, $port);
-            $input = socket_read($socket, 4096);
-            // socket_recv($socket, $input, 1024, 0);
+            $input = socket_read($socket, 1024);
+
             socket_close($socket);
 
-            // dd(($input));
-
-            // $replaced = str::replaceArray('ST,GS,+', [''], $input);
-            // $replaced = str::replaceArray('US,GS,+', [''], $input);
-
-            // $input = trim($input, );
-            // $input = trim($input, "UT,GS,");
-            // $input = trim($input, "WN");
-            // $input = trim($input, "+");
-            // $input = trim($input, "-");
-            // $input = trim($input, "kg");
+            // dd($input);
 
             // Remove Illegal values
-            $input = str_replace(array("\r", "\n", "ST,GS,", "UT,GS,", "WN", "+", "-", "kg", " "), "", $input);
+            $unwanted_strings = ["\r", "\n", "ST,GS,", "UT,GS,", "WN", "+", "-", "kg", " ", "SI", "g", "SUI"];
+            $input = str_replace($unwanted_strings, "", $input);
             $input = ltrim($input);
-            $input = intval($input);
+            $input = floatval($input);
 
             return response()->json($input);
         }
     }
-
 
     public function getpalletconfforitems(Request $request)
     {
