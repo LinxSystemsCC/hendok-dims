@@ -109,6 +109,7 @@
                 showSelectionControls: true,
                 showClearButton: true,
                 searchEnabled: true,
+                multiline: false,
                 onValueChanged: function(e) {
 
                 },
@@ -122,6 +123,7 @@
                 showSelectionControls: true,
                 showClearButton: true,
                 searchEnabled: true,
+                multiline: false,
                 onValueChanged: function(e) {
 
                 },
@@ -145,6 +147,7 @@
                 showSelectionControls: true,
                 showClearButton: true,
                 searchEnabled: true,
+                multiline: false,
                 onValueChanged: function(e) {
 
                 },
@@ -157,6 +160,7 @@
                 hideOnOutsideClick: true,
                 showCloseButton: true,
                 width: 500,
+                height: 600,
                 height: 'auto',
                 toolbarItems: [{
                     widget: 'dxButton',

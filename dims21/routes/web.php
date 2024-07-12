@@ -24,7 +24,7 @@ use App\Http\Controllers\Warehouse\ProductionController;
 use App\Http\Controllers\Warehouse\LoadingController;
 use App\Http\Controllers\Warehouse\StockControlController;
 use App\Http\Controllers\ApisController;
-use App\Http\Controllers\StockTakeController;
+use App\Http\Controllers\Warehouse\StockTakeController;
 use App\Http\Controllers\Warehouse\DiamondMeshController;
 use App\Http\Controllers\Warehouse\RoofingController;
 

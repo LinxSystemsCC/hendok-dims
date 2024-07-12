@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Warehouse;
 
 use Illuminate\Contracts\Session\Session;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -109,7 +110,7 @@ class StockTakeController extends Controller
     public function getBinsForLocations(Request $request)
     {
         $locationIds = $request->get('locationIds');
-        $bins = DB::connection('sqlsrv2')->select("SELECT * FROM viewBinNames WHERE intLocationNameId IN ($locationIds)");
+        $bins = DB::connection('sqlsrv2')->select("SELECT * FROM viewBinNames WHERE intLocationId IN ($locationIds)");
 
         return response()->json($bins);
     }
