@@ -27,6 +27,8 @@ use App\Http\Controllers\ApisController;
 use App\Http\Controllers\StockTakeController;
 use App\Http\Controllers\Warehouse\DiamondMeshController;
 use App\Http\Controllers\Warehouse\RoofingController;
+use App\Http\Controllers\WireDraw\WireDrawCustomersController;
+use App\Http\Controllers\WireDraw\WireDrawProductsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1335,4 +1337,11 @@ Route::group(['middleware' => 'auth'], function() {
 Route::group(['middleware' => 'auth'], function() { 
     Route::get('roofingReprint', [RoofingController::class,'roofingReprint']);
     Route::post('roofingInsertReprint', [RoofingController::class,'roofingInsertReprint']);
+});
+
+
+Route::prefix('wire-draw')->name('wire-draw.')->group(function () {
+    Route::get('customers/get-customers', [WireDrawCustomersController::class,'getCustomerName'])->name('customers.get-customers');
+    Route::resource('customers', WireDrawCustomersController::class);
+    Route::resource('products', WireDrawProductsController::class);
 });

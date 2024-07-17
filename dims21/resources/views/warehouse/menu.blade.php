@@ -731,6 +731,14 @@ if ((Auth::guest()))
                         </li>
 
                         <li>
+                            <a href='{{ route('wire-draw.customers.index') }}'>WireDraw Customers</a>
+                        </li>
+    
+                        <li>
+                            <a href='{{ route('wire-draw.products.index') }}'>WireDraw Products</a>
+                        </li>
+
+                        <li>
                             @if($galvscales !="0")
                             <a href='{!!url("/galvscale")!!}'>Scales</a> 
                             @endif
