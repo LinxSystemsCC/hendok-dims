@@ -1313,7 +1313,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getStockTakes', [StockTakeController::class,'getStockTakes']);
     Route::post('createStockTake', [StockTakeController::class,'createStockTake']);
     Route::post('updateStockTakeStatus', [StockTakeController::class,'updateStockTakeStatus']);
-    Route::get('getStockCounts', [StockTakeController::class,'getStockCounts']);
+    Route::get('stockCounts/{ID}', [StockTakeController::class,'stockCounts']);
+    Route::post('approveVarianceAdjustment', [StockTakeController::class,'approveVarianceAdjustment']);
+    Route::post('syncStockMovements', [StockTakeController::class,'syncStockMovements']);
+    
 
 });
 

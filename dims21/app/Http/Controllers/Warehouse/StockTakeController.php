@@ -19,6 +19,14 @@ class StockTakeController extends Controller
         return view('warehouse.stocktake.stocktake')->with('locations', $locations)->with('productGroups', $productGroups);
     }
 
+    public function getBinsForLocations(Request $request)
+    {
+        $locationIds = $request->get('locationIds');
+        $bins = DB::connection('sqlsrv2')->select("SELECT * FROM viewBinNames WHERE intLocationId IN ($locationIds)");
+
+        return response()->json($bins);
+    }
+
     public function getStockTakes(Request $request)
     {
         $datefrom = $request->get('datefrom');
@@ -50,14 +58,37 @@ class StockTakeController extends Controller
         DB::connection('sqlsrv2')->statement("EXEC sp_U_StockTakeStatus $stockTakeId, $statusId");
     }
 
-    public function getStockCounts(Request $request)
+    public function stockCounts($ID)
     {
-        $ID = $request->get('ID');
         $counts = DB::connection('sqlsrv2')->select("SELECT * FROM viewStockCountVariances WHERE intMainStockCountID = $ID");
 
-        return response()->json($counts);
+        return view('warehouse.stocktake.stockCounts')->with('counts', $counts);
     }
 
+    public function approveVarianceAdjustment(Request $request)
+    {
+        $gridData = $request->get('gridData');
+        $userId = Auth::user()->UserID;
+
+        if (is_array($gridData)) {
+            $xml = $this->toxml($gridData, "xml", array("result"));
+
+            // dd("EXEC sp_C_stockCountVarianceStockAdjustment '$xml', $userId");
+
+            // Execute the stored procedure
+            $response = DB::connection('sqlsrv2')->select("EXEC sp_C_stockCountVarianceStockAdjustment '$xml', $userId");
+        } else {
+            $response = ['error' => 'Invalid grid data'];
+        }
+
+        return response()->json($response);
+    }
+    
+    public function syncStockMovements(Request $request)
+    {
+        $response = DB::connection('sqlsrv2')->statement("EXEC spPostJsonData");
+        return response()->json($response);
+    }
     // old unused stock take methods ----------------------------------------------
 
     public function saveStockTake(Request $request)
@@ -106,12 +137,42 @@ class StockTakeController extends Controller
 
         return response()->json($vartosel);
     }
-
-    public function getBinsForLocations(Request $request)
+    
+    private static function getTabs($tabcount)
     {
-        $locationIds = $request->get('locationIds');
-        $bins = DB::connection('sqlsrv2')->select("SELECT * FROM viewBinNames WHERE intLocationId IN ($locationIds)");
+        $tabs = '';
+        for ($i = 0; $i < $tabcount; $i++) {
+            $tabs .= "\t";
+        }
+        return $tabs;
+    }
 
-        return response()->json($bins);
+    private static function asxml($arr, $elements = array(), $tabcount = 0)
+    {
+        $result = '';
+        $tabs = self::getTabs($tabcount);
+        foreach ($arr as $key => $val) {
+            $element = isset($elements[0]) ? $elements[0] : $key;
+            $result .= $tabs;
+            $result .= "<" . $element . ">";
+            if (!is_array($val))
+                $result .= $val;
+            else {
+                $result .= "\r\n";
+                $result .= self::asxml($val, array_slice($elements, 1, true), $tabcount + 1);
+                $result .= $tabs;
+            }
+            $result .= "</" . $element . ">\r\n";
+        }
+        return $result;
+    }
+
+    public static function toxml($arr, $root = "xml", $elements = array())
+    {
+        $result = '';
+        $result .= "<" . $root . ">\r\n";
+        $result .= self::asxml($arr, $elements, 1);
+        $result .= "</" . $root . ">\r\n";
+        return $result;
     }
 }
