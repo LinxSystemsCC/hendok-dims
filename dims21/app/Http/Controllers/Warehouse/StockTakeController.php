@@ -14,9 +14,24 @@ class StockTakeController extends Controller
     {
         $locations = DB::connection('sqlsrv3')->select('SELECT intLocationNameId, strLocationName FROM tblLocationNames');
         $productGroups = DB::connection('sqlsrv3')->select('SELECT DISTINCT ItemGroup, ItemGroupDescription FROM tblSageFullStock WHERE ItemGroup IS NOT NULL');
-
+        
         // dd($locations, $productGroups);
         return view('warehouse.stocktake.stocktake')->with('locations', $locations)->with('productGroups', $productGroups);
+    }
+
+    public function getNextStockTakeId(){
+        $lastStockTakeId = DB::table('tblStockTakenames')->latest('intAutoId')->pluck('intAutoId')->first();
+
+        if ($lastStockTakeId) {
+            $nextIdNumber = intval($lastStockTakeId) + 1;
+        } else {
+            $nextIdNumber = 1; // Start from 1 if there's no previous ID
+        }
+
+        // Format the next identifier
+        $stockTakeId = 'STK' . str_pad($nextIdNumber, 7, '0', STR_PAD_LEFT);
+
+        return $stockTakeId;
     }
 
     public function getBinsForLocations(Request $request)
@@ -61,8 +76,9 @@ class StockTakeController extends Controller
     public function stockCounts($ID)
     {
         $counts = DB::connection('sqlsrv2')->select("SELECT * FROM viewStockCountVariances WHERE intMainStockCountID = $ID");
-
-        return view('warehouse.stocktake.stockCounts')->with('counts', $counts);
+        $isApproved = DB::table('tblStockTakenames')->latest('bitAdjustmentApproved')->pluck('bitAdjustmentApproved')->first();
+        // dd($isApproved);
+        return view('warehouse.stocktake.stockCounts')->with('counts', $counts)->with('isApproved', $isApproved);
     }
 
     public function approveVarianceAdjustment(Request $request)

@@ -205,6 +205,7 @@
                             icon: "fa fa-plus-circle",
                             text: "APPROVE",
                             type: 'default',
+                            disabled: {{ $isApproved }} == "1",
                             stylingMode: 'contained',
                             onClick: function(args) {
                                 const visibleRows = gridStockCount.getVisibleRows();

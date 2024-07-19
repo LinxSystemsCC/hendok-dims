@@ -3,7 +3,6 @@
 {{-- Set the Title --}}
 @section('title', 'Stock Take')
 
-
 {{-- Set to show navbar --}}
 @php
     $includeMenu = true;
@@ -72,6 +71,7 @@
                 valueExpr: 'InvoiceNo',
                 showClearButton: true,
                 searchEnabled: true,
+                disabled: true,
                 onValueChanged: function(e) {},
             }).dxAutocomplete("instance");
 
@@ -141,6 +141,8 @@
                 },
             }).dxTagBox("instance");
 
+            let btnCreate;
+
             // Note from Kyle - If you add to the popup, make sure you initialize the components before the popup
             const popupCreate = $("#popupCreate").dxPopup({
                 showTitle: true,
@@ -164,19 +166,17 @@
                     options: {
                         icon: "fa-solid fa-add",
                         text: "CREATE STOCK TAKE",
+                        onInitialized: function(e) {
+                            btnCreate = e.component;
+                        },
                         onClick: function(args) {
+                            btnCreate.option('disabled', true);
+                            
                             var reference = inputReference.option('value');
                             var locations = selectLocations.option('value');
                             var bins = selectBins.option('value');
                             var productGroups = selectProductGroups.option('value');
                             var teams = selectTeams.option('value');
-
-                            console.log(reference);
-                            // console.log(locations.join(','));
-                            console.log(locations);
-                            console.log(bins.join(','));
-                            console.log(productGroups.join(','));
-                            console.log(teams.join(','));
 
                             createStockTake(reference, locations, bins.join(','), productGroups
                                 .join(','), teams.join(','))
@@ -276,7 +276,8 @@
                             class: "myDateRangeBox",
                             displayFormat: 'yyyy-MM-dd',
                             value: [formattedToday,
-                            formattedToday], // Set the initial date range
+                                formattedToday
+                            ], // Set the initial date range
                             elementAttr: {
                                 id: "dateRange"
                             },
@@ -300,8 +301,9 @@
                             icon: "fa-solid fa-add",
                             text: "ADD",
                             onClick: function(args) {
-                                popupCreate
-                                    .show(); // Your function to show the create popup
+                                getNextStockTakeId();
+                                popupCreate.show(); 
+                                btnCreate.option('disabled', false);
                             },
                         },
                     });
@@ -393,6 +395,16 @@
                     },
                     success: function(data) {
                         getStockTakes();
+                    }
+                });
+            }
+
+            function getNextStockTakeId() {
+                $.ajax({
+                    url: '{!! url('/getNextStockTakeId') !!}',
+                    type: "GET",
+                    success: function(result) {
+                        inputReference.option('value', result);
                     }
                 });
             }

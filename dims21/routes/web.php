@@ -1316,7 +1316,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('stockCounts/{ID}', [StockTakeController::class,'stockCounts']);
     Route::post('approveVarianceAdjustment', [StockTakeController::class,'approveVarianceAdjustment']);
     Route::post('syncStockMovements', [StockTakeController::class,'syncStockMovements']);
-    
+    Route::get('getNextStockTakeId', [StockTakeController::class,'getNextStockTakeId']);
 
 });
 
