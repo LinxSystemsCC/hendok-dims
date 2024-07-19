@@ -918,7 +918,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateAreaName', [WareHouseController::class,'updateAreaName']);
     Route::post('deleteCustomerName', [WareHouseController::class,'deleteCustomerName']);
     Route::post('updateGalvCustomer', [WareHouseController::class,'updateGalvCustomer']);
-    
+
     Route::get('getgalvcreateproductspecsheet', [WareHouseController::class,'getgalvcreateproductspecsheet']);
     Route::post('deletesalesorders', [WareHouseController::class,'deletesalesorders']);
     Route::post('deleteScale', [WareHouseController::class,'deleteScale']);
@@ -1178,7 +1178,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('galvPrintJumboCoil', [GalvController::class,'galvPrintJumboCoil']);
     Route::get('wmaxscrap', [GalvController::class,'wmaxscrap']);
     Route::post('postScrapWeigh', [GalvController::class,'postScrapWeigh']);
-    
+
 });
 //GALV CONTROLLER ENDS HERE !!!
 
@@ -1277,25 +1277,25 @@ Route::group(['middleware' => 'auth'], function() {
 });
 
 // API's Controller
-Route::group(['middleware' => 'auth'], function() { 
+Route::group(['middleware' => 'auth'], function() {
     Route::get('getOpenUpkeepWorkOrders', [ApisController::class,'getOpenUpkeepWorkOrders']);
 });
 
 // Production Controller
-Route::group(['middleware' => 'auth'], function() { 
+Route::group(['middleware' => 'auth'], function() {
     Route::get('productionCapture', [ProductionController::class,'productionCapture']);
     Route::post('postProductionCaptureCRUD', [ProductionController::class,'postProductionCaptureCRUD']);
 });
 
 // Loading Controller
-Route::group(['middleware' => 'auth'], function() { 
+Route::group(['middleware' => 'auth'], function() {
     Route::get('loadTracking', [LoadingController::class,'loadTracking']);
     Route::get('getLoadTracking', [LoadingController::class,'getLoadTracking']);
     Route::post('postLoadTrackingUpdate', [LoadingController::class,'postLoadTrackingUpdate']);
 });
 
 // Stock Control Controller
-Route::group(['middleware' => 'auth'], function() { 
+Route::group(['middleware' => 'auth'], function() {
     Route::get('stockLocation', [StockControlController::class,'stockLocation']);
     Route::get('getStockLocationSummary', [StockControlController::class,'getStockLocationSummary']);
     Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
@@ -1303,7 +1303,7 @@ Route::group(['middleware' => 'auth'], function() {
 });
 
 // Stock Control Controller
-Route::group(['middleware' => 'auth'], function() { 
+Route::group(['middleware' => 'auth'], function() {
     Route::get('stockTake', [StockTakeController::class,'stockTake']);
     Route::get('getStockTakes', [StockTakeController::class,'getStockTakes']);
     Route::post('saveStockTake', [StockTakeController::class,'saveStockTake']);
@@ -1315,7 +1315,7 @@ Route::group(['middleware' => 'auth'], function() {
 });
 
 // Diamond Mesh Controller
-Route::group(['middleware' => 'auth'], function() { 
+Route::group(['middleware' => 'auth'], function() {
     Route::get('diamondMeshWorkOrders', [DiamondMeshController::class,'diamondMeshWorkOrders']);
     Route::get('getDiamondMeshSalesOrders', [DiamondMeshController::class,'getDiamondMeshSalesOrders']);
     Route::post('createDiamondMeshPlan', [DiamondMeshController::class,'createDiamondMeshPlan']);
@@ -1336,7 +1336,7 @@ Route::group(['middleware' => 'auth'], function() {
 });
 
 // Roofing Controller
-Route::group(['middleware' => 'auth'], function() { 
+Route::group(['middleware' => 'auth'], function() {
     Route::get('roofingReprint', [RoofingController::class,'roofingReprint']);
     Route::post('roofingInsertReprint', [RoofingController::class,'roofingInsertReprint']);
 });
@@ -1351,5 +1351,5 @@ Route::prefix('wire-draw')->name('wire-draw.')->group(function () {
     Route::resource('headers', WireDrawHeadersController::class);
     Route::get('qcscreen/get-qcscreen', [WireDrawqcscreenController::class,'getqc'])->name('qcscreen.get-qcscreen');
     Route::resource('qcscreen', WireDrawqcscreenController::class);
-    
+
 });
