@@ -14,6 +14,8 @@ use App\Http\Controllers\ConsoleManagement;
 use App\Http\Controllers\InvoicingController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\WareHouseController;
+use App\Http\Controllers\WireDraw\WireDrawHeadersController;
+use App\Http\Controllers\WireDraw\WireDrawqcscreenController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
 use Illuminate\Support\Facades\Auth;
@@ -1343,5 +1345,11 @@ Route::group(['middleware' => 'auth'], function() {
 Route::prefix('wire-draw')->name('wire-draw.')->group(function () {
     Route::get('customers/get-customers', [WireDrawCustomersController::class,'getCustomerName'])->name('customers.get-customers');
     Route::resource('customers', WireDrawCustomersController::class);
+    Route::get('products/get-products', [WireDrawProductsController::class,'getProductsName'])->name('products.get-products');
     Route::resource('products', WireDrawProductsController::class);
+    Route::get('headers/get-headers', [WireDrawHeadersController::class,'getheaders'])->name('headers.get-headers');
+    Route::resource('headers', WireDrawHeadersController::class);
+    Route::get('qcscreen/get-qcscreen', [WireDrawqcscreenController::class,'getqc'])->name('qcscreen.get-qcscreen');
+    Route::resource('qcscreen', WireDrawqcscreenController::class);
+    
 });

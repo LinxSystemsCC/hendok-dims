@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
 
 class StorePostWireDrawProductsRequest extends FormRequest
 {
@@ -28,7 +30,10 @@ class StorePostWireDrawProductsRequest extends FormRequest
             'ftlWireSize' => 'required|max:255',
             'strSizeTolerance' => 'required|string|max:255',
             'strMPATolerance' => 'required|string|max:255',
-            'intCustomerId' => 'required|integer',
+            'strCustomerName' => [
+                'required',
+                Rule::notIn(['select']),
+            ],
         ];
     }
 }

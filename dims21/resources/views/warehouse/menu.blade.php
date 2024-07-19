@@ -586,6 +586,22 @@ if ((Auth::guest()))
 			</ul>
 		</li>
 
+        <!-- Wiredraw -->
+        <li>
+			<!-- Fisrt Category -->
+            @if($inventory !="0")
+            <a class="firstmenu" id="7"><i class="fa fa-archive"></i>Wiredraw<span class="caret pull-down"></span>
+			</a>
+            @endif
+			<ul class="item-show-7">
+				<li>
+                    <!-- Second Category -->
+                    <a class="secondmenu" id="7a" href='{!!url("/wire-draw/headers")!!}'>Wiredraw Headers</a>
+                    <a class="secondmenu" id="7b" href='{!!url("/wire-draw/qcscreen")!!}'>QC Phase</a>
+                </li>
+			</ul>
+		</li>
+
         <!-- Setup -->
         <li>
 			<!-- Fisrt Category -->
