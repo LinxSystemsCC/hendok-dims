@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-12 d-inline-flex">
             <h3 style="flex-grow: 1; padding-left: 15px;">Wiredraw Products</h3>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newcustomer">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newproduct">
                 New Products
             </button>
         </div>
