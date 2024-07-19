@@ -258,7 +258,6 @@
                     intCustomerId = 0;
                 }
 
-
                 $.ajax({
                     url: '{!! url('wire-draw/headers') !!}',
                     type: "POST",
@@ -288,12 +287,7 @@
                 type: "GET",
                 success: function(data) {
                     const gridWorkInProgress = $("#gridWorkInProgress").dxDataGrid({
-                        dataSource: data.headers.map(header => ({
-                            ...header,
-                            strCustomerName: data.customerName[0].strCustomerName,
-                            strProductName: data.productName[0].strProductName,
-                            strMachineName: data.machine[0].strMachineName
-                        })),
+                        dataSource: data.headers,
                         hoverStateEnabled: true,
                         showBorders: true,
                         filterRow: {

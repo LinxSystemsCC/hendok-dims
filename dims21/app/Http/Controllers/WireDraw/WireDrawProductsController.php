@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostWireDrawProductsRequest;
 use App\Models\WireDraw\WireDrawProduct;
 use App\Models\WireDraw\WireDrawCustomer;
-
+use Illuminate\Support\Facades\DB;
 
 class WireDrawProductsController extends Controller
 {
     public function index()
     {
-        $customers = WireDrawCustomer::select('strCustomerName')->get();
+        $customers = WireDrawCustomer::select('strCustomerName as Name', 'intCustomerId as ID')->get();
 
         return view('warehouse.wiredraw.products.index')->with('customers', $customers);
     }
@@ -57,8 +57,10 @@ class WireDrawProductsController extends Controller
 
     public function getProductsName()
     {
-        $productsNames = WireDrawProduct::all();
+        $data = DB::table('tbl_customers_wiredraw')->join('tbl_products_wiredraw', 'tbl_customers_wiredraw.intCustomerId', '=', 'tbl_products_wiredraw.intCustomerId')
+        ->select('tbl_customers_wiredraw.strCustomerName','tbl_products_wiredraw.intProductId','tbl_products_wiredraw.strProductName','tbl_products_wiredraw.ftlWireSize','tbl_products_wiredraw.strSizeTolerance','tbl_products_wiredraw.strMPATolerance','tbl_products_wiredraw.intCustomerId')
+        ->get();
         
-        return response()->json($productsNames);
+        return response()->json($data);
     }
 }

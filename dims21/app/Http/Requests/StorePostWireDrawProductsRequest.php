@@ -30,7 +30,7 @@ class StorePostWireDrawProductsRequest extends FormRequest
             'ftlWireSize' => 'required|max:255',
             'strSizeTolerance' => 'required|string|max:255',
             'strMPATolerance' => 'required|string|max:255',
-            'strCustomerName' => [
+            'intCustomerId' => [
                 'required',
                 Rule::notIn(['select']),
             ],

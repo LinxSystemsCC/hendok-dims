@@ -50,10 +50,10 @@
                             name="strMPATolerance">
                         <label class="control-label" for="Customer ID"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer ID</label>
-                        <select class="form-select" type="text" id='strCustomerName'>
-                            <option value="select" selected>Select Customer</option>
+                        <select class="form-select" type="text" id='intCustomerId'>
+                            <option value="select" selected>Select CustomerName</option>
                             @foreach ($customers as $val)
-                                <option value="{{ $val->strCustomerName }}">{{ $val->strCustomerName }}</option>
+                                <option value="{{ $val->intCustomerId }}">{{ $val->strCustomerName }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -114,7 +114,7 @@
                         ftlWireSize: $('#ftlWireSize').val(),
                         strSizeTolerance: $('#strSizeTolerance').val(),
                         strMPATolerance: $('#strMPATolerance').val(),
-                        strCustomerName: $('#strCustomerName').val()
+                        intCustomerId: $('#intCustomerId').val()
                     },
                     success: function(data) {
                         location.reload();
@@ -131,10 +131,12 @@
 
 
             var customers = {!! json_encode($customers) !!};
+            console.log(customers)
 
             $.ajax({
                 url: '{{ route('wire-draw.products.get-products') }}',
                 type: "GET",
+
                 success: function(data) {
                     $("#gridContainer").dxDataGrid({
 
@@ -199,14 +201,23 @@
                                 caption: 'Product ID',
                                 dataType: 'int'
                             },
+                            // {
+                            //     dataField: 'intCustomerId',
+                            //     caption: 'Customer Name',
+                            //     lookup: {
+                            //         dataSource: customers,
+                            //         displayExpr: 'Name',
+                            //         valueExpr: 'ID',
+                            //     },
+                            // },
                             {
-                                dataField: 'strCustomerName',
-                                caption: 'Customer Name',
-                                dataType: 'int',
+                                dataField: 'intCustomerId',
+                                caption: 'State',
+                                width: 125,
                                 lookup: {
                                     dataSource: customers,
-                                    valueExpr: "intCustomerId",
-                                    displayExpr: "strCustomerName",
+                                    displayExpr: 'Name',
+                                    valueExpr: 'ID',
                                 },
                             },
                             {
@@ -244,7 +255,7 @@
                             var ftlWireSize = e.data.ftlWireSize
                             var strSizeTolerance = e.data.strSizeTolerance
                             var strMPATolerance = e.data.strMPATolerance
-                            var strCustomerName = e.data.strCustomerName
+                            var intCustomerId = e.data.intCustomerId
 
                             $.ajax({
                                 url: '{!! url('wire-draw/products') !!}' + '/' + intProductId,
@@ -253,7 +264,7 @@
                                     intProductId: intProductId,
                                     strProductName: strProductName,
                                     ftlWireSize: ftlWireSize,
-                                    strCustomerName: strCustomerName,
+                                    intCustomerId: intCustomerId,
                                     strSizeTolerance: strSizeTolerance,
                                     strMPATolerance: strMPATolerance
                                 },
