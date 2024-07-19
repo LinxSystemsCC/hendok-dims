@@ -15,7 +15,7 @@ class CreateTblCustomersWireDrawTable extends Migration
     {
         Schema::create('tbl_customers_wiredraw', function (Blueprint $table) {
             $table->id('intCustomerId');
-            $table->string('strCustomerName ');
+            $table->string('strCustomerName');
             $table->timestamps();
         });
     }

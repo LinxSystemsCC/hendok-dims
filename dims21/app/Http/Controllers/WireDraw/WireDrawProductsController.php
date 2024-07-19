@@ -5,14 +5,16 @@ namespace App\Http\Controllers\WireDraw;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostWireDrawProductsRequest;
 use App\Models\WireDraw\WireDrawProduct;
+use App\Models\WireDraw\WireDrawCustomer;
+
 
 class WireDrawProductsController extends Controller
 {
     public function index()
     {
-        $data = WireDrawProduct::all();
+        $customers = WireDrawCustomer::select('strCustomerName')->get();
 
-        return view('warehouse.wiredraw.products.index')->with('data', $data);
+        return view('warehouse.wiredraw.products.index')->with('customers', $customers);
     }
     public function store(StorePostWireDrawProductsRequest $request)
     {
@@ -42,7 +44,7 @@ class WireDrawProductsController extends Controller
             'ftlWireSize' => $data['ftlWireSize'],
             'strSizeTolerance' => $data['strSizeTolerance'],
             'strMPATolerance' => $data['strMPATolerance'],
-            'intCustomerId' => $data['intCustomerId']
+            'intCustomerId' => $data['intCustomerId'],
         ];
     }
 
@@ -53,4 +55,10 @@ class WireDrawProductsController extends Controller
         return response()->json(['success' => 'Customer deleted successfully']);
     }
 
+    public function getProductsName()
+    {
+        $productsNames = WireDrawProduct::all();
+        
+        return response()->json($productsNames);
+    }
 }

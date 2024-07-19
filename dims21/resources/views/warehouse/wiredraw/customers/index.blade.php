@@ -172,10 +172,6 @@
         $.ajax({
             url: '{{ route("wire-draw.customers.get-customers") }}',
             type: "GET",
-            data: {
-                datefrom: $('#datefrom').val(),
-                dateto: $('#dateto').val()
-            },
             success: function(data) {
                 $("#gridContainer").dxDataGrid({
                     dataSource: data, //as json
@@ -217,7 +213,7 @@
                     },
                     onExporting(e) {
                         const workbook = new ExcelJS.Workbook();
-                        const worksheet = workbook.addWorksheet('Galv Customers');
+                        const worksheet = workbook.addWorksheet('Wiredraw Customers');
 
                         DevExpress.excelExporter.exportDataGrid({
                             component: e.component,
@@ -227,7 +223,7 @@
                             workbook.xlsx.writeBuffer().then((buffer) => {
                                 saveAs(new Blob([buffer], {
                                     type: 'application/octet-stream'
-                                }), 'Galv Customers.xlsx');
+                                }), 'Wiredraw Customers.xlsx');
                             });
                         });
                         e.cancel = true;

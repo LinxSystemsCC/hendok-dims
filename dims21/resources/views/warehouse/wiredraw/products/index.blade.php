@@ -3,7 +3,7 @@
 
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="{{asset('css/jobmodulestyle copy.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/jobmodulestyle copy.css') }}">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -85,7 +85,8 @@
                 <div class="form-group">
                     <label class="control-label" for="productname"
                         style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name</label>
-                    <input type="text" class="form-control input-sm col-xs-1" id="strProductName" name="strProductName">
+                    <input type="text" class="form-control input-sm col-xs-1" id="strProductName"
+                        name="strProductName">
 
                     <label class="control-label" for="wiresize"
                         style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size</label>
@@ -96,16 +97,45 @@
                         name="strSizeTolerance">
                     <label class="control-label" for="MPATolerance"
                         style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Tolerance</label>
-                    <input type="text" class="form-control input-sm col-xs-1" id="strMPATolerance" name="strMPATolerance">
-                    <label class="control-label" for="customerID"
+                    <input type="text" class="form-control input-sm col-xs-1" id="strMPATolerance"
+                        name="strMPATolerance">
+                    <label class="control-label" for="Customer ID"
                         style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer ID</label>
-                    <input type="number" class="form-control input-sm col-xs-1" id="intCustomerId" name="intCustomerId">
+                    <select class="form-select" type="text" id='strCustomerName'>
+                        <option  value="select" selected>Select Customer</option>
+                        @foreach ($customers as $val)
+                            <option value="{{ $val->strCustomerName }}">{{ $val->strCustomerName }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="savescustomername" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="assignPrinter" tabindex="-1" aria-labelledby="assignPrinterLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="assignPrinterLabel">Assigned Printers</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div id="checkboxContainer">
+
+                    </div>
+                    <input id='userId' hidden>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="updatePrinters" class="btn btn-success">Update</button>
             </div>
         </div>
     </div>
@@ -143,7 +173,6 @@
     $(document).ready(function() {
 
         $('#savescustomername').click(function() {
-
             $.ajax({
                 url: '{{ route("wire-draw.products.index") }}',
                 type: "POST",
@@ -152,7 +181,7 @@
                     ftlWireSize: $('#ftlWireSize').val(),
                     strSizeTolerance: $('#strSizeTolerance').val(),
                     strMPATolerance: $('#strMPATolerance').val(),
-                    intCustomerId: $('#intCustomerId').val()
+                    strCustomerName: $('#strCustomerName').val()
                 },
                 success: function(data) {
                     location.reload();
@@ -170,14 +199,14 @@
                                 xhr.responseJSON.message + '</div>');
                         }
 
-                        // Display field-specific error messages
+                        // Display field-specific error messages using a for loop
                         var errors = xhr.responseJSON.errors;
-                        if (errors.strProductName) {
-                            $('#strProductName').after('<span class="error-message text-danger">' + errors.strProductName[0] + '</span><br>');
-                            $('#ftlWireSize').after('<span class="error-message text-danger">' + errors.ftlWireSize[0] + '</span><br>');
-                            $('#strSizeTolerance').after('<span class="error-message text-danger">' + errors.strSizeTolerance[0] + '</span><br>');
-                            $('#strMPATolerance').after('<span class="error-message text-danger">' + errors.strMPATolerance[0] + '</span><br>');
-                            $('#intCustomerId').after('<span class="error-message text-danger">' + errors.intCustomerId[0] + '</span><br>');
+                        for (var key in errors) {
+                            if (errors.hasOwnProperty(key)) {
+                                $('#' + key).after(
+                                    '<span class="error-message text-danger">' +
+                                    errors[key][0] + '</span><br>');
+                            }
                         }
                     } else {
                         console.error('An unexpected error occurred:', xhr);
@@ -186,146 +215,158 @@
             });
         });
 
-        var data = {!! json_encode($data) !!};
-        console.log(data);
 
-        $("#gridContainer").dxDataGrid({
-            dataSource: data, //as json
-            showBorders: true,
-            hoverStateEnabled: true,
-            filterRow: {
-                visible: true
-            },
-            filterPanel: {
-                visible: true
-            },
-            headerFilter: {
-                visible: true
-            },
-            allowColumnResizing: true,
-            columnAutoWidth: true,
-            scrolling: {
-                rowRenderingMode: 'infinite',
-            },
-            paging: {
-                pageSize: 10,
-            },
-            pager: {
-                visible: true,
-                allowedPageSizes: [5, 10, 20, 50, 'all'],
-                showPageSizeSelector: true,
-                showInfo: true,
-                showNavigationButtons: true,
-            },
-            editing: {
-                mode: 'popup',
-                allowUpdating: true,
-                // allowAdding: true,
-                allowDeleting: true,
-                useIcons: true,
-            },
-            export: {
-                enabled: true,
-            },
-            onExporting(e) {
-                var currentDate = new Date();
-                const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('Galv Products');
+        var customers = {!! json_encode($customers) !!};
 
-                DevExpress.excelExporter.exportDataGrid({
-                    component: e.component,
-                    worksheet,
-                    autoFilterEnabled: true,
-                }).then(() => {
-                    workbook.xlsx.writeBuffer().then((buffer) => {
-                        saveAs(new Blob([buffer], {
-                            type: 'application/octet-stream'
-                        }), 'Galv Products - ' + currentDate + '.xlsx');
-                    });
-                });
-                e.cancel = true;
-            },
-            columns: [{
-                    dataField: 'intProductId',
-                    caption: 'Product ID',
-                    dataType: 'int'
-                },
-                {
-                    dataField: 'intCustomerId',
-                    caption: 'Customer ID',
-                    dataType: 'int'
-                },
-                {
-                    dataField: 'strProductName',
-                    caption: 'Name',
-                    dataType: 'string'
-                },
-                {
-                    dataField: 'ftlWireSize',
-                    caption: 'Wire Size',
-                    dataType: 'float',
-                },
-                {
-                    dataField: 'strSizeTolerance',
-                    caption: 'Size Tolerance',
-                    dataType: 'string'
-                },
-                {
-                    dataField: 'strMPATolerance',
-                    caption: 'MPA Tolerance',
-                    dataType: 'string'
-                },
+        $.ajax({
+            url: '{{ route("wire-draw.products.get-products") }}',
+            type: "GET",
+            success: function(data) {
+                $("#gridContainer").dxDataGrid({
 
-            ],
-
-            onRowClick: function(e) {},
-            onRowRemoved(e) {
-
-            },
-            onRowUpdated(e) {
-                // console.log(e);
-
-                var intProductId = e.data.intProductId
-                var strProductName = e.data.strProductName
-                var ftlWireSize = e.data.ftlWireSize
-                var strSizeTolerance = e.data.strSizeTolerance
-                var strMPATolerance = e.data.strMPATolerance
-                var intCustomerId = e.data.intCustomerId
-
-                $.ajax({
-                    url: '{!! url('wire-draw/products') !!}' + '/' + intProductId,
-                    type: "PUT",
-                    data: {
-                        intProductId: intProductId,
-                        strProductName: strProductName,
-                        ftlWireSize: ftlWireSize,
-                        intCustomerId: intCustomerId,
-                        strSizeTolerance: strSizeTolerance,
-                        strMPATolerance: strMPATolerance
+                    dataSource: data, //as json
+                    showBorders: true,
+                    hoverStateEnabled: true,
+                    filterRow: {
+                        visible: true
                     },
-                    success: function(data) {
-                        location.reload();
-                    }
-
-                });
-
-            },
-            onRowRemoved(e) {
-                var intProductId = e.data.intProductId;
-                console.log(intProductId);
-                $.ajax({
-                    url: '{!! url('wire-draw/products') !!}' + '/' + intProductId,
-                    type: "DELETE",
-                    data: {
-                        intProductId: intProductId
+                    filterPanel: {
+                        visible: true
                     },
-                    success: function(data) {
-                        location.reload();
+                    headerFilter: {
+                        visible: true
+                    },
+                    allowColumnResizing: true,
+                    columnAutoWidth: true,
+                    scrolling: {
+                        rowRenderingMode: 'infinite',
+                    },
+                    paging: {
+                        pageSize: 10,
+                    },
+                    pager: {
+                        visible: true,
+                        allowedPageSizes: [5, 10, 20, 50, 'all'],
+                        showPageSizeSelector: true,
+                        showInfo: true,
+                        showNavigationButtons: true,
+                    },
+                    editing: {
+                        mode: 'popup',
+                        allowUpdating: true,
+                        // allowAdding: true,
+                        allowDeleting: true,
+                        useIcons: true,
+                    },
+                    export: {
+                        enabled: true,
+                    },
+                    onExporting(e) {
+                        var currentDate = new Date();
+                        const workbook = new ExcelJS.Workbook();
+                        const worksheet = workbook.addWorksheet('Wiredraw Products');
+
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet,
+                            autoFilterEnabled: true,
+                        }).then(() => {
+                            workbook.xlsx.writeBuffer().then((buffer) => {
+                                saveAs(new Blob([buffer], {
+                                        type: 'application/octet-stream'
+                                    }), 'Wiredraw Products - ' +
+                                    currentDate + '.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+                    },
+                    columns: [{
+                            dataField: 'intProductId',
+                            caption: 'Product ID',
+                            dataType: 'int'
+                        },
+                        {
+                            dataField: 'strCustomerName',
+                            caption: 'Customer Name',
+                            dataType: 'int',
+                            lookup: {
+                                dataSource: customers,
+                                valueExpr: "intCustomerId",
+                                displayExpr: "strCustomerName",
+                            },
+                        },
+                        {
+                            dataField: 'strProductName',
+                            caption: 'Name',
+                            dataType: 'string'
+                        },
+                        {
+                            dataField: 'ftlWireSize',
+                            caption: 'Wire Size',
+                            dataType: 'float',
+                        },
+                        {
+                            dataField: 'strSizeTolerance',
+                            caption: 'Size Tolerance',
+                            dataType: 'string'
+                        },
+                        {
+                            dataField: 'strMPATolerance',
+                            caption: 'MPA Tolerance',
+                            dataType: 'string'
+                        },
+
+                    ],
+
+                    onRowClick: function(e) {},
+                    onRowRemoved(e) {
+
+                    },
+                    onRowUpdated(e) {
+                        // console.log(e);
+
+                        var intProductId = e.data.intProductId
+                        var strProductName = e.data.strProductName
+                        var ftlWireSize = e.data.ftlWireSize
+                        var strSizeTolerance = e.data.strSizeTolerance
+                        var strMPATolerance = e.data.strMPATolerance
+                        var strCustomerName = e.data.strCustomerName
+
+                        $.ajax({
+                            url: '{!! url('wire-draw/products') !!}' + '/' + intProductId,
+                            type: "PUT",
+                            data: {
+                                intProductId: intProductId,
+                                strProductName: strProductName,
+                                ftlWireSize: ftlWireSize,
+                                strCustomerName: strCustomerName,
+                                strSizeTolerance: strSizeTolerance,
+                                strMPATolerance: strMPATolerance
+                            },
+                            success: function(data) {
+                                location.reload();
+                            }
+
+                        });
+
+                    },
+                    onRowRemoved(e) {
+                        var intProductId = e.data.intProductId;
+                        console.log(intProductId);
+                        $.ajax({
+                            url: '{!! url('wire-draw/products') !!}' + '/' + intProductId,
+                            type: "DELETE",
+                            data: {
+                                intProductId: intProductId
+                            },
+                            success: function(data) {
+                                location.reload();
+                            },
+                        });
                     },
                 });
-            },
-        });
-
+            }
+        })
         $('.sidebar ul li a').on(function() {
             var id = $(this).attr('id');
             $('nav ul li ul.item-show-' + id).toggleClass("show");
