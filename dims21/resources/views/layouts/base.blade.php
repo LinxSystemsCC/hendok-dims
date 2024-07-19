@@ -202,6 +202,8 @@
 <!-- Multiselect -->
 <script src="{{ asset('public/js/jquery.multiselect.js') }}"></script>
 
+<script src="{{ asset('public/js/general.js') }}"></script>
+
 <script>
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );

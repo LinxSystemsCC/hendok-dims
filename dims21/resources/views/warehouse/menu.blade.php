@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 if ((Auth::guest()))
 {
-    
+
 }else{
     $v  =  new \App\Http\Controllers\SalesForm();
     /*$areaspage = $v->getThings(Auth::user()->GroupId,'areaspage');
@@ -36,7 +36,7 @@ if ((Auth::guest()))
     $gpl = $v->getThingsUserPermissions(Auth::user()->UserID,'Generic Product Labels');
     $wgpl = $v->getThingsUserPermissions(Auth::user()->UserID,'Warehouse Generic Product Labels');
 
-    
+
     //--------------------------Second Level Options--------------------------------
     //Work Order Options
     $barbed = $v->getThingsUserPermissions(Auth::user()->UserID,'Barbed Wire');
@@ -85,7 +85,7 @@ if ((Auth::guest()))
 
     //Work Orders Roofing
     $diamondMeshCreateWorkOrder = $v->getThingsUserPermissions(Auth::user()->UserID,'Diamond Mesh Create Work Order');
-    
+
     //Dispatch - Load Planning
     $customergridlookup=$v->getThingsUserPermissions(Auth::user()->UserID,'Customer Grid Lookup');
     $pickingplanner = $v->getThingsUserPermissions(Auth::user()->UserID,'Picking Planner');
@@ -132,20 +132,20 @@ if ((Auth::guest()))
     $galvscales = $v->getThingsUserPermissions(Auth::user()->UserID,'Scales');
     $nailsInner = $v->getThingsUserPermissions(Auth::user()->UserID,'Nails Inner');
     // $bulkmapping = $v->getThingsUserPermissions(Auth::user()->UserID,'Bulk Mapping');
-    
-}   
+
+}
 ?>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="{{ asset('public/css/all.min.css') }}"/>
 
 <link rel="stylesheet" href="{{ asset('/css/myicons.css') }}">
 
-<nav class="sidebar">
-    <!-- logo --> 
+<nav class="sidebar" style="height: 75vh !important">
+    <!-- logo -->
     <a href = "{{url('/dashboard')}}">
         <img src="{{url('/images/HendokLogoTransparent.png')}}" style="height: 70px; width: 100%; padding: 15px 35px 0px 20px;">
     </a>
-    
+
 	<ul class="main_side" style="padding-right: 10px;">
         <!-- Work Orders -->
         <li>
@@ -153,7 +153,7 @@ if ((Auth::guest()))
             @if($workorders !="0")
             <a class="firstmenu" id="1"><i class="fa fa-add"></i>Work Orders<span class="caret pull-down"></span></a>
             @endif
-			
+
 			<ul class="item-show-1">
                 <li>
                     <!-- Second Category -->
@@ -370,7 +370,7 @@ if ((Auth::guest()))
                             <a href='{!!url("/diamondMeshReprint")!!}'>Reprint Label</a> <!-- TODO add userpermission for roofing reprint -->
                             {{-- @endif --}}
                         </li>
-                        
+
                     </ul>
 
                     {{-- @if($roof !="0") --}}
@@ -427,7 +427,7 @@ if ((Auth::guest()))
                     @endif
                     <ul class="item-show-2a">
                         <!-- Item Links -->
-                       
+
                         <li>
                             @if($pickingplanner !="0")
                             <a href='{!!url("/routeplanner")!!}'>Picking Planner</a>
@@ -577,7 +577,7 @@ if ((Auth::guest()))
 
                     {{-- @if($exceptionreport !="0") --}}
                     <a class="secondmenu" id="4c" href='{!!url("/recievingwarehousereport")!!}'>Recieving Movement</a>
-                    
+
                     @if($galvmodulelogs !="0")
                     <a class="secondmenu" id="4d" href='{!!url("/galvmodulecomms")!!}'>Galv Module Logs</a>
                     @endif
@@ -665,24 +665,24 @@ if ((Auth::guest()))
                     <ul class="item-show-5c">
                         <!-- Item Links -->
                         <li>
-                            @if($areas !="0") 
-                            <a href='{!!url("/areapage")!!}'>Areas</a> 
-                            @endif 
+                            @if($areas !="0")
+                            <a href='{!!url("/areapage")!!}'>Areas</a>
+                            @endif
                         </li>
                         <li>
-                            @if($departments !="0") 
-                            <a href='{!!url("/departmentpage")!!}'>Departments</a> 
-                            @endif 
+                            @if($departments !="0")
+                            <a href='{!!url("/departmentpage")!!}'>Departments</a>
+                            @endif
                         </li>
                         <li>
-                            @if($departments !="0") 
-                            <a href='{!!url("/subDepartments")!!}'>Sub-Departments</a> 
-                            @endif 
+                            @if($departments !="0")
+                            <a href='{!!url("/subDepartments")!!}'>Sub-Departments</a>
+                            @endif
                         </li>
                         <li>
-                            @if($machines !="0") 
+                            @if($machines !="0")
                             <a href='{!!url("/machines")!!}'>Machines</a>
-                            @endif 
+                            @endif
                         </li>
                         <li>
                             {{-- @if($bulkMapping !="0") --}}
@@ -695,9 +695,9 @@ if ((Auth::guest()))
                             {{-- @endif --}}
                         </li>
                         <li>
-                            @if($palletconfig !="0") 
+                            @if($palletconfig !="0")
                             <a href='{!!url("/createPalletConfig")!!}'>Pallet Configurations</a>
-                            @endif 
+                            @endif
                         </li>
                         <li>
                             @if($locations !="0")
@@ -710,23 +710,23 @@ if ((Auth::guest()))
                             {{-- @endif --}}
                         </li>
                         {{-- <li>
-                            @if($mm2a !="0") 
-                            <a href='{!!url("/mapmachinetoarea")!!}'>Map Machine To Area</a> 
-                            @endif 
+                            @if($mm2a !="0")
+                            <a href='{!!url("/mapmachinetoarea")!!}'>Map Machine To Area</a>
+                            @endif
                         </li> --}}
                         {{-- <li>
                             @if($mm2d !="0")
-                            <a href='{!!url("/mapmachinestodept")!!}'>Map Machines To Department</a> 
-                            @endif 
+                            <a href='{!!url("/mapmachinestodept")!!}'>Map Machines To Department</a>
+                            @endif
                         </li> --}}
                         <li>
-                            @if($mmdp !="0") 
+                            @if($mmdp !="0")
                             <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Product To Machine</a>
-                            @endif 
+                            @endif
                         </li>
                         {{-- <li>
                             @if($mp2i !="0")
-                            <a href='{!!url("/mapitemstopallet")!!}'>Map Pallet To Items</a> 
+                            <a href='{!!url("/mapitemstopallet")!!}'>Map Pallet To Items</a>
                             @endif
                         </li> --}}
                         <li>
@@ -736,7 +736,7 @@ if ((Auth::guest()))
                         </li>
                         <li>
                             @if($galvcustomers !="0")
-                            <a href='{!!url("/galvcustomer")!!}'>Galv Customers</a> 
+                            <a href='{!!url("/galvcustomer")!!}'>Galv Customers</a>
                             @endif
                         </li>
 
@@ -749,33 +749,33 @@ if ((Auth::guest()))
                         <li>
                             <a href='{{ route('wire-draw.customers.index') }}'>WireDraw Customers</a>
                         </li>
-    
+
                         <li>
                             <a href='{{ route('wire-draw.products.index') }}'>WireDraw Products</a>
                         </li>
 
                         <li>
                             @if($galvscales !="0")
-                            <a href='{!!url("/galvscale")!!}'>Scales</a> 
+                            <a href='{!!url("/galvscale")!!}'>Scales</a>
                             @endif
                         </li>
                         <li>
                             @if("1" !="0")
-                            <a href='{!!url("/galvcreateprodspec")!!}'>Create Galv Product Spec</a> 
+                            <a href='{!!url("/galvcreateprodspec")!!}'>Create Galv Product Spec</a>
                             @endif
                         </li>
                         <li>
                             @if("1" !="0")
-                            <a href='{!!url("/galveditprodspec")!!}'>Edit Galv Product Spec</a> 
+                            <a href='{!!url("/galveditprodspec")!!}'>Edit Galv Product Spec</a>
                             @endif
                         </li>
                         <li>
                             @if("1" !="0")
-                            <a href='{!!url("/stockIssueTypes")!!}'>Stock Issue Types</a> 
+                            <a href='{!!url("/stockIssueTypes")!!}'>Stock Issue Types</a>
                             @endif
                         </li>
 
-                        
+
                     </ul>
 
                     @if($setup !="0")
@@ -811,7 +811,7 @@ if ((Auth::guest()))
 		</li>
 
         <!-- Print Labels & Reverse Pallets -->
-        
+
         <li>
             @if($ppl !="0")
             <a class="firstmenu" href='{!!url("/printpalletsselectdept")!!}'><i class="fa mi-pallet"></i>Print Pallet Labels</a>
@@ -819,7 +819,7 @@ if ((Auth::guest()))
         </li>
 
         <!-- Print Generic Product Labels -->
-        
+
         <li>
             @if($gpl !="0")
             <a class="firstmenu" href='{!!url("/genericproductlabels")!!}'><i class="fa mi-coil"></i>Product Label Printing</a>
@@ -833,7 +833,7 @@ if ((Auth::guest()))
     </ul>
 </nav>
 <!-- Logout -->
-<nav class="sidebar" style="height: 20vh !important">
+<nav class="sidebar" style="height: 25vh !important">
     <div style="position: absolute; bottom: 0;">
         <ul>
             <li>

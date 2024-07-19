@@ -20,11 +20,11 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="newcustomer" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+    <div class="modal fade" id="newproduct" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="newuserLabel">Create New Customer</h1>
+                    <h1 class="modal-title fs-5" id="newuserLabel">Create New Product</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -121,26 +121,7 @@
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {
-                            // Clear previous errors to avoid duplicate messages
-                            $('.error-message').remove();
-                            $('#general-error').remove();
-
-                            // Display general error message if it exists
-                            if (xhr.responseJSON.message) {
-                                $('.modal-body').prepend(
-                                    '<div id="general-error" class="alert alert-danger">' +
-                                    xhr.responseJSON.message + '</div>');
-                            }
-
-                            // Display field-specific error messages using a for loop
-                            var errors = xhr.responseJSON.errors;
-                            for (var key in errors) {
-                                if (errors.hasOwnProperty(key)) {
-                                    $('#' + key).after(
-                                        '<span class="error-message text-danger">' +
-                                        errors[key][0] + '</span><br>');
-                                }
-                            }
+                            modalSetValidation($("#newproduct"), xhr);
                         } else {
                             console.error('An unexpected error occurred:', xhr);
                         }
@@ -300,24 +281,6 @@
                     });
                 }
             })
-            $('.sidebar ul li a').on(function() {
-                var id = $(this).attr('id');
-                $('nav ul li ul.item-show-' + id).toggleClass("show");
-                $('nav ul li #' + id + ' span').toggleClass("rotate");
-
-            });
-
-            $('.sidebar ul li a').click(function() {
-                var id = $(this).attr('id');
-                $('nav ul li ul.item-show-' + id).toggleClass("show");
-                $('nav ul li #' + id + ' span').toggleClass("rotate");
-
-            });
-
-            $('nav ul li').click(function() {
-                $(this).addClass("active").siblings().removeClass("active");
-            });
-
         });
 
 

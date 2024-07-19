@@ -33,9 +33,9 @@
                     <div id="general-error"></div>
 
                     <div class="form-group">
-                        <label class="control-label" for="customername"
+                        <label class="control-label" for="strCustomerName"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer Name</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="customername"
+                        <input type="text" class="form-control input-sm col-xs-1" id="strCustomerName"
                             name="strCustomerName">
                         <!-- Error message will be appended here -->
                     </div>
@@ -67,7 +67,7 @@
                     url: '{{ route('wire-draw.customers.index') }}',
                     type: "POST",
                     data: {
-                        strCustomerName: $('#customername').val(),
+                        strCustomerName: $('#strCustomerName').val(),
                     },
                     success: function(data) {
                         if (data.success) {
@@ -76,24 +76,7 @@
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {
-                            // Clear previous errors to avoid duplicate messages
-                            $('.error-message').remove();
-                            $('#general-error').remove();
-
-                            // Display general error message if it exists
-                            if (xhr.responseJSON.message) {
-                                $('.modal-body').prepend(
-                                    '<div id="general-error" class="alert alert-danger">' +
-                                    xhr.responseJSON.message + '</div>');
-                            }
-
-                            // Display field-specific error messages
-                            var errors = xhr.responseJSON.errors;
-                            if (errors.strCustomerName) {
-                                $('#customername').after(
-                                    '<span class="error-message text-danger">' + errors
-                                    .strCustomerName[0] + '</span>');
-                            }
+                            modalSetValidation($("#newcustomer"), xhr);
                         } else {
                             console.error('An unexpected error occurred:', xhr);
                         }
@@ -208,25 +191,6 @@
                     });
                 }
             });
-
-            $('.sidebar ul li a').on(function() {
-                var id = $(this).attr('id');
-                $('nav ul li ul.item-show-' + id).toggleClass("show");
-                $('nav ul li #' + id + ' span').toggleClass("rotate");
-
-            });
-
-            $('.sidebar ul li a').click(function() {
-                var id = $(this).attr('id');
-                $('nav ul li ul.item-show-' + id).toggleClass("show");
-                $('nav ul li #' + id + ' span').toggleClass("rotate");
-
-            });
-
-            $('nav ul li').click(function() {
-                $(this).addClass("active").siblings().removeClass("active");
-            });
-
         });
 
         function showDialog(tag, width, height) {
