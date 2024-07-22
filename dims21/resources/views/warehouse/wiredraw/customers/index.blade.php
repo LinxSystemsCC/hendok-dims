@@ -85,14 +85,12 @@
             });
 
             $('#close').click(function () {
-                $('#addCustomerDiv').find('span').hide()
+                $('#addCustomerDiv').find('.errorClass').hide()
                 $('#general-error').hide()
-                $('#addCustomerDiv').find('br').remove()
             })
             $('.btn-close').click(function () {
-                $('#addCustomerDiv').find('span').hide()
+                $('#addCustomerDiv').find('.errorClass').hide()
                 $('#general-error').hide()
-                $('#addCustomerDiv').find('br').remove()
             })
 
             $.ajax({

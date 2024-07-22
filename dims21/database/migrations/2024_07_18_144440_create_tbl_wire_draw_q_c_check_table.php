@@ -13,7 +13,7 @@ class CreateTblWireDrawQCCheckTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_wire_draw_qc_check', function (Blueprint $table) {
+        Schema::create('tblWireDrawQCCheck', function (Blueprint $table) {
             $table->id('intQcId');
             $table->integer('intJobNumber');
             $table->integer('intProductId');
@@ -34,6 +34,6 @@ class CreateTblWireDrawQCCheckTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_wire_draw_qc_check');
+        Schema::dropIfExists('tblWireDrawQCCheck');
     }
 }

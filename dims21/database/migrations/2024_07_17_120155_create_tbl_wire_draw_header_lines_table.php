@@ -13,7 +13,7 @@ class CreateTblWireDrawHeaderLinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_wire_draw_header_lines', function (Blueprint $table) {
+        Schema::create('tblWireDrawHeaders', function (Blueprint $table) {
             $table->id('intHeaderId');
             $table->string('strReference');
             $table->string('strType');
@@ -38,6 +38,6 @@ class CreateTblWireDrawHeaderLinesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_wire_draw_header_lines');
+        Schema::dropIfExists('tblWireDrawHeaders');
     }
 }

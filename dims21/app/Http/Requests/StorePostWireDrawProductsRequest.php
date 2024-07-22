@@ -35,5 +35,16 @@ class StorePostWireDrawProductsRequest extends FormRequest
                 Rule::notIn(['select']),
             ],
         ];
+        
+    }
+    public function attributes()
+    {
+        return [
+            'strProductName' => 'Product Name',
+            'ftlWireSize' => 'Wire Size',
+            'strSizeTolerance' => 'Size Tolerance',
+            'intCustomerId' => 'Customer Name',
+            'strMPATolerance' => 'MPA Tolerance'
+        ];
     }
 }

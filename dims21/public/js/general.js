@@ -16,7 +16,7 @@ function modalSetValidation(modal, xhr)
     for (let key in errors) {
         if (errors.hasOwnProperty(key)) {
             $('#' + key).after(`
-                <span class="error-message text-danger">${errors[key][0]}</span><br>
+                <span class="error-message text-danger errorClass">${errors[key][0]}</span>
             `);
         }
     }

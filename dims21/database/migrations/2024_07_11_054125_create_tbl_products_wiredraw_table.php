@@ -13,7 +13,7 @@ class CreateTblProductsWireDrawTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_products_wiredraw', function (Blueprint $table) {
+        Schema::create('tblProductsWireDraw', function (Blueprint $table) {
             $table->id('intProductId');
             $table->string('strProductName');
             $table->float('ftlWireSize');
@@ -31,6 +31,6 @@ class CreateTblProductsWireDrawTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_products_wiredraw');
+        Schema::dropIfExists('tblProductsWireDraw');
     }
 }

@@ -25,7 +25,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="newuserLabel">Create New Product</h1>
-                    <button type="button" class="btn-close addProductclose" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="addProductDiv">
                     <!-- General error message will be displayed here if needed -->
@@ -36,36 +36,46 @@
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="strProductName"
                             name="strProductName">
-
+                    </div>
+                    <div class="form-group">
                         <label class="control-label" for="wiresize"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="ftlWireSize" name="ftlWireSize">
+                    </div>
+                    <div class="form-group">
                         <label class="control-label" for="sizetolerance"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Size Tolerance</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="strSizeTolerance"
                             name="strSizeTolerance">
+                    </div>
+                    <div class="form-group">
                         <label class="control-label" for="MPATolerance"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Tolerance</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="strMPATolerance"
                             name="strMPATolerance">
+                    </div>
+                    <div class="form-group">
                         <label class="control-label" for="Customer ID"
-                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer ID</label>
+                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Select Customer</label>
                         <select class="form-select" type="text" id='intCustomerId'>
                             <option value="select" selected>Select CustomerName</option>
+                            <!-- Assuming $customers is an array of objects containing ID and Name -->
                             @foreach ($customers as $val)
                                 <option value="{{ $val->ID }}">{{ $val->Name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
+                    <!-- Ensure the button has the correct classes and IDs -->
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="addProductcloseBtn">Close</button>
                     <button type="button" id="savescustomername" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="modal fade" id="assignPrinter" tabindex="-1" aria-labelledby="assignPrinterLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -129,16 +139,14 @@
                 });
             });
 
-            $('#addProductcloseBtn').click(function(){
-                $('#addProductDiv').find('span').hide();
+            $('#addProductcloseBtn').click(function() {
+                $('#addProductDiv').find('.errorClass').hide();
                 $('#general-error').hide()
-                $('#addProductDiv').find('br').remove()
             })
 
-            $('.addProductclose').click(function(){
-                $('#addProductDiv').find('span').hide();
+            $('.addProductclose').click(function() {
+                $('#addProductDiv').find('.errorClass').hide();
                 $('#general-error').hide()
-                $('#addProductDiv').find('br').remove()
             })
 
             var customers = {!! json_encode($customers) !!};
@@ -239,7 +247,11 @@
                             {
                                 dataField: 'ftlWireSize',
                                 caption: 'Wire Size',
-                                dataType: 'float',
+                                dataType: 'number',
+                                format: {
+                                    type: "fixedPoint",
+                                    precision: 2
+                                }
                             },
                             {
                                 dataField: 'strSizeTolerance',
@@ -284,7 +296,6 @@
                                 }
 
                             });
-
                         },
                         onRowRemoved(e) {
                             var intProductId = e.data.intProductId;

@@ -11,9 +11,11 @@ class CreateTblCustomersWireDrawTable extends Migration
      *
      * @return void
      */
+
+    
     public function up()
     {
-        Schema::create('tbl_customers_wiredraw', function (Blueprint $table) {
+        Schema::create('tblCustomersWireDraw', function (Blueprint $table) {
             $table->id('intCustomerId');
             $table->string('strCustomerName');
             $table->timestamps();
@@ -27,6 +29,6 @@ class CreateTblCustomersWireDrawTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_customers_wiredraw');
+        Schema::dropIfExists('tblCustomersWireDraw');
     }
 }

@@ -41,32 +41,23 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 mb-1">
-                            <label class="col-form-label" for="initmass">Initial Mass</label>
-                            <input type="number" class="form-control" id="initmass" required>
+                            <label class="col-form-label" for="initmass">ID</label>
+                            <input type="number" class="form-control" id="intQcId" required>
                         </div>
 
                         <div class="col-md-6 mb-1">
-                            <label class="col-form-label" for="stripmass">Strip Mass</label>
-                            <input type="number" class="form-control" id="stripmass" required>
+                            <label class="col-form-label" for="stripmass">Job Number</label>
+                            <input type="number" class="form-control" id="intJobNumber" required>
                         </div>
 
                         <div class="col-md-6 mb-1">
-                            <label class="col-form-label" for="stripsize">Strip Size</label>
-                            <input type="number" class="form-control" id="stripsize" required>
+                            <label class="col-form-label" for="stripsize">Product</label>
+                            <input type="number" class="form-control" id="intProductId" required>
                         </div>
 
                         <div class="col-md-6 mb-1">
-                            <label class="col-form-label" for="zinc">Zinc</label>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <button class="btn btn-primary px-4" id="calczinc">
-                                        Calculate
-                                    </button>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control" id="zinc" required>
-                                </div>
-                            </div>
+                            <label class="col-form-label" for="zinc">Stand #</label>
+                            <input type="number" class="form-control" id="intStand" required>
                         </div>
 
                         <div class="col-md-6 mb-1">

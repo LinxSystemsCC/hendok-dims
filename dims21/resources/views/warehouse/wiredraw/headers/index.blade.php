@@ -49,8 +49,6 @@
             @endif
         </div>
 
-        <div id="gridShiftData" style="width: 100% !important;"></div>
-
         <div id="gridWorkInProgress" style="width: 100% !important; flex-grow: 1;"></div>
 
         <!-- Finalise Job Modal -->
@@ -389,52 +387,6 @@
                 }
             });
 
-            const gridShiftData = $("#gridShiftData").dxDataGrid({
-                dataSource: [], //as json
-                hoverStateEnabled: true,
-                showBorders: true,
-                allowColumnResizing: true,
-                columnAutoWidth: true,
-                scrolling: {
-                    rowRenderingMode: 'infinite',
-                },
-                selection: {
-                    mode: 'single',
-                },
-
-                columns: [{
-                        dataField: "MachineName",
-                        caption: "Machine Group",
-                        //width: 80,
-
-                    }, {
-                        dataField: "DayWeight",
-                        caption: "Day Shift Weights",
-                        //width: 100,
-
-                    },
-                    {
-                        dataField: "NightWeight",
-                        caption: "Night Shift Weights",
-                        //width: 250,
-
-                    },
-                    {
-                        dataField: "DayCount",
-                        caption: "Day Shift Holds",
-                        //width: 300,
-
-                    },
-                    {
-                        dataField: "NightCount",
-                        caption: "Night Shift Holds",
-                        //width: 600,
-
-                    },
-                ]
-
-            }).dxDataGrid('instance');
-
             getWorkInProgress();
             getShiftData();
 
@@ -464,20 +416,6 @@
                 window.open('{!! url('/galvQCJobCard') !!}/' + JobNo, "_blank",
                     "location=1,status=1,scrollbars=1, width=1200,height=850");
             });
-
-            function getShiftData() {
-                $.ajax({
-                    url: '{!! url('/getGalvWIPConsolidated') !!}',
-                    type: "GET",
-                    success: function(data) {
-                        gridShiftData.option('dataSource', data);
-                        gridShiftData.refresh();
-
-                        gridData = gridShiftData.option("dataSource");
-                    },
-
-                });
-            };
 
             doacheck();
 

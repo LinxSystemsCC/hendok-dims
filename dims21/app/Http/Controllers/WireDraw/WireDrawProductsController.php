@@ -34,7 +34,8 @@ class WireDrawProductsController extends Controller
     {
         $validated = $request->validated();
         $Product->update($this->getRequestData($validated));
-        return response()->json(['data' => $Product]);
+        //return response()->json(['data' => $Product]);
+        return response()->json(['success' => true]);
     }
 
     private function getRequestData($data)
@@ -57,7 +58,8 @@ class WireDrawProductsController extends Controller
 
     public function getProductsName()
     {
-        $data = DB::table('tbl_customers_wiredraw')->join('tbl_products_wiredraw', 'tbl_customers_wiredraw.intCustomerId', '=', 'tbl_products_wiredraw.intCustomerId')
+        $data = DB::table('tbl_customers_wiredraw')
+        ->join('tbl_products_wiredraw', 'tbl_customers_wiredraw.intCustomerId', '=', 'tbl_products_wiredraw.intCustomerId')
         ->select('tbl_customers_wiredraw.strCustomerName','tbl_products_wiredraw.intProductId','tbl_products_wiredraw.strProductName','tbl_products_wiredraw.ftlWireSize','tbl_products_wiredraw.strSizeTolerance','tbl_products_wiredraw.strMPATolerance','tbl_products_wiredraw.intCustomerId')
         ->get();
         
