@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 {{-- Set the Title --}}
-@section('title', 'WireDraw Customers')
+@section('title', 'WireDraw Products')
 
 @php
     $includeMenu = true;
@@ -25,9 +25,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="newuserLabel">Create New Product</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close addProductclose" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="addProductDiv">
                     <!-- General error message will be displayed here if needed -->
                     <div id="general-error"></div>
 
@@ -53,14 +53,14 @@
                         <select class="form-select" type="text" id='intCustomerId'>
                             <option value="select" selected>Select CustomerName</option>
                             @foreach ($customers as $val)
-                                <option value="{{ $val->intCustomerId }}">{{ $val->strCustomerName }}</option>
+                                <option value="{{ $val->ID }}">{{ $val->Name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
                     <button type="button" id="savescustomername" class="btn btn-success">Save</button>
                 </div>
             </div>
@@ -129,6 +129,17 @@
                 });
             });
 
+            $('#addProductcloseBtn').click(function(){
+                $('#addProductDiv').find('span').hide();
+                $('#general-error').hide()
+                $('#addProductDiv').find('br').remove()
+            })
+
+            $('.addProductclose').click(function(){
+                $('#addProductDiv').find('span').hide();
+                $('#general-error').hide()
+                $('#addProductDiv').find('br').remove()
+            })
 
             var customers = {!! json_encode($customers) !!};
             console.log(customers)
@@ -212,7 +223,7 @@
                             // },
                             {
                                 dataField: 'intCustomerId',
-                                caption: 'State',
+                                caption: 'CustomerName',
                                 width: 125,
                                 lookup: {
                                     dataSource: customers,
@@ -222,7 +233,7 @@
                             },
                             {
                                 dataField: 'strProductName',
-                                caption: 'Name',
+                                caption: 'ProductName',
                                 dataType: 'string'
                             },
                             {

@@ -27,4 +27,8 @@ class StorePostWireDrawCustomerRequest extends FormRequest
             'strCustomerName'=>'required|max:50'
         ];
     }
+    public function messages()
+    {
+        return ['strCustomerName.required' => 'Customer name should be required'];
+    }
 }

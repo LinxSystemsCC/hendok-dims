@@ -16,7 +16,7 @@ class CreateTblProductsWireDrawTable extends Migration
         Schema::create('tbl_products_wiredraw', function (Blueprint $table) {
             $table->id('intProductId');
             $table->string('strProductName');
-            $table->string('ftlWireSize');
+            $table->float('ftlWireSize');
             $table->string('strSizeTolerance');
             $table->string('strMPATolerance');
             $table->integer('intCustomerId');

@@ -32,7 +32,7 @@
                     <!-- General error message will be displayed here if needed -->
                     <div id="general-error"></div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="addCustomerDiv">
                         <label class="control-label" for="strCustomerName"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer Name</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="strCustomerName"
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close">Close</button>
                     <button type="button" id="savescustomername" class="btn btn-success">Save</button>
                 </div>
             </div>
@@ -83,6 +83,17 @@
                     }
                 });
             });
+
+            $('#close').click(function () {
+                $('#addCustomerDiv').find('span').hide()
+                $('#general-error').hide()
+                $('#addCustomerDiv').find('br').remove()
+            })
+            $('.btn-close').click(function () {
+                $('#addCustomerDiv').find('span').hide()
+                $('#general-error').hide()
+                $('#addCustomerDiv').find('br').remove()
+            })
 
             $.ajax({
                 url: '{{ route('wire-draw.customers.get-customers') }}',
