@@ -34,7 +34,7 @@ class StorePostWireDrawStandsRequest extends FormRequest
         return [
             'strStandName' => 'Stand Name',
             'fltStandMass' => 'Stand Mass',
-            'intDepartmentId' => 'Department Name',
+            'intDepartmentId' => 'Department',
         ];
     }
 

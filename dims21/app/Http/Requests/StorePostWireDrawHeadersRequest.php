@@ -36,9 +36,9 @@ class StorePostWireDrawHeadersRequest extends FormRequest
     public function attributes()
     {
         return [
-            'intCustomerId' => 'Customer Name',
-            'intProductId' => 'Product Name',
-            'intWireDrawMachineId' => 'Wire Draw Machine',
+            'intCustomerId' => 'Customer',
+            'intProductId' => 'Product',
+            'intWireDrawMachineId' => 'Machine',
             'strType' => 'Type',
             'fltMassRequired' => 'Mass Required',
             'strReference' => 'Reference'

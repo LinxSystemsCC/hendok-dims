@@ -46,9 +46,9 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="Department ID"
-                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Select Department</label>
+                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
                         <select class="form-select" type="text" id='intDepartmentId'>
-                            <option value="" selected>Select DepartmentName</option>
+                            <option value="" selected>Select Department</option>
                             @foreach ($dept as $val)
                                 <option value="{{ $val-> dptID}}"> {{ $val->dptName }} </option>
                             @endforeach

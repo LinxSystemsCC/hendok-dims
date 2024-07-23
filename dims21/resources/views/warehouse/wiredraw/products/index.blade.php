@@ -48,9 +48,9 @@
                         <input type="text" class="form-control input-sm col-xs-1" id="strMPATolerance" name="strMPATolerance">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="Customer ID" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Select Customer</label>
+                        <label class="control-label" for="Customer ID" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
                         <select class="form-select" type="text" id='intCustomerId'>
-                            <option value="select" selected>Select CustomerName</option>
+                            <option value="" selected>Select Customer</option>
                             <!-- Assuming $customers is an array of objects containing ID and Name -->
                             @foreach ($customers as $val)
                                 <option value="{{ $val->ID }}">{{ $val->Name }}</option>
@@ -210,7 +210,6 @@
                             {
                                 dataField: 'intCustomerId',
                                 caption: 'CustomerName',
-                                width: 125,
                                 lookup: {
                                     dataSource: customers,
                                     displayExpr: 'Name',
@@ -250,7 +249,7 @@
                         },
                         onRowUpdated(e) {
                             // console.log(e);
-                            
+
                             var intProductId = e.data.intProductId
                             var strProductName = e.data.strProductName
                             var ftlWireSize = e.data.ftlWireSize

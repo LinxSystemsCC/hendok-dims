@@ -30,10 +30,7 @@ class StorePostWireDrawProductsRequest extends FormRequest
             'ftlWireSize' => 'required|numeric',
             'strSizeTolerance' => 'required|string|max:255',
             'strMPATolerance' => 'required|string|max:255',
-            'intCustomerId' => [
-                'required',
-                Rule::notIn(['select']),
-            ],
+            'intCustomerId' => ['required'],
         ];
 
     }
@@ -43,7 +40,7 @@ class StorePostWireDrawProductsRequest extends FormRequest
             'strProductName' => 'Product Name',
             'ftlWireSize' => 'Wire Size',
             'strSizeTolerance' => 'Size Tolerance',
-            'intCustomerId' => 'Customer Name',
+            'intCustomerId' => 'Customer',
             'strMPATolerance' => 'MPA Tolerance'
         ];
     }

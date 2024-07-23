@@ -69,7 +69,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog" aria-labelledby="createjob" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
@@ -100,9 +100,9 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="wiresize">Select Machine</label>
+                                <label class="col-form-label" for="wiresize">Machine</label>
                                 <select class="form-select" id="intWireDrawMachineId" required>
-                                    <option value="" selected>select Machine</option>
+                                    <option value="" selected>Select Machine</option>
                                     @foreach ($data as $val)
                                         <option value="{{ $val->intMachineID }}">{{ $val->strMachineName }}</option>
                                     @endforeach
@@ -163,7 +163,7 @@
                 theme: 'bootstrap-5',
                 dropdownParent: $('#createjob'),
             });
-            
+
 
             $('#strType').change(function() {
                 if ($('#strType').val() == 'internal') {
@@ -193,15 +193,12 @@
             });
 
             $('#wiredraw').click(function() {
-
-                $(this).prop("disabled", true);
                 var textbox = $('#strReference').val();
                 var intCustomerId = $('#intCustomerId').val();
                 length = textbox.length;
                 if ($('#strType').val() == 'internal') {
                     intCustomerId = 0;
                 }
-
                 $.ajax({
                     url: '{!! url('wire-draw/headers') !!}',
                     type: "POST",
@@ -278,6 +275,10 @@
                                 caption: "Reference",
                             },
                             {
+                                dataField: "strType",
+                                caption: "Type",
+                            },
+                            {
                                 dataField: "strCustomerName",
                                 caption: "Customer Name",
                             },
@@ -309,11 +310,6 @@
                                 dataField: "intNoOfStand",
                                 caption: "No Of Stands",
                             },
-                            {
-                                dataField: "strType",
-                                caption: "Type",
-                            }
-                            
                         ],
                         onRowDblClick: function(e) {
                             // Handle double click event here
