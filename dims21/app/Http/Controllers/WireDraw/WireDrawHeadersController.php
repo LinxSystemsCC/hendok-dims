@@ -24,7 +24,6 @@ class WireDrawHeadersController extends Controller
     public function store(StorePostWireDrawHeadersRequest $request)
     {
         $validated = $request->validated();
-        dd($validated);
         WireDrawHeaders::create([
             'intCustomerId' => $validated['intCustomerId'],
             'intProductId' => $validated['intProductId'],
