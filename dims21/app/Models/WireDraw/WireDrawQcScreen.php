@@ -16,7 +16,9 @@ class WireDrawQcScreen extends Model
         'intProductId',
         'intStand',
         'strTensileTicketNumber',
-        'strMpa',
-        'fltWireSize'
+        'strMPATolerance',
+        'fltWireSize',
+        'dtQCDateTime',
+        'intUserId'
     ];
 }

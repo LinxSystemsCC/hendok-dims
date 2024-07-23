@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostWireDrawQcRequest;
 use App\Models\WireDraw\WireDrawProduct;
 use App\Models\WireDraw\WireDrawQcScreen;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +21,7 @@ class WireDrawqcscreenController extends Controller
     public function getqc()
     {
         $data = DB::table('tblWireDrawHeaders')
-        ->join('tblCustomersWireDraw', 'tblWireDrawHeaders.intCustomerId', '=', 'tblCustomersWireDraw.intCustomerId')
+        ->leftJoin('tblCustomersWireDraw', 'tblWireDrawHeaders.intCustomerId', '=', 'tblCustomersWireDraw.intCustomerId')
         ->join('tblProductsWireDraw','tblWireDrawHeaders.intProductId','=','tblProductsWireDraw.intProductId')
         ->leftJoin('tblMachines','tblWireDrawHeaders.intWireDrawMachineId','=','tblMachines.intAutoMachineID')
         
@@ -36,14 +37,14 @@ class WireDrawqcscreenController extends Controller
     public function store(StorePostWireDrawQcRequest $request)
     {
         $validated = $request->validated();
-        
-        WireDrawQcScreen::create([
+        $testQC =WireDrawQcScreen::create([
             'intJobNumber' => $validated['intJobNumber'],
             'intProductId' => $validated['intProductId'],
             'fltWireSize' => $validated['fltWireSize'],
             'intStand' => $validated['intStand'],
             'strTensileTicketNumber' => $validated['strTensileTicketNumber'],
             'strMPATolerance' => $validated['strMPATolerance'],
+            'dtQCDateTime' => Carbon::now()->format('Y-m-d H:i:m'),
             'intUserId' => Auth::user()->UserID
         ]);
 

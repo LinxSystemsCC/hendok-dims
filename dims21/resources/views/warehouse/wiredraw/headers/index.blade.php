@@ -308,7 +308,12 @@
                             {
                                 dataField: "intNoOfStand",
                                 caption: "No Of Stands",
+                            },
+                            {
+                                dataField: "strType",
+                                caption: "Type",
                             }
+                            
                         ],
                         onRowDblClick: function(e) {
                             // Handle double click event here

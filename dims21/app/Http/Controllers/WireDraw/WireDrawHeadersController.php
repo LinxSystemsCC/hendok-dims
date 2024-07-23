@@ -48,7 +48,7 @@ class WireDrawHeadersController extends Controller
         
         ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName','tblWireDrawHeaders.intHeaderId',
         'tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd','tblWireDrawHeaders.dtDateStart','tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
-        'tblMachines.strMachineName','tblMachines.intAutoMachineID')
+        'tblMachines.strMachineName','tblMachines.intAutoMachineID','tblWireDrawHeaders.strType')
 
         ->get();
 

@@ -585,23 +585,6 @@ if ((Auth::guest()))
                 </li>
 			</ul>
 		</li>
-
-        <!-- Wiredraw -->
-        <li>
-			<!-- Fisrt Category -->
-            @if($inventory !="0")
-            <a class="firstmenu" id="7"><i class="fa fa-archive"></i>Wiredraw<span class="caret pull-down"></span>
-			</a>
-            @endif
-			<ul class="item-show-7">
-				<li>
-                    <!-- Second Category -->
-                    <a class="secondmenu" id="7a" href='{!!url("/wire-draw/headers")!!}'>Wiredraw Headers</a>
-                    <a class="secondmenu" id="7b" href='{!!url("/wire-draw/qcscreen")!!}'>QC Phase</a>
-                </li>
-			</ul>
-		</li>
-
         <!-- Setup -->
         <li>
 			<!-- Fisrt Category -->
@@ -777,7 +760,21 @@ if ((Auth::guest()))
 
 
                     </ul>
-
+                    <!-- Wiredraw -->
+                    <li>
+                        <!-- Fisrt Category -->
+                        @if ($inventory != '0')
+                            <a class="secondmenu" id="5d">Wiredraw<span class="caret pull-down"></span></a>
+                        @endif
+                        <ul class="item-show-5d">
+                            <li>
+                                <!-- Second Category -->
+                                <a href='{!! url('/wire-draw/headers') !!}'>Wiredraw Headers</a>
+                                <a href='{!! url('/wire-draw/qcscreen') !!}'>QC Phase</a>
+                                <a href='{!! url('/wire-draw/wireDrawWeight') !!}'>WireDrawWeight</a>
+                            </li>
+                        </ul>
+                    </li>
                     @if($setup !="0")
                     <a class="secondmenu" href='{!!url("/syncing")!!}'>Data Syncing</a>
                     @endif
