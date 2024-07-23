@@ -13,8 +13,9 @@ class WireDrawStandsController extends Controller
 {
     public function index()
     {
-        $dept = DB::table('tblDepartments')->select('intAutoID as dptID','strDeptName as dptName')->get();    
-        return view('warehouse.wiredraw.Stands.index')->with('dept',$dept);
+        $dept = DB::table('tblDepartments')->select('intAutoID as dptID','strDeptName as dptName')->get();
+
+        return view('warehouse.wiredraw.stands.index')->with('dept',$dept);
     }
 
     public function store(StorePostWireDrawStandsRequest $request)
@@ -34,8 +35,9 @@ class WireDrawStandsController extends Controller
         $data = DB::table('tblDepartments')
         ->join('tblStands', 'tblDepartments.intAutoID', '=', 'tblStands.intDepartmentId')
         ->select('tblDepartments.strDeptName','tblStands.intStandId','tblStands.strStandName','tblStands.fltStandMass','tblStands.intDepartmentId')
+        ->latest('intStandId')
         ->get();
-        
+
         return response()->json($data);
     }
     public function destroy(string $id)

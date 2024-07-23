@@ -25,7 +25,7 @@ class StorePostWireDrawStandsRequest extends FormRequest
     {
         return [
             'strStandName' => 'required',
-            'fltStandMass' => 'required',
+            'fltStandMass' => 'required|numeric',
             'intDepartmentId' => 'required',
         ];
     }

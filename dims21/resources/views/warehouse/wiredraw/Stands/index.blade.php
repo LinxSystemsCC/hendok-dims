@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 {{-- Set the Title --}}
-@section('title', 'WireDraw stands')
+@section('title', 'Stands')
 
 @php
     $includeMenu = true;
@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-lg-12 d-inline-flex">
-            <h3 style="flex-grow: 1; padding-left: 15px;">WireDraw stands</h3>
+            <h3 style="flex-grow: 1; padding-left: 15px;">Stands</h3>
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newstands">
                 New Stands
@@ -99,7 +99,7 @@
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {
-                            modalSetValidation($("#newcustomer"), xhr);
+                            modalSetValidation($("#newstands"), xhr);
                         } else {
                             console.error('An unexpected error occurred:', xhr);
                         }

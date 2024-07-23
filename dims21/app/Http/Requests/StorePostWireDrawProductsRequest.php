@@ -27,7 +27,7 @@ class StorePostWireDrawProductsRequest extends FormRequest
     {
         return [
             'strProductName' => 'required|string|max:255',
-            'ftlWireSize' => 'required|max:255',
+            'ftlWireSize' => 'required|numeric',
             'strSizeTolerance' => 'required|string|max:255',
             'strMPATolerance' => 'required|string|max:255',
             'intCustomerId' => [
@@ -35,7 +35,7 @@ class StorePostWireDrawProductsRequest extends FormRequest
                 Rule::notIn(['select']),
             ],
         ];
-        
+
     }
     public function attributes()
     {

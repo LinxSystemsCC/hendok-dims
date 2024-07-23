@@ -26,7 +26,7 @@ class StorePostWireDrawQcRequest extends FormRequest
         return [
             'intJobNumber' => 'required',
             'intProductId' => 'required',
-            'fltWireSize' => 'required',
+            'fltWireSize' => 'required|numeric',
             'intStand' => 'required',
             'strTensileTicketNumber' => 'required',
             'strMPATolerance' => 'required'

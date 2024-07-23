@@ -61,8 +61,9 @@ class WireDrawProductsController extends Controller
         $data = DB::table('tblCustomersWireDraw')
         ->join('tblProductsWireDraw', 'tblCustomersWireDraw.intCustomerId', '=', 'tblProductsWireDraw.intCustomerId')
         ->select('tblCustomersWireDraw.strCustomerName','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName','tblProductsWireDraw.ftlWireSize','tblProductsWireDraw.strSizeTolerance','tblProductsWireDraw.strMPATolerance','tblProductsWireDraw.intCustomerId')
+        ->latest('intProductId')
         ->get();
-        
+
         return response()->json($data);
     }
 }

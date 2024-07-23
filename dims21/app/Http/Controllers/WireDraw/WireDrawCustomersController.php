@@ -23,7 +23,9 @@ class WireDrawCustomersController extends Controller
     }
     public function getCustomerName()
     {
-        $customerNames = WireDrawCustomer::select('intCustomerId',	'strCustomerName')->get();
+        $customerNames = WireDrawCustomer::select('intCustomerId',	'strCustomerName')
+            ->latest('intCustomerId')
+            ->get();
 
         return response()->json($customerNames);
     }

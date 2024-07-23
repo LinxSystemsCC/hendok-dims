@@ -28,10 +28,10 @@ class StorePostWireDrawHeadersRequest extends FormRequest
             'intProductId'=>'required',
             'intWireDrawMachineId'=>'required',
             'strType'=>'required|max:255|string',
-            'fltMassRequired' => 'required',
+            'fltMassRequired' => 'required|numeric',
             'strReference' => 'required|max:255|string'
         ];
-        
+
     }
     public function attributes()
     {
