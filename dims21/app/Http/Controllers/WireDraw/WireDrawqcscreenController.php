@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\WireDraw;
 
 use App\Http\Controllers\Controller;
-use App\Models\WireDraw\WireDrawCustomer;
-use App\Models\WireDraw\WireDrawHeaders;
+use App\Http\Requests\StorePostWireDrawQcRequest;
 use App\Models\WireDraw\WireDrawProduct;
-use Illuminate\Http\Request;
+use App\Models\WireDraw\WireDrawQcScreen;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class WireDrawqcscreenController extends Controller
 {
@@ -18,17 +19,35 @@ class WireDrawqcscreenController extends Controller
 
     public function getqc()
     {
-        $customers = WireDrawCustomer::select('strCustomerName', 'intCustomerId')->get();
-        $products = WireDrawProduct::select('strProductName', 'intProductId')->get();
-        $data = DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines 10037, 'DepartmentMachines'");
-        $headers = WireDrawHeaders::select('intHeaderId', 'dtDateStart', 'dtDateEnd', 'strReference')->get();
+        $data = DB::table('tblWireDrawHeaders')
+        ->join('tblCustomersWireDraw', 'tblWireDrawHeaders.intCustomerId', '=', 'tblCustomersWireDraw.intCustomerId')
+        ->join('tblProductsWireDraw','tblWireDrawHeaders.intProductId','=','tblProductsWireDraw.intProductId')
+        ->leftJoin('tblMachines','tblWireDrawHeaders.intWireDrawMachineId','=','tblMachines.intAutoMachineID')
+        
+        ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName','tblWireDrawHeaders.intHeaderId',
+        'tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd','tblWireDrawHeaders.dtDateStart','tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
+        'tblMachines.strMachineName','tblMachines.intAutoMachineID')
 
-        $data = [
-            'headers' => $headers,
-            'customerName' => $customers,
-            'productName' => $products,
-            'machine' => $data,
-        ];
+        ->get();
+
         return response()->json($data);
     }
+
+    public function store(StorePostWireDrawQcRequest $request)
+    {
+        $validated = $request->validated();
+        
+        WireDrawQcScreen::create([
+            'intJobNumber' => $validated['intJobNumber'],
+            'intProductId' => $validated['intProductId'],
+            'fltWireSize' => $validated['fltWireSize'],
+            'intStand' => $validated['intStand'],
+            'strTensileTicketNumber' => $validated['strTensileTicketNumber'],
+            'strMPATolerance' => $validated['strMPATolerance'],
+            'intUserId' => Auth::user()->UserID
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
 }

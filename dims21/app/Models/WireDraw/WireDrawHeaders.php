@@ -9,7 +9,7 @@ class WireDrawHeaders extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbl_wire_draw_header_lines';
+    protected $table = 'tblWireDrawHeaders';
     protected $primaryKey = 'intHeaderId';
 
     protected $fillable = [
@@ -21,4 +21,5 @@ class WireDrawHeaders extends Model
         'strReference',
         'intUserId'
     ];
+    
 }

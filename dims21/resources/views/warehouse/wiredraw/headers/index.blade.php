@@ -69,9 +69,8 @@
                 </div>
             </div>
         </div>
-
-        <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog"
-            aria-labelledby="createjob" aria-hidden="true">
+        
+        <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog" aria-labelledby="createjob" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -86,7 +85,7 @@
                             <div class="col-md-6">
                                 <label class="col-form-label" for="department">Type</label>
                                 <select class="form-select" id="strType" required>
-                                    <option value="select" selected>Select Type</option>
+                                    <option value="" selected>Select Type</option>
                                     <option value="customer">Customer</option>
                                     <option value="internal">Internal</option>
                                 </select>
@@ -94,7 +93,7 @@
                             <div class="col-md-6">
                                 <label for="customers" class="col-form-label">Customer</label>
                                 <select class="form-select" type="text" id='intCustomerId'>
-                                    <option value="select" selected>Select Customer</option>
+                                    <option value="" selected>Select Customer</option>
                                     @foreach ($customers as $val)
                                         <option value="{{ $val->intCustomerId }}">{{ $val->strCustomerName }}</option>
                                     @endforeach
@@ -103,7 +102,7 @@
                             <div class="col-md-6">
                                 <label class="col-form-label" for="wiresize">Select Machine</label>
                                 <select class="form-select" id="intWireDrawMachineId" required>
-                                    <option value="select" selected>select Machine</option>
+                                    <option value="" selected>select Machine</option>
                                     @foreach ($data as $val)
                                         <option value="{{ $val->intMachineID }}">{{ $val->strMachineName }}</option>
                                     @endforeach
@@ -112,7 +111,7 @@
                             <div class="col-md-6">
                                 <label class="col-form-label" for="prodname">Product</label>
                                 <select class="form-select" id="intProductId" required>
-                                    <option value="select" selected>Select Product</option>
+                                    <option value="" selected>Select Product</option>
                                     @foreach ($products as $val)
                                         <option value="{{ $val->intProductId }}">{{ $val->strProductName }}</option>
                                     @endforeach
@@ -125,12 +124,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn btn-danger" id="saveGalvJob" style="width: 100%;">SAVE</button> --}}
-                        <button type="button" class="btn btn-secondary" data-bs-target="#createjob" data-bs-toggle="modal"
-                            id="cancelCreateJob">CANCEL</button>
-                        <button type="button" id="saveGalvJob" class="btn btn-success" data-bs-target="#createjob"
-                            data-bs-toggle="modal">SAVE</button>
+                        <button type="button" class="btn btn-secondary" data-bs-target="#createjob" data-bs-toggle="modal" id="cancelCreateJob">CANCEL</button>
+                        <button type="button" id="wiredraw" class="btn btn-success">SAVE</button>
                     </div>
                 </div>
             </div>
@@ -149,10 +144,26 @@
                 var len = max_length - $(this).val().length;
             });
 
-            $('#products').select2({
+            $('#intCustomerId').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#createjob'),
             });
+
+            $('#intProductId').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#createjob'),
+            });
+
+            $('#intWireDrawMachineId').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#createjob'),
+            });
+
+            $('#strType').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#createjob'),
+            });
+            
 
             $('#strType').change(function() {
                 if ($('#strType').val() == 'internal') {
@@ -162,72 +173,7 @@
                 }
             });
 
-            $('#prodname').change(function() {
-                $.ajax({
-
-                    url: '{!! url('/wmaxgetproductwiresize') !!}',
-                    type: "GET",
-                    data: {
-                        productId: $("#prodname").val()
-                    },
-                    success: function(data) {
-                        var toAppend = '';
-                        $("#wiresize").empty();
-                        $.each(data, function(i, o) {
-
-                            toAppend += '<option value="' + parseFloat(o.WireSize)
-                                .toFixed(2) + '">' + parseFloat(o.WireSize).toFixed(2) +
-                                '</option>';
-                        });
-
-                        $("#wiresize").append(toAppend);
-                        $("#wiresize").select2({
-                            theme: 'bootstrap-5',
-                            dropdownParent: $('#createjob'),
-                        });
-
-
-                    }
-                });
-            });
-
-            $('#department').change(function() {
-
-                $.ajax({
-
-                    url: '{!! url('/wmaxdepartmentmachinesgalv') !!}',
-                    type: "GET",
-                    data: {
-                        deptId: $('#department').val(),
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        var data = data.filter(function(item) {
-                            return item.strMachineName.includes("Take-Up");
-                        });
-
-                        var toAppend = '';
-                        $("#strMachineName").empty();
-                        toAppend += '<option value="None"></option>';
-                        $.each(data, function(i, o) {
-
-                            toAppend += '<option value="' + o.intWireDrawMachineId +
-                                '">' + o
-                                .strMachineName + '</option>';
-                        });
-                        $("#strMachineName").append(toAppend);
-                        $("#strMachineName").select2({
-                            theme: 'bootstrap-5',
-                            dropdownParent: $('#createjob'),
-                        });
-
-                    }
-
-                });
-            });
-
             $('#completesave').click(function() {
-
                 var selectedItem = $("#gridWorkInProgress").dxDataGrid("instance").getSelectedRowsData()[0];
                 var JobId = selectedItem.JobNo;
                 // console.log(JobId);
@@ -246,7 +192,7 @@
                 });
             });
 
-            $('#saveGalvJob').click(function() {
+            $('#wiredraw').click(function() {
 
                 $(this).prop("disabled", true);
                 var textbox = $('#strReference').val();
@@ -272,6 +218,13 @@
                             location.reload();
                         }
                     },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            modalSetValidation($("#createjob"), xhr);
+                        } else {
+                            console.error('An unexpected error occurred:', xhr);
+                        }
+                    }
                 });
 
             });
@@ -285,7 +238,7 @@
                 type: "GET",
                 success: function(data) {
                     const gridWorkInProgress = $("#gridWorkInProgress").dxDataGrid({
-                        dataSource: data.headers,
+                        dataSource: data,
                         hoverStateEnabled: true,
                         showBorders: true,
                         filterRow: {
@@ -349,11 +302,11 @@
                                 caption: "Mass Required",
                             },
                             {
-                                dataField: "intMassProduced",
+                                dataField: "fltMassProduced",
                                 caption: "Mass Produced",
                             },
                             {
-                                dataField: "intNoOfStands",
+                                dataField: "intNoOfStand",
                                 caption: "No Of Stands",
                             }
                         ],
@@ -387,11 +340,54 @@
                 }
             });
 
-            getWorkInProgress();
-            getShiftData();
+            const gridShiftData = $("#gridShiftData").dxDataGrid({
+                dataSource: [], //as json
+                hoverStateEnabled: true,
+                showBorders: true,
+                allowColumnResizing: true,
+                columnAutoWidth: true,
+                scrolling: {
+                    rowRenderingMode: 'infinite',
+                },
+                selection: {
+                    mode: 'single',
+                },
+
+                columns: [{
+                        dataField: "MachineName",
+                        caption: "Machine Group",
+                        //width: 80,
+
+                    }, {
+                        dataField: "DayWeight",
+                        caption: "Day Shift Weights",
+                        //width: 100,
+
+                    },
+                    {
+                        dataField: "NightWeight",
+                        caption: "Night Shift Weights",
+                        //width: 250,
+
+                    },
+                    {
+                        dataField: "DayCount",
+                        caption: "Day Shift Holds",
+                        //width: 300,
+
+                    },
+                    {
+                        dataField: "NightCount",
+                        caption: "Night Shift Holds",
+                        //width: 600,
+
+                    },
+                ]
+
+            }).dxDataGrid('instance');
 
             function getWorkInProgress() {
-                $('#saveGalvJob').prop("disabled", false);
+                $('#wiredraw').prop("disabled", false);
 
                 $.ajax({
                     url: '{!! url('/getGalvWIP') !!}',
@@ -416,6 +412,20 @@
                 window.open('{!! url('/galvQCJobCard') !!}/' + JobNo, "_blank",
                     "location=1,status=1,scrollbars=1, width=1200,height=850");
             });
+
+            function getShiftData() {
+                $.ajax({
+                    url: '{!! url('/getGalvWIPConsolidated') !!}',
+                    type: "GET",
+                    success: function(data) {
+                        gridShiftData.option('dataSource', data);
+                        gridShiftData.refresh();
+
+                        gridData = gridShiftData.option("dataSource");
+                    },
+
+                });
+            };
 
             doacheck();
 

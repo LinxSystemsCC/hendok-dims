@@ -9,6 +9,7 @@ use App\Models\WireDraw\WireDrawCustomer;
 use App\Models\WireDraw\WireDrawProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class WireDrawHeadersController extends Controller
 {
@@ -23,7 +24,7 @@ class WireDrawHeadersController extends Controller
     public function store(StorePostWireDrawHeadersRequest $request)
     {
         $validated = $request->validated();
-
+        dd($validated);
         WireDrawHeaders::create([
             'intCustomerId' => $validated['intCustomerId'],
             'intProductId' => $validated['intProductId'],
@@ -39,21 +40,24 @@ class WireDrawHeadersController extends Controller
 
     public function getheaders()
     {
-        $headers = WireDrawHeaders::all();
 
-        $customerName = DB::table('tbl_customers_wiredraw')->join('tbl_wire_draw_header_lines', 'tbl_customers_wiredraw.intCustomerId', '=', 'tbl_wire_draw_header_lines.intCustomerId')->select('tbl_customers_wiredraw.strCustomerName')->get();
+        $data = DB::table('tblWireDrawHeaders')
+        ->leftJoin('tblCustomersWireDraw', 'tblWireDrawHeaders.intCustomerId', '=', 'tblCustomersWireDraw.intCustomerId')
+        ->join('tblProductsWireDraw','tblWireDrawHeaders.intProductId','=','tblProductsWireDraw.intProductId')
+        ->leftJoin('tblMachines','tblWireDrawHeaders.intWireDrawMachineId','=','tblMachines.intAutoMachineID')
+        
+        ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName','tblWireDrawHeaders.intHeaderId',
+        'tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd','tblWireDrawHeaders.dtDateStart','tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
+        'tblMachines.strMachineName','tblMachines.intAutoMachineID')
 
-        $productName = DB::table('tbl_products_wiredraw')->join('tbl_wire_draw_header_lines', 'tbl_products_wiredraw.intProductId', '=', 'tbl_wire_draw_header_lines.intProductId')->select('tbl_products_wiredraw.strProductName')->get();
-
-        $machine = DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines 10037, 'DepartmentMachines'");
-
-        $data = [
-            'headers' => $headers,
-            'customerName' => $customerName,
-            'productName' => $productName,
-            'machine' => $machine,
-        ];
+        ->get();
 
         return response()->json($data);
     }
+
+    public function changeWireDrawJobStatus(Request $request){
+        $JobId = $request->get("JobId");
+    }
 }
+
+

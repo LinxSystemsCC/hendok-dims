@@ -15,7 +15,7 @@ function modalSetValidation(modal, xhr)
     let errors = xhr.responseJSON.errors;
     for (let key in errors) {
         if (errors.hasOwnProperty(key)) {
-            $('#' + key).after(`
+            $('#' + key).parents("div:first").append(`
                 <span class="error-message text-danger errorClass">${errors[key][0]}</span>
             `);
         }

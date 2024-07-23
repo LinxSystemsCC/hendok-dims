@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-12 d-inline-flex">
             <h3 style="flex-grow: 1; padding-left: 15px;">Wiredraw Products</h3>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newproduct">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newproduct" id="#newproduct">
                 New Products
             </button>
         </div>
@@ -25,38 +25,30 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="newuserLabel">Create New Product</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close closeicon" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="addProductDiv">
                     <!-- General error message will be displayed here if needed -->
                     <div id="general-error"></div>
 
                     <div class="form-group">
-                        <label class="control-label" for="productname"
-                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="strProductName"
-                            name="strProductName">
+                        <label class="control-label" for="productname" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name</label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="strProductName" name="strProductName">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="wiresize"
-                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size</label>
+                        <label class="control-label" for="wiresize" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="ftlWireSize" name="ftlWireSize">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="sizetolerance"
-                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Size Tolerance</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="strSizeTolerance"
-                            name="strSizeTolerance">
+                        <label class="control-label" for="sizetolerance" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Size Tolerance</label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="strSizeTolerance" name="strSizeTolerance">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="MPATolerance"
-                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Tolerance</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="strMPATolerance"
-                            name="strMPATolerance">
+                        <label class="control-label" for="MPATolerance" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Tolerance</label>
+                        <input type="text" class="form-control input-sm col-xs-1" id="strMPATolerance" name="strMPATolerance">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="Customer ID"
-                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Select Customer</label>
+                        <label class="control-label" for="Customer ID" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Select Customer</label>
                         <select class="form-select" type="text" id='intCustomerId'>
                             <option value="select" selected>Select CustomerName</option>
                             <!-- Assuming $customers is an array of objects containing ID and Name -->
@@ -68,38 +60,12 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Ensure the button has the correct classes and IDs -->
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        id="addProductcloseBtn">Close</button>
-                    <button type="button" id="savescustomername" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
+                    <button type="button" id="savesProductName" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
     </div>
-
-
-    <div class="modal fade" id="assignPrinter" tabindex="-1" aria-labelledby="assignPrinterLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="assignPrinterLabel">Assigned Printers</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div id="checkboxContainer">
-
-                        </div>
-                        <input id='userId' hidden>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="updatePrinters" class="btn btn-success">Update</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @section('scripts')
@@ -113,9 +79,17 @@
         $(document).on('focus', ':input', function() {
             $(this).attr('autocomplete', 'off');
         });
+
+        $('#intCustomerId').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#newproduct'),
+        });
+
+
+
         $(document).ready(function() {
 
-            $('#savescustomername').click(function() {
+            $('#savesProductName').click(function() {
                 $.ajax({
                     url: '{{ route('wire-draw.products.index') }}',
                     type: "POST",
@@ -145,6 +119,10 @@
             })
 
             $('.addProductclose').click(function() {
+                $('#addProductDiv').find('.errorClass').hide();
+                $('#general-error').hide()
+            })
+            $('.closeicon').click(function() {
                 $('#addProductDiv').find('.errorClass').hide();
                 $('#general-error').hide()
             })
@@ -272,7 +250,7 @@
                         },
                         onRowUpdated(e) {
                             // console.log(e);
-
+                            
                             var intProductId = e.data.intProductId
                             var strProductName = e.data.strProductName
                             var ftlWireSize = e.data.ftlWireSize

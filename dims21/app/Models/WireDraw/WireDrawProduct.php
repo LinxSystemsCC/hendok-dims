@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class WireDrawProduct extends Model
 {
     use HasFactory;
-    protected $table = 'tbl_products_wiredraw';
+    protected $table = 'tblProductsWireDraw';
     protected $primaryKey = 'intProductId';
 
     protected $fillable = [

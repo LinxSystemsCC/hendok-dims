@@ -30,7 +30,18 @@ class StorePostWireDrawHeadersRequest extends FormRequest
             'strType'=>'required|max:255|string',
             'fltMassRequired' => 'required',
             'strReference' => 'required|max:255|string'
-
+        ];
+        
+    }
+    public function attributes()
+    {
+        return [
+            'intCustomerId' => 'Customer Name',
+            'intProductId' => 'Product Name',
+            'intWireDrawMachineId' => 'Wire Draw Machine',
+            'strType' => 'Type',
+            'fltMassRequired' => 'Mass Required',
+            'strReference' => 'Reference'
         ];
     }
 }

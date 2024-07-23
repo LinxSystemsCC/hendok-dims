@@ -58,9 +58,9 @@ class WireDrawProductsController extends Controller
 
     public function getProductsName()
     {
-        $data = DB::table('tbl_customers_wiredraw')
-        ->join('tbl_products_wiredraw', 'tbl_customers_wiredraw.intCustomerId', '=', 'tbl_products_wiredraw.intCustomerId')
-        ->select('tbl_customers_wiredraw.strCustomerName','tbl_products_wiredraw.intProductId','tbl_products_wiredraw.strProductName','tbl_products_wiredraw.ftlWireSize','tbl_products_wiredraw.strSizeTolerance','tbl_products_wiredraw.strMPATolerance','tbl_products_wiredraw.intCustomerId')
+        $data = DB::table('tblCustomersWireDraw')
+        ->join('tblProductsWireDraw', 'tblCustomersWireDraw.intCustomerId', '=', 'tblProductsWireDraw.intCustomerId')
+        ->select('tblCustomersWireDraw.strCustomerName','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName','tblProductsWireDraw.ftlWireSize','tblProductsWireDraw.strSizeTolerance','tblProductsWireDraw.strMPATolerance','tblProductsWireDraw.intCustomerId')
         ->get();
         
         return response()->json($data);

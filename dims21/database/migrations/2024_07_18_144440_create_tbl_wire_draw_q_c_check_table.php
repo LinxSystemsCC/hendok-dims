@@ -18,7 +18,7 @@ class CreateTblWireDrawQCCheckTable extends Migration
             $table->integer('intJobNumber');
             $table->integer('intProductId');
             $table->integer('intStand');
-            $table->integer('intTensileTicketNumber');
+            $table->string('strTensileTicketNumber');
             $table->string('strMpa');
             $table->datetime('dtQCDateTime');
             $table->float('fltWireSize');
