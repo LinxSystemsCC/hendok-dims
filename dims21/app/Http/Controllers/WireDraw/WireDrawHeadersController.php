@@ -17,9 +17,15 @@ class WireDrawHeadersController extends Controller
     {
         $customers = WireDrawCustomer::select('strCustomerName', 'intCustomerId')->get();
         $products = WireDrawProduct::select('strProductName', 'intProductId')->get();
-        $data = DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines 10037, 'DepartmentMachines'");
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments Where strDeptName in ('Wire Draw')");
+        $wireDrawDepartmentId = 0;
+        if (isset($dept[0]->intAutoID)) {
+            $wireDrawDepartmentId = $dept[0]->intAutoID;
+        }
+        $machines = DB::connection('sqlsrv2')
+            ->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $wireDrawDepartmentId, 'DepartmentMachines'");
 
-        return view('warehouse.wiredraw.headers.index')->with('customers', $customers)->with('products', $products)->with('data', $data);
+        return view('warehouse.wiredraw.headers.index', compact('customers', 'products', 'machines'));
     }
     public function store(StorePostWireDrawHeadersRequest $request)
     {

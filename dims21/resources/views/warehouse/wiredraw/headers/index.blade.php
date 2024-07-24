@@ -3,8 +3,6 @@
 {{-- Set the Title --}}
 @section('title', 'Wiredraw Headers')
 
-
-
 {{-- Set to show navbar --}}
 @php
     if (Auth::guest()) {
@@ -12,36 +10,23 @@
         $v = new \App\Http\Controllers\SalesForm();
         $nwo = $v->getThingsUserPermissions(Auth::user()->UserID, 'New Work Order');
     }
-
     $includeMenu = true;
-
 @endphp
 
 @section('page')
-
-    <style>
-        #grid {
-            height: calc(100vh - 2rem);
-            max-height: calc(100vh - 2rem);
-        }
-    </style>
-
-
     <div class="col-12 h-100" style="display: flex; flex-direction: column;">
-        <div class="col-12" id="tabs">
+        <div class="col-12 mb-2" id="tabs">
             @if ($nwo != '0')
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createjob">
                     Create Job
                 </button>
             @endif
-
             @if ($nwo != '0')
                 <button type="button" id="completejob" class="btn btn-success" data-bs-toggle="modal"
                     data-bs-target="#finalisejob" disabled>
                     Complete Job
                 </button>
             @endif
-
             @if ($nwo != '0')
                 <button type="button" id="jobCard" class="btn btn-success" disabled>
                     QC Job Card
@@ -70,7 +55,8 @@
             </div>
         </div>
 
-        <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog" aria-labelledby="createjob" aria-hidden="true">
+        <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog"
+            aria-labelledby="createjob" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -84,7 +70,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="col-form-label" for="department">Type</label>
-                                <select class="form-select" id="strType" required>
+                                <select class="form-select dims-select2" id="strType" required>
                                     <option value="" selected>Select Type</option>
                                     <option value="customer">Customer</option>
                                     <option value="internal">Internal</option>
@@ -92,7 +78,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="customers" class="col-form-label">Customer</label>
-                                <select class="form-select" type="text" id='intCustomerId'>
+                                <select class="form-select dims-select2" type="text" id='intCustomerId'>
                                     <option value="" selected>Select Customer</option>
                                     @foreach ($customers as $val)
                                         <option value="{{ $val->intCustomerId }}">{{ $val->strCustomerName }}</option>
@@ -101,16 +87,16 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="col-form-label" for="wiresize">Machine</label>
-                                <select class="form-select" id="intWireDrawMachineId" required>
+                                <select class="form-select dims-select2" id="intWireDrawMachineId" required>
                                     <option value="" selected>Select Machine</option>
-                                    @foreach ($data as $val)
+                                    @foreach ($machines as $val)
                                         <option value="{{ $val->intMachineID }}">{{ $val->strMachineName }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="col-form-label" for="prodname">Product</label>
-                                <select class="form-select" id="intProductId" required>
+                                <select class="form-select dims-select2" id="intProductId" required>
                                     <option value="" selected>Select Product</option>
                                     @foreach ($products as $val)
                                         <option value="{{ $val->intProductId }}">{{ $val->strProductName }}</option>
@@ -124,7 +110,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-target="#createjob" data-bs-toggle="modal" id="cancelCreateJob">CANCEL</button>
+                        <button type="button" class="btn btn-secondary" data-bs-target="#createjob" data-bs-toggle="modal"
+                            id="cancelCreateJob">
+                            CANCEL
+                        </button>
                         <button type="button" id="wiredraw" class="btn btn-success">SAVE</button>
                     </div>
                 </div>
@@ -132,44 +121,21 @@
 
         </div>
     </div>
-
 @endsection
 
 @section('scripts')
-
     <script>
         $(document).ready(function() {
-            var max_length = 15;
-            $('#reference').keyup(function() {
-                var len = max_length - $(this).val().length;
-            });
-
-            $('#intCustomerId').select2({
+            $('.dims-select2').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#createjob'),
             });
-
-            $('#intProductId').select2({
-                theme: 'bootstrap-5',
-                dropdownParent: $('#createjob'),
-            });
-
-            $('#intWireDrawMachineId').select2({
-                theme: 'bootstrap-5',
-                dropdownParent: $('#createjob'),
-            });
-
-            $('#strType').select2({
-                theme: 'bootstrap-5',
-                dropdownParent: $('#createjob'),
-            });
-
 
             $('#strType').change(function() {
                 if ($('#strType').val() == 'internal') {
-                    $('#intCustomerId').attr('disabled', true)
+                    $('#intCustomerId').attr('disabled', true);
                 } else {
-                    $('#intCustomerId').attr('disabled', false)
+                    $('#intCustomerId').attr('disabled', false);
                 }
             });
 
@@ -227,9 +193,6 @@
             });
 
             var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
-            var customers = {!! json_encode($customers) !!};
-            console.log(customers);
-
             $.ajax({
                 url: '{{ route('wire-draw.headers.get-headers') }}',
                 type: "GET",
