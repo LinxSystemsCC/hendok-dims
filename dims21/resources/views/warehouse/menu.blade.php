@@ -248,6 +248,22 @@ if ((Auth::guest()))
 
                     </ul>
 
+                    <!-- Wiredraw -->
+                    <li>
+                        <!-- Fisrt Category -->
+                        @if ($inventory != '0')
+                            <a class="secondmenu" id="1m"><i class="fa mi-roof"></i>Wire Draw<span class="caret pull-down"></span></a>
+                        @endif
+                        <ul class="item-show-1m">
+                            <li>
+                                <!-- Second Category -->
+                                <a href='{!! url('/wire-draw/headers') !!}'>Headers</a>
+                                <a href='{!! url('/wire-draw/qcscreen') !!}'>QC Phase</a>
+                                <a href='{!! url('/wire-draw/weight') !!}'>Weigh</a>
+                            </li>
+                        </ul>
+                    </li>
+
                     @if($roof !="0")
                     <a class="secondmenu" id="1c"><i class="fa mi-roof"></i>Roofing<span class="caret pull-down"></span>
                     </a>
@@ -760,21 +776,6 @@ if ((Auth::guest()))
 
 
                     </ul>
-                    <!-- Wiredraw -->
-                    <li>
-                        <!-- Fisrt Category -->
-                        @if ($inventory != '0')
-                            <a class="secondmenu" id="5d">Wiredraw<span class="caret pull-down"></span></a>
-                        @endif
-                        <ul class="item-show-5d">
-                            <li>
-                                <!-- Second Category -->
-                                <a href='{!! url('/wire-draw/headers') !!}'>Wiredraw Headers</a>
-                                <a href='{!! url('/wire-draw/qcscreen') !!}'>QC Phase</a>
-                                <a href='{!! url('/wire-draw/wireDrawWeight') !!}'>WireDrawWeight</a>
-                            </li>
-                        </ul>
-                    </li>
                     @if($setup !="0")
                     <a class="secondmenu" href='{!!url("/syncing")!!}'>Data Syncing</a>
                     @endif

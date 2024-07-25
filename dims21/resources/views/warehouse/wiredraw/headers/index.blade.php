@@ -21,17 +21,14 @@
                     Create Job
                 </button>
             @endif
+
             @if ($nwo != '0')
                 <button type="button" id="completejob" class="btn btn-success" data-bs-toggle="modal"
                     data-bs-target="#finalisejob" disabled>
                     Complete Job
                 </button>
             @endif
-            @if ($nwo != '0')
-                <button type="button" id="jobCard" class="btn btn-success" disabled>
-                    QC Job Card
-                </button>
-            @endif
+            
         </div>
 
         <div id="gridWorkInProgress" style="width: 100% !important; flex-grow: 1;"></div>

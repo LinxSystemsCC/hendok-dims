@@ -42,7 +42,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-1">
                             <label class="col-form-label" for="stripmass">Job Number</label>
-                            <input type="number"  class="form-control" id="intJobNumber" required disabled>
+                            <input type="text"  class="form-control" id="intJobNumber" required disabled>
                         </div>
 
                         <div class="col-md-6 mb-1">
@@ -52,7 +52,7 @@
 
                         <div class="col-md-6 mb-1">
                             <label class="col-form-label" for="zinc">Stand #</label>
-                            <input type="number" class="form-control" id="intStand" required>
+                            <input type="text" class="form-control" id="intStand" required disabled>
                         </div>
                         <div class="col-md-6 mb-1">
                             <label class="col-form-label" for="wiresize">Tensile Ticket Number</label>
@@ -72,7 +72,7 @@
                         <div class="modal-footer">
                             <div class="d-inline-flex gap-2">
                                 <button class="btn btn-success" id="save">Save</button>
-                                <button class="btn btn-danger" id="testfail">cancel</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
                             </div>
                         </div>
                     </div>
@@ -153,7 +153,7 @@
                                     e.cancel = true;
                                 },
                                 columns: [{
-                                        dataField: "intHeaderId",
+                                        dataField: "intHeaderIdcustom",
                                         caption: "Job No"
                                     },
                                     {
@@ -190,11 +190,13 @@
                                     var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
                                     var selectedRowsData = dataGrid.getSelectedRowsData();
                                     if (selectedRowsData.length > 0) {
-                                        var ProductName = selectedRowsData[0].strProductName;
-                                        var HeaderId = selectedRowsData[0].intHeaderId;
+                                        var productName = selectedRowsData[0].strProductName;
+                                        var headerId = selectedRowsData[0].intHeaderIdcustom;
+                                        var stand = selectedRowsData[0].intNoOfStand;
 
-                                        $('#intProductId').val(ProductName);
-                                        $('#intJobNumber').val(HeaderId);
+                                        $('#intProductId').val(productName);
+                                        $('#intJobNumber').val(headerId);
+                                        $('#intStand').val(stand);
                                     }
                                 },
                                 onToolbarPreparing: function(e) {
@@ -214,7 +216,7 @@
                         $(this).prop("disabled", true);
                         var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
                         var selectedRowsData = dataGrid.getSelectedRowsData();
-
+                        console.log(selectedRowsData[0]);
                         $.ajax({
                             url: '{!! url('wire-draw/qcscreen') !!}',
                             type: "POST",

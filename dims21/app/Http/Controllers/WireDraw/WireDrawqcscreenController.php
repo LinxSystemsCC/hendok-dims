@@ -25,8 +25,8 @@ class WireDrawqcscreenController extends Controller
         ->join('tblProductsWireDraw','tblWireDrawHeaders.intProductId','=','tblProductsWireDraw.intProductId')
         ->leftJoin('tblMachines','tblWireDrawHeaders.intWireDrawMachineId','=','tblMachines.intAutoMachineID')
 
-        ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName',DB::raw("CONCAT('WD', tblWireDrawHeaders.intHeaderId) AS intHeaderId"),
-        'tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd','tblWireDrawHeaders.dtDateStart','tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
+        ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName',DB::raw("CONCAT('WD', tblWireDrawHeaders.intHeaderId) AS intHeaderIdcustom"),
+        'tblWireDrawHeaders.intHeaderId','tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd','tblWireDrawHeaders.dtDateStart','tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
         'tblMachines.strMachineName','tblMachines.intAutoMachineID')
 
         ->get();

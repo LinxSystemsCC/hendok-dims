@@ -146,7 +146,7 @@
         .loader__element:nth-child(3) {
             animation: preloader .6s ease-in-out alternate .4s infinite;
         }
-
+        
         @keyframes preloader {
             100% { transform: scale(1.3); }
         }
@@ -170,7 +170,7 @@
                     @include('warehouse.menu')
                 </div>
             </div>
-            <div class="col-custom-10 p-3" >
+            <div class="col-custom-10 p-3 w-100 ms-2 me-2" >
                 @yield('page')
             </div>
         @else
