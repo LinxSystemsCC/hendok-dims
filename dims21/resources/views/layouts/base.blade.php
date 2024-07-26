@@ -29,6 +29,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('public/css/all.min.css') }}"/>
 
+    <link rel="stylesheet" href="{{ asset('public/css/general.css') }}"/>
+
     <!-- Excel -->
     <script src="{{ asset('public/js/exceljs.min.js') }}"></script>
 
@@ -225,6 +227,13 @@
     $('nav ul li').click(function(){
         $(this).addClass("active").siblings().removeClass("active");
     });
+
+    $(document).ajaxStart(function() {
+        $('#overlay').removeAttr('hidden');
+    }).ajaxStop(function() {
+        $('#overlay').attr('hidden', '');
+    });
+    
 </script>
 
 @yield('scripts')

@@ -31,23 +31,23 @@
                     <!-- General error message will be displayed here if needed -->
                     <div id="general-error"></div>
 
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label class="control-label" for="productname" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="strProductName" name="strProductName">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label class="control-label" for="wiresize" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="ftlWireSize" name="ftlWireSize">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label class="control-label" for="sizetolerance" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Size Tolerance</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="strSizeTolerance" name="strSizeTolerance">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label class="control-label" for="MPATolerance" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Tolerance</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="strMPATolerance" name="strMPATolerance">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label class="control-label" for="Customer ID" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
                         <select class="form-select" type="text" id='intCustomerId'>
                             <option value="" selected>Select Customer</option>
@@ -84,8 +84,6 @@
             theme: 'bootstrap-5',
             dropdownParent: $('#newproduct'),
         });
-
-
 
         $(document).ready(function() {
 

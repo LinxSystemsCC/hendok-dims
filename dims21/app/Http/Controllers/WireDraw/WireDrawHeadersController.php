@@ -57,10 +57,11 @@ class WireDrawHeadersController extends Controller
         
 
         ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName',DB::raw("CONCAT('WD', tblWireDrawHeaders.intHeaderId) AS intHeaderId"),
-        'tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd','tblWireDrawHeaders.dtDateStart','tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
+        'tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd',DB::raw("FORMAT(tblWireDrawHeaders.dtDateStart, 'yyyy-MM-dd HH:mm:ss') as dtDateStart"),'tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
         'tblMachines.strMachineName','tblMachines.intAutoMachineID','tblWireDrawHeaders.strType')
         ->where('strJobStatus','=','Pending')
         ->orWhere('strJobStatus','=','Inprocess')
+        
 
         ->get();
 

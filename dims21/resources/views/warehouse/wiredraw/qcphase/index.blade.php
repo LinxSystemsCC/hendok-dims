@@ -34,14 +34,15 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="qc1TestTitle"></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="CloseModal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="CloseModal"></button>
                 </div>
 
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 mb-1">
                             <label class="col-form-label" for="stripmass">Job Number</label>
-                            <input type="text"  class="form-control" id="intJobNumber" required disabled>
+                            <input type="text" class="form-control" id="intJobNumber" required disabled>
                         </div>
 
                         <div class="col-md-6 mb-1">
@@ -68,10 +69,11 @@
                             <input type="number" class="form-control" id="fltWireSize" required>
                         </div>
 
-                        <div class="modal-footer">
+                        <div class="modal-footer mt-2">
                             <div class="d-inline-flex gap-2">
                                 <button class="btn btn-success" id="save">Save</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    id="addProductcloseBtn">Close</button>
                             </div>
                         </div>
                     </div>
@@ -101,7 +103,7 @@
                     // Clear inputs and selects within the modal
                     $("#saveQcData").on("hidden.bs.modal", function() {
                         $("#saveQcData input, #saveQcData select").val("");
-                    });
+                    })
 
                     $.ajax({
                         url: '{{ route('wire-draw.qcscreen.get-qcscreen') }}',
@@ -222,10 +224,10 @@
                             data: {
                                 intJobNumber: selectedRowsData[0].intHeaderId,
                                 intProductId: selectedRowsData[0].intProductId,
-                                fltWireSize : $('#fltWireSize').val(),
-                                intStand : $('#intStand').val(),
-                                strTensileTicketNumber : $('#strTensileTicketNumber').val(),
-                                strMPATolerance : $('#strMPATolerance').val(),
+                                fltWireSize: $('#fltWireSize').val(),
+                                intStand: $('#intStand').val(),
+                                strTensileTicketNumber: $('#strTensileTicketNumber').val(),
+                                strMPATolerance: $('#strMPATolerance').val(),
                             },
                             success: function(data) {
                                 location.reload();
@@ -239,55 +241,6 @@
                             }
                         });
                     });
-            
-                    function getQc1Data() {
-                        $('#save').prop("disabled", false);
-                        $('#testfail').prop("disabled", false);
-                        $.ajax({
-                            url: '{!! url('/getqc1') !!}',
-                            type: "GET",
-                            data: {
-
-                            },
-                            success: function(data) {
-                                gridQcPhase1.option('dataSource', data);
-                                gridQcPhase1.refresh();
-
-                                gridData = gridQcPhase1.option("dataSource");
-                            }
-                        });
-                    }
-
-                    doacheck();
-
-                    function doacheck() {
-                        setInterval(checkforchanges, 10000);
-                    };
-
-                    function checkforchanges() {
-                        $.ajax({
-                            url: '{!! url('/checkForGalvUpdates') !!}',
-                            type: "GET",
-                            data: {
-                                checker: "QC1",
-                            },
-                            success: function(data) {
-                                // console.log(data[0].Result);
-                                if (data[0].Result == "Reload") {
-                                    $.ajax({
-                                        url: '{!! url('/deleteGalvChecker') !!}',
-                                        type: "GET",
-                                        data: {
-                                            checker: "QC1",
-                                        },
-                                        success: function(data) {
-                                            getQc1Data();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    };
                 });
             </script>
 

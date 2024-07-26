@@ -138,7 +138,7 @@
 
             $('#completesave').click(function() {
                 var selectedItem = $("#gridWorkInProgress").dxDataGrid("instance").getSelectedRowsData()[0];
-                var intHeaderId = selectedItem.intHeaderId; 
+                var intHeaderId = selectedItem.intHeaderId;
 
                 var jobId = intHeaderId.replace('WD', '');
                 var parsedJobId = parseInt(jobId);
@@ -155,8 +155,6 @@
                         if (data.success) {
                             location.reload();
                         }
-                        //getWorkInProgress();
-                        //getShiftData();
                     }
                 });
             });
@@ -266,15 +264,15 @@
                             },
                             {
                                 dataField: "fltMassRequired",
-                                caption: "Mass Required",
+                                caption: "Required",
                             },
                             {
                                 dataField: "fltMassProduced",
-                                caption: "Mass Produced",
+                                caption: "Produced",
                             },
                             {
                                 dataField: "intNoOfStand",
-                                caption: "No Of Stands",
+                                caption: "Stands",
                             },
                         ],
                         onRowDblClick: function(e) {
@@ -288,7 +286,6 @@
                                 currentSelectedRow = [];
                                 e.component.clearSelection();
                                 $("#completejob").prop("disabled", true);
-                                $("#jobCard").prop("disabled", true);
                             } else {
                                 currentSelectedRow = [];
                                 currentSelectedRow.push(clickedID);
@@ -300,136 +297,11 @@
                                     "? \nTHE JOB WILL NO LONGER BE ACCESSIBLE ANYMORE"
                                 );
                                 $("#completejob").prop("disabled", false);
-                                $("#jobCard").prop("disabled", false);
                             }
                         },
                     }).dxDataGrid('instance');
                 }
             });
-
-            const gridShiftData = $("#gridShiftData").dxDataGrid({
-                dataSource: [], //as json
-                hoverStateEnabled: true,
-                showBorders: true,
-                allowColumnResizing: true,
-                columnAutoWidth: true,
-                scrolling: {
-                    rowRenderingMode: 'infinite',
-                },
-                selection: {
-                    mode: 'single',
-                },
-
-                columns: [{
-                        dataField: "MachineName",
-                        caption: "Machine Group",
-                        //width: 80,
-
-                    }, {
-                        dataField: "DayWeight",
-                        caption: "Day Shift Weights",
-                        //width: 100,
-
-                    },
-                    {
-                        dataField: "NightWeight",
-                        caption: "Night Shift Weights",
-                        //width: 250,
-
-                    },
-                    {
-                        dataField: "DayCount",
-                        caption: "Day Shift Holds",
-                        //width: 300,
-
-                    },
-                    {
-                        dataField: "NightCount",
-                        caption: "Night Shift Holds",
-                        //width: 600,
-
-                    },
-                ]
-
-            }).dxDataGrid('instance');
-
-            function getWorkInProgress() {
-                $('#wiredraw').prop("disabled", false);
-
-                $.ajax({
-                    url: '{!! url('/getGalvWIP') !!}',
-                    type: "GET",
-                    data: {
-                        machineId: $('#machineid').val()
-                    },
-                    success: function(data) {
-                        gridWorkInProgress.option('dataSource', data);
-                        gridWorkInProgress.refresh();
-
-                        gridData = gridWorkInProgress.option("dataSource");
-                    },
-
-                });
-            };
-
-            $('#jobCard').click(function() {
-                var selectedRowsData = gridWorkInProgress.getSelectedRowsData();
-
-                var JobNo = selectedRowsData[0].JobNo;
-                window.open('{!! url('/galvQCJobCard') !!}/' + JobNo, "_blank",
-                    "location=1,status=1,scrollbars=1, width=1200,height=850");
-            });
-
-            function getShiftData() {
-                $.ajax({
-                    url: '{!! url('/getGalvWIPConsolidated') !!}',
-                    type: "GET",
-                    success: function(data) {
-                        gridShiftData.option('dataSource', data);
-                        gridShiftData.refresh();
-
-                        gridData = gridShiftData.option("dataSource");
-                    },
-
-                });
-            };
-
-            doacheck();
-
-            function doacheck() {
-                setInterval(checkforchanges, 10000);
-            };
-
-            function checkforchanges() {
-                $.ajax({
-                    url: '{!! url('/checkForGalvUpdates') !!}',
-                    type: "GET",
-                    data: {
-                        checker: "NEWJOB",
-                    },
-                    success: function(data) {
-                        // console.log(data[0].Result);
-                        if (data[0].Result == "Reload") {
-                            console.log("deleting record and reloading");
-                            //runs store procedure to delete the record
-                            $.ajax({
-                                url: '{!! url('/deleteGalvChecker') !!}',
-                                type: "GET",
-                                data: {
-                                    checker: "NEWJOB",
-                                },
-                                success: function(data) {
-                                    getWorkInProgress();
-                                    getShiftData();
-                                }
-                            });
-                        } else {
-                            // console.log("as you where young lad");
-                        }
-                    }
-                });
-            };
-
         });
     </script>
 @endsection

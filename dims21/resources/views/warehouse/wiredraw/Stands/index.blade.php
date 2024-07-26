@@ -32,19 +32,19 @@
                     <!-- General error message will be displayed here if needed -->
                     <div id="general-error"></div>
 
-                    <div class="form-group" id="strStandNameDiv">
+                    <div class="form-group mt-2 " id="strStandNameDiv">
                         <label class="control-label" for="strStandName"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Stand Name</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="strStandName" name="strStandName">
                         <!-- Error message will be appended here -->
                     </div>
-                    <div class="form-group" id="fltStandMassDiv">
+                    <div class="form-group mt-2" id="fltStandMassDiv">
                         <label class="control-label" for="fltStandMass"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Stand Mass</label>
                         <input type="text" class="form-control input-sm col-xs-1" id="fltStandMass" name="fltStandMass">
                         <!-- Error message will be appended here -->
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label class="control-label" for="Department ID"
                             style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Department</label>
                         <select class="form-select" type="text" id='intDepartmentId'>
