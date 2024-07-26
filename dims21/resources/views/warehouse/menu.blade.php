@@ -746,11 +746,15 @@ if ((Auth::guest()))
                         </li>
 
                         <li>
-                            <a href='{{ route('wire-draw.customers.index') }}'>WireDraw Customers</a>
+                            <a href='{{ route('wire-draw.customers.index') }}'>Wire Draw Customers</a>
                         </li>
 
                         <li>
-                            <a href='{{ route('wire-draw.products.index') }}'>WireDraw Products</a>
+                            <a href='{{ route('wire-draw.products.index') }}'>Wire Draw Products</a>
+                        </li>
+
+                        <li>
+                            <a href='{{ route('wire-draw.stands.index') }}'>Stands</a>
                         </li>
 
                         <li>

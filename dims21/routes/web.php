@@ -1351,10 +1351,11 @@ Route::prefix('wire-draw')->name('wire-draw.')->group(function () {
     Route::resource('products', WireDrawProductsController::class);
     Route::get('headers/get-headers', [WireDrawHeadersController::class,'getheaders'])->name('headers.get-headers');
     Route::resource('headers', WireDrawHeadersController::class);
-    Route::get('changeWireDrawJobStatus', [WireDrawHeadersController::class,'changeWireDrawJobStatus']);
+    Route::get('changeJobStatus', [WireDrawHeadersController::class,'changeJobStatus'])->name('changeJobStatus');   
     Route::get('qcscreen/get-qcscreen', [WireDrawqcscreenController::class,'getqc'])->name('qcscreen.get-qcscreen');
     Route::resource('qcscreen', WireDrawqcscreenController::class);
     Route::get('stands/get-stands', [WireDrawStandsController::class,'getStandName'])->name('stands.get-stands');
     Route::resource('stands', WireDrawStandsController::class);
-    Route::get('wireDrawWeight',[WireDrawWireDrawWeightController::class,'index'])->name('wireDrawWeight');
+    Route::resource('weight', WireDrawWireDrawWeightController::class);
 });
+

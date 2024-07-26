@@ -28,7 +28,7 @@
                     Complete Job
                 </button>
             @endif
-            
+
         </div>
 
         <div id="gridWorkInProgress" style="width: 100% !important; flex-grow: 1;"></div>
@@ -138,19 +138,25 @@
 
             $('#completesave').click(function() {
                 var selectedItem = $("#gridWorkInProgress").dxDataGrid("instance").getSelectedRowsData()[0];
-                var JobId = selectedItem.JobNo;
-                // console.log(JobId);
+                var intHeaderId = selectedItem.intHeaderId; 
+
+                var jobId = intHeaderId.replace('WD', '');
+                var parsedJobId = parseInt(jobId);
+
                 $.ajax({
 
-                    url: '{!! url('/changeGalvJobStatus') !!}',
+                    url: '{!! url('wire-draw/changeJobStatus') !!}',
                     type: "GET",
                     data: {
-                        JobId: JobId,
+                        JobId: parsedJobId,
                     },
                     success: function(data) {
                         alert("Job Completed!");
-                        getWorkInProgress();
-                        getShiftData();
+                        if (data.success) {
+                            location.reload();
+                        }
+                        //getWorkInProgress();
+                        //getShiftData();
                     }
                 });
             });

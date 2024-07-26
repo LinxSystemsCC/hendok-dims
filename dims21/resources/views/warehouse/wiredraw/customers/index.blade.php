@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 {{-- Set the Title --}}
-@section('title', 'WireDraw Customers')
+@section('title', 'Wire Draw Customers')
 
 @php
     $includeMenu = true;
@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-lg-12 d-inline-flex">
-            <h3 style="flex-grow: 1; padding-left: 15px;">WireDraw Customers</h3>
+            <h3 style="flex-grow: 1; padding-left: 15px;">Wire Draw Customers</h3>
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newcustomer">
                 New Customer
