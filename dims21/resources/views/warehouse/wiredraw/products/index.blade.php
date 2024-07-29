@@ -126,7 +126,7 @@
             })
 
             var customers = {!! json_encode($customers) !!};
-            console.log(customers)
+            //console.log(customers)
 
             $.ajax({
                 url: '{{ route('wire-draw.products.get-products') }}',
@@ -194,7 +194,8 @@
                         columns: [{
                                 dataField: 'intProductId',
                                 caption: 'Product ID',
-                                dataType: 'int'
+                                dataType: 'int',
+                                allowEditing: false
                             },
                             // {
                             //     dataField: 'intCustomerId',
@@ -212,31 +213,42 @@
                                     dataSource: customers,
                                     displayExpr: 'Name',
                                     valueExpr: 'ID',
+                                    location: "left",
+                                    alignment: "center"
                                 },
                             },
                             {
                                 dataField: 'strProductName',
                                 caption: 'ProductName',
-                                dataType: 'string'
+                                dataType: 'string',
+                                location: "left",
+                                alignment: "center"
                             },
                             {
                                 dataField: 'ftlWireSize',
                                 caption: 'Wire Size',
                                 dataType: 'number',
+                                location: "left",
+                                alignment: "center",
                                 format: {
                                     type: "fixedPoint",
                                     precision: 2
                                 }
+
                             },
                             {
                                 dataField: 'strSizeTolerance',
                                 caption: 'Size Tolerance',
-                                dataType: 'string'
+                                dataType: 'string',
+                                location: "left",
+                                alignment: "center"
                             },
                             {
                                 dataField: 'strMPATolerance',
                                 caption: 'MPA Tolerance',
-                                dataType: 'string'
+                                dataType: 'string',
+                                location: "left",
+                                alignment: "center"
                             },
 
                         ],

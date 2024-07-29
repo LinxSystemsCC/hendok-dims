@@ -145,7 +145,6 @@
                     if (standMass.hasOwnProperty(intStandIdValue)) {
                         finalweight = -standMass[intStandIdValue];
                         $('#ftlfinalweight').val(finalweight);
-                        console.log(finalweight);
                     }
                     if ($('#fltweight').val()!='') {
                         var tareWeight = $('#intStandId option:selected').data('stand-mass');

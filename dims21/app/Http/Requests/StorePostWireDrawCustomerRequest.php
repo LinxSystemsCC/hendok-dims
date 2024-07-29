@@ -24,7 +24,7 @@ class StorePostWireDrawCustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'strCustomerName'=>'required|max:50'
+            'strCustomerName'=>'required|max:50|unique:tblCustomersWireDraw,strCustomerName'
         ];
     }
     public function attributes()

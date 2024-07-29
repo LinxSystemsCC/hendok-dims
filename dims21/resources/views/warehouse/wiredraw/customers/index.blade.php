@@ -57,7 +57,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        });
+        }); 
         $(document).on('focus', ':input', function() {
             $(this).attr('autocomplete', 'off');
         });
@@ -156,10 +156,17 @@
                         columns: [{
                             dataField: "intCustomerId",
                             caption: "ID",
-                        }, {
+                            allowEditing: false,
+                            location: "left",
+                            alignment: "center"
+                        },
+                        {
                             dataField: "strCustomerName",
                             caption: "Customer Name",
-                        }, ],
+                            location: "left",
+                            alignment: "center"
+                        }, 
+                    ],
                         onRowRemoved(e) {
                             var intCustomerID = e.data.intCustomerId;
                             console.log(intCustomerID);
