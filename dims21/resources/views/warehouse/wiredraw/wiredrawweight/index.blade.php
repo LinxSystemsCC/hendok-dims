@@ -91,11 +91,9 @@
                             <tbody>
                                 @foreach ($machineWiseJobs[$machineId] as $job)
                                     <tr class="trofwiredrawmachines">
-                                        <td scope="row" data-job-id="{{ $job->intHeaderId }}" class="tdofwiredrawmachines">JobNo:
-                                            {{ $job->intHeaderIdcustom }}</td>
-                                        <td scope="row" class="tdofwiredrawmachines">Stand: {{ $job->intNoOfStand + 1 }} </td>
-                                        <td scope="row" data-product-id="{{ $job->intProductId }}" class="tdofwiredrawmachines">Product:
-                                            {{ $job->strProductName }} </td>
+                                        <td scope="row" data-job-id="{{ $job->intHeaderId }}" class="tdofwiredrawmachines">JobNo:{{ $job->intHeaderIdcustom }}</td>
+                                        <td scope="row" class="tdofwiredrawmachines">Stand:{{ $job->intNoOfStand + 1 }}</td>
+                                        <td scope="row" data-product-id="{{ $job->intProductId }}" class="tdofwiredrawmachines">Product:{{ $job->strProductName }} </td>
                                     <tr>
                                 @endforeach
                             </tbody>
@@ -109,6 +107,7 @@
 @endsection
 
 @section('scripts')
+
     <script>
         $('#intStandId').select2({
             theme: 'bootstrap-5',
@@ -120,16 +119,15 @@
             var currentSelectedIntproductId = 0;
             var currentSelectedIntjobNo = 0;
             var machineName = "Ishan";
-            
+
             // Add click event listener to all <tr> elements inside tables
             $('#accordionFlush').on('click', 'tr', function() {
 
                 machineName = $(this).parents('.accordion-item:first').find('.accordion-header').text().trim();
-                var jobNo = $(this).find('td:eq(0)').text().trim().split(': ')[1]; // Extract JobNo value
-                var standNo = $(this).find('td:eq(1)').text().trim().split(': ')[1]; // Extract Stand value
-                var productName = $(this).find('td:eq(2)').text().trim().split(': ')[1]; // Extract product value
-                console.log(jobNo);
-                console.log(productName);
+
+                var jobNo = $(this).find('td:eq(0)').text().trim().split(':')[1]; // Extract JobNo value
+                var standNo = $(this).find('td:eq(1)').text().trim().split(':')[1]; // Extract Stand value
+                var productName = $(this).find('td:eq(2)').text().trim().split(':')[1]; // Extract product value
 
                 currentSelectedIntproductId = $(this).find('td:eq(2)').attr('data-product-id')
                 currentSelectedIntjobNo = $(this).find('td:eq(0)').attr('data-job-id')
@@ -138,10 +136,38 @@
                 $('#intproductId').val(productName);
                 $('#strMachines').val(machineName);
 
+                var finalweight = 0;
+
+                $('#intStandId').change(function() {
+                    var standMass = @json($standMass);
+                    var intStandIdValue = $('#intStandId').val();
+
+                    if (standMass.hasOwnProperty(intStandIdValue)) {
+                        finalweight = -standMass[intStandIdValue];
+                        $('#ftlfinalweight').val(finalweight);
+                        console.log(finalweight);
+                    }
+                    if ($('#fltweight').val()!='') {
+                        var tareWeight = $('#intStandId option:selected').data('stand-mass');
+                        var fltweightValue = parseFloat($('#fltweight').val());
+                        var newFinalWeight = fltweightValue - tareWeight;
+                        //console.log(isNaN(newFinalWeight));
+                        if (isNaN(newFinalWeight)) {
+                            newFinalWeight = finalweight
+                        }
+                        $('#ftlfinalweight').val(newFinalWeight);
+                    }
+                });
+
                 $('#fltweight').keyup(function() {
                     var tareWeight = $('#intStandId option:selected').data('stand-mass');
                     var fltweightValue = parseFloat($('#fltweight').val());
-                    $('#ftlfinalweight').val(fltweightValue - tareWeight);
+                    var newFinalWeight = fltweightValue - tareWeight;
+                    //console.log(isNaN(newFinalWeight));
+                    if (isNaN(newFinalWeight)) {
+                        newFinalWeight = finalweight
+                    }
+                    $('#ftlfinalweight').val(newFinalWeight);
                 });
 
                 // Open the modal
@@ -170,6 +196,7 @@
                     }
                 });
             });
+
         });
     </script>
 
