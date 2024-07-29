@@ -127,6 +127,10 @@
                 theme: 'bootstrap-5',
                 dropdownParent: $('#createjob'),
             });
+            $('#cancelCreateJob').click(function () {
+                $('#createjob').find('.errorClass').hide()
+                $('#general-error').hide();
+            })
 
             $('#strType').change(function() {
                 if ($('#strType').val() == 'internal') {
@@ -264,15 +268,19 @@
                             },
                             {
                                 dataField: "fltMassRequired",
-                                caption: "Required",
+                                caption: "Mass Required",
                             },
                             {
                                 dataField: "fltMassProduced",
-                                caption: "Produced",
+                                caption: "Mass Produced",
                             },
                             {
                                 dataField: "intNoOfStand",
-                                caption: "Stands",
+                                caption: "No Of Stand",
+                            },
+                            {
+                                dataField: "strType",
+                                caption: "Job Type",
                             },
                         ],
                         onRowDblClick: function(e) {

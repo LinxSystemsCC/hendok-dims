@@ -56,7 +56,7 @@
 
                     <div class="form-group mt-2">
                         <label class="control-label" for="fltweight">Weight</label>
-                        <input type="text" class="form-control" id="fltweight" name="fltweight">
+                        <input type="number" class="form-control" id="fltweight" name="fltweight">
                     </div>
 
                     <div class="form-group mt-2">
@@ -145,6 +145,10 @@
                     if (standMass.hasOwnProperty(intStandIdValue)) {
                         finalweight = -standMass[intStandIdValue];
                         $('#ftlfinalweight').val(finalweight);
+                    }
+                    if($('#intStandId').val() == ''){
+                        $('#fltweight').val('');
+                        $('#ftlfinalweight').val('');
                     }
                     if ($('#fltweight').val()!='') {
                         var tareWeight = $('#intStandId option:selected').data('stand-mass');

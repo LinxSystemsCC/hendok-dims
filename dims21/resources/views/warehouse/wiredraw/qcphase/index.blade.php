@@ -71,9 +71,8 @@
 
                         <div class="modal-footer mt-2">
                             <div class="d-inline-flex gap-2">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
                                 <button class="btn btn-success" id="save">Save</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                    id="addProductcloseBtn">Close</button>
                             </div>
                         </div>
                     </div>
@@ -92,6 +91,11 @@
                     $("#wiresize").change(function() {
                         $(this).val(parseFloat($(this).val()).toFixed(2));
                     });
+
+                    $('#addProductcloseBtn').click(function () {
+                        $('#saveQcData').find('.errorClass').hide()
+                        $('#general-error').hide();
+                    })
 
                     $('#wiresize').on('input', function() {
                         var inputValue = $(this).val();
@@ -214,7 +218,6 @@
                     });
 
                     $('#save').click(function() {
-                        $(this).prop("disabled", true);
                         var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
                         var selectedRowsData = dataGrid.getSelectedRowsData();
                         console.log(selectedRowsData[0]);
@@ -234,7 +237,7 @@
                             },
                             error: function(xhr) {
                                 if (xhr.status === 422) {
-                                    modalSetValidation($("#newproduct"), xhr);
+                                    modalSetValidation($("#saveQcData"), xhr);
                                 } else {
                                     console.error('An unexpected error occurred:', xhr);
                                 }
