@@ -43,10 +43,10 @@
                     <div class="modal-body">
                         <h6 id="JobEndTextMessage">ARE YOU SURE YOU WANT TO COMPLETE THIS JOB?</h6>
                     </div>
-                    <div class="modal-footer d-inline">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            id="closeFinaliseJob">CLOSE</button>
-                        <button class="btn btn-danger" id="completesave">COMPLETE</button>
+                            id="closeFinaliseJob">Close</button>
+                        <button class="btn btn-danger" id="completesave">Complete</button>
                     </div>
                 </div>
             </div>
@@ -109,9 +109,9 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-target="#createjob" data-bs-toggle="modal"
                             id="cancelCreateJob">
-                            CANCEL
+                            Close
                         </button>
-                        <button type="button" id="wiredraw" class="btn btn-success">SAVE</button>
+                        <button type="button" id="wiredraw" class="btn btn-success">Save</button>
                     </div>
                 </div>
             </div>
@@ -279,8 +279,8 @@
                                 caption: "No Of Stand",
                             },
                             {
-                                dataField: "strType",
-                                caption: "Job Type",
+                                dataField: "strJobStatus",
+                                caption: "Job Status",
                             },
                         ],
                         onRowDblClick: function(e) {

@@ -91,9 +91,9 @@
                             <tbody>
                                 @foreach ($machineWiseJobs[$machineId] as $job)
                                     <tr class="trofwiredrawmachines">
-                                        <td scope="row" data-job-id="{{ $job->intHeaderId }}" class="tdofwiredrawmachines">JobNo:{{ $job->intHeaderIdcustom }}</td>
-                                        <td scope="row" class="tdofwiredrawmachines">Stand:{{ $job->intNoOfStand + 1 }}</td>
-                                        <td scope="row" data-product-id="{{ $job->intProductId }}" class="tdofwiredrawmachines">Product:{{ $job->strProductName }} </td>
+                                        <td scope="row" data-job-id="{{ $job->intHeaderId }}" class="tdofwiredrawmachines">JobNo: {{ $job->intHeaderIdcustom }}</td>
+                                        <td scope="row" class="tdofwiredrawmachines">Stand: {{ $job->intNoOfStand + 1 }}</td>
+                                        <td scope="row" data-product-id="{{ $job->intProductId }}" class="tdofwiredrawmachines">Product: {{ $job->strProductName }} </td>
                                     <tr>
                                 @endforeach
                             </tbody>
@@ -120,14 +120,20 @@
             var currentSelectedIntjobNo = 0;
             var machineName = "Ishan";
 
+            
+            $('#close').click(function () {
+                $('#Weigh').find('.errorClass').hide()
+                $('#general-error').hide();
+            })
+
             // Add click event listener to all <tr> elements inside tables
             $('#accordionFlush').on('click', 'tr', function() {
 
                 machineName = $(this).parents('.accordion-item:first').find('.accordion-header').text().trim();
 
-                var jobNo = $(this).find('td:eq(0)').text().trim().split(':')[1]; // Extract JobNo value
-                var standNo = $(this).find('td:eq(1)').text().trim().split(':')[1]; // Extract Stand value
-                var productName = $(this).find('td:eq(2)').text().trim().split(':')[1]; // Extract product value
+                var jobNo = $(this).find('td:eq(0)').text().trim().split(': ')[1]; // Extract JobNo value
+                var standNo = $(this).find('td:eq(1)').text().trim().split(': ')[1]; // Extract Stand value
+                var productName = $(this).find('td:eq(2)').text().trim().split(': ')[1]; // Extract product value
 
                 currentSelectedIntproductId = $(this).find('td:eq(2)').attr('data-product-id')
                 currentSelectedIntjobNo = $(this).find('td:eq(0)').attr('data-job-id')
@@ -147,7 +153,6 @@
                         $('#ftlfinalweight').val(finalweight);
                     }
                     if($('#intStandId').val() == ''){
-                        $('#fltweight').val('');
                         $('#ftlfinalweight').val('');
                     }
                     if ($('#fltweight').val()!='') {
@@ -170,7 +175,9 @@
                     if (isNaN(newFinalWeight)) {
                         newFinalWeight = finalweight
                     }
-                    $('#ftlfinalweight').val(newFinalWeight);
+                   if($('#intStandId').val() != ''){
+                        $('#ftlfinalweight').val(newFinalWeight);
+                   }
                 });
 
                 // Open the modal

@@ -108,7 +108,7 @@
             });
 
             $('#close').click(function() {
-                $('#addCustomerDiv').find('.errorClass').hide()
+                $('#newstands').find('.errorClass').hide()
                 $('#general-error').hide()
             })
             $('.btn-close').click(function() {
