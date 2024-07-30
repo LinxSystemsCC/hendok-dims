@@ -30,6 +30,7 @@ class WireDrawWireDrawWeightController extends Controller
         $stand = $stands->pluck('strStandName', 'intStandId');
         $standMass = $stands->pluck('fltStandMass', 'intStandId');
         $standGuop = $stands->groupBy('intStandId');
+        
         return view('warehouse.wiredraw.wiredrawweight.index', compact('machineWiseJobs', 'machines', 'standGuop', 'stand', 'standMass'));
     }
 

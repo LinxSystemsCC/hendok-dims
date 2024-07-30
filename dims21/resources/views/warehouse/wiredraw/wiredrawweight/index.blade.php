@@ -15,7 +15,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="newuserLabel"></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
@@ -66,7 +66,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close">Close</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" id="close">Close</button>
                     <button type="button" id="save" class="btn btn-success">Save</button>
                 </div>
             </div>
@@ -121,10 +121,10 @@
             var machineName = "Ishan";
 
             
-            $('#close').click(function () {
+            $('.close').click(function () {
                 $('#Weigh').find('.errorClass').hide()
                 $('#general-error').hide();
-            })
+            });
 
             // Add click event listener to all <tr> elements inside tables
             $('#accordionFlush').on('click', 'tr', function() {
@@ -156,33 +156,29 @@
                         $('#ftlfinalweight').val('');
                     }
                     if ($('#fltweight').val()!='') {
-                        var tareWeight = $('#intStandId option:selected').data('stand-mass');
-                        var fltweightValue = parseFloat($('#fltweight').val());
-                        var newFinalWeight = fltweightValue - tareWeight;
-                        //console.log(isNaN(newFinalWeight));
-                        if (isNaN(newFinalWeight)) {
-                            newFinalWeight = finalweight
-                        }
-                        $('#ftlfinalweight').val(newFinalWeight);
+                        calculateFinalWeight($('#intStandId option:selected').data('stand-mass'),parseFloat($('#fltweight').val()))
                     }
                 });
 
                 $('#fltweight').keyup(function() {
-                    var tareWeight = $('#intStandId option:selected').data('stand-mass');
-                    var fltweightValue = parseFloat($('#fltweight').val());
-                    var newFinalWeight = fltweightValue - tareWeight;
-                    //console.log(isNaN(newFinalWeight));
+                    calculateFinalWeight($('#intStandId option:selected').data('stand-mass'),parseFloat($('#fltweight').val()))
+                });
+                
+                //This function calculate Final Tare Weight
+                function calculateFinalWeight(tareWeight,fltweightValue) {
+                    var newFinalWeight = fltweightValue - tareWeight
                     if (isNaN(newFinalWeight)) {
                         newFinalWeight = finalweight
                     }
-                   if($('#intStandId').val() != ''){
+                    if($('#intStandId').val() != ''){
                         $('#ftlfinalweight').val(newFinalWeight);
-                   }
-                });
+                    }
+                }
 
                 // Open the modal
                 $('#Weigh').modal('show');
             });
+            
             $('#save').click(function() {
                 $.ajax({
                     url: '{{ route('wire-draw.weight.store') }}',

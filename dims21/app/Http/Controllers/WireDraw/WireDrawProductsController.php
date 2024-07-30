@@ -34,7 +34,7 @@ class WireDrawProductsController extends Controller
     {
         $validated = $request->validated();
         $Product->update($this->getRequestData($validated));
-        //return response()->json(['data' => $Product]);
+        
         return response()->json(['success' => true]);
     }
 

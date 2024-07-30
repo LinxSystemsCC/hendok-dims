@@ -26,7 +26,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="newuserLabel">Create New Stands</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- General error message will be displayed here if needed -->
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close">Close</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" id="close">Close</button>
                     <button type="button" id="savestands" class="btn btn-success">Save</button>
                 </div>
             </div>
@@ -73,6 +73,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        
         $(document).on('focus', ':input', function() {
             $(this).attr('autocomplete', 'off');
         });
@@ -107,17 +108,12 @@
                 });
             });
 
-            $('#close').click(function() {
+            $('.close').click(function() {
                 $('#newstands').find('.errorClass').hide()
                 $('#general-error').hide()
-            })
-            $('.btn-close').click(function() {
-                $('#addCustomerDiv').find('.errorClass').hide()
-                $('#general-error').hide()
-            })
-
+            });
+            
             var dept = {!! json_encode($dept) !!};
-            console.log(dept)
             $.ajax({
                 url: '{{ route('wire-draw.stands.get-stands') }}',
                 type: "GET",

@@ -25,7 +25,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="newuserLabel">Create New Product</h1>
-                    <button type="button" class="btn-close closeicon" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="addProductDiv">
                     <!-- General error message will be displayed here if needed -->
@@ -60,7 +60,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Ensure the button has the correct classes and IDs -->
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
                     <button type="button" id="savesProductName" class="btn btn-success">Save</button>
                 </div>
             </div>
@@ -75,9 +75,6 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        });
-        $(document).on('focus', ':input', function() {
-            $(this).attr('autocomplete', 'off');
         });
 
         $('#intCustomerId').select2({
@@ -111,22 +108,16 @@
                 });
             });
 
-            $('#addProductcloseBtn').click(function() {
-                $('#addProductDiv').find('.errorClass').hide();
-                $('#general-error').hide()
-            })
-
-            $('.addProductclose').click(function() {
-                $('#addProductDiv').find('.errorClass').hide();
-                $('#general-error').hide()
-            })
-            $('.closeicon').click(function() {
+            $(document).on('focus', ':input', function() {
+                $(this).attr('autocomplete', 'off');
+            });
+            
+            $('.close').click(function() {
                 $('#addProductDiv').find('.errorClass').hide();
                 $('#general-error').hide()
             })
 
             var customers = {!! json_encode($customers) !!};
-            //console.log(customers)
 
             $.ajax({
                 url: '{{ route('wire-draw.products.get-products') }}',
@@ -197,15 +188,6 @@
                                 dataType: 'int',
                                 allowEditing: false
                             },
-                            // {
-                            //     dataField: 'intCustomerId',
-                            //     caption: 'Customer Name',
-                            //     lookup: {
-                            //         dataSource: customers,
-                            //         displayExpr: 'Name',
-                            //         valueExpr: 'ID',
-                            //     },
-                            // },
                             {
                                 dataField: 'intCustomerId',
                                 caption: 'CustomerName',
@@ -300,7 +282,7 @@
                         },
                     });
                 }
-            })
+            });
         });
 
 

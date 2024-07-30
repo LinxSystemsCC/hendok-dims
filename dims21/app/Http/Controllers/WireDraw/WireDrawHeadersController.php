@@ -54,15 +54,12 @@ class WireDrawHeadersController extends Controller
         ->leftJoin('tblCustomersWireDraw', 'tblWireDrawHeaders.intCustomerId', '=', 'tblCustomersWireDraw.intCustomerId')
         ->join('tblProductsWireDraw','tblWireDrawHeaders.intProductId','=','tblProductsWireDraw.intProductId')
         ->leftJoin('tblMachines','tblWireDrawHeaders.intWireDrawMachineId','=','tblMachines.intAutoMachineID')
-        
 
         ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName',DB::raw("CONCAT('WD', tblWireDrawHeaders.intHeaderId) AS intHeaderId"),
         'tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd',DB::raw("FORMAT(tblWireDrawHeaders.dtDateStart, 'yyyy-MM-dd HH:mm:ss') as dtDateStart"),'tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
         'tblMachines.strMachineName','tblMachines.intAutoMachineID','tblWireDrawHeaders.strType','tblWireDrawHeaders.strJobStatus')
         ->where('strJobStatus','=','Pending')
         ->orWhere('strJobStatus','=','Inprocess')
-        
-
         ->get();
 
         return response()->json($data);
@@ -71,14 +68,10 @@ class WireDrawHeadersController extends Controller
     public function changeJobStatus(Request $request){
 
         $jobId = $request->input('JobId');
-
         $header = WireDrawHeaders::find($jobId);
-        //dd($header);
         $header->dtDateEnd = Carbon::now();
-           
         $header->strJobStatus = "Complete";
         $header->save();
-        //dd($header);
 
         return response()->json(['success' => true]);
     }

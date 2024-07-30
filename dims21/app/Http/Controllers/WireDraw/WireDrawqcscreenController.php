@@ -37,7 +37,7 @@ class WireDrawqcscreenController extends Controller
     public function store(StorePostWireDrawQcRequest $request)
     {
         $validated = $request->validated();
-        $testQC =WireDrawQcScreen::create([
+        WireDrawQcScreen::create([
             'intJobNumber' => $validated['intJobNumber'],
             'intProductId' => $validated['intProductId'],
             'fltWireSize' => $validated['fltWireSize'],

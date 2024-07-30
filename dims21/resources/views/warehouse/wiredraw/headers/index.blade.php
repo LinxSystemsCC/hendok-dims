@@ -52,12 +52,12 @@
             </div>
         </div>
 
-        <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog"
-            aria-labelledby="createjob" aria-hidden="true">
+        <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog" aria-labelledby="createjob" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="createjob">Create A Work Order</h5>
+                        <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -107,8 +107,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-target="#createjob" data-bs-toggle="modal"
-                            id="cancelCreateJob">
+                        <button type="button" class="btn btn-secondary close" data-bs-target="#createjob" data-bs-toggle="modal" id="cancelCreateJob">
                             Close
                         </button>
                         <button type="button" id="wiredraw" class="btn btn-success">Save</button>
@@ -123,11 +122,17 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+
             $('.dims-select2').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#createjob'),
             });
-            $('#cancelCreateJob').click(function () {
+            
+            $(document).on('focus', ':input', function() {
+                $(this).attr('autocomplete', 'off');
+            });
+
+            $('.close').click(function () {
                 $('#createjob').find('.errorClass').hide()
                 $('#general-error').hide();
             })

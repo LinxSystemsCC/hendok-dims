@@ -34,7 +34,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="qc1TestTitle"></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"
                         id="CloseModal"></button>
                 </div>
 
@@ -71,7 +71,7 @@
 
                         <div class="modal-footer mt-2">
                             <div class="d-inline-flex gap-2">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
+                                <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
                                 <button class="btn btn-success" id="save">Save</button>
                             </div>
                         </div>
@@ -85,30 +85,16 @@
 
             <script>
                 $(document).ready(function() {
-
-                    $('#zinc').prop("disabled", true);
-
-                    $("#wiresize").change(function() {
-                        $(this).val(parseFloat($(this).val()).toFixed(2));
-                    });
-
-                    $('#addProductcloseBtn').click(function () {
+                    
+                    $('.close').click(function () {
                         $('#saveQcData').find('.errorClass').hide()
                         $('#general-error').hide();
-                    })
-
-                    $('#wiresize').on('input', function() {
-                        var inputValue = $(this).val();
-
-                        if (inputValue.length > 4) {
-                            $(this).val(inputValue.slice(0, 4)); // Truncate the input to four characters
-                        }
                     });
-                    // Clear inputs and selects within the modal
-                    $("#saveQcData").on("hidden.bs.modal", function() {
-                        $("#saveQcData input, #saveQcData select").val("");
-                    })
-
+                    
+                    $(document).on('focus', ':input', function() {
+                        $(this).attr('autocomplete', 'off');
+                    });
+                    
                     $.ajax({
                         url: '{{ route('wire-draw.qcscreen.get-qcscreen') }}',
                         type: "GET",
