@@ -57,12 +57,12 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        }); 
+        });
 
         $(document).on('focus', ':input', function() {
             $(this).attr('autocomplete', 'off');
         });
-        
+
         $(document).ready(function() {
             $('#savescustomername').click(function() {
                 $.ajax({
@@ -155,15 +155,14 @@
                             dataField: "intCustomerId",
                             caption: "ID",
                             allowEditing: false,
-                            location: "left",
-                            alignment: "center"
+                            alignment: "left",
+                            width: '10%',
                         },
                         {
                             dataField: "strCustomerName",
                             caption: "Customer Name",
-                            location: "left",
-                            alignment: "center"
-                        }, 
+                            alignment: "left",
+                        },
                     ],
                         onRowRemoved(e) {
                             var intCustomerID = e.data.intCustomerId;

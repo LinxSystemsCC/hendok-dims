@@ -12,6 +12,7 @@ class WireDrawCustomersController extends Controller
     {
         return view('warehouse.wiredraw.customers.index');
     }
+
     public function store(StorePostWireDrawCustomerRequest $request)
     {
         $validated = $request->validated();
@@ -21,6 +22,7 @@ class WireDrawCustomersController extends Controller
 
         return response()->json(['success' => 'Customer created successfully']);
     }
+
     public function getCustomerName()
     {
         $customerNames = WireDrawCustomer::select('intCustomerId',	'strCustomerName')
@@ -29,12 +31,14 @@ class WireDrawCustomersController extends Controller
 
         return response()->json($customerNames);
     }
+
     public function destroy(string $id)
     {
         WireDrawCustomer::destroy($id);
 
         return response()->json(['success' => 'Customer deleted successfully']);
     }
+
     public function update(StorePostWireDrawCustomerRequest $request, WireDrawCustomer $customer)
     {
         $validated = $request->validated();
@@ -42,11 +46,11 @@ class WireDrawCustomersController extends Controller
 
         return response()->json(['data' => $customer]);
     }
+
     private function getRequestData($data)
     {
         return [
             'strCustomerName' => $data['strCustomerName'],
         ];
     }
-
 }

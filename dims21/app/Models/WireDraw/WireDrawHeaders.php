@@ -19,7 +19,12 @@ class WireDrawHeaders extends Model
         'strType',
         'fltMassRequired',
         'strReference',
-        'intUserId'
+        'intUserId',
+        'intNoOfStand',
+        'fltMassProduced',
+        'dtDateStart',
+        'dtDateEnd',
+        'strJobStatus',
     ];
-    
+
 }

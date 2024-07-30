@@ -23,7 +23,7 @@ class CreateTblWireDrawHeaderLinesTable extends Migration
             $table->integer('intWireDrawMachineId');
             $table->integer('intProductId');
             $table->float('fltMassRequired');
-            $table->float('fltMassProduced ')->default('0');    
+            $table->float('fltMassProduced ')->default('0');
             $table->string('strJobStatus')->default('Pending');
             $table->integer('intNoOfStand')->default('0');
             $table->integer('intUserId');

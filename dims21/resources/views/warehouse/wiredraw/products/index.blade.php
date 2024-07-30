@@ -111,7 +111,7 @@
             $(document).on('focus', ':input', function() {
                 $(this).attr('autocomplete', 'off');
             });
-            
+
             $('.close').click(function() {
                 $('#addProductDiv').find('.errorClass').hide();
                 $('#general-error').hide()
@@ -182,10 +182,10 @@
                             });
                             e.cancel = true;
                         },
-                        columns: [{
+                        columns: [
+                            {
                                 dataField: 'intProductId',
                                 caption: 'Product ID',
-                                dataType: 'int',
                                 allowEditing: false
                             },
                             {
@@ -195,23 +195,18 @@
                                     dataSource: customers,
                                     displayExpr: 'Name',
                                     valueExpr: 'ID',
-                                    location: "left",
-                                    alignment: "center"
                                 },
                             },
                             {
                                 dataField: 'strProductName',
                                 caption: 'ProductName',
                                 dataType: 'string',
-                                location: "left",
-                                alignment: "center"
                             },
                             {
                                 dataField: 'ftlWireSize',
                                 caption: 'Wire Size',
                                 dataType: 'number',
-                                location: "left",
-                                alignment: "center",
+                                alignment: "left",
                                 format: {
                                     type: "fixedPoint",
                                     precision: 2
@@ -222,15 +217,11 @@
                                 dataField: 'strSizeTolerance',
                                 caption: 'Size Tolerance',
                                 dataType: 'string',
-                                location: "left",
-                                alignment: "center"
                             },
                             {
                                 dataField: 'strMPATolerance',
                                 caption: 'MPA Tolerance',
                                 dataType: 'string',
-                                location: "left",
-                                alignment: "center"
                             },
 
                         ],

@@ -16,6 +16,7 @@ class WireDrawProductsController extends Controller
 
         return view('warehouse.wiredraw.products.index')->with('customers', $customers);
     }
+
     public function store(StorePostWireDrawProductsRequest $request)
     {
         $validated = $request->validated();
@@ -34,7 +35,7 @@ class WireDrawProductsController extends Controller
     {
         $validated = $request->validated();
         $Product->update($this->getRequestData($validated));
-        
+
         return response()->json(['success' => true]);
     }
 
@@ -59,10 +60,10 @@ class WireDrawProductsController extends Controller
     public function getProductsName()
     {
         $data = DB::table('tblCustomersWireDraw')
-        ->join('tblProductsWireDraw', 'tblCustomersWireDraw.intCustomerId', '=', 'tblProductsWireDraw.intCustomerId')
-        ->select('tblCustomersWireDraw.strCustomerName','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName','tblProductsWireDraw.ftlWireSize','tblProductsWireDraw.strSizeTolerance','tblProductsWireDraw.strMPATolerance','tblProductsWireDraw.intCustomerId')
-        ->latest('intProductId')
-        ->get();
+            ->join('tblProductsWireDraw', 'tblCustomersWireDraw.intCustomerId', '=', 'tblProductsWireDraw.intCustomerId')
+            ->select('tblCustomersWireDraw.strCustomerName','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName','tblProductsWireDraw.ftlWireSize','tblProductsWireDraw.strSizeTolerance','tblProductsWireDraw.strMPATolerance','tblProductsWireDraw.intCustomerId')
+            ->latest('intProductId')
+            ->get();
 
         return response()->json($data);
     }
