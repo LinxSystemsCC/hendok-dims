@@ -23,9 +23,17 @@ class StorePostWireDrawCustomerRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'strCustomerName'=>'required|max:50|unique:tblCustomersWireDraw,strCustomerName'
+        $rules = [
+            'strStandName' => 'required|max:50',
+            'fltStandMass' => 'required|numeric',
+            'intDepartmentId' => 'required',
         ];
+        
+        if ($this->isMethod('post')) {
+            $rules['strStandName'] .= '|unique:tblCustomersWireDraw,strCustomerName';
+        }
+
+        return $rules;
     }
     public function attributes()
     {

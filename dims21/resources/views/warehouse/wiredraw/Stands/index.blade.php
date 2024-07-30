@@ -180,6 +180,7 @@
                             {
                                 dataField: "intStandId",
                                 caption: "ID",
+                                allowEditing: false,
                             },
                             {
                                 dataField: "strStandName",

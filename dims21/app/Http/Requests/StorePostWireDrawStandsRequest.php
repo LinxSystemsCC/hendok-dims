@@ -23,12 +23,18 @@ class StorePostWireDrawStandsRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'strStandName' => 'required|unique:tblStands,strStandName',
+        $rules = [
+            'strStandName' => 'required',
             'fltStandMass' => 'required|numeric',
             'intDepartmentId' => 'required',
         ];
+        if ($this->isMethod('post')) {
+            $rules['strStandName'] .= '|unique:tblStands,strStandName';
+        }
+        
+        return $rules;
     }
+
     public function attributes()
     {
         return [
@@ -37,6 +43,4 @@ class StorePostWireDrawStandsRequest extends FormRequest
             'intDepartmentId' => 'Department',
         ];
     }
-
-
 }
