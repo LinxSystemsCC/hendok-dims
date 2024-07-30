@@ -7,36 +7,38 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title', 'DIMS Hendok')</title>
     <link rel="icon" type="image/png" href="{{ url('images/dimslogo.png') }}">
-    <link rel="stylesheet" href="{{asset('css/colors.css')}}">
-    <link rel="stylesheet" href="{{ asset('resources\css\jobmodulestyle.css') }}">
-    <link rel="stylesheet" href="{{ asset('/css/myicons.css') }}">
-    
+    <link rel="stylesheet" href="{{asset('public/css/colors.css')}}">
+    <link rel="stylesheet" href="{{ asset('public/css/jobmodulestyle_final.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/css/myicons.css') }}">
+
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('public/css/bootstrap.min.css') }}">
 
     <!-- Select2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="{{ asset('public/css/select2.min.css') }}"/>
 
     <!--  Select 2 Bootstrap Theme -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+    <link rel="stylesheet" href="{{ asset('public/css/select2-bootstrap-5-theme.min.css') }}"/>
 
     <!-- DevExtreme theme Light-->
-    <link rel="stylesheet" href="https://cdn3.devexpress.com/jslib/23.1.6/css/dx.material.orange.light.compact.css">
+    <link rel="stylesheet" href="{{ asset('public/css/dx.material.orange.light.compact.css') }}">
 
-    <!-- Multiselect --> 
-    <link href="{{ asset('css/jquery.multiselect.css') }}" rel="stylesheet"  type='text/css'>
+    <!-- Multiselect -->
+    <link rel="stylesheet" href="{{ asset('public/css/jquery.multiselect.css') }}">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ asset('public/css/all.min.css') }}"/>
+
+    <link rel="stylesheet" href="{{ asset('public/css/general.css') }}"/>
 
     <!-- Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+    <script src="{{ asset('public/js/exceljs.min.js') }}"></script>
 
     <!-- File Saver -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <script src="{{ asset('public/js/FileSaver.min.js') }}"></script>
 
     <!-- jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script>
+    <script src="{{ asset('public/js/jspdf.umd.min.js') }}"></script>
 
     <style>
         .dx-datagrid .dx-link {
@@ -125,8 +127,8 @@
             top: 0; left: 0;
             display: flex;
             align-items: center;
-            align-content: center; 
-            justify-content: center;  
+            align-content: center;
+            justify-content: center;
             z-index: 100000;
         }
 
@@ -146,7 +148,7 @@
         .loader__element:nth-child(3) {
             animation: preloader .6s ease-in-out alternate .4s infinite;
         }
-
+        
         @keyframes preloader {
             100% { transform: scale(1.3); }
         }
@@ -170,7 +172,7 @@
                     @include('warehouse.menu')
                 </div>
             </div>
-            <div class="col-custom-10 p-3" >
+            <div class="col-custom-10 p-3 w-100 ms-2 me-2" >
                 @yield('page')
             </div>
         @else
@@ -182,25 +184,27 @@
 </body>
 
 <!-- Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="{{ asset('public/js/bootstrap.bundle.min.js') }}"></script>
 
 <!-- Jquery -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+<script src="{{ asset('public/js/jquery.min.js') }}"></script>
 
 <!-- DevExtreme library -->
-<script type="text/javascript" src="https://cdn3.devexpress.com/jslib/23.1.6/js/dx.all.js"></script>
+<script type="text/javascript" src="{{ asset('public/js/dx.all.js') }}"></script>
 
 <!-- Select 2 -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="{{ asset('public/js/select2.min.js') }}"></script>
 
 <!-- Excel -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script src="{{ asset('public/js/xlsx.full.min.js') }}"></script>
 
 <!-- File Saver -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+<script src="{{ asset('public/js/FileSaver.min.js') }}"></script>
 
 <!-- Multiselect -->
-<script src="{{ asset('js/jquery.multiselect.js') }}"></script>
+<script src="{{ asset('public/js/jquery.multiselect.js') }}"></script>
+
+<script src="{{ asset('public/js/general.js') }}"></script>
 
 <script>
     $( document ).on( 'focus', ':input', function(){
@@ -223,6 +227,13 @@
     $('nav ul li').click(function(){
         $(this).addClass("active").siblings().removeClass("active");
     });
+
+    $(document).ajaxStart(function() {
+        $('#overlay').removeAttr('hidden');
+    }).ajaxStop(function() {
+        $('#overlay').attr('hidden', '');
+    });
+    
 </script>
 
 @yield('scripts')
