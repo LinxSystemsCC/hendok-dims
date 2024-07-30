@@ -1,44 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="resources\css\jobmodulestyle.css">
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-</head>
+@extends('layouts.base')
+
+{{-- Set the Title --}}
+@section('title', 'Stock Counts')
 
 
-<div class="col-12 d-flex px-0">
-    <div class="col-custom-2">
-        <div class="vertical-menu">
-            @include('warehouse.menu')
-        </div>
-    </div>
-    <div class="col p-3">
+{{-- Set to show navbar --}}
+@php
+    $includeMenu = true;
+@endphp
+
+@section('page')
+    
+    <div class="container">
+        
         <h3>DATA SYNCING</h3>
-        <div class="container-fluid flex-grow-1 py-2">
-            <button class="btn btn-primary" style="height: 100px; width: 300px;" id="syncPastelStock">SYNC PASTEL STOCK TABLE</button>
+        <div class="row">
+            <button class="btn btn-primary col text-nowrap m-2" id="syncPastelStock">SYNC PASTEL STOCK TABLE</button>
+            <button class="btn btn-primary col text-nowrap m-2" id="syncStockMovement">PROCESS STOCK MOVEMENT QUEUE</button>
         </div>
     </div>
-</div>
 
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@endsection
 
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-
-<!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+@section('scripts')
 
 <script>
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'off' );
-    });
     $(document).ready(function() {
 
         $('#syncPastelStock').click(function(){
@@ -50,63 +36,50 @@
                 },
                 success: function (data) {
                     if (data === true){
-                        alert("The table has successfully synced");
+                        // alert("The table has successfully synced");
+                        DevExpress.ui.notify({
+                            message: 'Sucessfully Synced Sage Products',
+                            type: 'success', // 'info', 'success', 'warning'
+                            displayTime: 3500,
+                        });
                     }else{
-                        alert("An error occured while trying to sync the table");
+                        // alert("An error occured while trying to sync the table");
+                        DevExpress.ui.notify({
+                            message: 'An Error Occured While Trying to Sync Sage Products',
+                            type: 'error', // 'info', 'success', 'warning'
+                            displayTime: 3500,
+                        });
                     }
                     
                 }
             });
         });
-        
-        $('.sidebar ul li a').on(function(){
-            var id = $(this).attr('id');
-            $('nav ul li ul.item-show-'+id).toggleClass("show");
-            $('nav ul li #'+id+' span').toggleClass("rotate");
-            
-        });
 
-        $('.sidebar ul li a').click(function(){
-            var id = $(this).attr('id');
-            $('nav ul li ul.item-show-'+id).toggleClass("show");
-            $('nav ul li #'+id+' span').toggleClass("rotate");
-            
+        $('#syncStockMovement').click(function(){
+            $.ajax({
+                url: '{!!url("/syncStockMovements")!!}',
+                type: "post",
+                data: {
+                },
+                success: function (data) {
+                    if (data === true){
+                        DevExpress.ui.notify({
+                            message: 'Successfully Synced Stock Transactions',
+                            type: 'success', // 'info', 'success', 'warning'
+                            displayTime: 3500,
+                        });
+                    }else{
+                        DevExpress.ui.notify({
+                            message: 'An Error Occured While Trying to Sync Stock Transactions',
+                            type: 'error', // 'info', 'success', 'warning'
+                            displayTime: 3500,
+                        });
+                    }
+                    
+                }
+            });
         });
-        
-        $('nav ul li').click(function(){
-            $(this).addClass("active").siblings().removeClass("active");
-        });
-
     });
-
-
-    function showDialog(tag,width,height)
-    {
-        $( tag ).dialog({height: height, modal: false,
-            width: width,containment: false}).dialogExtend({
-            "closable" : true, // enable/disable close button
-            "maximizable" : false, // enable/disable maximize button
-            "minimizable" : true, // enable/disable minimize button
-            "collapsable" : true, // enable/disable collapse button
-            "dblclick" : "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-            "titlebar" : false, // false, 'none', 'transparent'
-            "minimizeLocation" : "right", // sets alignment of minimized dialogues
-            "icons" : { // jQuery UI icon class
-
-                "maximize" : "ui-icon-circle-plus",
-                "minimize" : "ui-icon-circle-minus",
-                "collapse" : "ui-icon-triangle-1-s",
-                "restore" : "ui-icon-bullet"
-            },
-            "load" : function(evt, dlg){ }, // event
-            "beforeCollapse" : function(evt, dlg){ }, // event
-            "beforeMaximize" : function(evt, dlg){ }, // event
-            "beforeMinimize" : function(evt, dlg){ }, // event
-            "beforeRestore" : function(evt, dlg){ }, // event
-            "collapse" : function(evt, dlg){  }, // event
-            "maximize" : function(evt, dlg){ }, // event
-            "minimize" : function(evt, dlg){  }, // event
-            "restore" : function(evt, dlg){  } // event
-        });
-    }
 </script>
+
+@endsection

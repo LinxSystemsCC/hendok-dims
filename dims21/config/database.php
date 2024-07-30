@@ -35,258 +35,129 @@ return [
 
     'connections' => [
 
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-        ],
-
-        'mysql' => [
-            'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
-
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
-//my test
-           'sqlsrv' => [
+        'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => '102.37.0.48',
-            'port' =>  '62019',
-            'database' => 'linxdbDIMS',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
-            'prefix' => ''
-
+            'host' => '102.37.216.104',
+            'port' =>  '1433',
+            'database' => 'linxdbDIMSHendok',
+            'username' => 'linxDemo',
+            'password' =>  '7!3qAd7T',
+            'prefix' => '',
+            'trust_server_certificate' => true,
         ] ,
-        //hendok
-        /*'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'pooling'  => false,
 
-        ],*/
         'sqlsrv2' => [
             'driver' => 'sqlsrv',
-            'host' => '102.37.0.48',
-            'port' =>  '62019',
-            'database' => 'linxdbDIMS',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
+            'host' => env('DB_HOST', '102.37.216.104'),
+            'port' =>  env('DB_PORT', '1433'),
+            'database' => env('DB_DATABASE', 'linxdbDIMSHendok'),
+            'username' => env('DB_USERNAME', 'linxDemo'),
+            'password' => env('DB_PASSWORD', '7!3qAd7T'),
             'prefix' => '',
             'pooling'  => false,
+            'trust_server_certificate' => true,
         ],
+
         'sqlsrv3' => [
             'driver' => 'sqlsrv',
-            'host' => '102.37.0.48',
-            'port' =>  '62019',
-            'database' => 'linxdbDIMS',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
+            'host' => env('DB_HOST', '102.37.216.104'),
+            'port' =>  env('DB_PORT', '1433'),
+            'database' => env('DB_DATABASE', 'linxdbDIMSHendok'),
+            'username' => env('DB_USERNAME', 'linxDemo'),
+            'password' => env('DB_PASSWORD', '7!3qAd7T'),
             'prefix' => '',
             'pooling'  => false,
+            'trust_server_certificate' => true,
         ],
+
         'weights' => [
             'driver' => 'sqlsrv',
-            'host' => '102.37.0.48',
-            'port' =>  '62019',
-            'database' => 'linxdbDIMS',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
+            'host' => env('DB_HOST', '102.37.216.104'),
+            'port' =>  env('DB_PORT', '1433'),
+            'database' => env('DB_DATABASE', 'linxdbDIMSHendok'),
+            'username' => env('DB_USERNAME', 'linxDemo'),
+            'password' => env('DB_PASSWORD', '7!3qAd7T'),
             'prefix' => '',
             'pooling'  => false,
         ],
+
         'wmax' => [
             'driver' => 'sqlsrv',
-            'host' => '102.37.0.48',
-            'port' =>  '62019',
+            'host' => '102.37.216.104',
+            'port' =>  '1433',
             'database' => 'WMax',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
+            'username' => 'linxDemo',
+            'password' =>  '7!3qAd7T',
             'prefix' => '',
             'pooling'  => false,
         ],
+
         'webstore' => [
             'driver' => 'sqlsrv',
             'host' => '102.133.239.108',
             'port' =>  '1444',
             'database' => 'LinxBriefcaseSEAF',
-            'username' => 'sa',
+            'username' => 'linxDemo',
             'password' =>  'Convid19',
             'prefix' => '',
             'charset' => 'utf8',
             'pooling'  => false,
         ],
-          'linxbriefcase' => [
+
+        'linxbriefcase' => [
             'driver' => 'sqlsrv',
-              'host' => '102.37.0.48',
-              'port' =>  '62019',
+            'host' => '102.37.216.104',
+            'port' =>  '1433',
             'database' => 'LinxBriefcase',
-            'username' => 'sa',
-            'password' =>  'Express62019SQL',
+            'username' => 'linxDemo',
+            'password' =>  'Express1433SQL',
             'prefix' => '',
             'pooling'  => false,
-              /*'driver' => 'sqlsrv',
-              'host' => '102.37.14.76',
-              'port' =>  '61994',
-              'database' => 'LinxBriefcase',
-              'username' => 'sa',
-              'password' =>  'Express62019SQL',
-              'prefix' => '',
-              'pooling'  => false,*/
+        ],
 
-
-          ],
         'linxbriefcaseBackOrders' => [
             'driver' => 'sqlsrv',
-            'host' => '102.37.0.48',
-            'port' =>  '62019',
+            'host' => '102.37.216.104',
+            'port' =>  '1433',
             'database' => 'LinxBriefcase',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
+            'username' => 'linxDemo',
+            'password' =>  '7!3qAd7T',
             'prefix' => '',
             'pooling'  => false,
-            /*'driver' => 'sqlsrv',
-            'host' => '102.37.14.76',
-            'port' =>  '61994',
-            'database' => 'LinxBriefcase',
-            'username' => 'sa',
-            'password' =>  'Express62019SQL',
-            'prefix' => '',
-            'pooling'  => false,*/
-
-
         ],
 
         'sqlsrv4' => [
             'driver' => 'sqlsrv',
-            'host' => '102.37.0.48',
-            'port' =>  '62019',
-            'database' => 'linxdbDIMS',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
+            'host' => env('DB_HOST', '102.37.216.104'),
+            'port' =>  env('DB_PORT', '1433'),
+            'database' => env('DB_DATABASE', 'linxdbDIMSHendok'),
+            'username' => env('DB_USERNAME', 'linxDemo'),
+            'password' => env('DB_PASSWORD', '7!3qAd7T'),
             'prefix' => '',
             'pooling'  => false,
-
         ],
-  'googlemaps' => [
+
+        'googlemaps' => [
             'driver' => 'sqlsrv',
             'host' => '192.168.0.11',
             'port' =>  '1444',
-            'database' => 'linxdbDIMS',
-            'username' => 'sa',
+            'database' => 'linxdbDIMSHendok',
+            'username' => 'linxDemo',
             'password' =>  'System2008#',
             'prefix' => '',
             'pooling'  => false,
-
         ],
-
-
-        /***
-        THIS IS FOR PREMISES**/
-/*
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1444',
-            'database' => 'linxdbDIMSMag',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
-            'prefix' => ''
-
-        ],
-        'sqlsrv2' => [
-            'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', '.'),
-            'port' => env('DB_PORT', '1444'),
-            'database' => env('DB_DATABASE', 'linxdbDIMS'),
-            'username' => env('DB_USERNAME', 'sa'),
-            'password' => env('DB_PASSWORD', 'Linx_123'),
-            'prefix' => '',
-            'pooling'  => false,
-
-        ],
-        'sqlsrv3' => [
-            'driver' => 'sqlsrv',
-            'host' => '192.168.1.129',
-            'port' =>  '1444',
-            'database' => 'linxdbDIMS',
-            'username' => 'sa',
-            'password' =>  'gR0!1248$',
-            'prefix' => '',
-            'pooling'  => false,
-
-        ],
-        'sqlsrv4' => [
-            'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1444',
-            'database' => 'linxdbDIMSMag',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
-            'prefix' => '',
-            'pooling'  => false,
-
-        ],*/
 
         'deals' => [
             'driver' => 'sqlsrv',
             'host' => '154.0.172.185',
             'port' =>  '1444',
             'database' => 'Deals',
-            'username' => 'sa',
+            'username' => 'linxDemo',
             'password' =>  'System2008',
             'prefix' => '',
             'pooling'  => false,
-
         ],
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
-
     ],
 
     /*
@@ -319,7 +190,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '').'_database'),
         ],
 
         'default' => [

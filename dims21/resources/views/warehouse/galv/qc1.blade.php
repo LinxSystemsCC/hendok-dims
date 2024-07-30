@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 {{-- Set the Title --}}
-@section('title', 'QC Phase2')
+@section('title', 'QC Phase1')
 
 
 
@@ -22,14 +22,14 @@
 @section('page')
 
 <style>
-    #gridQcPhase2{
+    #gridQcPhase1{
         height: calc(100vh - 2rem);
         max-height: calc(100vh - 2rem);
     }
 
 </style>
 
-<div id="gridQcPhase2"></div>
+<div id="gridQcPhase1"></div>
 
 <!-- Modal New Item -->
 <div class="modal modal-lg fade" id="modalPassOrFail" aria-labelledby="modalPassOrFail" aria-hidden="true">
@@ -43,22 +43,54 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="initmass">Initial Mass</label>
-                        <input type="number"  class="form-control" id="initmass" required>
+                        <label class="form-label" for="initmass">Initial Mass</label>
+                        <div class="row w-100">
+                            <div class="col-7 pe-0">
+                                <select class="form-select rounded-0 rounded-start" id="selectInitMassScale">
+                                    <option></option>
+                                    @foreach($scales as $scale)
+                                        <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-4 px-0">
+                                <input type="number"  class="form-control rounded-0" id="initmass" required disabled>
+                            </div>
+                            <div class="col-1 ps-0">
+                                <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditInitMass" ><i class="fa fa-edit p-0"></i></button>
+                                <button class="btn btn-success rounded-0 rounded-end" id="btnToggleMeasureInitMass" hidden><i class="fa fa-play p-0"></i></button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="stripmass">Strip Mass</label>
-                        <input type="number"  class="form-control" id="stripmass" required>
+                        <label class="form-label" for="stripmass">Strip Mass</label>
+                        <div class="row w-100">
+                            <div class="col-7 pe-0">
+                                <select class="form-select rounded-0 rounded-start" id="selectStripMassScale">
+                                    <option></option>
+                                    @foreach($scales as $scale)
+                                        <option value="{{$scale->intAutoId}}">{{$scale->strName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-4 px-0">
+                                <input type="number"  class="form-control rounded-0" id="stripmass" required disabled>
+                            </div>
+                            <div class="col-1 ps-0">
+                                <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditStripMass"><i class="fa fa-edit p-0"></i></button>
+                                <button class="btn btn-success rounded-0 rounded-end" id="btnToggleMeasureStripMass" hidden><i class="fa fa-play p-0"></i></button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="stripsize">Strip Size</label>
+                        <label class="form-label" for="stripsize">Strip Size</label>
                         <input type="number"  class="form-control" id="stripsize" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="zinc">Zinc</label>
+                        <label class="form-label" for="zinc">Zinc</label>
                         <div class="row">
                             <div class="col-md-4">
                                 <button class="btn btn-primary px-4" id="calczinc">
@@ -72,42 +104,37 @@
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="mpa">MPA Tested</label>
+                        <label class="form-label" for="mpa">MPA Tested</label>
                         <input type="number"  class="form-control" id="mpa" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="ticket">Tensile Ticket</label>
-                        <input type="text"  class="form-control" id="ticket" required>
-                    </div>
-
-                    <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="wiresize">Wire Size</label>
+                        <label class="form-label" for="wiresize">Wire Size</label>
                         <input type="number"  class="form-control" id="wiresize" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="stresstest">1 % Stress Test</label>
+                        <label class="form-label" for="stresstest">1 % Stress Test</label>
                         <input type="number"  class="form-control" id="stresstest" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="elongation">Elongation at Break %</label>
+                        <label class="form-label" for="elongation">Elongation at Break %</label>
                         <input type="number"  class="form-control" id="elongation" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="torsion">Torsion Test</label>
+                        <label class="form-label" for="torsion">Torsion Test</label>
                         <input type="number"  class="form-control" id="torsion" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="wraptest">1 Diameter Wrap Test</label>
+                        <label class="form-label" for="wraptest">1 Diameter Wrap Test</label>
                         <input type="number"  class="form-control" id="wraptest" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="coating">Coating Uniformity</label>
+                        <label class="form-label" for="coating">Coating Uniformity</label>
 
                         <select  class="form-control" id="coating" required>
                             <option>
@@ -121,27 +148,17 @@
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="coilID">Coil ID</label>
-                        <input type="number"  class="form-control" id="coilID" required>
-                    </div>
-
-                    <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="coilOD">Coil OD</label>
-                        <input type="number"  class="form-control" id="coilOD" required>
-                    </div>
-
-                    <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="CastNo">Cast Number</label>
+                        <label class="form-label" for="CastNo">Cast Number</label>
                         <input type="text"  class="form-control" id="CastNo" required>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="seq">Seq Number</label>
-                        <input type="number"  class="form-control" id="seq" required disabled>
+                        <label class="form-label" for="test">Test Number</label>
+                        <input type="number"  class="form-control" id="test" required disabled>
                     </div>
 
                     <div class="col-md-6 mb-1">
-                        <label class="col-form-label" for="comment1">Comment</label>
+                        <label class="form-label" for="comment1">Comment</label>
                         <select  class="form-control" id="comment1" required>
                             <option>
                             </option>
@@ -183,7 +200,7 @@
         $("#wiresize").change(function() {
             $(this).val(parseFloat($(this).val()).toFixed(2));
         });
-
+        
         $('#wiresize').on('input', function() {
             // console.log($('#wiresize').val());
             var inputValue = $(this).val();
@@ -200,12 +217,17 @@
                 $(this).val(inputValue.slice(0, 4)); // Truncate the input to four characters
             }
         });
-
+        
+        // Clear inputs and selects within the modal
         $("#modalPassOrFail").on("hidden.bs.modal", function () {
             $("#modalPassOrFail input, #modalPassOrFail select").val("");
+            $('#btnEditInitMass').prop('hidden', false);
+            $('#btnToggleMeasureInitMass').prop('hidden', true);
+            $('#btnEditStripMass').prop('hidden', false);
+            $('#btnToggleMeasureStripMass').prop('hidden', true);
         });
 
-        const gridQcPhase2 =  $("#gridQcPhase2").dxDataGrid({
+        const gridQcPhase1 = $("#gridQcPhase1").dxDataGrid({
             dataSource:[], //as json
             hoverStateEnabled: true,
             showBorders: true,
@@ -228,7 +250,7 @@
             },
             onExporting(e) {
                 const workbook = new ExcelJS.Workbook();
-                const worksheet = workbook.addWorksheet('qc2');
+                const worksheet = workbook.addWorksheet('qc1');
 
                 DevExpress.excelExporter.exportDataGrid({
                     component: e.component,
@@ -236,24 +258,23 @@
                     autoFilterEnabled: true,
                 }).then(() => {
                     workbook.xlsx.writeBuffer().then((buffer) => {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'qc2.xlsx');
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'qc1.xlsx');
                     });
                 });
                 e.cancel = true;
             },
-
             columns: [
                 {
                     dataField: "JobNo",
                     caption: "Job No",
                     //width:100,
                 },{
+                    dataField: "TestNo",
+                    caption: "Test No",
+                    //width:100,
+                },{
                     dataField: "Reference",
                     caption: "Reference",
-                    //width:150,
-                },{
-                    dataField: "SeqNo",
-                    caption: "Sequence Number",
                     //width:150,
                 },{
                     dataField: "CustomerName",
@@ -274,11 +295,11 @@
                 },{
                     dataField: "MPATolerance",
                     caption: "MPA Tolerance",
-                    //width: 350,
+                    //width:250,
                 },{
                     dataField: "ZincSpec",
                     caption: "Zinc Spec",
-                    //width: 350,
+                    //width:250,
                 },{
                     dataField: "WireSize",
                     caption: "Wire Size",
@@ -290,17 +311,11 @@
                 },{
                     dataField: "SizeTolerance",
                     caption: "Wire Tolerance",
-                    //width:250,
                 },{
-                    dataField: "TestDateTime",
+                    dataField: "MaxTDT",
                     caption: "Date",
                     //width:250,
-                },{
-                    dataField: "MassProduced",
-                    caption: "Produced",
-                    //width:100,
                 },
-                
                 {
                     dataField: "MassRequired",
                     caption: "Required",
@@ -314,17 +329,15 @@
             ],
             onRowDblClick:function(e){
                 $('#modalPassOrFail').modal('toggle');
-                var dataGrid = $("#gridQcPhase2").dxDataGrid("instance");
+                var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
                 var selectedRowsData = dataGrid.getSelectedRowsData();
                 var dept = selectedRowsData[0].DepartmentName;
                 var mach = selectedRowsData[0].MachineName;
                 var title = dept + ", " + mach;
-                // var count = selectedRowsData[0].count;
-                var seq = selectedRowsData[0].SeqNo;
-                seq = parseInt(seq);
+                var testNo = selectedRowsData[0].TestNo;
 
-                $('#qc2TestTitle').text(title);
-                $('#seq').val(seq);
+                $('#qc1TestTitle').text(title);
+                $('#test').val(testNo);
             },
             onToolbarPreparing: function (e) {
                 // Create a custom header on the left side
@@ -332,7 +345,7 @@
                     {
                         location: 'before',
                         template: function () {
-                            return $('<h3>').text('QC PHASE 2');
+                            return $('<h3>').text('QC PHASE 1');
                         }
                     }
                 );
@@ -340,12 +353,12 @@
 
         }).dxDataGrid('instance');
 
-        getQc2Data();
-        
+        getQc1Data();
+
         // Update Comments Lists
         $.ajax({
 
-            url: '{!!url("/getqc2comments")!!}',
+            url: '{!!url("/getqc1comments")!!}',
             type: "GET",
             data: {
     
@@ -370,12 +383,12 @@
 
         $('#testpass').click(function(){
             $(this).prop("disabled", true);
-            var dataGrid = $("#gridQcPhase2").dxDataGrid("instance");
+            var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
             $.ajax({
                 
-                url: '{!!url("/qc2pf")!!}',
+                url: '{!!url("/qc1pf")!!}',
                 type: "POST",
                 data: {
                     Reference: selectedRowsData[0].Reference,
@@ -386,10 +399,9 @@
                     JobNo: selectedRowsData[0].JobNo,
                     WireSize: selectedRowsData[0].WireSize,
                     MassRequired: selectedRowsData[0].MassRequired,
-                    seqNo: $("#seq").val(),
+                    testNo: $("#test").val(),
                     zincTested: $("#zinc").val(),
                     mpaTested: $("#mpa").val(),
-                    tensile: $("#ticket").val(),
                     castNo: $("#CastNo").val(),
                     wireSizeTested: $("#wiresize").val(),
                     stressTest: $("#stresstest").val(),
@@ -404,30 +416,25 @@
                     zincStripSize: $("#stripsize").val(),
                     comment2: $("#comment2 option:selected").text(),
                     comment3: $("#comment3 option:selected").text(),
-                    buttonMethod: "PASS",
+                    testpf: "P",
 
-                    // Added 20240220
-                    coilID:  $("#coilID").val(),
-                    coilOD:  $("#coilOD").val(),
                 },
                 success: function (data) {
                     if (data[0].Result != "Success"){
                         alert(data[0].Result);
-                        getQc2Data();
                     }
                     else{
                         if (data[0].Warnings != "Warning:"){
                             alert(data[0].Warnings);
                             $('#modalPassOrFail').modal('hide');
-                            getQc2Data();
+                            getQc1Data();
                         }
                         else{
                             $('#modalPassOrFail').modal('hide');
-                            getQc2Data();
+                            getQc1Data();
                         }
                     }
                 }
-
             });
             
                 
@@ -441,14 +448,13 @@
             if (comment1.trim() == "" && comment2.trim() == "" && comment3.trim() == "") {
                 alert("You need to select at least one comment.");
             } else {
-            
                 $(this).prop("disabled", true);
-                var dataGrid = $("#gridQcPhase2").dxDataGrid("instance");
+                var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
                 var selectedRowsData = dataGrid.getSelectedRowsData();
-                
-                $.ajax({
 
-                    url: '{!!url("/qc2pf")!!}',
+                $.ajax({
+                    
+                    url: '{!!url("/qc1pf")!!}',
                     type: "POST",
                     data: {
                         Reference: selectedRowsData[0].Reference,
@@ -459,10 +465,9 @@
                         JobNo: selectedRowsData[0].JobNo,
                         WireSize: selectedRowsData[0].WireSize,
                         MassRequired: selectedRowsData[0].MassRequired,
-                        seqNo: $("#seq").val(),
+                        testNo: $("#test").val(),
                         zincTested: $("#zinc").val(),
                         mpaTested: $("#mpa").val(),
-                        tensile: $("#ticket").val(),
                         castNo: $("#CastNo").val(),
                         wireSizeTested: $("#wiresize").val(),
                         stressTest: $("#stresstest").val(),
@@ -477,26 +482,24 @@
                         zincStripSize: $("#stripsize").val(),
                         comment2: $("#comment2 option:selected").text(),
                         comment3: $("#comment3 option:selected").text(),
-                        buttonMethod: "FAIL",
+                        testpf: "F",
 
-                        // Added 20240220
-                        coilID:  $("#coilID").val(),
-                        coilOD:  $("#coilOD").val(),
+
                     },
                     success: function (data) {
                         if (data[0].Result != "Success"){
                             alert(data[0].Result);
-                            getQc2Data();
+                            getQc1Data();
                         }
                         else{
                             if (data[0].Warnings != "Warning:"){
                                 alert(data[0].Warnings);
                                 $('#modalPassOrFail').modal('hide');
-                                getQc2Data();
+                                getQc1Data();
                             }
                             else{
                                 $('#modalPassOrFail').modal('hide');
-                                getQc2Data();
+                                getQc1Data();
                             }
                         }
                     }
@@ -506,7 +509,7 @@
         });
 
         $('#calczinc').click(function(){
-            var dataGrid = $("#gridQcPhase2").dxDataGrid("instance");
+            var dataGrid = $("#gridQcPhase1").dxDataGrid("instance");
             var selectedRowsData = dataGrid.getSelectedRowsData();
 
             var zincInitialMass = $("#initmass").val();
@@ -520,22 +523,23 @@
 
         });
 
-        function getQc2Data(){
+        function getQc1Data(){
             $('#testpass').prop("disabled", false);
             $('#testfail').prop("disabled", false);
             $.ajax({
-                url: '{!!url("/getqc2")!!}',
+                url: '{!!url("/getqc1")!!}',
                 type: "GET",
                 data: {
+
                 },
                 success: function (data) {
-                    gridQcPhase2.option('dataSource', data);
-                    gridQcPhase2.refresh();
+                    gridQcPhase1.option('dataSource', data);
+                    gridQcPhase1.refresh();
 
-                    gridData = gridQcPhase2.option("dataSource");
+                    gridData = gridQcPhase1.option("dataSource");
                 }
             });
-        };
+        }
 
         doacheck();
 
@@ -548,7 +552,7 @@
                 url: '{!!url("/checkForGalvUpdates")!!}',
                 type: "GET",
                 data: {
-                    checker: "QC2",
+                    checker: "QC1",
                 },
                 success: function (data) {
                     // console.log(data[0].Result);
@@ -557,10 +561,10 @@
                             url: '{!!url("/deleteGalvChecker")!!}',
                             type: "GET",
                             data: {
-                                checker: "QC2",
+                                checker: "QC1",
                             },
                             success: function (data) {
-                                getQc2Data();
+                                getQc1Data();
                             }
                         });
                     }
@@ -568,9 +572,106 @@
             });
         };
 
+        function fetchWeight(scale, inputId) {
+            $.ajax({
+                url: '{!!url("/listenToScale")!!}',
+                type: "GET",
+                data: {
+                    scaleID: scale,
+                },
+                success: function (data) {
+                    if (data) {
+                        $(inputId).val(data);
+                    } else {
+                        $(inputId).val(0);
+                    }
+                }
+            });
+        }
+
+        $("#selectInitMassScale").change(function () {
+            const scaleValue = $("#selectInitMassScale").val();
+
+            if (scaleValue === '') {
+                $('#btnEditInitMass').prop('hidden', false);
+                $('#btnToggleMeasureInitMass').prop('hidden', true);
+            } else {
+                $('#btnEditInitMass').prop('hidden', true);
+                $('#btnToggleMeasureInitMass').prop('hidden', false);
+            }
+        });
+
+        $("#selectStripMassScale").change(function () {
+            const scaleValue = $("#selectStripMassScale").val();
+
+            if (scaleValue === '') {
+                $('#btnEditStripMass').prop('hidden', false);
+                $('#btnToggleMeasureStripMass').prop('hidden', true);
+            } else {
+                $('#btnEditStripMass').prop('hidden', true);
+                $('#btnToggleMeasureStripMass').prop('hidden', false);
+            }
+        });
+
+        let isRunningInit = false;
+        let isRunningStrip = false;
+        let initInterval = null;
+        let stripInterval = null;
+
+        function toggleFetchWeight(button, scaleSelect, isRunning, intervalRef, inputId) {
+            const scaleValue = $(scaleSelect).val();
+            
+            if (isRunning) {
+                $(button + ' i').removeClass('fa-stop').addClass('fa-play');
+                $(button).removeClass('btn-danger').addClass('btn-success');
+                clearInterval(intervalRef);
+                return null;
+            } else {
+                $(button + ' i').removeClass('fa-play').addClass('fa-stop');
+                $(button).removeClass('btn-success').addClass('btn-danger');
+                fetchWeight(scaleValue, inputId);
+                return setInterval(() => fetchWeight(scaleValue, inputId), 2500);
+            }
+        }
+
+        $('#btnToggleMeasureInitMass').click(function () {
+            initInterval = toggleFetchWeight('#btnToggleMeasureInitMass', '#selectInitMassScale', isRunningInit, initInterval, '#initmass');
+            isRunningInit = !isRunningInit;
+        });
+
+        $('#btnToggleMeasureStripMass').click(function () {
+            var initMass = $("#initmass").val();
+            if (initMass == ''){
+                alert("Please Measeure the initial mass first.");
+                return;
+            }
+            
+            stripInterval = toggleFetchWeight('#btnToggleMeasureStripMass', '#selectStripMassScale', isRunningStrip, stripInterval, '#stripmass');
+            isRunningStrip = !isRunningStrip;
+        });
+
+        $('#btnEditInitMass').click(function () {
+            $('#initmass').prop("disabled", function(_, value) {
+                return !value;
+            });
+            $('#selectInitMassScale').prop("disabled", function(_, value) {
+                return !value;
+            });
+            $('#initmass').val("");
+            $('#selectInitMassScale').val("");
+        });
+
+        $('#btnEditStripMass').click(function () {
+            $('#stripmass').prop("disabled", function(_, value) {
+                return !value;
+            });
+            $('#selectStripMassScale').prop("disabled", function(_, value) {
+                return !value;
+            });
+            $('#stripmass').val("");
+            $('#selectStripMassScale').val("");
+        });
     });
-
-
 
 </script>
 

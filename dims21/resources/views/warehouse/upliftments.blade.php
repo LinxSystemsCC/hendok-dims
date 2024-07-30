@@ -405,6 +405,7 @@ if ((Auth::guest()))
                     {
                         dataField: "strReasonPickup",
                         caption: "Upliftment Description",
+                        visible: false,
                     },
                     {
                         dataField: "strCompany",

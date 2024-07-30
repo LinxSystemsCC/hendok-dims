@@ -36,6 +36,14 @@
                 'strDCName': 'All',
             });
 
+            let customColFormat = {
+                type: "custom",
+                formatter: function(value) {
+                    return (Math.round(value * 10000) / 10000).toFixed(4).replace(
+                        /\.?0+$/, '');
+                }
+            };
+
             const gridStockLocationSummary = $("#gridStockLocationSummary").dxDataGrid({
                 dataSource: [],
                 showBorders: true,
@@ -66,9 +74,8 @@
                 scrolling: {
                     mode: 'virtual'
                 },
-                columns: [
-                    {
-                        dataField: "strItemCode",
+                columns: [{
+                        dataField: "strPartNumber",
                         caption: "Item Code",
 
                     }, {
@@ -80,16 +87,39 @@
                         caption: "Item Group",
 
                     }, {
-                        dataField: "mnyEstimatedPallets",
-                        caption: "Qty",
-                        dataType:"number",
-                        format: "#0",
-
+                        dataField: "mnyOnHand",
+                        caption: "On Hand",
+                        dataType: "number",
+                        format: customColFormat,
+                    },
+                    {
+                        dataField: "mnyOnHandPallet",
+                        caption: "On Hand Pallet",
+                        dataType: "number",
+                        format: customColFormat,
+                    },
+                    {
+                        dataField: "mnyAvail",
+                        caption: "Avail.",
+                        dataType: "number",
+                        format: customColFormat,
+                    },
+                    {
+                        dataField: "mnyAvailPallet",
+                        caption: "Avail Pallet",
+                        dataType: "number",
+                        format: customColFormat,
                     }, {
-                        dataField: "mnyWeight",
-                        caption: "Weight",
-
-                    },{
+                        dataField: "mnyOnHandWeight",
+                        caption: "On Hand Weight",
+                        dataType: "number",
+                        format: customColFormat,
+                    }, {
+                        dataField: "mnyAvailWeight",
+                        caption: "Avail Weight",
+                        dataType: "number",
+                        format: customColFormat,
+                    }, {
                         dataField: "MinLevel",
                         caption: "Min Level",
 
@@ -98,7 +128,7 @@
                         caption: "Max Level",
 
                     }, {
-                        dataField: "QtyInStock",
+                        dataField: "mnySageInStock",
                         caption: "Sage Qty",
 
                     }
@@ -106,61 +136,91 @@
                 masterDetail: {
                     enabled: true,
                     template(container, options) {
-                        const ItemCode = options.data.strItemCode;
+                        const ItemCode = options.data.strPartNumber;
                         const gridStockDetailSummary = $('<div>')
-                        .dxDataGrid({
-                            dataSource: {
-                                load: function(loadOptions) {
-                                    return $.ajax({
-                                        url: '{!!url("/getStockDetailsSummary")!!}',
-                                        method: 'GET',
-                                        data: { 
-                                            ItemCode: ItemCode,
-                                            intDCid: selectedDC,
-                                        },
-                                        xhrFields: { withCredentials: true },
-                                    });
+                            .dxDataGrid({
+                                dataSource: {
+                                    load: function(loadOptions) {
+                                        return $.ajax({
+                                            url: '{!! url('/getStockDetailsSummary') !!}',
+                                            method: 'GET',
+                                            data: {
+                                                ItemCode: ItemCode,
+                                                intDCid: selectedDC,
+                                            },
+                                            xhrFields: {
+                                                withCredentials: true
+                                            },
+                                        });
+                                    },
+                                    update: function(key, values) {
+                                        gridStockDetailSummary.dxDataGrid('instance').refresh();
+                                    },
+                                    insert: function(key, values) {
+                                        gridStockDetailSummary.dxDataGrid('instance').refresh();
+                                    },
                                 },
-                                update: function (key, values) {
-                                    gridStockDetailSummary.dxDataGrid('instance').refresh();
+                                showBorders: true,
+                                filterRow: {
+                                    visible: true
                                 },
-                                insert: function (key, values) {
-                                    gridStockDetailSummary.dxDataGrid('instance').refresh();
+                                filterPanel: {
+                                    visible: true
                                 },
-                            },                        
-                            showBorders: true,     
-                            filterRow: {
-                                visible: true
-                            },
-                            filterPanel: {
-                                visible: true
-                            },
-                            headerFilter: {
-                                visible: true
-                            },
-                            paging: {
-                                enabled: false
-                            },
-                            onContentReady: function (e) {
-                                // This event is triggered when the content is ready, including the data
-                                // You can perform actions here after the data source is loaded
-                                // For example, hide the 'intBinId' column
-                                e.component.columnOption('intBinId', 'visible', false);
-                                e.component.columnOption('intBinId', 'allowEditing', false);
-                                e.component.columnOption('strLocationName', 'caption', 'Location Name');
-                                e.component.columnOption('strLocationName', 'allowEditing', false);
-                                e.component.columnOption('strDCName', 'caption', 'DC Name');
-                                e.component.columnOption('strDCName', 'allowEditing', false);
-                                e.component.columnOption('strBin', 'caption', 'Bin Name');
-                                e.component.columnOption('strBin', 'allowEditing', false);
-                                e.component.columnOption('mnyBinCapacity', 'caption', 'Capacity');
-                                e.component.columnOption('mnyBinCapacity', 'dataType', 'number');
-                                e.component.columnOption('mnyEstimatedPallets', 'caption', 'Qty');
-                                e.component.columnOption('mnyEstimatedPallets', 'allowEditing', false);
-                                e.component.columnOption('strErpItemCode', 'caption', 'Item Code');
-                                e.component.columnOption('strErpItemCode', 'allowEditing', false);
-                            },
-                        }).appendTo(container);
+                                headerFilter: {
+                                    visible: true
+                                },
+                                paging: {
+                                    enabled: false
+                                },
+                                onContentReady: function(e) {
+                                    e.component.columnOption('intBinId', 'visible', false);
+                                    e.component.columnOption('intBinId', 'allowEditing', false);
+
+                                    e.component.columnOption('strLocationName', 'caption', 'Location Name');
+                                    e.component.columnOption('strLocationName', 'allowEditing', false);
+
+                                    e.component.columnOption('strDCName', 'caption', 'DC Name');
+                                    e.component.columnOption('strDCName', 'allowEditing', false);
+
+                                    e.component.columnOption('strBin', 'caption', 'Bin Name');
+                                    e.component.columnOption('strBin', 'allowEditing', false);
+
+                                    e.component.columnOption('mnyBinCapacity', 'caption', 'Capacity');
+                                    e.component.columnOption('mnyBinCapacity', 'dataType', 'number');
+                                    e.component.columnOption('mnyBinCapacity', 'format', customColFormat);
+
+
+                                    e.component.columnOption('mnyOnHand', 'caption', 'On Hand Qty');
+                                    e.component.columnOption('mnyOnHand', 'dataType', 'number');
+                                    e.component.columnOption('mnyOnHand', 'format', customColFormat);
+
+                                    e.component.columnOption('mnyOnHandPallet', 'caption', 'On Hand Pallet Qty');
+                                    e.component.columnOption('mnyOnHandPallet', 'dataType', 'number');
+                                    e.component.columnOption('mnyOnHandPallet', 'format', customColFormat);
+
+                                    e.component.columnOption('mnyAvail', 'caption', 'Avail Qty');
+                                    e.component.columnOption('mnyAvail', 'dataType', 'number');
+                                    e.component.columnOption('mnyAvail', 'format', customColFormat);
+
+                                    e.component.columnOption('mnyAvailPallet', 'caption', 'Avail Pallet Qty');
+                                    e.component.columnOption('mnyAvailPallet', 'dataType', 'number');
+                                    e.component.columnOption('mnyAvailPallet', 'visible', false);
+                                    e.component.columnOption('mnyAvailPallet', 'format', customColFormat);
+
+                                    e.component.columnOption('mnyOnHandWeight', 'caption', 'On Hand Weigh');
+                                    e.component.columnOption('mnyOnHandWeight', 'dataType', 'number');
+                                    e.component.columnOption('mnyOnHandWeight', 'format', customColFormat);
+
+                                    e.component.columnOption('mnyAvailWeight', 'caption', 'Avail Weight');
+                                    e.component.columnOption('mnyAvailWeight', 'dataType', 'number');
+                                    e.component.columnOption('mnyAvailWeight', 'visible', false);
+                                    e.component.columnOption('mnyAvailWeight', 'format', customColFormat);
+
+                                    e.component.columnOption('strPartNumber', 'caption', 'Item Code');
+                                    e.component.columnOption('strPartNumber', 'allowEditing',false);
+                                },
+                            }).appendTo(container);
                     },
                 },
                 onToolbarPreparing: function(e) {
@@ -179,7 +239,7 @@
                             displayExpr: 'strDCName',
                             valueExpr: 'intAutoId',
                             value: -1,
-                            onValueChanged: function (e) {
+                            onValueChanged: function(e) {
                                 selectedDC = e.value;
                                 getStockLocationSummary();
                             }
@@ -211,9 +271,9 @@
                     success: function(data) {
                         const gridData = {
                             store: new DevExpress.data.CustomStore({
-                                key: "strItemCode",
+                                key: "strPartNumber",
                                 loadMode: "raw",
-                                load: function () {
+                                load: function() {
                                     return data;
                                 }
                             }),

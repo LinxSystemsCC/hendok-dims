@@ -386,6 +386,11 @@ if ((Auth::guest()))
                             <a href='{!!url("/diamondMeshReprint")!!}'>Reprint Label</a> <!-- TODO add userpermission for roofing reprint -->
                             {{-- @endif --}}
                         </li>
+                        <li>
+                            {{-- @if($diamondMeshCreateWorkOrder !="0") --}}
+                            <a href='{!!url("/diamondMeshReport")!!}'>Diamond Mesh Report</a> <!-- TODO add userpermission for roofing reprint -->
+                            {{-- @endif --}}
+                        </li>
 
                     </ul>
 

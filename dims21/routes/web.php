@@ -28,7 +28,7 @@ use App\Http\Controllers\Warehouse\ProductionController;
 use App\Http\Controllers\Warehouse\LoadingController;
 use App\Http\Controllers\Warehouse\StockControlController;
 use App\Http\Controllers\ApisController;
-use App\Http\Controllers\StockTakeController;
+use App\Http\Controllers\Warehouse\StockTakeController;
 use App\Http\Controllers\Warehouse\DiamondMeshController;
 use App\Http\Controllers\Warehouse\RoofingController;
 use App\Http\Controllers\WireDraw\WireDrawCustomersController;
@@ -891,8 +891,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('deleteUser', [WareHouseController::class,'deleteUser']);
     Route::get('updateUser', [WareHouseController::class,'updateUser']);
     Route::get('updateUserPrinters', [WareHouseController::class,'updateUserPrinters']);
-    Route::get('getqc1', [WareHouseController::class,'getqc1']);
-    Route::get('getqc2', [WareHouseController::class,'getqc2']);
     Route::get('getweigh', [WareHouseController::class,'getweigh']);
     Route::get('getscales', [WareHouseController::class,'getscales']);
     Route::get('getregrade', [WareHouseController::class,'getregrade']);
@@ -951,11 +949,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
     Route::get('getWIP', [WareHouseController::class,'getWIP']);
     Route::get('getRoofWIP', [WareHouseController::class,'getRoofWIP']);
-    Route::get('getGalvWIP', [WareHouseController::class,'getGalvWIP']);
-    Route::get('checkForGalvUpdates', [WareHouseController::class,'checkForGalvUpdates']);
-    Route::get('deleteGalvChecker', [WareHouseController::class,'deleteGalvChecker']);
-    Route::get('changeGalvJobStatus', [WareHouseController::class,'changeGalvJobStatus']);
-    Route::get('getGalvWIPConsolidated',[WareHouseController::class,'getGalvWIPConsolidated']);
     Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
     Route::get('roofingReport', [WareHouseController::class,'roofingReport']);
     Route::get('galvReport', [WareHouseController::class,'galvReport']);
@@ -984,15 +977,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getpalletmovementreport', [WareHouseController::class,'getpalletmovementreport']);
     Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovementreport']);
     Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
-    Route::get('wmaxlanding', [WareHouseController::class,'wmaxlanding']);
     Route::get('wmaxreprint', [WareHouseController::class,'wmaxreprint']);
     Route::post('galvReprintEdit', [WareHouseController::class,'galvReprintEdit']);
     Route::get('getGalvReprints', [WareHouseController::class,'getGalvReprints']);
-    Route::get('wmaxgetcustomerproduct', [WareHouseController::class,'wmaxgetcustomerproduct']);
-    Route::get('wmaxgetproductinfo', [WareHouseController::class,'wmaxgetproductinfo']);
-    Route::get('wmaxgetproductwiresize', [WareHouseController::class,'wmaxgetproductwiresize']);
-    Route::get('wmaxdepartmentgalv', [WareHouseController::class,'wmaxdepartmentgalv']);
-    Route::get('wmaxdepartmentmachinesgalv', [WareHouseController::class,'wmaxdepartmentmachinesgalv']);
     Route::get('binandqrcodes', [WareHouseController::class,'binandqrcodes']);
     Route::get('printlocationqrcodes/{location}', [WareHouseController::class,'printlocationqrcodes']);
     Route::get('getProductGroupMappedToDept', [WareHouseController::class,'getProductGroupMappedToDept']);
@@ -1003,7 +990,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('customergridlookup', [WareHouseController::class,'customergridlookup']);
     Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
     Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
-    Route::post('insertIntoJobTableGalv', [WareHouseController::class,'insertIntoJobTableGalv']);
     Route::post('insertPrePlannedSO', [WareHouseController::class,'insertPrePlannedSO']);
     Route::post('updateRoofLines', [WareHouseController::class,'updateRoofLines']);
     Route::post('updateRoofLinesSequence', [WareHouseController::class,'updateRoofLinesSequence']);
@@ -1022,10 +1008,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('printselectedcriteria/{department}/{machine}/{product}', [WareHouseController::class,'printselectedcriteria']);
     Route::get('goprintfirstqrcode/{department}/{machine}/{product}/{pallet}/{required}', [WareHouseController::class,'goprintfirstqrcode']);
     Route::get('startprintingjob/{qty}/{machine}/{product}/{pallet}/{startdate}', [WareHouseController::class,'startprintingjob']);
-    Route::get('getqc1comments', [WareHouseController::class,'getqc1comments']);
-    Route::get('getqc2comments', [WareHouseController::class,'getqc2comments']);
-    Route::post('qc1pf', [WareHouseController::class,'qc1pf']);
-    Route::post('qc2pf', [WareHouseController::class,'qc2pf']);
     Route::post('acceptholdweigh', [WareHouseController::class,'acceptholdweigh']);
     Route::post('savestockchangewmax', [WareHouseController::class,'savestockchangewmax']);
     Route::post('saveretest', [WareHouseController::class,'saveretest']);
@@ -1128,8 +1110,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('galvcreateprodspec', [WareHouseController::class,'galvcreateprodspec']);
     Route::get('galveditprodspec', [WareHouseController::class,'galveditprodspec']);
     Route::get('galvscale', [WareHouseController::class,'galvscale']);
-    Route::get('qc1', [WareHouseController::class,'qc1']);
-    Route::get('qc2', [WareHouseController::class,'qc2']);
     Route::get('wmaxweigh', [WareHouseController::class,'wmaxweigh']);
     Route::get('wmaxregrade', [WareHouseController::class,'wmaxregrade']);
     Route::get('wmaxstockchange', [WareHouseController::class,'wmaxstockchange']);
@@ -1175,11 +1155,32 @@ Route::group(['middleware' => 'auth'], function() {
 
 //GALV CONTROLLER STARTS HERE !!!
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('galvjumbocoilsprint', [GalvController::class,'galvjumbocoilsprint']);
+    Route::get('galvJumboCoilsPrint', [GalvController::class,'galvJumboCoilsPrint']);
     Route::get('getWmaxTickets', [GalvController::class,'getWmaxTickets']);
     Route::get('galvPrintJumboCoil', [GalvController::class,'galvPrintJumboCoil']);
     Route::get('wmaxscrap', [GalvController::class,'wmaxscrap']);
     Route::post('postScrapWeigh', [GalvController::class,'postScrapWeigh']);
+
+    Route::get('wmaxlanding', [GalvController::class,'wmaxlanding']);
+    Route::get('qc1', [GalvController::class,'qc1']);
+    Route::get('qc2', [GalvController::class,'qc2']);
+    Route::get('getqc1comments', [GalvController::class,'getqc1comments']);
+    Route::get('getqc2comments', [GalvController::class,'getqc2comments']);
+    Route::post('qc1pf', [GalvController::class,'qc1pf']);
+    Route::post('qc2pf', [GalvController::class,'qc2pf']);
+    Route::get('getqc1', [GalvController::class,'getqc1']);
+    Route::get('getqc2', [GalvController::class,'getqc2']);
+    Route::get('checkForGalvUpdates', [GalvController::class,'checkForGalvUpdates']);
+    Route::get('deleteGalvChecker', [GalvController::class,'deleteGalvChecker']);
+    Route::get('wmaxgetcustomerproduct', [GalvController::class,'wmaxgetcustomerproduct']);
+    Route::get('wmaxgetproductinfo', [GalvController::class,'wmaxgetproductinfo']);
+    Route::get('wmaxgetproductwiresize', [GalvController::class,'wmaxgetproductwiresize']);
+    Route::get('wmaxdepartmentgalv', [GalvController::class,'wmaxdepartmentgalv']);
+    Route::get('wmaxdepartmentmachinesgalv', [GalvController::class,'wmaxdepartmentmachinesgalv']);
+    Route::get('getGalvWIP', [GalvController::class,'getGalvWIP']);
+    Route::get('changeGalvJobStatus', [GalvController::class,'changeGalvJobStatus']);
+    Route::get('getGalvWIPConsolidated',[GalvController::class,'getGalvWIPConsolidated']);
+    Route::post('insertIntoJobTableGalv', [GalvController::class,'insertIntoJobTableGalv']);
 
 });
 //GALV CONTROLLER ENDS HERE !!!
@@ -1306,14 +1307,24 @@ Route::group(['middleware' => 'auth'], function() {
 
 // Stock Control Controller
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('stockTake', [StockTakeController::class,'stockTake']);
-    Route::get('getStockTakes', [StockTakeController::class,'getStockTakes']);
+
     Route::post('saveStockTake', [StockTakeController::class,'saveStockTake']);
     Route::get('getStockTakeLines', [StockTakeController::class,'getStockTakeLines']);
     Route::get('selectStockTake', [StockTakeController::class,'selectStockTake']);
-    Route::post('updateStockTakeStatus', [StockTakeController::class,'updateStockTakeStatus']);
     Route::get('productStockCountMapping', [StockTakeController::class,'productStockCountMapping']);
     Route::post('postMappedItems', [StockTakeController::class,'postMappedItems']);
+    Route::get('getBinsForLocations', [StockTakeController::class,'getBinsForLocations']);
+
+    // New And imporved methods
+    Route::get('stockTake', [StockTakeController::class,'stockTake']);
+    Route::get('getStockTakes', [StockTakeController::class,'getStockTakes']);
+    Route::post('createStockTake', [StockTakeController::class,'createStockTake']);
+    Route::post('updateStockTakeStatus', [StockTakeController::class,'updateStockTakeStatus']);
+    Route::get('stockCounts/{ID}', [StockTakeController::class,'stockCounts']);
+    Route::post('approveVarianceAdjustment', [StockTakeController::class,'approveVarianceAdjustment']);
+    Route::post('syncStockMovements', [StockTakeController::class,'syncStockMovements']);
+    Route::get('getNextStockTakeId', [StockTakeController::class,'getNextStockTakeId']);
+
 });
 
 // Diamond Mesh Controller
@@ -1335,6 +1346,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('diamondMeshReprint', [DiamondMeshController::class,'diamondMeshReprint']);
     Route::post('diamondMeshInsertReprint', [DiamondMeshController::class,'diamondMeshInsertReprint']);
+    Route::get('diamondMeshReport', [DiamondMeshController::class,'diamondMeshReport']);
+
+    Route::post('deleteDiamondMeshBatch', [DiamondMeshController::class,'deleteDiamondMeshBatch']);
+    Route::post('deleteDiamondMeshSO', [DiamondMeshController::class,'deleteDiamondMeshSO']);
 });
 
 // Roofing Controller
