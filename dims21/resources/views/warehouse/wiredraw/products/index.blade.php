@@ -185,7 +185,7 @@
                             },
                             {
                                 dataField: 'intCustomerId',
-                                caption: 'CustomerName',
+                                caption: 'Customer Name',
                                 lookup: {
                                     dataSource: customers,
                                     displayExpr: 'Name',
@@ -194,7 +194,7 @@
                             },
                             {
                                 dataField: 'strProductName',
-                                caption: 'ProductName',
+                                caption: 'Product Name',
                                 dataType: 'string',
                             },
                             {

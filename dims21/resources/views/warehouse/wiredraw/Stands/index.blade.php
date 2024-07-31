@@ -188,7 +188,7 @@
                             },
                             {
                                 dataField: "intDepartmentId",
-                                caption: "DependentName",
+                                caption: "Department Name",
                                 lookup: {
                                     dataSource: dept,
                                     displayExpr: 'dptName',

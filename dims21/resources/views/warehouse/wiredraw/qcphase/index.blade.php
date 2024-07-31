@@ -131,7 +131,7 @@
                         },
                         onExporting(e) {
                             const workbook = new ExcelJS.Workbook();
-                            const worksheet = workbook.addWorksheet('qc1');
+                            const worksheet = workbook.addWorksheet('qcphase');
 
                             DevExpress.excelExporter.exportDataGrid({
                                 component: e.component,
@@ -141,7 +141,7 @@
                                 workbook.xlsx.writeBuffer().then((buffer) => {
                                     saveAs(new Blob([buffer], {
                                         type: 'application/octet-stream'
-                                    }), 'qc1.xlsx');
+                                    }), 'qcphase.xlsx');
                                 });
                             });
                             e.cancel = true;

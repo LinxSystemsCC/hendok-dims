@@ -23,6 +23,7 @@ class WireDrawWireDrawWeightController extends Controller
             )
             ->leftJoin('tblMachines', 'tblWireDrawHeaders.intWireDrawMachineId', '=', 'tblMachines.intAutoMachineID')
             ->join('tblProductsWireDraw', 'tblWireDrawHeaders.intProductId', '=', 'tblProductsWireDraw.intProductId')
+            ->where('strJobStatus','!=','Completed')
             ->get();
 
         $machines = $jobHeaders->pluck('strMachineName', 'intWireDrawMachineId');
