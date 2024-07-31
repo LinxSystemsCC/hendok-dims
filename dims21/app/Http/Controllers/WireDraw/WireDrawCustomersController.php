@@ -8,11 +8,19 @@ use App\Models\WireDraw\WireDrawCustomer;
 
 class WireDrawCustomersController extends Controller
 {
+    /**
+     * This function is used for return view and disply data    
+     */
     public function index()
     {
         return view('warehouse.wiredraw.customers.index');
     }
 
+    /**
+     * This function is used for save the new customerName
+     *
+     * @param obj $request
+     */
     public function store(StorePostWireDrawCustomerRequest $request)
     {
         $validated = $request->validated();
@@ -23,6 +31,9 @@ class WireDrawCustomersController extends Controller
         return response()->json(['success' => 'Customer created successfully']);
     }
 
+    /**
+     * This function is used for get the customer list
+     */
     public function getCustomerName()
     {
         $customerNames = WireDrawCustomer::select('intCustomerId',	'strCustomerName')
@@ -32,6 +43,9 @@ class WireDrawCustomersController extends Controller
         return response()->json($customerNames);
     }
 
+    /**
+     * This function is used for delete the customer
+     */
     public function destroy(string $id)
     {
         WireDrawCustomer::destroy($id);
@@ -39,6 +53,11 @@ class WireDrawCustomersController extends Controller
         return response()->json(['success' => 'Customer deleted successfully']);
     }
 
+    /**
+     * This function is used for update the customerName
+     *
+     * @param obj $request
+     */
     public function update(StorePostWireDrawCustomerRequest $request, WireDrawCustomer $customer)
     {
         $validated = $request->validated();
@@ -47,6 +66,9 @@ class WireDrawCustomersController extends Controller
         return response()->json(['data' => $customer]);
     }
 
+    /**
+     * This function is used for get data,update data and return array 
+     */
     private function getRequestData($data)
     {
         return [

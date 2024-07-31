@@ -71,12 +71,7 @@
 @section('scripts')
 
     <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
+        
         $('#intCustomerId').select2({
             theme: 'bootstrap-5',
             dropdownParent: $('#newproduct'),
@@ -275,7 +270,6 @@
                 }
             });
         });
-
 
         function showDialog(tag, width, height) {
             $(tag).dialog({

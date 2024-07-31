@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostWireDrawStandsRequest extends FormRequest
@@ -21,18 +22,22 @@ class StorePostWireDrawStandsRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        $rules = [
-            'strStandName' => 'required',
-            'fltStandMass' => 'required|numeric',
-            'intDepartmentId' => 'required',
+        $validations = [
+            'strStandName' => ['required'],
+            'fltStandMass' => ['required', 'numeric'],
+            'intDepartmentId' => ['required'],
         ];
-        if ($this->isMethod('post')) {
-            $rules['strStandName'] .= '|unique:tblStands,strStandName';
+
+        $uniqueName = Rule::unique('tblStands', 'strStandName');
+        if ($this->stand) {
+            $uniqueName = $uniqueName->ignore($this->intStandId, 'intStandId');
         }
-        
-        return $rules;
+
+        $validations['strStandName'][] = $uniqueName;
+
+        return $validations;
     }
 
     public function attributes()

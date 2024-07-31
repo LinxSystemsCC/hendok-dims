@@ -11,6 +11,9 @@ use Illuminate\Support\Carbon;
 
 class WireDrawWireDrawWeightController extends Controller
 {
+    /**
+     * This function is used for return view and disply data    
+     */
     public function index()
     {
         $jobHeaders = DB::table('tblWireDrawHeaders')
@@ -38,6 +41,11 @@ class WireDrawWireDrawWeightController extends Controller
         return view('warehouse.wiredraw.wiredrawweight.index', compact('machineWiseJobs', 'machines', 'standGuop', 'stand', 'standMass'));
     }
 
+    /**
+     * This function is used for save the data and also save the add NoOfStand,weight,JobStatus,DateStart in tblWireDrawHeaders
+     *
+     * @param obj $request
+     */
     public function store(StorePostWireDrawWeighRequest $request)
     {
         $validated = $request->validated();
