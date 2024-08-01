@@ -35,250 +35,69 @@ return [
 
     'connections' => [
 
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-        ],
-
-        'mysql' => [
-            'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
-
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
-
-            'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => ''
-
-        ],
-        'sqlsrv2' => [
-			'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => ''
-        ],
-        'sqlsrv3' => [
-            'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'pooling'  => false,
-        ], 
-		'weights' => [
-            'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2012',
-            'port' =>  '',
-            'database' => 'WB_Ticket_Trans',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'pooling'  => false,
-        ],
-        'webstore' => [
-             'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'charset' => 'utf8',
-            'pooling'  => false,
-        ],
-          'linxbriefcase' => [
-             'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'prefix' => '',
-            'pooling'  => false,
-              /*'driver' => 'sqlsrv',
-              'host' => '102.37.14.76',
-              'port' =>  '61994',
-              'database' => 'LinxBriefcase',
-              'username' => 'sa',
-              'password' =>  'Express62019SQL',
-              'prefix' => '',
-              'pooling'  => false,*/
-
-
-          ],
-        'linxbriefcaseBackOrders' => [
-            'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'prefix' => '',
-            'pooling'  => false,
-            /*'driver' => 'sqlsrv',
-            'host' => '102.37.14.76',
-            'port' =>  '61994',
-            'database' => 'LinxBriefcase',
-            'username' => 'sa',
-            'password' =>  'Express62019SQL',
-            'prefix' => '',
-            'pooling'  => false,*/
-
-
-        ],
-
-        'sqlsrv4' => [
-			'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'prefix' => '',
-            'pooling'  => false,
-
-        ],
-		
-        'weights' => [
-			'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2012',
-            'port' =>  '',
-            'database' => 'ProWeigh',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'prefix' => '',
-            'pooling'  => false,
-
-        ],
-  'googlemaps' => [
-           'driver' => 'sqlsrv',
-            'host' => 'HK-SQL2019',
-            'port' =>  '',
-            'database' => 'linxdbDIMS',
-            'username' => 'dims',
-            'password' =>  '$D1ms_L1nx#',
-            'prefix' => '',
-            'prefix' => '',
-            'pooling'  => false,
-
-        ],
-
-
-        /***
-        THIS IS FOR PREMISES**/
-/*
         'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1444',
-            'database' => 'linxdbDIMSMag',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
+            'driver' => env('DB_CONNECTION', 'driver'),
+            'host' => env('DB_HOST', 'host'),
+            'port' =>  env('DB_PORT', 'port'),
+            'database' => env('DB_DATABASE', 'database'),
+            'username' => env('DB_USERNAME', 'username'),
+            'password' =>  env('DB_PASSWORD', 'password'),
             'prefix' => ''
-
         ],
+        
         'sqlsrv2' => [
-            'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', '.'),
-            'port' => env('DB_PORT', '1444'),
-            'database' => env('DB_DATABASE', 'linxdbDIMS'),
-            'username' => env('DB_USERNAME', 'sa'),
-            'password' => env('DB_PASSWORD', 'Linx_123'),
-            'prefix' => '',
-            'pooling'  => false,
-
+			'driver' => env('DB_CONNECTION', 'driver'),
+            'host' => env('DB_HOST', 'host'),
+            'port' =>  env('DB_PORT', 'port'),
+            'database' => env('DB_DATABASE', 'database'),
+            'username' => env('DB_USERNAME', 'username'),
+            'password' =>  env('DB_PASSWORD', 'password'),
+            'prefix' => ''
         ],
+
         'sqlsrv3' => [
-            'driver' => 'sqlsrv',
-            'host' => '192.168.1.129',
-            'port' =>  '1444',
-            'database' => 'linxdbDIMS',
-            'username' => 'sa',
-            'password' =>  'gR0!1248$',
+			'driver' => env('DB_CONNECTION', 'driver'),
+            'host' => env('DB_HOST', 'host'),
+            'port' =>  env('DB_PORT', 'port'),
+            'database' => env('DB_DATABASE', 'database'),
+            'username' => env('DB_USERNAME', 'username'),
+            'password' =>  env('DB_PASSWORD', 'password'),
             'prefix' => '',
             'pooling'  => false,
-
         ],
+
         'sqlsrv4' => [
-            'driver' => 'sqlsrv',
-            'host' => '.',
-            'port' =>  '1444',
-            'database' => 'linxdbDIMSMag',
-            'username' => 'sa',
-            'password' =>  'Linx_123',
+			'driver' => env('DB_CONNECTION', 'driver'),
+            'host' => env('DB_HOST', 'host'),
+            'port' =>  env('DB_PORT', 'port'),
+            'database' => env('DB_DATABASE', 'database'),
+            'username' => env('DB_USERNAME', 'username'),
+            'password' =>  env('DB_PASSWORD', 'password'),
+            'prefix' => '',
             'prefix' => '',
             'pooling'  => false,
-
-        ],*/
-
-        'deals' => [
-            'driver' => 'sqlsrv',
-            'host' => '154.0.172.185',
-            'port' =>  '1444',
-            'database' => 'Deals',
-            'username' => 'sa',
-            'password' =>  'System2008',
-            'prefix' => '',
-            'pooling'  => false,
-
         ],
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
+
+		'weights' => [
+            'driver' => env('DB_CONNECTION', 'driver'),
+            'host' => env('DB2_HOST', 'host'),
+            'port' =>  env('DB2_PORT', 'port'),
+            'database' => env('DB2_DATABASE', 'database'),
+            'username' => env('DB2_USERNAME', 'username'),
+            'password' =>  env('DB2_PASSWORD', 'password'),
             'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
+            'pooling'  => false,
+        ],
+
+        'googlemaps' => [
+            'driver' => env('DB_CONNECTION', 'driver'),
+            'host' => env('DB_HOST', 'host'),
+            'port' =>  env('DB_PORT', 'port'),
+            'database' => env('DB_DATABASE', 'database'),
+            'username' => env('DB_USERNAME', 'username'),
+            'password' =>  env('DB_PASSWORD', 'password'),
+            'prefix' => '',
+            'pooling'  => false,
         ],
 
     ],
@@ -315,23 +134,20 @@ return [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
-
         'default' => [
             'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host' => env('REDIS_HOST', 'host'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
         ],
-
         'cache' => [
             'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host' => env('REDIS_HOST', 'host'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
-
     ],
 
 ];
