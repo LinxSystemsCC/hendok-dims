@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlsrv'),
+    'default' => env('DB1_CONNECTION', 'sqlsrv'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,50 +36,50 @@ return [
     'connections' => [
 
         'sqlsrv' => [
-            'driver' => env('DB_CONNECTION', 'driver'),
-            'host' => env('DB_HOST', 'host'),
-            'port' =>  env('DB_PORT', 'port'),
-            'database' => env('DB_DATABASE', 'database'),
-            'username' => env('DB_USERNAME', 'username'),
-            'password' =>  env('DB_PASSWORD', 'password'),
+            'driver' => 'sqlsrv',
+            'host' => env('DB1_HOST', 'host'),
+            'port' =>  env('DB1_PORT', 'port'),
+            'database' => env('DB1_DATABASE', 'database'),
+            'username' => env('DB1_USERNAME', 'username'),
+            'password' =>  env('DB1_PASSWORD', 'password'),
             'prefix' => ''
         ],
         
         'sqlsrv2' => [
-			'driver' => env('DB_CONNECTION', 'driver'),
-            'host' => env('DB_HOST', 'host'),
-            'port' =>  env('DB_PORT', 'port'),
-            'database' => env('DB_DATABASE', 'database'),
-            'username' => env('DB_USERNAME', 'username'),
-            'password' =>  env('DB_PASSWORD', 'password'),
+			'driver' => 'sqlsrv',
+            'host' => env('DB1_HOST', 'host'),
+            'port' =>  env('DB1_PORT', 'port'),
+            'database' => env('DB1_DATABASE', 'database'),
+            'username' => env('DB1_USERNAME', 'username'),
+            'password' =>  env('DB1_PASSWORD', 'password'),
             'prefix' => ''
         ],
 
         'sqlsrv3' => [
-			'driver' => env('DB_CONNECTION', 'driver'),
-            'host' => env('DB_HOST', 'host'),
-            'port' =>  env('DB_PORT', 'port'),
-            'database' => env('DB_DATABASE', 'database'),
-            'username' => env('DB_USERNAME', 'username'),
-            'password' =>  env('DB_PASSWORD', 'password'),
+			'driver' => 'sqlsrv',
+            'host' => env('DB1_HOST', 'host'),
+            'port' =>  env('DB1_PORT', 'port'),
+            'database' => env('DB1_DATABASE', 'database'),
+            'username' => env('DB1_USERNAME', 'username'),
+            'password' =>  env('DB1_PASSWORD', 'password'),
             'prefix' => '',
             'pooling'  => false,
         ],
 
         'sqlsrv4' => [
-			'driver' => env('DB_CONNECTION', 'driver'),
-            'host' => env('DB_HOST', 'host'),
-            'port' =>  env('DB_PORT', 'port'),
-            'database' => env('DB_DATABASE', 'database'),
-            'username' => env('DB_USERNAME', 'username'),
-            'password' =>  env('DB_PASSWORD', 'password'),
+			'driver' => 'sqlsrv',
+            'host' => env('DB1_HOST', 'host'),
+            'port' =>  env('DB1_PORT', 'port'),
+            'database' => env('DB1_DATABASE', 'database'),
+            'username' => env('DB1_USERNAME', 'username'),
+            'password' =>  env('DB1_PASSWORD', 'password'),
             'prefix' => '',
             'prefix' => '',
             'pooling'  => false,
         ],
 
 		'weights' => [
-            'driver' => env('DB_CONNECTION', 'driver'),
+            'driver' => 'sqlsrv',
             'host' => env('DB2_HOST', 'host'),
             'port' =>  env('DB2_PORT', 'port'),
             'database' => env('DB2_DATABASE', 'database'),
@@ -90,12 +90,12 @@ return [
         ],
 
         'googlemaps' => [
-            'driver' => env('DB_CONNECTION', 'driver'),
-            'host' => env('DB_HOST', 'host'),
-            'port' =>  env('DB_PORT', 'port'),
-            'database' => env('DB_DATABASE', 'database'),
-            'username' => env('DB_USERNAME', 'username'),
-            'password' =>  env('DB_PASSWORD', 'password'),
+            'driver' => 'sqlsrv',
+            'host' => env('DB1_HOST', 'host'),
+            'port' =>  env('DB1_PORT', 'port'),
+            'database' => env('DB1_DATABASE', 'database'),
+            'username' => env('DB1_USERNAME', 'username'),
+            'password' =>  env('DB1_PASSWORD', 'password'),
             'prefix' => '',
             'pooling'  => false,
         ],
