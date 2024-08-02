@@ -68,11 +68,6 @@
 @section('scripts')
 
     <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         
         $(document).on('focus', ':input', function() {
             $(this).attr('autocomplete', 'off');
@@ -193,7 +188,7 @@
                             },
                             {
                                 dataField: "intDepartmentId",
-                                caption: "DependentName",
+                                caption: "Department Name",
                                 lookup: {
                                     dataSource: dept,
                                     displayExpr: 'dptName',

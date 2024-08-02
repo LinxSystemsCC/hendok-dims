@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class WireDrawProductsController extends Controller
 {
+    /**
+     * This function is used for return view and disply data  
+     */
     public function index()
     {
         $customers = WireDrawCustomer::select('strCustomerName as Name', 'intCustomerId as ID')->get();
@@ -17,6 +20,11 @@ class WireDrawProductsController extends Controller
         return view('warehouse.wiredraw.products.index')->with('customers', $customers);
     }
 
+    /**
+     * This function is used for save the new products
+     *
+     * @param obj $request
+     */
     public function store(StorePostWireDrawProductsRequest $request)
     {
         $validated = $request->validated();
@@ -31,6 +39,11 @@ class WireDrawProductsController extends Controller
         return response()->json(['success' => true]);
     }
 
+    /**
+     * This function is used for update the products
+     *
+     * @param obj $request
+     */
     public function update(StorePostWireDrawProductsRequest $request, WireDrawProduct $Product)
     {
         $validated = $request->validated();
@@ -39,6 +52,9 @@ class WireDrawProductsController extends Controller
         return response()->json(['success' => true]);
     }
 
+    /**
+     * This function is used for get data,update data and return array 
+     */
     private function getRequestData($data)
     {
         return [
@@ -50,6 +66,9 @@ class WireDrawProductsController extends Controller
         ];
     }
 
+    /**
+     * This function is used for delete the products
+     */
     public function destroy(string $id)
     {
         WireDrawProduct::destroy($id);
@@ -57,11 +76,16 @@ class WireDrawProductsController extends Controller
         return response()->json(['success' => 'Customer deleted successfully']);
     }
 
+    /**
+     * This function is used for get the products list
+     */
     public function getProductsName()
     {
         $data = DB::table('tblCustomersWireDraw')
             ->join('tblProductsWireDraw', 'tblCustomersWireDraw.intCustomerId', '=', 'tblProductsWireDraw.intCustomerId')
-            ->select('tblCustomersWireDraw.strCustomerName','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName','tblProductsWireDraw.ftlWireSize','tblProductsWireDraw.strSizeTolerance','tblProductsWireDraw.strMPATolerance','tblProductsWireDraw.intCustomerId')
+            ->select('tblCustomersWireDraw.strCustomerName','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName',
+                'tblProductsWireDraw.ftlWireSize','tblProductsWireDraw.strSizeTolerance','tblProductsWireDraw.strMPATolerance','tblProductsWireDraw.intCustomerId'
+            )
             ->latest('intProductId')
             ->get();
 

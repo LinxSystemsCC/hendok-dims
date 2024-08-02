@@ -14,18 +14,21 @@ use Illuminate\Http\Request;
 
 class WireDrawHeadersController extends Controller
 {
+    /**
+     * This function is used for return view and disply data    
+     */
     public function index()
     {
         $customers = WireDrawCustomer::select('strCustomerName', 'intCustomerId')->get();
         $products = WireDrawProduct::select('strProductName', 'intProductId')->get();
         $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments Where strDeptName in ('Wire Draw')");
+                ->select("select * from tblDepartments Where strDeptName in ('Wire Draw')");
         $wireDrawDepartmentId = 0;
         if (isset($dept[0]->intAutoID)) {
             $wireDrawDepartmentId = $dept[0]->intAutoID;
         }
         $machines = DB::connection('sqlsrv2')
-            ->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $wireDrawDepartmentId, 'DepartmentMachines'");
+                ->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $wireDrawDepartmentId, 'DepartmentMachines'");
 
         return view('warehouse.wiredraw.headers.index', compact('customers', 'products', 'machines'));
     }
@@ -60,19 +63,24 @@ class WireDrawHeadersController extends Controller
             ->leftJoin('tblCustomersWireDraw', 'tblWireDrawHeaders.intCustomerId', '=', 'tblCustomersWireDraw.intCustomerId')
             ->join('tblProductsWireDraw','tblWireDrawHeaders.intProductId','=','tblProductsWireDraw.intProductId')
             ->leftJoin('tblMachines','tblWireDrawHeaders.intWireDrawMachineId','=','tblMachines.intAutoMachineID')
-            ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName',DB::raw("CONCAT('WD', tblWireDrawHeaders.intHeaderId) AS intHeaderId"),
-                'tblWireDrawHeaders.strReference','tblWireDrawHeaders.dtDateEnd',DB::raw("FORMAT(tblWireDrawHeaders.dtDateStart, 'yyyy-MM-dd HH:mm:ss') as dtDateStart"),'tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
-                'tblMachines.strMachineName','tblMachines.intAutoMachineID','tblWireDrawHeaders.strType','tblWireDrawHeaders.strJobStatus')
+            ->select('tblCustomersWireDraw.strCustomerName','tblCustomersWireDraw.intCustomerId','tblProductsWireDraw.intProductId',
+                    'tblProductsWireDraw.strProductName',
+                    DB::raw("CONCAT('WD', tblWireDrawHeaders.intHeaderId) AS intHeaderId"),
+                    'tblWireDrawHeaders.strReference',
+                    DB::raw("FORMAT(tblWireDrawHeaders.dtDateEnd, 'yyyy-MM-dd HH:mm:ss') as dtDateEnd"),
+                    DB::raw("FORMAT(tblWireDrawHeaders.dtDateStart, 'yyyy-MM-dd HH:mm:ss') as dtDateStart"),
+                    'tblWireDrawHeaders.fltMassRequired','tblWireDrawHeaders.fltMassProduced','tblWireDrawHeaders.intNoOfStand',
+                    'tblMachines.strMachineName','tblMachines.intAutoMachineID','tblWireDrawHeaders.strType','tblWireDrawHeaders.strJobStatus'
+                )
             ->where('strJobStatus','!=','Completed')
+            ->latest('intHeaderId')
             ->get();
 
         return response()->json($data);
     }
 
     /**
-     * This function is used for mark the job status as completed
-     *
-     * @param obj $request
+     * This function is used for change JobS tatus
      */
     public function changeJobStatus(Request $request)
     {

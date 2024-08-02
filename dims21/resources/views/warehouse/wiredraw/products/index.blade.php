@@ -71,12 +71,7 @@
 @section('scripts')
 
     <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
+        
         $('#intCustomerId').select2({
             theme: 'bootstrap-5',
             dropdownParent: $('#newproduct'),
@@ -190,7 +185,7 @@
                             },
                             {
                                 dataField: 'intCustomerId',
-                                caption: 'CustomerName',
+                                caption: 'Customer Name',
                                 lookup: {
                                     dataSource: customers,
                                     displayExpr: 'Name',
@@ -199,7 +194,7 @@
                             },
                             {
                                 dataField: 'strProductName',
-                                caption: 'ProductName',
+                                caption: 'Product Name',
                                 dataType: 'string',
                             },
                             {
@@ -275,7 +270,6 @@
                 }
             });
         });
-
 
         function showDialog(tag, width, height) {
             $(tag).dialog({
