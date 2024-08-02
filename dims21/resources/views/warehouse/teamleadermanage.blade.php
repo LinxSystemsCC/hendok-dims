@@ -812,9 +812,11 @@
 
             $('#date').val(formattedDate);
 
-            getPickingPlanData('{{ $ref }}');
-            getNotifications('{{ $ref }}');
-            getStatus('{{ $ref }}');
+            if('{{  $ref }}' != '0'){
+                getPickingPlanData('{{ $ref }}');
+                getNotifications('{{ $ref }}');
+                getStatus('{{ $ref }}');
+            }
 
             $('#getdata').click(function(){
                 getData();
