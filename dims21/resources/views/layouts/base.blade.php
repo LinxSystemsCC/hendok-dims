@@ -227,12 +227,6 @@
     $('nav ul li').click(function(){
         $(this).addClass("active").siblings().removeClass("active");
     });
-
-    $(document).ajaxStart(function() {
-        $('#overlay').removeAttr('hidden');
-    }).ajaxStop(function() {
-        $('#overlay').attr('hidden', '');
-    });
     
 </script>
 
