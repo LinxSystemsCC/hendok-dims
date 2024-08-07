@@ -42,7 +42,10 @@ return [
             'database' => env('DB1_DATABASE', 'database'),
             'username' => env('DB1_USERNAME', 'username'),
             'password' =>  env('DB1_PASSWORD', 'password'),
-            'prefix' => ''
+            'prefix' => '',
+			'encrypt' => 'yes',
+			'trust_server_certificate' => true,
+
         ],
         
         'sqlsrv2' => [
@@ -52,7 +55,9 @@ return [
             'database' => env('DB1_DATABASE', 'database'),
             'username' => env('DB1_USERNAME', 'username'),
             'password' =>  env('DB1_PASSWORD', 'password'),
-            'prefix' => ''
+            'prefix' => '',
+			'encrypt' => 'yes',
+			'trust_server_certificate' => true,
         ],
 
         'sqlsrv3' => [
@@ -63,6 +68,8 @@ return [
             'username' => env('DB1_USERNAME', 'username'),
             'password' =>  env('DB1_PASSWORD', 'password'),
             'prefix' => '',
+			'encrypt' => 'yes',
+			'trust_server_certificate' => true,
             'pooling'  => false,
         ],
 
@@ -74,7 +81,8 @@ return [
             'username' => env('DB1_USERNAME', 'username'),
             'password' =>  env('DB1_PASSWORD', 'password'),
             'prefix' => '',
-            'prefix' => '',
+			'encrypt' => 'yes',
+			'trust_server_certificate' => true,
             'pooling'  => false,
         ],
 
@@ -86,6 +94,8 @@ return [
             'username' => env('DB2_USERNAME', 'username'),
             'password' =>  env('DB2_PASSWORD', 'password'),
             'prefix' => '',
+			'encrypt' => 'yes',
+			'trust_server_certificate' => true,
             'pooling'  => false,
         ],
 
@@ -97,6 +107,8 @@ return [
             'username' => env('DB1_USERNAME', 'username'),
             'password' =>  env('DB1_PASSWORD', 'password'),
             'prefix' => '',
+			'encrypt' => 'yes',
+			'trust_server_certificate' => true,
             'pooling'  => false,
         ],
 
