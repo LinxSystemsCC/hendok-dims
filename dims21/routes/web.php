@@ -17,6 +17,7 @@ use App\Http\Controllers\WareHouseController;
 use App\Http\Controllers\WireDraw\WireDrawHeadersController;
 use App\Http\Controllers\WireDraw\WireDrawqcscreenController;
 use App\Http\Controllers\WireDraw\WireDrawStandsController;
+use App\Http\Controllers\WireDraw\WireDrawWireDrawRodSupplierController;
 use App\Http\Controllers\WireDraw\WireDrawWireDrawWeightController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\UserFeature;
@@ -1365,6 +1366,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('products/get-products', [WireDrawProductsController::class,'getProductsName'])->name('products.get-products');
         Route::resource('products', WireDrawProductsController::class);
         Route::get('headers/get-headers', [WireDrawHeadersController::class,'getheaders'])->name('headers.get-headers');
+        Route::post('headers/add-rod', [WireDrawHeadersController::class,'addrod'])->name('headers.add-rod');
+        Route::get('headers/getproduct/{getproduct}', [WireDrawHeadersController::class,'getproduct'])->name('headers.getproduct');
         Route::resource('headers', WireDrawHeadersController::class);
         Route::get('changeJobStatus', [WireDrawHeadersController::class,'changeJobStatus'])->name('changeJobStatus');
         Route::get('qcscreen/get-qcscreen', [WireDrawqcscreenController::class,'getqc'])->name('qcscreen.get-qcscreen');
@@ -1372,6 +1375,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('stands/get-stands', [WireDrawStandsController::class,'getStandName'])->name('stands.get-stands');
         Route::resource('stands', WireDrawStandsController::class);
         Route::resource('weight', WireDrawWireDrawWeightController::class);
+        Route::get('rod-supplier/get-rodsupplier', [WireDrawWireDrawRodSupplierController::class,'getRodSupplierName'])->name('rod-supplier.get-rodsupplier');
+        Route::resource('rod-supplier', WireDrawWireDrawRodSupplierController::class);
     });
 });
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class WireDrawWeigh extends Model
 {
     use HasFactory;
-    protected $table = 'tblWireDrawHeaderLines';
+    protected $table = 'tblWireDrawLines';
     protected $primaryKey = 'intorderlinsId';
 
     protected $fillable = [
@@ -17,5 +17,7 @@ class WireDrawWeigh extends Model
         'intstand',
         'intStandId',
         'fltweight',
+        'intRodId',
+        'intUserId',
     ];
 }

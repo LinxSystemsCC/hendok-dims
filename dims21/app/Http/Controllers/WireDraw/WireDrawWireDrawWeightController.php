@@ -4,36 +4,38 @@ namespace App\Http\Controllers\WireDraw;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostWireDrawWeighRequest;
+use App\Models\WireDraw\WireDrawAddRod;
 use App\Models\WireDraw\WireDrawHeaders;
 use App\Models\WireDraw\WireDrawWeigh;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class WireDrawWireDrawWeightController extends Controller
 {
     /**
-     * This function is used for return view and disply data    
+     * This function is used for return view and disply data
      */
     public function index()
     {
         $jobHeaders = DB::table('tblWireDrawHeaders')
-            ->select(DB::raw("CONCAT('WD', tblWireDrawHeaders.intHeaderId) AS intHeaderIdcustom"),
-                'intWireDrawMachineId', 'tblMachines.strMachineName', 'intNoOfStand', 'tblProductsWireDraw.strProductName', 'tblWireDrawHeaders.intHeaderId',
-                'tblWireDrawHeaders.intProductId'
-            )
-            ->leftJoin('tblMachines', 'tblWireDrawHeaders.intWireDrawMachineId', '=', 'tblMachines.intAutoMachineID')
-            ->join('tblProductsWireDraw', 'tblWireDrawHeaders.intProductId', '=', 'tblProductsWireDraw.intProductId')
-            ->where('strJobStatus','!=','Completed')
-            ->get();
+            ->select(
+                DB::raw("CONCAT('WD', tblWireDrawHeaders.intHeaderId) AS intHeaderIdcustom"),
+                'intWireDrawMachineId',
+                'tblMachines.strMachineName',
+                'intNoOfStand',
+                'tblProductsWireDraw.strProductName', 
+                'tblWireDrawHeaders.intHeaderId', 
+                'tblWireDrawHeaders.intProductId')
+                ->leftJoin('tblMachines', 'tblWireDrawHeaders.intWireDrawMachineId', '=', 'tblMachines.intAutoMachineID')
+                ->join('tblProductsWireDraw', 'tblWireDrawHeaders.intProductId', '=', 'tblProductsWireDraw.intProductId')
+                ->where('strJobStatus', '!=', 'Completed')
+                ->get();
 
         $machines = $jobHeaders->pluck('strMachineName', 'intWireDrawMachineId');
         $machineWiseJobs = $jobHeaders->groupBy('intWireDrawMachineId');
 
-        $stands = DB::table('tblStands')
-            ->Join('tblDepartments', 'tblStands.intDepartmentId', '=', 'tblDepartments.intAutoID')
-            ->select('tblStands.strStandName', 'tblStands.intStandId', 'tblStands.fltStandMass')
-            ->where('tblDepartments.strDeptName', '=', 'Wire Draw')
-            ->get();
+        $stands = DB::table('tblStands')->Join('tblDepartments', 'tblStands.intDepartmentId', '=', 'tblDepartments.intAutoID')->select('tblStands.strStandName', 'tblStands.intStandId', 'tblStands.fltStandMass')->where('tblDepartments.strDeptName', '=', 'Wire Draw')->get();
 
         $stand = $stands->pluck('strStandName', 'intStandId');
         $standMass = $stands->pluck('fltStandMass', 'intStandId');
@@ -49,13 +51,25 @@ class WireDrawWireDrawWeightController extends Controller
      */
     public function store(StorePostWireDrawWeighRequest $request)
     {
+        $drawRod= WireDrawAddRod::select('intRodId')
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if ($drawRod) {
+            $rolId = (int) $drawRod->intRodId;
+        } else {
+            $rolId = 0; 
+        }
+
         $validated = $request->validated();
+
         WireDrawWeigh::create([
             'intjobNumber' => $validated['intjobNumber'],
             'intproductId' => $validated['intproductId'],
             'intstand' => $validated['intstand'],
             'intStandId' => $validated['intStandId'],
             'fltweight' => $validated['fltweight'],
+            'intRodId' => $rolId,
+            'intUserId' => Auth::user()->UserID,
         ]);
 
         $header = WireDrawHeaders::find($validated['intjobNumber']);

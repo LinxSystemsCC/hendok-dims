@@ -29,6 +29,12 @@
                 </button>
             @endif
 
+            @if ($nwo != '0')
+                <button type="button" id="btnaddrod" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#addrod" disabled>
+                    Add ROD
+                </button>
+            @endif
         </div>
 
         <div id="gridWorkInProgress" style="width: 100% !important; flex-grow: 1;"></div>
@@ -52,12 +58,13 @@
             </div>
         </div>
 
+        <!-- Creation Job Modal -->
         <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog"
             aria-labelledby="createjob" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createjob">Create A Work Order</h5>
+                        <h5 class="modal-title">Create A Work Order</h5>
                         <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -67,16 +74,8 @@
                                 <input type="text" maxlength="15" class="form-control" id="strReference" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="department">Type</label>
-                                <select class="form-select dims-select2" id="strType" required>
-                                    <option value="" selected>Select Type</option>
-                                    <option value="customer">Customer</option>
-                                    <option value="internal">Internal</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
                                 <label for="customers" class="col-form-label">Customer</label>
-                                <select class="form-select dims-select2" type="text" id='intCustomerId'>
+                                <select class="form-select dims-select2" id="intCustomerId" required>
                                     <option value="" selected>Select Customer</option>
                                     @foreach ($customers as $val)
                                         <option value="{{ $val->intCustomerId }}">{{ $val->strCustomerName }}</option>
@@ -96,14 +95,11 @@
                                 <label class="col-form-label" for="prodname">Product</label>
                                 <select class="form-select dims-select2" id="intProductId" required>
                                     <option value="" selected>Select Product</option>
-                                    @foreach ($products as $val)
-                                        <option value="{{ $val->intProductId }}">{{ $val->strProductName }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="col-form-label" for="qty">Mass Required</label>
-                                <input type="text" class="form-control" id="fltMassRequired" required>
+                                <input type="number" class="form-control" id="fltMassRequired" required>
                             </div>
                         </div>
                     </div>
@@ -116,7 +112,69 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <!-- Add Rods Modal -->
+        <div id="addrod" class="modal modal-xl fade" tabindex="-1" role="dialog" aria-labelledby="addrod"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="h5addrod">Add ROD</h5>
+                        <button type="button" class="btn-close rodsclose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="col-form-label" for="supplier">Row Supplier</label>
+                                <select class="form-select dims-select3" type="text" id="intRodSupplier">
+                                    <option value="" selected>Select Supplier</option>
+                                    @foreach ($suppliers as $val)
+                                        <option value="{{ $val->intRodSupplierId }}">{{ $val->strRodSupplierName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-form-label" for="rodcode">Rod Code</label>
+                                <select class="form-select dims-select3" type="text" id='strRodCode'>
+                                    <option value="" selected>Select Supplier</option>
+                                    @foreach ($rodcodes as $val)
+                                        <option value="{{ $val->strPartNumber }}">{{ $val->strPartDescription }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="strCastNumber" class="col-form-label">Cast No.</label>
+                                <input type="text" class="form-control" id="strCastNumber" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-form-label" for="wiresize">Serial No.</label>
+                                <input type="text" class="form-control" id="strSerialNumber" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-form-label" for="qty">Batch No.</label>
+                                <input type="text" class="form-control" id="strBatchNumber" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-form-label" for="qty">Rod Elongation</label>
+                                <input type="number" class="form-control" id="fltRodElongation" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-form-label" for="qty">Rod MPa</label>
+                                <input type="number" class="form-control" id="fltRodMpa" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary rodsclose" data-bs-target="#addrod"
+                            data-bs-toggle="modal" id="canceladdrod">Close</button>
+                        <button type="button" id="addrodsave" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -136,7 +194,7 @@
             $('.close').click(function() {
                 $('#createjob').find('.errorClass').hide()
                 $('#general-error').hide();
-            })
+            });
 
             $('#strType').change(function() {
                 if ($('#strType').val() == 'internal') {
@@ -146,19 +204,44 @@
                 }
             });
 
+            $('#intCustomerId').change(function() {
+                $('#intProductId').children().not('option:first').remove();
+                var customerId = $('#intCustomerId').val();
+                $.ajax({
+                    url: '{{ route('wire-draw.headers.getproduct', ':getproduct') }}'.replace(
+                        ':getproduct', customerId),
+                    type: "GET",
+                    data: {
+                        intCustomerID: customerId
+                    },
+                    success: function(data) {
+                        for (let index = 0; index < data.length; index++) {
+                            $('#intProductId').append($('<option>', {
+                                value: data[index].intProductId,
+                                text: data[index].strProductName
+                            }));
+                        }
+                    }
+
+                });
+            });
+
+            $('.dims-select3').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#addrod'),
+            });
+            $('.rodsclose').click(function() {
+                $('#addrod').find('.errorClass').hide()
+                $('#general-error').hide();
+            });
+
             $('#completesave').click(function() {
-                var selectedItem = $("#gridWorkInProgress").dxDataGrid("instance").getSelectedRowsData()[0];
-                var intHeaderId = selectedItem.intHeaderId;
-
-                var jobId = intHeaderId.replace('WD', '');
-                var parsedJobId = parseInt(jobId);
-
                 $.ajax({
 
                     url: '{!! url('wire-draw/changeJobStatus') !!}',
                     type: "GET",
                     data: {
-                        JobId: parsedJobId,
+                        JobId: getJobId(),
                     },
                     success: function(data) {
                         alert("Job Completed!");
@@ -169,21 +252,24 @@
                 });
             });
 
+            function getJobId() {
+                var selectedItem = $("#gridWorkInProgress").dxDataGrid("instance").getSelectedRowsData()[0];
+                var intHeaderId = selectedItem.intHeaderId;
+                var jobId = intHeaderId.replace('WD', '');
+                var parsedJobId = parseInt(jobId);
+
+                return parsedJobId;
+            }
+
             $('#wiredraw').click(function() {
-                var textbox = $('#strReference').val();
-                var intCustomerId = $('#intCustomerId').val();
-                length = textbox.length;
-                if ($('#strType').val() == 'internal') {
-                    intCustomerId = 0;
-                }
+
                 $.ajax({
                     url: '{!! url('wire-draw/headers') !!}',
                     type: "POST",
                     data: {
-                        intCustomerId: intCustomerId,
+                        intCustomerId: $('#intCustomerId').val(),
                         intProductId: $('#intProductId').val(),
                         intWireDrawMachineId: $('#intWireDrawMachineId').val(),
-                        strType: $('#strType').val(),
                         fltMassRequired: $('#fltMassRequired').val(),
                         strReference: $('#strReference').val()
                     },
@@ -195,6 +281,38 @@
                     error: function(xhr) {
                         if (xhr.status === 422) {
                             modalSetValidation($("#createjob"), xhr);
+                        } else {
+                            console.error('An unexpected error occurred:', xhr);
+                        }
+                    }
+                });
+
+            });
+
+            $('#addrodsave').click(function() {
+                var jobId = getJobId();
+                var intJobNumber = parseInt(jobId);
+                $.ajax({
+                    url: '{!! url('wire-draw/headers/add-rod') !!}',
+                    type: "POST",
+                    data: {
+                        intJobNumber: intJobNumber,
+                        intRodSupplier: $('#intRodSupplier').val(),
+                        strRodCode: $('#strRodCode').val(),
+                        strCastNumber: $('#strCastNumber').val(),
+                        strSerialNumber: $('#strSerialNumber').val(),
+                        strBatchNumber: $('#strBatchNumber').val(),
+                        fltRodElongation: $('#fltRodElongation').val(),
+                        fltRodMpa: $('#fltRodMpa').val()
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            modalSetValidation($("#addrod"), xhr);
                         } else {
                             console.error('An unexpected error occurred:', xhr);
                         }
@@ -249,10 +367,6 @@
                                 caption: "Reference",
                             },
                             {
-                                dataField: "strType",
-                                caption: "Type",
-                            },
-                            {
                                 dataField: "strCustomerName",
                                 caption: "Customer Name",
                             },
@@ -300,6 +414,7 @@
                                 currentSelectedRow = [];
                                 e.component.clearSelection();
                                 $("#completejob").prop("disabled", true);
+                                $("#btnaddrod").prop("disabled", true);
                             } else {
                                 currentSelectedRow = [];
                                 currentSelectedRow.push(clickedID);
@@ -311,6 +426,7 @@
                                     "? \nTHE JOB WILL NO LONGER BE ACCESSIBLE ANYMORE"
                                 );
                                 $("#completejob").prop("disabled", false);
+                                $("#btnaddrod").prop("disabled", false);
                             }
                         },
                     }).dxDataGrid('instance');

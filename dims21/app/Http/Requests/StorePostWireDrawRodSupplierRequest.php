@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePostWireDrawCustomerRequest extends FormRequest
+class StorePostWireDrawRodSupplierRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,14 @@ class StorePostWireDrawCustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'strCustomerName'=>'required|max:255|unique:tblCustomersWireDraw,strCustomerName'
+            'strRodSupplierName'=>'required|max:255|unique:tblSuppliersWireDrawRod,strRodSupplierName'
         ];
     }
+
     public function attributes()
     {
         return [
-            'strCustomerName' => 'Customer Name'
+            'strRodSupplierName' => 'RodSupplier Name'
         ];
     }
 }

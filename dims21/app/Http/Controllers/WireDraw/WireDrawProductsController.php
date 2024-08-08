@@ -54,6 +54,8 @@ class WireDrawProductsController extends Controller
 
     /**
      * This function is used for get data,update data and return array 
+     * 
+     *  @param array $data
      */
     private function getRequestData($data)
     {
@@ -68,6 +70,8 @@ class WireDrawProductsController extends Controller
 
     /**
      * This function is used for delete the products
+     * 
+     * @param string $id
      */
     public function destroy(string $id)
     {

@@ -27,7 +27,6 @@ class StorePostWireDrawHeadersRequest extends FormRequest
             'intCustomerId'=>'required',
             'intProductId'=>'required',
             'intWireDrawMachineId'=>'required',
-            'strType'=>'required|max:255|string',
             'fltMassRequired' => 'required|numeric',
             'strReference' => 'required|max:255|string'
         ];
@@ -39,7 +38,6 @@ class StorePostWireDrawHeadersRequest extends FormRequest
             'intCustomerId' => 'Customer',
             'intProductId' => 'Product',
             'intWireDrawMachineId' => 'Machine',
-            'strType' => 'Type',
             'fltMassRequired' => 'Mass Required',
             'strReference' => 'Reference'
         ];

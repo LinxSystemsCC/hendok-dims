@@ -759,6 +759,10 @@ if ((Auth::guest()))
                         </li>
 
                         <li>
+                            <a href='{{ route('wire-draw.rod-supplier.index') }}'>Wire Draw Rod Supplier</a>
+                        </li>
+
+                        <li>
                             <a href='{{ route('wire-draw.stands.index') }}'>Stands</a>
                         </li>
 

@@ -45,6 +45,8 @@ class WireDrawCustomersController extends Controller
 
     /**
      * This function is used for delete the customer
+     * 
+     * @param string $id
      */
     public function destroy(string $id)
     {
@@ -68,6 +70,8 @@ class WireDrawCustomersController extends Controller
 
     /**
      * This function is used for get data,update data and return array 
+     * 
+     * @param array $data
      */
     private function getRequestData($data)
     {
