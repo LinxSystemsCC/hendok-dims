@@ -16,6 +16,7 @@ class WireDrawProduct extends Model
         'ftlWireSize',
         'strSizeTolerance',
         'strMPATolerance',
-        'intCustomerId'
+        'intCustomerId',
+        'strSageCode'
     ];
 }

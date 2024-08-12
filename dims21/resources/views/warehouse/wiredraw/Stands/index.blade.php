@@ -50,13 +50,14 @@
                         <select class="form-select" type="text" id='intDepartmentId'>
                             <option value="" selected>Select Department</option>
                             @foreach ($dept as $val)
-                                <option value="{{ $val-> dptID}}"> {{ $val->dptName }} </option>
+                                <option value="{{ $val->dptID }}"> {{ $val->dptName }} </option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" id="close">Close</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal"
+                        id="close">Close</button>
                     <button type="button" id="savestands" class="btn btn-success">Save</button>
                 </div>
             </div>
@@ -68,7 +69,6 @@
 @section('scripts')
 
     <script>
-        
         $(document).on('focus', ':input', function() {
             $(this).attr('autocomplete', 'off');
         });
@@ -103,11 +103,6 @@
                 });
             });
 
-            $('.close').click(function() {
-                $('#newstands').find('.errorClass').hide()
-                $('#general-error').hide()
-            });
-            
             var dept = {!! json_encode($dept) !!};
             $.ajax({
                 url: '{{ route('wire-draw.stands.get-stands') }}',
@@ -165,14 +160,13 @@
                                 workbook.xlsx.writeBuffer().then((buffer) => {
                                     saveAs(new Blob([buffer], {
                                         type: 'application/octet-stream'
-                                    }), 'Wiredraw Stands.xlsx');
+                                    }), 'Stands.xlsx');
                                 });
                             });
                             e.cancel = true;
                         },
 
-                        columns: [
-                            {
+                        columns: [{
                                 dataField: "intStandId",
                                 caption: "ID",
                                 allowEditing: false,
@@ -221,7 +215,8 @@
                             //var strStandName = ;
 
                             $.ajax({
-                                url: '{!! url('wire-draw/stands') !!}' + '/' + e.data.intStandId,
+                                url: '{!! url('wire-draw/stands') !!}' + '/' + e.data
+                                    .intStandId,
                                 type: "PUT",
                                 data: {
                                     intStandId: e.data.intStandId,
@@ -237,6 +232,11 @@
                     });
                 }
             });
+        });
+
+        $('#newstands').on('hidden.bs.modal', function() {
+            $(this).find('.errorClass').hide();
+            $('#general-error').hide();
         });
 
         function showDialog(tag, width, height) {

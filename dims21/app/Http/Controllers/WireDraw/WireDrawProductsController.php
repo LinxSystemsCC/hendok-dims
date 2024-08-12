@@ -34,6 +34,7 @@ class WireDrawProductsController extends Controller
             'strSizeTolerance' => $validated['strSizeTolerance'],
             'strMPATolerance' => $validated['strMPATolerance'],
             'intCustomerId' => $validated['intCustomerId'],
+            'strSageCode' => $validated['strSageCode']
         ]);
 
         return response()->json(['success' => true]);
@@ -88,7 +89,7 @@ class WireDrawProductsController extends Controller
         $data = DB::table('tblCustomersWireDraw')
             ->join('tblProductsWireDraw', 'tblCustomersWireDraw.intCustomerId', '=', 'tblProductsWireDraw.intCustomerId')
             ->select('tblCustomersWireDraw.strCustomerName','tblProductsWireDraw.intProductId','tblProductsWireDraw.strProductName',
-                'tblProductsWireDraw.ftlWireSize','tblProductsWireDraw.strSizeTolerance','tblProductsWireDraw.strMPATolerance','tblProductsWireDraw.intCustomerId'
+                'tblProductsWireDraw.ftlWireSize','tblProductsWireDraw.strSizeTolerance','tblProductsWireDraw.strMPATolerance','tblProductsWireDraw.intCustomerId','tblProductsWireDraw.strSageCode'
             )
             ->latest('intProductId')
             ->get();

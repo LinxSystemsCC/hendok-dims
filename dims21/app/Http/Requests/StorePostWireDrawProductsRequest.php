@@ -31,6 +31,7 @@ class StorePostWireDrawProductsRequest extends FormRequest
             'strSizeTolerance' => 'required|string|max:255',
             'strMPATolerance' => 'required|string|max:255',
             'intCustomerId' => ['required'],
+            'strSageCode' => 'required|string|max:255'
         ];
 
     }
@@ -41,7 +42,8 @@ class StorePostWireDrawProductsRequest extends FormRequest
             'ftlWireSize' => 'Wire Size',
             'strSizeTolerance' => 'Size Tolerance',
             'intCustomerId' => 'Customer',
-            'strMPATolerance' => 'MPA Tolerance'
+            'strMPATolerance' => 'MPA Tolerance',
+            'strSageCode' => 'Sage Code'
         ];
     }
 }

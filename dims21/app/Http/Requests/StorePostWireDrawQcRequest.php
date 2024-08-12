@@ -29,18 +29,16 @@ class StorePostWireDrawQcRequest extends FormRequest
             'fltWireSize' => 'required|numeric',
             'intStand' => 'required',
             'strTensileTicketNumber' => 'required',
-            'strMPATolerance' => 'required'
+            'strMPATolerance' => 'required' 
         ];
     }
 
     public function attributes()
     {
         return [
-            'intJobNumber' => 'Job Number',
-            'intProductId' => 'Wire Size',
-            'strSizeTolerance' => 'Size Tolerance',
-            'intCustomerId' => 'Customer Name',
-            'strMPATolerance' => 'MPA Tolerance'
+            'strTensileTicketNumber' => 'Tensile Ticket Number',
+            'fltWireSize' => 'Wire Size',
+            'strMPATolerance' => 'Mpa Tolerance'
         ];
     }
 

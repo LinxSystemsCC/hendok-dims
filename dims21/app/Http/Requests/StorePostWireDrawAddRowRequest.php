@@ -32,18 +32,20 @@ class StorePostWireDrawAddRowRequest extends FormRequest
             'strBatchNumber' => 'required|max:255|string',
             'fltRodElongation' =>  'required|numeric',
             'fltRodMpa' => 'required|numeric',
+            'fltRodWeigh' => 'required|numeric',
         ];
     }
     public function attributes()
     {
         return [
             'intRodSupplier' => 'Rod Supplier',
-            'strRodCode' => 'Rod Supplier Code',
+            'strRodCode' => 'Rod Code',
             'strCastNumber' => 'Cast Number',
             'strSerialNumber' => 'Serial Number',
             'strBatchNumber' => 'Batch Number',
             'fltRodElongation' => 'Rod Elongation',
-            'fltRodMpa' => 'Rod Mpa'
+            'fltRodMpa' => 'Rod Mpa',
+            'fltRodWeigh' => 'Rod Weigh',
         ];
     }
 }

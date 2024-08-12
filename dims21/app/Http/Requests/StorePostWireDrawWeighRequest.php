@@ -35,10 +35,8 @@ class StorePostWireDrawWeighRequest extends FormRequest
     public function attributes()
     {
         return [
-            'intjobNumber' => 'Job No',
-            'intproductId' => 'porudect Name',
-            'intstand' => 'Stand',
             'intStandId' => 'Stand Name',
+            'fltweight' => 'weight'
         ];
     }
 }

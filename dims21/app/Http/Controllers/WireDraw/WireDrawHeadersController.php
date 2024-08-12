@@ -5,7 +5,7 @@ namespace App\Http\Controllers\WireDraw;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostWireDrawAddRowRequest;
 use App\Http\Requests\StorePostWireDrawHeadersRequest;
-use App\Models\WireDraw\WireDrawAddRod;
+use App\Models\WireDraw\WireDrawRod;
 use App\Models\WireDraw\WireDrawHeaders;
 use App\Models\WireDraw\WireDrawCustomer;
 use App\Models\WireDraw\WireDrawProduct;
@@ -114,7 +114,7 @@ class WireDrawHeadersController extends Controller
     public function addrod(StorePostWireDrawAddRowRequest $request)
     {
         $validated = $request->validated();
-        WireDrawAddRod::create([
+        WireDrawRod::create([
             'dtmDate' => date('Y-m-d H:i:s'),
             'intJobNumber' => $validated['intJobNumber'],
             'intRodSupplier' => $validated['intRodSupplier'],
@@ -124,6 +124,7 @@ class WireDrawHeadersController extends Controller
             'strBatchNumber' => $validated['strBatchNumber'],
             'fltRodElongation' => $validated['fltRodElongation'],
             'fltRodMpa' => $validated['fltRodMpa'],
+            'fltRodWeigh' => $validated['fltRodWeigh'],
             'intUserId' => Auth::user()->UserID,
         ]);
 

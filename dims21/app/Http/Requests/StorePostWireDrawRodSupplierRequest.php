@@ -31,7 +31,7 @@ class StorePostWireDrawRodSupplierRequest extends FormRequest
     public function attributes()
     {
         return [
-            'strRodSupplierName' => 'RodSupplier Name'
+            'strRodSupplierName' => 'Supplier Name'
         ];
     }
 }

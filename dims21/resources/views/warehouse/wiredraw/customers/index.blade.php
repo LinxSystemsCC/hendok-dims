@@ -25,7 +25,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="newuserLabel">Create New Customer</h1>
+                    <h1 class="modal-title fs-5" id="newuserLabel">Create New Wire Draw Customers</h1>
                     <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -59,6 +59,10 @@
         });
 
         $(document).ready(function() {
+            $('#newcustomer').on('hidden.bs.modal', function() {
+                $(this).find('.errorClass').hide();
+                $('#general-error').hide();
+            });
             $('#savescustomername').click(function() {
                 $.ajax({
                     url: '{{ route('wire-draw.customers.index') }}',
@@ -79,11 +83,6 @@
                         }
                     }
                 });
-            });
-
-            $('.close').click(function () {
-                $('#addCustomerDiv').find('.errorClass').hide()
-                $('#general-error').hide()
             });
 
             $.ajax({
@@ -140,7 +139,7 @@
                                 workbook.xlsx.writeBuffer().then((buffer) => {
                                     saveAs(new Blob([buffer], {
                                         type: 'application/octet-stream'
-                                    }), 'Wiredraw Customers.xlsx');
+                                    }), 'Wire Draw Customers.xlsx');
                                 });
                             });
                             e.cancel = true;

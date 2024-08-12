@@ -88,12 +88,6 @@
 
     <script>
         $(document).ready(function() {
-
-            $('.close').click(function() {
-                $('#saveQcData').find('.errorClass').hide()
-                $('#general-error').hide();
-            });
-
             $(document).on('focus', ':input', function() {
                 $(this).attr('autocomplete', 'off');
             });
@@ -141,7 +135,7 @@
                                 workbook.xlsx.writeBuffer().then((buffer) => {
                                     saveAs(new Blob([buffer], {
                                         type: 'application/octet-stream'
-                                    }), 'qcphase.xlsx');
+                                    }), 'QC PHASE.xlsx');
                                 });
                             });
                             e.cancel = true;
@@ -204,6 +198,11 @@
 
                     }).dxDataGrid('instance');
                 }
+            });
+
+            $('#saveQcData').on('hidden.bs.modal', function() {
+                $(this).find('.errorClass').hide();
+                $('#general-error').hide();
             });
 
             $('#save').click(function() {

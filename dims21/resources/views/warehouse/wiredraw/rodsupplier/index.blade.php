@@ -81,11 +81,6 @@
                 });
             });
 
-            $('.close').click(function() {
-                $('#addCustomerDiv').find('.errorClass').hide()
-                $('#general-error').hide()
-            });
-
             $.ajax({
                 url: '{{ route('wire-draw.rod-supplier.get-rodsupplier') }}',
                 type: "GET",
@@ -140,7 +135,7 @@
                                 workbook.xlsx.writeBuffer().then((buffer) => {
                                     saveAs(new Blob([buffer], {
                                         type: 'application/octet-stream'
-                                    }), 'Wiredraw RodSupplier.xlsx');
+                                    }), 'Wire draw Rod Supplier.xlsx');
                                 });
                             });
                             e.cancel = true;
@@ -199,6 +194,11 @@
                     });
                 }
             });
+        });
+
+        $('#newsupplier').on('hidden.bs.modal', function() {
+            $(this).find('.errorClass').hide();
+            $('#general-error').hide();
         });
 
         function showDialog(tag, width, height) {

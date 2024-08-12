@@ -5,7 +5,7 @@ namespace App\Models\WireDraw;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WireDrawAddRod extends Model
+class WireDrawRod extends Model
 {
     use HasFactory;
     protected $table = 'tblwiredrawrods';
@@ -21,6 +21,7 @@ class WireDrawAddRod extends Model
         'strBatchNumber',
         'fltRodElongation',
         'fltRodMpa',
-        'intUserId'
+        'intUserId',
+        'fltRodWeigh'
     ];
 }

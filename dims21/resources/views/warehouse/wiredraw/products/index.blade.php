@@ -32,23 +32,32 @@
                     <div id="general-error"></div>
 
                     <div class="form-group mt-2">
-                        <label class="control-label" for="productname" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="strProductName" name="strProductName">
+                        <label class="control-label" for="productname"
+                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Product Name</label>
+                        <input type="text" class="form-control input-sm col-xs-1 myinput" id="strProductName"
+                            name="strProductName">
                     </div>
                     <div class="form-group mt-2">
-                        <label class="control-label" for="wiresize" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="ftlWireSize" name="ftlWireSize">
+                        <label class="control-label" for="wiresize"
+                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Wire Size</label>
+                        <input type="text" class="form-control input-sm col-xs-1 myinput" id="ftlWireSize"
+                            name="ftlWireSize">
                     </div>
                     <div class="form-group mt-2">
-                        <label class="control-label" for="sizetolerance" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Size Tolerance</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="strSizeTolerance" name="strSizeTolerance">
+                        <label class="control-label" for="sizetolerance"
+                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Size Tolerance</label>
+                        <input type="text" class="form-control input-sm col-xs-1 myinput" id="strSizeTolerance"
+                            name="strSizeTolerance">
                     </div>
                     <div class="form-group mt-2">
-                        <label class="control-label" for="MPATolerance" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Tolerance</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="strMPATolerance" name="strMPATolerance">
+                        <label class="control-label" for="MPATolerance"
+                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">MPA Tolerance</label>
+                        <input type="text" class="form-control input-sm col-xs-1 myinput" id="strMPATolerance"
+                            name="strMPATolerance">
                     </div>
                     <div class="form-group mt-2">
-                        <label class="control-label" for="Customer ID" style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
+                        <label class="control-label" for="Customer ID"
+                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
                         <select class="form-select" type="text" id='intCustomerId'>
                             <option value="" selected>Select Customer</option>
                             <!-- Assuming $customers is an array of objects containing ID and Name -->
@@ -57,10 +66,16 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group mt-2">
+                        <label class="control-label" for="SageCode"
+                            style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Sage Code</label>
+                        <input type="text" class="form-control input-sm col-xs-1 myinput" id="strSageCode">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <!-- Ensure the button has the correct classes and IDs -->
-                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" id="addProductcloseBtn">Close</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal"
+                        id="addProductcloseBtn">Close</button>
                     <button type="button" id="savesProductName" class="btn btn-success">Save</button>
                 </div>
             </div>
@@ -71,13 +86,16 @@
 @section('scripts')
 
     <script>
-        
         $('#intCustomerId').select2({
             theme: 'bootstrap-5',
             dropdownParent: $('#newproduct'),
         });
 
         $(document).ready(function() {
+            $('#newproduct').on('hidden.bs.modal', function() {
+                $('#addProductDiv').find('.errorClass').hide();
+                $('#general-error').hide();
+            });
 
             $('#savesProductName').click(function() {
                 $.ajax({
@@ -88,7 +106,8 @@
                         ftlWireSize: $('#ftlWireSize').val(),
                         strSizeTolerance: $('#strSizeTolerance').val(),
                         strMPATolerance: $('#strMPATolerance').val(),
-                        intCustomerId: $('#intCustomerId').val()
+                        intCustomerId: $('#intCustomerId').val(),
+                        strSageCode: $('#strSageCode').val()
                     },
                     success: function(data) {
                         location.reload();
@@ -106,11 +125,6 @@
             $(document).on('focus', ':input', function() {
                 $(this).attr('autocomplete', 'off');
             });
-
-            $('.close').click(function() {
-                $('#addProductDiv').find('.errorClass').hide();
-                $('#general-error').hide()
-            })
 
             var customers = {!! json_encode($customers) !!};
 
@@ -171,14 +185,13 @@
                                 workbook.xlsx.writeBuffer().then((buffer) => {
                                     saveAs(new Blob([buffer], {
                                             type: 'application/octet-stream'
-                                        }), 'Wiredraw Products - ' +
+                                        }), 'Wire Draw Products - ' +
                                         currentDate + '.xlsx');
                                 });
                             });
                             e.cancel = true;
                         },
-                        columns: [
-                            {
+                        columns: [{
                                 dataField: 'intProductId',
                                 caption: 'Product ID',
                                 allowEditing: false
@@ -218,7 +231,11 @@
                                 caption: 'MPA Tolerance',
                                 dataType: 'string',
                             },
-
+                            {
+                                dataField: 'strSageCode',
+                                caption: 'Sage Code',
+                                dataType: 'string',
+                            },
                         ],
 
                         onRowClick: function(e) {},

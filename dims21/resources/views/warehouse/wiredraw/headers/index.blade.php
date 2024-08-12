@@ -59,22 +59,21 @@
         </div>
 
         <!-- Creation Job Modal -->
-        <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog"
-            aria-labelledby="createjob" aria-hidden="true">
+        <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog" aria-labelledby="createjob" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Create A Work Order</h5>
+                        <h5 class="modal-title">Create A Wire Draw Work Order</h5>
                         <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <label class="col-form-label" for="reference">References</label>
+                                <label class="col-form-label" for="reference" style="font-weight: 700;font-size: 15px;">References</label>
                                 <input type="text" maxlength="15" class="form-control" id="strReference" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="customers" class="col-form-label">Customer</label>
+                                <label for="customers" class="col-form-label" style="font-weight: 700;font-size: 15px;">Customer</label>
                                 <select class="form-select dims-select2" id="intCustomerId" required>
                                     <option value="" selected>Select Customer</option>
                                     @foreach ($customers as $val)
@@ -83,7 +82,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="wiresize">Machine</label>
+                                <label class="col-form-label" for="wiresize" style="font-weight: 700;font-size: 15px;">Machine</label>
                                 <select class="form-select dims-select2" id="intWireDrawMachineId" required>
                                     <option value="" selected>Select Machine</option>
                                     @foreach ($machines as $val)
@@ -92,13 +91,13 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="prodname">Product</label>
+                                <label class="col-form-label" for="prodname" style="font-weight: 700;font-size: 15px;">Product</label>
                                 <select class="form-select dims-select2" id="intProductId" required>
                                     <option value="" selected>Select Product</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="qty">Mass Required</label>
+                                <label class="col-form-label" for="qty" style="font-weight: 700;font-size: 15px;">Mass Required</label>
                                 <input type="number" class="form-control" id="fltMassRequired" required>
                             </div>
                         </div>
@@ -115,21 +114,20 @@
         </div>
 
         <!-- Add Rods Modal -->
-        <div id="addrod" class="modal modal-xl fade" tabindex="-1" role="dialog" aria-labelledby="addrod"
-            aria-hidden="true">
+        <div id="addrod" class="modal modal-xl fade" tabindex="-1" role="dialog" aria-labelledby="addrodLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="h5addrod">Add ROD</h5>
+                        <h5 class="modal-title" id="h5addrod">Add Wire Draw ROD</h5>
                         <button type="button" class="btn-close rodsclose" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <label class="col-form-label" for="supplier">Row Supplier</label>
+                                <label class="col-form-label" for="supplier" style="font-weight: 700;font-size: 15px;">Rod Supplier</label>
                                 <select class="form-select dims-select3" type="text" id="intRodSupplier">
-                                    <option value="" selected>Select Supplier</option>
+                                    <option value="" selected>Select Rod Supplier</option>
                                     @foreach ($suppliers as $val)
                                         <option value="{{ $val->intRodSupplierId }}">{{ $val->strRodSupplierName }}
                                         </option>
@@ -137,9 +135,9 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="rodcode">Rod Code</label>
+                                <label class="col-form-label" for="rodcode" style="font-weight: 700;font-size: 15px;">Rod Code</label>
                                 <select class="form-select dims-select3" type="text" id='strRodCode'>
-                                    <option value="" selected>Select Supplier</option>
+                                    <option value="" selected>Select Rod Code</option>
                                     @foreach ($rodcodes as $val)
                                         <option value="{{ $val->strPartNumber }}">{{ $val->strPartDescription }}
                                         </option>
@@ -147,24 +145,28 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="strCastNumber" class="col-form-label">Cast No.</label>
+                                <label for="strCastNumber" class="col-form-label" style="font-weight: 700;font-size: 15px;">Cast Number</label>
                                 <input type="text" class="form-control" id="strCastNumber" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="wiresize">Serial No.</label>
+                                <label class="col-form-label" for="wiresize" style="font-weight: 700;font-size: 15px;">Serial Number</label>
                                 <input type="text" class="form-control" id="strSerialNumber" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="qty">Batch No.</label>
+                                <label class="col-form-label" for="qty" style="font-weight: 700;font-size: 15px;">Batch Number</label>
                                 <input type="text" class="form-control" id="strBatchNumber" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="qty">Rod Elongation</label>
+                                <label class="col-form-label" for="qty" style="font-weight: 700;font-size: 15px;">Rod Elongation</label>
                                 <input type="number" class="form-control" id="fltRodElongation" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="col-form-label" for="qty">Rod MPa</label>
+                                <label class="col-form-label" for="qty" style="font-weight: 700;font-size: 15px;">Rod MPa</label>
                                 <input type="number" class="form-control" id="fltRodMpa" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="col-form-label" for="qty" style="font-weight: 700;font-size: 15px;">Rod Weigh</label>
+                                <input type="number" class="form-control" id="fltRodWeigh" required>
                             </div>
                         </div>
                     </div>
@@ -176,6 +178,7 @@
                 </div>
             </div>
         </div>
+        <div id="toastContainer"></div>
     </div>
 @endsection
 
@@ -189,11 +192,6 @@
 
             $(document).on('focus', ':input', function() {
                 $(this).attr('autocomplete', 'off');
-            });
-
-            $('.close').click(function() {
-                $('#createjob').find('.errorClass').hide()
-                $('#general-error').hide();
             });
 
             $('#strType').change(function() {
@@ -303,12 +301,22 @@
                         strSerialNumber: $('#strSerialNumber').val(),
                         strBatchNumber: $('#strBatchNumber').val(),
                         fltRodElongation: $('#fltRodElongation').val(),
-                        fltRodMpa: $('#fltRodMpa').val()
+                        fltRodMpa: $('#fltRodMpa').val(),
+                        fltRodWeigh: $('#fltRodWeigh').val()
                     },
                     success: function(data) {
-                        if (data.success) {
-                            location.reload();
-                        }
+                        $("#addrod").modal("hide");
+                        $("#toastContainer").dxToast({
+                            message: "Data saved successfully!",
+                            type: "success",
+                            width: 230,
+                            height: 50,
+                            position: {
+                                my: 'top right',
+                                at: 'top right',
+                            },
+                            visible: true
+                        });
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {
@@ -319,6 +327,17 @@
                     }
                 });
 
+            });
+
+            $('#addrod').on('hidden.bs.modal', function() {
+                $(this).find('.errorClass').hide();
+                $('#general-error').hide();
+                $('#addrod').find('input').val('');
+            });
+
+            $('#createjob').on('hidden.bs.modal', function() {
+                $(this).find('.errorClass').hide();
+                $('#general-error').hide();
             });
 
             var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization

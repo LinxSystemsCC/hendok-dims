@@ -66,7 +66,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" id="close">Close</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal"
+                        id="close">Close</button>
                     <button type="button" id="save" class="btn btn-success">Save</button>
                 </div>
             </div>
@@ -91,9 +92,12 @@
                             <tbody>
                                 @foreach ($machineWiseJobs[$machineId] as $job)
                                     <tr class="trofwiredrawmachines">
-                                        <td scope="row" data-job-id="{{ $job->intHeaderId }}" class="tdofwiredrawmachines">JobNo: {{ $job->intHeaderIdcustom }}</td>
-                                        <td scope="row" class="tdofwiredrawmachines">Stand: {{ $job->intNoOfStand + 1 }}</td>
-                                        <td scope="row" data-product-id="{{ $job->intProductId }}" class="tdofwiredrawmachines">Product: {{ $job->strProductName }} </td>
+                                        <td scope="row" data-job-id="{{ $job->intHeaderId }}"
+                                            class="tdofwiredrawmachines">JobNo: {{ $job->intHeaderIdcustom }}</td>
+                                        <td scope="row" class="tdofwiredrawmachines">Stand: {{ $job->intNoOfStand + 1 }}
+                                        </td>
+                                        <td scope="row" data-product-id="{{ $job->intProductId }}"
+                                            class="tdofwiredrawmachines">Product: {{ $job->strProductName }} </td>
                                     <tr>
                                 @endforeach
                             </tbody>
@@ -120,20 +124,16 @@
             var currentSelectedIntjobNo = 0;
             var machineName = "Ishan";
 
-            
-            $('.close').click(function () {
-                $('#Weigh').find('.errorClass').hide()
-                $('#general-error').hide();
-            });
-
             // Add click event listener to all <tr> elements inside tables
             $('#accordionFlush').on('click', 'tr', function() {
 
-                machineName = $(this).parents('.accordion-item:first').find('.accordion-header').text().trim();
+                machineName = $(this).parents('.accordion-item:first').find('.accordion-header').text()
+                    .trim();
 
                 var jobNo = $(this).find('td:eq(0)').text().trim().split(': ')[1]; // Extract JobNo value
                 var standNo = $(this).find('td:eq(1)').text().trim().split(': ')[1]; // Extract Stand value
-                var productName = $(this).find('td:eq(2)').text().trim().split(': ')[1]; // Extract product value
+                var productName = $(this).find('td:eq(2)').text().trim().split(': ')[
+                    1]; // Extract product value
 
                 currentSelectedIntproductId = $(this).find('td:eq(2)').attr('data-product-id')
                 currentSelectedIntjobNo = $(this).find('td:eq(0)').attr('data-job-id')
@@ -152,33 +152,39 @@
                         finalweight = -standMass[intStandIdValue];
                         $('#ftlfinalweight').val(finalweight);
                     }
-                    if($('#intStandId').val() == ''){
+                    if ($('#intStandId').val() == '') {
                         $('#ftlfinalweight').val('');
                     }
-                    if ($('#fltweight').val()!='') {
-                        calculateFinalWeight($('#intStandId option:selected').data('stand-mass'),parseFloat($('#fltweight').val()))
+                    if ($('#fltweight').val() != '') {
+                        calculateFinalWeight($('#intStandId option:selected').data('stand-mass'),
+                            parseFloat($('#fltweight').val()))
                     }
                 });
 
                 $('#fltweight').keyup(function() {
-                    calculateFinalWeight($('#intStandId option:selected').data('stand-mass'),parseFloat($('#fltweight').val()))
+                    calculateFinalWeight($('#intStandId option:selected').data('stand-mass'),
+                        parseFloat($('#fltweight').val()))
                 });
-                
+
                 //This function calculate Final Tare Weight
-                function calculateFinalWeight(tareWeight,fltweightValue) {
+                function calculateFinalWeight(tareWeight, fltweightValue) {
                     var newFinalWeight = fltweightValue - tareWeight
                     if (isNaN(newFinalWeight)) {
                         newFinalWeight = finalweight
                     }
-                    if($('#intStandId').val() != ''){
+                    if ($('#intStandId').val() != '') {
                         $('#ftlfinalweight').val(newFinalWeight);
                     }
                 }
-
                 // Open the modal
                 $('#Weigh').modal('show');
             });
-            
+
+            $('#Weigh').on('hidden.bs.modal', function() {
+                $(this).find('.errorClass').hide();
+                $('#general-error').hide();
+            });
+
             $('#save').click(function() {
                 $.ajax({
                     url: '{{ route('wire-draw.weight.store') }}',
