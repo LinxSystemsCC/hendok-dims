@@ -228,10 +228,6 @@
                 theme: 'bootstrap-5',
                 dropdownParent: $('#addrod'),
             });
-            $('.rodsclose').click(function() {
-                $('#addrod').find('.errorClass').hide()
-                $('#general-error').hide();
-            });
 
             $('#completesave').click(function() {
                 $.ajax({
@@ -333,21 +329,8 @@
                 $(this).find('.errorClass').hide();
                 $('#general-error').hide();
                 $('#addrod').find('input').val('');
-                $('#intRodSupplier').find('option').each(function() {
-                    if ($(this).text().trim() === 'Select Rod Supplier') {
-                        $(this).prop('selected', true);
-                        return false;
-                    }
-                });
-                $('#intRodSupplier').trigger('change');
-
-                $('#strRodCode').find('option').each(function() {
-                    if ($(this).text().trim() === 'Select Rod Code') {
-                        $(this).prop('selected', true);
-                        return false;
-                    }
-                });
-                $('#strRodCode').trigger('change');
+                $('#intRodSupplier').val('').trigger('change');
+                $('#strRodCode').val('').trigger('change');
             });
 
             $('#createjob').on('hidden.bs.modal', function() {
