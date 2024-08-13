@@ -26,7 +26,7 @@ class DropStrTypeFromTblWireDrawHeadersTable extends Migration
     public function down()
     {
         Schema::table('tblWireDrawHeaders', function (Blueprint $table) {
-            $table->string('strType');
+            $table->string('strType')->nullable();
         });
     }
 }
