@@ -69,7 +69,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <label class="col-form-label" for="reference" style="font-weight: 700;font-size: 15px;">References</label>
+                                <label class="col-form-label" for="reference" style="font-weight: 700;font-size: 15px;">Reference</label>
                                 <input type="text" maxlength="15" class="form-control" id="strReference" required>
                             </div>
                             <div class="col-md-6">
@@ -333,6 +333,21 @@
                 $(this).find('.errorClass').hide();
                 $('#general-error').hide();
                 $('#addrod').find('input').val('');
+                $('#intRodSupplier').find('option').each(function() {
+                    if ($(this).text().trim() === 'Select Rod Supplier') {
+                        $(this).prop('selected', true);
+                        return false;
+                    }
+                });
+                $('#intRodSupplier').trigger('change');
+
+                $('#strRodCode').find('option').each(function() {
+                    if ($(this).text().trim() === 'Select Rod Code') {
+                        $(this).prop('selected', true);
+                        return false;
+                    }
+                });
+                $('#strRodCode').trigger('change');
             });
 
             $('#createjob').on('hidden.bs.modal', function() {
