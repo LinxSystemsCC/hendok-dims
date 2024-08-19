@@ -34,6 +34,7 @@ use App\Http\Controllers\Warehouse\DiamondMeshController;
 use App\Http\Controllers\Warehouse\RoofingController;
 use App\Http\Controllers\WireDraw\WireDrawCustomersController;
 use App\Http\Controllers\WireDraw\WireDrawProductsController;
+use App\Http\Controllers\Warehouse\PlanningController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1378,5 +1379,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('rod-supplier/get-rodsupplier', [WireDrawWireDrawRodSupplierController::class,'getRodSupplierName'])->name('rod-supplier.get-rodsupplier');
         Route::resource('rod-supplier', WireDrawWireDrawRodSupplierController::class);
     });
+});
+
+// Roofing Controller
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('pickingPlanner', [PlanningController::class,'pickingPlanner']);
+    Route::post('getSalesOrdersToPlanOptimized', [PlanningController::class,'getSalesOrdersToPlanOptimized']);
 });
 

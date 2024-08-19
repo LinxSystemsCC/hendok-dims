@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('public/css/select2-bootstrap-5-theme.min.css') }}"/>
 
     <!-- DevExtreme theme Light-->
-    <link rel="stylesheet" href="{{ asset('public/css/dx.material.orange.light.compact.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/css/dx.material.hendok.css') }}">
 
     <!-- Multiselect -->
     <link rel="stylesheet" href="{{ asset('public/css/jquery.multiselect.css') }}">
@@ -29,7 +29,11 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('public/css/all.min.css') }}"/>
 
+    <!-- General -->
     <link rel="stylesheet" href="{{ asset('public/css/general.css') }}"/>
+
+    <!-- Jquery-ui -->
+    <link rel="stylesheet" href="{{ asset('public/css/jquery-ui2.min.css') }}"/>
 
     <!-- Excel -->
     <script src="{{ asset('public/js/exceljs.min.js') }}"></script>
@@ -156,6 +160,7 @@
     </style>
 
 </head>
+
 <body class="vh-100 h-100">
     <div id="overlay" hidden>
         <div class="loader d-flex">
@@ -188,6 +193,9 @@
 
 <!-- Jquery -->
 <script src="{{ asset('public/js/jquery.min.js') }}"></script>
+
+<!-- Jquery-ui -->
+<script src="{{ asset('public/js/jquery-ui.js') }}"></script>
 
 <!-- DevExtreme library -->
 <script type="text/javascript" src="{{ asset('public/js/dx.all.js') }}"></script>
