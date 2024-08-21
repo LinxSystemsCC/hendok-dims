@@ -170,7 +170,7 @@
         </div>
     </div>
 
-    <div class="col-12 d-flex px-0 mh-100"  style="background: white;">
+    <div class="col-12 d-flex px-0 mh-100 h-100"  style="background: white;">
         @if(isset($includeMenu) && $includeMenu)
             <div class="col-custom-2"  style="background: white;">
                 <div class="vertical-menu">

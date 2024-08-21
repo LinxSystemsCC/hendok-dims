@@ -5,7 +5,7 @@
 
 {{-- Set to show navbar --}}
 @php
-    $includeMenu = true;
+    $includeMenu = false;
 @endphp
 
 @section('page')
@@ -56,49 +56,61 @@
             white-space: normal;
             word-wrap: break-word;
         }
+
+        .dx-datagrid .dx-row > td{
+            padding: 5px !important;
+        }
     </style>
 
     <div class="col-12 h-100">
-        <div class="panel-container">
+        <div class="panel-container h-100">
             <div class="panel-left">
                 <div class="row">
-                    <div class="col-4 px-1">
+                    <div class="col-1 px-1 ms-3">
+                        <button id="btnHome" class="btn btn-sm btn-secondary">
+                            Home
+                        </button>
+                    </div>
+                    <div class="col px-1">
                         <div id="selectDateRange"></div>
                     </div>
-                    <div class="col-2 px-1">
+                    <div class="col px-1">
                         <div id="selectDC"></div>
                     </div>
-                    <div class="col-2 px-1">
+                    <div class="col px-1">
                         <div id="selectRoute"></div>
                     </div>
-                    <div class="col-2 px-1">
-                        <div id="selectLoadType"></div>
+                    <div class="col px-1">
+                        <div id="selectProductGroup"></div>
                     </div>
-                    <div class="col-2 px-1">
+                    <div class="col px-1">
                         <div id="btnGetOrders"></div>
                     </div>
                 </div>
-                <div id="gridPlannable"></div>
+                <div id="gridPlannable" style="height: 90%;"></div>
             </div>
 
             <div class="splitter"></div>
 
             <div class="panel-right">
                 <div class="row">
-                    <div class="col-3 px-1">
-                        <div id="inputTLNumber"></div>
+                    <div class="col px-1">
+                        <div id="inputUnickReference"></div>
                     </div>
-                    <div class="col-3 px-1">
+                    <div class="col px-1">
                         <div id="selectTrailer"></div>
                     </div>
-                    <div class="col-3 px-1">
+                    <div class="col px-1">
                         <div id="selectTeamLeader"></div>
                     </div>
-                    <div class="col-3 px-1">
+                    <div class="col px-1">
                         <div id="inputLoadName"></div>
                     </div>
+                    <div class="col px-1">
+                        <div id="selectLoadType"></div>
+                    </div>
                 </div>
-                <div id="gridPlanned"></div>
+                <div id="gridPlanned" style="height: 90%;"></div>
             </div>
         </div>
     </div>
@@ -115,8 +127,14 @@
                 disableSerialization: true,
             });
 
+            $('#btnHome').click(function() {
+                // Replace '/your-laravel-route' with the actual URL or route name
+                window.location.href = '{!! url('/') !!}';
+            });
+
             var dcs = ({!! json_encode($dcs) !!});
             var routes = ({!! json_encode($routes) !!});
+            var productGroups = ({!! json_encode($productGroups) !!});
             var loadTypes = [{
                 "value": "Hendok Tranport / CC",
                 "display": "Hendok Tranport / CC",
@@ -125,7 +143,12 @@
                 "display": "Other",
             }];
 
-            let selectedDateFrom, selectedDateTo, selectedDC, selectedRoutes, selectedLoadType;
+            let selectedDateFrom = '2023-08-01';
+            let selectedDateTo = '2023-08-30';
+            let selectedDC = 1;
+            let selectedRoutes = [10,12,25,63,20,29,41,52,57,35];
+            let selectedProductGroup;
+            let selectedLoadType;
 
             const selectDateRange = $("#selectDateRange").dxDateRangeBox({
                 displayFormat: 'yyyy-MM-dd',
@@ -171,6 +194,20 @@
                 },
             }).dxTagBox("instance");
 
+            const selectProductGroup = $("#selectProductGroup").dxSelectBox({
+                dataSource: productGroups,
+                valueExpr: 'ItemGroupDescription',
+                displayExpr: 'ItemGroupDescription',
+                placeholder: 'Proudct Group',
+                showSelectionControls: true,
+                showClearButton: true,
+                width: '100%',
+                searchEnabled: true,
+                onValueChanged: function(e) {
+                    selectedProductGroup = e.value;
+                },
+            }).dxSelectBox("instance");
+
             const selectLoadType = $("#selectLoadType").dxSelectBox({
                 dataSource: loadTypes,
                 valueExpr: 'value',
@@ -195,12 +232,11 @@
                 },
             }).dxButton("instance");
 
-            const inputTLNumber = $("#inputTLNumber").dxTextBox({
-                placeholder: 'TL number',
+            const inputUnickReference = $("#inputUnickReference").dxTextBox({
+                placeholder: 'Ref',
                 showSelectionControls: true,
                 showClearButton: true,
                 width: '100%',
-                searchEnabled: true,
                 onValueChanged: function(e) {},
             }).dxTextBox("instance");
 
@@ -220,7 +256,7 @@
                 dataSource: [],
                 valueExpr: 'intAutoId',
                 displayExpr: 'strDCName',
-                placeholder: 'Trailer Type',
+                placeholder: 'Team Leader',
                 showSelectionControls: true,
                 showClearButton: true,
                 width: '100%',
@@ -237,13 +273,16 @@
                 onValueChanged: function(e) {},
             }).dxTextBox("instance");
 
-            let detailData = [];
-            let plannedData = [];
+            let plannableDetails = [];
+            let plannableMaster = [];
+            let plannedMaster = [];
+            let bulkAdd = false;
 
             const gridPlannable = $("#gridPlannable").dxDataGrid({
                 dataSource: [],
                 showBorders: true,
                 showRowLines: true,
+                keyExpr: 'GroupKey',
                 showColumnLines: true,
                 filterRow: {
                     visible: true
@@ -292,14 +331,35 @@
                     },
                     {
                         dataField: "mnyTons",
-                        caption: "Tons"
+                        caption: "Tons",
+                        dataType: "number",
+                        alignment: "center",
+                        format: "#0.####",
                     }
                 ],
+                rowDragging: {
+                    group: 'sharedGroup',
+                    allowDragging: false,
+                    onDragStart: function(e) {
+                        e.itemData = e.itemData;
+                        bulkAdd = true;
+                    },
+                    onAdd: function(e) {
+                        const index = plannedMaster.findIndex(item => item.OrderNo === e.itemData.OrderNo && item.LineId === e.itemData.LineId);
+
+                        if (index > -1) {
+                            plannedMaster.splice(index, 1);
+                        }
+                        plannableDetails.push(e.itemData);
+
+                        setAllGridData(plannableDetails, plannedMaster);
+                    },
+                },
                 masterDetail: {
                     enabled: true,
                     template: function(container, options) {
                         const masterRow = options.data;
-                        const lineData = detailData.filter(detail =>
+                        const masterDetailData = plannableDetails.filter(detail =>
                             detail.CustomerPastelCode === masterRow.CustomerPastelCode &&
                             detail.StoreName === masterRow.StoreName &&
                             detail.Area === masterRow.Area &&
@@ -311,36 +371,24 @@
                         $("<div>")
                             .appendTo(container)
                             .dxDataGrid({
-                                dataSource: lineData,
+                                dataSource: masterDetailData,
                                 showBorders: true,
                                 rowDragging: {
-                                    group: 'taskGroup',
+                                    group: 'sharedGroup',
                                     onDragStart: function(e) {
-                                        e.itemData = e.itemData; // Store the dragged data
+                                        e.itemData = e.itemData;
+                                        bulkAdd = false;
                                     },
-                                    onDragEnd: function(e) {
-                                        if (e.fromComponent === gridPlannable && e
-                                            .toComponent === gridPlanned) {
-                                            const removedItem = e.itemData;
-                                            const masterRowKey = generateMasterRowKey(
-                                                removedItem);
+                                    onAdd: function(e) {
+                                        const index = plannedMaster.findIndex(item => item.OrderNo === e.itemData.OrderNo && item.LineId === e.itemData.LineId);
 
-                                            // Remove the item from detailData
-                                            detailData = detailData.filter(detail =>
-                                                generateMasterRowKey(detail) !==
-                                                masterRowKey
-                                            );
-
-                                            // Add the item to plannedData
-                                            if (!plannedData.some(item => generateMasterRowKey(
-                                                    item) === masterRowKey)) {
-                                                plannedData.push(removedItem);
-                                            }
-
-                                            // Refresh grids
-                                            refreshGrids();
+                                        if (index > -1) {
+                                            plannedMaster.splice(index, 1);
                                         }
-                                    }
+                                        plannableDetails.push(e.itemData);
+
+                                        setAllGridData(plannableDetails, plannedMaster);
+                                    },
                                 },
                                 columns: [{
                                         dataField: "OrderNo",
@@ -359,16 +407,18 @@
                                         caption: "Pastel Description"
                                     },
                                     {
-                                        dataField: "mnyQtyOutstanding",
-                                        caption: "Qty Outstanding"
-                                    },
-                                    {
-                                        dataField: "qtyAlreadyPlanned",
-                                        caption: "Qty Planned"
+                                        dataField: "mnyOutstanding",
+                                        caption: "Outstanding",
+                                        dataType: "number",
+                                        alignment: "center",
+                                        format: "#0.####",
                                     },
                                     {
                                         dataField: "mnyAvail",
-                                        caption: "Available"
+                                        caption: "Available",
+                                        dataType: "number",
+                                        alignment: "center",
+                                        format: "#0.####",
                                     }
                                 ]
                             });
@@ -377,12 +427,17 @@
             }).dxDataGrid('instance');
 
             const gridPlanned = $("#gridPlanned").dxDataGrid({
-                dataSource: plannedData,
+                dataSource: [],
                 showBorders: true,
                 showRowLines: true,
                 showColumnLines: true,
                 paging: {
                     enabled: false
+                },
+                editing: {
+                    mode: 'batch',
+                    allowUpdating: true,
+                    useIcons: true,
                 },
                 selection: {
                     mode: "single"
@@ -390,77 +445,146 @@
                 columnAutoWidth: true,
                 allowColumnResizing: true,
                 columnResizingMode: "nextColumn",
+                rowDragging: {
+                    group: 'sharedGroup', // Ensure the group matches the one in gridPlannable's detail grid
+                    allowReordering: true,
+                    allowDropInsideItem: false,
+                    onDragStart: function(e) {
+                        e.itemData = e.itemData;
+                    },
+                    onAdd: function(e) {
+                        if (!bulkAdd){
+                            const index = plannableDetails.findIndex(item => item.OrderNo === e.itemData.OrderNo && item.LineId === e.itemData.LineId);
+
+                            if (index > -1) {
+                                plannableDetails.splice(index, 1);
+                            }
+                            plannedMaster.push(e.itemData);
+
+                        }else{
+                            var criteria = {
+                                Area: e.itemData.Area,
+                                CustomerPastelCode: e.itemData.CustomerPastelCode,
+                                DeliveryDate: e.itemData.DeliveryDate,
+                                OrderDate: e.itemData.OrderDate,
+                                Route: e.itemData.Route,
+                                StoreName: e.itemData.StoreName
+                            };
+
+                            var matchedItems = [];
+                            var nonMatchedItems = [];
+
+                            $.each(plannableDetails, function(index, item) {
+                                if (item.Area === criteria.Area &&
+                                    item.CustomerPastelCode === criteria.CustomerPastelCode &&
+                                    item.DeliveryDate === criteria.DeliveryDate &&
+                                    item.OrderDate === criteria.OrderDate &&
+                                    item.Route === criteria.Route &&
+                                    item.StoreName === criteria.StoreName) {
+                                    matchedItems.push(item);
+                                } else {
+                                    nonMatchedItems.push(item);
+                                }
+                            });
+
+                            plannableDetails = nonMatchedItems;
+
+                            $.merge(plannedMaster, matchedItems);
+                        }
+                        
+                        setAllGridData(plannableDetails, plannedMaster);
+                    }
+                },
                 columns: [{
                         dataField: "OrderNo",
-                        caption: "Order No"
+                        caption: "Order No",
+                        allowEditing: false,
                     },
                     {
                         dataField: "LineId",
-                        caption: "Line Id"
+                        caption: "Line Id",
+                        allowEditing: false,
                     },
                     {
                         dataField: "PastelCode",
-                        caption: "Pastel Code"
+                        caption: "Pastel Code",
+                        allowEditing: false,
                     },
                     {
                         dataField: "PastelDescription",
-                        caption: "Pastel Description"
+                        caption: "Pastel Description",
+                        allowEditing: false,
                     },
                     {
-                        dataField: "mnyQtyOutstanding",
-                        caption: "Qty Outstanding"
-                    },
-                    {
-                        dataField: "qtyAlreadyPlanned",
-                        caption: "Qty Planned"
+                        dataField: "mnyOutstanding",
+                        caption: "Outstanding",
+                        dataType: "number",
+                        alignment: "center",
+                        format: "#0.####",
+                        allowEditing: false,
                     },
                     {
                         dataField: "mnyAvail",
-                        caption: "Available"
+                        caption: "Available",
+                        dataType: "number",
+                        alignment: "center",
+                        format: "#0.####",
+                        allowEditing: false,
+                    },
+                    {
+                        dataField: "mnyToPlan",
+                        caption: "Plan",
+                        dataType: "number",
+                        alignment: "center",
+                        format: "#0.####",
+                        cellTemplate: function(element, info) {
+                            element.append("<div>" + info.text + "</div>")
+                                .css("background", "#5c95c573")
+                                .css("font-size", "16px")
+                                .css("font-weight", "900");
+                        }
+                    },
+                    {
+                        dataField: "mnyAlreadyPlanned",
+                        caption: "Already Planned",
+                        dataType: "number",
+                        alignment: "center",
+                        format: "#0.####",
+                        allowEditing: false,
+                        visible: false,
+                    },
+                    {
+                        dataField: "mnyTons",
+                        caption: "Tons",
+                        dataType: "number",
+                        alignment: "center",
+                        format: "#0.####",
+                        allowEditing: false,
                     }
                 ],
-                rowDragging: {
-                    group: 'taskGroup',
-                    onDragStart: function(e) {
-                        e.itemData = e.itemData; // Store the dragged data
-                    }
-                }
             }).dxDataGrid('instance');
-
-            function generateMasterRowKey(item) {
-                return item.CustomerPastelCode + '_' + item.StoreName + '_' + item.Area + '_' +
-                    item.Route + '_' + item.OrderDate + '_' + item.DeliveryDate;
-            }
-
-            function refreshGrids() {
-                // Refresh the master-detail data for gridPlannable
-                gridPlannable.option('dataSource', groupData(detailData));
-                gridPlannable.refresh();
-
-                // Refresh the data for gridPlanned
-                gridPlanned.option('dataSource', plannedData);
-                gridPlanned.refresh();
-            }
 
             function groupData(data) {
                 var groupedData = {};
 
                 $.each(data, function(index, item) {
-                    var key = generateMasterRowKey(item);
+                    var key = item.CustomerPastelCode + '|' + item.StoreName + '|' + item.Area + '|' + item
+                        .Route + '|' + item.OrderDate + '|' + item.DeliveryDate;
 
                     if (!groupedData[key]) {
                         groupedData[key] = {
+                            GroupKey: key,
                             CustomerPastelCode: item.CustomerPastelCode,
                             StoreName: item.StoreName,
                             Area: item.Area,
                             Route: item.Route,
                             OrderDate: item.OrderDate,
                             DeliveryDate: item.DeliveryDate,
-                            Tons: 0 // Initialize Tons
+                            mnyTons: 0 // Initialize Tons
                         };
                     }
 
-                    groupedData[key].Tons += item.Tons;
+                    groupedData[key].mnyTons += parseFloat(item.mnyTons);
                 });
 
                 return $.map(groupedData, function(value, key) {
@@ -478,12 +602,27 @@
                         DeliveryDateTo: selectedDateTo,
                         intDcId: selectedDC,
                         routeIds: selectedRoutes.join(','),
+                        productGroup: selectedProductGroup,
                     },
                     success: function(data) {
-                        detailData = data;
-                        refreshGrids();
+                        setAllGridData(data.orders, []);
+                        inputUnickReference.option('value', data.strUnickReference);
                     }
                 });
+            }
+
+            function setAllGridData(plannableData, plannedData) {
+                plannableDetails = plannableData;
+                plannableMaster = groupData(plannableData);
+                plannedMaster = plannedData;
+
+                let expandedRowKeys = gridPlannable.option("masterDetail.expandedRowKeys");
+                gridPlannable.option('dataSource', plannableMaster);
+                gridPlannable.refresh();
+                gridPlannable.option("masterDetail.expandedRowKeys", expandedRowKeys);
+
+                gridPlanned.option('dataSource', plannedMaster);
+                gridPlanned.refresh();
             }
 
             function formatDate(date) {
