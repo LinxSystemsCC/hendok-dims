@@ -2,17 +2,8 @@
     box-shadow: unset;
 }
 
-.tblwiredrawmachines {
+/* .tblwiredrawmachines {
     border-collapse: collapse;
     width: 100%;
-}
-.tdofwiredrawmachines {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
+} */
 
-.trofwiredrawmachines:hover {
-    background-color: coral;
-    cursor: pointer;
-}

@@ -4,15 +4,17 @@ namespace App\Http\Controllers\WireDraw;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostWireDrawWeighRequest;
-use App\Models\WireDraw\WireDrawRod;
 use App\Models\WireDraw\WireDrawHeaders;
 use App\Models\WireDraw\WireDrawWeigh;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\UtilityTrait;
 
 class WireDrawWireDrawWeightController extends Controller
 {
+    use UtilityTrait;
+
     /**
      * This function is used for return view and disply data
      */
@@ -45,8 +47,10 @@ class WireDrawWireDrawWeightController extends Controller
         $stand = $stands->pluck('strStandName', 'intStandId');
         $standMass = $stands->pluck('fltStandMass', 'intStandId');
         $standGuop = $stands->groupBy('intStandId');
+        $rodcodes = $this->getRodCodesList();
+        $suppliers = $this->getSuppliersList();
 
-        return view('warehouse.wiredraw.wiredrawweight.index', compact('machineWiseJobs', 'machines', 'standGuop', 'stand', 'standMass'));
+        return view('warehouse.wiredraw.wiredrawweight.index', compact('machineWiseJobs', 'machines', 'standGuop', 'stand', 'standMass', 'rodcodes', 'suppliers'));
     }
 
     /**
@@ -57,16 +61,7 @@ class WireDrawWireDrawWeightController extends Controller
     public function store(StorePostWireDrawWeighRequest $request)
     {
         $validated = $request->validated();
-        $drawRod = WireDrawRod::select('intRodId')
-            ->orderBy('created_at', 'desc')
-            ->where('intjobNumber', $validated['intjobNumber'])
-            ->first();
-
-        if ($drawRod) {
-            $intRodId = (int) $drawRod->intRodId;
-        } else {
-            $intRodId = 0;
-        }
+        $intRodId = $this->getRodIdLastOfJobHeader($validated['intjobNumber']);
 
         WireDrawWeigh::create([
             'intjobNumber' => $validated['intjobNumber'],

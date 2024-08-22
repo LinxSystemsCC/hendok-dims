@@ -20,6 +20,8 @@
     <!--  Select 2 Bootstrap Theme -->
     <link rel="stylesheet" href="{{ asset('public/css/select2-bootstrap-5-theme.min.css') }}"/>
 
+    <link rel="stylesheet" href="{{ asset('public/css/bootstrap-icons.css') }}"/>
+
     <!-- DevExtreme theme Light-->
     <link rel="stylesheet" href="{{ asset('public/css/dx.material.orange.light.compact.css') }}">
 
@@ -148,7 +150,7 @@
         .loader__element:nth-child(3) {
             animation: preloader .6s ease-in-out alternate .4s infinite;
         }
-        
+
         @keyframes preloader {
             100% { transform: scale(1.3); }
         }
@@ -227,7 +229,7 @@
     $('nav ul li').click(function(){
         $(this).addClass("active").siblings().removeClass("active");
     });
-    
+
 </script>
 
 @yield('scripts')

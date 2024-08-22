@@ -251,6 +251,7 @@
                             var strSizeTolerance = e.data.strSizeTolerance
                             var strMPATolerance = e.data.strMPATolerance
                             var intCustomerId = e.data.intCustomerId
+                            var strSageCode = e.data.strSageCode
 
                             $.ajax({
                                 url: '{!! url('wire-draw/products') !!}' + '/' + intProductId,
@@ -261,7 +262,8 @@
                                     ftlWireSize: ftlWireSize,
                                     intCustomerId: intCustomerId,
                                     strSizeTolerance: strSizeTolerance,
-                                    strMPATolerance: strMPATolerance
+                                    strMPATolerance: strMPATolerance,
+                                    strSageCode: strSageCode,
                                 },
                                 success: function(data) {
                                     location.reload();
