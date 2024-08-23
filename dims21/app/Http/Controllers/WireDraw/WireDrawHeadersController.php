@@ -9,23 +9,21 @@ use App\Models\WireDraw\WireDrawRod;
 use App\Models\WireDraw\WireDrawHeaders;
 use App\Models\WireDraw\WireDrawCustomer;
 use App\Models\WireDraw\WireDrawProduct;
-use App\Models\WireDraw\WireDrawRodSupplier;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Traits\UtilityTrait;
 
 class WireDrawHeadersController extends Controller
 {
+    use UtilityTrait;
+
     /**
-     * This function is used for return view and disply data    
+     * This function is used for return view and disply data
      */
     public function index()
     {
-        $rodcodes = DB::connection('sqlsrv2')
-            ->select("SELECT Code AS strPartNumber, Description_1 AS strPartDescription FROM tblSageFullStock WHERE ItemGroup = 'WR'");
-        $suppliers = WireDrawRodSupplier::select('intRodSupplierId','strRodSupplierName')
-            ->get();
         $customers = WireDrawCustomer::select('strCustomerName', 'intCustomerId')
             ->get();
         $products = WireDrawProduct::select('strProductName', 'intProductId')
@@ -38,6 +36,9 @@ class WireDrawHeadersController extends Controller
         }
         $machines = DB::connection('sqlsrv2')
                 ->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $wireDrawDepartmentId, 'DepartmentMachines'");
+
+        $rodcodes = $this->getRodCodesList();
+        $suppliers = $this->getSuppliersList();
 
         return view('warehouse.wiredraw.headers.index', compact('customers', 'products', 'machines','suppliers','rodcodes'));
     }
@@ -91,7 +92,7 @@ class WireDrawHeadersController extends Controller
 
     /**
      * This function is used for change JobS tatus
-     * 
+     *
      * @param obj $request
      */
     public function changeJobStatus(Request $request)
@@ -105,7 +106,7 @@ class WireDrawHeadersController extends Controller
 
         return response()->json(['success' => true]);
     }
-    
+
     /**
      * This function is used for save the add rod
      *
@@ -133,7 +134,7 @@ class WireDrawHeadersController extends Controller
 
     /**
      * This function is used for get the product list base on customer id
-     * 
+     *
      *  @param obj $request
      */
     public function getproduct(Request $request)

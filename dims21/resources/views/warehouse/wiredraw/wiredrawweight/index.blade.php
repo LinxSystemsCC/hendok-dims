@@ -4,13 +4,13 @@
 @section('title', 'WireDraw Machines')
 
 @php
-    $includeMenu = true;
+    $includeMenu = false;
 @endphp
 
 @section('page')
 
     <!-- Modal -->
-    <div class="modal fade" id="Weigh" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+    <div class="modal modal-lg fade" id="Weigh" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -74,8 +74,19 @@
         </div>
     </div>
 
-    <div class="accordion" id="accordionFlush">
+    @include('warehouse.wiredraw.addrod')
+
+    <div class="logoutbtn" style="display: flex; margin-bottom: 1pc;">
+        <button class="btn btn-dark d-flex justify-content-center align-items-center" style="width:75px; margin-right: 1pc;"
+            onclick="document.getElementById('logout-form').submit()">
+            <i class="bi bi-door-open h4"></i>
+        </button>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
         <h2>WireDraw Machines</h2>
+    </div>
+    <div class="accordion" id="accordionFlush">
         @foreach ($machines as $machineId => $machineName)
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading{{ $machineId }}">
@@ -91,13 +102,28 @@
                         <table class="table table-bordered mb-0 tblwiredrawmachines">
                             <tbody>
                                 @foreach ($machineWiseJobs[$machineId] as $job)
-                                    <tr class="trofwiredrawmachines">
-                                        <td scope="row" data-job-id="{{ $job->intHeaderId }}"
-                                            class="tdofwiredrawmachines">JobNo: {{ $job->intHeaderIdcustom }}</td>
-                                        <td scope="row" class="tdofwiredrawmachines">Stand: {{ $job->intNoOfStand + 1 }}
+                                    <tr
+                                        data-machinename="{{ $machineName }}"
+                                        data-jobnocustom="{{ $job->intHeaderIdcustom }}"
+                                        data-jobno="{{ $job->intHeaderId }}"
+                                        data-standno="{{ $job->intNoOfStand + 1 }}"
+                                        data-productname="{{ $job->strProductName }}"
+                                        data-product-id="{{ $job->intProductId }}"
+                                        data-job-id="{{ $job->intHeaderId }}"
+                                    >
+                                        <td>
+                                            JobNo: {{ $job->intHeaderIdcustom }}
                                         </td>
-                                        <td scope="row" data-product-id="{{ $job->intProductId }}"
-                                            class="tdofwiredrawmachines">Product: {{ $job->strProductName }} </td>
+                                        <td>
+                                            Stand: {{ $job->intNoOfStand + 1 }}
+                                        </td>
+                                        <td>
+                                            Product Name: {{ $job->strProductName }}
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm mb-1 add_weight">Add Weight</button>
+                                            <button class="btn btn-secondary btn-sm mb-1 open_rod_modal is_from_weight">Add Rod</button>
+                                        </td>
                                     <tr>
                                 @endforeach
                             </tbody>
@@ -111,7 +137,6 @@
 @endsection
 
 @section('scripts')
-
     <script>
         $('#intStandId').select2({
             theme: 'bootstrap-5',
@@ -119,66 +144,46 @@
         });
 
         $(document).ready(function() {
-
             var currentSelectedIntproductId = 0;
             var currentSelectedIntjobNo = 0;
-            var machineName = "Ishan";
+            var finalweight = 0;
+            var standMass = @json($standMass);
 
-            // Add click event listener to all <tr> elements inside tables
-            $('#accordionFlush').on('click', 'tr', function() {
-
-                machineName = $(this).parents('.accordion-item:first').find('.accordion-header').text()
-                    .trim();
-
-                var jobNo = $(this).find('td:eq(0)').text().trim().split(': ')[1]; // Extract JobNo value
-                var standNo = $(this).find('td:eq(1)').text().trim().split(': ')[1]; // Extract Stand value
-                var productName = $(this).find('td:eq(2)').text().trim().split(': ')[
-                    1]; // Extract product value
-
-                currentSelectedIntproductId = $(this).find('td:eq(2)').attr('data-product-id')
-                currentSelectedIntjobNo = $(this).find('td:eq(0)').attr('data-job-id')
-                $('#intjobNumber').val(jobNo);
-                $('#intstand').val(standNo);
-                $('#intproductId').val(productName);
-                $('#strMachines').val(machineName);
-
-                var finalweight = 0;
-
-                $('#intStandId').change(function() {
-                    var standMass = @json($standMass);
-                    var intStandIdValue = $('#intStandId').val();
-
-                    if (standMass.hasOwnProperty(intStandIdValue)) {
-                        finalweight = -standMass[intStandIdValue];
-                        $('#ftlfinalweight').val(finalweight);
-                    }
-                    if ($('#intStandId').val() == '') {
-                        $('#ftlfinalweight').val('');
-                    }
-                    if ($('#fltweight').val() != '') {
-                        calculateFinalWeight($('#intStandId option:selected').data('stand-mass'),
-                            parseFloat($('#fltweight').val()))
-                    }
-                });
-
-                $('#fltweight').keyup(function() {
-                    calculateFinalWeight($('#intStandId option:selected').data('stand-mass'),
-                        parseFloat($('#fltweight').val()))
-                });
-
-                //This function calculate Final Tare Weight
-                function calculateFinalWeight(tareWeight, fltweightValue) {
-                    var newFinalWeight = fltweightValue - tareWeight
-                    if (isNaN(newFinalWeight)) {
-                        newFinalWeight = finalweight
-                    }
-                    if ($('#intStandId').val() != '') {
-                        $('#ftlfinalweight').val(newFinalWeight);
-                    }
+            $('#intStandId').change(function() {
+                var intStandIdValue = $('#intStandId').val();
+                if (standMass.hasOwnProperty(intStandIdValue)) {
+                    finalweight = -standMass[intStandIdValue];
+                    $('#ftlfinalweight').val(finalweight);
                 }
-                // Open the modal
+                if ($('#intStandId').val() == '') {
+                    $('#ftlfinalweight').val('');
+                }
+                if ($('#fltweight').val() != '') {
+                    calculateFinalWeight(
+                        $('#intStandId option:selected').data('stand-mass'),
+                        parseFloat($('#fltweight').val())
+                    );
+                }
+            });
+
+            $('#fltweight').keyup(function() {
+                calculateFinalWeight(
+                    $('#intStandId option:selected').data('stand-mass'),
+                    parseFloat($('#fltweight').val())
+                );
+            });
+
+            $('.add_weight').click(function() {
+                let curTR = $(this).parents('tr:first');
+                currentSelectedIntproductId = curTR.attr('data-product-id');
+                currentSelectedIntjobNo = curTR.attr('data-job-id');
+                $('#strMachines').val(curTR.attr('data-machinename'));
+                $('#intjobNumber').val(curTR.attr('data-jobnocustom'));
+                $('#intstand').val(curTR.attr('data-standno'));
+                $('#intproductId').val(curTR.attr('data-productname'));
                 $('#Weigh').modal('show');
             });
+
 
             $('#Weigh').on('hidden.bs.modal', function() {
                 $(this).find('.errorClass').hide();
@@ -208,8 +213,18 @@
                     }
                 });
             });
-
         });
+        //This function is used for calculate final tare weight
+        function calculateFinalWeight(tareWeight, fltweightValue) {
+            var newFinalWeight = fltweightValue - tareWeight
+            if (isNaN(newFinalWeight)) {
+                newFinalWeight = finalweight
+            }
+            if ($('#intStandId').val() != '') {
+                $('#ftlfinalweight').val(newFinalWeight);
+            }
+        }
     </script>
 
+    @yield('rod_scripts')
 @endsection
