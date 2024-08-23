@@ -1,0 +1,26 @@
+{
+    "items": [
+        {
+            "key": "$base-accent",
+            "value": "rgba(230, 63, 45, 1)"
+        },
+        {
+            "key": "$base-text-color",
+            "value": "rgba(68, 63, 63, 1)"
+        },
+        {
+            "key": "$base-border-radius",
+            "value": "2px"
+        },
+        {
+            "key": "$datagrid-columnchooser-font-weight",
+            "value": "700"
+        }
+    ],
+    "baseTheme": "fluent.saas.light.compact",
+    "outputColorScheme": "Hendok",
+    "makeSwatch": false,
+    "version": "24.1.5",
+    "widgets": [],
+    "removeExternalResources": false
+}

@@ -21,7 +21,8 @@
     <link rel="stylesheet" href="{{ asset('public/css/select2-bootstrap-5-theme.min.css') }}"/>
 
     <!-- DevExtreme theme Light-->
-    <link rel="stylesheet" href="{{ asset('public/css/dx.material.hendok.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/css/dx.material.Hendok.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('public/css/dx.fluent.Hendok.css') }}"> --}}
 
     <!-- Multiselect -->
     <link rel="stylesheet" href="{{ asset('public/css/jquery.multiselect.css') }}">

@@ -23,7 +23,6 @@
         .panel-container {
             display: flex;
             flex-direction: row;
-            overflow: hidden;
             height: 100%;
         }
 
@@ -33,12 +32,12 @@
             min-height: 100%;
             min-width: 150px;
             max-width: calc(100% - 150px);
-            overflow-y: auto;
+            padding: 10px;
         }
 
         .splitter {
             flex: 0 0 auto;
-            width: 3px;
+            width: 2px;
             cursor: col-resize;
             background: var(--hendok-red);
         }
@@ -48,25 +47,20 @@
             min-height: 100%;
             min-width: 150px;
             max-width: calc(100% - 150px);
-            overflow-y: auto;
+            padding: 10px;
         }
 
-        .panel-left p,
-        .panel-right p {
-            white-space: normal;
-            word-wrap: break-word;
-        }
-
-        .dx-datagrid .dx-row > td{
+        .dx-datagrid .dx-row > td {
             padding: 5px !important;
+            font-size: 12px !important;
         }
     </style>
 
     <div class="col-12 h-100">
-        <div class="panel-container h-100">
+        <div class="panel-container">
             <div class="panel-left">
-                <div class="row">
-                    <div class="col-1 px-1 ms-3">
+                <div class="row gx-0">
+                    <div class="col-1 px-1">
                         <button id="btnHome" class="btn btn-sm btn-secondary">
                             Home
                         </button>
@@ -93,7 +87,7 @@
             <div class="splitter"></div>
 
             <div class="panel-right">
-                <div class="row">
+                <div class="row gx-0">
                     <div class="col px-1">
                         <div id="inputUnickReference"></div>
                     </div>
@@ -108,6 +102,9 @@
                     </div>
                     <div class="col px-1">
                         <div id="selectLoadType"></div>
+                    </div>
+                    <div class="col px-1">
+                        <div id="btnSavePlan"></div>
                     </div>
                 </div>
                 <div id="gridPlanned" style="height: 90%;"></div>
@@ -128,13 +125,12 @@
             });
 
             $('#btnHome').click(function() {
-                // Replace '/your-laravel-route' with the actual URL or route name
                 window.location.href = '{!! url('/') !!}';
             });
 
             var dcs = ({!! json_encode($dcs) !!});
             var routes = ({!! json_encode($routes) !!});
-            var productGroups = ({!! json_encode($productGroups) !!});
+            var productGroups = [];
             var loadTypes = [{
                 "value": "Hendok Tranport / CC",
                 "display": "Hendok Tranport / CC",
@@ -142,6 +138,8 @@
                 "value": "Other",
                 "display": "Other",
             }];
+            var trailerTypes = ({!! json_encode($trailerTypes) !!});
+            var teamleaders = ({!! json_encode($teamleaders) !!});
 
             let selectedDateFrom = '2023-08-01';
             let selectedDateTo = '2023-08-30';
@@ -194,7 +192,7 @@
                 },
             }).dxTagBox("instance");
 
-            const selectProductGroup = $("#selectProductGroup").dxSelectBox({
+            const selectProductGroup = $("#selectProductGroup").dxTagBox({
                 dataSource: productGroups,
                 valueExpr: 'ItemGroupDescription',
                 displayExpr: 'ItemGroupDescription',
@@ -202,11 +200,23 @@
                 showSelectionControls: true,
                 showClearButton: true,
                 width: '100%',
+                multiline: false,
                 searchEnabled: true,
                 onValueChanged: function(e) {
-                    selectedProductGroup = e.value;
+                    const selectedValues = e.value;
+
+                    if (selectedValues.length === 0) {
+                        setAllGridData(originalData, [])
+                        return;
+                    }
+
+                    const filteredDetails = originalData.filter(function(detail) {
+                        return selectedValues.includes(detail.ItemGroupDescription);
+                    });
+                    
+                    setAllGridData(filteredDetails, [])
                 },
-            }).dxSelectBox("instance");
+            }).dxTagBox("instance");
 
             const selectLoadType = $("#selectLoadType").dxSelectBox({
                 dataSource: loadTypes,
@@ -235,27 +245,29 @@
             const inputUnickReference = $("#inputUnickReference").dxTextBox({
                 placeholder: 'Ref',
                 showSelectionControls: true,
-                showClearButton: true,
+                disabled: true,
                 width: '100%',
                 onValueChanged: function(e) {},
             }).dxTextBox("instance");
 
             const selectTrailer = $("#selectTrailer").dxSelectBox({
-                dataSource: [],
-                valueExpr: 'intAutoId',
-                displayExpr: 'strDCName',
+                dataSource: trailerTypes,
+                valueExpr: 'TruckId',
+                displayExpr: 'TruckName',
                 placeholder: 'Trailer Type',
                 showSelectionControls: true,
                 showClearButton: true,
                 width: '100%',
                 searchEnabled: true,
-                onValueChanged: function(e) {},
+                onValueChanged: function(e) {
+
+                },
             }).dxSelectBox("instance");
 
             const selectTeamLeader = $("#selectTeamLeader").dxSelectBox({
-                dataSource: [],
-                valueExpr: 'intAutoId',
-                displayExpr: 'strDCName',
+                dataSource: teamleaders,
+                valueExpr: 'UserID',
+                displayExpr: 'FullName',
                 placeholder: 'Team Leader',
                 showSelectionControls: true,
                 showClearButton: true,
@@ -273,6 +285,17 @@
                 onValueChanged: function(e) {},
             }).dxTextBox("instance");
 
+            const btnSavePlan = $('#btnSavePlan').dxButton({
+                stylingMode: 'contained',
+                text: 'SAVE',
+                type: 'success',
+                width: '100%',
+                onClick() {
+                    savePickingPlan();
+                },
+            }).dxButton("instance");
+
+            let originalData = [];
             let plannableDetails = [];
             let plannableMaster = [];
             let plannedMaster = [];
@@ -284,15 +307,6 @@
                 showRowLines: true,
                 keyExpr: 'GroupKey',
                 showColumnLines: true,
-                filterRow: {
-                    visible: true
-                },
-                filterPanel: {
-                    visible: true
-                },
-                headerFilter: {
-                    visible: true
-                },
                 paging: {
                     enabled: false
                 },
@@ -399,6 +413,15 @@
                                         caption: "Line Id"
                                     },
                                     {
+                                        dataField: "intorderdetailId",
+                                        caption: "OrderDetailId",
+                                        visible: false,
+                                    },
+                                    {
+                                        dataField: "strInstruction",
+                                        caption: "Instruction"
+                                    },
+                                    {
                                         dataField: "PastelCode",
                                         caption: "Pastel Code"
                                     },
@@ -419,6 +442,11 @@
                                         dataType: "number",
                                         alignment: "center",
                                         format: "#0.####",
+                                    },
+                                    {
+                                        dataField: "OwnerID",
+                                        caption: "Owner",
+                                        visible: false,
                                     }
                                 ]
                             });
@@ -496,6 +524,27 @@
                     }
                 },
                 columns: [{
+                        dataField: "StoreName",
+                        caption: "Customer Name",
+                        groupIndex: 0,
+                        allowEditing: false,
+                        groupCellTemplate: function(container, options) {
+                            const storeName = options.value;
+                            const intSequenceEditor = $("<div>").dxNumberBox({
+                                value: options.data.intSequence,
+                                onValueChanged: function(e) {
+                                    const newIntSequence = e.value;
+                                    const groupItems = options.data.items;
+                                    groupItems.forEach(item => {
+                                        item.intSequence = newIntSequence;
+                                    });
+                                    setAllGridData(plannableDetails, plannedMaster);
+                                }
+                            });
+                            container.append($("<div>").text(storeName));
+                            container.append(intSequenceEditor);
+                        }
+                    },{
                         dataField: "OrderNo",
                         caption: "Order No",
                         allowEditing: false,
@@ -504,6 +553,15 @@
                         dataField: "LineId",
                         caption: "Line Id",
                         allowEditing: false,
+                    },
+                    {
+                        dataField: "intorderdetailId",
+                        caption: "OrderDetailId",
+                        visible: false,
+                    },
+                    {
+                        dataField: "strInstruction",
+                        caption: "Instruction"
                     },
                     {
                         dataField: "PastelCode",
@@ -560,7 +618,19 @@
                         alignment: "center",
                         format: "#0.####",
                         allowEditing: false,
-                    }
+                    },
+                    {
+                        dataField: "OwnerID",
+                        caption: "Owner",
+                        visible: false,
+                    },
+                    {
+                        dataField: "intSequence",
+                        caption: "Sequence",
+                        dataType: "number",
+                        alignment: "center",
+                        allowEditing: true,  // Ensure editing is enabled
+                    },
                 ],
             }).dxDataGrid('instance');
 
@@ -592,7 +662,75 @@
                 });
             }
 
-            // Fetch initial data
+            function savePickingPlan() {
+                const plannedLines = gridPlanned.option('dataSource');
+
+                // Filter lines with already planned quantity, ensuring `items` is defined
+                const linesWithPlannedQty = plannedLines.filter(element =>
+                    Array.isArray(element.items) && element.items.some(item => item.mnyAlreadyPlanned > 0)
+                );
+
+                if (linesWithPlannedQty.length > 0) {
+                    let confirmationMessage = "These lines have already been planned:\n";
+                    linesWithPlannedQty.forEach(element => {
+                        element.items.forEach(item => {
+                            if (item.mnyAlreadyPlanned > 0) {
+                                confirmationMessage += `${item.OrderNo}, \n${item.PastelDescription}\n\n`;
+                            }
+                        });
+                    });
+
+                    confirmationMessage += "Are you sure you want to proceed?";
+                    const confirmation = confirm(confirmationMessage);
+                    if (!confirmation) {
+                        return;
+                    }
+                }
+
+                const lines = [];
+
+                // Iterate over planned lines and build up the lines array
+                plannedLines.forEach(value => {
+                    const mnyToPlan = Number(value.mnyToPlan);
+                    
+                    if (mnyToPlan !== 0) {
+                        let strPickingType = '';
+
+                        if (value.strInstruction === 'Upliftment-DIMS') {
+                            strPickingType = 'upliftment';
+                        } else {
+                            strPickingType = 'priority';
+                        }
+
+                        lines.push({
+                            'intorderdetailId': value.intorderdetailId,
+                            'mnyQty': mnyToPlan.toFixed(4),
+                            'strPickingType': strPickingType,
+                            'intOwnerID': value.OwnerID,
+                            'strUnickReference': inputUnickReference.option('value'),
+                            'intSequence': value.intSequence,
+                        });
+                    }
+                });
+                
+                $.ajax({
+                    url: '{!! url('/savePickingPlan') !!}',
+                    type: "POST",
+                    data: {
+                        lines: lines,
+                        strUnickReference: inputUnickReference.option('value'),
+                        intDc: selectDC.option('value'),
+                        intTrailerType: selectTrailer.option('value'),
+                        intTeamLeaderId: selectTeamLeader.option('value'),
+                        loadName: inputLoadName.option('value'),
+                        loadType: selectLoadType.option('value'),
+                    },
+                    success: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
+
             function getSalesOrdersToPlan() {
                 $.ajax({
                     url: '{!! url('/getSalesOrdersToPlanOptimized') !!}',
@@ -602,11 +740,12 @@
                         DeliveryDateTo: selectedDateTo,
                         intDcId: selectedDC,
                         routeIds: selectedRoutes.join(','),
-                        productGroup: selectedProductGroup,
                     },
                     success: function(data) {
+                        originalData = data.orders;
                         setAllGridData(data.orders, []);
                         inputUnickReference.option('value', data.strUnickReference);
+                        setItemGroupData(data.orders);
                     }
                 });
             }
@@ -623,6 +762,20 @@
 
                 gridPlanned.option('dataSource', plannedMaster);
                 gridPlanned.refresh();
+            }
+
+            function setItemGroupData(data) {
+                $.each(data, function(index, item) {
+                    var existingGroup = $.grep(productGroups, function(group) {
+                        return group.ItemGroupDescription === item.ItemGroupDescription;
+                    });
+                    if (existingGroup.length === 0) {
+                        productGroups.push({
+                            ItemGroupDescription: item.ItemGroupDescription,
+                        });
+                    }
+                });
+                selectProductGroup.option('items', productGroups);
             }
 
             function formatDate(date) {
