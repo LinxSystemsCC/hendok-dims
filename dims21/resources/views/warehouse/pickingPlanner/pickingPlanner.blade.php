@@ -141,10 +141,10 @@
             var trailerTypes = ({!! json_encode($trailerTypes) !!});
             var teamleaders = ({!! json_encode($teamleaders) !!});
 
-            let selectedDateFrom = '2023-08-01';
-            let selectedDateTo = '2023-08-30';
+            let selectedDateFrom = '2023-08-23';
+            let selectedDateTo = '2023-08-23';
             let selectedDC = 1;
-            let selectedRoutes = [10, 12, 25, 63, 20, 29, 41, 52, 57, 35];
+            let selectedRoutes = [4,10,12,25,63,20,29,41,52,57,35];
             let selectedProductGroup;
             let selectedLoadType;
 
@@ -455,7 +455,8 @@
                                 onRowPrepared(e) {
                                     if (e.data) {
                                         if (e.data.strRowColor != null) {
-                                            e.rowElement.css("background-color", e.data.strRowColor);
+                                            e.rowElement.css("background-color", e.data
+                                            .strRowColor);
                                         }
                                     }
                                 },
@@ -542,7 +543,9 @@
                         groupCellTemplate: function(container, options) {
                             const storeName = options.value;
                             const groupItems = options.data.items || options.data.collapsedItems;
-                            const initialIntSequence = groupItems.length > 0 ? groupItems[0].intSequence : null;
+                            const itemCount = groupItems.length;
+                            const initialIntSequence = groupItems.length > 0 ? groupItems[0]
+                                .intSequence : null;
 
                             const intSequenceEditor = $("<div>").dxNumberBox({
                                 value: initialIntSequence,
@@ -564,7 +567,7 @@
                             });
 
                             // Create and append the store name div
-                            const storeNameDiv = $("<div>").text(storeName).css({
+                            const storeNameDiv = $("<div>").text(`${storeName} (${itemCount} lines)`).css({
                                 flexGrow: 1, // Allow it to take up the remaining space
                                 textAlign: "left"
                             });
@@ -663,10 +666,19 @@
                     {
                         dataField: "mnyTons",
                         caption: "Tons",
-                        dataType: "number",
-                        alignment: "center",
+                        sColor: "Red",
                         format: "#0.####",
-                        allowEditing: false,
+                        dataType: "number",
+                        calculateCellValue: function(rowData) {
+                            return rowData.mnyTonsProduct * rowData.mnyToPlan;
+                        },
+                        cellTemplate: function(element, info) {
+                            element.append("<div>" + info.text + "</div>")
+                                .css("background", "#152b4d73")
+                                .css("color", "#fff")
+                                .css("font-size", "16px")
+                                .css("font-weight", "900");
+                        }
                     },
                     {
                         dataField: "OwnerID",
@@ -689,23 +701,59 @@
                     }
                 },
                 toolbar: {
-                    items: [
-                        {
-                            location: 'before',
-                            widget: 'dxButton',
-                            options: {
-                                icon: 'collapse',
-                                onClick: function(e) {
-                                    const allExpanded = gridPlanned.option('grouping.autoExpandAll');
-                                    gridPlanned.option('grouping.autoExpandAll', !allExpanded);
-                                    e.component.option('icon', allExpanded ? 'expand' : 'collapse');
-                                }
+                    items: [{
+                        location: 'before',
+                        widget: 'dxButton',
+                        options: {
+                            icon: 'collapse',
+                            onClick: function(e) {
+                                const allExpanded = gridPlanned.option(
+                                'grouping.autoExpandAll');
+                                gridPlanned.option('grouping.autoExpandAll', !allExpanded);
+                                e.component.option('icon', allExpanded ? 'expand' : 'collapse');
                             }
                         }
-                    ]
+                    }]
                 },
                 grouping: {
                     autoExpandAll: true
+                },
+                sortByGroupSummaryInfo: [{
+                    summaryItem: 'count',
+                }],
+                summary: {
+                    recalculateWhileEditing: true,
+                    groupItems: [{
+                        column: 'mnyToPlan',
+                        summaryType: 'sum',
+                        displayFormat: 'Total: {0}',
+                        showInGroupFooter: true,
+                    }, {
+                        column: 'mnyTons',
+                        summaryType: 'sum',
+                        displayFormat: 'Tons: {0}',
+                        showInGroupFooter: true,
+                        valueFormat: { 
+                            type: "fixedPoint", 
+                            precision: 4 
+                        }
+                    }],
+                    totalItems: [
+                        {
+                            column: "mnyToPlan",
+                            summaryType: "sum",
+                            displayFormat: 'Plan: {0}',
+                        },
+                        {
+                            column: "mnyTons",
+                            summaryType: "sum",
+                            displayFormat: 'Tons: {0}',
+                            valueFormat: { 
+                                type: "fixedPoint", 
+                                precision: 4 
+                            }
+                        }
+                    ]
                 },
             }).dxDataGrid('instance');
 
@@ -729,7 +777,7 @@
                         };
                     }
 
-                    groupedData[key].mnyTons += parseFloat(item.mnyTons);
+                    groupedData[key].mnyTons += parseFloat(item.mnyTonsProduct * item.mnyToPlan);
                 });
 
                 return $.map(groupedData, function(value, key) {
