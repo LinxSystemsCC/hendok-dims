@@ -50,7 +50,7 @@
             padding: 10px;
         }
 
-        .dx-datagrid .dx-row > td {
+        .dx-datagrid .dx-row>td {
             padding: 5px !important;
             font-size: 12px !important;
         }
@@ -144,7 +144,7 @@
             let selectedDateFrom = '2023-08-01';
             let selectedDateTo = '2023-08-30';
             let selectedDC = 1;
-            let selectedRoutes = [10,12,25,63,20,29,41,52,57,35];
+            let selectedRoutes = [10, 12, 25, 63, 20, 29, 41, 52, 57, 35];
             let selectedProductGroup;
             let selectedLoadType;
 
@@ -213,7 +213,7 @@
                     const filteredDetails = originalData.filter(function(detail) {
                         return selectedValues.includes(detail.ItemGroupDescription);
                     });
-                    
+
                     setAllGridData(filteredDetails, [])
                 },
             }).dxTagBox("instance");
@@ -359,7 +359,8 @@
                         bulkAdd = true;
                     },
                     onAdd: function(e) {
-                        const index = plannedMaster.findIndex(item => item.OrderNo === e.itemData.OrderNo && item.LineId === e.itemData.LineId);
+                        const index = plannedMaster.findIndex(item => item.OrderNo === e.itemData
+                            .OrderNo && item.LineId === e.itemData.LineId);
 
                         if (index > -1) {
                             plannedMaster.splice(index, 1);
@@ -394,7 +395,9 @@
                                         bulkAdd = false;
                                     },
                                     onAdd: function(e) {
-                                        const index = plannedMaster.findIndex(item => item.OrderNo === e.itemData.OrderNo && item.LineId === e.itemData.LineId);
+                                        const index = plannedMaster.findIndex(item => item
+                                            .OrderNo === e.itemData.OrderNo && item
+                                            .LineId === e.itemData.LineId);
 
                                         if (index > -1) {
                                             plannedMaster.splice(index, 1);
@@ -448,7 +451,14 @@
                                         caption: "Owner",
                                         visible: false,
                                     }
-                                ]
+                                ],
+                                onRowPrepared(e) {
+                                    if (e.data) {
+                                        if (e.data.strRowColor != null) {
+                                            e.rowElement.css("background-color", e.data.strRowColor);
+                                        }
+                                    }
+                                },
                             });
                     }
                 }
@@ -481,15 +491,16 @@
                         e.itemData = e.itemData;
                     },
                     onAdd: function(e) {
-                        if (!bulkAdd){
-                            const index = plannableDetails.findIndex(item => item.OrderNo === e.itemData.OrderNo && item.LineId === e.itemData.LineId);
+                        if (!bulkAdd) {
+                            const index = plannableDetails.findIndex(item => item.OrderNo === e.itemData
+                                .OrderNo && item.LineId === e.itemData.LineId);
 
                             if (index > -1) {
                                 plannableDetails.splice(index, 1);
                             }
                             plannedMaster.push(e.itemData);
 
-                        }else{
+                        } else {
                             var criteria = {
                                 Area: e.itemData.Area,
                                 CustomerPastelCode: e.itemData.CustomerPastelCode,
@@ -519,7 +530,7 @@
 
                             $.merge(plannedMaster, matchedItems);
                         }
-                        
+
                         setAllGridData(plannableDetails, plannedMaster);
                     }
                 },
@@ -530,21 +541,59 @@
                         allowEditing: false,
                         groupCellTemplate: function(container, options) {
                             const storeName = options.value;
+                            const groupItems = options.data.items || options.data.collapsedItems;
+                            const initialIntSequence = groupItems.length > 0 ? groupItems[0].intSequence : null;
+
                             const intSequenceEditor = $("<div>").dxNumberBox({
-                                value: options.data.intSequence,
+                                value: initialIntSequence,
                                 onValueChanged: function(e) {
                                     const newIntSequence = e.value;
-                                    const groupItems = options.data.items;
                                     groupItems.forEach(item => {
                                         item.intSequence = newIntSequence;
                                     });
                                     setAllGridData(plannableDetails, plannedMaster);
                                 }
                             });
-                            container.append($("<div>").text(storeName));
-                            container.append(intSequenceEditor);
+
+                            // Create a flex container for alignment
+                            const flexContainer = $("<div>").css({
+                                display: "flex",
+                                alignItems: "center", // Vertically align items in the center
+                                justifyContent: "space-between", // Space between storeName and intSequenceEditor
+                                height: "100%" // Make the div's height match the container
+                            });
+
+                            // Create and append the store name div
+                            const storeNameDiv = $("<div>").text(storeName).css({
+                                flexGrow: 1, // Allow it to take up the remaining space
+                                textAlign: "left"
+                            });
+
+                            // Create a wrapper for the sequence editor and label
+                            const sequenceWrapper = $("<div>").css({
+                                display: "flex",
+                                alignItems: "center" // Vertically align the editor and label
+                            });
+
+                            // Append the sequence label
+                            const sequenceLabel = $("<div>").text("Seq").css({
+                                marginRight: "10px"
+                            });
+
+                            // Append the number box to the wrapper
+                            sequenceWrapper.append(sequenceLabel).append(intSequenceEditor);
+
+                            // Append the store name div and sequence wrapper to the flex container
+                            flexContainer.append(storeNameDiv).append(sequenceWrapper);
+
+                            // Append the flex container to the cell container
+                            container.append(flexContainer);
+
+                            // Set specific styling for the number box
+                            container.find(".dx-numberbox").css("width", "150px");
                         }
-                    },{
+
+                    }, {
                         dataField: "OrderNo",
                         caption: "Order No",
                         allowEditing: false,
@@ -629,9 +678,35 @@
                         caption: "Sequence",
                         dataType: "number",
                         alignment: "center",
-                        allowEditing: true,  // Ensure editing is enabled
+                        allowEditing: true,
                     },
                 ],
+                onRowPrepared(e) {
+                    if (e.data) {
+                        if (e.data.strRowColor != null) {
+                            e.rowElement.css("background-color", e.data.strRowColor);
+                        }
+                    }
+                },
+                toolbar: {
+                    items: [
+                        {
+                            location: 'before',
+                            widget: 'dxButton',
+                            options: {
+                                icon: 'collapse',
+                                onClick: function(e) {
+                                    const allExpanded = gridPlanned.option('grouping.autoExpandAll');
+                                    gridPlanned.option('grouping.autoExpandAll', !allExpanded);
+                                    e.component.option('icon', allExpanded ? 'expand' : 'collapse');
+                                }
+                            }
+                        }
+                    ]
+                },
+                grouping: {
+                    autoExpandAll: true
+                },
             }).dxDataGrid('instance');
 
             function groupData(data) {
@@ -675,7 +750,8 @@
                     linesWithPlannedQty.forEach(element => {
                         element.items.forEach(item => {
                             if (item.mnyAlreadyPlanned > 0) {
-                                confirmationMessage += `${item.OrderNo}, \n${item.PastelDescription}\n\n`;
+                                confirmationMessage +=
+                                    `${item.OrderNo}, \n${item.PastelDescription}\n\n`;
                             }
                         });
                     });
@@ -692,7 +768,7 @@
                 // Iterate over planned lines and build up the lines array
                 plannedLines.forEach(value => {
                     const mnyToPlan = Number(value.mnyToPlan);
-                    
+
                     if (mnyToPlan !== 0) {
                         let strPickingType = '';
 
@@ -712,7 +788,7 @@
                         });
                     }
                 });
-                
+
                 $.ajax({
                     url: '{!! url('/savePickingPlan') !!}',
                     type: "POST",
