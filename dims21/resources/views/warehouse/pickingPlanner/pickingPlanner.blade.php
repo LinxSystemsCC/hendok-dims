@@ -17,13 +17,13 @@
             font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
             padding: 0;
             margin: 0;
-            overflow: auto;
+            overflow: hidden;
         }
 
         .panel-container {
             display: flex;
             flex-direction: row;
-            height: 100%;
+            height: 90%;
         }
 
         .panel-left {
@@ -57,62 +57,68 @@
     </style>
 
     <div class="col-12 h-100">
-        <div class="panel-container">
-            <div class="panel-left">
+        <div class="row gx-0 w-100" >
+            <div class="col-6">
                 <div class="row gx-0">
-                    <div class="col-1 px-1">
-                        <button id="btnHome" class="btn btn-sm btn-secondary">
-                            Home
-                        </button>
+                    <div class="col-4 px-1">
+                        <div id="btnHome"></div>
                     </div>
-                    <div class="col px-1">
+                    <div class="col-4 px-1 mb-2">
                         <div id="selectDateRange"></div>
                     </div>
-                    <div class="col px-1">
+                    <div class="col-4 px-1">
                         <div id="selectDC"></div>
                     </div>
-                    <div class="col px-1">
+                    <div class="col-4 px-1">
                         <div id="selectRoute"></div>
                     </div>
-                    <div class="col px-1">
+                    <div class="col-4 px-1">
                         <div id="selectProductGroup"></div>
                     </div>
-                    <div class="col px-1">
+                    <div class="col-4 px-1">
                         <div id="btnGetOrders"></div>
                     </div>
                 </div>
-                <div id="gridPlannable" style="height: 90%;"></div>
+            </div>
+            <div class="col-6">
+                <div class="row gx-0">
+                    <div class="col-4 px-1 mb-2">
+                        <div id="inputUnickReference"></div>
+                    </div>
+                    <div class="col-4 px-1">
+                        <div id="selectTrailer"></div>
+                    </div>
+                    <div class="col-4 px-1">
+                        <div id="selectTeamLeader"></div>
+                    </div>
+                    <div class="col-4 px-1">
+                        <div id="inputLoadName"></div>
+                    </div>
+                    <div class="col-4 px-1">
+                        <div id="selectLoadType"></div>
+                    </div>
+                    <div class="col-4 px-1">
+                        <div id="btnSavePlan"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-container">
+            <div class="panel-left">
+                <div id="gridPlannable"></div>
             </div>
 
             <div class="splitter"></div>
 
             <div class="panel-right">
-                <div class="row gx-0">
-                    <div class="col px-1">
-                        <div id="inputUnickReference"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div id="selectTrailer"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div id="selectTeamLeader"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div id="inputLoadName"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div id="selectLoadType"></div>
-                    </div>
-                    <div class="col px-1">
-                        <div id="btnSavePlan"></div>
-                    </div>
-                </div>
-                <div id="gridPlanned" style="height: 90%;"></div>
+                <div id="gridPlanned"></div>
             </div>
         </div>
     </div>
 
 @endsection
+
 
 @section('scripts')
 
@@ -120,17 +126,19 @@
         $(document).ready(function() {
             $(".panel-left").resizable({
                 handleSelector: ".splitter",
-                resizeHeight: false,
-                disableSerialization: true,
-            });
-
-            $('#btnHome').click(function() {
-                window.location.href = '{!! url('/') !!}';
+                resizeHeight: false, // Prevent height resizing
+                resizeWidth: true,   // Allow width resizing
+                minWidth: 150,       // Minimum width constraint
+                maxWidth: '100%',    // Maximum width constraint (you can adjust as needed)
+                disableSelection: true,
+                containment: 'parent', // Contain the resizing within the parent element
+                grid: [1, 0],        // Optional: Snap to grid for more controlled resizing
             });
 
             var dcs = ({!! json_encode($dcs) !!});
             var routes = ({!! json_encode($routes) !!});
             var productGroups = [];
+
             var loadTypes = [{
                 "value": "Hendok Tranport / CC",
                 "display": "Hendok Tranport / CC",
@@ -138,15 +146,33 @@
                 "value": "Other",
                 "display": "Other",
             }];
+
             var trailerTypes = ({!! json_encode($trailerTypes) !!});
             var teamleaders = ({!! json_encode($teamleaders) !!});
 
-            let selectedDateFrom = '2023-08-23';
-            let selectedDateTo = '2023-08-23';
-            let selectedDC = 1;
-            let selectedRoutes = [4,10,12,25,63,20,29,41,52,57,35];
+            let selectedDateFrom;
+            let selectedDateTo;
+            let selectedDC;
+            let selectedRoutes;
             let selectedProductGroup;
             let selectedLoadType;
+
+            let originalData = [];
+            let plannableDetails = [];
+            let plannableMaster = [];
+            let plannedMaster = [];
+            let bulkAdd = false;
+
+            const btnHome = $('#btnHome').dxButton({
+                stylingMode: 'contained',
+                text: 'Home',
+                type: 'normal',
+                icon: 'fa fa-home',
+                width: '100%',
+                onClick() {
+                    window.location.href = '{!! url('/') !!}';
+                },
+            }).dxButton("instance");
 
             const selectDateRange = $("#selectDateRange").dxDateRangeBox({
                 displayFormat: 'yyyy-MM-dd',
@@ -157,7 +183,13 @@
                         selectedDateFrom = formatDate(e.value[0]);
                         selectedDateTo = formatDate(e.value[1]);
                     }
-                }
+                },
+            }).dxValidator({
+                validationGroup: "getData",
+                validationRules: [{
+                    type: 'required',
+                    message: 'Date is required',
+                }],
             }).dxDateRangeBox("instance");
 
             const selectDC = $("#selectDC").dxSelectBox({
@@ -172,6 +204,12 @@
                 onValueChanged: function(e) {
                     selectedDC = e.value;
                 },
+            }).dxValidator({
+                validationGroup: "getData",
+                validationRules: [{
+                    type: 'required',
+                    message: 'DC is required',
+                }],
             }).dxSelectBox("instance");
 
             const selectRoute = $("#selectRoute").dxTagBox({
@@ -190,6 +228,12 @@
                 onValueChanged: function(e) {
                     selectedRoutes = e.value;
                 },
+            }).dxValidator({
+                validationGroup: "getData",
+                validationRules: [{
+                    type: 'required',
+                    message: 'Route is required',
+                }],
             }).dxTagBox("instance");
 
             const selectProductGroup = $("#selectProductGroup").dxTagBox({
@@ -206,7 +250,7 @@
                     const selectedValues = e.value;
 
                     if (selectedValues.length === 0) {
-                        setAllGridData(originalData, [])
+                        setAllGridData(originalData, plannedMaster)
                         return;
                     }
 
@@ -214,32 +258,23 @@
                         return selectedValues.includes(detail.ItemGroupDescription);
                     });
 
-                    setAllGridData(filteredDetails, [])
+                    setAllGridData(filteredDetails, plannedMaster)
                 },
             }).dxTagBox("instance");
-
-            const selectLoadType = $("#selectLoadType").dxSelectBox({
-                dataSource: loadTypes,
-                valueExpr: 'value',
-                displayExpr: 'display',
-                placeholder: 'Load Type',
-                showSelectionControls: true,
-                showClearButton: true,
-                width: '100%',
-                searchEnabled: true,
-                onValueChanged: function(e) {
-                    selectedLoadType = e.value;
-                },
-            }).dxSelectBox("instance");
 
             const btnGetOrders = $('#btnGetOrders').dxButton({
                 stylingMode: 'contained',
                 text: 'SEARCH',
-                type: 'success',
+                type: 'normal',
                 width: '100%',
-                onClick() {
-                    getSalesOrdersToPlan();
-                },
+                icon: 'fa fa-search',
+                validationGroup: "getData",
+                onClick: function (e) {
+                    var result = e.validationGroup.validate();
+                    if (result.isValid) {
+                        getSalesOrdersToPlan();
+                    }
+                }
             }).dxButton("instance");
 
             const inputUnickReference = $("#inputUnickReference").dxTextBox({
@@ -262,6 +297,12 @@
                 onValueChanged: function(e) {
 
                 },
+            }).dxValidator({
+                validationGroup: "saveData",
+                validationRules: [{
+                    type: 'required',
+                    message: 'Trailer is required',
+                }],
             }).dxSelectBox("instance");
 
             const selectTeamLeader = $("#selectTeamLeader").dxSelectBox({
@@ -274,6 +315,12 @@
                 width: '100%',
                 searchEnabled: true,
                 onValueChanged: function(e) {},
+            }).dxValidator({
+                validationGroup: "saveData",
+                validationRules: [{
+                    type: 'required',
+                    message: 'Team Leader is required',
+                }],
             }).dxSelectBox("instance");
 
             const inputLoadName = $("#inputLoadName").dxTextBox({
@@ -283,23 +330,48 @@
                 width: '100%',
                 searchEnabled: true,
                 onValueChanged: function(e) {},
+            }).dxValidator({
+                validationGroup: "saveData",
+                validationRules: [{
+                    type: 'required',
+                    message: 'Load Name is required',
+                }],
             }).dxTextBox("instance");
+
+            const selectLoadType = $("#selectLoadType").dxSelectBox({
+                dataSource: loadTypes,
+                valueExpr: 'value',
+                displayExpr: 'display',
+                placeholder: 'Load Type',
+                showSelectionControls: true,
+                showClearButton: true,
+                width: '100%',
+                searchEnabled: true,
+                onValueChanged: function(e) {
+                    selectedLoadType = e.value;
+                },
+            }).dxValidator({
+                validationGroup: "saveData",
+                validationRules: [{
+                    type: 'required',
+                    message: 'Load Type is required',
+                }],
+            }).dxSelectBox("instance");
 
             const btnSavePlan = $('#btnSavePlan').dxButton({
                 stylingMode: 'contained',
                 text: 'SAVE',
                 type: 'success',
                 width: '100%',
-                onClick() {
-                    savePickingPlan();
-                },
+                icon: 'fa fa-save',
+                validationGroup: "saveData",
+                onClick: function (e) {
+                    var result = e.validationGroup.validate();
+                    if (result.isValid) {
+                        savePickingPlan();
+                    }
+                }
             }).dxButton("instance");
-
-            let originalData = [];
-            let plannableDetails = [];
-            let plannableMaster = [];
-            let plannedMaster = [];
-            let bulkAdd = false;
 
             const gridPlannable = $("#gridPlannable").dxDataGrid({
                 dataSource: [],
@@ -307,6 +379,7 @@
                 showRowLines: true,
                 keyExpr: 'GroupKey',
                 showColumnLines: true,
+                height: '100%',
                 paging: {
                     enabled: false
                 },
@@ -372,6 +445,7 @@
                 },
                 masterDetail: {
                     enabled: true,
+                    autoExpandAll: false,
                     template: function(container, options) {
                         const masterRow = options.data;
                         const masterDetailData = plannableDetails.filter(detail =>
@@ -456,13 +530,30 @@
                                     if (e.data) {
                                         if (e.data.strRowColor != null) {
                                             e.rowElement.css("background-color", e.data
-                                            .strRowColor);
+                                                .strRowColor);
                                         }
                                     }
                                 },
                             });
                     }
-                }
+                },
+                toolbar: {
+                    items: [{
+                        location: 'before',
+                        widget: 'dxButton',
+                        options: {
+                            icon: 'expand',
+                            onClick: function(e) {
+                                const allExpanded = gridPlannable.option(
+                                    'masterDetail.autoExpandAll');
+                                gridPlannable.option('masterDetail.autoExpandAll', !
+                                allExpanded);
+                                gridPlannable.refresh();
+                                e.component.option('icon', allExpanded ? 'expand' : 'collapse');
+                            }
+                        }
+                    }]
+                },
             }).dxDataGrid('instance');
 
             const gridPlanned = $("#gridPlanned").dxDataGrid({
@@ -470,6 +561,7 @@
                 showBorders: true,
                 showRowLines: true,
                 showColumnLines: true,
+                height: '100%',
                 paging: {
                     enabled: false
                 },
@@ -567,7 +659,8 @@
                             });
 
                             // Create and append the store name div
-                            const storeNameDiv = $("<div>").text(`${storeName} (${itemCount} lines)`).css({
+                            const storeNameDiv = $("<div>").text(
+                                `${storeName} (${itemCount} lines)`).css({
                                 flexGrow: 1, // Allow it to take up the remaining space
                                 textAlign: "left"
                             });
@@ -708,7 +801,7 @@
                             icon: 'collapse',
                             onClick: function(e) {
                                 const allExpanded = gridPlanned.option(
-                                'grouping.autoExpandAll');
+                                    'grouping.autoExpandAll');
                                 gridPlanned.option('grouping.autoExpandAll', !allExpanded);
                                 e.component.option('icon', allExpanded ? 'expand' : 'collapse');
                             }
@@ -733,13 +826,12 @@
                         summaryType: 'sum',
                         displayFormat: 'Tons: {0}',
                         showInGroupFooter: true,
-                        valueFormat: { 
-                            type: "fixedPoint", 
-                            precision: 4 
+                        valueFormat: {
+                            type: "fixedPoint",
+                            precision: 4
                         }
                     }],
-                    totalItems: [
-                        {
+                    totalItems: [{
                             column: "mnyToPlan",
                             summaryType: "sum",
                             displayFormat: 'Plan: {0}',
@@ -748,9 +840,9 @@
                             column: "mnyTons",
                             summaryType: "sum",
                             displayFormat: 'Tons: {0}',
-                            valueFormat: { 
-                                type: "fixedPoint", 
-                                precision: 4 
+                            valueFormat: {
+                                type: "fixedPoint",
+                                precision: 4
                             }
                         }
                     ]
@@ -837,6 +929,8 @@
                     }
                 });
 
+                loadingPanel.option('visible', true);
+
                 $.ajax({
                     url: '{!! url('/savePickingPlan') !!}',
                     type: "POST",
@@ -851,11 +945,20 @@
                     },
                     success: function(data) {
                         console.log(data);
+                    },
+                    error: function() {
+                        DevExpress.ui.notify("Error fetching data.", "error", 3000);
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
                     }
                 });
             }
 
             function getSalesOrdersToPlan() {
+                loadingPanel.option('visible', true);
+                
                 $.ajax({
                     url: '{!! url('/getSalesOrdersToPlanOptimized') !!}',
                     type: "POST",
@@ -870,6 +973,13 @@
                         setAllGridData(data.orders, []);
                         inputUnickReference.option('value', data.strUnickReference);
                         setItemGroupData(data.orders);
+                    },
+                    error: function() {
+                        DevExpress.ui.notify("Error fetching data.", "error", 3000);
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
                     }
                 });
             }

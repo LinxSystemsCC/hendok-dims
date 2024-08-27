@@ -173,6 +173,8 @@
         </div>
     </div>
 
+    <div id="loadingPanel"></div>
+
     <div class="col-12 d-flex px-0 mh-100 h-100"  style="background: white;">
         @if(isset($includeMenu) && $includeMenu)
             <div class="col-custom-2"  style="background: white;">
@@ -238,6 +240,17 @@
     $('nav ul li').click(function(){
         $(this).addClass("active").siblings().removeClass("active");
     });
+
+    const loadingPanel = $("#loadingPanel").dxLoadPanel({
+        shadingColor: 'rgba(0,0,0,0.4)',
+        position: {
+            of: 'container' // Adjust positioning as needed
+        },
+        visible: false, // Initially hidden
+        showIndicator: true,
+        showPane: true,
+        shading: true,
+    }).dxLoadPanel("instance");
 
 </script>
 
