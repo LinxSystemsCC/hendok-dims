@@ -49,11 +49,6 @@
             max-width: calc(100% - 150px);
             padding: 10px;
         }
-
-        .dx-datagrid .dx-row>td {
-            padding: 5px !important;
-            font-size: 12px !important;
-        }
     </style>
 
     <div class="col-12 h-100">
@@ -380,6 +375,9 @@
                 keyExpr: 'GroupKey',
                 showColumnLines: true,
                 height: '100%',
+                filterRow: { visible: true },
+                filterPanel: { visible: true },
+                headerFilter: { visible: true },
                 paging: {
                     enabled: false
                 },
@@ -566,6 +564,14 @@
                         }
                     }]
                 },
+                onRowPrepared(e) {
+                    if (e.data) {
+                        if (e.data.strRowColor != null) {
+                            e.rowElement.css("background-color", e.data
+                                .strRowColor);
+                        }
+                    }
+                },
             }).dxDataGrid('instance');
 
             const gridPlanned = $("#gridPlanned").dxDataGrid({
@@ -574,6 +580,9 @@
                 showRowLines: true,
                 showColumnLines: true,
                 height: '100%',
+                filterRow: { visible: true },
+                filterPanel: { visible: true },
+                headerFilter: { visible: true },
                 paging: {
                     enabled: false
                 },
@@ -893,7 +902,7 @@
 
                 gridPlanned.saveEditData();
                 const plannedLines = gridPlanned.option('dataSource');
-                
+
                 if (Array.isArray(plannedLines)) {
                     // Filter lines with already planned quantity, checking `mnyAlreadyPlanned` directly on each element
                     const linesWithPlannedQty = plannedLines.filter(element =>
