@@ -66,13 +66,12 @@ class PlanningController extends Controller
         $intTeamLeaderId = $request->get('intTeamLeaderId');
         $loadName = $request->get('loadName');
         $loadType = $request->get('loadType');
-        
 
         if (is_array($lines)) {
             $xml = $this->toxml($lines, "xml", array("result"));
 
-            dd("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType'");
-
+            // dd("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType'");
+            
             $response = DB::connection('sqlsrv3')->select("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType'");
 
             return response()->json($response);

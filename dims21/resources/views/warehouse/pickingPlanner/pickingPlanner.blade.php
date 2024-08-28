@@ -57,7 +57,7 @@
     </style>
 
     <div class="col-12 h-100">
-        <div class="row gx-0 w-100" >
+        <div class="row gx-0 w-100">
             <div class="col-6">
                 <div class="row gx-0">
                     <div class="col-4 px-1">
@@ -127,12 +127,12 @@
             $(".panel-left").resizable({
                 handleSelector: ".splitter",
                 resizeHeight: false, // Prevent height resizing
-                resizeWidth: true,   // Allow width resizing
-                minWidth: 150,       // Minimum width constraint
-                maxWidth: '100%',    // Maximum width constraint (you can adjust as needed)
+                resizeWidth: true, // Allow width resizing
+                minWidth: 150, // Minimum width constraint
+                maxWidth: '100%', // Maximum width constraint (you can adjust as needed)
                 disableSelection: true,
                 containment: 'parent', // Contain the resizing within the parent element
-                grid: [1, 0],        // Optional: Snap to grid for more controlled resizing
+                grid: [1, 0], // Optional: Snap to grid for more controlled resizing
             });
 
             var dcs = ({!! json_encode($dcs) !!});
@@ -269,7 +269,7 @@
                 width: '100%',
                 icon: 'fa fa-search',
                 validationGroup: "getData",
-                onClick: function (e) {
+                onClick: function(e) {
                     var result = e.validationGroup.validate();
                     if (result.isValid) {
                         getSalesOrdersToPlan();
@@ -365,7 +365,7 @@
                 width: '100%',
                 icon: 'fa fa-save',
                 validationGroup: "saveData",
-                onClick: function (e) {
+                onClick: function(e) {
                     var result = e.validationGroup.validate();
                     if (result.isValid) {
                         savePickingPlan();
@@ -547,10 +547,22 @@
                                 const allExpanded = gridPlannable.option(
                                     'masterDetail.autoExpandAll');
                                 gridPlannable.option('masterDetail.autoExpandAll', !
-                                allExpanded);
+                                    allExpanded);
                                 gridPlannable.refresh();
                                 e.component.option('icon', allExpanded ? 'expand' : 'collapse');
                             }
+                        }
+                    }]
+                },
+                summary: {
+                    recalculateWhileEditing: true,
+                    totalItems: [{
+                        column: "mnyTons",
+                        summaryType: "sum",
+                        displayFormat: 'Tons: {0}',
+                        valueFormat: {
+                            type: "fixedPoint",
+                            precision: 4
                         }
                     }]
                 },
@@ -754,7 +766,7 @@
                         alignment: "center",
                         format: "#0.####",
                         allowEditing: false,
-                        visible: false,
+                        // visible: false,
                     },
                     {
                         dataField: "mnyTons",
@@ -865,7 +877,7 @@
                             Route: item.Route,
                             OrderDate: item.OrderDate,
                             DeliveryDate: item.DeliveryDate,
-                            mnyTons: 0 // Initialize Tons
+                            mnyTons: 0
                         };
                     }
 
@@ -878,87 +890,118 @@
             }
 
             function savePickingPlan() {
+
+                gridPlanned.saveEditData();
                 const plannedLines = gridPlanned.option('dataSource');
+                
+                if (Array.isArray(plannedLines)) {
+                    // Filter lines with already planned quantity, checking `mnyAlreadyPlanned` directly on each element
+                    const linesWithPlannedQty = plannedLines.filter(element =>
+                        parseFloat(element.mnyAlreadyPlanned) > 0
+                    );
 
-                // Filter lines with already planned quantity, ensuring `items` is defined
-                const linesWithPlannedQty = plannedLines.filter(element =>
-                    Array.isArray(element.items) && element.items.some(item => item.mnyAlreadyPlanned > 0)
-                );
 
-                if (linesWithPlannedQty.length > 0) {
-                    let confirmationMessage = "These lines have already been planned:\n";
-                    linesWithPlannedQty.forEach(element => {
-                        element.items.forEach(item => {
-                            if (item.mnyAlreadyPlanned > 0) {
-                                confirmationMessage +=
-                                    `${item.OrderNo}, \n${item.PastelDescription}\n\n`;
+                    if (linesWithPlannedQty.length > 0) {
+                        let confirmationMessage = "<p class='fw-bold'>These lines have already been planned:</p>";
+                        linesWithPlannedQty.forEach(element => {
+                            confirmationMessage +=
+                                `[ ${element.OrderNo} ] ${element.PastelDescription}<br>`;
+                        });
+
+                        confirmationMessage += "<br><p class='fw-bold'>Are you sure you want to proceed?</p>";
+
+                        DevExpress.ui.dialog.confirm(confirmationMessage, "Confirmation").done(function(confirmed) {
+                            if (confirmed) {
+                                const lines = [];
+
+                                plannedLines.forEach(value => {
+                                    const mnyToPlan = Number(value.mnyToPlan);
+
+                                    if (mnyToPlan !== 0) {
+                                        let strPickingType = '';
+
+                                        if (value.strInstruction === 'Upliftment-DIMS') {
+                                            strPickingType = 'upliftment';
+                                        } else {
+                                            strPickingType = 'priority';
+                                        }
+
+                                        lines.push({
+                                            'intorderdetailId': value.intorderdetailId,
+                                            'mnyQty': mnyToPlan.toFixed(4),
+                                            'strPickingType': strPickingType,
+                                            'intOwnerID': value.OwnerID,
+                                            'strUnickReference': inputUnickReference.option(
+                                                'value'),
+                                            'intSequence': value.intSequence,
+                                        });
+                                    }
+                                });
+
+                                loadingPanel.option('visible', true);
+
+                                $.ajax({
+                                    url: '{!! url('/savePickingPlan') !!}',
+                                    type: "POST",
+                                    data: {
+                                        lines: lines,
+                                        strUnickReference: inputUnickReference.option('value'),
+                                        intDc: selectDC.option('value'),
+                                        intTrailerType: selectTrailer.option('value'),
+                                        intTeamLeaderId: selectTeamLeader.option('value'),
+                                        loadName: inputLoadName.option('value'),
+                                        loadType: selectLoadType.option('value'),
+                                    },
+                                    success: function(data) {
+                                        window.open('{!! url('/pickingplanlist') !!}/' +
+                                            inputUnickReference.option('value'),
+                                            "strUnickReference",
+                                            "location=1,status=1,scrollbars=1, width=1200,height=850"
+                                            );
+
+                                        selectDateRange.option('value', []);
+                                        selectDC.option('value', '');
+                                        selectRoute.option('value', []);
+                                        selectProductGroup.option('value', '');
+                                        selectProductGroup.option('dataSource', []);
+
+                                        inputUnickReference.option('value', '');
+                                        selectTrailer.option('value', '');
+                                        selectTeamLeader.option('value', '');
+                                        inputLoadName.option('value', '');
+                                        selectLoadType.option('value', '');
+
+                                        gridPlannable.option('dataSource', []);
+                                        gridPlannable.refresh();
+                                        gridPlanned.option('dataSource', []);
+                                        gridPlanned.refresh();
+
+                                        DevExpress.validationEngine.resetGroup("getData");
+                                        DevExpress.validationEngine.resetGroup("saveData");
+
+                                    },
+                                    error: function() {
+                                        DevExpress.ui.notify("Error fetching data.", "error",
+                                            3000);
+                                    },
+                                    complete: function() {
+                                        // Hide the loading panel
+                                        loadingPanel.option('visible', false);
+                                    }
+                                });
+
+                            } else {
+                                return;
                             }
                         });
-                    });
-
-                    confirmationMessage += "Are you sure you want to proceed?";
-                    const confirmation = confirm(confirmationMessage);
-                    if (!confirmation) {
-                        return;
                     }
                 }
 
-                const lines = [];
-
-                // Iterate over planned lines and build up the lines array
-                plannedLines.forEach(value => {
-                    const mnyToPlan = Number(value.mnyToPlan);
-
-                    if (mnyToPlan !== 0) {
-                        let strPickingType = '';
-
-                        if (value.strInstruction === 'Upliftment-DIMS') {
-                            strPickingType = 'upliftment';
-                        } else {
-                            strPickingType = 'priority';
-                        }
-
-                        lines.push({
-                            'intorderdetailId': value.intorderdetailId,
-                            'mnyQty': mnyToPlan.toFixed(4),
-                            'strPickingType': strPickingType,
-                            'intOwnerID': value.OwnerID,
-                            'strUnickReference': inputUnickReference.option('value'),
-                            'intSequence': value.intSequence,
-                        });
-                    }
-                });
-
-                loadingPanel.option('visible', true);
-
-                $.ajax({
-                    url: '{!! url('/savePickingPlan') !!}',
-                    type: "POST",
-                    data: {
-                        lines: lines,
-                        strUnickReference: inputUnickReference.option('value'),
-                        intDc: selectDC.option('value'),
-                        intTrailerType: selectTrailer.option('value'),
-                        intTeamLeaderId: selectTeamLeader.option('value'),
-                        loadName: inputLoadName.option('value'),
-                        loadType: selectLoadType.option('value'),
-                    },
-                    success: function(data) {
-                        console.log(data);
-                    },
-                    error: function() {
-                        DevExpress.ui.notify("Error fetching data.", "error", 3000);
-                    },
-                    complete: function() {
-                        // Hide the loading panel
-                        loadingPanel.option('visible', false);
-                    }
-                });
             }
 
             function getSalesOrdersToPlan() {
                 loadingPanel.option('visible', true);
-                
+
                 $.ajax({
                     url: '{!! url('/getSalesOrdersToPlanOptimized') !!}',
                     type: "POST",
@@ -970,7 +1013,7 @@
                     },
                     success: function(data) {
                         originalData = data.orders;
-                        setAllGridData(data.orders, []);
+                        setAllGridData(data.orders, plannedMaster);
                         inputUnickReference.option('value', data.strUnickReference);
                         setItemGroupData(data.orders);
                     },
@@ -985,9 +1028,29 @@
             }
 
             function setAllGridData(plannableData, plannedData) {
-                plannableDetails = plannableData;
-                plannableMaster = groupData(plannableData);
                 plannedMaster = plannedData;
+
+                plannableDetails = plannableData.filter(plannableItem => {
+                    return !plannedMaster.some(plannedItem => {
+                        return (
+                            plannableItem.CustomerPastelCode === plannedItem
+                            .CustomerPastelCode &&
+                            plannableItem.StoreName === plannedItem.StoreName &&
+                            plannableItem.Area === plannedItem.Area &&
+                            plannableItem.Route === plannedItem.Route &&
+                            plannableItem.OrderDate === plannedItem.OrderDate &&
+                            plannableItem.DeliveryDate === plannedItem.DeliveryDate &&
+                            plannableItem.OrderNo === plannedItem.OrderNo &&
+                            plannableItem.LineId === plannedItem.LineId &&
+                            plannableItem.PastelCode === plannedItem.PastelCode &&
+                            plannableItem.PastelDescription === plannedItem.PastelDescription &&
+                            plannableItem.mnyQtyOutstanding === plannedItem.mnyQtyOutstanding
+                        );
+                    });
+                });
+
+                plannableMaster = groupData(plannableDetails);
+
 
                 let expandedRowKeys = gridPlannable.option("masterDetail.expandedRowKeys");
                 gridPlannable.option('dataSource', plannableMaster);
