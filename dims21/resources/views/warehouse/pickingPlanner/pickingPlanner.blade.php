@@ -363,7 +363,7 @@
                 onClick: function(e) {
                     var result = e.validationGroup.validate();
                     if (result.isValid) {
-                        savePickingPlan();
+                        prepareToSave();
                     }
                 }
             }).dxButton("instance");
@@ -375,9 +375,15 @@
                 keyExpr: 'GroupKey',
                 showColumnLines: true,
                 height: '100%',
-                filterRow: { visible: true },
-                filterPanel: { visible: true },
-                headerFilter: { visible: true },
+                filterRow: {
+                    visible: true
+                },
+                filterPanel: {
+                    visible: true
+                },
+                headerFilter: {
+                    visible: true
+                },
                 paging: {
                     enabled: false
                 },
@@ -580,9 +586,15 @@
                 showRowLines: true,
                 showColumnLines: true,
                 height: '100%',
-                filterRow: { visible: true },
-                filterPanel: { visible: true },
-                headerFilter: { visible: true },
+                filterRow: {
+                    visible: true
+                },
+                filterPanel: {
+                    visible: true
+                },
+                headerFilter: {
+                    visible: true
+                },
                 paging: {
                     enabled: false
                 },
@@ -898,19 +910,22 @@
                 });
             }
 
-            function savePickingPlan() {
+            function prepareToSave() {
 
                 gridPlanned.saveEditData();
                 const plannedLines = gridPlanned.option('dataSource');
 
+                console.debug("Planned Lines");
+                console.debug(plannedLines);
+
                 if (Array.isArray(plannedLines)) {
-                    // Filter lines with already planned quantity, checking `mnyAlreadyPlanned` directly on each element
                     const linesWithPlannedQty = plannedLines.filter(element =>
                         parseFloat(element.mnyAlreadyPlanned) > 0
                     );
-
+                    console.debug("Planned Lines is an array.");
 
                     if (linesWithPlannedQty.length > 0) {
+                        console.debug("Lines have already been planned");
                         let confirmationMessage = "<p class='fw-bold'>These lines have already been planned:</p>";
                         linesWithPlannedQty.forEach(element => {
                             confirmationMessage +=
@@ -921,91 +936,96 @@
 
                         DevExpress.ui.dialog.confirm(confirmationMessage, "Confirmation").done(function(confirmed) {
                             if (confirmed) {
-                                const lines = [];
-
-                                plannedLines.forEach(value => {
-                                    const mnyToPlan = Number(value.mnyToPlan);
-
-                                    if (mnyToPlan !== 0) {
-                                        let strPickingType = '';
-
-                                        if (value.strInstruction === 'Upliftment-DIMS') {
-                                            strPickingType = 'upliftment';
-                                        } else {
-                                            strPickingType = 'priority';
-                                        }
-
-                                        lines.push({
-                                            'intorderdetailId': value.intorderdetailId,
-                                            'mnyQty': mnyToPlan.toFixed(4),
-                                            'strPickingType': strPickingType,
-                                            'intOwnerID': value.OwnerID,
-                                            'strUnickReference': inputUnickReference.option(
-                                                'value'),
-                                            'intSequence': value.intSequence,
-                                        });
-                                    }
-                                });
-
-                                loadingPanel.option('visible', true);
-
-                                $.ajax({
-                                    url: '{!! url('/savePickingPlan') !!}',
-                                    type: "POST",
-                                    data: {
-                                        lines: lines,
-                                        strUnickReference: inputUnickReference.option('value'),
-                                        intDc: selectDC.option('value'),
-                                        intTrailerType: selectTrailer.option('value'),
-                                        intTeamLeaderId: selectTeamLeader.option('value'),
-                                        loadName: inputLoadName.option('value'),
-                                        loadType: selectLoadType.option('value'),
-                                    },
-                                    success: function(data) {
-                                        window.open('{!! url('/pickingplanlist') !!}/' +
-                                            inputUnickReference.option('value'),
-                                            "strUnickReference",
-                                            "location=1,status=1,scrollbars=1, width=1200,height=850"
-                                            );
-
-                                        selectDateRange.option('value', []);
-                                        selectDC.option('value', '');
-                                        selectRoute.option('value', []);
-                                        selectProductGroup.option('value', '');
-                                        selectProductGroup.option('dataSource', []);
-
-                                        inputUnickReference.option('value', '');
-                                        selectTrailer.option('value', '');
-                                        selectTeamLeader.option('value', '');
-                                        inputLoadName.option('value', '');
-                                        selectLoadType.option('value', '');
-
-                                        gridPlannable.option('dataSource', []);
-                                        gridPlannable.refresh();
-                                        gridPlanned.option('dataSource', []);
-                                        gridPlanned.refresh();
-
-                                        DevExpress.validationEngine.resetGroup("getData");
-                                        DevExpress.validationEngine.resetGroup("saveData");
-
-                                    },
-                                    error: function() {
-                                        DevExpress.ui.notify("Error fetching data.", "error",
-                                            3000);
-                                    },
-                                    complete: function() {
-                                        // Hide the loading panel
-                                        loadingPanel.option('visible', false);
-                                    }
-                                });
-
+                                savePickingPlan(plannedLines);
                             } else {
                                 return;
                             }
                         });
+                    } else {
+                        console.debug("No Lines have already been planned");
+                        savePickingPlan(plannedLines);
                     }
                 }
+            }
 
+            function savePickingPlan(plannedLines) {
+                const lines = [];
+
+                plannedLines.forEach(value => {
+                    const mnyToPlan = Number(value.mnyToPlan);
+
+                    if (mnyToPlan !== 0) {
+                        let strPickingType = '';
+
+                        if (value.strInstruction === 'Upliftment-DIMS') {
+                            strPickingType = 'upliftment';
+                        } else {
+                            strPickingType = 'priority';
+                        }
+
+                        lines.push({
+                            'intorderdetailId': value.intorderdetailId,
+                            'mnyQty': mnyToPlan.toFixed(4),
+                            'strPickingType': strPickingType,
+                            'intOwnerID': value.OwnerID,
+                            'strUnickReference': inputUnickReference.option(
+                                'value'),
+                            'intSequence': value.intSequence,
+                        });
+                    }
+                });
+
+                loadingPanel.option('visible', true);
+
+                $.ajax({
+                    url: '{!! url('/savePickingPlan') !!}',
+                    type: "POST",
+                    data: {
+                        lines: lines,
+                        strUnickReference: inputUnickReference.option('value'),
+                        intDc: selectDC.option('value'),
+                        intTrailerType: selectTrailer.option('value'),
+                        intTeamLeaderId: selectTeamLeader.option('value'),
+                        loadName: inputLoadName.option('value'),
+                        loadType: selectLoadType.option('value'),
+                    },
+                    success: function(data) {
+                        window.open('{!! url('/pickingplanlist') !!}/' +
+                            inputUnickReference.option('value'),
+                            "strUnickReference",
+                            "location=1,status=1,scrollbars=1, width=1200,height=850"
+                        );
+
+                        selectDateRange.option('value', []);
+                        selectDC.option('value', '');
+                        selectRoute.option('value', []);
+                        selectProductGroup.option('value', '');
+                        selectProductGroup.option('dataSource', []);
+
+                        inputUnickReference.option('value', '');
+                        selectTrailer.option('value', '');
+                        selectTeamLeader.option('value', '');
+                        inputLoadName.option('value', '');
+                        selectLoadType.option('value', '');
+
+                        gridPlannable.option('dataSource', []);
+                        gridPlannable.refresh();
+                        gridPlanned.option('dataSource', []);
+                        gridPlanned.refresh();
+
+                        DevExpress.validationEngine.resetGroup("getData");
+                        DevExpress.validationEngine.resetGroup("saveData");
+
+                    },
+                    error: function() {
+                        DevExpress.ui.notify("Error fetching data.", "error",
+                            3000);
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
+                    }
+                });
             }
 
             function getSalesOrdersToPlan() {
