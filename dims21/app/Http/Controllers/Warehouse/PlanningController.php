@@ -38,11 +38,11 @@ class PlanningController extends Controller
         $DeliveryDateTo = $request->get('DeliveryDateTo');
         $intDcId = $request->get('intDcId');
         $routeIds = $request->get('routeIds');
-        $userGroup = Auth::user()->GroupId;
+        $orderType = $request->get('orderType');
 
         // dd("EXEC sp_R_GetSalesOrdersToPlan '$DeliveryDateFrom','$DeliveryDateTo',$intDcId,'$routeIds',$userGroup");
 
-        $orders = DB::connection('sqlsrv3')->select("EXEC sp_R_GetSalesOrdersToPlan '$DeliveryDateFrom','$DeliveryDateTo',$intDcId,'$routeIds',$userGroup");
+        $orders = DB::connection('sqlsrv3')->select("EXEC sp_R_GetSalesOrdersToPlan '$DeliveryDateFrom','$DeliveryDateTo',$intDcId,'$routeIds','$orderType'");
 
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $t=time();
@@ -66,13 +66,14 @@ class PlanningController extends Controller
         $intTeamLeaderId = $request->get('intTeamLeaderId');
         $loadName = $request->get('loadName');
         $loadType = $request->get('loadType');
+        $orderType = $request->get('orderType');
 
         if (is_array($lines)) {
             $xml = $this->toxml($lines, "xml", array("result"));
 
             // dd("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType'");
             
-            $response = DB::connection('sqlsrv3')->select("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType'");
+            $response = DB::connection('sqlsrv3')->select("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType', '$orderType'");
 
             return response()->json($response);
         }

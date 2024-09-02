@@ -68,7 +68,7 @@
                         <div id="selectRoute"></div>
                     </div>
                     <div class="col-4 px-1">
-                        <div id="selectProductGroup"></div>
+                        <div id="selectType"></div>
                     </div>
                     <div class="col-4 px-1">
                         <div id="btnGetOrders"></div>
@@ -121,25 +121,48 @@
         $(document).ready(function() {
             $(".panel-left").resizable({
                 handleSelector: ".splitter",
-                resizeHeight: false, // Prevent height resizing
-                resizeWidth: true, // Allow width resizing
-                minWidth: 150, // Minimum width constraint
-                maxWidth: '100%', // Maximum width constraint (you can adjust as needed)
+                resizeHeight: false,
+                resizeWidth: true,
+                minWidth: 150,
+                maxWidth: '100%',
                 disableSelection: true,
-                containment: 'parent', // Contain the resizing within the parent element
-                grid: [1, 0], // Optional: Snap to grid for more controlled resizing
+                containment: 'parent',
+                grid: [1, 0],
+                stop: function(event, ui) {
+                    console.log('done');
+                    gridPlannable.repaint();
+                    gridPlanned.repaint();
+                }
             });
 
             var dcs = ({!! json_encode($dcs) !!});
             var routes = ({!! json_encode($routes) !!});
             var productGroups = [];
+            let selectProductGroup;
 
             var loadTypes = [{
-                "value": "Hendok Tranport / CC",
-                "display": "Hendok Tranport / CC",
+                "value": "Hendok Transport",
+                "display": "Hendok Transport",
             }, {
-                "value": "Other",
-                "display": "Other",
+                "value": "Outside Transport",
+                "display": "Outside Transport",
+            }, {
+                "value": "Customer Collection",
+                "display": "Customer Collection",
+            }, {
+                "value": "IBT Hendok Transport",
+                "display": "IBT Hendok Transport",
+            }, {
+                "value": "IBT Outside Transport",
+                "display": "IBT Outside Transport",
+            }];
+
+            const orderTypes = [{
+                "value": "DELIVERED",
+                "display": "Delivery",
+            },{
+                "value": "COLLECT",
+                "display": "Collection",
             }];
 
             var trailerTypes = ({!! json_encode($trailerTypes) !!});
@@ -231,31 +254,13 @@
                 }],
             }).dxTagBox("instance");
 
-            const selectProductGroup = $("#selectProductGroup").dxTagBox({
-                dataSource: productGroups,
-                valueExpr: 'ItemGroupDescription',
-                displayExpr: 'ItemGroupDescription',
-                placeholder: 'Proudct Group',
-                showSelectionControls: true,
-                showClearButton: true,
-                width: '100%',
-                multiline: false,
-                searchEnabled: true,
-                onValueChanged: function(e) {
-                    const selectedValues = e.value;
-
-                    if (selectedValues.length === 0) {
-                        setAllGridData(originalData, plannedMaster)
-                        return;
-                    }
-
-                    const filteredDetails = originalData.filter(function(detail) {
-                        return selectedValues.includes(detail.ItemGroupDescription);
-                    });
-
-                    setAllGridData(filteredDetails, plannedMaster)
-                },
-            }).dxTagBox("instance");
+            const selectType = $("#selectType").dxRadioGroup({
+                items: orderTypes,
+                valueExpr: 'value',
+                displayExpr: 'display',
+                value: orderTypes[0].value,
+                layout: 'horizontal',
+            }).dxRadioGroup("instance");
 
             const btnGetOrders = $('#btnGetOrders').dxButton({
                 stylingMode: 'contained',
@@ -556,6 +561,62 @@
                                 e.component.option('icon', allExpanded ? 'expand' : 'collapse');
                             }
                         }
+                    },{
+                        location: 'after',
+                        widget: 'dxTagBox',
+                        options: {
+                            dataSource: productGroups,
+                            valueExpr: 'ItemGroupDescription',
+                            displayExpr: 'ItemGroupDescription',
+                            placeholder: 'Proudct Group',
+                            showSelectionControls: true,
+                            showClearButton: true,
+                            width: '300px',
+                            multiline: false,
+                            searchEnabled: true,
+                            onInitialized: function(e) {
+                                selectProductGroup = e.component;
+                            },
+                            onValueChanged: function(e) {
+                                const selectedValues = e.value;
+
+                                if (selectedValues.length === 0) {
+                                    setAllGridData(originalData, plannedMaster)
+                                    return;
+                                }
+
+                                const filteredDetails = originalData.filter(function(detail) {
+                                    return selectedValues.includes(detail.ItemGroupDescription);
+                                });
+
+                                setAllGridData(filteredDetails, plannedMaster)
+                            },
+                        },
+                        // const selectProductGroup = $("#selectProductGroup").dxTagBox({
+                        //     dataSource: productGroups,
+                        //     valueExpr: 'ItemGroupDescription',
+                        //     displayExpr: 'ItemGroupDescription',
+                        //     placeholder: 'Proudct Group',
+                        //     showSelectionControls: true,
+                        //     showClearButton: true,
+                        //     width: '100%',
+                        //     multiline: false,
+                        //     searchEnabled: true,
+                        //     onValueChanged: function(e) {
+                        //         const selectedValues = e.value;
+
+                        //         if (selectedValues.length === 0) {
+                        //             setAllGridData(originalData, plannedMaster)
+                        //             return;
+                        //         }
+
+                        //         const filteredDetails = originalData.filter(function(detail) {
+                        //             return selectedValues.includes(detail.ItemGroupDescription);
+                        //         });
+
+                        //         setAllGridData(filteredDetails, plannedMaster)
+                        //     },
+                        // }).dxTagBox("instance");
                     }]
                 },
                 summary: {
@@ -721,7 +782,6 @@
                             // Set specific styling for the number box
                             container.find(".dx-numberbox").css("width", "150px");
                         }
-
                     }, {
                         dataField: "OrderNo",
                         caption: "Order No",
@@ -745,6 +805,7 @@
                         dataField: "PastelCode",
                         caption: "Pastel Code",
                         allowEditing: false,
+                        visible: false,
                     },
                     {
                         dataField: "PastelDescription",
@@ -787,7 +848,7 @@
                         alignment: "center",
                         format: "#0.####",
                         allowEditing: false,
-                        // visible: false,
+                        visible: false,
                     },
                     {
                         dataField: "mnyTons",
@@ -915,17 +976,12 @@
                 gridPlanned.saveEditData();
                 const plannedLines = gridPlanned.option('dataSource');
 
-                console.debug("Planned Lines");
-                console.debug(plannedLines);
-
                 if (Array.isArray(plannedLines)) {
                     const linesWithPlannedQty = plannedLines.filter(element =>
                         parseFloat(element.mnyAlreadyPlanned) > 0
                     );
-                    console.debug("Planned Lines is an array.");
 
                     if (linesWithPlannedQty.length > 0) {
-                        console.debug("Lines have already been planned");
                         let confirmationMessage = "<p class='fw-bold'>These lines have already been planned:</p>";
                         linesWithPlannedQty.forEach(element => {
                             confirmationMessage +=
@@ -942,7 +998,6 @@
                             }
                         });
                     } else {
-                        console.debug("No Lines have already been planned");
                         savePickingPlan(plannedLines);
                     }
                 }
@@ -988,6 +1043,7 @@
                         intTeamLeaderId: selectTeamLeader.option('value'),
                         loadName: inputLoadName.option('value'),
                         loadType: selectLoadType.option('value'),
+                        orderType: selectType.option('value'),
                     },
                     success: function(data) {
                         window.open('{!! url('/pickingplanlist') !!}/' +
@@ -1012,6 +1068,13 @@
                         gridPlannable.refresh();
                         gridPlanned.option('dataSource', []);
                         gridPlanned.refresh();
+
+                        plannableMaster = [];
+                        plannableDetails = [];
+                        plannedMaster = [];
+                        originalData = [];
+
+                        selectType.option('value', orderTypes[0].value);
 
                         DevExpress.validationEngine.resetGroup("getData");
                         DevExpress.validationEngine.resetGroup("saveData");
@@ -1039,6 +1102,7 @@
                         DeliveryDateTo: selectedDateTo,
                         intDcId: selectedDC,
                         routeIds: selectedRoutes.join(','),
+                        orderType: selectType.option('value'),
                     },
                     success: function(data) {
                         originalData = data.orders;
