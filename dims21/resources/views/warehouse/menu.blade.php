@@ -451,7 +451,7 @@ if ((Auth::guest()))
 
                         <li>
                             @if($pickingplanner !="0")
-                            <a href='{!!url("/routeplanner")!!}'>Picking Planner</a>
+                            <a href='{!!url("/pickingPlanner")!!}'>Picking Planner</a>
                             @endif
                         </li>
                         <li>
