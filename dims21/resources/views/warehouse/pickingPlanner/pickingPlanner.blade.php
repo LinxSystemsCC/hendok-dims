@@ -523,6 +523,15 @@
                                         format: "#0.####",
                                     },
                                     {
+                                        dataField: "mnyTons",
+                                        caption: "Tons",
+                                        format: "#0.####",
+                                        dataType: "number",
+                                        calculateCellValue: function(rowData) {
+                                            return rowData.mnyTonsProduct * rowData.mnyToPlan;
+                                        },
+                                    },
+                                    {
                                         dataField: "mnyAvail",
                                         caption: "Available",
                                         dataType: "number",
