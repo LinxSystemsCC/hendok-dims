@@ -1175,6 +1175,7 @@
                     }
                 });
                 selectProductGroup.option('items', productGroups);
+                gridPlannable.repaint();
             }
 
             function formatDate(date) {
