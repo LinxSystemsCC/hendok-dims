@@ -368,6 +368,7 @@ Route::post('assignDriversToPickingTicket',[TabletLoadingApp::class,'assignDrive
 Route::post('assignTicketToPickingTicket',[TabletLoadingApp::class,'assignTicketToPickingTicket']);
 Route::post('truckLoadUpdatePriortiyStatus',[TabletLoadingApp::class,'truckLoadUpdatePriortiyStatus']);
 Route::post('completeTruckLoad',[TabletLoadingApp::class,'completeTruckLoad']);
+Route::post('cancelTruckLoad',[TabletLoadingApp::class,'cancelTruckLoad']);
 Route::post('sequencepickingplans',[TabletLoadingApp::class,'sequencepickingplans']);
 Route::get('getIncompletePickingTickets',[TabletLoadingApp::class,'getIncompletePickingTickets']);
 Route::get('getInstructions',[TabletLoadingApp::class,'getInstructions']);

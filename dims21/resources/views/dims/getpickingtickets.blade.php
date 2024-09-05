@@ -7,32 +7,39 @@
 {{-- Set to show navbar --}}
 @php
     $includeMenu = true;
+    if ((Auth::guest()))
+    {
+    }else{
+        $v  =  new \App\Http\Controllers\SalesForm();
+    }
+
+    $complete = $v->getThingsUserPermissions(Auth::user()->UserID,'Complete Load');
 @endphp
 
 @section('page')
 
     <div class="col-lg-12">
-        <div class="col-lg-12 d-inline-flex mb-2" >
+        <div class="col-lg-12 d-inline-flex mb-2">
             <h3 class="col-6 text-nowrap">Truck Loads</h3>
-
-            <div class="col-6 d-flex justify-content-end">
-                {{-- <label class="d-flex align-items-center px-2 text-nowrap" >Date From</label> 
-                <input class="form-control px-2" type="date" id='from'>
-                <label class="d-flex align-items-center px-2 text-nowrap" >Date To</label>
-                <input class="form-control px-2" type="date" id='to'>
-                <button class="btn btn-success w-100 ms-2" id="getdata">SEARCH</button> --}}
-            </div>
         </div>
 
         <div class="col-lg-12 d-inline-flex">
-            <button class="btn btn-primary mb-2 w-100" data-bs-toggle="modal" data-bs-target="#teamLeaderModal" id="btnTeamLeader" disabled>TEAM LEADER</button>
-            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#horseModal" id="btnHorse" disabled>HORSE</button>
-            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#trailorModal" id="btnTrailor" disabled>TRAILER</button>
-            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#driverModal" id="btnDriver" disabled>DRIVER</button>
-            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#ticketModal" id="btnTicket" disabled>TICKET</button>
-            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#instructionsModal" id="btnInstructions" disabled>INSTRUCTIONS</button>
-            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#timeModal" id="btnTimeRequired" disabled>TIME REQ</button>
-            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#departureModal" id="btnDepartureTime" disabled>DEPARTURE TIME</button>
+            <button class="btn btn-primary mb-2 w-100" data-bs-toggle="modal" data-bs-target="#teamLeaderModal"
+                id="btnTeamLeader" disabled>TEAM LEADER</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#horseModal" id="btnHorse"
+                disabled>HORSE</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#trailorModal"
+                id="btnTrailor" disabled>TRAILER</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#driverModal"
+                id="btnDriver" disabled>DRIVER</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#ticketModal"
+                id="btnTicket" disabled>TICKET</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#instructionsModal"
+                id="btnInstructions" disabled>INSTRUCTIONS</button>
+            <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#timeModal"
+                id="btnTimeRequired" disabled>TIME REQ</button>
+            {{-- <button class="btn btn-primary mb-2 w-100 ms-2" data-bs-toggle="modal" data-bs-target="#departureModal" id="btnDepartureTime" disabled>DEPARTURE TIME</button> --}}
+            <button class="btn btn-danger mb-2 w-100 ms-2" id="btnCancel" disabled>Cancel</button>
             <button class="btn btn-success mb-2 w-100 ms-2" id="btnComplete" disabled>COMPLETE</button>
         </div>
 
@@ -49,7 +56,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="teamLeaderModal">Assign Team Leader</h1>
                 </div>
-    
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -72,10 +79,11 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseTeamLeader">Close</button>
-                    <button type="button" id="saveTeamLeader" class="btn btn-success" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="btnCloseTeamLeader">Close</button>
+                    <button type="button" id="saveTeamLeader" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -88,7 +96,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="horseModal">Assign Horse</h1>
                 </div>
-    
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -97,17 +105,20 @@
                                 <option value=" ">UNASSIGN</option>
                                 @foreach ($horses as $horse)
                                     <option value="{{ $horse->TruckId }}">
-                                        {{ $horse->TruckName }} @if ($horse->intInUse == 1) - IN USE @endif
+                                        {{ $horse->TruckName }} @if ($horse->intInUse == 1)
+                                            - IN USE
+                                        @endif
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseHorse">Close</button>
-                    <button type="button" id="saveHorse" class="btn btn-success" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="btnCloseHorse">Close</button>
+                    <button type="button" id="saveHorse" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -120,7 +131,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="trailorModal">Assign Trailer</h1>
                 </div>
-    
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -129,7 +140,9 @@
                                 <option value=" ">UNASSIGN</option>
                                 @foreach ($trailors as $trailorOne)
                                     <option value="{{ $trailorOne->TruckId }}">
-                                        {{ $trailorOne->TruckName }} @if ($trailorOne->intInUse == 1) - IN USE @endif
+                                        {{ $trailorOne->TruckName }} @if ($trailorOne->intInUse == 1)
+                                            - IN USE
+                                        @endif
                                     </option>
                                 @endforeach
                             </select>
@@ -141,17 +154,20 @@
                                 <option value=" ">UNASSIGN</option>
                                 @foreach ($trailors as $trailorTwo)
                                     <option value="{{ $trailorTwo->TruckId }}">
-                                        {{ $trailorTwo->TruckName }}  @if ($trailorTwo->intInUse == 1)- IN USE @endif
+                                        {{ $trailorTwo->TruckName }} @if ($trailorTwo->intInUse == 1)
+                                            - IN USE
+                                        @endif
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseTrailor">Close</button>
-                    <button type="button" id="saveTrailor" class="btn btn-success" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="btnCloseTrailor">Close</button>
+                    <button type="button" id="saveTrailor" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -164,7 +180,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="driverModal">Assign To Picking Ticket</h1>
                 </div>
-    
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -188,10 +204,11 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseDriver">Close</button>
-                    <button type="button" id="saveDriver" class="btn btn-success" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="btnCloseDriver">Close</button>
+                    <button type="button" id="saveDriver" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -204,7 +221,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="ticketModal">Assign To Picking Ticket</h1>
                 </div>
-    
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -216,13 +233,14 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                     </div>
                 </div>
-    
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseTicket">Close</button>
-                    <button type="button" id="saveTicket" class="btn btn-success" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="btnCloseTicket">Close</button>
+                    <button type="button" id="saveTicket" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -235,7 +253,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="instructionsModal">Assign Instructions</h1>
                 </div>
-    
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -248,10 +266,11 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseInstructions">Close</button>
-                    <button type="button" id="saveInstructions" class="btn btn-success" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="btnCloseInstructions">Close</button>
+                    <button type="button" id="saveInstructions" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -264,18 +283,20 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="timeModal">Time Requirements</h1>
                 </div>
-    
+
                 <div class="modal-body">
                     <div class="col-md-12 mb-3">
                         <label for="picking" class="col-form-label">Picking Time</label>
                         <div class="d-inline-flex">
                             <input placeholder="Hours" type="number" class="form-control timeInput" id="pickingHours">
-                            <input placeholder="Minutes" type="number" class="form-control timeInput ms-2" id="pickingMins">
+                            <input placeholder="Minutes" type="number" class="form-control timeInput ms-2"
+                                id="pickingMins">
                         </div>
                         <label for="loading" class="col-form-label">Loading Time</label>
                         <div class="d-inline-flex">
                             <input placeholder="Hours" type="number" class="form-control timeInput" id="loadingHours">
-                            <input placeholder="Minutes" type="number" class="form-control timeInput ms-2" id="loadingMins">
+                            <input placeholder="Minutes" type="number" class="form-control timeInput ms-2"
+                                id="loadingMins">
                         </div>
                         <label for="total" class="col-form-label">Total Time</label>
                         <div class="d-inline-flex">
@@ -284,10 +305,11 @@
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseTime">Close</button>
-                    <button type="button" id="saveTimeRequirements" class="btn btn-success" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="btnCloseTime">Close</button>
+                    <button type="button" id="saveTimeRequirements" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -311,8 +333,9 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseDepartureTime">Close</button>
-                    <button type="button" id="saveDepartureTime" class="btn btn-success" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="btnCloseDepartureTime">Close</button>
+                    <button type="button" id="saveDepartureTime" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -323,7 +346,7 @@
 @section('scripts')
 
     <style>
-        #gridTruckLoads{
+        #gridTruckLoads {
             height: calc(100vh - 152px);
             max-height: calc(100vh - 152px);
         }
@@ -338,38 +361,40 @@
             padding: 3px !important;
         }
 
-        .dx-header-row{
+        .dx-header-row {
             color: black;
         }
     </style>
-
-    
 
     <script>
         $(document).ready(function() {
             var currentSelectedRow = []; // Declare the selectedRowKeys array outside dxDataGrid initialization
 
             const gridTruckLoads = $("#gridTruckLoads").dxDataGrid({
-                dataSource:[],
+                dataSource: [],
                 keyExpr: 'strUnickReference',
                 showBorders: true,
                 showRowLines: true,
                 showColumnLines: true,
-                rowAlternationEnabled: true,
-                filterRow: { visible: true },
-                filterPanel: { visible: true },
-                headerFilter: { visible: true },
+                filterRow: {
+                    visible: true
+                },
+                filterPanel: {
+                    visible: true
+                },
+                headerFilter: {
+                    visible: true
+                },
                 paging: {
                     enabled: false
                 },
                 selection: {
                     mode: "single",
                 },
-                columnAutoWidth:true,        
-                allowColumnResizing: true,       
+                columnAutoWidth: true,
+                allowColumnResizing: true,
                 columnResizingMode: "nextColumn",
-                columns: [
-                    {
+                columns: [{
                         dataField: "bitHidden",
                         caption: "is invoiced",
                         dataType: "number",
@@ -378,7 +403,7 @@
                     {
                         dataField: "date",
                         caption: "Date Created",
-                        calculateCellValue: function (rowData) {
+                        calculateCellValue: function(rowData) {
                             // Extract the date part from the "dtm" field
                             const dtm = new Date(rowData.dtm);
                             return dtm.toLocaleDateString("en-ZA");
@@ -387,7 +412,7 @@
                     {
                         dataField: "time",
                         caption: "Time Created",
-                        calculateCellValue: function (rowData) {
+                        calculateCellValue: function(rowData) {
                             // Extract the time part from the "dtm" field
                             const dtm = new Date(rowData.dtm);
                             return dtm.toLocaleTimeString();
@@ -475,21 +500,21 @@
                 ],
                 masterDetail: {
                     enabled: true,
-                    template: function (container, options) {
+                    template: function(container, options) {
                         const detailGridContainer = $("<div>");
 
                         // Load the external HTML content into the detailGridContainer
                         $.ajax({
-                            url: '{!!url("/teamleaderUpdatePickingLoadingTable")!!}', // Replace with the actual URL
+                            url: '{!! url('/teamleaderUpdatePickingLoadingTable') !!}', // Replace with the actual URL
                             dataType: 'html',
                             method: 'GET',
                             data: {
                                 ref: options.data.strUnickReference,
                             },
-                            success: function (data) {
+                            success: function(data) {
                                 detailGridContainer.html(data);
                             },
-                            error: function (error) {
+                            error: function(error) {
                                 console.error('Error loading content: ' + error);
                             }
                         });
@@ -499,35 +524,46 @@
                     }
                 },
                 onRowPrepared(e) {
-                    if (e.rowType == 'data' && e.data.isCancelled ==1) {
-                        e.rowElement.css('background', 'red');
+                    if (e.rowType == 'data') {
+                        // Ensure red background for cancelled rows
+                        if (e.data.isCancelled == 1) {
+                            e.rowElement.css('background', 'red');
+                        } else {
+                            // Allow row alternation for non-cancelled rows
+                            if (e.rowIndex % 2 === 0) {
+                                e.rowElement.css('background', ''); // Default background for even rows
+                            } else {
+                                e.rowElement.css('background', 'rgba(0, 0, 0, 0.05)'); // Alternating background for odd rows
+                            }
+                        }
                     }
                 },
-                onRowClick: function (e) {
+                onRowClick: function(e) {
                     // console.log(e.data);
 
                     getTimeRequirements(e.data.strUnickReference).then(function(times) {
                         // console.log(times);
                         $("#pickingHours").val('');
                         $("#pickingMins").val('');
-                        
+
                         $("#loadingHours").val('');
                         $("#loadingMins").val('');
-                        
+
                         $("#totalHours").val('');
                         $("#totalMins").val('');
 
                         times.forEach(function(time) {
-                            if (time){
+                            if (time) {
                                 $("#pickingHours").val(time.intPickingHour);
                                 $("#pickingMins").val(time.intPickingMin);
-                                
+
                                 $("#loadingHours").val(time.intLoadingHour);
                                 $("#loadingMins").val(time.intLoadingMin);
-                                
+
                                 $("#totalHours").val(time.intTotalHour);
                                 $("#totalMins").val(time.intTotalMin);
-                            }e
+                            }
+                            e
                         });
                     });
 
@@ -536,8 +572,9 @@
                         instructions.forEach(function(instruction) {
                             if (instruction.strType == 'Notes') {
                                 $("#notes").val(instruction.strInstruction);
-                            }else if(instruction.strType == 'Delivery'){
-                                $("#deliveryInstructions").val(instruction.strInstruction);
+                            } else if (instruction.strType == 'Delivery') {
+                                $("#deliveryInstructions").val(instruction
+                                    .strInstruction);
                             }
                         });
                     });
@@ -545,7 +582,7 @@
                     var currentID = currentSelectedRow[0];
                     var clickedID = e.data.intAutoPickingHeader;
 
-                    if (clickedID === currentID){
+                    if (clickedID === currentID) {
                         currentSelectedRow = [];
                         e.component.clearSelection();
 
@@ -558,7 +595,8 @@
                         $("#btnComplete").prop("disabled", true);
                         $("#btnTimeRequired").prop("disabled", true);
                         $("#btnDepartureTime").prop("disabled", true);
-                    }else{
+                        $("#btnCancel").prop("disabled", true);
+                    } else {
                         currentSelectedRow = [];
                         currentSelectedRow.push(clickedID);
 
@@ -571,6 +609,7 @@
                         $("#btnComplete").prop("disabled", false);
                         $("#btnTimeRequired").prop("disabled", false);
                         $("#btnDepartureTime").prop("disabled", false);
+                        $("#btnCancel").prop("disabled", false);
 
                         $('#teamLeaderOne').val(e.data.intTeamLeaderId).trigger('change');
                         $('#teamLeaderTwo').val(e.data.intTeamLeaderTwoId).trigger('change');
@@ -588,8 +627,7 @@
 
                             $('#dispatchDate').val(datePart);
                             $('#dispatchTime').val(timePart);
-                        }
-                        else{
+                        } else {
                             var currentDate = new Date();
 
                             // Extract date components
@@ -603,21 +641,33 @@
                             var seconds = currentDate.getSeconds();
 
                             // Format date and time as needed
-                            var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-                            var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+                            var formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (
+                                day < 10 ? '0' : '') + day;
+                            var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ?
+                                '0' : '') + minutes;
 
                             $('#dispatchDate').val(formattedDate);
                             $('#dispatchTime').val(formattedTime);
                         }
 
-                        // console.log(e.data);
+                        if (e.data.isCancelled != '1'){
+                            $("#btnCancel").removeClass("btn-success");
+                            $("#btnCancel").addClass("btn-danger");
+                            $("#btnCancel").text("Cancel");
+                        } else{
+                            $("#btnCancel").removeClass("btn-danger");
+                            $("#btnCancel").addClass("btn-success");
+                            $("#btnCancel").text("Re-instate");
+                        }
                     }
                 },
                 onSelectionChanged: function(e) {
                     // console.debug("");
                 },
-                onRowDblClick: function (e) {
-                    window.open('{!!url("/pickingplanlist")!!}/'+e.data.strUnickReference, "strUnickReference", "location=1,status=1,scrollbars=1, width=1200,height=850");
+                onRowDblClick: function(e) {
+                    window.open('{!! url('/pickingplanlist') !!}/' + e.data.strUnickReference,
+                        "strUnickReference",
+                        "location=1,status=1,scrollbars=1, width=1200,height=850");
                 },
                 onInitNewRow: function(e) {
                     console.debug("InitNewRow");
@@ -651,19 +701,19 @@
                 }
 
                 $.ajax({
-                    url: '{!!url("/truckLoadUpdatePriortiyStatus")!!}',
+                    url: '{!! url('/truckLoadUpdatePriortiyStatus') !!}',
                     type: "POST",
                     data: {
                         intAutoPicking: id,
                         isPriorityLine: newPriority,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         getData();
                     }
                 });
 
 
-                
+
                 // Prevent the click event from propagating to the parent row
                 e.stopPropagation();
             });
@@ -728,7 +778,7 @@
             var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
             var day = ("0" + currentDate.getDate()).slice(-2);
             var formattedDate = year + "-" + month + "-" + day;
-            
+
             $('#from').val(formattedDate);
             $('#to').val(formattedDate);
 
@@ -821,11 +871,11 @@
                 $(this).val(minutes);
             });
 
-            $('#saveTimeRequirements').click(function(){
+            $('#saveTimeRequirements').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ref = selectedItem.strUnickReference;
                 var ID = selectedItem.intAutoPickingHeader;
-                
+
                 var pickingHours = $('#pickingHours').val();
                 var pickingMins = $('#pickingMins').val();
 
@@ -836,7 +886,7 @@
                 var totalMins = $('#totalMins').val();
 
                 $.ajax({
-                    url: '{!!url("/assignTimeToPickingTicket")!!}',
+                    url: '{!! url('/assignTimeToPickingTicket') !!}',
                     type: "POST",
                     data: {
                         ref: ref,
@@ -848,17 +898,17 @@
                         totalHours: totalHours,
                         totalMins: totalMins,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         getData();
                         $("#btnCloseTime").click();
                     }
                 });
             });
 
-            $('#saveDepartureTime').click(function(){
+            $('#saveDepartureTime').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ref = selectedItem.strUnickReference;
-                
+
                 var date = $('#dispatchDate').val();
                 var time = $('#dispatchTime').val();
 
@@ -866,118 +916,153 @@
                 console.log(dateTime)
 
                 $.ajax({
-                    url: '{!!url("/assignDepartureTimeToPickingTicket")!!}',
+                    url: '{!! url('/assignDepartureTimeToPickingTicket') !!}',
                     type: "POST",
                     data: {
                         ref: ref,
                         dateTime: dateTime,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         getData();
                         $("#btnCloseDepartureTime").click();
                     }
                 });
             });
 
-            $('#getdata').click(function(){
+            $('#getdata').click(function() {
                 getData();
             });
 
-            $('#saveTeamLeader').click(function(){
+            $('#saveTeamLeader').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ID = selectedItem.intAutoPickingHeader;
                 $.ajax({
-                    url: '{!!url("/assignTeamLeaderToPickingTicket")!!}',
+                    url: '{!! url('/assignTeamLeaderToPickingTicket') !!}',
                     type: "POST",
                     data: {
                         ID: ID,
                         teamLeaderOne: $('#teamLeaderOne').val(),
                         teamLeaderTwo: $('#teamLeaderTwo').val(),
                     },
-                    success: function (data) {
+                    success: function(data) {
                         $("#btnCloseTeamLeader").click();
                         getData();
                     }
                 });
             });
 
-            $('#saveHorse').click(function(){
+            $('#saveHorse').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ID = selectedItem.intAutoPickingHeader;
                 $.ajax({
-                    url: '{!!url("/assignHorseToPickingTicket")!!}',
+                    url: '{!! url('/assignHorseToPickingTicket') !!}',
                     type: "POST",
                     data: {
                         ID: ID,
                         horse: $('#horse').val(),
                     },
-                    success: function (data) {
+                    success: function(data) {
                         getData();
                         $("#btnCloseHorse").click();
                     }
                 });
             });
 
-            $('#saveTrailor').click(function(){
+            $('#saveTrailor').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ID = selectedItem.intAutoPickingHeader;
                 $.ajax({
-                    url: '{!!url("/assignTrailorToPickingTicket")!!}',
+                    url: '{!! url('/assignTrailorToPickingTicket') !!}',
                     type: "POST",
                     data: {
                         ID: ID,
                         trailorOne: $('#trailorOne').val(),
                         trailorTwo: $('#trailorTwo').val(),
                     },
-                    success: function (data) {
+                    success: function(data) {
                         getData();
                         $("#btnCloseTrailor").click();
                     }
                 });
             });
 
-            $('#saveDriver').click(function(){
+            $('#saveDriver').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ID = selectedItem.intAutoPickingHeader;
                 $.ajax({
-                    url: '{!!url("/assignDriversToPickingTicket")!!}',
+                    url: '{!! url('/assignDriversToPickingTicket') !!}',
                     type: "POST",
                     data: {
                         ID: ID,
                         driverOne: $('#driverOne').val(),
                         driverTwo: $('#driverTwo').val(),
                     },
-                    success: function (data) {
+                    success: function(data) {
                         getData();
                         $("#btnCloseDriver").click();
                     }
                 });
             });
 
-            $('#saveTicket').click(function(){
+            $('#saveTicket').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ID = selectedItem.intAutoPickingHeader;
                 $.ajax({
-                    url: '{!!url("/assignTicketToPickingTicket")!!}',
+                    url: '{!! url('/assignTicketToPickingTicket') !!}',
                     type: "POST",
                     data: {
                         ID: ID,
                         ticket: $('#ticket').val(),
                     },
-                    success: function (data) {
+                    success: function(data) {
                         getData();
                         $("#btnCloseTicket").click();
                     }
                 });
             });
 
-            $('#btnComplete').click(function(){
+            $('#btnComplete').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ref = selectedItem.strUnickReference;
-                completeTruckLoad(ref)
+                DevExpress.ui.dialog.confirm("Are You sure you want to complete this Truck Load?",
+                    "Confirmation").done(function(confirmed) {
+                    if (confirmed) {
+                        completeTruckLoad(ref);
+                    } else {
+                        return;
+                    }
+                });
+
             });
 
-            $('#saveInstructions').click(function(){
+            $('#btnCancel').click(function() {
+                var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
+                var ref = selectedItem.strUnickReference;
+                var cancelled = selectedItem.isCancelled;
+
+                if (cancelled != '1'){
+                    DevExpress.ui.dialog.confirm("Are You sure you want to cancel this Truck Load?",
+                        "Confirmation").done(function(confirmed) {
+                        if (confirmed) {
+                            cancelTruckLoad(ref, !parseInt(cancelled));
+                        } else {
+                            return;
+                        }
+                    });
+                } else{
+                    DevExpress.ui.dialog.confirm("Are You sure you want to re-instate this Truck Load?",
+                        "Confirmation").done(function(confirmed) {
+                        if (confirmed) {
+                            cancelTruckLoad(ref, !parseInt(cancelled));
+                        } else {
+                            return;
+                        }
+                    });
+                }
+
+            });
+
+            $('#saveInstructions').click(function() {
                 var selectedItem = gridTruckLoads.getSelectedRowsData()[0];
                 var ref = selectedItem.strUnickReference;
                 var notes = $("#notes").val();
@@ -988,7 +1073,7 @@
                 assignInstruction(ref, delivery, type)
             });
 
-            $("#btnCloseInstructions").click(function(){
+            $("#btnCloseInstructions").click(function() {
                 $("#notes").val("");
                 $("#deliveryInstructions").val("");
             });
@@ -996,7 +1081,7 @@
             function getInstructions(ref) {
                 return new Promise(function(resolve, reject) {
                     $.ajax({
-                        url: '{!!url("/getInstructions")!!}',
+                        url: '{!! url('/getInstructions') !!}',
                         type: "GET",
                         data: {
                             ref: ref,
@@ -1014,7 +1099,7 @@
             function getTimeRequirements(ref) {
                 return new Promise(function(resolve, reject) {
                     $.ajax({
-                        url: '{!!url("/getTimeRequirements")!!}',
+                        url: '{!! url('/getTimeRequirements') !!}',
                         type: "GET",
                         data: {
                             ref: ref,
@@ -1029,48 +1114,86 @@
                 });
             }
 
-            function getData(){
+            function getData() {
                 $.ajax({
-                    url: '{!!url("/getIncompletePickingTickets")!!}',
+                    url: '{!! url('/getIncompletePickingTickets') !!}',
                     type: "GET",
                     data: {
                         from: $('#from').val(),
                         to: $('#to').val()
                     },
-                    success: function (data) {
+                    success: function(data) {
                         gridTruckLoads.option('dataSource', data);
                         gridTruckLoads.refresh();
                     }
                 });
             };
 
-            function completeTruckLoad(ref){
+            function completeTruckLoad(ref) {
                 $.ajax({
-                    url: '{!!url("/completeTruckLoad")!!}',
+                    url: '{!! url('/completeTruckLoad') !!}',
                     type: "POST",
                     data: {
                         ref: ref,
+                        bitForceComplete: {{ $complete }},
                     },
-                    success: function (data) {
-                        if(data[0].Result == "Success"){
+                    success: function(data) {
+                        if (data[0].Result == "Success") {
+                            DevExpress.ui.notify({
+                                message: 'Sucessfully Completed Truck Load',
+                                type: 'success', // 'info', 'success', 'warning'
+                                displayTime: 3500,
+                            });
                             getData();
-                        }else{
-                            alert(data[0].Result);
+                        } else {
+                            DevExpress.ui.notify({
+                                message: data[0].Result,
+                                type: 'error', // 'info', 'success', 'warning'
+                                displayTime: 5000,
+                            });
                         }
                     }
                 });
             };
 
-            function assignInstruction(ref, instruction, type){
+            function cancelTruckLoad(ref, cancelled) {
                 $.ajax({
-                    url: '{!!url("/assignInstruction")!!}',
+                    url: '{!! url('/cancelTruckLoad') !!}',
+                    type: "POST",
+                    data: {
+                        ref: ref,
+                        cancelled: cancelled,
+                    },
+                    success: function(data) {
+                        if (cancelled){
+                            DevExpress.ui.notify({
+                                message: 'Sucessfully Canceled Truck Load',
+                                type: 'success', // 'info', 'success', 'warning'
+                                displayTime: 3500,
+                            });
+                        }else{
+                            DevExpress.ui.notify({
+                                message: 'Sucessfully Re-instated Truck Load',
+                                type: 'success', // 'info', 'success', 'warning'
+                                displayTime: 3500,
+                            });
+                        }
+                        
+                        getData();
+                    }
+                });
+            };
+
+            function assignInstruction(ref, instruction, type) {
+                $.ajax({
+                    url: '{!! url('/assignInstruction') !!}',
                     type: "POST",
                     data: {
                         ref: ref,
                         instruction: instruction,
                         type: type,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         getData();
                         $("#btnCloseInstructions").click();
                     }

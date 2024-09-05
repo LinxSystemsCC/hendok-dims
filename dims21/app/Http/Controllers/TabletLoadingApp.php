@@ -324,7 +324,7 @@ class TabletLoadingApp extends controller
             ->where('strUnickReference',$referenceno )
             ->update(['strPickingNickname' => $nickname]);
         //spPickingPlannerCreditLimitEmail
-         DB::connection('sqlsrv3')
+        DB::connection('sqlsrv3')
             ->statement('exec spPickingPlannerCreditLimitEmail ?',array($referenceno));
 
     }
@@ -460,8 +460,17 @@ class TabletLoadingApp extends controller
 
     public function completeTruckLoad(Request $request){
         $ref = $request->get('ref');
-        $result = DB::connection('sqlsrv3')->select("EXEC spCompleteTruckLoad '$ref'");
+        $bitForceComplete = $request->get('bitForceComplete');
+        $result = DB::connection('sqlsrv3')->select("EXEC spCompleteTruckLoad '$ref', $bitForceComplete");
         return response()->json($result);
+    }
+
+    public function cancelTruckLoad(Request $request){
+        $ref = $request->get('ref');
+        $planstatus = $request->get('cancelled');
+        DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference',$ref )
+            ->update(['isCancelled' => $planstatus]);
     }
 
     public function getIncompletePickingTickets(Request $request){
