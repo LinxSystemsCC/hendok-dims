@@ -58,21 +58,19 @@
                     <div class="col-4 px-1">
                         <div id="btnHome"></div>
                     </div>
-                    <div class="col-4 d-inline-flex px-1 mb-2">
-                        <input type="checkbox" value="0" id="checkDate">
+                    <div class="col-4 px-1 mb-2">
                         <div id="selectDateRange"></div>
                     </div>
-                    <div class="col-4 d-inline-flex px-1 mb-2">
-                        <input type="checkbox" value="0" id="checkDC">
+                    <div class="col-4 px-1">
                         <div id="selectDC"></div>
                     </div>
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 px-1">
                         <div id="selectRoute"></div>
                     </div>
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 px-1">
                         <div id="selectType"></div>
                     </div>
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 px-1">
                         <div id="btnGetOrders"></div>
                     </div>
                 </div>
@@ -82,19 +80,19 @@
                     <div class="col-4 px-1 mb-2">
                         <div id="inputUnickReference"></div>
                     </div>
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 px-1">
                         <div id="selectTrailer"></div>
                     </div>
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 px-1">
                         <div id="selectTeamLeader"></div>
                     </div>
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 px-1">
                         <div id="inputLoadName"></div>
                     </div>
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 px-1">
                         <div id="selectLoadType"></div>
                     </div>
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 px-1">
                         <div id="btnSavePlan"></div>
                     </div>
                 </div>
@@ -131,6 +129,7 @@
                 containment: 'parent',
                 grid: [1, 0],
                 stop: function(event, ui) {
+                    console.log('done');
                     gridPlannable.repaint();
                     gridPlanned.repaint();
                 }
@@ -163,7 +162,7 @@
             const orderTypes = [{
                 "value": "DELIVERED",
                 "display": "Delivery",
-            }, {
+            },{
                 "value": "COLLECT",
                 "display": "Collection",
             }];
@@ -273,7 +272,6 @@
                 icon: 'fa fa-search',
                 validationGroup: "getData",
                 onClick: function(e) {
-                    setStorageData();
                     var result = e.validationGroup.validate();
                     if (result.isValid) {
                         getSalesOrdersToPlan();
@@ -422,6 +420,14 @@
                         caption: "Route"
                     },
                     {
+                        dataField: "OrderDate",
+                        caption: "Order Date"
+                    },
+                    {
+                        dataField: "DeliveryDate",
+                        caption: "Delivery Date"
+                    },
+                    {
                         dataField: "mnyTons",
                         caption: "Tons",
                         dataType: "number",
@@ -457,7 +463,9 @@
                             detail.CustomerPastelCode === masterRow.CustomerPastelCode &&
                             detail.StoreName === masterRow.StoreName &&
                             detail.Area === masterRow.Area &&
-                            detail.Route === masterRow.Route
+                            detail.Route === masterRow.Route &&
+                            detail.OrderDate === masterRow.OrderDate &&
+                            detail.DeliveryDate === masterRow.DeliveryDate
                         );
 
                         $("<div>")
@@ -502,14 +510,6 @@
                                         caption: "Instruction"
                                     },
                                     {
-                                        dataField: "OrderDate",
-                                        caption: "Order Date"
-                                    },
-                                    {
-                                        dataField: "DeliveryDate",
-                                        caption: "Delivery Date"
-                                    },
-                                    {
                                         dataField: "PastelCode",
                                         caption: "Pastel Code"
                                     },
@@ -530,8 +530,7 @@
                                         format: "#0.####",
                                         dataType: "number",
                                         calculateCellValue: function(rowData) {
-                                            return rowData.mnyTonsProduct * rowData
-                                                .mnyToPlan;
+                                            return rowData.mnyTonsProduct * rowData.mnyToPlan;
                                         },
                                     },
                                     {
@@ -573,7 +572,38 @@
                                 e.component.option('icon', allExpanded ? 'expand' : 'collapse');
                             }
                         }
-                    }, {
+                    },{
+                        location: 'after',
+                        widget: 'dxTagBox',
+                        options: {
+                            dataSource: productGroups,
+                            valueExpr: 'ItemGroupDescription',
+                            displayExpr: 'ItemGroupDescription',
+                            placeholder: 'Proudct Group',
+                            showSelectionControls: true,
+                            showClearButton: true,
+                            width: '300px',
+                            multiline: false,
+                            searchEnabled: true,
+                            onInitialized: function(e) {
+                                selectProductGroup = e.component;
+                            },
+                            onValueChanged: function(e) {
+                                const selectedValues = e.value;
+
+                                if (selectedValues.length === 0) {
+                                    setAllGridData(originalData, plannedMaster)
+                                    return;
+                                }
+
+                                const filteredDetails = originalData.filter(function(detail) {
+                                    return selectedValues.includes(detail.ItemGroupDescription);
+                                });
+
+                                setAllGridData(filteredDetails, plannedMaster)
+                            },
+                        },
+                    },{
                         location: 'after',
                         widget: 'dxTagBox',
                         options: {
@@ -604,39 +634,7 @@
                                 setAllGridData(filteredDetails, plannedMaster)
                             },
                         },
-                    }, {
-                        location: 'after',
-                        widget: 'dxTagBox',
-                        options: {
-                            dataSource: productGroups,
-                            valueExpr: 'ItemGroupDescription',
-                            displayExpr: 'ItemGroupDescription',
-                            placeholder: 'Proudct Group',
-                            showSelectionControls: true,
-                            showClearButton: true,
-                            width: '300px',
-                            multiline: false,
-                            searchEnabled: true,
-                            onInitialized: function(e) {
-                                selectProductGroup = e.component;
-                            },
-                            onValueChanged: function(e) {
-                                const selectedValues = e.value;
-
-                                if (selectedValues.length === 0) {
-                                    setAllGridData(originalData, plannedMaster)
-                                    return;
-                                }
-
-                                const filteredDetails = originalData.filter(function(detail) {
-                                    return selectedValues.includes(detail
-                                        .ItemGroupDescription);
-                                });
-
-                                setAllGridData(filteredDetails, plannedMaster)
-                            },
-                        },
-                    }, ]
+                    }]
                 },
                 summary: {
                     recalculateWhileEditing: true,
@@ -710,6 +708,8 @@
                             var criteria = {
                                 Area: e.itemData.Area,
                                 CustomerPastelCode: e.itemData.CustomerPastelCode,
+                                DeliveryDate: e.itemData.DeliveryDate,
+                                OrderDate: e.itemData.OrderDate,
                                 Route: e.itemData.Route,
                                 StoreName: e.itemData.StoreName
                             };
@@ -720,6 +720,8 @@
                             $.each(plannableDetails, function(index, item) {
                                 if (item.Area === criteria.Area &&
                                     item.CustomerPastelCode === criteria.CustomerPastelCode &&
+                                    item.DeliveryDate === criteria.DeliveryDate &&
+                                    item.OrderDate === criteria.OrderDate &&
                                     item.Route === criteria.Route &&
                                     item.StoreName === criteria.StoreName) {
                                     matchedItems.push(item);
@@ -745,12 +747,6 @@
                             const storeName = options.value;
                             const groupItems = options.data.items || options.data.collapsedItems;
                             const itemCount = groupItems.length;
-                            var itemTonnage = groupItems.reduce(function(sum, item) {
-                                var tons = parseFloat(item.mnyTonsProduct) * parseFloat(item
-                                    .mnyToPlan);
-                                return sum + (isNaN(tons) ? 0 : tons);
-                            }, 0);
-
                             const initialIntSequence = groupItems.length > 0 ? groupItems[0]
                                 .intSequence : null;
 
@@ -775,8 +771,7 @@
 
                             // Create and append the store name div
                             const storeNameDiv = $("<div>").text(
-                                `${storeName} (${itemCount} lines) - ${groupItems[0].Route} [ ${itemTonnage.toFixed(4)} Tons ]`
-                            ).css({
+                                `${storeName} (${itemCount} lines) - ${groupItems[0].Route}`).css({
                                 flexGrow: 1, // Allow it to take up the remaining space
                                 textAlign: "left"
                             });
@@ -808,7 +803,7 @@
                         dataField: "OrderNo",
                         caption: "Order No",
                         allowEditing: false,
-                    }, {
+                    },{
                         dataField: "Route",
                         caption: "Route",
                         visible: false,
@@ -826,14 +821,6 @@
                     {
                         dataField: "strInstruction",
                         caption: "Instruction"
-                    },
-                    {
-                        dataField: "OrderDate",
-                        caption: "Order Date"
-                    },
-                    {
-                        dataField: "DeliveryDate",
-                        caption: "Delivery Date"
                     },
                     {
                         dataField: "PastelCode",
@@ -934,11 +921,11 @@
                                 e.component.option('icon', allExpanded ? 'expand' : 'collapse');
                             }
                         }
-                    }, {
+                    },{
                         location: 'after',
                         widget: 'dxButton',
                         options: {
-                            icon: 'clearformat',
+                            icon: 'clear',
                             onClick: function(e) {
                                 setAllGridData(originalData, []);
                             }
@@ -994,7 +981,7 @@
 
                 $.each(data, function(index, item) {
                     var key = item.CustomerPastelCode + '|' + item.StoreName + '|' + item.Area + '|' + item
-                        .Route;
+                        .Route + '|' + item.OrderDate + '|' + item.DeliveryDate;
 
                     if (!groupedData[key]) {
                         groupedData[key] = {
@@ -1003,6 +990,8 @@
                             StoreName: item.StoreName,
                             Area: item.Area,
                             Route: item.Route,
+                            OrderDate: item.OrderDate,
+                            DeliveryDate: item.DeliveryDate,
                             mnyTons: 0
                         };
                     }
@@ -1016,6 +1005,7 @@
             }
 
             function prepareToSave() {
+
                 gridPlanned.saveEditData();
                 const plannedLines = gridPlanned.option('dataSource');
 
@@ -1257,48 +1247,6 @@
 
                 return returnFormat.replace(/\//g, '-');
             }
-
-            getStorageData();
-
-            function getStorageData() {
-                if (typeof(Storage) !== "undefined") {
-                    var datecheck = localStorage.getItem("datecheck");
-                    var dccheck = localStorage.getItem("dccheck");
-
-                    var dateval = localStorage.getItem("dateval");
-                    var dcval = localStorage.getItem("dcval");
-
-                    var dateval = dateval.split(',');
-
-                    if (datecheck && datecheck === "1") {
-                        selectDateRange.option('value', dateval);
-                        $("#checkDate").prop("checked", true);
-                    }
-                    if (dccheck && dccheck === "1") {
-                        selectDC.option('value', dcval);
-                        $("#checkDC").prop("checked", true);
-                    }
-                } else {
-                    DevExpress.ui.notify(
-                        "Sorry, your browser does not support local storage and you wont be able to store date, shift, department, and machine",
-                        "error", 5000
-                    );
-                }
-            };
-
-            function setStorageData() {
-                var datecheck = $("#checkDate").prop("checked") ? "1" : "0";
-                var dccheck = $("#checkDC").prop("checked") ? "1" : "0";
-
-                var dateval = selectDateRange.option('value');
-                var dcval = selectDC.option('value');
-
-                localStorage.setItem("datecheck", datecheck);
-                localStorage.setItem("dccheck", dccheck);
-
-                localStorage.setItem("dateval", dateval);
-                localStorage.setItem("dcval", dcval);
-            };
         });
     </script>
 
