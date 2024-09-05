@@ -775,7 +775,7 @@
 
                             // Create and append the store name div
                             const storeNameDiv = $("<div>").text(
-                                `${storeName} (${itemCount} lines) - ${groupItems[0].Route} [ ${itemTonnage.toFixed(4)} Tons ]`
+                                `${storeName} (${itemCount} lines) - ${groupItems[0].Area} [ ${itemTonnage.toFixed(4)} Tons ]`
                             ).css({
                                 flexGrow: 1, // Allow it to take up the remaining space
                                 textAlign: "left"
@@ -809,60 +809,54 @@
                         caption: "Order No",
                         allowEditing: false,
                     }, {
+                        dataField: "Area",
+                        caption: "Area",
+                        visible: false,
+                    }, {
                         dataField: "Route",
                         caption: "Route",
                         visible: false,
-                    },
-                    {
+                    }, {
                         dataField: "LineId",
                         caption: "Line Id",
                         allowEditing: false,
-                    },
-                    {
+                    }, {
                         dataField: "intorderdetailId",
                         caption: "OrderDetailId",
                         visible: false,
-                    },
-                    {
+                    }, {
                         dataField: "strInstruction",
                         caption: "Instruction"
-                    },
-                    {
+                    }, {
                         dataField: "OrderDate",
                         caption: "Order Date"
-                    },
-                    {
+                    }, {
                         dataField: "DeliveryDate",
                         caption: "Delivery Date"
-                    },
-                    {
+                    }, {
                         dataField: "PastelCode",
                         caption: "Pastel Code",
                         allowEditing: false,
                         visible: false,
-                    },
-                    {
+                    }, {
                         dataField: "PastelDescription",
                         caption: "Pastel Description",
                         allowEditing: false,
-                    },
-                    {
+                    }, {
                         dataField: "mnyOutstanding",
                         caption: "Outstanding",
                         dataType: "number",
                         alignment: "center",
                         format: "#0.####",
                         allowEditing: false,
-                    },
-                    {
+                    }, {
                         dataField: "mnyAvail",
                         caption: "Available",
                         dataType: "number",
                         alignment: "center",
                         format: "#0.####",
                         allowEditing: false,
-                    },
-                    {
+                    }, {
                         dataField: "mnyToPlan",
                         caption: "Plan",
                         dataType: "number",
@@ -874,8 +868,7 @@
                                 .css("font-size", "16px")
                                 .css("font-weight", "900");
                         }
-                    },
-                    {
+                    }, {
                         dataField: "mnyAlreadyPlanned",
                         caption: "Already Planned",
                         dataType: "number",
@@ -883,8 +876,7 @@
                         format: "#0.####",
                         allowEditing: false,
                         visible: false,
-                    },
-                    {
+                    }, {
                         dataField: "mnyTons",
                         caption: "Tons",
                         sColor: "Red",
@@ -900,13 +892,11 @@
                                 .css("font-size", "16px")
                                 .css("font-weight", "900");
                         }
-                    },
-                    {
+                    }, {
                         dataField: "OwnerID",
                         caption: "Owner",
                         visible: false,
-                    },
-                    {
+                    }, {
                         dataField: "intSequence",
                         caption: "Sequence",
                         dataType: "number",
