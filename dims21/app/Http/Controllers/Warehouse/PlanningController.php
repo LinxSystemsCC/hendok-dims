@@ -20,6 +20,12 @@ class PlanningController extends Controller
 
         $teamleaders = DB::connection('sqlsrv2')->select("SELECT * FROM viewTeamLeaders");
 
+        $TLNumbers = DB::table('tblPickingPlanHeader')
+            ->select('intAutoPickingHeader', DB::raw("'TL' + CAST(intAutoPickingHeader AS NVARCHAR(50)) AS strTLNum"))
+            ->orderByDesc('intAutoPickingHeader')
+            ->limit(5000)
+            ->get();
+
         // dd($dcs, $routes, $orderTypes, $trucks, $drivers);
         // dd($productGroups);
 
@@ -29,7 +35,8 @@ class PlanningController extends Controller
             ->with('orderTypes', $orderTypes)
             ->with('trailerTypes', $trailerTypes)
             ->with('drivers', $drivers)
-            ->with('teamleaders', $teamleaders);
+            ->with('teamleaders', $teamleaders)
+            ->with('TLNumbers', $TLNumbers);
     }
 
     public function getSalesOrdersToPlanOptimized(Request $request)
@@ -71,13 +78,39 @@ class PlanningController extends Controller
         if (is_array($lines)) {
             $xml = $this->toxml($lines, "xml", array("result"));
 
-            // dd("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType'");
+            // dd("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType', '$orderType'");
             
             $response = DB::connection('sqlsrv3')->select("EXEC sp_C_SavePickingPlan '$xml', '$strUnickReference', $userId, '$userName', $intDc, $intTrailerType, $intTeamLeaderId, '$loadName', '$loadType', '$orderType'");
 
             return response()->json($response);
         }
         
+    }
+
+    public function getPickingPlanToEdit(Request $request)
+    {
+        $intAutoHeaderId = $request->get('intAutoHeaderId');
+
+        // dd("EXEC sp_R_GetPickingPlanToEdit $intAutoHeaderId");
+
+        $orders = DB::connection('sqlsrv3')->select("EXEC sp_R_GetPickingPlanToEdit $intAutoHeaderId");
+        // dd($orders);
+        $header = DB::connection('sqlsrv3')->select("SELECT * FROM tblPickingPlanHeader WHERE intAutoPickingHeader =  $intAutoHeaderId");
+
+        $strUnickReference = $header[0]->strUnickReference;
+        $intTeamLeaderId = $header[0]->intTeamLeaderId;
+        $intTrailerType = $header[0]->intTrailerType;
+        $strPickingNickname = $header[0]->strPickingNickname;
+        $strLoadType = $header[0]->strLoadType;
+
+        $response['orders'] = $orders;
+        $response['strUnickReference'] = $strUnickReference;
+        $response['intTeamLeaderId'] = $intTeamLeaderId;
+        $response['intTrailerType'] = $intTrailerType;
+        $response['strPickingNickname'] = $strPickingNickname;
+        $response['strLoadType'] = $strLoadType;
+        
+        return response()->json($response);
     }
 
     private static function getTabs($tabcount)
@@ -118,5 +151,3 @@ class PlanningController extends Controller
         return $result;
     }
 }
-
-

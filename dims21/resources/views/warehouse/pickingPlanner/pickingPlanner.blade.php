@@ -79,7 +79,8 @@
             </div>
             <div class="col-6">
                 <div class="row gx-0">
-                    <div class="col-4 px-1 mb-2">
+                    <div class="col-4 d-inline-flex px-1 mb-2">
+                        <div id="btnImportPlan"></div>
                         <div id="inputUnickReference"></div>
                     </div>
                     <div class="col-4 px-1 mb-2">
@@ -112,6 +113,15 @@
                 <div id="gridPlanned"></div>
             </div>
         </div>
+
+        <div id="popupEditPlan">
+            <div class="dx-field">
+                <div class="dx-field-label">Select A Plan</div>
+                <div class="dx-field-value">
+                    <div id="selectPlan"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection
@@ -138,6 +148,8 @@
 
             var dcs = ({!! json_encode($dcs) !!});
             var routes = ({!! json_encode($routes) !!});
+            var TLNumbers = ({!! json_encode($TLNumbers) !!});
+
             var productGroups = [];
             var salesOrders = [];
             let selectProductGroup;
@@ -281,12 +293,23 @@
                 }
             }).dxButton("instance");
 
+            const btnImportPlan = $('#btnImportPlan').dxButton({
+                stylingMode: 'contained',
+                type: 'normal',
+                icon: 'edit',
+                onClick: function(e) {
+                    popupEditPlan.show();
+                }
+            }).dxButton("instance");
+
             const inputUnickReference = $("#inputUnickReference").dxTextBox({
                 placeholder: 'Ref',
                 showSelectionControls: true,
                 disabled: true,
                 width: '100%',
-                onValueChanged: function(e) {},
+                onValueChanged: function(e) {
+
+                },
             }).dxTextBox("instance");
 
             const selectTrailer = $("#selectTrailer").dxSelectBox({
@@ -690,10 +713,13 @@
                 allowColumnResizing: true,
                 columnResizingMode: "nextColumn",
                 rowDragging: {
-                    group: 'sharedGroup', // Ensure the group matches the one in gridPlannable's detail grid
+                    group: 'sharedGroup',
                     allowReordering: true,
                     allowDropInsideItem: false,
                     onDragStart: function(e) {
+                        if (e.itemData.bitCanEdit == "0") {
+                            e.cancel = true;
+                        }
                         e.itemData = e.itemData;
                     },
                     onAdd: function(e) {
@@ -736,178 +762,193 @@
                         setAllGridData(plannableDetails, plannedMaster);
                     }
                 },
+                onEditorPreparing: function(e) {
+                    if (e.row && e.row.data.bitCanEdit == "0") {
+                        e.editorOptions.disabled = true;
+                    }
+                },
                 columns: [{
-                        dataField: "StoreName",
-                        caption: "Customer Name",
-                        groupIndex: 0,
-                        allowEditing: false,
-                        groupCellTemplate: function(container, options) {
-                            const storeName = options.value;
-                            const groupItems = options.data.items || options.data.collapsedItems;
-                            const itemCount = groupItems.length;
-                            var itemTonnage = groupItems.reduce(function(sum, item) {
-                                var tons = parseFloat(item.mnyTonsProduct) * parseFloat(item
-                                    .mnyToPlan);
-                                return sum + (isNaN(tons) ? 0 : tons);
-                            }, 0);
+                    dataField: "StoreName",
+                    caption: "Customer Name",
+                    groupIndex: 0,
+                    allowEditing: false,
+                    groupCellTemplate: function(container, options) {
+                        const storeName = options.value;
+                        const groupItems = options.data.items || options.data.collapsedItems;
+                        const itemCount = groupItems.length;
+                        var itemTonnage = groupItems.reduce(function(sum, item) {
+                            var tons = parseFloat(item.mnyTonsProduct) * parseFloat(item
+                                .mnyToPlan);
+                            return sum + (isNaN(tons) ? 0 : tons);
+                        }, 0);
 
-                            const initialIntSequence = groupItems.length > 0 ? groupItems[0]
-                                .intSequence : null;
+                        const initialIntSequence = groupItems.length > 0 ? groupItems[0]
+                            .intSequence : null;
 
-                            const intSequenceEditor = $("<div>").dxNumberBox({
-                                value: initialIntSequence,
-                                onValueChanged: function(e) {
-                                    const newIntSequence = e.value;
-                                    groupItems.forEach(item => {
-                                        item.intSequence = newIntSequence;
-                                    });
-                                    setAllGridData(plannableDetails, plannedMaster);
-                                }
-                            });
+                        const intSequenceEditor = $("<div>").dxNumberBox({
+                            value: initialIntSequence,
+                            onValueChanged: function(e) {
+                                const newIntSequence = e.value;
+                                groupItems.forEach(item => {
+                                    item.intSequence = newIntSequence;
+                                });
+                                setAllGridData(plannableDetails, plannedMaster);
+                            }
+                        });
 
-                            // Create a flex container for alignment
-                            const flexContainer = $("<div>").css({
-                                display: "flex",
-                                alignItems: "center", // Vertically align items in the center
-                                justifyContent: "space-between", // Space between storeName and intSequenceEditor
-                                height: "100%" // Make the div's height match the container
-                            });
+                        // Create a flex container for alignment
+                        const flexContainer = $("<div>").css({
+                            display: "flex",
+                            alignItems: "center", // Vertically align items in the center
+                            justifyContent: "space-between", // Space between storeName and intSequenceEditor
+                            height: "100%" // Make the div's height match the container
+                        });
 
-                            // Create and append the store name div
-                            const storeNameDiv = $("<div>").text(
-                                `${storeName} (${itemCount} lines) - ${groupItems[0].Area} [ ${itemTonnage.toFixed(4)} Tons ]`
-                            ).css({
-                                flexGrow: 1, // Allow it to take up the remaining space
-                                textAlign: "left"
-                            });
+                        // Create and append the store name div
+                        const storeNameDiv = $("<div>").text(
+                            `${storeName} (${itemCount} lines) - ${groupItems[0].Area} [ ${itemTonnage.toFixed(4)} Tons ]`
+                        ).css({
+                            flexGrow: 1, // Allow it to take up the remaining space
+                            textAlign: "left"
+                        });
 
-                            // Create a wrapper for the sequence editor and label
-                            const sequenceWrapper = $("<div>").css({
-                                display: "flex",
-                                alignItems: "center" // Vertically align the editor and label
-                            });
+                        // Create a wrapper for the sequence editor and label
+                        const sequenceWrapper = $("<div>").css({
+                            display: "flex",
+                            alignItems: "center" // Vertically align the editor and label
+                        });
 
-                            // Append the sequence label
-                            const sequenceLabel = $("<div>").text("Seq").css({
-                                marginRight: "10px"
-                            });
+                        // Append the sequence label
+                        const sequenceLabel = $("<div>").text("Seq").css({
+                            marginRight: "10px"
+                        });
 
-                            // Append the number box to the wrapper
-                            sequenceWrapper.append(sequenceLabel).append(intSequenceEditor);
+                        // Append the number box to the wrapper
+                        sequenceWrapper.append(sequenceLabel).append(intSequenceEditor);
 
-                            // Append the store name div and sequence wrapper to the flex container
-                            flexContainer.append(storeNameDiv).append(sequenceWrapper);
+                        // Append the store name div and sequence wrapper to the flex container
+                        flexContainer.append(storeNameDiv).append(sequenceWrapper);
 
-                            // Append the flex container to the cell container
-                            container.append(flexContainer);
+                        // Append the flex container to the cell container
+                        container.append(flexContainer);
 
-                            // Set specific styling for the number box
-                            container.find(".dx-numberbox").css("width", "150px");
-                        }
-                    }, {
-                        dataField: "OrderNo",
-                        caption: "Order No",
-                        allowEditing: false,
-                    }, {
-                        dataField: "Area",
-                        caption: "Area",
-                        visible: false,
-                    }, {
-                        dataField: "Route",
-                        caption: "Route",
-                        visible: false,
-                    }, {
-                        dataField: "LineId",
-                        caption: "Line Id",
-                        allowEditing: false,
-                    }, {
-                        dataField: "intorderdetailId",
-                        caption: "OrderDetailId",
-                        visible: false,
-                    }, {
-                        dataField: "strInstruction",
-                        caption: "Instruction"
-                    }, {
-                        dataField: "OrderDate",
-                        caption: "Order Date"
-                    }, {
-                        dataField: "DeliveryDate",
-                        caption: "Delivery Date"
-                    }, {
-                        dataField: "PastelCode",
-                        caption: "Pastel Code",
-                        allowEditing: false,
-                        visible: false,
-                    }, {
-                        dataField: "PastelDescription",
-                        caption: "Pastel Description",
-                        allowEditing: false,
-                    }, {
-                        dataField: "mnyOutstanding",
-                        caption: "Outstanding",
-                        dataType: "number",
-                        alignment: "center",
-                        format: "#0.####",
-                        allowEditing: false,
-                    }, {
-                        dataField: "mnyAvail",
-                        caption: "Available",
-                        dataType: "number",
-                        alignment: "center",
-                        format: "#0.####",
-                        allowEditing: false,
-                    }, {
-                        dataField: "mnyToPlan",
-                        caption: "Plan",
-                        dataType: "number",
-                        alignment: "center",
-                        format: "#0.####",
-                        cellTemplate: function(element, info) {
-                            element.append("<div>" + info.text + "</div>")
-                                .css("background", "#5c95c573")
-                                .css("font-size", "16px")
-                                .css("font-weight", "900");
-                        }
-                    }, {
-                        dataField: "mnyAlreadyPlanned",
-                        caption: "Already Planned",
-                        dataType: "number",
-                        alignment: "center",
-                        format: "#0.####",
-                        allowEditing: false,
-                        visible: false,
-                    }, {
-                        dataField: "mnyTons",
-                        caption: "Tons",
-                        sColor: "Red",
-                        format: "#0.####",
-                        dataType: "number",
-                        calculateCellValue: function(rowData) {
-                            return rowData.mnyTonsProduct * rowData.mnyToPlan;
-                        },
-                        cellTemplate: function(element, info) {
-                            element.append("<div>" + info.text + "</div>")
-                                .css("background", "#152b4d73")
-                                .css("color", "#fff")
-                                .css("font-size", "16px")
-                                .css("font-weight", "900");
-                        }
-                    }, {
-                        dataField: "OwnerID",
-                        caption: "Owner",
-                        visible: false,
-                    }, {
-                        dataField: "intSequence",
-                        caption: "Sequence",
-                        dataType: "number",
-                        alignment: "center",
-                        allowEditing: true,
+                        // Set specific styling for the number box
+                        container.find(".dx-numberbox").css("width", "150px");
+                    }
+                }, {
+                    dataField: "OrderNo",
+                    caption: "Order No",
+                    allowEditing: false,
+                }, {
+                    dataField: "Area",
+                    caption: "Area",
+                    visible: false,
+                }, {
+                    dataField: "Route",
+                    caption: "Route",
+                    visible: false,
+                }, {
+                    dataField: "LineId",
+                    caption: "Line Id",
+                    allowEditing: false,
+                }, {
+                    dataField: "intorderdetailId",
+                    caption: "OrderDetailId",
+                    visible: false,
+                }, {
+                    dataField: "strInstruction",
+                    caption: "Instruction"
+                }, {
+                    dataField: "OrderDate",
+                    caption: "Order Date"
+                }, {
+                    dataField: "DeliveryDate",
+                    caption: "Delivery Date"
+                }, {
+                    dataField: "PastelCode",
+                    caption: "Pastel Code",
+                    allowEditing: false,
+                    visible: false,
+                }, {
+                    dataField: "PastelDescription",
+                    caption: "Pastel Description",
+                    allowEditing: false,
+                }, {
+                    dataField: "mnyOutstanding",
+                    caption: "Outstanding",
+                    dataType: "number",
+                    alignment: "center",
+                    format: "#0.####",
+                    allowEditing: false,
+                }, {
+                    dataField: "mnyAvail",
+                    caption: "Available",
+                    dataType: "number",
+                    alignment: "center",
+                    format: "#0.####",
+                    allowEditing: false,
+                }, {
+                    dataField: "mnyToPlan",
+                    caption: "Plan",
+                    dataType: "number",
+                    alignment: "center",
+                    format: "#0.####",
+                    cellTemplate: function(element, info) {
+                        element.append("<div>" + info.text + "</div>")
+                            .css("background", "#5c95c573")
+                            .css("font-size", "16px")
+                            .css("font-weight", "900");
+                    }
+                }, {
+                    dataField: "mnyAlreadyPlanned",
+                    caption: "Already Planned",
+                    dataType: "number",
+                    alignment: "center",
+                    format: "#0.####",
+                    allowEditing: false,
+                    visible: false,
+                }, {
+                    dataField: "mnyTons",
+                    caption: "Tons",
+                    sColor: "Red",
+                    format: "#0.####",
+                    dataType: "number",
+                    calculateCellValue: function(rowData) {
+                        return rowData.mnyTonsProduct * rowData.mnyToPlan;
                     },
-                ],
+                    cellTemplate: function(element, info) {
+                        element.append("<div>" + info.text + "</div>")
+                            .css("background", "#152b4d73")
+                            .css("color", "#fff")
+                            .css("font-size", "16px")
+                            .css("font-weight", "900");
+                    }
+                }, {
+                    dataField: "OwnerID",
+                    caption: "Owner",
+                    visible: false,
+                }, {
+                    dataField: "intSequence",
+                    caption: "Sequence",
+                    dataType: "number",
+                    alignment: "center",
+                    allowEditing: true,
+                }, {
+                    dataField: "bitCanEdit",
+                    caption: "Editable",
+                    visible: false,
+                }, ],
                 onRowPrepared(e) {
                     if (e.data) {
                         if (e.data.strRowColor != null) {
                             e.rowElement.css("background-color", e.data.strRowColor);
+                        }
+                        if (e.data.bitCanEdit == "0") {
+                            e.rowElement.css({
+                                "background-color": "#d3d3d3",
+                                "pointer-events": "none",
+                                "opacity": "0.6"
+                            });
                         }
                     }
                 },
@@ -978,6 +1019,55 @@
                     ]
                 },
             }).dxDataGrid('instance');
+
+            const selectPlan = $("#selectPlan").dxSelectBox({
+                dataSource: {
+                    store: TLNumbers,
+                    paginate: true,
+                    pageSize: 100
+                },
+                valueExpr: 'intAutoPickingHeader',
+                displayExpr: 'strTLNum',
+                placeholder: 'TL Number',
+                showSelectionControls: true,
+                showClearButton: true,
+                width: '100%',
+                searchEnabled: true,
+            }).dxSelectBox("instance");
+
+            let btnEdit;
+
+            const popupEditPlan = $('#popupEditPlan').dxPopup({
+                showTitle: true,
+                title: 'Edit Picking Plan',
+                hideOnOutsideClick: true,
+                showCloseButton: true,
+                width: 500,
+                height: 600,
+                height: 'auto',
+                onHidden: function(e) {
+
+                },
+                toolbarItems: [{
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        icon: "edit",
+                        text: "EDIT PLAN",
+                        onInitialized: function(e) {
+                            btnEdit = e.component;
+                        },
+                        onClick: function(args) {
+                            btnEdit.option('disabled', true);
+                            var truckLoadNumber = selectPlan.option('value');
+
+                            getPickingPlanToEdit(truckLoadNumber);
+                            popupEditPlan.hide();
+                        },
+                    },
+                }],
+            }).dxPopup("instance");
 
             function groupData(data) {
                 var groupedData = {};
@@ -1079,40 +1169,34 @@
                         orderType: selectType.option('value'),
                     },
                     success: function(data) {
-                        window.open('{!! url('/pickingplanlist') !!}/' +
-                            inputUnickReference.option('value'),
-                            "strUnickReference",
-                            "location=1,status=1,scrollbars=1, width=1200,height=850"
-                        );
+                        if (data[0].Result == "Success") {
+                            window.open('{!! url('/pickingplanlist') !!}/' +
+                                inputUnickReference.option('value'),
+                                "strUnickReference",
+                                "location=1,status=1,scrollbars=1, width=1200,height=850"
+                            );
 
-                        selectDateRange.option('value', []);
-                        selectDC.option('value', '');
-                        selectRoute.option('value', []);
-                        selectProductGroup.option('value', '');
-                        selectProductGroup.option('dataSource', []);
-                        selectSalesOrder.option('value', '');
-                        selectSalesOrder.option('dataSource', []);
+                            location.reload();
+                        } else {
+                            var message = data[0].Result.replace(/\r\n/g, '<br>')
+                            .replace(/\n/g, '<br>');
+                            message += "<br><b>Would you like to proceed?</b>";
 
-                        inputUnickReference.option('value', '');
-                        selectTrailer.option('value', '');
-                        selectTeamLeader.option('value', '');
-                        inputLoadName.option('value', '');
-                        selectLoadType.option('value', '');
+                            DevExpress.ui.dialog.confirm(message, "Alert").done(function(confirmed) {
+                                if (confirmed) {
+                                    window.open('{!! url('/pickingplanlist') !!}/' +
+                                        inputUnickReference.option('value'),
+                                        "strUnickReference",
+                                        "location=1,status=1,scrollbars=1, width=1200,height=850"
+                                    );
+                                    location.reload();
+                                } else {
+                                    return;
+                                }
+                            });
+                        }
 
-                        gridPlannable.option('dataSource', []);
-                        gridPlannable.refresh();
-                        gridPlanned.option('dataSource', []);
-                        gridPlanned.refresh();
 
-                        plannableMaster = [];
-                        plannableDetails = [];
-                        plannedMaster = [];
-                        originalData = [];
-
-                        selectType.option('value', orderTypes[0].value);
-
-                        DevExpress.validationEngine.resetGroup("getData");
-                        DevExpress.validationEngine.resetGroup("saveData");
 
                     },
                     error: function() {
@@ -1142,7 +1226,10 @@
                     success: function(data) {
                         originalData = data.orders;
                         setAllGridData(data.orders, plannedMaster);
-                        inputUnickReference.option('value', data.strUnickReference);
+                        if (inputUnickReference.option('value') == '') {
+                            inputUnickReference.option('value', data.strUnickReference);
+                        }
+
                         setItemGroupData(data.orders);
                         setItemSalesOrderData(data.orders);
                     },
@@ -1246,6 +1333,33 @@
                 });
 
                 return returnFormat.replace(/\//g, '-');
+            }
+
+            function getPickingPlanToEdit(intAutoHeaderId) {
+                loadingPanel.option('visible', true);
+
+                $.ajax({
+                    url: '{!! url('/getPickingPlanToEdit') !!}',
+                    type: "POST",
+                    data: {
+                        intAutoHeaderId: intAutoHeaderId,
+                    },
+                    success: function(data) {
+                        setAllGridData([], data.orders);
+                        inputUnickReference.option('value', data.strUnickReference);
+                        selectTeamLeader.option('value', data.intTeamLeaderId);
+                        selectTrailer.option('value', data.intTrailerType);
+                        inputLoadName.option('value', data.strPickingNickname);
+                        selectLoadType.option('value', data.strLoadType);
+                    },
+                    error: function() {
+                        DevExpress.ui.notify("Error fetching data.", "error", 3000);
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
+                    }
+                });
             }
 
             getStorageData();

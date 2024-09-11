@@ -1387,5 +1387,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('pickingPlanner', [PlanningController::class,'pickingPlanner']);
     Route::post('getSalesOrdersToPlanOptimized', [PlanningController::class,'getSalesOrdersToPlanOptimized']);
     Route::post('savePickingPlan', [PlanningController::class,'savePickingPlan']);
+    Route::post('getPickingPlanToEdit', [PlanningController::class,'getPickingPlanToEdit']);
 });
 
