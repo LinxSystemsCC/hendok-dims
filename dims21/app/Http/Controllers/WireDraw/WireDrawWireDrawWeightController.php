@@ -61,23 +61,25 @@ class WireDrawWireDrawWeightController extends Controller
     public function store(StorePostWireDrawWeighRequest $request)
     {
         $validated = $request->validated();
-        $intRodId = $this->getRodIdLastOfJobHeader($validated['intjobNumber']);
+        $intRodId = $this->getRodIdLastOfJobHeader($validated['intJobNumber']);
 
-        WireDrawWeigh::create([
-            'intjobNumber' => $validated['intjobNumber'],
-            'intproductId' => $validated['intproductId'],
-            'intstand' => $validated['intstand'],
+        $newRecord = WireDrawWeigh::create([
+            'intJobNumber' => $validated['intJobNumber'],
+            'intProductId' => $validated['intProductId'],
+            'intStand' => $validated['intStand'],
             'intStandId' => $validated['intStandId'],
-            'fltweight' => $validated['fltweight'],
+            'fltWeight' => $validated['fltWeight'],
             'intRodId' => $intRodId,
             'intUserId' => Auth::user()->UserID,
         ]);
 
-        $header = WireDrawHeaders::find($validated['intjobNumber']);
+        $newJobId = $newRecord->intOrderLineId;
+
+        $header = WireDrawHeaders::find($validated['intJobNumber']);
         if ($header) {
-            $totalWeight = WireDrawWeigh::where('intjobNumber', $validated['intjobNumber'])->sum('fltweight');
+            $totalWeight = WireDrawWeigh::where('intJobNumber', $validated['intJobNumber'])->sum('fltWeight');
             $updateData = [
-                'intNoOfStand' => $validated['intstand'],
+                'intNoOfStand' => $validated['intStand'],
                 'fltMassProduced' => $header->fltMassProduced + $totalWeight,
             ];
             if ($header->strJobStatus == 'Pending') {
@@ -88,6 +90,17 @@ class WireDrawWireDrawWeightController extends Controller
             }
             $header->update($updateData);
         }
+
+        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $t = time();
+        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+        $strToken = $t . $randomString;
+
+        $UserId = Auth::user()->UserID;
+
+        // dd("EXEC usp_C_InsertWireDrawLabel $newJobId, 1, $UserId, '$strToken'");
+
+        DB::connection('sqlsrv2')->statement("EXEC usp_C_InsertWireDrawLabel $newJobId, 1, $UserId, '$strToken'");
 
         return response()->json(['success' => true]);
     }

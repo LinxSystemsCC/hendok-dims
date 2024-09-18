@@ -24,11 +24,11 @@ class StorePostWireDrawWeighRequest extends FormRequest
     public function rules()
     {
         return [
-            'intjobNumber' => 'required|numeric',
-            'intproductId' => 'required|numeric',
-            'intstand' => 'required|numeric',
+            'intJobNumber' => 'required|numeric',
+            'intProductId' => 'required|numeric',
+            'intStand' => 'required|numeric',
             'intStandId' => 'required|numeric',
-            'fltweight' => 'required|numeric',
+            'fltWeight' => 'required|numeric',
         ];
     }
 
@@ -36,7 +36,7 @@ class StorePostWireDrawWeighRequest extends FormRequest
     {
         return [
             'intStandId' => 'Stand Name',
-            'fltweight' => 'weight'
+            'fltWeight' => 'weight'
         ];
     }
 }

@@ -22,23 +22,23 @@
                     <div id="general-error"></div>
 
                     <div class="form-group">
-                        <label class="control-label" for="intjobNumber">Machines</label>
+                        <label class="control-label" for="intJobNumber">Machines</label>
                         <input type="text" class="form-control" id="strMachines" name="strMachines" disabled>
                     </div>
 
                     <div class="form-group mt-2">
-                        <label class="control-label" for="intjobNumber">Job No</label>
-                        <input type="text" class="form-control" id="intjobNumber" name="intjobNumber" disabled>
+                        <label class="control-label" for="intJobNumber">Job No</label>
+                        <input type="text" class="form-control" id="intJobNumber" name="intJobNumber" disabled>
                     </div>
 
                     <div class="form-group mt-2">
-                        <label class="control-label" for="intproductId">Product Name</label>
-                        <input type="text" class="form-control" id="intproductId" name="intproductId" disabled>
+                        <label class="control-label" for="intProductId">Product Name</label>
+                        <input type="text" class="form-control" id="intProductId" name="intProductId" disabled>
                     </div>
 
                     <div class="form-group mt-2">
-                        <label class="control-label" for="intstand">Stand No</label>
-                        <input type="text" class="form-control" id="intstand" name="intstand" disabled>
+                        <label class="control-label" for="intStand">Stand No</label>
+                        <input type="text" class="form-control" id="intStand" name="intStand" disabled>
                     </div>
 
                     <div class="form-group mt-2">
@@ -55,8 +55,8 @@
                     </div>
 
                     <div class="form-group mt-2">
-                        <label class="control-label" for="fltweight">Weight</label>
-                        <input type="number" class="form-control" id="fltweight" name="fltweight">
+                        <label class="control-label" for="fltWeight">Weight</label>
+                        <input type="number" class="form-control" id="fltWeight" name="fltWeight">
                     </div>
 
                     <div class="form-group mt-2">
@@ -158,18 +158,18 @@
                 if ($('#intStandId').val() == '') {
                     $('#ftlfinalweight').val('');
                 }
-                if ($('#fltweight').val() != '') {
+                if ($('#fltWeight').val() != '') {
                     calculateFinalWeight(
                         $('#intStandId option:selected').data('stand-mass'),
-                        parseFloat($('#fltweight').val())
+                        parseFloat($('#fltWeight').val())
                     );
                 }
             });
 
-            $('#fltweight').keyup(function() {
+            $('#fltWeight').keyup(function() {
                 calculateFinalWeight(
                     $('#intStandId option:selected').data('stand-mass'),
-                    parseFloat($('#fltweight').val())
+                    parseFloat($('#fltWeight').val())
                 );
             });
 
@@ -178,9 +178,9 @@
                 currentSelectedIntproductId = curTR.attr('data-product-id');
                 currentSelectedIntjobNo = curTR.attr('data-job-id');
                 $('#strMachines').val(curTR.attr('data-machinename'));
-                $('#intjobNumber').val(curTR.attr('data-jobnocustom'));
-                $('#intstand').val(curTR.attr('data-standno'));
-                $('#intproductId').val(curTR.attr('data-productname'));
+                $('#intJobNumber').val(curTR.attr('data-jobnocustom'));
+                $('#intStand').val(curTR.attr('data-standno'));
+                $('#intProductId').val(curTR.attr('data-productname'));
                 $('#Weigh').modal('show');
             });
 
@@ -195,11 +195,11 @@
                     url: '{{ route('wire-draw.weight.store') }}',
                     type: "POST",
                     data: {
-                        intjobNumber: currentSelectedIntjobNo,
-                        intproductId: currentSelectedIntproductId,
-                        intstand: $('#intstand').val(),
+                        intJobNumber: currentSelectedIntjobNo,
+                        intProductId: currentSelectedIntproductId,
+                        intStand: $('#intStand').val(),
                         intStandId: $('#intStandId').val(),
-                        fltweight: $('#ftlfinalweight').val()
+                        fltWeight: $('#ftlfinalweight').val()
                     },
                     success: function(data) {
                         location.reload();
@@ -215,8 +215,8 @@
             });
         });
         //This function is used for calculate final tare weight
-        function calculateFinalWeight(tareWeight, fltweightValue) {
-            var newFinalWeight = fltweightValue - tareWeight
+        function calculateFinalWeight(tareWeight, fltWeightValue) {
+            var newFinalWeight = fltWeightValue - tareWeight
             if (isNaN(newFinalWeight)) {
                 newFinalWeight = finalweight
             }

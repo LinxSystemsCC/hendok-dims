@@ -9,14 +9,14 @@ class WireDrawWeigh extends Model
 {
     use HasFactory;
     protected $table = 'tblWireDrawLines';
-    protected $primaryKey = 'intorderlinsId';
+    protected $primaryKey = 'intOrderLineId';
 
     protected $fillable = [
-        'intjobNumber',
-        'intproductId',
-        'intstand',
+        'intJobNumber',
+        'intProductId',
+        'intStand',
         'intStandId',
-        'fltweight',
+        'fltWeight',
         'intRodId',
         'intUserId',
     ];

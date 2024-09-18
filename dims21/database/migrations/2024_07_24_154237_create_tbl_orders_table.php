@@ -14,12 +14,12 @@ class CreateTblOrdersTable extends Migration
     public function up()
     {
         Schema::create('tblWireDrawHeaderLines', function (Blueprint $table) {
-            $table->id('intorderlinsId');
-            $table->integer('intjobNumber');
-            $table->integer('intproductId');
-            $table->integer('intstand');
+            $table->id('intOrderLineId');
+            $table->integer('intJobNumber');
+            $table->integer('intProductId');
+            $table->integer('intStand');
             $table->integer('intStandId');
-            $table->float('fltweight');
+            $table->float('fltWeight');
             $table->timestamps();
         });
     }

@@ -28,14 +28,14 @@ trait UtilityTrait
     /**
      * This function is used for get the last job header rod id
      *
-     * @param int $intjobNumber
+     * @param int $intJobNumber
      */
-    public function getRodIdLastOfJobHeader($intjobNumber)
+    public function getRodIdLastOfJobHeader($intJobNumber)
     {
         $intRodId = 0;
         $drawRod = WireDrawRod::select('intRodId')
             ->orderBy('created_at', 'desc')
-            ->where('intjobNumber', $intjobNumber)
+            ->where('intJobNumber', $intJobNumber)
             ->first();
 
         if ($drawRod) {
