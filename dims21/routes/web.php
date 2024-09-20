@@ -1306,9 +1306,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getStockLocationSummary', [StockControlController::class,'getStockLocationSummary']);
     Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
     Route::get('getIssuedStock', [StockControlController::class,'getIssuedStock']);
+    Route::get('stockAdjustment', [StockControlController::class,'stockAdjustment']);
+    Route::get('getBinStockCount', [StockControlController::class,'getBinStockCount']);
+    Route::post('processStockAdjustment', [StockControlController::class,'processStockAdjustment']);
 });
 
-// Stock Control Controller
+// Stock Take Control Controller
 Route::group(['middleware' => 'auth'], function() {
 
     Route::post('saveStockTake', [StockTakeController::class,'saveStockTake']);
@@ -1382,7 +1385,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 });
 
-// Roofing Controller
+// Planning Controller
 Route::group(['middleware' => 'auth'], function() {
     Route::get('pickingPlanner', [PlanningController::class,'pickingPlanner']);
     Route::post('getSalesOrdersToPlanOptimized', [PlanningController::class,'getSalesOrdersToPlanOptimized']);
