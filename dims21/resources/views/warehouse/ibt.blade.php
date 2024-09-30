@@ -217,6 +217,10 @@ if ((Auth::guest()))
                         caption: "Reference",
                     },
                     {
+                        dataField: "strStatus",
+                        caption: "Status",
+                    },
+                    {
                         dataField: "Username",
                         caption: "Created By",
                         
@@ -224,10 +228,6 @@ if ((Auth::guest()))
                     {
                         dataField: "dtmCreated",
                         caption: "Created Date",
-                    },
-                    {
-                        dataField: "strStatus",
-                        caption: "Status",
                     },
                 ],
                 onRowRemoving: function(e) {
