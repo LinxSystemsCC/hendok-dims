@@ -35,6 +35,7 @@ use App\Http\Controllers\Warehouse\RoofingController;
 use App\Http\Controllers\WireDraw\WireDrawCustomersController;
 use App\Http\Controllers\WireDraw\WireDrawProductsController;
 use App\Http\Controllers\Warehouse\PlanningController;
+use App\Http\Controllers\IbtController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1391,5 +1392,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('getSalesOrdersToPlanOptimized', [PlanningController::class,'getSalesOrdersToPlanOptimized']);
     Route::post('savePickingPlan', [PlanningController::class,'savePickingPlan']);
     Route::post('getPickingPlanToEdit', [PlanningController::class,'getPickingPlanToEdit']);
+});
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::resource('ibt', controller: IbtController::class)->only('index', 'store');
+    Route::get('getIBTRecords',[IbtController::class,'getIBTRecords'])->name(name: 'getIBTRecords');
+    Route::get('getIBTDetails',[IbtController::class,'getIBTDetails']);
+    Route::post('update-ibt',[IbtController::class,'updateIBTDetails']);
 });
 
