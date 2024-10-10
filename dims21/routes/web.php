@@ -1395,7 +1395,7 @@ Route::group(['middleware' => 'auth'], function() {
 });
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::resource('ibt', controller: IbtController::class)->only('index', 'store');
+    Route::resource('ibt', IbtController::class)->only(['index', 'store']);
     Route::get('getIBTRecords',[IbtController::class,'getIBTRecords'])->name(name: 'getIBTRecords');
     Route::get('getIBTDetails',[IbtController::class,'getIBTDetails']);
     Route::post('update-ibt',[IbtController::class,'updateIBTDetails']);
