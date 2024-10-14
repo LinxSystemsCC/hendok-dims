@@ -36,7 +36,10 @@ class IbtController extends Controller
 
         return response()->json(['success' => true]);
     }
-    
+
+    /**
+     * This function is used for get the IBT list
+     */
     public function getIBTRecords()
     {
         $returndata = DB::connection('sqlsrv2')->select("select * from viewtblIBTHeadersData");
@@ -44,6 +47,11 @@ class IbtController extends Controller
         return response()->json($returndata);
     }
 
+    /**
+     * This function is used for get IBT Details
+     * 
+     * @param obj $request
+     */
     public function getIBTDetails(Request $request)
     {
         $ibtHeaderId = $request->get('IbtHeaderId');
@@ -52,6 +60,11 @@ class IbtController extends Controller
         return response()->json($ibtDetails);
     }
 
+    /**
+     * This function is used for Update IBT Details
+     * 
+     * @param obj $request
+     */
     public function updateIBTDetails(Request $request)
     {
         $xmlLines = $request->input('dataxml');
