@@ -1,24 +1,4 @@
 
-<?php
-if ((Auth::guest()))
-{
-
-}else{
-    $v  =  new \App\Http\Controllers\SalesForm();
-    $make = $v->getThingsUserPermissions(Auth::user()->UserID,'Make Voucher');
-    $view = $v->getThingsUserPermissions(Auth::user()->UserID,'View Upliftment Voucher');
-    $update = $v->getThingsUserPermissions(Auth::user()->UserID,'Update Upliftment Voucher');
-    $enquiry = $v->getThingsUserPermissions(Auth::user()->UserID,'Enquire Upliftment Voucher');
-    $backlog = $v->getThingsUserPermissions(Auth::user()->UserID,'View Backlogs Upliftment Voucher');
-    $approve = $v->getThingsUserPermissions(Auth::user()->UserID,'Approve Uplifment Voucher');
-    $print = $v->getThingsUserPermissions(Auth::user()->UserID,'Print Upliftment Voucher');
-    $complete = $v->getThingsUserPermissions(Auth::user()->UserID,'Complete Upliftment Voucher');
-    $viewimage = $v->getThingsUserPermissions(Auth::user()->UserID,'View Image Upliftment Voucher');
-}   
-?>
-
-
-
 @extends('layouts.base')
 
 {{-- Set the Title --}}
@@ -71,13 +51,13 @@ if ((Auth::guest()))
                         </div>
                         <div class="row d-inline-flex border bg-light mt-3 mb-3 mx-1">
                             <label class="control-label fw-bold">By Products</label>
-                            <div class="col-2 pe-0">
+                            <div class="col-3 pe-0">
                                 <div class="form-group mb-2">
                                     <label class="control-label" for="inputProductCode">Code</label>
                                     <input type="text" class="form-control rounded-0 rounded-start" id="inputProductCode">
                                 </div>
                             </div>
-                            <div class="col-3 p-0">
+                            <div class="col-5 p-0">
                                 <div class="form-group mb-2">
                                     <label class="control-label" for="inputProductDescription">Description</label>
                                     <input type="text" class="form-control rounded-0" id="inputProductDescription">
@@ -95,13 +75,13 @@ if ((Auth::guest()))
                                     <input type="number" class="form-control rounded-0" id="inputProductQty">
                                 </div>
                             </div>
-                            <div class="col-1 p-0">
+                            <div class="col-2 ps-0">
                                 <div class="form-group mb-2">
                                     <label class="control-label" for="inputProductWeight">Weight</label>
                                     <input type="number" class="form-control rounded-0" id="inputProductWeight" readonly>
                                 </div>
                             </div>
-                            <div class="col-3 p-0">
+                            <div class="col-11 pe-0">
                                 <div class="form-group mb-2">
                                     <label class="control-label" for="inputProductComment">Comment</label>
                                     <input type="text" class="form-control rounded-0" id="inputProductComment">
@@ -121,11 +101,7 @@ if ((Auth::guest()))
                     </div>
 
                     <div class="modal-footer">
-                        @if($update !="0")
-                            <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden>Update</button>
-                        @else
-                            <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden disabled>Update</button>
-                        @endif
+                        <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden>Update</button>
                         <button type="button" id="btnSaveIBT" class="btn btn-success" >Save</button>
                         <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
                     </div>
@@ -142,11 +118,7 @@ if ((Auth::guest()))
     <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
 
     <script>
-
-        // Parse the JSON string into a JavaScript object
         var products = JSON.parse(JSON.stringify({!! json_encode($products) !!}));
-
-        // Map the products array to a new array with selected properties
         var productsList = $.map(products, function (item) {
             return {
                 PastelCode: item.PastelCode,
@@ -155,11 +127,13 @@ if ((Auth::guest()))
                 qtyavl:item.qtyavl
             };
         });
+        var gridProducts;
 
         $(document).ready(function() {
             let date = '';
             let reference = '';
 
+            //This is use for disply the IBT list 
             const gridIBT = $("#gridIBT").dxDataGrid({
                 dataSource:[], //as json
                 hoverStateEnabled: true,
@@ -204,7 +178,7 @@ if ((Auth::guest()))
                 columns: [
                     {
                         dataField: "intAutoId",
-                        caption: "IBT Header Id",
+                        caption: "IBT ID",
                         customizeText: function (cellInfo) {
                             // Customize the text for the 'intUpliftmentNumber' column
                             var IbtHeaderId = cellInfo.value;
@@ -234,22 +208,18 @@ if ((Auth::guest()))
 
                 },
                 onRowDblClick: function(e) {
-                    if (viewPermission) {
-                        var IbtHeaderId = e.data.intAutoId;
-                        SelectedIbtHeaderId = e.data.intAutoId;
-                        $('#IBTModal').modal('toggle');
-
-                        var numericPart = (1000000 + SelectedIbtHeaderId).toString().slice(-6);
-                        $('#newuserLabel').text('Update IBT');
-                        $('#txtIBTNumber').text('IBT' + numericPart);
-                        $('#btnUpdateIBT').prop('hidden',false);
-                        $('#btnSaveIBT').prop('hidden',true);
-
-                        $('#inputDate').val(e.data.dtmCreated);
-                        $('#strReference').val(e.data.strReference);
-                        
-                        getGridProducts(IbtHeaderId);
-                    }
+                    var IbtHeaderId = e.data.intAutoId;
+                    SelectedIbtHeaderId = e.data.intAutoId;
+                    $('#IBTModal').modal('toggle');
+                    var numericPart = (1000000 + SelectedIbtHeaderId).toString().slice(-6);
+                    $('#newuserLabel').text('Update IBT');
+                    $('#txtIBTNumber').text('IBT' + numericPart);
+                    $('#btnUpdateIBT').prop('hidden',false);
+                    $('#btnSaveIBT').prop('hidden',true);
+                    $('#inputDate').val(e.data.dtmCreated);
+                    $('#strReference').val(e.data.strReference);
+                    
+                    getGridProducts(IbtHeaderId);
                 },
                 onToolbarPreparing: function (e) {
                     e.toolbarOptions.items.unshift(
@@ -260,28 +230,27 @@ if ((Auth::guest()))
                             }
                         }
                     );
-                    if (makeUpliftment != 0){
-                        e.toolbarOptions.items.push(
-                            {
-                                location: 'after',
-                                widget: "dxButton",
-                                options: {
-                                    icon: "fa fa-plus",
-                                    text: "ADD",
-                                    onClick: function (args) {
-                                        $('#IBTModal').modal('show');
-                                        $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
-                                        $('#btnSaveIBT').prop('hidden',false);
-                                        $('#btnUpdateIBT').prop('hidden', true);
-                                    },
+                    e.toolbarOptions.items.push(
+                        {
+                            location: 'after',
+                            widget: "dxButton",
+                            options: {
+                                icon: "fa fa-plus",
+                                text: "ADD",
+                                onClick: function (args) {
+                                    $('#IBTModal').modal('show');
+                                    $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
+                                    $('#btnSaveIBT').prop('hidden',false);
+                                    $('#btnUpdateIBT').prop('hidden', true);
                                 },
-                            }
-                        );
-                    }
+                            },
+                        }
+                    );
                 }
             }).dxDataGrid('instance');
 
-            const gridProducts = $("#gridProducts").dxDataGrid({
+            //This is use for disply the Products list 
+            gridProducts = $("#gridProducts").dxDataGrid({
                 dataSource:[], //as json
                 hoverStateEnabled: true,
                 showBorders: true,
@@ -344,118 +313,7 @@ if ((Auth::guest()))
             var SelectedIbtHeaderId = 0;
             setProductsDataList(productsList);
 
-            function setProductsDataList(products){
-                var inputProductCode = $('#inputProductCode').flexdatalist({
-                    minLength: 1,
-                    valueProperty: '*',
-                    selectionRequired: true,
-                    focusFirstResult: true,
-                    searchContain:true,
-                    visibleProperties: ["PastelCode","PastelDescription"],
-                    searchIn: ["PastelCode","PastelDescription"],
-                    data: products
-                });
-                inputProductCode.on('select:flexdatalist', function (event, data) {
-                    //fill in inputs of code desc weight, empty qty empty comment..
-                    console.log(data);
-                    $('#inputProductCode').flexdatalist('value', data.PastelCode);
-                    $('#inputProductDescription').flexdatalist('value', data.PastelDescription);
-                    if (data.qtyavl != undefined) {
-                        $('#inputProductQtyAvl').val(parseFloat(data.qtyavl));
-                    } else {
-                        $('#inputProductQtyAvl').val(0);
-                    }
-                    $('#inputProductQty').val(1);
-                    $('#inputProductWeight').val(parseFloat(data.Weight).toFixed(3));
-                });
-                
-                var inputProductDescription = $('#inputProductDescription').flexdatalist({
-                    minLength: 1,
-                    valueProperty: '*',
-                    selectionRequired: true,
-                    focusFirstResult: true,
-                    searchContain:true,
-                    visibleProperties: ["PastelCode","PastelDescription"],
-                    searchIn: ["PastelCode","PastelDescription"],
-                    data: products
-                });
-                inputProductDescription.on('select:flexdatalist', function (event, data) {
-                    //fill in inputs of code desc weight, empty qty empty comment..
-                    $('#inputProductCode').flexdatalist('value', data.PastelCode);
-                    $('#inputProductDescription').flexdatalist('value', data.PastelDescription);
-                    $('#inputProductQty').val(1);
-                    $('#inputProductWeight').val(parseFloat(data.Weight).toFixed(3));
-                });
-            }
-            function setAlternativeAreaList(areas){
-                var alternativeAreasList = $.map(JSON.parse(JSON.stringify(areas)), function (item) {
-                    return {
-                        // routeID: item.routeID,
-                        // Route: item.Route,
-                        id: item.Route,
-                        text: item.Route
-                    }
-                });
-
-                alternativeAreasList.unshift({ id: '', text: '' });
-
-                $('#selectAltArea').empty().select2({
-                    data: alternativeAreasList,
-                    theme: 'bootstrap-5',
-                    dropdownParent: $('#IBTModal'),
-                });
-
-            };
-
-            function setInvoiceDataList(invoices){
-                var invoiceList = $.map(JSON.parse(JSON.stringify(invoices)), function (item) {
-                    return {
-                        value: item.InvNumber,
-                        id: item.InvNumber,
-                        text: item.InvNumber
-                    };
-                });
-
-                invoiceList.unshift({ value: '', id: '', text: '' });
-
-                $('#selectInvoice').empty().select2({
-                    data: invoiceList,
-                    theme: 'bootstrap-5',
-                    dropdownParent: $('#IBTModal'),
-                });
-
-                $('#selectSOInvoice').empty().select2({
-                    data: invoiceList,
-                    theme: 'bootstrap-5',
-                    dropdownParent: $('#IBTModal'),
-                });
-
-                if (!invoiceList.some(item => item.value === reference)) {
-                    $('#inputAltInvoice').val(reference);
-                }else{
-                    $('#selectInvoice').val(reference).trigger('change');
-                }
-
-            };
-
-            function setSalesOrderProductDataList(soProducts){
-                var soProductList = $.map(JSON.parse(JSON.stringify(soProducts)), function (item) {
-                    return {
-                        id: item.PartNumber,
-                        text: item.PDesc
-                    };
-                });
-
-                soProductList.unshift({ value: '', id: '', text: '' });
-
-                $('#selectSOProductCode').empty().select2({
-                    data: soProductList,
-                    theme: 'bootstrap-5',
-                    dropdownParent: $('#IBTModal'),
-                });
-
-            };
-
+            //change qty Weight wiil change with use of this function
             $('#inputProductQty').on('change', function() {
                 var qty = parseFloat($('#inputProductQty').val()) || 0; // Ensure qty is a valid number
                 var selectedProductCode = $('#inputProductCode').flexdatalist('value');
@@ -472,97 +330,44 @@ if ((Auth::guest()))
                 }
             });
 
-            $('#selectInvoice').on('change', function() {
-                $('#selectSOInvoice').val($(this).val()).trigger('change');
-            });
-
-            $('#selectSOInvoice').on('change', function() {
-                var InvNum = $('#selectInvoice').val();
-                var strCompany = $('#selectCompany').val();
-
-                console.log(InvNum);
-                
-                if (InvNum != "" && InvNum){
-                    $.ajax({
-                        url: '{!!url("/getUpliftmentSalesOrderLines")!!}',
-                        type: "GET",
-                        data: {
-                            InvNum: InvNum,
-                            strCompany: strCompany,
-                        },
-                        success: function (data) {
-                            // console.log(data)
-
-                            setSalesOrderProductDataList(data);
-                        }
-                    });
-                }
-            });
-
-            $('#selectSOProductCode').on('change', function() {
-                var selectedProductCode = $('#selectSOProductCode').val();
-                if (selectedProductCode != ''){
-                    var selectedProduct = products.find(item => item.PastelCode === selectedProductCode);
-                    $('#inputSOProductQty').val(1);
-                    $('#inputSOProductWeight').val(parseFloat(selectedProduct.Weight).toFixed(3));
-                }
-            }); 
-
-            $('#inputSOProductQty').on('change', function() {
-                var qty = parseFloat($('#inputSOProductQty').val()) || 0; // Ensure qty is a valid number
-                var selectedProductCode = $('#selectSOProductCode').val();
-
-                // Find the corresponding product based on the selected PastelCode
-                var selectedProduct = products.find(item => item.PastelCode === selectedProductCode);
-
-                if (selectedProduct) {
-                    // Calculate the new weight based on the quantity
-                    var calculatedWeight = qty * selectedProduct.Weight;
-
-                    // Set the calculated weight in the input field
-                    $('#inputSOProductWeight').val(calculatedWeight.toFixed(3));
-                }
-            });
-
+            //This function is use for Save IBT product
             $('#btnAddProduct').click(function() {
                 var PastelCode = $('#inputProductCode').val();
                 var PastelDescription = $('#inputProductDescription').val();
                 var Weight = $('#inputProductWeight').val();
                 var Qty = $('#inputProductQty').val();
                 var Comment = $('#inputProductComment').val();
-                if (parseFloat(Qty) > parseFloat($('#inputProductQtyAvl').val())) {
-                    alert('Your available quantity is less then added so we can\'t allow this');
-                } else {
-                    $('#inputProductCode').val('');
-                    $('#inputProductDescription').val('');
-                    $('#inputProductWeight').val(0);
-                    $('#inputProductQty').val(0);
-                    $('#inputProductComment').val('');
-                    $('#inputProductQtyAvl').val(0);
-                    var newRow = {
-                        PastelCode: PastelCode, 
-                        PastelDescription: PastelDescription, 
-                        Qty: Qty,
-                        Weight: Weight,
-                        Comment: Comment
-                    };
+                // if (parseFloat(Qty) > parseFloat($('#inputProductQtyAvl').val())) {
+                //     alert("We're sorry, but the quantity you've requested exceeds our current stock, so we can't process request!");
+                // } else {
+                // }
+                $('#inputProductCode').val('');
+                $('#inputProductDescription').val('');
+                $('#inputProductWeight').val(0);
+                $('#inputProductQty').val(0);
+                $('#inputProductComment').val('');
+                $('#inputProductQtyAvl').val(0);
+                var newRow = {
+                    PastelCode: PastelCode, 
+                    PastelDescription: PastelDescription, 
+                    Qty: Qty,
+                    Weight: Weight,
+                    Comment: Comment
+                };
 
-                    if (gridProducts) {
-                        var dataSource = gridProducts.getDataSource();
-                        console.log(newRow);
-                        dataSource.store().insert(newRow);
-                        dataSource.reload();
-                    } else {
-                        console.log('Datagrid not found.');
-                    }
+                if (gridProducts) {
+                    var dataSource = gridProducts.getDataSource();
+                    dataSource.store().insert(newRow);
+                    dataSource.reload();
+                } else {
+                    console.log('Datagrid not found.');
                 }
             });
 
+            //This function is use for Save IBT data with product and convet product to xml and append into formData 
             $('#btnSaveIBT').click(function(){
-
                 var checkedLines = Array();
                 checkedLines = gridProducts.option('dataSource');
-
                 var gridResults = '<xml>';
                 $.each(checkedLines ,function(key,value) {
                     if (value.Qty !=undefined || value.Qty !=null){
@@ -595,10 +400,10 @@ if ((Auth::guest()))
                 });
             });
 
+            //This function is use for Update IBT Data with product
             $('#btnUpdateIBT').click(function(){
                 var checkedLines = Array();
                 checkedLines = gridProducts.option('dataSource');
-
                 var gridResults = '<xml>';
                 $.each(checkedLines ,function(key,value) {
                     if (value.Qty !=undefined || value.Qty !=null){
@@ -634,9 +439,23 @@ if ((Auth::guest()))
                 });
             });
 
-            var viewPermission = '{{ $view }}';
-            var makeUpliftment = '{{ $make }}';
+            getIbtRecords(gridIBT);
 
+            // To clear and close the IBT modal
+            $('#IBTModal').on('hidden.bs.modal', function() {
+                $('#txtIBTNumber').text('');
+                $('#btnUpdateIBT').prop('hidden',true);
+                $('.form-control', IBTModal).val('');
+                date = '';
+                reference = '';
+                gridProducts.option('dataSource', []);
+                gridProducts.refresh();
+            });
+        });
+
+        //This function is use for get ibt records
+        function getIbtRecords(gridIBT) {
+            // Ajax call for Get IBT Records
             $.ajax({
                 url: '{!!url("/getIBTRecords")!!}',
                 type: "GET",
@@ -645,52 +464,74 @@ if ((Auth::guest()))
                     gridIBT.refresh();
                 }
             });
+        }
 
-            function getGridProducts(IbtHeaderId){
-                $.ajax({
-                    url: '{!!url("/getIBTDetails")!!}',
-                    type: 'GET',
-                    data: {
-                        IbtHeaderId: IbtHeaderId
-                    },
-                    success: function(data) {
-                        gridProducts.option('dataSource', data);
-                        gridProducts.refresh();
-                    }
-                });
-            }
-
-            // To clear and close the upliftment modal
-            var IBTModal = $('#IBTModal');
-            $('.closeIBTModal', IBTModal).on('click', function () {
-                IBTModal.hide();
-
-                $('#txtIBTNumber').text('');
-
-                $('#btnUpdateIBT').prop('hidden',true);
-                $('#btnSaveUpliftment').prop('hidden',false);
-
-                $('.form-control', IBTModal).val('');
-                $('.form-select', IBTModal).val('default');
-                $('.form-select', IBTModal).trigger('change.select2');
-                $('.form-select:not(#selectCompany,#selectType)', IBTModal).empty();
-                date = '';
-
-                reference = '';
-
-                gridProducts.option('dataSource', []);
-                gridProducts.refresh();
+        //This function is use for set Products list
+        function setProductsDataList(products){
+            var inputProductCode = $('#inputProductCode').flexdatalist({
+                minLength: 1,
+                valueProperty: '*',
+                selectionRequired: true,
+                focusFirstResult: true,
+                searchContain:true,
+                visibleProperties: ["PastelCode","PastelDescription"],
+                searchIn: ["PastelCode","PastelDescription"],
+                data: products
             });
+            inputProductCode.on('select:flexdatalist', function (event, data) {
+                //fill in inputs of code desc weight, empty qty empty comment..
+                $('#inputProductCode').flexdatalist('value', data.PastelCode);
+                $('#inputProductDescription').flexdatalist('value', data.PastelDescription);
+                if (data.qtyavl != undefined) {
+                    $('#inputProductQtyAvl').val(parseFloat(data.qtyavl));
+                } else {
+                    $('#inputProductQtyAvl').val(0);
+                }
+                $('#inputProductQty').val(1);
+                $('#inputProductWeight').val(parseFloat(data.Weight).toFixed(3));
+            });
+            
+            var inputProductDescription = $('#inputProductDescription').flexdatalist({
+                minLength: 1,
+                valueProperty: '*',
+                selectionRequired: true,
+                focusFirstResult: true,
+                searchContain:true,
+                visibleProperties: ["PastelCode","PastelDescription"],
+                searchIn: ["PastelCode","PastelDescription"],
+                data: products
+            });
+            inputProductDescription.on('select:flexdatalist', function (event, data) {
+                //fill in inputs of code desc weight, empty qty empty comment..
+                $('#inputProductCode').flexdatalist('value', data.PastelCode);
+                $('#inputProductDescription').flexdatalist('value', data.PastelDescription);
+                $('#inputProductQty').val(1);
+                $('#inputProductWeight').val(parseFloat(data.Weight).toFixed(3));
+            });
+        }
 
-            function escapeHtml(unsafe) {
-                return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-            };
+        //Get IBT Details on time of upadte IBT
+        function getGridProducts(IbtHeaderId){
+            $.ajax({
+                url: '{!!url("/getIBTDetails")!!}',
+                type: 'GET',
+                data: {
+                    IbtHeaderId: IbtHeaderId
+                },
+                success: function(data) {
+                    gridProducts.option('dataSource', data);
+                    gridProducts.refresh();
+                }
+            });
+        }
 
-        });
+        function escapeHtml(unsafe) {
+            return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        };
     </script>
 @endsection
