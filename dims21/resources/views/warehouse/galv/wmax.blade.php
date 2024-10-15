@@ -55,7 +55,7 @@
 
 
         <!-- Finalise Job Modal -->
-        <div class="modal fade" id="finalisejob" aria-labelledby="finalisejob" aria-hidden="true">
+        <div class="modal fade" id="finalisejob" aria-labelledby="finalisejob" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -74,7 +74,7 @@
         </div>
 
         <div title="Job Creation" id="createjob" class="modal modal-xl fade" tabindex="-1" role="dialog"
-            aria-labelledby="createjob" aria-hidden="true">
+            aria-labelledby="createjob" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">

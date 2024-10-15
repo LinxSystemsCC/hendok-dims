@@ -32,11 +32,11 @@
 <div id="gridQcPhase2"></div>
 
 <!-- Modal New Item -->
-<div class="modal modal-lg fade" id="modalPassOrFail" aria-labelledby="modalPassOrFail" aria-hidden="true">
+<div class="modal modal-lg fade" id="modalPassOrFail" aria-labelledby="modalPassOrFail" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="qc1TestTitle"></h1>
+                <h1 class="modal-title fs-5" id="qc2TestTitle"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="CloseModal"></button>
             </div>
 

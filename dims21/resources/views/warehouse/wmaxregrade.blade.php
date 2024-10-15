@@ -28,7 +28,7 @@
 
     <div id="gridRegrade"></div>
 
-    <div title="Regrade" id="modalRegrade" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRegradeTitle" aria-hidden="true">
+    <div title="Regrade" id="modalRegrade" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRegradeTitle" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">

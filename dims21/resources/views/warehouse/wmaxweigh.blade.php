@@ -31,7 +31,7 @@
 
 <div id="gridWeigh"></div>
 
-<div class="modal modal-lg fade" id="modalAcceptHold" aria-labelledby="modalAcceptHold" aria-hidden="true">
+<div class="modal modal-lg fade" id="modalAcceptHold" aria-labelledby="modalAcceptHold" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

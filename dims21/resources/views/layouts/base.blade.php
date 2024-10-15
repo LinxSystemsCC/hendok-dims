@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta charset="UTF-8">
@@ -7,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title', 'DIMS Hendok')</title>
     <link rel="icon" type="image/png" href="{{ url('images/dimslogo.png') }}">
-    <link rel="stylesheet" href="{{asset('public/css/colors.css')}}">
+    <link rel="stylesheet" href="{{ asset('public/css/colors.css') }}">
     <link rel="stylesheet" href="{{ asset('public/css/jobmodulestyle_final.css') }}">
     <link rel="stylesheet" href="{{ asset('public/css/myicons.css') }}">
 
@@ -15,12 +16,12 @@
     <link rel="stylesheet" href="{{ asset('public/css/bootstrap.min.css') }}">
 
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('public/css/select2.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('public/css/select2.min.css') }}" />
 
     <!--  Select 2 Bootstrap Theme -->
-    <link rel="stylesheet" href="{{ asset('public/css/select2-bootstrap-5-theme.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('public/css/select2-bootstrap-5-theme.min.css') }}" />
 
-    <link rel="stylesheet" href="{{ asset('public/css/bootstrap-icons.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('public/css/bootstrap-icons.css') }}" />
 
     <!-- DevExtreme theme Light-->
     <link rel="stylesheet" href="{{ asset('public/css/dx.material.Hendok.css') }}">
@@ -30,13 +31,13 @@
     <link rel="stylesheet" href="{{ asset('public/css/jquery.multiselect.css') }}">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('public/css/all.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('public/css/all.min.css') }}" />
 
     <!-- General -->
-    <link rel="stylesheet" href="{{ asset('public/css/general.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('public/css/general.css') }}" />
 
     <!-- Jquery-ui -->
-    <link rel="stylesheet" href="{{ asset('public/css/jquery-ui2.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('public/css/jquery-ui2.min.css') }}" />
 
     <!-- Excel -->
     <script src="{{ asset('public/js/exceljs.min.js') }}"></script>
@@ -52,7 +53,8 @@
             color: var(--hendok-red) !important;
         }
 
-        .dx-pager .dx-page-sizes .dx-selection, .dx-pager .dx-pages .dx-selection {
+        .dx-pager .dx-page-sizes .dx-selection,
+        .dx-pager .dx-pages .dx-selection {
             background-color: var(--hendok-red) !important;
             color: var(--hendok-light);
         }
@@ -61,7 +63,8 @@
             color: var(--hendok-red) !important;
         }
 
-        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-clear-filter, .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
+        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-clear-filter,
+        .dx-datagrid-filter-panel .dx-datagrid-filter-panel-text {
             color: var(--hendok-red) !important;
         }
 
@@ -79,21 +82,21 @@
             background-color: var(--hendok-red) !important;
         }
 
-        .dx-selection{
+        .dx-selection {
             background-color: var(--hendok-red-highlight) !important;
         }
 
-        .text-green{
+        .text-green {
             color: #028A0F;
             font-weight: 500;
         }
 
-        .text-yellow{
+        .text-yellow {
             color: #ffd700;
             font-weight: 500;
         }
 
-        .text-red{
+        .text-red {
             color: #b90e0a;
             font-weight: 500;
         }
@@ -112,11 +115,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Semi-transparent dark background */
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999; /* Ensure it's above other content */
+            z-index: 9999;
+            /* Ensure it's above other content */
             color: white;
         }
 
@@ -131,7 +136,8 @@
             width: 100%;
             height: 100%;
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             display: flex;
             align-items: center;
             align-content: center;
@@ -148,6 +154,7 @@
         .loader__element:nth-child(1) {
             animation: preloader .6s ease-in-out alternate infinite;
         }
+
         .loader__element:nth-child(2) {
             animation: preloader .6s ease-in-out alternate .2s infinite;
         }
@@ -157,9 +164,10 @@
         }
 
         @keyframes preloader {
-            100% { transform: scale(1.3); }
+            100% {
+                transform: scale(1.3);
+            }
         }
-
     </style>
 
 </head>
@@ -175,18 +183,18 @@
 
     <div id="loadingPanel"></div>
 
-    <div class="col-12 d-flex px-0 mh-100 h-100"  style="background: white;">
-        @if(isset($includeMenu) && $includeMenu)
-            <div class="col-custom-2"  style="background: white;">
+    <div class="col-12 d-flex px-0 mh-100 h-100" style="background: white;">
+        @if (isset($includeMenu) && $includeMenu)
+            <div class="col-custom-2" style="background: white;">
                 <div class="vertical-menu">
                     @include('warehouse.menu')
                 </div>
             </div>
-            <div class="col-custom-10 p-3 w-100 ms-2 me-2" >
+            <div class="col-custom-10 p-3 w-100 ms-2 me-2">
                 @yield('page')
             </div>
         @else
-            <div class="col-12 p-3" >
+            <div class="col-12 p-3">
                 @yield('page')
             </div>
         @endif
@@ -220,8 +228,8 @@
 <script src="{{ asset('public/js/general.js') }}"></script>
 
 <script>
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'off' );
+    $(document).on('focus', ':input', function() {
+        $(this).attr('autocomplete', 'off');
     });
 
     $.ajaxSetup({
@@ -230,14 +238,14 @@
         }
     });
 
-    $('.sidebar ul li a').click(function(){
+    $('.sidebar ul li a').click(function() {
         var id = $(this).attr('id');
-        $('nav ul li ul.item-show-'+id).toggleClass("show");
-        $('nav ul li #'+id+' span').toggleClass("rotate");
+        $('nav ul li ul.item-show-' + id).toggleClass("show");
+        $('nav ul li #' + id + ' span').toggleClass("rotate");
 
     });
 
-    $('nav ul li').click(function(){
+    $('nav ul li').click(function() {
         $(this).addClass("active").siblings().removeClass("active");
     });
 
@@ -252,6 +260,33 @@
         shading: true,
     }).dxLoadPanel("instance");
 
+    function setDateFormat(date) {
+        if (!date) {
+            return '';
+        }
+
+        // Check if the date is already in the correct format (yyyy-MM-dd)
+        const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+        if (datePattern.test(date)) {
+            return date;
+        }
+
+        // Parse the date string into a Date object
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate)) {
+            // If the date is invalid, return an empty string or handle the error as needed
+            return '';
+        }
+
+        // Format the date to yyyy-MM-dd
+        const returnFormat = parsedDate.toLocaleDateString("en-ZA", {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+
+        return returnFormat.replace(/\//g, '-');
+    }
 </script>
 
 @yield('scripts')

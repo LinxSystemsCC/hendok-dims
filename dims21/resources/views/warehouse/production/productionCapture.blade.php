@@ -305,6 +305,13 @@
                 text: ''
             });
 
+            let chooseDateRange;
+            // Get the first day of the current month
+            var dteFrom = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+            // Get the last day of the current month
+            var dteTo = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+
             const gridProductionCapture = $("#gridProductionCapture").dxDataGrid({
                 dataSource: productionCapture,
                 showBorders: true,
@@ -550,6 +557,31 @@
                         template: function() {
                             return $('<h3>').text('Production Capture');
                         }
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'before',
+                        widget: "dxDateRangeBox",
+                        options: {
+                            showClearButton: true,
+                            displayFormat: 'yyyy-MM-dd',
+                            width: 300,
+                            value: [dteFrom, dteTo],
+                            label: "Date Range",
+                            onInitialized: function(e) {
+                                chooseDateRange = e.component;
+                            },
+                        }
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'before',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa fa-search",
+                            text: "GET DATA",
+                            onClick: function(args) {
+                                getProductionCapture();
+                            },
+                        },
                     });
                     e.toolbarOptions.items.push({
                         location: 'after',
@@ -881,11 +913,14 @@
             getProductionCapture();
 
             function getProductionCapture() {
+                var dateRange = chooseDateRange.option('value');
                 $.ajax({
                     url: "{!! url('/postProductionCaptureCRUD') !!}",
                     type: "POST",
                     data: {
-                        command: "READ"
+                        command: "READ",
+                        dteFrom: setDateFormat(dateRange[0]),
+                        dteTo: setDateFormat(dateRange[1]),
                     },
                     success: function(data) {
                         gridProductionCapture.option('dataSource', data);

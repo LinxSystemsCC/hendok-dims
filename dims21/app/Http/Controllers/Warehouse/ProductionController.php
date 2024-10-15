@@ -49,10 +49,12 @@ class ProductionController extends Controller
         $intReason4 = $request->get("intReason4");
         $strComment4 = $request->get("strComment4");
         $command = $request->get("command");
+        $dteFrom = $request->get("dteFrom");
+        $dteTo = $request->get("dteTo");
 
-        // dd("'$intAutoId', '$dteOccured', '$intShiftId', '$intDepartmentId', '$intMachineId', '$strProductCode', '$fltWeight', '$fltQty', '$strOperator1', '$strOperator2', '$strOperator3', '$strOperator4', '$fltScrap', '$strDowntime1', '$intReason1', '$strComment1', '$strDowntime2', '$intReason2', '$strComment2', '$strDowntime3', '$intReason3', '$strComment3', '$strDowntime4', '$intReason4', '$strComment4', '$command'");
+        // dd("'$intAutoId', '$dteOccured', '$intShiftId', '$intDepartmentId', '$intMachineId', '$strProductCode', '$fltWeight', '$fltQty', '$strOperator1', '$strOperator2', '$strOperator3', '$strOperator4', '$fltScrap', '$strDowntime1', '$intReason1', '$strComment1', '$strDowntime2', '$intReason2', '$strComment2', '$strDowntime3', '$intReason3', '$strComment3', '$strDowntime4', '$intReason4', '$strComment4', '$command', '$dteFrom', '$dteTo'");
 
-        $data = DB::connection('sqlsrv2')->select("EXEC spProductionCaptureCRUD '$intAutoId', '$dteOccured', '$intShiftId', '$intDepartmentId', '$intMachineId', '$strProductCode', '$fltWeight', '$fltQty', '$strOperator1', '$strOperator2', '$strOperator3', '$strOperator4', '$fltScrap', '$strDowntime1', '$intReason1', '$strComment1', '$strDowntime2', '$intReason2', '$strComment2', '$strDowntime3', '$intReason3', '$strComment3', '$strDowntime4', '$intReason4', '$strComment4', '$command'");
+        $data = DB::connection('sqlsrv2')->select("EXEC spProductionCaptureCRUD '$intAutoId', '$dteOccured', '$intShiftId', '$intDepartmentId', '$intMachineId', '$strProductCode', '$fltWeight', '$fltQty', '$strOperator1', '$strOperator2', '$strOperator3', '$strOperator4', '$fltScrap', '$strDowntime1', '$intReason1', '$strComment1', '$strDowntime2', '$intReason2', '$strComment2', '$strDowntime3', '$intReason3', '$strComment3', '$strDowntime4', '$intReason4', '$strComment4', '$command', '$dteFrom', '$dteTo'");
         return response()->json($data);
     }
 }

@@ -11,10 +11,13 @@
 @section('page')
 
     <div id="gridAdjustment" class="col-lg-12 h-100"></div>
+    <input type="file" id="csvFileInput" accept=".csv" style="display: none;" />
 
 @endsection
 
 @section('scripts')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -34,7 +37,7 @@
 
             let dcs = ({!! json_encode($dcs) !!});
             let locations = ({!! json_encode($locations) !!});
-            let bins = []; //({!! json_encode($bins) !!});
+            let bins = ({!! json_encode($bins) !!});
 
             let countTypes = [{
                 "value": "+",
@@ -79,6 +82,26 @@
                     allowUpdating: true,
                     allowAdding: true,
                     allowDeleting: true,
+                },
+                export: {
+                    enabled: true
+                },
+                onExporting(e) {
+                    const workbook = new ExcelJS.Workbook();
+                    const worksheet = workbook.addWorksheet('StockIssues');
+
+                    DevExpress.excelExporter.exportDataGrid({
+                        component: e.component,
+                        worksheet,
+                        autoFilterEnabled: true,
+                    }).then(() => {
+                        workbook.xlsx.writeBuffer().then((buffer) => {
+                            saveAs(new Blob([buffer], {
+                                type: 'application/octet-stream'
+                            }), 'StockIssues.xlsx');
+                        });
+                    });
+                    e.cancel = true;
                 },
                 columns: [{
                     dataField: "intStockLink",
@@ -250,19 +273,19 @@
                             return $('<h3>').text('Stock Adjustment');
                         }
                     });
-                    // e.toolbarOptions.items.push({
-                    //     location: 'after',
-                    //     widget: "dxButton",
-                    //     options: {
-                    //         icon: "edit",
-                    //         text: "FORM INPUT",
-                    //         type: 'success',
-                    //         stylingMode: 'contained',
-                    //         onClick: function(args) {
-                    //             alert("Show Popup")
-                    //         },
-                    //     },
-                    // }); // Coming Soon
+                    e.toolbarOptions.items.push({
+                        location: 'after',
+                        widget: "dxButton",
+                        options: {
+                            icon: "upload",
+                            text: "IMPORT CSV",
+                            type: 'default',
+                            stylingMode: 'contained',
+                            onClick: function() {
+                                $("#csvFileInput").click();
+                            },
+                        },
+                    });
                     e.toolbarOptions.items.push({
                         location: 'after',
                         widget: "dxButton",
@@ -278,6 +301,61 @@
                     });
                 }
             }).dxDataGrid('instance');
+
+            $("#csvFileInput").on('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    Papa.parse(file, {
+                        header: true,
+                        dynamicTyping: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            console.log(results.data)
+                            const mappedData = results.data.map(function(row) {
+                                // Match intDcId
+                                const dc = dcs.find(dc => dc.strDCName === row['DC']);
+                                const intDcId = dc ? dc.intDcId : null;
+
+                                console.log(row['Code']);
+                                console.log(row['Count Typ']);
+                                console.log(row['Count Type']);
+
+                                // Match intStockLink
+                                const product = products.find(product => product.strPartNumber === row['Code']);
+                                const intStockLink = product ? product.intStockLink : null;
+
+                                // Match intLocationId
+                                const location = locations.find(location => location.strLocationName === row['Warehouse']);
+                                const intLocationId = location ? location.intLocationId : null;
+
+                                // Match intBinId
+                                const bin = bins.find(bin => bin.strBin === row['Bin']);
+                                const intBinId = bin ? bin.intBinId : null;
+
+                                // Match strAdjustmentType
+                                const countType = countTypes.find(type => type.display === row['Count Type']);
+                                const strAdjustmentType = countType ? countType.value : null;
+
+                                return {
+                                    intStockLink: intStockLink, // Mapped StockCode to intStockLink
+                                    strDocType: row['Document Type'],
+                                    intDcId: intDcId, // Mapped DC to intDcId
+                                    intLocationId: intLocationId, // Mapped Warehouse to intLocationId
+                                    intBinId: intBinId, // Mapped Bin to intBinId
+                                    mnyOnHand: row['On Hand'],
+                                    strAdjustmentType: strAdjustmentType, // Mapped AdjustmentType to strAdjustmentType
+                                    mnyAdjustment: row['Adjustment'],
+                                    mnyNewOnHand: row['New Count'],
+                                    strDocReference: row['Reference'],
+                                    strDocReference2: row['Reference 2']
+                                };
+                            });
+                            console.log(mappedData);
+                            gridAdjustment.option('dataSource', mappedData);
+                        }
+                    });
+                }
+            });
 
             function getBins(selectedLocationId) {
                 $.ajax({
