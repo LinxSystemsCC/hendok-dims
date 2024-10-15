@@ -3,7 +3,7 @@ CREATE TABLE tblIBTHeader (
     strReference NVARCHAR(50) NULL,
     dtmCreated DATE NULL,
     intCreatedBy BIGINT DEFAULT 0,
-    intStatus INT NULL 
+    intStatus INT NULL
 );
 
 
@@ -14,7 +14,7 @@ CREATE TABLE tblIBTLines (
     fltWeight FLOAT NULL,
     mnyQty MONEY NULL,
     strComment NVARCHAR(250) NULL,
-    
+
     -- Foreign key constraint (optional, if needed)
     CONSTRAINT FK_tblIBTLines_tblIBTHeader FOREIGN KEY (intAutoHeaderId)
     REFERENCES tblIBTHeader(intAutoId)
@@ -44,7 +44,7 @@ BEGIN
 
     -- Insert product data from XML into the temporary table
     INSERT INTO #tempProductDataDump (pastelcode, pasteldesc, qty, [weight], comment)
-    SELECT 
+    SELECT
         result.value('PastelCode[1]', 'nvarchar(50)'),
         result.value('PastelDescription[1]', 'nvarchar(255)'),
         result.value('Qty[1]', 'float'),
@@ -76,7 +76,7 @@ BEGIN
         mnyQty,
         strComment
     )
-    SELECT 
+    SELECT
         @identityInsertHeader,
         pastelcode,
         [weight],
@@ -105,12 +105,12 @@ BEGIN
 
     -- Update tblIBTHeader
     UPDATE tblIBTHeader
-    SET 
+    SET
         strReference = @reference,
         dtmCreated = @date,
         intCreatedBy = @userID,
         intStatus = @intStatus
-    WHERE 
+    WHERE
         intAutoId = @SelectedIbtHeaderId;
 
     -- Temporary table for product data
@@ -129,7 +129,7 @@ BEGIN
 
     -- Insert product data from XML into the temporary table
     INSERT INTO #tempProductDataDump (pastelcode, pasteldesc, qty, [weight], comment)
-    SELECT 
+    SELECT
         result.value('PastelCode[1]', 'nvarchar(50)'),
         result.value('PastelDescription[1]', 'nvarchar(255)'),
         result.value('Qty[1]', 'float'),
@@ -149,7 +149,7 @@ BEGIN
         mnyQty,
         strComment
     )
-    SELECT 
+    SELECT
         @SelectedIbtHeaderId,
         pastelcode,
         [weight],
@@ -168,21 +168,32 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT intAutoId, intAutoHeaderId, strPartNumber, fltWeight, mnyQty, strComment, PastelDescription
-    FROM tblIBTLines
-    INNER JOIN viewTblProductWeightedCalc 
+    SELECT
+        intAutoId,
+        intAutoHeaderId,
+        strPartNumber AS PastelCode,
+        fltWeight AS Weight,
+        mnyQty AS Qty,
+        strComment AS Comment,
+        PastelDescription
+    FROM
+        tblIBTLines
+    INNER JOIN
+        viewTblProductWeightedCalc
         ON tblIBTLines.strPartNumber COLLATE SQL_Latin1_General_CP1_CI_AS = viewTblProductWeightedCalc.PastelCode
-    WHERE intAutoHeaderId = @ibtnumber;
+    WHERE
+        intAutoHeaderId = @ibtnumber;
 END
 
 
-CREATE view [dbo].[viewtblIBTHeadersData] as 
+
+CREATE view [dbo].[viewtblIBTHeadersData] as
 select
 	intAutoId,
 	strReference,
 	dtmCreated,
 	du.UserName as [Username],
-	CASE 
+	CASE
         WHEN intStatus = 0 THEN 'Pending'
         WHEN intStatus = 1 THEN 'Open'
         WHEN intStatus = 2 THEN 'Complete'
