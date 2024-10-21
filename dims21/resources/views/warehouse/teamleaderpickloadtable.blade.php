@@ -68,9 +68,9 @@
             $totalLoadedQty = 0;
             ?>
             @if($val->isLineInvoiced == 1)
-                <tr id="rtrr{{$ID}}" @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
+                <tr id="rtrr{{$ID}}" @if($val->isPriorityLine == '1') class='text-white' style="background-color: {{ $val->strRowColor }};" @endif>
             @else
-                <tr id="rtrr{{$ID}}" @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
+                <tr id="rtrr{{$ID}}" @if($val->isPriorityLine == '1') class='text-white' style="background-color: {{ $val->strRowColor }};" @endif>
                     @endif
                     <td>{{ $val->OrderDate}}</td>
                     <td>{{$val->OrderNum}}</td>
@@ -109,7 +109,7 @@
                 $totalLoadedQty += floatval($val->mnyLoadedQty);
                 ?>
                 @else
-                    <tr @if($val->isPriorityLine == '1') class='bg-danger text-white' @endif>
+                    <tr @if($val->isPriorityLine == '1') class='text-white' style="background-color: {{ $val->strRowColor }};" @endif>
                         @if($orderdate != $val->OrderDate)
                             <td>{{ $val->OrderDate}}</td>
                         @else
