@@ -22,7 +22,6 @@
 
     <div id="gridProductionCapture"></div>
 
-    <!-- Upliftment Modal -->
     <div class="modal fade modal-lg" id="captureModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">

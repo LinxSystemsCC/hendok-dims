@@ -310,52 +310,85 @@
                         dynamicTyping: true,
                         skipEmptyLines: true,
                         complete: function(results) {
-                            console.log(results.data)
-                            const mappedData = results.data.map(function(row) {
-                                // Match intDcId
-                                const dc = dcs.find(dc => dc.strDCName === row['DC']);
-                                const intDcId = dc ? dc.intDcId : null;
 
-                                console.log(row['Code']);
-                                console.log(row['Count Typ']);
-                                console.log(row['Count Type']);
+                            // We need to process the data asynchronously because of the AJAX call
+                            const processData = results.data.map(function(row) {
+                                return new Promise((resolve, reject) => {
+                                    // Match intDcId
+                                    const dc = dcs.find(dc => dc.strDCName ===
+                                        row['DC']);
+                                    const intDcId = dc ? dc.intDcId : null;
 
-                                // Match intStockLink
-                                const product = products.find(product => product.strPartNumber === row['Code']);
-                                const intStockLink = product ? product.intStockLink : null;
+                                    // Match intStockLink
+                                    const product = products.find(product =>
+                                        product.strPartNumber === row[
+                                            'Code']);
+                                    const intStockLink = product ? product
+                                        .intStockLink : null;
 
-                                // Match intLocationId
-                                const location = locations.find(location => location.strLocationName === row['Warehouse']);
-                                const intLocationId = location ? location.intLocationId : null;
+                                    // Match intLocationId
+                                    const location = locations.find(location =>
+                                        location.strLocationName === row[
+                                            'Warehouse']);
+                                    const intLocationId = location ? location
+                                        .intLocationId : null;
 
-                                // Match intBinId
-                                const bin = bins.find(bin => bin.strBin === row['Bin']);
-                                const intBinId = bin ? bin.intBinId : null;
+                                    // Match intBinId
+                                    const bin = bins.find(bin => bin.strBin ===
+                                        row['Bin']);
+                                    const intBinId = bin ? bin.intBinId : null;
 
-                                // Match strAdjustmentType
-                                const countType = countTypes.find(type => type.display === row['Count Type']);
-                                const strAdjustmentType = countType ? countType.value : null;
+                                    // Match strAdjustmentType
+                                    const countType = countTypes.find(type =>
+                                        type.display === row['Count Type']);
+                                    const strAdjustmentType = countType ?
+                                        countType.value : null;
 
-                                return {
-                                    intStockLink: intStockLink, // Mapped StockCode to intStockLink
-                                    strDocType: row['Document Type'],
-                                    intDcId: intDcId, // Mapped DC to intDcId
-                                    intLocationId: intLocationId, // Mapped Warehouse to intLocationId
-                                    intBinId: intBinId, // Mapped Bin to intBinId
-                                    mnyOnHand: row['On Hand'],
-                                    strAdjustmentType: strAdjustmentType, // Mapped AdjustmentType to strAdjustmentType
-                                    mnyAdjustment: row['Adjustment'],
-                                    mnyNewOnHand: row['New Count'],
-                                    strDocReference: row['Reference'],
-                                    strDocReference2: row['Reference 2']
-                                };
+                                    // Fetch the onHand value using getBinStockCount
+                                    getBinStockCount(intBinId, intStockLink,
+                                        function(onHand) {
+                                            resolve({
+                                                intStockLink: intStockLink,
+                                                strDocType: row['Document Type'],
+                                                intDcId: intDcId,
+                                                intLocationId: intLocationId,
+                                                intBinId: intBinId,
+                                                mnyOnHand: onHand[0]["mnyOnHand"],
+                                                strAdjustmentType: strAdjustmentType,
+                                                mnyAdjustment: row['Adjustment'],
+                                                mnyNewOnHand: row['New Count'],
+                                                strDocReference: row['Reference'],
+                                                strDocReference2: row['Reference 2']
+                                            });
+                                        });
+                                });
                             });
-                            console.log(mappedData);
-                            gridAdjustment.option('dataSource', mappedData);
+
+                            // Wait for all data to be processed before updating the grid
+                            Promise.all(processData).then(function(finalData) {
+                                gridAdjustment.option('dataSource', finalData);
+                            });
                         }
                     });
                 }
             });
+
+            function getBinStockCount(selectedBinId, intStockLink, callback) {
+                $.ajax({
+                    url: '{!! url('/getBinStockCount') !!}',
+                    type: 'GET',
+                    data: {
+                        intBinId: selectedBinId,
+                        intStockLink: intStockLink,
+                    },
+                    success: function(onHand) {
+                        callback(onHand);
+                    },
+                    error: function() {
+                        DevExpress.ui.notify('Failed to load onHandQty.', 'error', 3500);
+                    }
+                });
+            }
 
             function getBins(selectedLocationId) {
                 $.ajax({
@@ -371,23 +404,6 @@
                     },
                     error: function() {
                         DevExpress.ui.notify('Failed to load bins.', 'error', 3500);
-                    }
-                });
-            }
-
-            function getBinStockCount(selectedBinId, intStockLink, callback) {
-                $.ajax({
-                    url: '{!! url('/getBinStockCount') !!}',
-                    type: 'GET',
-                    data: {
-                        intBinId: selectedBinId,
-                        intStockLink: intStockLink,
-                    },
-                    success: function(onHand) {
-                        callback(onHand);
-                    },
-                    error: function() {
-                        DevExpress.ui.notify('Failed to load onHandQty.', 'error', 3500);
                     }
                 });
             }
