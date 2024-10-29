@@ -46,7 +46,7 @@ if ((Auth::guest()))
         <div class="grid" id="gridUpliftment"></div>
 
         <!-- Upliftment Modal -->
-        <div class="modal fade modal-xl" id="upliftmentModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+        <div class="modal fade modal-xl" id="upliftmentModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -758,23 +758,28 @@ if ((Auth::guest()))
 
             };
 
-            function setSalesOrderProductDataList(soProducts){
+            function setSalesOrderProductDataList(soProducts) {
+                // Map the soProducts array to match select2 expected format
+                console.log(soProducts);
                 var soProductList = $.map(JSON.parse(JSON.stringify(soProducts)), function (item) {
                     return {
-                        id: item.PartNumber,
+                        value: item.Code,
+                        id: item.Code,
                         text: item.PDesc
                     };
                 });
 
-                soProductList.unshift({ value: '', id: '', text: '' });
+                // Add an empty option at the beginning
+                soProductList.unshift({ id: '', text: '' });
 
+                // Initialize select2 with the data
                 $('#selectSOProductCode').empty().select2({
                     data: soProductList,
                     theme: 'bootstrap-5',
                     dropdownParent: $('#upliftmentModal'),
                 });
+            }
 
-            };
 
             $('#inputProductQty').on('change', function() {
                 var qty = parseFloat($('#inputProductQty').val()) || 0; // Ensure qty is a valid number
