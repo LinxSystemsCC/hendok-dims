@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreSystemModuleInfoRequest;
-
+use App\Traits\UtilityTrait;
 
 class SystemModuleController extends Controller
 {
+    use UtilityTrait;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
         return view('system-module.index');
     }
 
@@ -24,7 +24,8 @@ class SystemModuleController extends Controller
      */
     public function getSystemModules()
     {
-        $systemModulesList = DB::connection('sqlsrv2')->select('EXEC GetSystemModulesListing');
+        $systemModulesList = DB::connection('sqlsrv2')
+            ->select('EXEC sp_GetSystemModulesListing');
 
         return response()->json($systemModulesList);
     }
@@ -36,9 +37,12 @@ class SystemModuleController extends Controller
      */
     public function create()
     {
-        $nameList = DB::connection('sqlsrv2')->table('tblSystemModules')->select('strName','intAutoId')->get();
+        $parentSystemModules = DB::connection('sqlsrv2')
+            ->table('tblSystemModules')
+            ->select('strName','intAutoId')
+            ->get();
 
-        return view('system-module.create',compact('nameList')); 
+        return view('system-module.create', compact('parentSystemModules'));
     }
 
     /**
@@ -50,33 +54,24 @@ class SystemModuleController extends Controller
     public function store(StoreSystemModuleInfoRequest $request)
     {
         $passData = [
-            'strName' => $request->get('moduleName'),
+            'strName' => $request->get('strName'),
             'intParentId' => $request->get('intParentId'),
             'intAutoId' => $request->get('intAutoId'),
+            'strSlug' => $this->createSlug($request->get('strName')),
             'StatementType' => 'add'
         ];
         DB::connection('sqlsrv2')->statement('
-                EXEC dbo.SystemModules
-                    @intAutoId = :intAutoId,
-	                @intParentsId = :intParentId ,
-                    @strName = :strName ,
-	                @StatementType = :StatementType
-                ',$passData);
+            EXEC dbo.sp_SystemModules
+                @intAutoId = :intAutoId,
+                @intParentId = :intParentId ,
+                @strName = :strName ,
+                @strSlug = :strSlug,
+                @StatementType = :StatementType
+            ',$passData);
 
         return response()->json(['success' => true]);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -85,10 +80,17 @@ class SystemModuleController extends Controller
      */
     public function edit($id)
     {
-        $nameList = DB::connection('sqlsrv2')->table('tblSystemModules')->select('strName','intAutoId')->get();
-        $moduleData = DB::connection('sqlsrv2')->table('tblSystemModules')->where('intAutoId', $id)->first(); 
+        $parentSystemModules = DB::connection('sqlsrv2')
+            ->table('tblSystemModules')
+            ->select('strName','intAutoId')
+            ->get();
 
-        return view('system-module.edit', compact('nameList', 'moduleData'));
+        $systemModule = DB::connection('sqlsrv2')
+            ->table('tblSystemModules')
+            ->where('intAutoId', $id)
+            ->first(); 
+
+        return view('system-module.edit', compact('parentSystemModules', 'systemModule'));
     }
 
 
@@ -101,20 +103,21 @@ class SystemModuleController extends Controller
      */
     public function update(StoreSystemModuleInfoRequest $request, $id)
     {
-        //dd($request);
         $passData = [
-            'strName' => $request->get('moduleName'),
+            'strName' => $request->get('strName'),
             'intParentId' => $request->get('intParentId'),
             'intAutoId' => $id,
+            'strSlug' => '',
             'StatementType' => 'update'
         ];
         DB::connection('sqlsrv2')->statement('
-                EXEC dbo.SystemModules
-                    @intAutoId = :intAutoId,
-	                @intParentsId = :intParentId ,
-                    @strName = :strName ,
-	                @StatementType = :StatementType
-                ',$passData);
+            EXEC dbo.sp_SystemModules
+                @intAutoId = :intAutoId,
+                @intParentId = :intParentId ,
+                @strName = :strName,
+                @strSlug = :strSlug,
+                @StatementType = :StatementType
+            ',$passData);
 
         return response()->json(['success' => true]);
     }
@@ -127,9 +130,8 @@ class SystemModuleController extends Controller
      */
     public function destroy($id)
     {
-        DB::connection('sqlsrv2')->statement('EXEC DeleteSystemModule ?', [$id]);
-    
+        DB::connection('sqlsrv2')->statement('EXEC sp_DeleteSystemModule ?', [$id]);
+
         return response()->json(['success' => true]);
     }
-
 }

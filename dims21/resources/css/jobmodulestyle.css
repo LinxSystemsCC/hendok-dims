@@ -41,7 +41,7 @@ nav ul li{
 nav ul li a{
   position: relative;
   color: white;
-  text-decoration: none;
+  text-decoration: none !important;
   font-size: 13px;
   padding-left: 14px;
   font-weight: 500;
@@ -96,7 +96,7 @@ nav ul li.active ul li a{
 
 a:hover{
   color: #a9a9a9 !important;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .firstmenu{
@@ -167,4 +167,16 @@ nav ul li a span.rotate{
   border-top: 4px solid\9;
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
+}
+/* nav ul li ul li .submenu{
+  color:  #e83f2f !important;
+} */
+
+a.submenu:not([href]):not([tabindex]) {
+  color: #e6e6e6;
+  text-decoration: none !important;
+}
+
+.sidebar ul ul li a.active1{
+  color: #e83f2f;
 }

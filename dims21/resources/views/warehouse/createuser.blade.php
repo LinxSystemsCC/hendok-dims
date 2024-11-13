@@ -370,10 +370,10 @@
                     allowEditing: false,
                 },
             ],
-            onRowDblClick:function(e){ 
-                var intUserID =  e.data.UserID;
-
-                window.open('{!!url("/userpermissions")!!}/' +intUserID, "User" +intUserID);
+            onRowDblClick:function(e){
+                var intUserID = e.data.UserID;
+                var url = '{{ route('newuserpermissions.index', ['userid' => '__USER_ID__']) }}'.replace('__USER_ID__', intUserID);
+                window.open(url, "User" + intUserID);
             },
             onRowRemoving: function(e) {
 

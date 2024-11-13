@@ -36,6 +36,8 @@ use App\Http\Controllers\WireDraw\WireDrawCustomersController;
 use App\Http\Controllers\WireDraw\WireDrawProductsController;
 use App\Http\Controllers\Warehouse\PlanningController;
 use App\Http\Controllers\IbtController;
+use App\Http\Controllers\SystemModuleController;
+use App\Http\Controllers\UserPermissionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1395,9 +1397,17 @@ Route::group(['middleware' => 'auth'], function() {
 });
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::resource('ibt', controller: IbtController::class)->only('index', 'store');
+    Route::resource('ibt',IbtController::class)->only('index', 'store');
     Route::get('getIBTRecords',[IbtController::class,'getIBTRecords'])->name(name: 'getIBTRecords');
     Route::get('getIBTDetails',[IbtController::class,'getIBTDetails']);
     Route::post('update-ibt',[IbtController::class,'updateIBTDetails']);
 });
 
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('system-modules/get-system-modules', [SystemModuleController::class,'getSystemModules'])->name('system-modules.get-system-modules');
+    Route::resource('system-modules',SystemModuleController::class);
+    Route::get('new-userpermissions/{userid}', [UserPermissionsController::class, 'index'])->name('newuserpermissions.index');
+    Route::get('getPermissionsList/{userid}', [UserPermissionsController::class, 'getPermissionsList'])->name('getPermissionsList');
+    Route::post('saveUserPermissions/{userid}', [UserPermissionsController::class, 'saveUserPermissions'])->name('saveUserPermissions');
+    Route::get('get-menu-items/{userid}', [UserPermissionsController::class, 'getAllowedPermissionSystemModules'])->name('get-menu-items');
+});

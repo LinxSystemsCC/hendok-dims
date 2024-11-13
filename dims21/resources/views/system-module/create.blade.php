@@ -8,20 +8,20 @@
         <div id="general-error"></div>
     
         <div class="form-group" id="addCustomerDiv">
-            <label class="control-label" for="moduleName"
+            <label class="control-label" for="strName"
                 style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Name</label>
-            <input type="text" class="form-control input-sm col-xs-1" id="moduleName" name="moduleName">
+            <input type="text" class="form-control input-sm col-xs-1" id="strName" name="strName">
             <!-- Error message will be appended here -->
         </div>
         <div class="form-group">
             <label for="parent" class="col-form-label" style="font-weight: 700;font-size: 15px;">Select Parent</label>
             <select class="form-select dims-select2" id="intParentId" name="intParentId" required>
                 <option value="" selected>Select Parent</option>
-                @foreach ($nameList as $val)
+                @foreach ($parentSystemModules as $val)
                     <option value="{{ $val->intAutoId }}">{{ $val->strName }}</option>
                 @endforeach
             </select>
-        </div>    
+        </div>
     </form>
 </div>
 <div class="modal-footer">

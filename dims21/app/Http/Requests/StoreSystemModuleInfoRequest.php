@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreSystemModuleInfoRequest extends FormRequest
 {
@@ -23,13 +24,24 @@ class StoreSystemModuleInfoRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'moduleName' => 'required',
+        $validations = [
+            'strName' => ['required'],
         ];
+        if ($this->isMethod('put')) {
+            $uniqueName = Rule::unique('tblSystemModules', 'strName')
+                ->ignore($this->route('system_module'), 'intAutoId');
+        } else {
+            $uniqueName = Rule::unique('tblSystemModules', 'strName');
+        }
+        $validations['strName'][] = $uniqueName;
+
+        return $validations;
     }
-    public function attributes(){
+
+    public function attributes()
+    {
         return [
-            'moduleName' => 'Name',
+            'strName' => 'Name',
         ];
     }
 }

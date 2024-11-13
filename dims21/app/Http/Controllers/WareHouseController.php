@@ -861,6 +861,9 @@ class WareHouseController extends Controller
             $sessionUserId = Auth::user()->UserID; 
             $GroupId= Auth::user()->GroupId;
 
+            if (request()->has('menu') && request()->get('menu') == 'newMenu') {
+                session()->put('menu', 'newMenu');
+            }
             if($this->getThings($GroupId,'Has Auto Redirect')){
                 $userDepartment =Auth::user()->strPickingTeams;
                 $departmentMachines = explode('|', $userDepartment);

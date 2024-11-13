@@ -74,13 +74,20 @@
     </style>
 
 </head>
-
 <div class="col-12 d-flex px-0"  style="background: white;">
     <div class="col-custom-2"  style="background: white;">
         <div class="vertical-menu">
             @include('warehouse.menu')
         </div>
     </div>
+    @if (request()->has('newMenu') && request()->get('newMenu') == 1)
+        <div class="form-check newMenu">
+            <input class="form-check-input" type="checkbox" value="" id="isNewMenuShow">
+            <label class="form-check-label" for="isNewMenuShow">
+                To use the new side menu, please check the checkbox
+            </label>
+        </div>
+    @endif
     <div class="col p-3" >
         <div class="flex-center position-ref full-height">
             <div class="content">
@@ -118,6 +125,13 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
+
+    $(document).on('change', '#isNewMenuShow', function(event) {
+        if($("#isNewMenuShow").prop('checked')){
+            window.location.href = '{{ url()->full() }}' + ( '{{ url()->full() }}'.includes('?') ? '&' : '?' ) + 'menu=newMenu';
+        }
+    });
+
     $(document).ready(function() {
 
         $('.sidebar ul li a').on(function(){

@@ -132,14 +132,14 @@
                         export: { enabled: true },
                         onExporting(e) {
                             const workbook = new ExcelJS.Workbook();
-                            const worksheet = workbook.addWorksheet('Wiredraw Customers');
+                            const worksheet = workbook.addWorksheet('System Modules');
                             DevExpress.excelExporter.exportDataGrid({
                                 component: e.component,
                                 worksheet,
                                 autoFilterEnabled: true,
                             }).then(() => {
                                 workbook.xlsx.writeBuffer().then((buffer) => {
-                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Wire Draw Customers.xlsx');
+                                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'System Modules.xlsx');
                                 });
                             });
                             e.cancel = true;
@@ -155,6 +155,11 @@
                             {
                                 dataField: "strName", 
                                 caption: "Name", 
+                                alignment: "left" 
+                            },
+                            {
+                                dataField: "strSlug", 
+                                caption: "Slug Name", 
                                 alignment: "left" 
                             },
                             { 

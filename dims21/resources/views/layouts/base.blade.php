@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="{{ asset('public/css/jobmodulestyle_final.css') }}">
     <link rel="stylesheet" href="{{ asset('public/css/myicons.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('public/css/css.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/css/prismjs.bundle.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/css/jstree.bundle.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/css/plugins.bundle.css') }}" />
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ asset('public/css/bootstrap.min.css') }}">
 
@@ -46,6 +51,10 @@
 
     <!-- jsPDF -->
     <script src="{{ asset('public/js/jspdf.umd.min.js') }}"></script>
+
+    <script src="{{ asset('public/js/plugins.bundle.js') }}"></script>
+    <script src="{{ asset('public/js/scripts.bundle.js') }}"></script>
+    <script src="{{ asset('public/js/prismjs.bundle.js') }}"></script>
 
     <style>
         .dx-datagrid .dx-link {
@@ -218,6 +227,8 @@
 <script src="{{ asset('public/js/jquery.multiselect.js') }}"></script>
 
 <script src="{{ asset('public/js/general.js') }}"></script>
+
+<script src="{{ asset('public/js/jstree.bundle.js') }}"></script>
 
 <script>
     $( document ).on( 'focus', ':input', function(){
