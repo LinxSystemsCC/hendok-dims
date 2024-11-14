@@ -207,7 +207,7 @@
                     calculateCellValue: function(rowData) {
                         let newOnHandValue = parseFloat(rowData.mnyOnHand);
 
-                        if (rowData.strAdjustmentType && rowData.mnyAdjustment) {
+                        if (rowData.strAdjustmentType) {
                             if (rowData.strAdjustmentType === "+") {
                                 newOnHandValue = parseFloat(rowData.mnyOnHand) + rowData
                                     .mnyAdjustment;

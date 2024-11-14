@@ -21,13 +21,15 @@ class WareHouseController extends Controller
 {
     public function createuserpage()
     {
-        $groups = DB::connection('sqlsrv2')->select("select * from tblDIMSGROUPS");
-        $groupTypes = DB::connection('sqlsrv2')->select("select * from tblGroupTypes");
+        $groups = DB::connection('sqlsrv2')->select("SELECT * FROM tblDIMSGROUPS");
+        $groupTypes = DB::connection('sqlsrv2')->select("SELECT * FROM tblGroupTypes");
         $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName FROM viewSage300Employees WHERE EmployeeStatusCode = 'A' ");
+        $printers = DB::connection('sqlsrv3')->select("SELECT * FROM tblPrinters");
         return view('warehouse/createuser')
             ->with('users', $users)
             ->with('groups', $groups)
-            ->with('groupTypes', $groupTypes);
+            ->with('groupTypes', $groupTypes)
+            ->with('printers', $printers);
     }
 
     public function getUserPrinters(Request $request)
@@ -88,6 +90,11 @@ class WareHouseController extends Controller
         $groupType = $request->get('groupType');
         $sageCode = $request->get('sageCode');
         $tablet = $request->get('tablet');
+        $PrinterPathInvoice = $request->get('PrinterPathInvoice');
+        $PrinterPathTruckControl = $request->get('PrinterPathTruckControl');
+        $PrinterPathDeliveryNote = $request->get('PrinterPathDeliveryNote');
+        $PrinterPathUpliftment = $request->get('PrinterPathUpliftment');
+        $PrinterPathTestCert = $request->get('PrinterPathTestCert');
 
         // Check if any of the variables is empty and set them to NULL
         $userName = empty($userName) ? 'NULL' : "'$userName'";
@@ -96,9 +103,14 @@ class WareHouseController extends Controller
         $groupType = empty($groupType) ? 'NULL' : $groupType;
         $sageCode = empty($sageCode) ? 'NULL' : "'$sageCode'";
         $tablet = empty($tablet) ? 'NULL' : $tablet;
+        $PrinterPathInvoice = empty($PrinterPathInvoice) ? 'NULL' : "'$PrinterPathInvoice'";
+        $PrinterPathTruckControl = empty($PrinterPathTruckControl) ? 'NULL' : "'$PrinterPathTruckControl'";
+        $PrinterPathDeliveryNote = empty($PrinterPathDeliveryNote) ? 'NULL' : "'$PrinterPathDeliveryNote'";
+        $PrinterPathUpliftment = empty($PrinterPathUpliftment) ? 'NULL' : "'$PrinterPathUpliftment'";
+        $PrinterPathTestCert = empty($PrinterPathTestCert) ? 'NULL' : "'$PrinterPathTestCert'";
 
         // Build and execute the SQL query
-        $query = "EXEC spUpdateUserInfo $ID, $userName, $email, $groupId, $groupType, $sageCode, $tablet";
+        $query = "EXEC spUpdateUserInfo $ID, $userName, $email, $groupId, $groupType, $sageCode, $tablet, $PrinterPathInvoice, $PrinterPathTruckControl, $PrinterPathDeliveryNote, $PrinterPathUpliftment, $PrinterPathTestCert";
         $update = DB::connection('sqlsrv2')->select($query);
 
         return response()->json($update);
