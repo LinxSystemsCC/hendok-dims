@@ -605,7 +605,7 @@ function getMenuItems()
                             'name' => 'Users',
                             'href' => '/createuserpage',
                             'is_active' => request()->is('createuserpage'),
-                            'is_allow' => in_array('users', $allowedItems),
+                            'is_allow' => in_array('user', $allowedItems),
                         ],
                         [
                             'name' => 'Leaders',
