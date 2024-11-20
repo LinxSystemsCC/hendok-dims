@@ -1399,5 +1399,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getIBTRecords',[IbtController::class,'getIBTRecords'])->name(name: 'getIBTRecords');
     Route::get('getIBTDetails',[IbtController::class,'getIBTDetails']);
     Route::post('update-ibt',[IbtController::class,'updateIBTDetails']);
+    Route::post('update-ibt-lines',[IbtController::class,'updateIbtLines']);
 });
 

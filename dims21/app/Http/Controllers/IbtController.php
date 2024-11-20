@@ -15,9 +15,17 @@ class IbtController extends Controller
      */
     public function index()
     {
-        $products = DB::connection('sqlsrv2')->select("select * from viewTblProductWeightedCalc");
+        $products = DB::connection('sqlsrv2')
+            ->select("select * from viewTblProductWeightedCalc");
+        $dcData = DB::connection('sqlsrv2')
+            ->select("select * from tblDCNames");
+        $gitData = DB::connection('sqlsrv2')
+            ->select("select * from tblLocationNames ln inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId where strLocationType = 'Transit'");
+        $varianceData = DB::connection('sqlsrv2')
+            ->select("select * from tblLocationNames ln inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId where strLocationType = 'Variance'");
 
-        return view('warehouse.ibt',compact('products'));
+
+        return view('warehouse.ibt.ibt',compact('products','dcData','gitData','varianceData'));
     }
 
     /**
@@ -28,13 +36,40 @@ class IbtController extends Controller
      */
     public function store(Request $request)
     {
-        $xmlLines = $request->input('dataxml');
-        $date = $request->input('dtmCreated');
-        $reference = $request->input('strReference');
-        $userID = Auth::user()->UserID;
-        $result = DB::connection('sqlsrv2')->select("exec spCreateIBT '$reference','$date',$userID,0,'$xmlLines' ");
+        if ($request->has('intStatus') && $request->get('intStatus') == 1) {
+            $status = 3;
+        } else {
+            $status = 0;
+        }
+        $result = DB::connection('sqlsrv2')->select(
+            'EXEC spCreateIBT
+                @reference = :reference,
+                @date = :date,
+                @userID = :userID,
+                @intStatus = :intStatus,
+                @intFromDC = :intFromDC,
+                @intToDC = :intToDC,
+                @intGIT = :intGIT,
+                @intVariance = :intVariance,
+                @xmlLines = :xmlLines', 
+            [
+                'reference' => $request->get('strReference'),
+                'date' => $request->get('dtmCreated'),
+                'userID' => Auth::user()->UserID,
+                'intStatus' => $status,
+                'intFromDC' => $request->get('intFromDC'),
+                'intToDC' => $request->get('intToDC'),
+                'intGIT' => $request->get('intGIT'),
+                'intVariance' => $request->get('intVariance'),
+                'xmlLines' => $request->get('dataxml')
+            ]
+        );
 
-        return response()->json(['success' => true]);
+        if ($result[0]->Result == 'Success') {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
     }
 
     /**
@@ -43,7 +78,7 @@ class IbtController extends Controller
     public function getIBTRecords()
     {
         $returndata = DB::connection('sqlsrv2')->select("select * from viewtblIBTHeadersData");
-        
+
         return response()->json($returndata);
     }
 
@@ -67,13 +102,63 @@ class IbtController extends Controller
      */
     public function updateIBTDetails(Request $request)
     {
-        $xmlLines = $request->input('dataxml');
-        $date = $request->input('dtmCreated');
-        $reference = $request->input('strReference');
-        $userID = Auth::user()->UserID;
-        $SelectedIbtHeaderId = $request->input('SelectedIbtHeaderId');
-        $result = DB::connection('sqlsrv2')->select("exec spUpdateIBT $SelectedIbtHeaderId,'$reference','$date',$userID,0, '$xmlLines' ");
+        $intStatus = $request->has('intStatus') && $request->get('intStatus') == 1 ? 3 : 0;
+        $strTlNumber = $request->get('strTlNumber') ?: null;
+        $intVariance = $request->get('intVariance') ?: null;
+        $result = DB::connection('sqlsrv2')->select(
+            'EXEC spUpdateIBT
+                @SelectedIbtHeaderId = :SelectedIbtHeaderId,
+                @reference = :reference,
+                @date = :date,
+                @userID = :userID,
+                @intStatus = :intStatus,
+                @strTlNumber = :strTlNumber,
+                @intFromDC = :intFromDC,
+                @intToDC = :intToDC,
+                @intGIT = :intGIT,
+                @intVariance = :intVariance,
+                @xmlLines = :xmlLines',
+            [
+                'SelectedIbtHeaderId' => $request->get('SelectedIbtHeaderId'),
+                'reference' => $request->get('strReference'),
+                'date' => $request->get('dtmCreated'),
+                'userID' => Auth::user()->UserID,
+                'intStatus' => $intStatus,
+                'strTlNumber' => $strTlNumber,
+                'intFromDC' => $request->get('intFromDC'),
+                'intToDC' => $request->get('intToDC'),
+                'intGIT' => $request->get('intGIT'),
+                'intVariance' => $intVariance,
+                'xmlLines' => $request->get('dataxml')
+            ]
+        );
+        if (isset($result[0]->Result) && $result[0]->Result == 'Success') {
+            return response()->json(['success' => true]);
+        }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => false]);
+    }
+
+    /**
+     * This function is used for Update Qty Received And QtyVariance
+     * 
+     * @param obj $request
+     */
+    public function updateIbtLines(Request $request)
+    {
+        $key = $request->input('key');
+        $values = $request->input('values');
+        $qtyReceived = $values['intQtyReceived'];
+        $qtyVariance = $values['QtyVariance'];
+        $updatedRows = DB::update('UPDATE tblIBTLines 
+            SET intQtyVariance = ?, intQtyReceived = ? 
+            WHERE intAutoId = ?', 
+            [$qtyVariance, $qtyReceived, $key]);
+
+        if ($updatedRows > 0) {
+            return response()->json(['success' => true, 'message' => 'Record updated successfully.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Update failed.']);
+        }
     }
 }

@@ -3,7 +3,12 @@ CREATE TABLE tblIBTHeader (
     strReference NVARCHAR(50) NULL,
     dtmCreated DATE NULL,
     intCreatedBy BIGINT DEFAULT 0,
-    intStatus INT NULL 
+    intStatus INT NULL,
+    intFromDC INT NULL,
+    intToDC INT NULL,
+    intGIT INT NULL, 
+    strTlNumber INT NULL,
+    intVariance INT NULL
 );
 
 
@@ -14,18 +19,31 @@ CREATE TABLE tblIBTLines (
     fltWeight FLOAT NULL,
     mnyQty MONEY NULL,
     strComment NVARCHAR(250) NULL,
-    
+    intQtyVariance int,
+
     -- Foreign key constraint (optional, if needed)
     CONSTRAINT FK_tblIBTLines_tblIBTHeader FOREIGN KEY (intAutoHeaderId)
     REFERENCES tblIBTHeader(intAutoId)
 );
 
 
-CREATE PROCEDURE [dbo].[spCreateIBT]
+USE [linxdbDIMSHendok]
+GO
+/****** Object:  StoredProcedure [dbo].[spCreateIBT]    Script Date: 20-11-2024 7:57:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[spCreateIBT]
     @reference NVARCHAR(50),
     @date DATETIME,
     @userID BIGINT,
     @intStatus INT = 0,
+	@intFromDC INT,
+	@intToDC INT,
+	@intGIT INT,
+	@intVariance INT,
     @xmlLines XML
 AS
 BEGIN
@@ -57,13 +75,21 @@ BEGIN
         strReference,
         dtmCreated,
         intCreatedBy,
-        intStatus
+        intStatus,
+		intFromDC,
+		intToDC,
+		intGIT,
+		intVariance
     )
     VALUES (
         @reference,
         @date,
         @userID,
-        @intStatus
+        @intStatus,
+		@intFromDC,
+		@intToDC,
+		@intGIT,
+		@intVariance
     );
 
     SET @identityInsertHeader = SCOPE_IDENTITY();
@@ -85,6 +111,7 @@ BEGIN
     FROM #tempProductDataDump;
 
     -- Return the created header identity
+	SELECT 'Success' AS Result 
     SELECT @identityInsertHeader AS intAutoHeaderId;
 
     -- Clean up temporary table
@@ -92,12 +119,25 @@ BEGIN
 END
 
 
-CREATE PROCEDURE [dbo].[spUpdateIBT]
+USE [linxdbDIMSHendok]
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateIBT]    Script Date: 20-11-2024 7:58:20 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[spUpdateIBT]
     @SelectedIbtHeaderId BIGINT,
     @reference NVARCHAR(50),
     @date DATE,
     @userID BIGINT,
     @intStatus INT = 0,
+	@strTlNumber varchar(255) null,
+	@intFromDC INT null,
+	@intToDC INT null,
+	@intGIT INT null,
+	@intVariance INT null,
     @xmlLines XML
 AS
 BEGIN
@@ -109,7 +149,12 @@ BEGIN
         strReference = @reference,
         dtmCreated = @date,
         intCreatedBy = @userID,
-        intStatus = @intStatus
+        intStatus = @intStatus,
+		strTlNumber = @strTlNumber,
+		intFromDC = @intFromDC,
+		intToDC = @intToDC,
+		intGIT = @intGIT,
+		intVariance = @intVariance
     WHERE 
         intAutoId = @SelectedIbtHeaderId;
 
@@ -124,7 +169,7 @@ BEGIN
         pasteldesc NVARCHAR(255),
         qty FLOAT,
         [weight] FLOAT,
-        comment NVARCHAR(255)
+        comment NVARCHAR(255),
     );
 
     -- Insert product data from XML into the temporary table
@@ -160,36 +205,61 @@ BEGIN
     -- Clean up temporary table
     DROP TABLE #tempProductDataDump;
 	SELECT @SelectedIbtHeaderId AS intAutoId
+
+	-- Return the created header identity
+	SELECT 'Success' AS Result 
 END
 
-CREATE PROCEDURE [dbo].[spGetIBTDetails]
+USE [linxdbDIMSHendok]
+GO
+/****** Object:  StoredProcedure [dbo].[spGetIBTDetails]    Script Date: 20-11-2024 8:00:55 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[spGetIBTDetails]
     @ibtnumber INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT intAutoId, intAutoHeaderId, strPartNumber, fltWeight, mnyQty, strComment, PastelDescription
+    SELECT intAutoId, intAutoHeaderId, strPartNumber as PastelCode, fltWeight as Weight, mnyQty as Qty, strComment as Comment, PastelDescription,intQtyVariance,intQtyReceived
     FROM tblIBTLines
     INNER JOIN viewTblProductWeightedCalc 
         ON tblIBTLines.strPartNumber COLLATE SQL_Latin1_General_CP1_CI_AS = viewTblProductWeightedCalc.PastelCode
     WHERE intAutoHeaderId = @ibtnumber;
 END
 
+USE [linxdbDIMSHendok]
+GO
 
-CREATE view [dbo].[viewtblIBTHeadersData] as 
+/****** Object:  View [dbo].[viewtblIBTHeadersData]    Script Date: 20-11-2024 7:59:39 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER view [dbo].[viewtblIBTHeadersData] as 
 select
 	intAutoId,
 	strReference,
+	intFromDC,
+	intToDC,
+	intGIT,
+	intVariance,
 	dtmCreated,
 	du.UserName as [Username],
+
 	CASE 
         WHEN intStatus = 0 THEN 'Pending'
-        WHEN intStatus = 1 THEN 'Open'
-        WHEN intStatus = 2 THEN 'Complete'
+        WHEN intStatus = 1 THEN 'Planned'
+        WHEN intStatus = 2 THEN 'Issue'
+		WHEN intStatus = 3 THEN 'Receive'
         ELSE ''
     END AS strStatus
 from tblIBTHeader as head
 inner join tblDIMSUSERS du on du.UserID = head.intCreatedBy
+GO
 
 
 --============Updated the View viewTblProductWeightedCalc=============
