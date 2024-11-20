@@ -56,6 +56,23 @@
                             return {
                                 'parent': node.id // Send the parent ID to the backend
                             };
+                        },
+                        'dataFilter': function(data) {
+                            // After receiving the data, but before rendering it, modify it here
+                            var jsonData = JSON.parse(data);
+                            console.log(jsonData)
+
+                            // Modify the 'state' of each node based on isChecked before passing it to jsTree
+                            jsonData.forEach(function (item) {
+                                console.log(item.state.selected)
+                                item.state = item.state || {};  // Make sure state is initialized
+                                item.state.selected = (item.state.selected);  // Set checkbox state
+                                item.state.checked = (item.state.selected);  // Set checkbox state (ensure checked state matches)
+                            });
+                            console.log(jsonData)
+
+                            // Return the modified data
+                            return JSON.stringify(jsonData);
                         }
                     }
                 },
@@ -67,8 +84,15 @@
                         "icon": "ki-solid ki-file text-warning"
                     }
                 },
-                "plugins": ["wholerow", "checkbox", "types"]
+                "plugins": ["wholerow", "checkbox", "types"],
+                "checkbox": {
+                    "three_state": false,  // Disable three-state checkboxes
+                    "cascade": "down",     // Or "up" depending on how you want cascading
+                    "visible": true,
+                    "keep_selected_style": false  // Disable extra styles for selected nodes
+                }
             });
+
 
             $(document).on('click', '#savescustomername', function(event) {
                 event.preventDefault();
