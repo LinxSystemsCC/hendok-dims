@@ -205,17 +205,18 @@ inner join tblDIMSUSERS du on du.UserID = head.intCreatedBy
 
 --============Updated the View viewTblProductWeightedCalc=============
 ALTER view [dbo].[viewTblProductWeightedCalc] as (
-select  Code [PastelCode],Description_1 as [PastelDescription], ISNULL(ufIIWeight,1) as [Weight],mnySumAvail as [qtyavl] from [Hendok Distribution].dbo._bvStockFull
-Left JOIN tblInventory ON Code COLLATE SQL_Latin1_General_CP1_CI_AS = tblInventory.strPartNumber
+	select  Code [PastelCode],Description_1 as [PastelDescription], ISNULL(ufIIWeight,1) as [Weight],mnySumAvail as [qtyavl] from [Hendok Distribution].dbo._bvStockFull
+	Left JOIN tblInventory ON Code COLLATE SQL_Latin1_General_CP1_CI_AS = tblInventory.strPartNumber
+)
 
 --===========IBT NEW CHANGES(DATE - 20-11-2024(D-M-Y)))============
 
 ALTER TABLE tblIBTHeader
-ADD 
+ADD
     intFromDC INT NULL,
     intToDC INT NULL,
     intGIT INT NULL,
-    strTlNumber INT NULL,
+    strTlNumber NVARCHAR(100) NULL,
     intVariance INT NULL;
 
 
@@ -253,7 +254,7 @@ BEGIN
 
     -- Insert product data from XML into the temporary table
     INSERT INTO #tempProductDataDump (pastelcode, pasteldesc, qty, [weight], comment)
-    SELECT 
+    SELECT
         result.value('PastelCode[1]', 'nvarchar(50)'),
         result.value('PastelDescription[1]', 'nvarchar(255)'),
         result.value('Qty[1]', 'float'),
@@ -293,7 +294,7 @@ BEGIN
         mnyQty,
         strComment
     )
-    SELECT 
+    SELECT
         @identityInsertHeader,
         pastelcode,
         [weight],
@@ -302,7 +303,7 @@ BEGIN
     FROM #tempProductDataDump;
 
     -- Return the created header identity
-	SELECT 'Success' AS Result 
+	SELECT 'Success' AS Result
     SELECT @identityInsertHeader AS intAutoHeaderId;
 
     -- Clean up temporary table
@@ -329,7 +330,7 @@ BEGIN
 
     -- Update tblIBTHeader
     UPDATE tblIBTHeader
-    SET 
+    SET
         strReference = @reference,
         dtmCreated = @date,
         intCreatedBy = @userID,
@@ -339,7 +340,7 @@ BEGIN
 		intToDC = @intToDC,
 		intGIT = @intGIT,
 		intVariance = @intVariance
-    WHERE 
+    WHERE
         intAutoId = @SelectedIbtHeaderId;
 
     -- Temporary table for product data
@@ -358,7 +359,7 @@ BEGIN
 
     -- Insert product data from XML into the temporary table
     INSERT INTO #tempProductDataDump (pastelcode, pasteldesc, qty, [weight], comment)
-    SELECT 
+    SELECT
         result.value('PastelCode[1]', 'nvarchar(50)'),
         result.value('PastelDescription[1]', 'nvarchar(255)'),
         result.value('Qty[1]', 'float'),
@@ -378,7 +379,7 @@ BEGIN
         mnyQty,
         strComment
     )
-    SELECT 
+    SELECT
         @SelectedIbtHeaderId,
         pastelcode,
         [weight],
@@ -391,7 +392,7 @@ BEGIN
 	SELECT @SelectedIbtHeaderId AS intAutoId
 
 	-- Return the created header identity
-	SELECT 'Success' AS Result 
+	SELECT 'Success' AS Result
 END
 
 
@@ -403,7 +404,7 @@ BEGIN
 
     SELECT intAutoId, intAutoHeaderId, strPartNumber as PastelCode, fltWeight as Weight, mnyQty as Qty, strComment as Comment, PastelDescription,intQtyVariance,intQtyReceived
     FROM tblIBTLines
-    INNER JOIN viewTblProductWeightedCalc 
+    INNER JOIN viewTblProductWeightedCalc
         ON tblIBTLines.strPartNumber COLLATE SQL_Latin1_General_CP1_CI_AS = viewTblProductWeightedCalc.PastelCode
     WHERE intAutoHeaderId = @ibtnumber;
 END
@@ -426,12 +427,12 @@ SELECT
     ln2.strLocationName As gitstrLocationName,
     dc.strDCName,
     dc2.strDCName AS toDCName,
-
-    CASE 
+	head.strTlNumber,
+    CASE
         WHEN intStatus = 0 THEN 'Pending'
         WHEN intStatus = 1 THEN 'Planned'
-        WHEN intStatus = 2 THEN 'Issue'
-        WHEN intStatus = 3 THEN 'Receive'
+        WHEN intStatus = 2 THEN 'Issued'
+        WHEN intStatus = 3 THEN 'Received'
         ELSE ''
     END AS strStatus
 FROM tblIBTHeader AS head

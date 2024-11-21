@@ -12,7 +12,7 @@
 
 @section('page')
     <!-- Flexdatalist -->
-    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>  
+    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>
 
     <style>
         .grid{
@@ -22,10 +22,10 @@
     </style>
 
     <div class="col-md-12 h-100">
-        
+
         <div class="grid" id="gridIBT"></div>
         <!-- IBT Modal -->
-        <div class="modal fade modal-xl" id="IBTModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+        <div class="modal fade modal-xl extra-large" id="IBTModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -95,8 +95,14 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-6 tlnumber_container">
+                                <div class="form-group mb-2">
+                                    <label class="control-label fw-bold" for="strTlNumber">TL Number</label>
+                                    <input  class="form-control w-100 strTlNumber" id="strTlNumber" required>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row d-inline-flex border bg-light mt-3 mb-3 mx-1 modal-lg">
+                        <div class="row d-inline-flex border bg-light mt-3 mb-3 mx-1 modal-lg add_product_section">
                             <label class="control-label fw-bold">By Products</label>
                             <div class="col-2 pe-0">
                                 <div class="form-group mb-2">
@@ -156,18 +162,12 @@
                 </div>
             </div>
         </div>
-        <!-- IBT Issue Modal -->
-        @include('warehouse.ibt.issue-model-popup')
-        <!-- IBT Receive Modal -->
-        @include('warehouse.ibt.receive-model-popup')
-        <!-- IBT Receive Modal -->
-        @include('warehouse.ibt.Planned-model-popup')
     </div>
 
 @endsection
 
 @section('scripts')
-    <!-- Flexdatalist -->  
+    <!-- Flexdatalist -->
     <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
     <script>
         var products = JSON.parse(JSON.stringify({!! json_encode($products) !!}));
@@ -180,16 +180,17 @@
             };
         });
         var gridProducts;
+        var selectedStatus = "";
+        var SelectedIbtHeaderId = null;
+        var selectedIBT = null;
         $(document).ready(function() {
-            var selectedStatus = "";
-            var SelectedIbtHeaderId = null;
 
             $('#IBTModal').on('shown.bs.modal', function () {
                 $('.select2').select2({
                     theme: 'bootstrap-5',
                     dropdownParent: $('#IBTModal'),
                 });
-            }); 
+            });
             //This is use for disply the IBT list
             let showReceivedButton = false;
             const gridIBT = $("#gridIBT").dxDataGrid({
@@ -276,6 +277,11 @@
                         caption: "Created By",
                     },
                     {
+                        dataField: "strTlNumber",
+                        caption: "TL Number",
+                        visible: false,
+                    },
+                    {
                         dataField: "dtmCreated",
                         caption: "Created Date",
                         customizeText: function(cellInfo) {
@@ -311,19 +317,7 @@
                                 icon: "fa fa-plus",
                                 text: "ADD",
                                 onClick: function () {
-                                    $('#IBTModal').modal('show');
-                                    $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
-                                    $('#btnSaveIBT').prop('hidden', false);
-                                    $('.btnUpdateIBT').prop('hidden', true);
-                                    $('.txtIBTNumber').text('');
-                                    $('.btnUpdateIBT').prop('hidden',true);
-                                    $('.form-control', IBTModal).val('');
-                                    $('.intFromDC').val('');
-                                    $('.intToDC').val('');
-                                    $('.intGIT').val('');
-                                    $('.intVariance').val('');
-                                    gridProducts.option('dataSource', []);
-                                    gridProducts.refresh();
+                                    modalPopupShow('add');
                                 },
                             },
                         }
@@ -334,8 +328,9 @@
                         options: {
                             text: "Received",
                             onClick: function () {
-                                $('#IBTReceiveModal').modal('show');
-                                $('#intStatus').val(1);
+                                modalPopupShow('received', selectedIBT);
+                                // $('#IBTReceiveModal').modal('show');
+                                // $('#intStatus').val(1);
                             },
                         }
                     };
@@ -344,26 +339,13 @@
                     }
                 },
                 onRowDblClick: function (e) {
-                    if (e.data.strStatus !== "Issue" && e.data.strStatus !== "Receive" && e.data.strStatus !== "Planned") {
-                        selectedStatus = e.data.strStatus;
-                        SelectedIbtHeaderId = e.data.intAutoId;
-                        $('#IBTModal').modal('toggle');
-                        if (SelectedIbtHeaderId) {
-                            var numericPart = (1000000 + SelectedIbtHeaderId).toString().slice(-6);
-                            $('#newuserLabel').text('Update IBT');
-                            $('.txtIBTNumber').text('IBT' + numericPart);
-                        }
-                        $('#btnSaveIBT').prop('hidden', true);
-                        $('.btnUpdateIBT').prop('hidden', false);
-                        $('#inputDate').val(e.data.dtmCreated);
-                        $('#strReference').val(e.data.strReference);
-                        $('#intFromDC').val(e.data.intFromDC);
-                        $('#intToDC').val(e.data.intToDC);
-                        $('#intGIT').val(e.data.intGIT);
-                        $('#intVariance').val(e.data.intVariance);
+                    if (e.data.strStatus == "Pending") {
+                        modalPopupShow('update', e);
+                    } else {
+                        modalPopupShow('show', e);
                     }
 
-                    // this is not working. 
+                    // this is not working.
                     // if (e.data.strStatus === "Issue") {
                     //     getGridProducts(e.data.intAutoId);
                     //     $('.inputDate').val(e.data.dtmCreated);
@@ -375,22 +357,19 @@
                     //     getIssueModalProducts(e.data.intAutoId);
                     // }
 
-                    if (e.data.strStatus == "Planned") {
-                        $('#IBTPlannedModal').modal('show');
-                        getPlannedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
-                    }
 
-                    if (e.data.strStatus === "Receive") {
-                        $('#IBTReceiveModal').modal('show');
-                        ReceivedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
-                    }
-                    getGridProducts(e.data.intAutoId);
+
+                    // if (e.data.strStatus === "Received") {
+                    //     $('#IBTReceiveModal').modal('show');
+                    //     ReceivedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
+                    // }
                 },
                 onRowClick: function (e) {
-                    if (e.data && e.data.strStatus === "Issue") {
+                    if (e.data && e.data.strStatus === "Issued") {
                         showReceivedButton = true;
                         selectedStatus = e.data.strStatus;
                         SelectedIbtHeaderId = e.data.intAutoId;
+                        selectedIBT = e;
                         e.component.repaint();
                         if (e.data.intAutoId) {
                             ReceivedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
@@ -399,12 +378,12 @@
                         showReceivedButton = false;
                         setTimeout(function () {
                             e.component.repaint();
-                        }, 20); 
+                        }, 20);
                     }
                 },
             }).dxDataGrid('instance');
 
-            //This is use for disply the Products list 
+            //This is use for disply the Products list
             gridProducts = $(".gridProducts").dxDataGrid({
                 dataSource:[], //as json
                 hoverStateEnabled: true,
@@ -418,7 +397,8 @@
                     pageSize: 10,
                 },
                 editing: {
-                    mode: "row",
+                    mode: "cell",
+                    allowUpdating: true,
                     allowDeleting: true,
                 },
                 columns: [
@@ -435,6 +415,7 @@
                     {
                         dataField: "Qty",
                         caption: "Qty",
+                        allowEditing: false,
                     },
                     {
                         dataField: "Weight",
@@ -445,13 +426,24 @@
                     {
                         dataField: "Comment",
                         caption: "Comment",
+                        allowEditing: false,
                     },
+                    {
+                        dataField: "intQtyReceived",
+                        caption: "Qty Received",
+                        allowEditing: false,
+                    },
+                    {
+                        dataField: "intQtyVariance",
+                        caption: "Qty Variance",
+                        allowEditing: false,
+                    }
                 ],
                 onRowRemoving: function(e) {
-                    
+
                 },
                 onRowDblClick: function(e) {
-                    
+
                 },
                 onToolbarPreparing: function (e) {
                     e.toolbarOptions.items.unshift(
@@ -502,8 +494,8 @@
                 $('#inputProductComment').val('');
                 $('#inputProductQtyAvl').val(0);
                 var newRow = {
-                    PastelCode: PastelCode, 
-                    PastelDescription: PastelDescription, 
+                    PastelCode: PastelCode,
+                    PastelDescription: PastelDescription,
                     Qty: Qty,
                     Weight: Weight,
                     Comment: Comment
@@ -518,8 +510,9 @@
                 }
             });
 
-            //This function is use for Save IBT data with product and convet product to xml and append into formData 
+            //This function is use for Save IBT data with product and convet product to xml and append into formData
             $('#btnSaveIBT').click(function() {
+                loadingPanel.option('visible', true);
                 var checkedLines = Array();
                 checkedLines = gridProducts.option('dataSource');
                 var gridResults = '<xml>';
@@ -553,14 +546,19 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        loadingPanel.option('visible', true);
                         location.reload();
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
                     }
                 });
             });
 
             //This function is use for Update IBT Data with product
             $('.update-record').click(function(){
-                
+                loadingPanel.option('visible', true);
                 var checkedLines = Array();
                 checkedLines = gridProducts.option('dataSource');
                 var gridResults = '<xml>';
@@ -591,7 +589,7 @@
                 if ($('.strTlNumber') != '') {
                     formData.append('strTlNumber',$('.strTlNumber').val());
                 }
-                
+
 
                 $.ajax({
                     url: '{!! url("update-ibt") !!}',
@@ -600,7 +598,12 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        loadingPanel.option('visible', true);
                         location.reload();
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
                     }
                 });
             });
@@ -702,5 +705,88 @@
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
         };
+
+        function modalPopupShow(action, e) {
+            if (e) {
+                selectedStatus = e.data.strStatus;
+                SelectedIbtHeaderId = e.data.intAutoId;
+            }
+            $('#IBTModal').modal('show');
+            gridProducts.option("editing.allowDeleting", true);
+            if (action != 'add') {
+                if (SelectedIbtHeaderId) {
+                    var numericPart = (1000000 + SelectedIbtHeaderId).toString().slice(-6);
+                    $('.txtIBTNumber').text('IBT' + numericPart);
+                }
+                $('#inputDate').val(e.data.dtmCreated);
+                $('#strReference').val(e.data.strReference);
+                $('#intFromDC').val(e.data.intFromDC);
+                $('#intToDC').val(e.data.intToDC);
+                $('#intGIT').val(e.data.intGIT);
+                $('#intVariance').val(e.data.intVariance);
+                $('#strTlNumber').val(e.data.strTlNumber);
+                getGridProducts(e.data.intAutoId);
+            }
+            $('#strTlNumber').attr('disabled', true);
+            $(".tlnumber_container").hide();
+            if (action != 'show') {
+                $('#inputDate').removeAttr('disabled');
+                $('#strReference').removeAttr('disabled');
+                $('#intFromDC').removeAttr('disabled');
+                $('#intToDC').removeAttr('disabled');
+                $('#intGIT').removeAttr('disabled');
+                $('#intVariance').removeAttr('disabled');
+            }
+            if (action == 'add') {
+                $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
+                $('#btnSaveIBT').prop('hidden', false);
+                $('.btnUpdateIBT').prop('hidden', true);
+                $('.txtIBTNumber').text('');
+                $('.btnUpdateIBT').prop('hidden',true);
+                $('.form-control', IBTModal).val('');
+                $('.intFromDC').val('');
+                $('.intToDC').val('');
+                $('.intGIT').val('');
+                $('.intVariance').val('');
+                $(".add_product_section").removeClass('d-none');
+                gridProducts.option('dataSource', []);
+                gridProducts.refresh();
+            } else if(action == 'update') {
+                $('#newuserLabel').text('Update IBT');
+                $('#btnSaveIBT').prop('hidden', true);
+                $('.btnUpdateIBT').prop('hidden', false);
+                $(".add_product_section").removeClass('d-none');
+            } else if(action == 'received') {
+                $('#newuserLabel').text('Receive IBT');
+                $('.btnUpdateIBT').prop('hidden', false);
+            } else if(action == 'show') {
+                $('#newuserLabel').text('IBT Details');
+                $('.btnUpdateIBT').prop('hidden', true);
+            }
+            if(action == 'received' || action == 'show') {
+                $('#btnSaveIBT').prop('hidden', true);
+                $(".add_product_section").addClass('d-none');
+                gridProducts.option("editing.allowDeleting", false);
+                $('#inputDate').attr('disabled', true);
+                $('#strReference').attr('disabled', true);
+                $('#intFromDC').attr('disabled', true);
+                $('#intToDC').attr('disabled', true);
+                $('#intGIT').attr('disabled', true);
+                $('#intVariance').attr('disabled', true);
+                $(".tlnumber_container").show();
+            }
+            gridProducts.columnOption("Qty", "caption", "Qty");
+            gridProducts.columnOption("intQtyReceived", "visible", false);
+            gridProducts.columnOption("intQtyVariance", "visible", false);
+            if (e.data.strStatus === "Received" || action == 'received') {
+                gridProducts.columnOption("Qty", "caption", "Qty Issued");
+                gridProducts.columnOption("intQtyReceived", "visible", true);
+                gridProducts.columnOption("intQtyVariance", "visible", true);
+            }
+            gridProducts.columnOption("intQtyReceived", "allowEditing", false);
+            if (e.data.strStatus === "Received" || action == 'received') {
+                gridProducts.columnOption("intQtyReceived", "allowEditing", true);
+            }
+        }
     </script>
 @endsection

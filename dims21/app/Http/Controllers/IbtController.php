@@ -25,7 +25,7 @@ class IbtController extends Controller
             ->select("select * from tblLocationNames ln inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId where strLocationType = 'Variance'");
 
 
-        return view('warehouse.ibt.ibt',compact('products','dcData','gitData','varianceData'));
+        return view('warehouse.ibt.index',compact('products','dcData','gitData','varianceData'));
     }
 
     /**
@@ -51,7 +51,7 @@ class IbtController extends Controller
                 @intToDC = :intToDC,
                 @intGIT = :intGIT,
                 @intVariance = :intVariance,
-                @xmlLines = :xmlLines', 
+                @xmlLines = :xmlLines',
             [
                 'reference' => $request->get('strReference'),
                 'date' => $request->get('dtmCreated'),
@@ -85,14 +85,14 @@ class IbtController extends Controller
 
     /**
      * This function is used for get IBT Details
-     * 
+     *
      * @param obj $request
      */
     public function getIBTDetails(Request $request)
     {
         if (is_array($request->all())) {
             $ibtHeaderId = $request->all()['IbtHeaderId'];
-            
+
         } else {
             $ibtHeaderId = $request->get('IbtHeaderId');
         }
@@ -103,13 +103,13 @@ class IbtController extends Controller
 
     /**
      * This function is used for Update IBT Details
-     * 
+     *
      * @param obj $request
      */
     public function updateIBTDetails(Request $request)
     {
         $intStatus = $request->has('intStatus') && $request->get('intStatus') == 1 ? 3 : 0;
-        
+
         $strTlNumber = $request->get('strTlNumber') ?: null;
         $intVariance = $request->get('intVariance') ?: null;
         $result = DB::connection('sqlsrv2')->select(
@@ -148,7 +148,7 @@ class IbtController extends Controller
 
     /**
      * This function is used for Update Qty Received And QtyVariance
-     * 
+     *
      * @param obj $request
      */
     public function updateIbtLines(Request $request)
@@ -157,9 +157,9 @@ class IbtController extends Controller
         $values = $request->input('values');
         $qtyReceived = $values['intQtyReceived'];
         $qtyVariance = $values['QtyVariance'];
-        $updatedRows = DB::update('UPDATE tblIBTLines 
-            SET intQtyVariance = ?, intQtyReceived = ? 
-            WHERE intAutoId = ?', 
+        $updatedRows = DB::update('UPDATE tblIBTLines
+            SET intQtyVariance = ?, intQtyReceived = ?
+            WHERE intAutoId = ?',
             [$qtyVariance, $qtyReceived, $key]);
 
         if ($updatedRows > 0) {
