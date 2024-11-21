@@ -86,7 +86,6 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="btnUpdateIBT" class="btn btn-success update-record">Update</button>
             </div>
         </div>
     </div>

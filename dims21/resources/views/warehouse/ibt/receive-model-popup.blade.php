@@ -86,6 +86,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnUpdateIBT" class="btn btn-success update-record">Update</button>
             </div>
         </div>
     </div>
@@ -125,6 +126,7 @@
                                     filter: loadOptions.filter
                                 },
                                 success: function (data) {
+                                    console.log(data);
                                     // Check and populate data if needed
                                     return { data: data, totalCount: data.length };
                                 },
@@ -201,11 +203,11 @@
                         pageSize: 10
                     },
                     columns: [
-                        { dataField: "PastelCode", caption: "Item Code", allowEditing: false },
-                        { dataField: "PastelDescription", caption: "Pastel Description", allowEditing: false },
-                        { dataField: "Qty", caption: "Qty Issue", allowEditing: false },
-                        { dataField: "Weight", caption: "Weight", dataType: 'number', allowEditing: false },
-                        { dataField: "Comment", caption: "Comment", allowEditing: false },
+                        { dataField: "PastelCode", caption: "Item Code" },
+                        { dataField: "PastelDescription", caption: "Pastel Description" },
+                        { dataField: "Qty", caption: "Qty Issue" },
+                        { dataField: "Weight", caption: "Weight", dataType: 'number' },
+                        { dataField: "Comment", caption: "Comment" },
                         { dataField: "intQtyReceived", caption: "Qty Received" },
                         { dataField: "intQtyVariance", caption: "Qty Variance", allowEditing: false }
                     ]

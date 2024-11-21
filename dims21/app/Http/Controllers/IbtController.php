@@ -90,7 +90,12 @@ class IbtController extends Controller
      */
     public function getIBTDetails(Request $request)
     {
-        $ibtHeaderId = $request->get('IbtHeaderId');
+        if (is_array($request->all())) {
+            $ibtHeaderId = $request->all()['IbtHeaderId'];
+            
+        } else {
+            $ibtHeaderId = $request->get('IbtHeaderId');
+        }
         $ibtDetails = DB::connection('sqlsrv2')->select("exec spGetIBTDetails ?", array($ibtHeaderId));
 
         return response()->json($ibtDetails);
@@ -104,6 +109,7 @@ class IbtController extends Controller
     public function updateIBTDetails(Request $request)
     {
         $intStatus = $request->has('intStatus') && $request->get('intStatus') == 1 ? 3 : 0;
+        
         $strTlNumber = $request->get('strTlNumber') ?: null;
         $intVariance = $request->get('intVariance') ?: null;
         $result = DB::connection('sqlsrv2')->select(

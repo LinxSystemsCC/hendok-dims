@@ -24,7 +24,6 @@
     <div class="col-md-12 h-100">
         
         <div class="grid" id="gridIBT"></div>
-
         <!-- IBT Modal -->
         <div class="modal fade modal-xl" id="IBTModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
@@ -335,11 +334,11 @@
                         options: {
                             text: "Received",
                             onClick: function () {
-                                $('#IBTIssueModal').modal('show');
+                                $('#IBTReceiveModal').modal('show');
                                 $('#intStatus').val(1);
                             },
                         }
-                    };  
+                    };
                     if (showReceivedButton) {
                         e.toolbarOptions.items.push(receivedButton);
                     }
@@ -364,6 +363,18 @@
                         $('#intVariance').val(e.data.intVariance);
                     }
 
+                    // this is not working. 
+                    // if (e.data.strStatus === "Issue") {
+                    //     getGridProducts(e.data.intAutoId);
+                    //     $('.inputDate').val(e.data.dtmCreated);
+                    //     $('.strReference').val(e.data.strReference);
+                    //     $('.intFromDC').val(e.data.intFromDC);
+                    //     $('.intToDC').val(e.data.intToDC);
+                    //     $('.intGIT').val(e.data.intGIT);
+                    //     $('.intVariance').val(e.data.intVariance);
+                    //     getIssueModalProducts(e.data.intAutoId);
+                    // }
+
                     if (e.data.strStatus == "Planned") {
                         $('#IBTPlannedModal').modal('show');
                         getPlannedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
@@ -382,14 +393,7 @@
                         SelectedIbtHeaderId = e.data.intAutoId;
                         e.component.repaint();
                         if (e.data.intAutoId) {
-                            getGridProducts(e.data.intAutoId);
-                            $('.inputDate').val(e.data.dtmCreated);
-                            $('.strReference').val(e.data.strReference);
-                            $('.intFromDC').val(e.data.intFromDC);
-                            $('.intToDC').val(e.data.intToDC);
-                            $('.intGIT').val(e.data.intGIT);
-                            $('.intVariance').val(e.data.intVariance);
-                            getIssueModalProducts(e.data.intAutoId);
+                            ReceivedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
                         }
                     } else {
                         showReceivedButton = false;
