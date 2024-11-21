@@ -3,8 +3,8 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newuserLabel">Update IBT</h1>
-                <h3 class="modal-title fs-5" id="txtIBTNumber"></h3>
+                <h1 class="modal-title fs-5" id="newuserLabel">IBT Details</h1>
+                <h3 class="modal-title fs-5 txtIBTNumber"></h3>
             </div>
 
             <div class="modal-body">
@@ -93,14 +93,12 @@
 
 <script>
     function ReceivedModalProducts(currentSlectedID, date, reference, fromDc, toDc, git, variance) {
-
         $('#IBTReceiveModal').on('shown.bs.modal', function () {
                 $('.select2').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#IBTReceiveModal'),
             });
         });
-        
         let gridIssueProducts;
         $('.inputDate').val(date);
         $('.strReference').val(reference);
@@ -109,6 +107,7 @@
         $('.intGIT').val(git);
         $('.intVariance').val(variance);
         $('#IBTReceiveModal').on('shown.bs.modal', function () {
+            $('.txtIBTNumber').text('IBT' + (1000000 + currentSlectedID).toString().slice(-6));   
             if (!gridIssueProducts) {
                 gridIssueProducts = $(".gridReceiveProducts").dxDataGrid({
                     dataSource: new DevExpress.data.CustomStore({

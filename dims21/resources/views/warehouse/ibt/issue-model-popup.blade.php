@@ -3,8 +3,8 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newuserLabel">Upadet IBT</h1>
-                <h3 class="modal-title fs-5" id="txtIBTNumber"></h3>
+                <h1 class="modal-title fs-5" id="newuserLabel">IBT Details</h1>
+                <h3 class="modal-title fs-5 txtIBTNumber"></h3>
             </div>
 
             <div class="modal-body">
@@ -85,8 +85,8 @@
             <input type="text" id="intStatus" hidden>
 
             <div class="modal-footer">
-                <button type="button" id="btnUpdateIBT" class="btn btn-success update-record">Update</button>
                 <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnUpdateIBT" class="btn btn-success update-record">Update</button>
             </div>
         </div>
     </div>
@@ -102,6 +102,7 @@
         });
         var gridIssueProducts;
         $('#IBTIssueModal').on('shown.bs.modal', function () {
+            $('.txtIBTNumber').text('IBT' + (1000000 + currentSlectedID).toString().slice(-6));
             if (!gridIssueProducts) {
                 gridIssueProducts = $(".gridIssueProducts").dxDataGrid({
                     dataSource: new DevExpress.data.CustomStore({

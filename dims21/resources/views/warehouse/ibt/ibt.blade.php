@@ -31,7 +31,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="newuserLabel">Create IBT</h1>
-                        <h3 class="modal-title fs-5" id="txtIBTNumber"></h3>
+                        <h3 class="modal-title fs-5 txtIBTNumber" id="txtIBTNumber"></h3>
                     </div>
 
                     <div class="modal-body">
@@ -150,9 +150,9 @@
                     <input type="text" id="intStatus" hidden>
 
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
                         <button type="button" id="btnUpdateIBT" class="btn btn-success btnUpdateIBT update-record" hidden>Update</button>
                         <button type="button" id="btnSaveIBT" class="btn btn-success" >Save</button>
-                        <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -178,12 +178,8 @@
                 qtyavl:item.qtyavl
             };
         });
-        
-        var gridProducts; 
-
+        var gridProducts;
         $(document).ready(function() {
-            let date = '';
-            let reference = '';
             var selectedStatus = "";
             var SelectedIbtHeaderId = null;
 
@@ -192,8 +188,7 @@
                     theme: 'bootstrap-5',
                     dropdownParent: $('#IBTModal'),
                 });
-            });
-
+            }); 
             //This is use for disply the IBT list
             let showReceivedButton = false;
             const gridIBT = $("#gridIBT").dxDataGrid({
@@ -217,6 +212,10 @@
                     showPageSizeSelector: true,
                     showInfo: true,
                     showNavigationButtons: true,
+                },
+                selection: {
+                    mode: "single",
+                    rowCssClass: 'custom-selected-row'
                 },
                 export: {
                     enabled: true
@@ -284,7 +283,7 @@
                                 const day = ("0" + date.getDate()).slice(-2);
                                 const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are 0-based
                                 const year = date.getFullYear();
-                                return `${day}/${month}/${year}`;
+                                return `${day}-${month}-${year}`;
                             }
                             return cellInfo.value; // Return the original value if it's not a valid date
                         }
@@ -315,38 +314,43 @@
                                     $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
                                     $('#btnSaveIBT').prop('hidden', false);
                                     $('.btnUpdateIBT').prop('hidden', true);
+                                    $('.txtIBTNumber').text('');
+                                    $('.btnUpdateIBT').prop('hidden',true);
+                                    $('.form-control', IBTModal).val('');
+                                    $('.intFromDC').val('');
+                                    $('.intToDC').val('');
+                                    $('.intGIT').val('');
+                                    $('.intVariance').val('');
+                                    gridProducts.option('dataSource', []);
+                                    gridProducts.refresh();
                                 },
                             },
                         }
                     );
-                    // Conditionally add the "Received" button if the flag is true
+                    let receivedButton = {
+                        location: 'after',
+                        widget: "dxButton",
+                        options: {
+                            text: "Received",
+                            onClick: function () {
+                                $('#IBTIssueModal').modal('show');
+                                $('#intStatus').val(1);
+                            },
+                        }
+                    };  
                     if (showReceivedButton) {
-                        e.toolbarOptions.items.push(
-                            {
-                                location: 'after',
-                                widget: "dxButton",
-                                options: {
-                                    text: "Received",
-                                    onClick: function (e) {
-                                        $('#IBTIssueModal').modal('show');
-                                        $('#intStatus').val(1);
-                                    },
-                                },
-                            }
-                        );
+                        e.toolbarOptions.items.push(receivedButton);
                     }
                 },
                 onRowDblClick: function (e) {
                     if (e.data.strStatus !== "Issue" && e.data.strStatus !== "Receive") {
-                        console.log(e.data);
-                        var IbtHeaderId = e.data.intAutoId;
                         selectedStatus = e.data.strStatus;
                         SelectedIbtHeaderId = e.data.intAutoId;
                         $('#IBTModal').modal('toggle');
-                        if (IbtHeaderId) {
-                            var numericPart = (1000000 + IbtHeaderId).toString().slice(-6);
+                        if (SelectedIbtHeaderId) {
+                            var numericPart = (1000000 + SelectedIbtHeaderId).toString().slice(-6);
                             $('#newuserLabel').text('Update IBT');
-                            $('#txtIBTNumber').text('IBT' + numericPart);
+                            $('.txtIBTNumber').text('IBT' + numericPart);
                         }
                         $('#btnSaveIBT').prop('hidden', true);
                         $('.btnUpdateIBT').prop('hidden', false);
@@ -356,6 +360,7 @@
                         $('#intToDC').val(e.data.intToDC);
                         $('#intGIT').val(e.data.intGIT);
                         $('#intVariance').val(e.data.intVariance);
+                        
                     }
 
                     if (e.data.strStatus === "Receive") {
@@ -366,10 +371,9 @@
                 },
                 onRowClick: function (e) {
                     if (e.data && e.data.strStatus === "Issue") {
+                        showReceivedButton = true;
                         selectedStatus = e.data.strStatus;
                         SelectedIbtHeaderId = e.data.intAutoId;
-                        console.log(SelectedIbtHeaderId);
-                        showReceivedButton = true;
                         e.component.repaint();
                         if (e.data.intAutoId) {
                             getGridProducts(e.data.intAutoId);
@@ -382,7 +386,10 @@
                             getIssueModalProducts(e.data.intAutoId);
                         }
                     } else {
-                        showReceivedButton = false; 
+                        showReceivedButton = false;
+                        setTimeout(function () {
+                            e.component.repaint();
+                        }, 20); 
                     }
                 },
             }).dxDataGrid('instance');
@@ -592,18 +599,17 @@
 
             // To clear and close the IBT modal
             $('#IBTModal').on('hidden.bs.modal', function() {
-                $('#txtIBTNumber').text('');
+                $('.txtIBTNumber').text('');
                 $('.btnUpdateIBT').prop('hidden',true);
                 $('.form-control', IBTModal).val('');
                 $('.intFromDC').val('');
                 $('.intToDC').val('');
                 $('.intGIT').val('');
                 $('.intVariance').val('');
-                date = '';
-                reference = '';
                 gridProducts.option('dataSource', []);
                 gridProducts.refresh();
             });
+
         });
 
         //This function is use for get ibt records
