@@ -139,6 +139,12 @@
                             if (rowData) {
                                 var qty = rowData.Qty; 
                                 var qtyReceived = values.intQtyReceived;
+
+                                if (qtyReceived < 0 || isNaN(qtyReceived)) {
+                                    DevExpress.ui.notify("Qty Received cannot be less than 0", "error", 3000);
+                                    return;
+                                }
+
                                 if (qty !== undefined && qtyReceived !== undefined) {
                                     var qtyVariance = qty - qtyReceived;
                                     values.QtyVariance = qtyVariance;
