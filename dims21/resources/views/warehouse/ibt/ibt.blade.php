@@ -161,6 +161,8 @@
         @include('warehouse.ibt.issue-model-popup')
         <!-- IBT Receive Modal -->
         @include('warehouse.ibt.receive-model-popup')
+        <!-- IBT Receive Modal -->
+        @include('warehouse.ibt.Planned-model-popup')
     </div>
 
 @endsection
@@ -251,14 +253,6 @@
                         caption: "Reference",
                     },
                     {
-                        dataField: "strStatus",
-                        caption: "Status",
-                    },
-                    {
-                        dataField: "Username",
-                        caption: "Created By",
-                    },
-                    {
                         dataField: "strDCName",
                         caption: "From DC",
                     },
@@ -273,6 +267,14 @@
                     {
                         dataField: "strLocationName",
                         caption: "Variance",
+                    },
+                    {
+                        dataField: "strStatus",
+                        caption: "Status",
+                    },
+                    {
+                        dataField: "Username",
+                        caption: "Created By",
                     },
                     {
                         dataField: "dtmCreated",
@@ -343,7 +345,7 @@
                     }
                 },
                 onRowDblClick: function (e) {
-                    if (e.data.strStatus !== "Issue" && e.data.strStatus !== "Receive") {
+                    if (e.data.strStatus !== "Issue" && e.data.strStatus !== "Receive" && e.data.strStatus !== "Planned") {
                         selectedStatus = e.data.strStatus;
                         SelectedIbtHeaderId = e.data.intAutoId;
                         $('#IBTModal').modal('toggle');
@@ -360,7 +362,11 @@
                         $('#intToDC').val(e.data.intToDC);
                         $('#intGIT').val(e.data.intGIT);
                         $('#intVariance').val(e.data.intVariance);
-                        
+                    }
+
+                    if (e.data.strStatus == "Planned") {
+                        $('#IBTPlannedModal').modal('show');
+                        getPlannedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
                     }
 
                     if (e.data.strStatus === "Receive") {

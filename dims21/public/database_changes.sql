@@ -219,8 +219,9 @@ ADD
     intVariance INT NULL;
 
 
-ALTER TABLE tblIBTHeader
-ADD 
+ALTER TABLE tblIBTLines
+ADD
+    intQtyReceived int,
     intQtyVariance int,
 
 
