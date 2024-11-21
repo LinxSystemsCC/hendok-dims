@@ -222,16 +222,9 @@ ADD
 ALTER TABLE tblIBTLines
 ADD
     intQtyReceived int,
-    intQtyVariance int,
+    intQtyVariance int;
 
 
-USE [linxdbDIMSHendok]
-GO
-/****** Object:  StoredProcedure [dbo].[spCreateIBT]    Script Date: 20-11-2024 7:57:16 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
 ALTER PROCEDURE [dbo].[spCreateIBT]
     @reference NVARCHAR(50),
@@ -317,13 +310,6 @@ BEGIN
 END
 
 
-USE [linxdbDIMSHendok]
-GO
-/****** Object:  StoredProcedure [dbo].[spUpdateIBT]    Script Date: 20-11-2024 7:58:20 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
 ALTER PROCEDURE [dbo].[spUpdateIBT]
     @SelectedIbtHeaderId BIGINT,
@@ -408,13 +394,6 @@ BEGIN
 	SELECT 'Success' AS Result 
 END
 
-USE [linxdbDIMSHendok]
-GO
-/****** Object:  StoredProcedure [dbo].[spGetIBTDetails]    Script Date: 20-11-2024 8:00:55 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
 ALTER PROCEDURE [dbo].[spGetIBTDetails]
     @ibtnumber INT
@@ -429,13 +408,6 @@ BEGIN
     WHERE intAutoHeaderId = @ibtnumber;
 END
 
-
-USE [linxdbDIMSHendok]
-GO
-
-/****** Object:  View [dbo].[viewtblIBTHeadersData]    Script Date: 20-11-2024 7:59:39 PM ******/
-SET ANSI_NULLS ON
-GO
 
 SET QUOTED_IDENTIFIER ON
 GO
