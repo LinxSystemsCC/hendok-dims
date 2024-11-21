@@ -80,7 +80,7 @@
                                     <select class="form-select select2 intGIT" type="text" id='intGIT'>
                                         <option value="" selected>Select GIT</option>
                                         @foreach ($gitData as $val)
-                                            <option value="{{ $val->intLocationNameId }}">{{ $val->strLocationType }}</option>
+                                            <option value="{{ $val->intLocationNameId }}">{{ $val->strLocationName }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -91,7 +91,7 @@
                                     <select class="form-select select2 intVariance" type="text" id='intVariance'>
                                         <option value="" selected>Select Variance</option>
                                         @foreach ($varianceData as $val)
-                                            <option value="{{ $val->intLocationNameId }}">{{ $val->strLocationType }}</option>
+                                            <option value="{{ $val->intLocationNameId }}">{{ $val->strLocationName }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -105,10 +105,16 @@
                                     <input type="text" class="form-control rounded-0 rounded-start" id="inputProductCode">
                                 </div>
                             </div>
-                            <div class="col-4 p-0">
+                            <div class="col-3 p-0">
                                 <div class="form-group mb-2">
                                     <label class="control-label" for="inputProductDescription">Description</label>
                                     <input type="text" class="form-control rounded-0" id="inputProductDescription">
+                                </div>
+                            </div>
+                            <div class="col-1 p-0">
+                                <div class="form-group mb-2">
+                                    <label class="control-label" for="inputProductQtyAvl" id="int-qty">Qty Avl</label>
+                                    <input type="number" class="form-control rounded-0" id="inputProductQtyAvl">
                                 </div>
                             </div>
                             <div class="col-1 p-0">
@@ -144,7 +150,7 @@
                     <input type="text" id="intStatus" hidden>
 
                     <div class="modal-footer">
-                        <button type="button" id="btnUpdateIBT" class="btn btn-success btnUpdateIBT" hidden>Update</button>
+                        <button type="button" id="btnUpdateIBT" class="btn btn-success btnUpdateIBT update-record" hidden>Update</button>
                         <button type="button" id="btnSaveIBT" class="btn btn-success" >Save</button>
                         <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
                     </div>
@@ -160,10 +166,8 @@
 @endsection
 
 @section('scripts')
-
     <!-- Flexdatalist -->  
     <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
-
     <script>
         var products = JSON.parse(JSON.stringify({!! json_encode($products) !!}));
         var productsList = $.map(products, function (item) {
@@ -184,7 +188,6 @@
             var SelectedIbtHeaderId = null;
 
             $('#IBTModal').on('shown.bs.modal', function () {
-                // Reinitialize select2 on the elements inside the modal
                 $('.select2').select2({
                     theme: 'bootstrap-5',
                     dropdownParent: $('#IBTModal'),
@@ -257,19 +260,19 @@
                         caption: "Created By",
                     },
                     {
-                        dataField: "intFromDC",
+                        dataField: "strDCName",
                         caption: "From DC",
                     },
                     {
-                        dataField: "intToDC",
+                        dataField: "toDCName",
                         caption: "To DC",
                     },
                     {
-                        dataField: "intGIT",
+                        dataField: "gitstrLocationName",
                         caption: "GIT",
                     },
                     {
-                        dataField: "intVariance",
+                        dataField: "strLocationName",
                         caption: "Variance",
                     },
                     {
@@ -539,7 +542,7 @@
             });
 
             //This function is use for Update IBT Data with product
-            $('.btnUpdateIBT').click(function(){
+            $('.update-record').click(function(){
                 
                 var checkedLines = Array();
                 checkedLines = gridProducts.option('dataSource');

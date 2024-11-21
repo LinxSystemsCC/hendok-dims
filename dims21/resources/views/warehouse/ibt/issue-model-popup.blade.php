@@ -12,13 +12,13 @@
                     <div class="col-6">
                         <div class="form-group mb-2">
                             <label class="control-label fw-bold" for="inputDate">Date</label>
-                            <input type="date" class="form-control w-100 inputDate" id="inputDate">
+                            <input type="date" class="form-control w-100 inputDate" id="inputDate" disabled>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-group mb-2">
                             <label class="control-label fw-bold" for="strReference">Reference</label>
-                            <input  class="form-control w-100 strReference" id="strReference" required>
+                            <input  class="form-control w-100 strReference" id="strReference" disabled>
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                     <div class="col-6">
                         <div class="form-group mb-2">
                             <label class="control-label fw-bold" for="intFromDC">From DC</label>
-                            <select class="form-select select2 intFromDC" type="text" id='intFromDC'>
+                            <select class="form-select select2 intFromDC" type="text" id='intFromDC' disabled>
                                 <option value="" selected>Select From DC</option>
                                 @foreach ($dcData as $val)
                                     <option value="{{ $val->intAutoId }}">{{ $val->strDCName }}</option>
@@ -37,7 +37,7 @@
                     <div class="col-6">
                         <div class="form-group mb-2">
                             <label class="control-label fw-bold" for="intToDC">To DC</label>
-                            <select class="form-select select2 intToDC" type="text" id='intToDC'>
+                            <select class="form-select select2 intToDC" type="text" id='intToDC' disabled>
                                 <option value="" selected>Select To DC</option>
                                 @foreach ($dcData as $val)
                                     <option value="{{ $val->intAutoId }}">{{ $val->strDCName }}</option>
@@ -50,7 +50,7 @@
                     <div class="col-6">
                         <div class="form-group mb-2">
                             <label class="control-label fw-bold" for="intGIT">GIT</label>
-                            <select class="form-select select2 intGIT" type="text" id='intGIT'>
+                            <select class="form-select select2 intGIT" type="text" id='intGIT' disabled>
                                 <option value="" selected>Select GIT</option>
                                 @foreach ($gitData as $val)
                                     <option value="{{ $val->intLocationNameId }}">{{ $val->strLocationName }}</option>
@@ -61,7 +61,7 @@
                     <div class="col-6">
                         <div class="form-group mb-2">
                             <label class="control-label fw-bold" for="intVariance">Variance</label>
-                            <select class="form-select select2 intVariance" type="text" id='intVariance'>
+                            <select class="form-select select2 intVariance" type="text" id='intVariance' disabled>
                                 <option value="" selected>Select Variance</option>
                                 @foreach ($varianceData as $val)
                                     <option value="{{ $val->intLocationNameId }}">{{ $val->strLocationName }}</option>
@@ -85,7 +85,7 @@
             <input type="text" id="intStatus" hidden>
 
             <div class="modal-footer">
-                <button type="button" id="btnUpdateIBT" class="btn btn-success btnUpdateIBT">Update</button>
+                <button type="button" id="btnUpdateIBT" class="btn btn-success update-record">Update</button>
                 <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
