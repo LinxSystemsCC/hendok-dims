@@ -77,7 +77,8 @@ class IbtController extends Controller
      */
     public function getIBTRecords()
     {
-        $returndata = DB::connection('sqlsrv2')->select("select * from viewtblIBTHeadersData");
+        $returndata = DB::connection('sqlsrv2')
+            ->select("SELECT * FROM dbo.viewtblIBTHeadersData ORDER BY intAutoId DESC");
 
         return response()->json($returndata);
     }

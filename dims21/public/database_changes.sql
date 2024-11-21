@@ -210,33 +210,18 @@ Left JOIN tblInventory ON Code COLLATE SQL_Latin1_General_CP1_CI_AS = tblInvento
 
 --===========IBT NEW CHANGES(DATE - 20-11-2024(D-M-Y)))============
 
-CREATE TABLE tblIBTHeader (
-    intAutoId BIGINT IDENTITY(1,1) PRIMARY KEY,
-    strReference NVARCHAR(50) NULL,
-    dtmCreated DATE NULL,
-    intCreatedBy BIGINT DEFAULT 0,
-    intStatus INT NULL,
+ALTER TABLE tblIBTHeader
+ADD 
     intFromDC INT NULL,
     intToDC INT NULL,
-    intGIT INT NULL, 
+    intGIT INT NULL,
     strTlNumber INT NULL,
-    intVariance INT NULL
-);
+    intVariance INT NULL;
 
 
-CREATE TABLE tblIBTLines (
-    intAutoId BIGINT IDENTITY(1,1) PRIMARY KEY,
-    intAutoHeaderId BIGINT NOT NULL,
-    strPartNumber NVARCHAR(50) NOT NULL,
-    fltWeight FLOAT NULL,
-    mnyQty MONEY NULL,
-    strComment NVARCHAR(250) NULL,
+ALTER TABLE tblIBTHeader
+ADD 
     intQtyVariance int,
-
-    -- Foreign key constraint (optional, if needed)
-    CONSTRAINT FK_tblIBTLines_tblIBTHeader FOREIGN KEY (intAutoHeaderId)
-    REFERENCES tblIBTHeader(intAutoId)
-);
 
 
 USE [linxdbDIMSHendok]
@@ -483,9 +468,3 @@ LEFT JOIN tblLocationNames ln2 ON head.intGIT = ln2.intLocationNameId
 LEFT JOIN tblDCNames dc ON dc.intAutoId = head.intFromDC
 LEFT JOIN tblDCNames dc2 ON dc2.intAutoId = head.intToDC
 GO
-
-
---============Updated the View viewTblProductWeightedCalc=============
-ALTER view [dbo].[viewTblProductWeightedCalc] as (
-select  Code [PastelCode],Description_1 as [PastelDescription], ISNULL(ufIIWeight,1) as [Weight],mnySumAvail as [qtyavl] from [Hendok Distribution].dbo._bvStockFull
-Left JOIN tblInventory ON Code COLLATE SQL_Latin1_General_CP1_CI_AS = tblInventory.strPartNumber
