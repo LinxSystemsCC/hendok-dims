@@ -15,9 +15,24 @@ class IbtController extends Controller
      */
     public function index()
     {
-        $products = DB::connection('sqlsrv2')->select("select * from viewTblProductWeightedCalc");
+        $products = DB::connection('sqlsrv2')
+            ->select("select * from viewTblProductWeightedCalc");
+        $dcData = DB::connection('sqlsrv2')
+            ->select("select * from tblDCNames");
+        $gitData = DB::connection('sqlsrv2')
+            ->select("
+                select * from tblLocationNames ln
+                inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId
+                where strLocationType = 'Transit'
+            ");
+        $varianceData = DB::connection('sqlsrv2')
+            ->select("
+                select * from tblLocationNames ln
+                inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId
+                where strLocationType = 'Variance'
+            ");
 
-        return view('warehouse.ibt',compact('products'));
+        return view('warehouse.ibt.index',compact('products','dcData','gitData','varianceData'));
     }
 
     /**
@@ -28,13 +43,36 @@ class IbtController extends Controller
      */
     public function store(Request $request)
     {
-        $xmlLines = $request->input('dataxml');
-        $date = $request->input('dtmCreated');
-        $reference = $request->input('strReference');
-        $userID = Auth::user()->UserID;
-        $result = DB::connection('sqlsrv2')->select("exec spCreateIBT '$reference','$date',$userID,0,'$xmlLines' ");
+        $status = 0;
+        $result = DB::connection('sqlsrv2')->select(
+            'EXEC spCreateIBT
+                @reference = :reference,
+                @date = :date,
+                @userID = :userID,
+                @intStatus = :intStatus,
+                @intFromDC = :intFromDC,
+                @intToDC = :intToDC,
+                @intGIT = :intGIT,
+                @intVariance = :intVariance,
+                @xmlLines = :xmlLines',
+            [
+                'reference' => $request->get('strReference'),
+                'date' => $request->get('dtmCreated'),
+                'userID' => Auth::user()->UserID,
+                'intStatus' => $status,
+                'intFromDC' => $request->get('intFromDC'),
+                'intToDC' => $request->get('intToDC'),
+                'intGIT' => $request->get('intGIT'),
+                'intVariance' => $request->get('intVariance'),
+                'xmlLines' => $request->get('dataxml')
+            ]
+        );
 
-        return response()->json(['success' => true]);
+        if ($result[0]->Result == 'Success') {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
     }
 
     /**
@@ -42,19 +80,25 @@ class IbtController extends Controller
      */
     public function getIBTRecords()
     {
-        $returndata = DB::connection('sqlsrv2')->select("select * from viewtblIBTHeadersData");
-        
+        $returndata = DB::connection('sqlsrv2')
+            ->select("SELECT * FROM dbo.viewtblIBTHeadersData ORDER BY intAutoId DESC");
+
         return response()->json($returndata);
     }
 
     /**
      * This function is used for get IBT Details
-     * 
+     *
      * @param obj $request
      */
     public function getIBTDetails(Request $request)
     {
-        $ibtHeaderId = $request->get('IbtHeaderId');
+        if (is_array($request->all())) {
+            $ibtHeaderId = $request->all()['IbtHeaderId'];
+
+        } else {
+            $ibtHeaderId = $request->get('IbtHeaderId');
+        }
         $ibtDetails = DB::connection('sqlsrv2')->select("exec spGetIBTDetails ?", array($ibtHeaderId));
 
         return response()->json($ibtDetails);
@@ -62,18 +106,92 @@ class IbtController extends Controller
 
     /**
      * This function is used for Update IBT Details
-     * 
+     *
      * @param obj $request
      */
     public function updateIBTDetails(Request $request)
     {
-        $xmlLines = $request->input('dataxml');
-        $date = $request->input('dtmCreated');
-        $reference = $request->input('strReference');
-        $userID = Auth::user()->UserID;
-        $SelectedIbtHeaderId = $request->input('SelectedIbtHeaderId');
-        $result = DB::connection('sqlsrv2')->select("exec spUpdateIBT $SelectedIbtHeaderId,'$reference','$date',$userID,0, '$xmlLines' ");
+        $intStatus = $request->has('intStatus') && $request->get('intStatus') ? $request->get('intStatus') : 0;
+        $strTlNumber = $request->get('strTlNumber') ?: null;
+        $intVariance = $request->get('intVariance') ?: null;
+        $result = DB::connection('sqlsrv2')->select(
+            'EXEC spUpdateIBT
+                @SelectedIbtHeaderId = :SelectedIbtHeaderId,
+                @reference = :reference,
+                @date = :date,
+                @userID = :userID,
+                @intStatus = :intStatus,
+                @strTlNumber = :strTlNumber,
+                @intFromDC = :intFromDC,
+                @intToDC = :intToDC,
+                @intGIT = :intGIT,
+                @intVariance = :intVariance,
+                @xmlLines = :xmlLines',
+            [
+                'SelectedIbtHeaderId' => $request->get('SelectedIbtHeaderId'),
+                'reference' => $request->get('strReference'),
+                'date' => $request->get('dtmCreated'),
+                'userID' => Auth::user()->UserID,
+                'intStatus' => $intStatus,
+                'strTlNumber' => $strTlNumber,
+                'intFromDC' => $request->get('intFromDC'),
+                'intToDC' => $request->get('intToDC'),
+                'intGIT' => $request->get('intGIT'),
+                'intVariance' => $intVariance,
+                'xmlLines' => $request->get('dataxml')
+            ]
+        );
+        if (isset($result[0]->Result) && $result[0]->Result == 'Success') {
+            return response()->json(['success' => true]);
+        }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => false]);
+    }
+
+    /**
+     * This function is used for Update Qty Received And QtyVariance
+     *
+     * @param obj $request
+     */
+    public function updateIbtLines(Request $request)
+    {
+        $passData = [
+            'intQtyVariance' => $request->get('intQtyVariance'),
+            'intQtyReceived' => $request->get('intQtyReceived'),
+            'intAutoId' => $request->get('intAutoId'),
+        ];
+        $updatedRows = DB::update(
+            'UPDATE tblIBTLines SET intQtyVariance = :intQtyVariance, intQtyReceived = :intQtyReceived WHERE intAutoId = :intAutoId',
+            $passData
+        );
+
+        if ($updatedRows > 0) {
+            return response()->json(['success' => true, 'message' => 'Record updated successfully.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Update failed.']);
+    }
+
+    /**
+     * This function is used for update the status
+     *
+     * @param obj $request
+     */
+    public function updateStatus(Request $request)
+    {
+        $passData = [
+            'intStatus' => $request->get('intStatus'),
+            'intAutoId' => $request->get('SelectedIbtHeaderId'),
+        ];
+        $updatedRows = DB::update(
+            'UPDATE tblIBTHeader SET intStatus = :intStatus WHERE intAutoId = :intAutoId',
+            $passData
+        );
+
+        if ($updatedRows > 0) {
+            return response()->json(['success' => true, 'message' => 'Record updated successfully.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Update failed.']);
     }
 }
