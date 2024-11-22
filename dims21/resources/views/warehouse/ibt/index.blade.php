@@ -463,7 +463,12 @@
                             alert("Error updating record.");
                         }
                     });
-                }
+                },
+                onContentReady: function(e) {
+                    setTimeout(function() {
+                        focusOnFirstBlankCell(e);
+                    }, 100);
+                },
             }).dxDataGrid('instance');
 
             setProductsDataList(productsList);
@@ -824,6 +829,22 @@
             if (action == 'received') {
                 gridProducts.columnOption("intQtyReceived", "allowEditing", true);
             }
+        }
+
+        function focusOnFirstBlankCell(e) {
+            var columnIndex = e.component.columnOption('intQtyReceived').index;  // Column index for 'intQtyReceived'
+            var firstBlankCellFound = false;
+
+            // Iterate over all visible rows and check for the first blank cell in the specified column
+            e.component.getVisibleRows().forEach(function(row) {
+                if (gridProducts.columnOption("intQtyReceived", "visible") && !firstBlankCellFound && !row.data.intQtyReceived) {
+                    firstBlankCellFound = true;
+                    var rowIndex = row.rowIndex;
+                    var rowElement = e.component.getRowElement(rowIndex);
+                    var cellElement = $(rowElement).find('td').eq(columnIndex);  // Find the cell in the column
+                    $(cellElement).click();  // Simulate a click on the blank cell to focus it
+                }
+            });
         }
     </script>
 @endsection
