@@ -156,7 +156,8 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="btnUpdateIBT" class="btn btn-success btnUpdateIBT update-record" hidden>Update</button>
+                        <button type="button" id="btnReceivedIBT" class="btn btn-success" hidden>Received</button>
+                        <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden>Update</button>
                         <button type="button" id="btnSaveIBT" class="btn btn-success" >Save</button>
                     </div>
                 </div>
@@ -182,9 +183,8 @@
         var gridProducts;
         var selectedStatus = "";
         var SelectedIbtHeaderId = null;
-        var selectedIBT = null;
+        var selectedIBTRowDetails = null;
         $(document).ready(function() {
-
             $('#IBTModal').on('shown.bs.modal', function () {
                 $('.select2').select2({
                     theme: 'bootstrap-5',
@@ -237,7 +237,6 @@
                     });
                     e.cancel = true;
                 },
-
                 columns: [
                     {
                         dataField: "intAutoId",
@@ -292,13 +291,11 @@
                                 const year = date.getFullYear();
                                 return `${day}-${month}-${year}`;
                             }
-                            return cellInfo.value; // Return the original value if it's not a valid date
+                            return cellInfo.value;
                         }
                     }
                 ],
-
                 onRowRemoving: function (e) { },
-
                 // onToolbarPreparing should manage toolbar items based on the flag
                 onToolbarPreparing: function (e) {
                     e.toolbarOptions.items.unshift(
@@ -328,9 +325,7 @@
                         options: {
                             text: "Received",
                             onClick: function () {
-                                modalPopupShow('received', selectedIBT);
-                                // $('#IBTReceiveModal').modal('show');
-                                // $('#intStatus').val(1);
+                                modalPopupShow('received', selectedIBTRowDetails);
                             },
                         }
                     };
@@ -344,36 +339,14 @@
                     } else {
                         modalPopupShow('show', e);
                     }
-
-                    // this is not working.
-                    // if (e.data.strStatus === "Issue") {
-                    //     getGridProducts(e.data.intAutoId);
-                    //     $('.inputDate').val(e.data.dtmCreated);
-                    //     $('.strReference').val(e.data.strReference);
-                    //     $('.intFromDC').val(e.data.intFromDC);
-                    //     $('.intToDC').val(e.data.intToDC);
-                    //     $('.intGIT').val(e.data.intGIT);
-                    //     $('.intVariance').val(e.data.intVariance);
-                    //     getIssueModalProducts(e.data.intAutoId);
-                    // }
-
-
-
-                    // if (e.data.strStatus === "Received") {
-                    //     $('#IBTReceiveModal').modal('show');
-                    //     ReceivedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
-                    // }
                 },
                 onRowClick: function (e) {
                     if (e.data && e.data.strStatus === "Issued") {
                         showReceivedButton = true;
                         selectedStatus = e.data.strStatus;
                         SelectedIbtHeaderId = e.data.intAutoId;
-                        selectedIBT = e;
+                        selectedIBTRowDetails = e;
                         e.component.repaint();
-                        if (e.data.intAutoId) {
-                            ReceivedModalProducts(e.data.intAutoId,e.data.dtmCreated,e.data.strReference,e.data.intFromDC,e.data.intToDC,e.data.intGIT,e.data.intVariance)
-                        }
                     } else {
                         showReceivedButton = false;
                         setTimeout(function () {
@@ -454,6 +427,42 @@
                             }
                         }
                     );
+                },
+                onRowUpdating: function (e) {
+                    console.log(e)
+                    // Check if the updated field is 'intQtyReceived'
+                    var updatedField = e.newData.intQtyReceived; // Get the new value of 'intQtyReceived'
+                    var oldQtyReceived = e.oldData.intQtyReceived; // Get the old value of 'intQtyReceived'
+
+                    // If 'intQtyReceived' was updated, calculate 'intQtyVariance'
+                    if (updatedField !== oldQtyReceived) {
+                        var qty = e.oldData.Qty || 0; // Assuming 'Qty' is the base quantity
+                        var intQtyReceived = e.newData.intQtyReceived || 0;
+
+                        // Calculate the variance
+                        var intQtyVariance = qty - intQtyReceived;
+
+                        // Update the 'intQtyVariance' value
+                        e.newData.intQtyVariance = intQtyVariance;
+                    }
+                },
+                onRowUpdated: function(e) {
+                    return $.ajax({
+                        url: '{!! url("ibt/update-ibt-lines") !!}',
+                        type: 'POST',
+                        data: {
+                            intAutoId: e.data.intAutoId,
+                            intQtyReceived: e.data.intQtyReceived,
+                            intQtyVariance: e.data.intQtyVariance,
+                        },
+                        success: function (data) {
+                            console.log("Update success:", data);
+                            return data;
+                        },
+                        error: function () {
+                            alert("Error updating record.");
+                        }
+                    });
                 }
             }).dxDataGrid('instance');
 
@@ -557,7 +566,7 @@
             });
 
             //This function is use for Update IBT Data with product
-            $('.update-record').click(function(){
+            $('#btnUpdateIBT').click(function(){
                 loadingPanel.option('visible', true);
                 var checkedLines = Array();
                 checkedLines = gridProducts.option('dataSource');
@@ -583,7 +592,7 @@
                 formData.append('intToDC',$('.intToDC').val());
                 formData.append('intGIT',$('.intGIT').val());
                 formData.append('intVariance',$('.intVariance').val());
-                if ($('#intStatus').val() == '1') {
+                if ($('#intStatus').val() != '') {
                     formData.append('intStatus',$('#intStatus').val());
                 }
                 if ($('.strTlNumber') != '') {
@@ -592,7 +601,7 @@
 
 
                 $.ajax({
-                    url: '{!! url("update-ibt") !!}',
+                    url: '{!! url("ibt/update-ibt") !!}',
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -613,7 +622,7 @@
             // To clear and close the IBT modal
             $('#IBTModal').on('hidden.bs.modal', function() {
                 $('.txtIBTNumber').text('');
-                $('.btnUpdateIBT').prop('hidden',true);
+                $('#btnUpdateIBT').prop('hidden',true);
                 $('.form-control', IBTModal).val('');
                 $('.intFromDC').val('');
                 $('.intToDC').val('');
@@ -623,6 +632,25 @@
                 gridProducts.refresh();
             });
 
+            $('#btnReceivedIBT').click(function() {
+                loadingPanel.option('visible', true);
+                $.ajax({
+                    url: '{!!url("/ibt/update-status")!!}',
+                    type: "POST",
+                    data: {
+                        intStatus: 3,
+                        SelectedIbtHeaderId: SelectedIbtHeaderId,
+                    },
+                    success: function (data) {
+                        loadingPanel.option('visible', true);
+                        location.reload();
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
+                    }
+                });
+            });
         });
 
         //This function is use for get ibt records
@@ -684,6 +712,7 @@
 
         //Get IBT Details on time of upadte IBT
         function getGridProducts(IbtHeaderId){
+            loadingPanel.option('visible', true);
             $.ajax({
                 url: '{!!url("/getIBTDetails")!!}',
                 type: 'GET',
@@ -693,6 +722,10 @@
                 success: function(data) {
                     gridProducts.option('dataSource', data);
                     gridProducts.refresh();
+                },
+                complete: function() {
+                    // Hide the loading panel
+                    loadingPanel.option('visible', false);
                 }
             });
         }
@@ -707,7 +740,7 @@
         };
 
         function modalPopupShow(action, e) {
-            if (e) {
+            if (e != undefined) {
                 selectedStatus = e.data.strStatus;
                 SelectedIbtHeaderId = e.data.intAutoId;
             }
@@ -740,9 +773,9 @@
             if (action == 'add') {
                 $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
                 $('#btnSaveIBT').prop('hidden', false);
-                $('.btnUpdateIBT').prop('hidden', true);
+                $('#btnUpdateIBT').prop('hidden', true);
+                $('#btnReceivedIBT').prop('hidden', true);
                 $('.txtIBTNumber').text('');
-                $('.btnUpdateIBT').prop('hidden',true);
                 $('.form-control', IBTModal).val('');
                 $('.intFromDC').val('');
                 $('.intToDC').val('');
@@ -754,17 +787,21 @@
             } else if(action == 'update') {
                 $('#newuserLabel').text('Update IBT');
                 $('#btnSaveIBT').prop('hidden', true);
-                $('.btnUpdateIBT').prop('hidden', false);
+                $('#btnUpdateIBT').prop('hidden', false);
+                $('#btnReceivedIBT').prop('hidden', true);
                 $(".add_product_section").removeClass('d-none');
             } else if(action == 'received') {
-                $('#newuserLabel').text('Receive IBT');
-                $('.btnUpdateIBT').prop('hidden', false);
+                $('#newuserLabel').text('Received IBT');
+                $('#btnSaveIBT').prop('hidden', true);
+                $('#btnUpdateIBT').prop('hidden', true);
+                $('#btnReceivedIBT').prop('hidden', false);
             } else if(action == 'show') {
                 $('#newuserLabel').text('IBT Details');
-                $('.btnUpdateIBT').prop('hidden', true);
+                $('#btnSaveIBT').prop('hidden', true);
+                $('#btnUpdateIBT').prop('hidden', true);
+                $('#btnReceivedIBT').prop('hidden', true);
             }
             if(action == 'received' || action == 'show') {
-                $('#btnSaveIBT').prop('hidden', true);
                 $(".add_product_section").addClass('d-none');
                 gridProducts.option("editing.allowDeleting", false);
                 $('#inputDate').attr('disabled', true);
@@ -778,13 +815,13 @@
             gridProducts.columnOption("Qty", "caption", "Qty");
             gridProducts.columnOption("intQtyReceived", "visible", false);
             gridProducts.columnOption("intQtyVariance", "visible", false);
-            if (e.data.strStatus === "Received" || action == 'received') {
+            if ((e != undefined && e.data.strStatus === "Received") || action == 'received') {
                 gridProducts.columnOption("Qty", "caption", "Qty Issued");
                 gridProducts.columnOption("intQtyReceived", "visible", true);
                 gridProducts.columnOption("intQtyVariance", "visible", true);
             }
             gridProducts.columnOption("intQtyReceived", "allowEditing", false);
-            if (e.data.strStatus === "Received" || action == 'received') {
+            if (action == 'received') {
                 gridProducts.columnOption("intQtyReceived", "allowEditing", true);
             }
         }

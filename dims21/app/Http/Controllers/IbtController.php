@@ -20,10 +20,17 @@ class IbtController extends Controller
         $dcData = DB::connection('sqlsrv2')
             ->select("select * from tblDCNames");
         $gitData = DB::connection('sqlsrv2')
-            ->select("select * from tblLocationNames ln inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId where strLocationType = 'Transit'");
+            ->select("
+                select * from tblLocationNames ln
+                inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId
+                where strLocationType = 'Transit'
+            ");
         $varianceData = DB::connection('sqlsrv2')
-            ->select("select * from tblLocationNames ln inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId where strLocationType = 'Variance'");
-
+            ->select("
+                select * from tblLocationNames ln
+                inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId
+                where strLocationType = 'Variance'
+            ");
 
         return view('warehouse.ibt.index',compact('products','dcData','gitData','varianceData'));
     }
@@ -36,11 +43,7 @@ class IbtController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->has('intStatus') && $request->get('intStatus') == 1) {
-            $status = 3;
-        } else {
-            $status = 0;
-        }
+        $status = 0;
         $result = DB::connection('sqlsrv2')->select(
             'EXEC spCreateIBT
                 @reference = :reference,
@@ -108,8 +111,7 @@ class IbtController extends Controller
      */
     public function updateIBTDetails(Request $request)
     {
-        $intStatus = $request->has('intStatus') && $request->get('intStatus') == 1 ? 3 : 0;
-
+        $intStatus = $request->has('intStatus') && $request->get('intStatus') ? $request->get('intStatus') : 0;
         $strTlNumber = $request->get('strTlNumber') ?: null;
         $intVariance = $request->get('intVariance') ?: null;
         $result = DB::connection('sqlsrv2')->select(
@@ -153,19 +155,43 @@ class IbtController extends Controller
      */
     public function updateIbtLines(Request $request)
     {
-        $key = $request->input('key');
-        $values = $request->input('values');
-        $qtyReceived = $values['intQtyReceived'];
-        $qtyVariance = $values['QtyVariance'];
-        $updatedRows = DB::update('UPDATE tblIBTLines
-            SET intQtyVariance = ?, intQtyReceived = ?
-            WHERE intAutoId = ?',
-            [$qtyVariance, $qtyReceived, $key]);
+        $passData = [
+            'intQtyVariance' => $request->get('intQtyVariance'),
+            'intQtyReceived' => $request->get('intQtyReceived'),
+            'intAutoId' => $request->get('intAutoId'),
+        ];
+        $updatedRows = DB::update(
+            'UPDATE tblIBTLines SET intQtyVariance = :intQtyVariance, intQtyReceived = :intQtyReceived WHERE intAutoId = :intAutoId',
+            $passData
+        );
 
         if ($updatedRows > 0) {
             return response()->json(['success' => true, 'message' => 'Record updated successfully.']);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Update failed.']);
         }
+
+        return response()->json(['success' => false, 'message' => 'Update failed.']);
+    }
+
+    /**
+     * This function is used for update the status
+     *
+     * @param obj $request
+     */
+    public function updateStatus(Request $request)
+    {
+        $passData = [
+            'intStatus' => $request->get('intStatus'),
+            'intAutoId' => $request->get('SelectedIbtHeaderId'),
+        ];
+        $updatedRows = DB::update(
+            'UPDATE tblIBTHeader SET intStatus = :intStatus WHERE intAutoId = :intAutoId',
+            $passData
+        );
+
+        if ($updatedRows > 0) {
+            return response()->json(['success' => true, 'message' => 'Record updated successfully.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Update failed.']);
     }
 }
