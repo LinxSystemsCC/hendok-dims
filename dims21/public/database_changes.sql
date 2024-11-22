@@ -410,9 +410,6 @@ BEGIN
 END
 
 
-SET QUOTED_IDENTIFIER ON
-GO
-
 ALTER VIEW [dbo].[viewtblIBTHeadersData] AS
 SELECT
     head.intAutoId,
