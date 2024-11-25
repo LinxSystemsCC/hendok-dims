@@ -178,6 +178,9 @@
             }, {
                 "value": "COLLECT",
                 "display": "Collection",
+            }, {
+                "value": "IBT",
+                "display": "IBT",
             }];
 
             var trailerTypes = ({!! json_encode($trailerTypes) !!});
@@ -1137,7 +1140,9 @@
 
                         if (value.strInstruction === 'Upliftment-DIMS') {
                             strPickingType = 'upliftment';
-                        } else {
+                        } else if (value.strInstruction === 'IBT-DIMS') {
+                            strPickingType = 'ibt';
+                        }else {
                             strPickingType = 'priority';
                         }
 

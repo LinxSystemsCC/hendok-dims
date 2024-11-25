@@ -79,7 +79,7 @@
                                     <select class="form-select select2 intGIT" type="text" id='intGIT'>
                                         <option value="" selected>Select GIT</option>
                                         @foreach ($gitData as $val)
-                                            <option value="{{ $val->intLocationNameId }}">{{ $val->strLocationName }}</option>
+                                            <option value="{{ $val->intBinId }}">{{ $val->strBin }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -90,7 +90,7 @@
                                     <select class="form-select select2 intVariance" type="text" id='intVariance'>
                                         <option value="" selected>Select Variance</option>
                                         @foreach ($varianceData as $val)
-                                            <option value="{{ $val->intLocationNameId }}">{{ $val->strLocationName }}</option>
+                                            <option value="{{ $val->intBinId }}">{{ $val->strBin }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -156,7 +156,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="btnReceivedIBT" class="btn btn-success" hidden>Received</button>
+                        <button type="button" id="btnReceivedIBT" class="btn btn-success" hidden>Receive</button>
                         <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden>Update</button>
                         <button type="button" id="btnSaveIBT" class="btn btn-success" >Save</button>
                     </div>
@@ -323,7 +323,7 @@
                         location: 'after',
                         widget: "dxButton",
                         options: {
-                            text: "Received",
+                            text: "Receive",
                             onClick: function () {
                                 modalPopupShow('received', selectedIBTRowDetails);
                             },

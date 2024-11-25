@@ -21,15 +21,17 @@ class IbtController extends Controller
             ->select("select * from tblDCNames");
         $gitData = DB::connection('sqlsrv2')
             ->select("
-                select * from tblLocationNames ln
-                inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId
-                where strLocationType = 'Transit'
+                SELECT * FROM viewBinNames bn
+                INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
+                INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
+                WHERE strLocationType = 'Transit'
             ");
         $varianceData = DB::connection('sqlsrv2')
             ->select("
-                select * from tblLocationNames ln
-                inner join tblLocationTypes lt ON LT.intLocationTypeId = LN.intLocationTypeId
-                where strLocationType = 'Variance'
+                SELECT * FROM viewBinNames bn
+                INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
+                INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
+                WHERE strLocationType = 'Variance'
             ");
 
         return view('warehouse.ibt.index',compact('products','dcData','gitData','varianceData'));
