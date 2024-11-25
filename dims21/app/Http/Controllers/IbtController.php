@@ -19,22 +19,8 @@ class IbtController extends Controller
             ->select("select * from viewTblProductWeightedCalc");
         $dcData = DB::connection('sqlsrv2')
             ->select("select * from tblDCNames");
-        $gitData = DB::connection('sqlsrv2')
-            ->select("
-                SELECT * FROM viewBinNames bn
-                INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
-                INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
-                WHERE strLocationType = 'Transit'
-            ");
-        $varianceData = DB::connection('sqlsrv2')
-            ->select("
-                SELECT * FROM viewBinNames bn
-                INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
-                INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
-                WHERE strLocationType = 'Variance'
-            ");
 
-        return view('warehouse.ibt.index',compact('products','dcData','gitData','varianceData'));
+        return view('warehouse.ibt.index',compact('products','dcData'));
     }
 
     /**
@@ -183,10 +169,11 @@ class IbtController extends Controller
     {
         $passData = [
             'intStatus' => $request->get('intStatus'),
+            'intReceivingBin' => $request->get('intReceivingBin'),
             'intAutoId' => $request->get('SelectedIbtHeaderId'),
         ];
         $updatedRows = DB::update(
-            'UPDATE tblIBTHeader SET intStatus = :intStatus WHERE intAutoId = :intAutoId',
+            'UPDATE tblIBTHeader SET intStatus = :intStatus, intReceivingBin = :intReceivingBin WHERE intAutoId = :intAutoId',
             $passData
         );
 
@@ -195,5 +182,46 @@ class IbtController extends Controller
         }
 
         return response()->json(['success' => false, 'message' => 'Update failed.']);
+    }
+
+
+    /**
+     * This function is used for get the bins
+     *
+     * @param obj $request
+     */
+    public function getBins(Request $request)
+    {
+        $dcId = $request->get('dc_id');
+        if ($request->has('is_from_dc') && $request->get('is_from_dc')) {
+            $bins = DB::connection('sqlsrv2')
+                ->select("
+                    SELECT * FROM viewBinNames bn
+                    INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
+                    INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
+                    WHERE strLocationType = 'Transit' AND intDcId = '$dcId'
+                ");
+        } elseif ($request->has('is_to_dc') && $request->get('is_to_dc')) {
+            $varianceBins = DB::connection('sqlsrv2')
+                ->select("
+                    SELECT * FROM viewBinNames bn
+                    INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
+                    INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
+                    WHERE strLocationType = 'Variance' AND intDcId = '$dcId'
+                ");
+            $receivingBins = DB::connection('sqlsrv2')
+                ->select("
+                    SELECT * FROM viewBinNames bn
+                    INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
+                    INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
+                    WHERE strLocationType = 'Receiving' AND intDcId = '$dcId'
+                ");
+            $bins = [
+                'varianceBins' => $varianceBins,
+                'receivingBins' => $receivingBins,
+            ];
+        }
+
+        return response()->json($bins);
     }
 }

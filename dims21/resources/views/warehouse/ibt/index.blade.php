@@ -78,9 +78,6 @@
                                     <label class="control-label fw-bold" for="intGIT">GIT</label>
                                     <select class="form-select select2 intGIT" type="text" id='intGIT'>
                                         <option value="" selected>Select GIT</option>
-                                        @foreach ($gitData as $val)
-                                            <option value="{{ $val->intBinId }}">{{ $val->strBin }}</option>
-                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -89,9 +86,6 @@
                                     <label class="control-label fw-bold" for="intVariance">Variance</label>
                                     <select class="form-select select2 intVariance" type="text" id='intVariance'>
                                         <option value="" selected>Select Variance</option>
-                                        @foreach ($varianceData as $val)
-                                            <option value="{{ $val->intBinId }}">{{ $val->strBin }}</option>
-                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -99,6 +93,14 @@
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="strTlNumber">TL Number</label>
                                     <input  class="form-control w-100 strTlNumber" id="strTlNumber" required>
+                                </div>
+                            </div>
+                            <div class="col-6 receiving_bin_container">
+                                <div class="form-group mb-2">
+                                    <label class="control-label fw-bold" for="intReceivingBin">Receiving Bin</label>
+                                    <select class="form-select select2 intReceivingBin" type="text" id='intReceivingBin'>
+                                        <option value="" selected>Select Receiving Bin</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -260,11 +262,11 @@
                         caption: "To DC",
                     },
                     {
-                        dataField: "gitstrLocationName",
+                        dataField: "gitBinName",
                         caption: "GIT",
                     },
                     {
-                        dataField: "strLocationName",
+                        dataField: "varianceBinName",
                         caption: "Variance",
                     },
                     {
@@ -278,6 +280,11 @@
                     {
                         dataField: "strTlNumber",
                         caption: "TL Number",
+                        visible: false,
+                    },
+                    {
+                        dataField: "intReceivingBin",
+                        caption: "Receiving Bin",
                         visible: false,
                     },
                     {
@@ -644,6 +651,7 @@
                     type: "POST",
                     data: {
                         intStatus: 3,
+                        intReceivingBin: $('#intReceivingBin').val(),
                         SelectedIbtHeaderId: SelectedIbtHeaderId,
                     },
                     success: function (data) {
@@ -656,6 +664,15 @@
                     }
                 });
             });
+
+            $('#intFromDC').change(function() {
+                getGITBins();
+            });
+
+            $('#intToDC').change(function() {
+                getVarianceAndReceivingBins();
+            });
+
         });
 
         //This function is use for get ibt records
@@ -745,6 +762,9 @@
         };
 
         function modalPopupShow(action, e) {
+            let intGIT = 0;
+            let intVariance = 0;
+            let intReceivingBin = 0;
             if (e != undefined) {
                 selectedStatus = e.data.strStatus;
                 SelectedIbtHeaderId = e.data.intAutoId;
@@ -763,10 +783,15 @@
                 $('#intGIT').val(e.data.intGIT);
                 $('#intVariance').val(e.data.intVariance);
                 $('#strTlNumber').val(e.data.strTlNumber);
+                $('#intReceivingBin').val(e.data.intReceivingBin);
+                intGIT = e.data.intGIT;
+                intVariance = e.data.intVariance;
+                intReceivingBin = e.data.intReceivingBin;
                 getGridProducts(e.data.intAutoId);
             }
             $('#strTlNumber').attr('disabled', true);
             $(".tlnumber_container").hide();
+            $(".receiving_bin_container").hide();
             if (action != 'show') {
                 $('#inputDate').removeAttr('disabled');
                 $('#strReference').removeAttr('disabled');
@@ -774,6 +799,7 @@
                 $('#intToDC').removeAttr('disabled');
                 $('#intGIT').removeAttr('disabled');
                 $('#intVariance').removeAttr('disabled');
+                $('#intReceivingBin').removeAttr('disabled');
             }
             if (action == 'add') {
                 $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
@@ -805,6 +831,7 @@
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', true);
                 $('#btnReceivedIBT').prop('hidden', true);
+                $('#intReceivingBin').attr('disabled', true);
             }
             if(action == 'received' || action == 'show') {
                 $(".add_product_section").addClass('d-none');
@@ -816,6 +843,7 @@
                 $('#intGIT').attr('disabled', true);
                 $('#intVariance').attr('disabled', true);
                 $(".tlnumber_container").show();
+                $(".receiving_bin_container").show();
             }
             gridProducts.columnOption("Qty", "caption", "Qty");
             gridProducts.columnOption("intQtyReceived", "visible", false);
@@ -829,6 +857,8 @@
             if (action == 'received') {
                 gridProducts.columnOption("intQtyReceived", "allowEditing", true);
             }
+            getGITBins(intGIT);
+            getVarianceAndReceivingBins(intVariance, intReceivingBin);
         }
 
         function focusOnFirstBlankCell(e) {
@@ -845,6 +875,79 @@
                     $(cellElement).click();  // Simulate a click on the blank cell to focus it
                 }
             });
+        }
+
+        function getGITBins(intGIT) {
+            $('#intGIT').children().not('option:first').remove();
+            if ($('#intFromDC').val() != '') {
+                loadingPanel.option('visible', true);
+                $.ajax({
+                    url: '{{ url('ibt/get-bins') }}',
+                    type: "GET",
+                    data: {
+                        is_from_dc: true,
+                        dc_id: $('#intFromDC').val()
+                    },
+                    success: function(data) {
+                        for (let index = 0; index < data.length; index++) {
+                            $('#intGIT').append($('<option>', {
+                                value: data[index].intBinId,
+                                text: data[index].strBin
+                            }));
+                        }
+                        if (intGIT != undefined) {
+                            $('#intGIT').val(intGIT);
+                        }
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
+                    }
+                });
+            }
+        }
+        function getVarianceAndReceivingBins(intVariance, intReceivingBin) {
+            $('#intVariance').children().not('option:first').remove();
+            $('#intReceivingBin').children().not('option:first').remove();
+            if ($('#intToDC').val() != '') {
+                loadingPanel.option('visible', true);
+                $.ajax({
+                    url: '{{ url('ibt/get-bins') }}',
+                    type: "GET",
+                    data: {
+                        is_to_dc: true,
+                        dc_id: $('#intToDC').val()
+                    },
+                    success: function(data) {
+                        if (data.varianceBins) {
+                            for (let index = 0; index < data.varianceBins.length; index++) {
+                                $('#intVariance').append($('<option>', {
+                                    value: data.varianceBins[index].intBinId,
+                                    text: data.varianceBins[index].strBin
+                                }));
+                            }
+                        }
+                        if (data.receivingBins) {
+                            for (let index = 0; index < data.receivingBins.length; index++) {
+                                $('#intReceivingBin').append($('<option>', {
+                                    value: data.receivingBins[index].intBinId,
+                                    text: data.receivingBins[index].strBin
+                                }));
+                            }
+                        }
+                        if (intVariance != undefined) {
+                            $('#intVariance').val(intVariance);
+                        }
+                        if (intReceivingBin != undefined) {
+                            $('#intReceivingBin').val(intReceivingBin);
+                        }
+                    },
+                    complete: function() {
+                        // Hide the loading panel
+                        loadingPanel.option('visible', false);
+                    }
+                });
+            }
         }
     </script>
 @endsection

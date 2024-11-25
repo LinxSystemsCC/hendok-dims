@@ -1401,5 +1401,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('ibt/update-ibt', [IbtController::class, 'updateIBTDetails']);
     Route::post('ibt/update-ibt-lines', [IbtController::class, 'updateIbtLines']);
     Route::post('ibt/update-status', [IbtController::class, 'updateStatus']);
+    Route::get('ibt/get-bins', [IbtController::class, 'getBins']);
 });
 
