@@ -100,7 +100,7 @@ class IbtController extends Controller
     public function updateIBTDetails(Request $request)
     {
         $intStatus = $request->has('intStatus') && $request->get('intStatus') ? $request->get('intStatus') : 0;
-        $strTlNumber = $request->get('strTlNumber') ?: null;
+        $intTlNumber = $request->get('intTlNumber') ?: null;
         $intVariance = $request->get('intVariance') ?: null;
         $result = DB::connection('sqlsrv2')->select(
             'EXEC spUpdateIBT
@@ -109,7 +109,7 @@ class IbtController extends Controller
                 @date = :date,
                 @userID = :userID,
                 @intStatus = :intStatus,
-                @strTlNumber = :strTlNumber,
+                @intTlNumber = :intTlNumber,
                 @intFromDC = :intFromDC,
                 @intToDC = :intToDC,
                 @intGIT = :intGIT,
@@ -121,7 +121,7 @@ class IbtController extends Controller
                 'date' => $request->get('dtmCreated'),
                 'userID' => Auth::user()->UserID,
                 'intStatus' => $intStatus,
-                'strTlNumber' => $strTlNumber,
+                'intTlNumber' => $intTlNumber,
                 'intFromDC' => $request->get('intFromDC'),
                 'intToDC' => $request->get('intToDC'),
                 'intGIT' => $request->get('intGIT'),
