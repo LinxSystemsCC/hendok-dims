@@ -477,3 +477,170 @@ LEFT JOIN viewBinNames ln2 ON head.intGIT = ln2.intBinId
 LEFT JOIN tblDCNames dc ON dc.intAutoId = head.intFromDC
 LEFT JOIN tblDCNames dc2 ON dc2.intAutoId = head.intToDC
 GO
+
+
+--===========IBT NEW CHANGES(DATE - 27-11-2024(D-M-Y)))============
+EXEC sp_rename 'tblIBTHeader.strTLNumber', 'intTLNumber', 'COLUMN';
+
+ALTER TABLE tblIBTHeader
+ALTER COLUMN intTLNumber BIGINT;
+
+ALTER PROCEDURE [dbo].[spUpdateIBT]
+    @SelectedIbtHeaderId BIGINT,
+    @reference NVARCHAR(50),
+    @date DATE,
+    @userID BIGINT,
+    @intStatus INT = 0,
+	@intTLNumber varchar(255) null,
+	@intFromDC INT null,
+	@intToDC INT null,
+	@intGIT INT null,
+	@intVariance INT null,
+    @xmlLines XML
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Update tblIBTHeader
+    UPDATE tblIBTHeader
+    SET
+        strReference = @reference,
+        dtmCreated = @date,
+        intCreatedBy = @userID,
+        intStatus = @intStatus,
+		intTLNumber = @intTLNumber,
+		intFromDC = @intFromDC,
+		intToDC = @intToDC,
+		intGIT = @intGIT,
+		intVariance = @intVariance
+    WHERE
+        intAutoId = @SelectedIbtHeaderId;
+
+    -- Temporary table for product data
+    IF OBJECT_ID(N'tempdb..#tempProductDataDump') IS NOT NULL
+    BEGIN
+        DROP TABLE #tempProductDataDump;
+    END
+
+    CREATE TABLE #tempProductDataDump (
+        pastelcode NVARCHAR(50),
+        pasteldesc NVARCHAR(255),
+        qty FLOAT,
+        [weight] FLOAT,
+        comment NVARCHAR(255),
+    );
+
+    -- Insert product data from XML into the temporary table
+    INSERT INTO #tempProductDataDump (pastelcode, pasteldesc, qty, [weight], comment)
+    SELECT
+        result.value('PastelCode[1]', 'nvarchar(50)'),
+        result.value('PastelDescription[1]', 'nvarchar(255)'),
+        result.value('Qty[1]', 'float'),
+        result.value('Weight[1]', 'float'),
+        result.value('Comment[1]', 'nvarchar(255)')
+    FROM @xmlLines.nodes('/xml/result') AS results(result);
+
+    -- Delete existing lines for the selected header
+    DELETE FROM tblIBTLines
+    WHERE intAutoHeaderId = @SelectedIbtHeaderId;
+
+    -- Insert new product data into tblIBTLines
+    INSERT INTO tblIBTLines (
+        intAutoHeaderId,
+        strPartNumber,
+        fltWeight,
+        mnyQty,
+        strComment
+    )
+    SELECT
+        @SelectedIbtHeaderId,
+        pastelcode,
+        [weight],
+        qty,
+        comment
+    FROM #tempProductDataDump;
+
+    -- Clean up temporary table
+    DROP TABLE #tempProductDataDump;
+	SELECT @SelectedIbtHeaderId AS intAutoId
+
+	-- Return the created header identity
+	SELECT 'Success' AS Result
+END
+GO
+
+
+ALTER VIEW [dbo].[viewtblIBTHeadersData] AS
+SELECT
+    head.intAutoId,
+    strReference,
+    intFromDC,
+    intToDC,
+    intGIT,
+    intVariance,
+    head.dtmCreated,
+    du.UserName AS [Username],
+    ln.strBin As varianceBinName,
+    ln2.strBin As gitBinName,
+    dc.strDCName,
+    dc2.strDCName AS toDCName,
+	'TL' + CAST(head.intTLnumber AS NVARCHAR(10)) strTlNumber,
+	head.intReceivingBin,
+    CASE
+        WHEN intStatus = 0 THEN 'Pending'
+        WHEN intStatus = 1 THEN 'Planned'
+        WHEN intStatus = 2 THEN 'Issued'
+        WHEN intStatus = 3 THEN 'Received'
+        ELSE ''
+    END AS strStatus
+FROM tblIBTHeader AS head
+INNER JOIN tblDIMSUSERS du ON du.UserID = head.intCreatedBy
+LEFT JOIN viewBinNames ln ON head.intVariance = ln.intBinId
+LEFT JOIN viewBinNames ln2 ON head.intGIT = ln2.intBinId
+LEFT JOIN tblDCNames dc ON dc.intAutoId = head.intFromDC
+LEFT JOIN tblDCNames dc2 ON dc2.intAutoId = head.intToDC
+GO
+
+
+--===========IBT NEW CHANGES(DATE - 28-11-2024(D-M-Y)))============
+ALTER TABLE tblIBTHeader
+ADD
+    dtmReceived DATETIME NULL,
+    intReceivedBy BIGINT NULL;
+
+ALTER TABLE tblIBTHeader
+ALTER COLUMN dtmCreated DATETIME;
+
+ALTER VIEW [dbo].[viewtblIBTHeadersData] AS
+SELECT
+    head.intAutoId,
+    strReference,
+    intFromDC,
+    intToDC,
+    intGIT,
+    intVariance,
+    head.dtmCreated,
+    du.UserName AS IssuedBy,
+	head.dtmReceived,
+	ru.UserName AS ReceivedBy,
+    ln.strBin As varianceBinName,
+    ln2.strBin As gitBinName,
+    dc.strDCName,
+    dc2.strDCName AS toDCName,
+	'TL' + CAST(head.intTLnumber AS NVARCHAR(10)) strTlNumber,
+	head.intReceivingBin,
+    CASE
+        WHEN intStatus = 0 THEN 'Pending'
+        WHEN intStatus = 1 THEN 'Planned'
+        WHEN intStatus = 2 THEN 'Issued'
+        WHEN intStatus = 3 THEN 'Received'
+        ELSE ''
+    END AS strStatus
+FROM tblIBTHeader AS head
+INNER JOIN tblDIMSUSERS du ON du.UserID = head.intCreatedBy
+LEFT JOIN tblDIMSUSERS ru ON ru.UserID = head.intReceivedBy
+LEFT JOIN viewBinNames ln ON head.intVariance = ln.intBinId
+LEFT JOIN viewBinNames ln2 ON head.intGIT = ln2.intBinId
+LEFT JOIN tblDCNames dc ON dc.intAutoId = head.intFromDC
+LEFT JOIN tblDCNames dc2 ON dc2.intAutoId = head.intToDC
+GO

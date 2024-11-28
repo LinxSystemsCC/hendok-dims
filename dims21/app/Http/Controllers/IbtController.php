@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class IbtController extends Controller
 {
@@ -170,10 +171,19 @@ class IbtController extends Controller
         $passData = [
             'intStatus' => $request->get('intStatus'),
             'intReceivingBin' => $request->get('intReceivingBin'),
+            'dtmReceived' => Carbon::now(),
+            'intReceivedBy' => Auth::user()->UserID,
             'intAutoId' => $request->get('SelectedIbtHeaderId'),
         ];
         $updatedRows = DB::update(
-            'UPDATE tblIBTHeader SET intStatus = :intStatus, intReceivingBin = :intReceivingBin WHERE intAutoId = :intAutoId',
+            '
+                UPDATE tblIBTHeader SET
+                    intStatus = :intStatus,
+                    intReceivingBin = :intReceivingBin,
+                    dtmReceived = :dtmReceived,
+                    intReceivedBy = :intReceivedBy
+                WHERE intAutoId = :intAutoId
+            ',
             $passData
         );
 

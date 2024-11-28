@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="{{ asset('public/css/all.min.css') }}" />
 
     <!-- General -->
-    <link rel="stylesheet" href="{{ asset('public/css/general.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/css/general.css?v=' . config('custom.css_version')) }}" />
 
     <!-- Jquery-ui -->
     <link rel="stylesheet" href="{{ asset('public/css/jquery-ui2.min.css') }}" />
@@ -199,6 +199,11 @@
             </div>
         @endif
     </div>
+
+    <div id="generalConfirmationPopup"></div>
+    <div id="generalAlertPopup"></div>
+    <div id="generalValidationPopup"></div>
+    <div id="generalErrorList"></div>
 </body>
 
 <!-- Bootstrap -->
@@ -225,7 +230,7 @@
 <!-- Multiselect -->
 <script src="{{ asset('public/js/jquery.multiselect.js') }}"></script>
 
-<script src="{{ asset('public/js/general.js') }}"></script>
+<script src="{{ asset('public/js/general.js?v=' . config('custom.js_version')) }}"></script>
 
 <script>
     $(document).on('focus', ':input', function() {
