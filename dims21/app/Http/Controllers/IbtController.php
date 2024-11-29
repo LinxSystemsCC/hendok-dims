@@ -187,6 +187,12 @@ class IbtController extends Controller
             $passData
         );
 
+        // This is added to adjust the stock when an ibt is moved
+        $ibtHeaderid = $request->get('SelectedIbtHeaderId');
+        $userId = Auth::user()->UserID;
+
+        $move = DB::connection('sqlsrv2')->select("EXEC usp_C_RecieveIBTandMove $ibtHeaderid, $userId");
+
         if ($updatedRows > 0) {
             return response()->json(['success' => true, 'message' => 'Record updated successfully.']);
         }
