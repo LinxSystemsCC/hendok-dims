@@ -944,7 +944,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('removemappingdeptmachitems', [WareHouseController::class,'removemappingdeptmachitems']);
     Route::post('savepermissions', [WareHouseController::class,'savepermissions']);
     Route::post('printgenericlabel', [WareHouseController::class,'printgenericlabel']);
-    Route::post('printgalvlabel', [WareHouseController::class,'printgalvlabel']);
     Route::get('startendjob', [WareHouseController::class,'startendjob']);
     Route::get('issuestock', [WareHouseController::class,'issuestock']);
     Route::get('getIssueStock', [WareHouseController::class,'getIssueStock']);
@@ -981,9 +980,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getpalletmovementreport', [WareHouseController::class,'getpalletmovementreport']);
     Route::get('getitemmovementreport', [WareHouseController::class,'getitemmovementreport']);
     Route::get('getpalletreversalreport', [WareHouseController::class,'getpalletreversalreport']);
-    Route::get('wmaxreprint', [WareHouseController::class,'wmaxreprint']);
-    Route::post('galvReprintEdit', [WareHouseController::class,'galvReprintEdit']);
-    Route::get('getGalvReprints', [WareHouseController::class,'getGalvReprints']);
     Route::get('binandqrcodes', [WareHouseController::class,'binandqrcodes']);
     Route::get('printlocationqrcodes/{location}', [WareHouseController::class,'printlocationqrcodes']);
     Route::get('getProductGroupMappedToDept', [WareHouseController::class,'getProductGroupMappedToDept']);
@@ -1185,6 +1181,11 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('changeGalvJobStatus', [GalvController::class,'changeGalvJobStatus']);
     Route::get('getGalvWIPConsolidated',[GalvController::class,'getGalvWIPConsolidated']);
     Route::post('insertIntoJobTableGalv', [GalvController::class,'insertIntoJobTableGalv']);
+    
+    Route::get('getGalvReprints', [GalvController::class,'getGalvReprints']);
+    Route::post('printgalvlabel', [GalvController::class,'printgalvlabel']);
+    Route::post('galvReprintEdit', [GalvController::class,'galvReprintEdit']);
+    Route::get('wmaxreprint', [GalvController::class,'wmaxreprint']);
 
 });
 //GALV CONTROLLER ENDS HERE !!!

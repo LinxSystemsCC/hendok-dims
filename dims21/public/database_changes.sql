@@ -222,8 +222,8 @@ ADD
 
 ALTER TABLE tblIBTLines
 ADD
-    intQtyReceived int,
-    intQtyVariance int;
+    mnyQtyReceived int,
+    mnyQtyVariance int;
 
 
 
@@ -402,7 +402,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT intAutoId, intAutoHeaderId, strPartNumber as PastelCode, fltWeight as Weight, mnyQty as Qty, strComment as Comment, PastelDescription,intQtyVariance,intQtyReceived
+    SELECT intAutoId, intAutoHeaderId, strPartNumber as PastelCode, fltWeight as Weight, mnyQty as Qty, strComment as Comment, PastelDescription,mnyQtyVariance,mnyQtyReceived
     FROM tblIBTLines
     INNER JOIN viewTblProductWeightedCalc
         ON tblIBTLines.strPartNumber COLLATE SQL_Latin1_General_CP1_CI_AS = viewTblProductWeightedCalc.PastelCode

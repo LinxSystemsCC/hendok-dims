@@ -279,4 +279,61 @@ class GalvController extends Controller
             );
         return response()->json($returnmach);
     }
+
+    public function getGalvReprints(Request $request)
+    {
+        $ticketNo = $request->get('ticketNo');
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+
+        $query = "SELECT * FROM viewGalvReprint WHERE 1=1";
+
+        if (!empty($ticketNo)) {
+            $query .= " AND TicketNo LIKE ?";
+            $bindings[] = '%' . $ticketNo . '%';
+        }
+
+        if (!empty($dateFrom) && !empty($dateTo)) {
+            $query .= " AND [DateTime] BETWEEN ? AND ?";
+            $bindings[] = $dateFrom;
+            $bindings[] = $dateTo;
+        }
+
+        $query .= " ORDER BY [DateTime] DESC";
+
+        $reprints = DB::connection('sqlsrv2')->select($query, $bindings ?? []);
+        return response()->json($reprints);
+
+    }
+
+    public function printgalvlabel(Request $request)
+    {
+        $ticketno = $request->get("ticketno");
+        $qty = $request->get("qty");
+        $status = $request->get('status');
+
+        //dd($ticketno,$qty,$type);
+
+        $returndata = DB::connection('sqlsrv2')->statement('exec spInsertFinalGalvLabelJobToPrint ?,?,?', array($ticketno, $qty, $status));
+
+        return response()->json($returndata);
+    }
+
+    public function galvReprintEdit(Request $request)
+    {
+        $TicketNo = $request->get("TicketNo");
+        $ActualWireSize = $request->get("ActualWireSize");
+        $TreatedMPA = $request->get("TreatedMPA");
+        $TestedZinc = $request->get("TestedZinc");
+        $Weight = $request->get("Weight");
+        $Table = $request->get("Table");
+
+        $result = DB::connection('sqlsrv2')->select("EXEC spUpdateGalvCompletedJob '$TicketNo', $ActualWireSize, $TreatedMPA, $TestedZinc, $Weight, '$Table'");
+        return response()->json($result);
+    }
+
+    public function wmaxreprint()
+    {
+        return view('warehouse.galv.wmaxreprint');
+    }
 }

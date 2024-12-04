@@ -203,7 +203,7 @@
     <div id="generalConfirmationPopup"></div>
     <div id="generalAlertPopup"></div>
     <div id="generalValidationPopup"></div>
-    <div id="generalErrorList"></div>
+    <div id="generalErrorList" hidden></div>
 </body>
 
 <!-- Bootstrap -->

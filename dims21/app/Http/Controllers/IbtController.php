@@ -145,12 +145,12 @@ class IbtController extends Controller
     public function updateIbtLines(Request $request)
     {
         $passData = [
-            'intQtyVariance' => $request->get('intQtyVariance'),
-            'intQtyReceived' => $request->get('intQtyReceived'),
+            'mnyQtyVariance' => $request->get('mnyQtyVariance'),
+            'mnyQtyReceived' => $request->get('mnyQtyReceived'),
             'intAutoId' => $request->get('intAutoId'),
         ];
         $updatedRows = DB::update(
-            'UPDATE tblIBTLines SET intQtyVariance = :intQtyVariance, intQtyReceived = :intQtyReceived WHERE intAutoId = :intAutoId',
+            'UPDATE tblIBTLines SET mnyQtyVariance = :mnyQtyVariance, mnyQtyReceived = :mnyQtyReceived WHERE intAutoId = :intAutoId',
             $passData
         );
 

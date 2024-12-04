@@ -286,7 +286,18 @@
                     },
                     {
                         dataField: "IssuedBy",
-                        caption: "Issued By",
+                        caption: "Requested By",
+                    },
+                    {
+                        dataField: "dtmCreated",
+                        caption: "Requested Date",
+                        customizeText: function(cellInfo) {
+                            const date = new Date(cellInfo.value);
+                            if (!isNaN(date)) {
+                                return formatDateDDMMYYY(date);
+                            }
+                            return cellInfo.value;
+                        }
                     },
                     {
                         dataField: "ReceivedBy",
@@ -296,27 +307,6 @@
                                 return cellInfo.value;
                             }
                             return '-';
-                        }
-                    },
-                    {
-                        dataField: "strTlNumber",
-                        caption: "TL Number",
-                        visible: false,
-                    },
-                    {
-                        dataField: "intReceivingBin",
-                        caption: "Receiving Bin",
-                        visible: false,
-                    },
-                    {
-                        dataField: "dtmCreated",
-                        caption: "Issued Date",
-                        customizeText: function(cellInfo) {
-                            const date = new Date(cellInfo.value);
-                            if (!isNaN(date)) {
-                                return formatDateDDMMYYY(date);
-                            }
-                            return cellInfo.value;
                         }
                     },
                     {
@@ -331,7 +321,17 @@
                             }
                             return '-';
                         }
-                    }
+                    },
+                    {
+                        dataField: "strTlNumber",
+                        caption: "TL Number",
+                        visible: false,
+                    },
+                    {
+                        dataField: "intReceivingBin",
+                        caption: "Receiving Bin",
+                        visible: false,
+                    },
                 ],
                 onRowRemoving: function (e) { },
                 // onToolbarPreparing should manage toolbar items based on the flag
@@ -440,12 +440,12 @@
                         allowEditing: false,
                     },
                     {
-                        dataField: "intQtyReceived",
+                        dataField: "mnyQtyReceived",
                         caption: "Qty Received",
                         allowEditing: false,
                     },
                     {
-                        dataField: "intQtyVariance",
+                        dataField: "mnyQtyVariance",
                         caption: "Qty Variance",
                         allowEditing: false,
                     }
@@ -475,20 +475,20 @@
                 },
                 onRowUpdating: function (e) {
                     console.log(e)
-                    // Check if the updated field is 'intQtyReceived'
-                    var updatedField = e.newData.intQtyReceived; // Get the new value of 'intQtyReceived'
-                    var oldQtyReceived = e.oldData.intQtyReceived; // Get the old value of 'intQtyReceived'
+                    // Check if the updated field is 'mnyQtyRecieved'
+                    var updatedField = e.newData.mnyQtyRecieved; // Get the new value of 'mnyQtyRecieved'
+                    var oldQtyReceived = e.oldData.mnyQtyRecieved; // Get the old value of 'mnyQtyRecieved'
 
-                    // If 'intQtyReceived' was updated, calculate 'intQtyVariance'
+                    // If 'mnyQtyRecieved' was updated, calculate 'mnyQtyVariance'
                     if (updatedField !== oldQtyReceived) {
                         var qty = e.oldData.Qty || 0; // Assuming 'Qty' is the base quantity
-                        var intQtyReceived = e.newData.intQtyReceived || 0;
+                        var mnyQtyRecieved = e.newData.mnyQtyRecieved || 0;
 
                         // Calculate the variance
-                        var intQtyVariance = qty - intQtyReceived;
+                        var mnyQtyVariance = qty - mnyQtyRecieved;
 
-                        // Update the 'intQtyVariance' value
-                        e.newData.intQtyVariance = intQtyVariance;
+                        // Update the 'mnyQtyVariance' value
+                        e.newData.mnyQtyVariance = mnyQtyVariance;
                     }
                 },
                 onRowUpdated: function(e) {
@@ -497,8 +497,8 @@
                         type: 'POST',
                         data: {
                             intAutoId: e.data.intAutoId,
-                            intQtyReceived: e.data.intQtyReceived,
-                            intQtyVariance: e.data.intQtyVariance,
+                            mnyQtyRecieved: e.data.mnyQtyRecieved,
+                            mnyQtyVariance: e.data.mnyQtyVariance,
                         },
                         success: function (data) {
                             console.log("Update success:", data);
@@ -897,28 +897,28 @@
                 $(".receiving_bin_container").show();
             }
             gridProducts.columnOption("Qty", "caption", "Qty");
-            gridProducts.columnOption("intQtyReceived", "visible", false);
-            gridProducts.columnOption("intQtyVariance", "visible", false);
+            gridProducts.columnOption("mnyQtyRecieved", "visible", false);
+            gridProducts.columnOption("mnyQtyVariance", "visible", false);
             if ((e != undefined && e.data.strStatus === "Received") || action == 'received') {
                 gridProducts.columnOption("Qty", "caption", "Qty Issued");
-                gridProducts.columnOption("intQtyReceived", "visible", true);
-                gridProducts.columnOption("intQtyVariance", "visible", true);
+                gridProducts.columnOption("mnyQtyRecieved", "visible", true);
+                gridProducts.columnOption("mnyQtyVariance", "visible", true);
             }
-            gridProducts.columnOption("intQtyReceived", "allowEditing", false);
+            gridProducts.columnOption("mnyQtyRecieved", "allowEditing", false);
             if (action == 'received') {
-                gridProducts.columnOption("intQtyReceived", "allowEditing", true);
+                gridProducts.columnOption("mnyQtyRecieved", "allowEditing", true);
             }
             getGITBins(intGIT);
             getVarianceAndReceivingBins(intVariance, intReceivingBin);
         }
 
         function focusOnFirstBlankCell(e) {
-            var columnIndex = e.component.columnOption('intQtyReceived').index;  // Column index for 'intQtyReceived'
+            var columnIndex = e.component.columnOption('mnyQtyRecieved').index;  // Column index for 'mnyQtyRecieved'
             var firstBlankCellFound = false;
 
             // Iterate over all visible rows and check for the first blank cell in the specified column
             e.component.getVisibleRows().forEach(function(row) {
-                if (gridProducts.columnOption("intQtyReceived", "visible") && !firstBlankCellFound && !row.data.intQtyReceived) {
+                if (gridProducts.columnOption("mnyQtyRecieved", "visible") && !firstBlankCellFound && !row.data.mnyQtyRecieved) {
                     firstBlankCellFound = true;
                     var rowIndex = row.rowIndex;
                     var rowElement = e.component.getRowElement(rowIndex);
@@ -1075,7 +1075,7 @@
                 let isLineValidationOccur = false;
                 lines.forEach(function(item, index) {
                     if (item) {
-                        if (item.intQtyReceived == '' || item.intQtyReceived == null) {
+                        if (item.mnyQtyRecieved == '' || item.mnyQtyRecieved == null) {
                             if (!isLineValidationOccur) {
                                 errors.push({ message: "Please ensure that the quantity received for all products is filled." });
                                 isLineValidationOccur = true;

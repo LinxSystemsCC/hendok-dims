@@ -428,20 +428,6 @@ class WareHouseController extends Controller
         return response()->json($returndata);
     }
 
-    public function printgalvlabel(Request $request)
-    {
-        $ticketno = $request->get("ticketno");
-        $qty = $request->get("qty");
-        $status = $request->get('status');
-
-        //dd($ticketno,$qty,$type);
-
-        $returndata = DB::connection('sqlsrv2')->statement('exec spInsertFinalGalvLabelJobToPrint ?,?,?', array($ticketno, $qty, $status));
-
-        return response()->json($returndata);
-    }
-
-
     public function modifyuserleaderpage()
     {
         $baseusers = DB::connection('sqlsrv2')->select("Select * from tblDimsusers");
@@ -1448,31 +1434,6 @@ class WareHouseController extends Controller
         //dd($deparment);
 
         return view('warehouse/printpalletchoosemachine')->with('departments', $dept)->with('machines', $machines)->with('deparment', $deparment);
-    }
-
-    public function wmaxreprint()
-    {
-        // $jobs = DB::connection('sqlsrv2')->select("SELECT * FROM viewGalvReprint ORDER BY [DateTime] DESC");
-        return view('warehouse/wmaxreprint');//->with('jobs',$jobs);
-    }
-
-    public function galvReprintEdit(Request $request)
-    {
-        $TicketNo = $request->get("TicketNo");
-        $ActualWireSize = $request->get("ActualWireSize");
-        $TreatedMPA = $request->get("TreatedMPA");
-        $TestedZinc = $request->get("TestedZinc");
-        $Weight = $request->get("Weight");
-        $Table = $request->get("Table");
-
-        $result = DB::connection('sqlsrv2')->select("EXEC spUpdateGalvCompletedJob '$TicketNo', $ActualWireSize, $TreatedMPA, $TestedZinc, $Weight, '$Table'");
-        return response()->json($result);
-    }
-
-    public function getGalvReprints(Request $request)
-    {
-        $reprints = DB::connection('sqlsrv2')->select("SELECT * FROM viewGalvReprint ORDER BY [DateTime] DESC");
-        return response()->json($reprints);
     }
 
     public function getMachinesforselecteddept(Request $request)
