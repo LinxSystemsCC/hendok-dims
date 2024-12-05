@@ -79,7 +79,7 @@
                     @endif
                     <td>{{ $val->OrderDate}}</td>
                     <td>{{$val->OrderNum}}</td>
-                    @if($manualEdit == "1")
+                    @if($manualEdit == "0")
                         <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
                     @else
                         <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value="0"></td>
