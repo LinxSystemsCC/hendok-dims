@@ -289,6 +289,14 @@
                             valueExpr: "strPrinter",
                             displayExpr: "strPrinter",
                         },
+                    },{
+                        dataField: "PrinterPathIBT",
+                        caption: "IBT Printer",
+                        lookup: {
+                            dataSource: printers,
+                            valueExpr: "strPrinter",
+                            displayExpr: "strPrinter",
+                        },
                     },
                     {
                         dataField: "intGroupType",
@@ -389,6 +397,7 @@
                     var PrinterPathDeliveryNote = e.newData.PrinterPathDeliveryNote || e.oldData.PrinterPathDeliveryNote;
                     var PrinterPathUpliftment = e.newData.PrinterPathUpliftment || e.oldData.PrinterPathUpliftment;
                     var PrinterPathTestCert = e.newData.PrinterPathTestCert || e.oldData.PrinterPathTestCert;
+                    var PrinterPathIBT = e.newData.PrinterPathIBT || e.oldData.PrinterPathIBT;
 
                     $.ajax({
                         url: '{!! url('/updateUser') !!}',
@@ -406,6 +415,7 @@
                             PrinterPathDeliveryNote: PrinterPathDeliveryNote,
                             PrinterPathUpliftment: PrinterPathUpliftment,
                             PrinterPathTestCert: PrinterPathTestCert,
+                            PrinterPathIBT: PrinterPathIBT,
                         },
                         success: function(data) {
                             getUsers();

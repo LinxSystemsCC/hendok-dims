@@ -181,7 +181,10 @@ class IbtController extends Controller
                     intStatus = :intStatus,
                     intReceivingBin = :intReceivingBin,
                     dtmReceived = :dtmReceived,
-                    intReceivedBy = :intReceivedBy
+                    intReceivedBy = :intReceivedBy,
+                    intAutoRecieveId = (
+                        SELECT ISNULL(MAX(intAutoRecieveId), 0) + 1 FROM tblIBTHeader
+                    )
                 WHERE intAutoId = :intAutoId
             ',
             $passData

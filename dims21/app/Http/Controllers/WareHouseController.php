@@ -95,6 +95,7 @@ class WareHouseController extends Controller
         $PrinterPathDeliveryNote = $request->get('PrinterPathDeliveryNote');
         $PrinterPathUpliftment = $request->get('PrinterPathUpliftment');
         $PrinterPathTestCert = $request->get('PrinterPathTestCert');
+        $PrinterPathIBT = $request->get('PrinterPathIBT');
 
         // Check if any of the variables is empty and set them to NULL
         $userName = empty($userName) ? 'NULL' : "'$userName'";
@@ -108,9 +109,10 @@ class WareHouseController extends Controller
         $PrinterPathDeliveryNote = empty($PrinterPathDeliveryNote) ? 'NULL' : "'$PrinterPathDeliveryNote'";
         $PrinterPathUpliftment = empty($PrinterPathUpliftment) ? 'NULL' : "'$PrinterPathUpliftment'";
         $PrinterPathTestCert = empty($PrinterPathTestCert) ? 'NULL' : "'$PrinterPathTestCert'";
+        $PrinterPathIBT = empty($PrinterPathIBT) ? 'NULL' : "'$PrinterPathIBT'";
 
         // Build and execute the SQL query
-        $query = "EXEC spUpdateUserInfo $ID, $userName, $email, $groupId, $groupType, $sageCode, $tablet, $PrinterPathInvoice, $PrinterPathTruckControl, $PrinterPathDeliveryNote, $PrinterPathUpliftment, $PrinterPathTestCert";
+        $query = "EXEC spUpdateUserInfo $ID, $userName, $email, $groupId, $groupType, $sageCode, $tablet, $PrinterPathInvoice, $PrinterPathTruckControl, $PrinterPathDeliveryNote, $PrinterPathUpliftment, $PrinterPathTestCert, $PrinterPathIBT";
         $update = DB::connection('sqlsrv2')->select($query);
 
         return response()->json($update);

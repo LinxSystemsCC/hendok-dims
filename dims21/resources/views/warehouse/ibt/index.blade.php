@@ -1,9 +1,7 @@
-
 @extends('layouts.base')
 
 {{-- Set the Title --}}
 @section('title', 'IBT')
-
 
 {{-- Set to show navbar --}}
 @php
@@ -12,10 +10,10 @@
 
 @section('page')
     <!-- Flexdatalist -->
-    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>
+    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet" type='text/css'>
 
     <style>
-        .grid{
+        .grid {
             height: 100%;
             max-height: 100%;
         }
@@ -24,8 +22,10 @@
     <div class="col-md-12 h-100">
 
         <div class="grid" id="gridIBT"></div>
+
         <!-- IBT Modal -->
-        <div class="modal fade modal-xl extra-large" id="IBTModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true">
+        <div class="modal fade modal-xl extra-large" id="IBTModal" tabindex="-1" aria-labelledby="newuserLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -44,7 +44,7 @@
                             <div class="col-6">
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="strReference">Reference</label>
-                                    <input  class="form-control w-100 strReference" id="strReference" required>
+                                    <input class="form-control w-100 strReference" id="strReference" required>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                             <div class="col-6 tlnumber_container">
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="strTlNumber">TL Number</label>
-                                    <input  class="form-control w-100 strTlNumber" id="strTlNumber" required>
+                                    <input class="form-control w-100 strTlNumber" id="strTlNumber" required>
                                 </div>
                             </div>
                             <div class="col-6 receiving_bin_container">
@@ -109,7 +109,8 @@
                             <div class="col-2 pe-0">
                                 <div class="form-group mb-2">
                                     <label class="control-label" for="inputProductCode">Code</label>
-                                    <input type="text" class="form-control rounded-0 rounded-start" id="inputProductCode">
+                                    <input type="text" class="form-control rounded-0 rounded-start"
+                                        id="inputProductCode">
                                 </div>
                             </div>
                             <div class="col-3 p-0">
@@ -133,7 +134,8 @@
                             <div class="col-1 p-0">
                                 <div class="form-group mb-2">
                                     <label class="control-label" for="inputProductWeight">Weight</label>
-                                    <input type="number" class="form-control rounded-0" id="inputProductWeight" readonly>
+                                    <input type="number" class="form-control rounded-0" id="inputProductWeight"
+                                        readonly>
                                 </div>
                             </div>
                             <div class="col-3 p-0">
@@ -145,7 +147,8 @@
                             <div class="col-1 ps-0">
                                 <div class="form-group mb-2">
                                     <label class="control-label">&nbsp;</label>
-                                    <button class="btn btn-success rounded-0 rounded-end w-100" id="btnAddProduct">ADD</button>
+                                    <button class="btn btn-success rounded-0 rounded-end w-100"
+                                        id="btnAddProduct">ADD</button>
                                 </div>
                             </div>
                         </div>
@@ -157,14 +160,16 @@
                     <input type="text" id="intStatus" hidden>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary closeIBTModal"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="button" id="btnReceivedIBT" class="btn btn-success" hidden>Receive</button>
                         <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden>Update</button>
-                        <button type="button" id="btnSaveIBT" class="btn btn-success" >Save</button>
+                        <button type="button" id="btnSaveIBT" class="btn btn-success">Save</button>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
 @endsection
@@ -174,12 +179,12 @@
     <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>
     <script>
         var products = JSON.parse(JSON.stringify({!! json_encode($products) !!}));
-        var productsList = $.map(products, function (item) {
+        var productsList = $.map(products, function(item) {
             return {
                 PastelCode: item.PastelCode,
                 PastelDescription: item.PastelDescription,
                 Weight: item.Weight,
-                qtyavl:item.qtyavl
+                qtyavl: item.qtyavl
             };
         });
         var gridProducts;
@@ -187,17 +192,18 @@
         var SelectedIbtHeaderId = null;
         var selectedIBTRowDetails = null;
         var inputDateElement = null;
+
         $(document).ready(function() {
             inputDateElement = $("#inputDate").dxDateBox({
-                type: "datetime",  // This will allow selecting both date and time
-                displayFormat: "dd-MM-yyyy HH:mm:ss",  // Customize the display format
-                value: new Date(),  // Optional: Set initial value to current date and time
+                type: "datetime", // This will allow selecting both date and time
+                displayFormat: "dd-MM-yyyy HH:mm:ss", // Customize the display format
+                value: new Date(), // Optional: Set initial value to current date and time
                 // Define the onValueChanged event
                 onValueChanged: function(e) {
                     var newValue = e.value;
                 }
             }).dxDateBox("instance");
-            $('#IBTModal').on('shown.bs.modal', function () {
+            $('#IBTModal').on('shown.bs.modal', function() {
                 $('.select2').select2({
                     theme: 'bootstrap-5',
                     dropdownParent: $('#IBTModal'),
@@ -209,9 +215,15 @@
                 dataSource: [],
                 hoverStateEnabled: true,
                 showBorders: true,
-                filterRow: { visible: true },
-                filterPanel: { visible: true },
-                headerFilter: { visible: true },
+                filterRow: {
+                    visible: true
+                },
+                filterPanel: {
+                    visible: true
+                },
+                headerFilter: {
+                    visible: true
+                },
                 allowColumnResizing: true,
                 columnAutoWidth: true,
                 scrolling: {
@@ -244,16 +256,17 @@
                         autoFilterEnabled: true,
                     }).then(() => {
                         workbook.xlsx.writeBuffer().then((buffer) => {
-                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'IBT.xlsx');
+                            saveAs(new Blob([buffer], {
+                                type: 'application/octet-stream'
+                            }), 'IBT.xlsx');
                         });
                     });
                     e.cancel = true;
                 },
-                columns: [
-                    {
+                columns: [{
                         dataField: "intAutoId",
                         caption: "IBT ID",
-                        customizeText: function (cellInfo) {
+                        customizeText: function(cellInfo) {
                             var IbtHeaderId = cellInfo.value;
                             var numericPart = (100000 + IbtHeaderId).toString().slice(-6);
                             return 'IBT' + numericPart;
@@ -300,6 +313,17 @@
                         }
                     },
                     {
+                        dataField: "intAutoRecieveId",
+                        caption: "Receiving ID",
+                        customizeText: function(cellInfo) {
+                            if (cellInfo.value != null) {
+                                var numericPart = (100000 + parseInt(cellInfo.value, 10)).toString().slice(-6);
+                                return 'IBTRC' + numericPart;
+                            }
+                            return '-';
+                        },
+                    },
+                    {
                         dataField: "ReceivedBy",
                         caption: "Received By",
                         customizeText: function(cellInfo) {
@@ -333,36 +357,32 @@
                         visible: false,
                     },
                 ],
-                onRowRemoving: function (e) { },
+                onRowRemoving: function(e) {},
                 // onToolbarPreparing should manage toolbar items based on the flag
-                onToolbarPreparing: function (e) {
-                    e.toolbarOptions.items.unshift(
-                        {
-                            location: 'before',
-                            template: function () {
-                                return $('<h3>').text('IBT');
-                            }
+                onToolbarPreparing: function(e) {
+                    e.toolbarOptions.items.unshift({
+                        location: 'before',
+                        template: function() {
+                            return $('<h3>').text('IBT');
                         }
-                    );
-                    e.toolbarOptions.items.push(
-                        {
-                            location: 'after',
-                            widget: "dxButton",
-                            options: {
-                                icon: "fa fa-plus",
-                                text: "ADD",
-                                onClick: function () {
-                                    modalPopupShow('add');
-                                },
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'after',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa fa-plus",
+                            text: "ADD",
+                            onClick: function() {
+                                modalPopupShow('add');
                             },
-                        }
-                    );
+                        },
+                    });
                     let receivedButton = {
                         location: 'after',
                         widget: "dxButton",
                         options: {
                             text: "Receive",
-                            onClick: function () {
+                            onClick: function() {
                                 modalPopupShow('received', selectedIBTRowDetails);
                             },
                         }
@@ -371,14 +391,14 @@
                         e.toolbarOptions.items.push(receivedButton);
                     }
                 },
-                onRowDblClick: function (e) {
+                onRowDblClick: function(e) {
                     if (e.data.strStatus == "Pending") {
                         modalPopupShow('update', e);
                     } else {
                         modalPopupShow('show', e);
                     }
                 },
-                onRowClick: function (e) {
+                onRowClick: function(e) {
                     if (e.data && e.data.strStatus === "Issued") {
                         showReceivedButton = true;
                         selectedStatus = e.data.strStatus;
@@ -387,7 +407,7 @@
                         e.component.repaint();
                     } else {
                         showReceivedButton = false;
-                        setTimeout(function () {
+                        setTimeout(function() {
                             e.component.repaint();
                         }, 20);
                     }
@@ -396,7 +416,7 @@
 
             //This is use for disply the Products list
             gridProducts = $(".gridProducts").dxDataGrid({
-                dataSource:[], //as json
+                dataSource: [], //as json
                 hoverStateEnabled: true,
                 showBorders: true,
                 allowColumnResizing: true,
@@ -404,7 +424,7 @@
                 scrolling: {
                     rowRenderingMode: 'infinite',
                 },
-                paging:{
+                paging: {
                     pageSize: 10,
                 },
                 editing: {
@@ -412,8 +432,7 @@
                     allowUpdating: true,
                     allowDeleting: true,
                 },
-                columns: [
-                    {
+                columns: [{
                         dataField: "PastelCode",
                         caption: "Item Code",
                         allowEditing: false,
@@ -451,33 +470,31 @@
                     }
                 ],
                 summary: {
-                    totalItems: [
-                        {
-                            column: 'Weight',
-                            summaryType: 'sum',
-                            valueFormat: 'number',
-                            customizeText: function (itemInfo) {
-                                let value = itemInfo.value.toFixed(3);
-                                return `Total Weight: ${value}`;
-                            }
+                    totalItems: [{
+                        column: 'Weight',
+                        summaryType: 'sum',
+                        valueFormat: 'number',
+                        customizeText: function(itemInfo) {
+                            let value = itemInfo.value.toFixed(3);
+                            return `Total Weight: ${value}`;
                         }
-                    ]
+                    }]
                 },
-                onToolbarPreparing: function (e) {
-                    e.toolbarOptions.items.unshift(
-                        {
-                            location: 'before',
-                            template: function () {
-                                return $('<h5>').text('PRODUCTS');
-                            }
+                onToolbarPreparing: function(e) {
+                    e.toolbarOptions.items.unshift({
+                        location: 'before',
+                        template: function() {
+                            return $('<h5>').text('PRODUCTS');
                         }
-                    );
+                    });
                 },
-                onRowUpdating: function (e) {
+                onRowUpdating: function(e) {
                     console.log(e)
                     // Check if the updated field is 'mnyQtyRecieved'
-                    var updatedField = e.newData.mnyQtyRecieved; // Get the new value of 'mnyQtyRecieved'
-                    var oldQtyReceived = e.oldData.mnyQtyRecieved; // Get the old value of 'mnyQtyRecieved'
+                    var updatedField = e.newData
+                    .mnyQtyRecieved; // Get the new value of 'mnyQtyRecieved'
+                    var oldQtyReceived = e.oldData
+                    .mnyQtyRecieved; // Get the old value of 'mnyQtyRecieved'
 
                     // If 'mnyQtyRecieved' was updated, calculate 'mnyQtyVariance'
                     if (updatedField !== oldQtyReceived) {
@@ -493,18 +510,18 @@
                 },
                 onRowUpdated: function(e) {
                     return $.ajax({
-                        url: '{!! url("ibt/update-ibt-lines") !!}',
+                        url: '{!! url('ibt/update-ibt-lines') !!}',
                         type: 'POST',
                         data: {
                             intAutoId: e.data.intAutoId,
                             mnyQtyRecieved: e.data.mnyQtyRecieved,
                             mnyQtyVariance: e.data.mnyQtyVariance,
                         },
-                        success: function (data) {
+                        success: function(data) {
                             console.log("Update success:", data);
                             return data;
                         },
-                        error: function () {
+                        error: function() {
                             alert("Error updating record.");
                         }
                     });
@@ -578,36 +595,38 @@
                     var checkedLines = Array();
                     checkedLines = gridProducts.option('dataSource');
                     var gridResults = '<xml>';
-                    $.each(checkedLines ,function(key,value) {
-                        if (value.Qty !=undefined || value.Qty !=null){
-                            gridResults= gridResults + "<result>";
-                            gridResults= gridResults + "<PastelCode>"+escapeHtml(value.PastelCode)+"</PastelCode>";
-                            gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
-                            gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
-                            gridResults= gridResults + "<Comment>"+escapeHtml(value.Comment)+"</Comment>";
-                            gridResults= gridResults+ "</result>";
+                    $.each(checkedLines, function(key, value) {
+                        if (value.Qty != undefined || value.Qty != null) {
+                            gridResults = gridResults + "<result>";
+                            gridResults = gridResults + "<PastelCode>" + escapeHtml(value
+                                .PastelCode) + "</PastelCode>";
+                            gridResults = gridResults + "<Qty>" + value.Qty + "</Qty>";
+                            gridResults = gridResults + "<Weight>" + value.Weight + "</Weight>";
+                            gridResults = gridResults + "<Comment>" + escapeHtml(value.Comment) +
+                                "</Comment>";
+                            gridResults = gridResults + "</result>";
                         }
                     });
-                    gridResults= gridResults+"</xml>";
+                    gridResults = gridResults + "</xml>";
 
                     var formData = new FormData();
                     // Append the other form data to the FormData object
                     formData.append('dataxml', gridResults);
                     formData.append('dtmCreated', formatDateYYYYMMDD(inputDateElement.option("value")));
-                    formData.append('strReference',$('#strReference').val());
-                    formData.append('intFromDC',$('#intFromDC').val());
-                    formData.append('intToDC',$('#intToDC').val());
-                    formData.append('intGIT',$('#intGIT').val());
-                    formData.append('intVariance',$('#intVariance').val());
-                    formData.append('intStatus',$('#intStatus').val());
+                    formData.append('strReference', $('#strReference').val());
+                    formData.append('intFromDC', $('#intFromDC').val());
+                    formData.append('intToDC', $('#intToDC').val());
+                    formData.append('intGIT', $('#intGIT').val());
+                    formData.append('intVariance', $('#intVariance').val());
+                    formData.append('intStatus', $('#intStatus').val());
 
                     $.ajax({
-                        url: '{!!url("/ibt")!!}',
+                        url: '{!! url('/ibt') !!}',
                         type: "POST",
                         data: formData,
                         processData: false,
                         contentType: false,
-                        success: function (data) {
+                        success: function(data) {
                             loadingPanel.option('visible', true);
                             location.reload();
                         },
@@ -620,48 +639,50 @@
             });
 
             //This function is use for Update IBT Data with product
-            $('#btnUpdateIBT').click(function(){
+            $('#btnUpdateIBT').click(function() {
                 if (!isValidationOccurOnCreate()) {
                     loadingPanel.option('visible', true);
                     var checkedLines = Array();
                     checkedLines = gridProducts.option('dataSource');
                     var gridResults = '<xml>';
-                    $.each(checkedLines ,function(key,value) {
-                        if (value.Qty !=undefined || value.Qty !=null){
-                            gridResults= gridResults + "<result>";
-                            gridResults= gridResults + "<PastelCode>"+escapeHtml(value.PastelCode)+"</PastelCode>";
-                            gridResults= gridResults + "<Qty>"+value.Qty+"</Qty>";
-                            gridResults= gridResults + "<Weight>"+value.Weight+"</Weight>";
-                            gridResults= gridResults + "<Comment>"+escapeHtml(value.Comment)+"</Comment>";
-                            gridResults= gridResults+ "</result>";
+                    $.each(checkedLines, function(key, value) {
+                        if (value.Qty != undefined || value.Qty != null) {
+                            gridResults = gridResults + "<result>";
+                            gridResults = gridResults + "<PastelCode>" + escapeHtml(value
+                                .PastelCode) + "</PastelCode>";
+                            gridResults = gridResults + "<Qty>" + value.Qty + "</Qty>";
+                            gridResults = gridResults + "<Weight>" + value.Weight + "</Weight>";
+                            gridResults = gridResults + "<Comment>" + escapeHtml(value.Comment) +
+                                "</Comment>";
+                            gridResults = gridResults + "</result>";
                         }
                     });
-                    gridResults= gridResults+"</xml>";
+                    gridResults = gridResults + "</xml>";
 
                     var formData = new FormData();
-                    formData.append('SelectedIbtHeaderId',SelectedIbtHeaderId);
+                    formData.append('SelectedIbtHeaderId', SelectedIbtHeaderId);
                     formData.append('dataxml', gridResults);
                     formData.append('dtmCreated', formatDateYYYYMMDD(inputDateElement.option("value")));
-                    formData.append('strReference',$('.strReference').val());
-                    formData.append('intFromDC',$('.intFromDC').val());
-                    formData.append('intToDC',$('.intToDC').val());
-                    formData.append('intGIT',$('.intGIT').val());
-                    formData.append('intVariance',$('.intVariance').val());
+                    formData.append('strReference', $('.strReference').val());
+                    formData.append('intFromDC', $('.intFromDC').val());
+                    formData.append('intToDC', $('.intToDC').val());
+                    formData.append('intGIT', $('.intGIT').val());
+                    formData.append('intVariance', $('.intVariance').val());
                     if ($('#intStatus').val() != '') {
-                        formData.append('intStatus',$('#intStatus').val());
+                        formData.append('intStatus', $('#intStatus').val());
                     }
                     if ($('.strTlNumber') != '') {
-                        formData.append('strTlNumber',$('.strTlNumber').val());
+                        formData.append('strTlNumber', $('.strTlNumber').val());
                     }
 
 
                     $.ajax({
-                        url: '{!! url("ibt/update-ibt") !!}',
+                        url: '{!! url('ibt/update-ibt') !!}',
                         type: "POST",
                         data: formData,
                         processData: false,
                         contentType: false,
-                        success: function (data) {
+                        success: function(data) {
                             loadingPanel.option('visible', true);
                             location.reload();
                         },
@@ -678,7 +699,7 @@
             // To clear and close the IBT modal
             $('#IBTModal').on('hidden.bs.modal', function() {
                 $('.txtIBTNumber').text('');
-                $('#btnUpdateIBT').prop('hidden',true);
+                $('#btnUpdateIBT').prop('hidden', true);
                 $('.form-control', IBTModal).val('');
                 $('.intFromDC').val('');
                 $('.intToDC').val('');
@@ -692,14 +713,14 @@
                 if (!isValidationOccurOnReceive()) {
                     loadingPanel.option('visible', true);
                     $.ajax({
-                        url: '{!!url("/ibt/update-status")!!}',
+                        url: '{!! url('/ibt/update-status') !!}',
                         type: "POST",
                         data: {
                             intStatus: 3,
                             intReceivingBin: $('#intReceivingBin').val(),
                             SelectedIbtHeaderId: SelectedIbtHeaderId,
                         },
-                        success: function (data) {
+                        success: function(data) {
                             loadingPanel.option('visible', true);
                             location.reload();
                         },
@@ -729,9 +750,9 @@
         function getIbtRecords(gridIBT) {
             // Ajax call for Get IBT Records
             $.ajax({
-                url: '{!!url("/getIBTRecords")!!}',
+                url: '{!! url('/getIBTRecords') !!}',
                 type: "GET",
-                success: function (data) {
+                success: function(data) {
                     gridIBT.option('dataSource', data);
                     gridIBT.refresh();
                 }
@@ -739,18 +760,18 @@
         }
 
         //This function is use for set Products list
-        function setProductsDataList(products){
+        function setProductsDataList(products) {
             var inputProductCode = $('#inputProductCode').flexdatalist({
                 minLength: 1,
                 valueProperty: '*',
                 selectionRequired: true,
                 focusFirstResult: true,
-                searchContain:true,
-                visibleProperties: ["PastelCode","PastelDescription"],
-                searchIn: ["PastelCode","PastelDescription"],
+                searchContain: true,
+                visibleProperties: ["PastelCode", "PastelDescription"],
+                searchIn: ["PastelCode", "PastelDescription"],
                 data: products
             });
-            inputProductCode.on('select:flexdatalist', function (event, data) {
+            inputProductCode.on('select:flexdatalist', function(event, data) {
                 //fill in inputs of code desc weight, empty qty empty comment..
                 $('#inputProductCode').flexdatalist('value', data.PastelCode);
                 $('#inputProductDescription').flexdatalist('value', data.PastelDescription);
@@ -768,12 +789,12 @@
                 valueProperty: '*',
                 selectionRequired: true,
                 focusFirstResult: true,
-                searchContain:true,
-                visibleProperties: ["PastelCode","PastelDescription"],
-                searchIn: ["PastelCode","PastelDescription"],
+                searchContain: true,
+                visibleProperties: ["PastelCode", "PastelDescription"],
+                searchIn: ["PastelCode", "PastelDescription"],
                 data: products
             });
-            inputProductDescription.on('select:flexdatalist', function (event, data) {
+            inputProductDescription.on('select:flexdatalist', function(event, data) {
                 //fill in inputs of code desc weight, empty qty empty comment..
                 $('#inputProductCode').flexdatalist('value', data.PastelCode);
                 $('#inputProductDescription').flexdatalist('value', data.PastelDescription);
@@ -783,10 +804,10 @@
         }
 
         //Get IBT Details on time of upadte IBT
-        function getGridProducts(IbtHeaderId){
+        function getGridProducts(IbtHeaderId) {
             loadingPanel.option('visible', true);
             $.ajax({
-                url: '{!!url("/getIBTDetails")!!}',
+                url: '{!! url('/getIBTDetails') !!}',
                 type: 'GET',
                 data: {
                     IbtHeaderId: IbtHeaderId
@@ -804,11 +825,11 @@
 
         function escapeHtml(unsafe) {
             return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         };
 
         function modalPopupShow(action, e) {
@@ -866,25 +887,25 @@
                 inputDateElement.option("value", new Date());
                 gridProducts.option('dataSource', []);
                 gridProducts.refresh();
-            } else if(action == 'update') {
+            } else if (action == 'update') {
                 $('#newuserLabel').text('Update IBT');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', false);
                 $('#btnReceivedIBT').prop('hidden', true);
                 $(".add_product_section").removeClass('d-none');
-            } else if(action == 'received') {
+            } else if (action == 'received') {
                 $('#newuserLabel').text('Received IBT');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', true);
                 $('#btnReceivedIBT').prop('hidden', false);
-            } else if(action == 'show') {
+            } else if (action == 'show') {
                 $('#newuserLabel').text('IBT Details');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', true);
                 $('#btnReceivedIBT').prop('hidden', true);
                 $('#intReceivingBin').attr('disabled', true);
             }
-            if(action == 'received' || action == 'show') {
+            if (action == 'received' || action == 'show') {
                 $(".add_product_section").addClass('d-none');
                 gridProducts.option("editing.allowDeleting", false);
                 inputDateElement.option("disabled", true);
@@ -913,17 +934,18 @@
         }
 
         function focusOnFirstBlankCell(e) {
-            var columnIndex = e.component.columnOption('mnyQtyRecieved').index;  // Column index for 'mnyQtyRecieved'
+            var columnIndex = e.component.columnOption('mnyQtyRecieved').index; // Column index for 'mnyQtyRecieved'
             var firstBlankCellFound = false;
 
             // Iterate over all visible rows and check for the first blank cell in the specified column
             e.component.getVisibleRows().forEach(function(row) {
-                if (gridProducts.columnOption("mnyQtyRecieved", "visible") && !firstBlankCellFound && !row.data.mnyQtyRecieved) {
+                if (gridProducts.columnOption("mnyQtyRecieved", "visible") && !firstBlankCellFound && !row.data
+                    .mnyQtyRecieved) {
                     firstBlankCellFound = true;
                     var rowIndex = row.rowIndex;
                     var rowElement = e.component.getRowElement(rowIndex);
-                    var cellElement = $(rowElement).find('td').eq(columnIndex);  // Find the cell in the column
-                    $(cellElement).click();  // Simulate a click on the blank cell to focus it
+                    var cellElement = $(rowElement).find('td').eq(columnIndex); // Find the cell in the column
+                    $(cellElement).click(); // Simulate a click on the blank cell to focus it
                 }
             });
         }
@@ -1002,9 +1024,9 @@
             }
         }
 
-        function checkSameDcOrNot(curDc){
-            if ($('#intFromDC').val() != '' && $('#intToDC').val() != ''
-                && $('#intFromDC').val() == $('#intToDC').val()
+        function checkSameDcOrNot(curDc) {
+            if ($('#intFromDC').val() != '' && $('#intToDC').val() != '' &&
+                $('#intFromDC').val() == $('#intToDC').val()
             ) {
                 generalAlertPopup('Alert Popup', "You cannot select the same DC for both 'From DC' and 'To DC'.")
                 curDc.val('');
@@ -1018,23 +1040,35 @@
         function isValidationOccurOnCreate() {
             var errors = [];
             if (inputDateElement.option("value") == '') {
-                errors.push({ message: "Date field is required!" });
+                errors.push({
+                    message: "Date field is required!"
+                });
             }
             if ($("#intFromDC").val() == '') {
-                errors.push({ message: "From DC field is required!" });
+                errors.push({
+                    message: "From DC field is required!"
+                });
             }
             if ($("#intToDC").val() == '') {
-                errors.push({ message: "To DC field is required!" });
+                errors.push({
+                    message: "To DC field is required!"
+                });
             }
             if ($("#intGIT").val() == '') {
-                errors.push({ message: "GIT field is required!" });
+                errors.push({
+                    message: "GIT field is required!"
+                });
             }
             if ($("#intVariance").val() == '') {
-                errors.push({ message: "Variance field is required!" });
+                errors.push({
+                    message: "Variance field is required!"
+                });
             }
             let lines = gridProducts.option("dataSource");
             if (lines.length <= 0) {
-                errors.push({ message: "Please select at least one product to proceed with the ibt." });
+                errors.push({
+                    message: "Please select at least one product to proceed with the ibt."
+                });
             }
             if (errors.length > 0) {
                 generalErrorList.option("dataSource", errors);
@@ -1048,13 +1082,19 @@
         function isValidationOccurOnAddProduct() {
             var errors = [];
             if ($("#inputProductCode").val() == '') {
-                errors.push({ message: "Product Code field is required!" });
+                errors.push({
+                    message: "Product Code field is required!"
+                });
             }
             if ($("#inputProductDescription").val() == '') {
-                errors.push({ message: "Product Description field is required!" });
+                errors.push({
+                    message: "Product Description field is required!"
+                });
             }
             if ($("#inputProductQty").val() == '') {
-                errors.push({ message: "Qty field is required!" });
+                errors.push({
+                    message: "Qty field is required!"
+                });
             }
             if (errors.length > 0) {
                 generalErrorList.option("dataSource", errors);
@@ -1068,7 +1108,9 @@
         function isValidationOccurOnReceive() {
             var errors = [];
             if ($("#intReceivingBin").val() == '') {
-                errors.push({ message: "Receiving Bin field is required!" });
+                errors.push({
+                    message: "Receiving Bin field is required!"
+                });
             }
             let lines = gridProducts.option("dataSource");
             if (lines.length > 0) {
@@ -1077,7 +1119,9 @@
                     if (item) {
                         if (item.mnyQtyRecieved == '' || item.mnyQtyRecieved == null) {
                             if (!isLineValidationOccur) {
-                                errors.push({ message: "Please ensure that the quantity received for all products is filled." });
+                                errors.push({
+                                    message: "Please ensure that the quantity received for all products is filled."
+                                });
                                 isLineValidationOccur = true;
                             }
                         }

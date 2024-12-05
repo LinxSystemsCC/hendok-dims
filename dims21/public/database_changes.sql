@@ -644,3 +644,42 @@ LEFT JOIN viewBinNames ln2 ON head.intGIT = ln2.intBinId
 LEFT JOIN tblDCNames dc ON dc.intAutoId = head.intFromDC
 LEFT JOIN tblDCNames dc2 ON dc2.intAutoId = head.intToDC
 GO
+
+--===========IBT NEW CHANGES(DATE - 05-12-2024(D-M-Y)))============
+ALTER TABLE tblIBTHeader
+    ADD intAutoRecieveId BIGINT NULL;
+
+ALTER VIEW [dbo].[viewtblIBTHeadersData] AS
+SELECT
+    head.intAutoId,
+    strReference,
+    intFromDC,
+    intToDC,
+    intGIT,
+    intVariance,
+    head.dtmCreated,
+    du.UserName AS IssuedBy,
+    ISNULL(head.intAutoRecieveId, '-') intAutoRecieveId,
+	head.dtmReceived,
+	ru.UserName AS ReceivedBy,
+    ln.strBin As varianceBinName,
+    ln2.strBin As gitBinName,
+    dc.strDCName,
+    dc2.strDCName AS toDCName,
+	'TL' + CAST(head.intTLnumber AS NVARCHAR(10)) strTlNumber,
+	head.intReceivingBin,
+    CASE
+        WHEN intStatus = 0 THEN 'Pending'
+        WHEN intStatus = 1 THEN 'Planned'
+        WHEN intStatus = 2 THEN 'Issued'
+        WHEN intStatus = 3 THEN 'Received'
+        ELSE ''
+    END AS strStatus
+FROM tblIBTHeader AS head
+INNER JOIN tblDIMSUSERS du ON du.UserID = head.intCreatedBy
+LEFT JOIN tblDIMSUSERS ru ON ru.UserID = head.intReceivedBy
+LEFT JOIN viewBinNames ln ON head.intVariance = ln.intBinId
+LEFT JOIN viewBinNames ln2 ON head.intGIT = ln2.intBinId
+LEFT JOIN tblDCNames dc ON dc.intAutoId = head.intFromDC
+LEFT JOIN tblDCNames dc2 ON dc2.intAutoId = head.intToDC
+GO

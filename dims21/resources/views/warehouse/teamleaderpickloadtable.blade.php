@@ -1,3 +1,10 @@
+@php
+    $v  =  new \App\Http\Controllers\SalesForm();
+    $manualEdit = $v->getThingsUserPermissions(Auth::user()->UserID,'Team Leader Manual Edit');
+@endphp
+
+<h1>{{ $manualEdit }}</h1>
+
 <table id="pickLoadTable" class="table mb-0">
     <thead class="sticky-top">
     <tr class="bg-dark text-white fw-bold">
@@ -74,7 +81,7 @@
                     @endif
                     <td>{{ $val->OrderDate}}</td>
                     <td>{{$val->OrderNum}}</td>
-                    {{-- @if(Auth::user()->DefaultRoute != 8) --}} @if(8 != 8)
+                    @if($manualEdit == "1")
                         <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
                     @else
                         <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value="0"></td>
@@ -120,7 +127,7 @@
                         @else
                             <td></td>
                         @endif
-                        {{-- @if(Auth::user()->DefaultRoute != 8) --}} @if(8 != 8)
+                        @if($manualEdit == "0")
                             <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value={{ $val->hasLabel }}></td>
                         @else
                             <td>{{ $val->PastelDescription }}<input type="hidden" class="intAutoPickinghidden" value={{ $val->intAutoPicking }}>  <input type="hidden" class="hasLabel" value="0"></td>
