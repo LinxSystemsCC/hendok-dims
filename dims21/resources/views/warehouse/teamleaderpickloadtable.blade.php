@@ -3,8 +3,6 @@
     $manualEdit = $v->getThingsUserPermissions(Auth::user()->UserID,'Team Leader Manual Edit');
 @endphp
 
-<h1>{{ $manualEdit }}</h1>
-
 <table id="pickLoadTable" class="table mb-0">
     <thead class="sticky-top">
     <tr class="bg-dark text-white fw-bold">
