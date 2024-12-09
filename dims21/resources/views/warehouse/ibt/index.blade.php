@@ -490,19 +490,19 @@
                 },
                 onRowUpdating: function(e) {
                     console.log(e)
-                    // Check if the updated field is 'mnyQtyRecieved'
+                    // Check if the updated field is 'mnyQtyReceived'
                     var updatedField = e.newData
-                    .mnyQtyRecieved; // Get the new value of 'mnyQtyRecieved'
+                    .mnyQtyReceived; // Get the new value of 'mnyQtyReceived'
                     var oldQtyReceived = e.oldData
-                    .mnyQtyRecieved; // Get the old value of 'mnyQtyRecieved'
+                    .mnyQtyReceived; // Get the old value of 'mnyQtyReceived'
 
-                    // If 'mnyQtyRecieved' was updated, calculate 'mnyQtyVariance'
+                    // If 'mnyQtyReceived' was updated, calculate 'mnyQtyVariance'
                     if (updatedField !== oldQtyReceived) {
                         var qty = e.oldData.Qty || 0; // Assuming 'Qty' is the base quantity
-                        var mnyQtyRecieved = e.newData.mnyQtyRecieved || 0;
+                        var mnyQtyReceived = e.newData.mnyQtyReceived || 0;
 
                         // Calculate the variance
-                        var mnyQtyVariance = qty - mnyQtyRecieved;
+                        var mnyQtyVariance = qty - mnyQtyReceived;
 
                         // Update the 'mnyQtyVariance' value
                         e.newData.mnyQtyVariance = mnyQtyVariance;
@@ -514,7 +514,7 @@
                         type: 'POST',
                         data: {
                             intAutoId: e.data.intAutoId,
-                            mnyQtyRecieved: e.data.mnyQtyRecieved,
+                            mnyQtyReceived: e.data.mnyQtyReceived,
                             mnyQtyVariance: e.data.mnyQtyVariance,
                         },
                         success: function(data) {
@@ -918,29 +918,32 @@
                 $(".receiving_bin_container").show();
             }
             gridProducts.columnOption("Qty", "caption", "Qty");
-            gridProducts.columnOption("mnyQtyRecieved", "visible", false);
+            gridProducts.columnOption("mnyQtyReceived", "visible", false);
             gridProducts.columnOption("mnyQtyVariance", "visible", false);
             if ((e != undefined && e.data.strStatus === "Received") || action == 'received') {
                 gridProducts.columnOption("Qty", "caption", "Qty Issued");
-                gridProducts.columnOption("mnyQtyRecieved", "visible", true);
+                gridProducts.columnOption("mnyQtyReceived", "visible", true);
                 gridProducts.columnOption("mnyQtyVariance", "visible", true);
             }
-            gridProducts.columnOption("mnyQtyRecieved", "allowEditing", false);
+            gridProducts.columnOption("mnyQtyReceived", "allowEditing", false);
             if (action == 'received') {
-                gridProducts.columnOption("mnyQtyRecieved", "allowEditing", true);
+                gridProducts.columnOption("mnyQtyReceived", "allowEditing", true);
             }
             getGITBins(intGIT);
             getVarianceAndReceivingBins(intVariance, intReceivingBin);
         }
 
         function focusOnFirstBlankCell(e) {
-            var columnIndex = e.component.columnOption('mnyQtyRecieved').index; // Column index for 'mnyQtyRecieved'
+            console.log(e);
+            console.log("-------------------------------------------------------------------");
+            
+            var columnIndex = e.component.columnOption('mnyQtyReceived').index; // Column index for 'mnyQtyReceived'
             var firstBlankCellFound = false;
 
             // Iterate over all visible rows and check for the first blank cell in the specified column
             e.component.getVisibleRows().forEach(function(row) {
-                if (gridProducts.columnOption("mnyQtyRecieved", "visible") && !firstBlankCellFound && !row.data
-                    .mnyQtyRecieved) {
+                if (gridProducts.columnOption("mnyQtyReceived", "visible") && !firstBlankCellFound && !row.data
+                    .mnyQtyReceived) {
                     firstBlankCellFound = true;
                     var rowIndex = row.rowIndex;
                     var rowElement = e.component.getRowElement(rowIndex);
@@ -1117,7 +1120,7 @@
                 let isLineValidationOccur = false;
                 lines.forEach(function(item, index) {
                     if (item) {
-                        if (item.mnyQtyRecieved == '' || item.mnyQtyRecieved == null) {
+                        if (item.mnyQtyReceived == '' || item.mnyQtyReceived == null) {
                             if (!isLineValidationOccur) {
                                 errors.push({
                                     message: "Please ensure that the quantity received for all products is filled."
