@@ -129,10 +129,6 @@ class InvoicingController extends Controller
                     }
                     $orderHeadersLines .= "</Details></Order>";
 
-                    $UserID = Auth::user()->UserID;
-
-                    DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
-
                     $xmlresponse =  DB::connection('sqlsrv3')
                         ->select('exec spInsertXmlOrder ?,?,?',
                             array($orderHeadersLines,$invoiceid.'_'.$ref,$invoiceid)
@@ -149,6 +145,9 @@ class InvoicingController extends Controller
             return $hasLimits;
 
         }
+
+        $UserID = Auth::user()->UserID;
+        DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
 
     }
     public function individualInvoicingAPITest($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName)
@@ -197,8 +196,8 @@ class InvoicingController extends Controller
                     $orderHeadersLines .= "<CustomerCode>".$returnGetsalesorderNoLines[0]->Account."</CustomerCode>";
                     $orderHeadersLines .= "<PlanID>".$returnGetsalesorderNoLines[0]->intAutoPickingHeader."</PlanID>";
                     $orderHeadersLines .= "<invoiceid>".$invoiceid."</invoiceid>
-</Header>
-<Details>";
+                </Header>
+                <Details>";
 
                     $v = new \App\Http\Controllers\SalesForm();
                     $isCapeUser = $v->getThings($this->getusergroupid($userid), 'isCapeUser');
@@ -233,10 +232,6 @@ class InvoicingController extends Controller
                     }
                     $orderHeadersLines .= "</Details></Order>";
 
-                    $UserID = Auth::user()->UserID;
-
-                    DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
-
                     $xmlresponse =  DB::connection('sqlsrv3')
                         ->select('exec spInsertXmlOrder ?,?,?',
                             array($orderHeadersLines,$invoiceid.'_'.$ref,$invoiceid)
@@ -253,6 +248,9 @@ class InvoicingController extends Controller
             return $hasLimits;
 
         }
+
+        $UserID = Auth::user()->UserID;
+        DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
 
     }
     //NOT IBT

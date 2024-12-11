@@ -728,3 +728,25 @@ LEFT JOIN viewBinNames ln2 ON head.intGIT = ln2.intBinId
 LEFT JOIN tblDCNames dc ON dc.intAutoId = head.intFromDC
 LEFT JOIN tblDCNames dc2 ON dc2.intAutoId = head.intToDC
 GO
+
+--===========IBT NEW CHANGES(DATE - 11-12-2024(D-M-Y)))============
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER VIEW [dbo].[viewTblProductWeightedCalc]
+AS
+(
+        SELECT Code [PastelCode]
+            , Description_1 AS [PastelDescription]
+            , ISNULL(ufIIWeight, 1) AS [Weight]
+            , mnySumAvail AS [qtyavl]
+        FROM [Hendok Distribution].dbo._bvStockFull
+        LEFT JOIN tblInventory
+            ON StockLink = tblInventory.intStockLink
+        WHERE WhseItem = 1 AND ItemActive = 1
+        )
+        
+GO
