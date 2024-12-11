@@ -685,6 +685,11 @@ LEFT JOIN tblDCNames dc2 ON dc2.intAutoId = head.intToDC
 GO
 
 --===========IBT NEW CHANGES(DATE - 09-12-2024(D-M-Y)))============
+ALTER TABLE tblIBTHeader
+ADD 
+    dtmIssued DATETIME NULL,
+    intIssuedBy BIGINT NULL
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

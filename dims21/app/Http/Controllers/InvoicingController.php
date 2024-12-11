@@ -93,8 +93,8 @@ class InvoicingController extends Controller
                     $orderHeadersLines .= "<CustomerCode>".$returnGetsalesorderNoLines[0]->Account."</CustomerCode>";
                     $orderHeadersLines .= "<PlanID>".$returnGetsalesorderNoLines[0]->intAutoPickingHeader."</PlanID>";
                     $orderHeadersLines .= "<invoiceid>".$invoiceid."</invoiceid>
-</Header>
-<Details>";
+                </Header>
+                <Details>";
 
                     $v = new \App\Http\Controllers\SalesForm();
                     $isCapeUser = $v->getThings($this->getusergroupid($userid), 'isCapeUser');
@@ -128,6 +128,10 @@ class InvoicingController extends Controller
                         $orderHeadersLines .= "</Line>";
                     }
                     $orderHeadersLines .= "</Details></Order>";
+
+                    $UserID = Auth::user()->UserID;
+
+                    DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
 
                     $xmlresponse =  DB::connection('sqlsrv3')
                         ->select('exec spInsertXmlOrder ?,?,?',
@@ -229,7 +233,11 @@ class InvoicingController extends Controller
                     }
                     $orderHeadersLines .= "</Details></Order>";
 
-                   $xmlresponse =  DB::connection('sqlsrv3')
+                    $UserID = Auth::user()->UserID;
+
+                    DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
+
+                    $xmlresponse =  DB::connection('sqlsrv3')
                         ->select('exec spInsertXmlOrder ?,?,?',
                             array($orderHeadersLines,$invoiceid.'_'.$ref,$invoiceid)
                         );
