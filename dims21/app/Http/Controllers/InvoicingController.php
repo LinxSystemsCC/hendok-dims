@@ -60,9 +60,16 @@ class InvoicingController extends Controller
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
-        //dd();
+
+        if($invoiceid < 0){
+            $UserID = Auth::user()->UserID;
+            DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
+            return response()->json(['status' => 'success', 'message' => 'Process completed and execution halted.']);
+        }
+            
         $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId);
         $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
+
         if ($hasLimits == "Success")
         {
             if (strlen(trim($invnum)) > 4) {
@@ -143,11 +150,7 @@ class InvoicingController extends Controller
             }
         }else{
             return $hasLimits;
-
         }
-
-        $UserID = Auth::user()->UserID;
-        DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
 
     }
     public function individualInvoicingAPITest($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName)
@@ -157,15 +160,21 @@ class InvoicingController extends Controller
     //{ownersId}/{SoNumber}/{invoiceid}/{ref}/{userid}/{userName}
     public function individualInvoicingAPI($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName)
     {
-
         $refDescription = "";
         $mustStockAdjust = 0;
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
-        //dd();
+        
+        if($invoiceid < 0){
+            $UserID = Auth::user()->UserID;
+            DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
+            return response()->json(['status' => 'success', 'message' => 'Process completed and execution halted.']);
+        }
+
         $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId);
         $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
+
         if ($hasLimits == "Success")
         {
             if (strlen(trim($invnum)) > 4) {
@@ -246,12 +255,7 @@ class InvoicingController extends Controller
             }
         }else{
             return $hasLimits;
-
         }
-
-        $UserID = Auth::user()->UserID;
-        DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
-
     }
     //NOT IBT
     public function testWarehouseT($ref,$SoNumber,$ownersId){
