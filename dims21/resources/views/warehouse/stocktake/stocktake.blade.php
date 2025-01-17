@@ -36,12 +36,6 @@
                 <div id="selectProductGroups"></div>
             </div>
         </div>
-        <div class="dx-field">
-            <div class="dx-field-label">Select Stock Take Teams</div>
-            <div class="dx-field-value">
-                <div id="selectTeams"></div>
-            </div>
-        </div>
     </div>
 
 @endsection
@@ -117,30 +111,6 @@
                 },
             }).dxTagBox("instance");
 
-            const selectTeams = $("#selectTeams").dxTagBox({
-                dataSource: {
-                    store: [{
-                        'strTeamName': 'RedTeam',
-                        'strDisplayName': 'Red Team',
-                    }, {
-                        'strTeamName': 'BlueTeam',
-                        'strDisplayName': 'Blue Team',
-                    }],
-                    paginate: true,
-                    pageSize: 100
-                },
-                valueExpr: 'strTeamName',
-                displayExpr: 'strDisplayName',
-                applyValueMode: 'useButtons',
-                showSelectionControls: true,
-                showClearButton: true,
-                searchEnabled: true,
-                multiline: false,
-                onValueChanged: function(e) {
-
-                },
-            }).dxTagBox("instance");
-
             let btnCreate;
 
             // Note from Kyle - If you add to the popup, make sure you initialize the components before the popup
@@ -157,7 +127,6 @@
                     selectLocations.option('value', null);
                     selectBins.option('value', null);
                     selectProductGroups.option('value', null);
-                    selectTeams.option('value', null);
                 },
                 toolbarItems: [{
                     widget: 'dxButton',
@@ -176,10 +145,9 @@
                             var locations = selectLocations.option('value');
                             var bins = selectBins.option('value');
                             var productGroups = selectProductGroups.option('value');
-                            var teams = selectTeams.option('value');
 
                             createStockTake(reference, locations, bins.join(','), productGroups
-                                .join(','), teams.join(','))
+                                .join(','))
                         },
                     },
                 }],
@@ -362,7 +330,7 @@
                 });
             }
 
-            function createStockTake(reference, locations, bins, productGroups, teams) {
+            function createStockTake(reference, locations, bins, productGroups) {
                 $.ajax({
                     url: '{!! url('/createStockTake') !!}',
                     type: "POST",
@@ -371,7 +339,6 @@
                         locations: locations,
                         bins: bins,
                         productGroups: productGroups,
-                        teams: teams,
                     },
                     success: function(data) {
                         getStockTakes();

@@ -14,12 +14,13 @@ class StockTakeController extends Controller
     {
         $locations = DB::connection('sqlsrv3')->select('SELECT intLocationNameId, strLocationName FROM tblLocationNames');
         $productGroups = DB::connection('sqlsrv3')->select('SELECT DISTINCT ItemGroup, ItemGroupDescription FROM tblSageFullStock WHERE ItemGroup IS NOT NULL');
-        
+
         // dd($locations, $productGroups);
         return view('warehouse.stocktake.stocktake')->with('locations', $locations)->with('productGroups', $productGroups);
     }
 
-    public function getNextStockTakeId(){
+    public function getNextStockTakeId()
+    {
         $lastStockTakeId = DB::table('tblStockTakenames')->latest('intAutoId')->pluck('intAutoId')->first();
 
         if ($lastStockTakeId) {
@@ -57,11 +58,10 @@ class StockTakeController extends Controller
         $locations = $request->get('locations');
         $bins = $request->get('bins');
         $productGroups = $request->get('productGroups');
-        $teams = $request->get('teams');
 
         // dd("EXEC sp_C_StockTake '$reference', '$locations', '$bins', '$productGroups', '$teams'");
 
-        $stocktakes = DB::connection('sqlsrv2')->select("EXEC sp_C_StockTake '$reference', '$locations', '$bins', '$productGroups', '$teams'");
+        $stocktakes = DB::connection('sqlsrv2')->select("EXEC sp_C_StockTake '$reference', '$locations', '$bins', '$productGroups'");
 
         return response()->json($stocktakes);
     }
@@ -76,9 +76,9 @@ class StockTakeController extends Controller
     public function stockCounts($ID)
     {
         $counts = DB::connection('sqlsrv2')->select("SELECT * FROM viewStockCountVariances WHERE intMainStockCountID = $ID");
-        $isApproved = DB::table('tblStockTakenames')->latest('bitAdjustmentApproved')->pluck('bitAdjustmentApproved')->first();
-        // dd($isApproved);
-        return view('warehouse.stocktake.stockCounts')->with('counts', $counts)->with('isApproved', $isApproved);
+        return view('warehouse.stocktake.stockCounts')
+            ->with('counts', $counts)
+            ->with('ID', $ID);
     }
 
     public function approveVarianceAdjustment(Request $request)
@@ -99,7 +99,7 @@ class StockTakeController extends Controller
 
         return response()->json($response);
     }
-    
+
     public function syncStockMovements(Request $request)
     {
         $response = DB::connection('sqlsrv2')->statement("EXEC spPostJsonData");
@@ -153,7 +153,29 @@ class StockTakeController extends Controller
 
         return response()->json($vartosel);
     }
+
+    public function StockTakeRecountItems(Request $request)
+    {
+        $gridData = $request->get('gridData');
+        $intStockTakeId = $request->get('intStockTakeId');
+
+        if (is_array($gridData)) {
+            $xml = $this->toxml($gridData, "xml", array("result"));
+
+            // dd("EXEC usp_c_StockTakeRecountItems $intStockTakeId, '$xml'");
+
+            // Execute the stored procedure
+            $response = DB::connection('sqlsrv2')->select("EXEC usp_c_StockTakeRecountItems $intStockTakeId, '$xml'");
+        } else {
+            $response = ['error' => 'Invalid grid data'];
+        }
+
+        return response()->json($response);
+    }
+
+
     
+
     private static function getTabs($tabcount)
     {
         $tabs = '';

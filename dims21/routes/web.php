@@ -1332,7 +1332,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('approveVarianceAdjustment', [StockTakeController::class,'approveVarianceAdjustment']);
     Route::post('syncStockMovements', [StockTakeController::class,'syncStockMovements']);
     Route::get('getNextStockTakeId', [StockTakeController::class,'getNextStockTakeId']);
-
+    Route::post('StockTakeRecountItems', [StockTakeController::class,'StockTakeRecountItems']);
+    
 });
 
 // Diamond Mesh Controller

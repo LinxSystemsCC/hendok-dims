@@ -24,6 +24,8 @@
             const gridStockCount = $("#gridStockCount").dxDataGrid({
                 dataSource: counts,
                 showBorders: true,
+                width: '100%',
+                heigh: '100vh',
                 filterRow: {
                     visible: true
                 },
@@ -40,7 +42,15 @@
                 paging: {
                     enabled: false
                 },
+                selection: {
+                    mode: 'multiple',
+                },
                 columns: [{
+                    dataField: "intAutoCountId",
+                    caption: "intAutoCountId",
+                    visible: false,
+                    allowEditing: false,
+                }, {
                     dataField: "intMainStockCountID",
                     caption: "intMainStockCountID",
                     visible: false,
@@ -49,12 +59,10 @@
                     dataField: "strStockTakeName",
                     caption: "Name",
                     allowEditing: false,
-                    width: 150,
                 }, {
                     dataField: "strItemCode",
                     caption: "Item Code",
                     allowEditing: false,
-                    width: 250,
                 }, {
                     dataField: "intBinId",
                     caption: "Bin ID",
@@ -64,79 +72,40 @@
                     dataField: "strBinName",
                     caption: "Bin Name",
                     allowEditing: false,
-                    width: 250,
                 }, {
-                    dataField: "mnyBlueSingle",
-                    caption: "Blue Single",
+                    dataField: "strLastCountBy",
+                    caption: "Counted By",
+                    allowEditing: false,
+                }, {
+                    dataField: "mnySingle",
+                    caption: "Single",
+                    dataType: 'number',
+                    alignment: 'center',
+                    allowEditing: true,
+                }, {
+                    dataField: "mnyPallet",
+                    caption: "Pallet",
+                    dataType: 'number',
+                    alignment: 'center',
+                    allowEditing: true,
+                }, {
+                    dataField: "mnyTotal",
+                    caption: "Total",
                     dataType: 'number',
                     alignment: 'center',
                     allowEditing: false,
-                    width: 150,
-                }, {
-                    dataField: "mnyRedSingle",
-                    caption: "Red Single",
-                    dataType: 'number',
-                    alignment: 'center',
-                    allowEditing: false,
-                    width: 150,
-                }, {
-                    dataField: "mnyManagerSingle",
-                    caption: "Manager Single",
-                    dataType: 'number',
-                    alignment: 'center',
-                    width: 150,
-                }, {
-                    dataField: "mnyBluePallet",
-                    caption: "Blue Pallet",
-                    dataType: 'number',
-                    alignment: 'center',
-                    allowEditing: false,
-                    width: 150,
-                }, {
-                    dataField: "mnyRedPallet",
-                    caption: "Red Pallet",
-                    dataType: 'number',
-                    alignment: 'center',
-                    allowEditing: false,
-                    width: 150,
-                }, {
-                    dataField: "mnyManagerPallet",
-                    caption: "Manager Pallet",
-                    dataType: 'number',
-                    alignment: 'center',
-                    width: 150,
-                }, {
-                    dataField: "mnyBlueTotal",
-                    caption: "Blue Total",
-                    dataType: 'number',
-                    alignment: 'center',
-                    allowEditing: false,
-                    width: 150,
-                }, {
-                    dataField: "mnyRedTotal",
-                    caption: "Red Total",
-                    dataType: 'number',
-                    alignment: 'center',
-                    allowEditing: false,
-                    width: 150,
-                }, {
-                    dataField: "mnyManagerTotal",
-                    caption: "Manager Total",
-                    dataType: 'number',
-                    alignment: 'center',
-                    allowEditing: false,
-                    width: 150,
-                    fixed: true,
-                    fixedPosition: "right",
                     calculateCellValue: function(rowData) {
-                        const mnyManagerSingle = parseFloat(rowData
-                            .mnyManagerSingle) || 0;
-                        const mnyManagerPallet = parseFloat(rowData
-                            .mnyManagerPallet) || 0;
+                        const mnySingle = parseFloat(rowData
+                            .mnySingle) || 0;
+                        const mnyPallet = parseFloat(rowData
+                            .mnyPallet) || 0;
                         const mnyPalletFactor = parseFloat(rowData
                             .mnyPalletFactor) || 0;
-                        return mnyManagerSingle + (mnyManagerPallet *
-                            mnyPalletFactor);
+                        const mnyTotal = mnySingle + (
+                            mnyPallet * mnyPalletFactor) || 0;
+                        const mnyOnHand = parseFloat(rowData
+                            .mnyOnHand) || 0;
+                        return mnyTotal;
                     },
                 }, {
                     dataField: "mnyOnHand",
@@ -144,7 +113,6 @@
                     dataType: 'number',
                     alignment: 'center',
                     allowEditing: false,
-                    width: 150,
                     fixed: true,
                     fixedPosition: "right",
                 }, {
@@ -153,21 +121,20 @@
                     dataType: 'number',
                     alignment: 'center',
                     allowEditing: false,
-                    width: 150,
                     fixed: true,
                     fixedPosition: "right",
                     calculateCellValue: function(rowData) {
-                        const mnyManagerSingle = parseFloat(rowData
-                            .mnyManagerSingle) || 0;
-                        const mnyManagerPallet = parseFloat(rowData
-                            .mnyManagerPallet) || 0;
+                        const mnySingle = parseFloat(rowData
+                            .mnySingle) || 0;
+                        const mnyPallet = parseFloat(rowData
+                            .mnyPallet) || 0;
                         const mnyPalletFactor = parseFloat(rowData
                             .mnyPalletFactor) || 0;
-                        const mnyManagerTotal = mnyManagerSingle + (
-                            mnyManagerPallet * mnyPalletFactor) || 0;
+                        const mnyTotal = mnySingle + (
+                            mnyPallet * mnyPalletFactor) || 0;
                         const mnyOnHand = parseFloat(rowData
                             .mnyOnHand) || 0;
-                        return mnyManagerTotal - mnyOnHand;
+                        return mnyTotal - mnyOnHand;
                     },
                 }, {
                     dataField: "strRowColor",
@@ -179,13 +146,25 @@
                     caption: "Pallet Factor",
                     allowEditing: false,
                     visible: false,
-                }],
+                }, {
+                    dataField: "mnyPalletInSingles",
+                    caption: "Pallets in Singles",
+                    allowEditing: false,
+                    visible: false,
+                }, {
+                    dataField: "bitCanApprove",
+                    caption: "bitCanApprove",
+                    visible: false,
+                    allowEditing: false,
+                }, ],
                 onCellPrepared: function(e) {
                     if (e.rowType === "data" && (e.column.dataField ===
-                            "mnyManagerSingle" || e.column.dataField ===
-                            "mnyManagerPallet")) {
-                        e.cellElement.css("background-color", "#4287f5");
-                        e.cellElement.css("color", "white");
+                            "mnySingle" || e.column.dataField ===
+                            "mnyPallet")) {
+                        e.cellElement.css("background-color", "#a1acff")
+                            .css("background", "#152b4d73")
+                            .css("color", "#fff")
+                            .css("font-weight", "900");
                     }
                 },
                 onRowPrepared: function(e) {
@@ -193,11 +172,49 @@
                         if (e.data.strRowColor != null) {
                             e.rowElement.css("background-color", e.data
                                 .strRowColor);
-                            e.rowElement.css("color", "white");
+                            // e.rowElement.css("color", "white");
                         }
                     }
                 },
+                onEditorPreparing: function(e) {
+                    if (e.row && e.row.data.bitCanApprove == "0") {
+                        e.editorOptions.disabled = true;
+                    }
+                },
+                onSelectionChanged: function(e) {
+                    const selectedKeys = e.selectedRowKeys;
+                    const data = e.component.getDataSource().items();
+
+                    selectedKeys.forEach(key => {
+                        const rowData = data.find(row => row.intAutoCountId === key
+                            .intAutoCountId);
+                        if (rowData && rowData.bitCanApprove === "0") {
+                            e.component.deselectRows([key]);
+                        }
+                    });
+                },
                 onToolbarPreparing: function(e) {
+                    e.toolbarOptions.items.push({
+                        location: 'before',
+                        widget: "dxButton",
+                        options: {
+                            icon: "fa fa-plus-circle",
+                            text: "Re-count",
+                            type: 'default',
+                            stylingMode: 'contained',
+                            onClick: function(args) {
+                                const selectedData = gridStockCount.getSelectedRowsData();
+
+                                if (selectedData.length <= 0){
+                                    DevExpress.ui.notify("Please select lines to recount", "error", 6000);
+                                    return;
+                                }
+
+                                recountItems(selectedData);
+                            },
+                        },
+                    });
+
                     e.toolbarOptions.items.push({
                         location: 'after',
                         widget: "dxButton",
@@ -205,37 +222,24 @@
                             icon: "fa fa-plus-circle",
                             text: "APPROVE",
                             type: 'default',
-                            disabled: {{ $isApproved }} == "1",
                             stylingMode: 'contained',
                             onClick: function(args) {
-                                const visibleRows = gridStockCount.getVisibleRows();
+                                const selectedData = gridStockCount.getSelectedRowsData();
 
-                                const currentData = visibleRows.map(
-                                    row => {
-                                        const rowData = row.data;
+                                if (selectedData.length <= 0){
+                                    DevExpress.ui.notify("Please select lines to approve", "error", 6000);
+                                    return;
+                                }
 
-                                        const mnyManagerSingle = parseFloat(rowData
-                                            .mnyManagerSingle) || 0;
-                                        const mnyManagerPallet = parseFloat(rowData
-                                            .mnyManagerPallet) || 0;
-                                        const mnyPalletFactor = parseFloat(rowData
-                                            .mnyPalletFactor) || 0;
-                                        const mnyOnHand = parseFloat(rowData
-                                            .mnyOnHand) || 0;
+                                selectedData.forEach(row => {
+                                    row.mnyTotal = parseFloat(row
+                                        .mnyPalletInSingles) + parseFloat(row
+                                        .mnySingle);
+                                    row.mnyVariance = parseFloat(row.mnyTotal) -
+                                        parseFloat(row.mnyOnHand);
+                                });
 
-                                        const mnyManagerTotal = mnyManagerSingle + (
-                                            mnyManagerPallet * mnyPalletFactor);
-                                        const mnyVariance = mnyManagerTotal - mnyOnHand;
-
-                                        return {
-                                            ...rowData,
-                                            mnyManagerTotal,
-                                            mnyVariance
-                                        };
-                                    }
-                                );
-
-                                approveVarianceAdjustment(currentData);
+                                approveVarianceAdjustment(selectedData);
                             },
                         },
                     });
@@ -245,11 +249,12 @@
             function approveVarianceAdjustment(gridData) {
                 let filteredArray = gridData.map(item => ({
                     jquery: item.jquery,
+                    intAutoCountId: item.intAutoCountId,
                     strItemCode: item.strItemCode,
                     intMainStockCountID: item.intMainStockCountID,
-                    mnyManagerSingle: item.mnyManagerSingle,
-                    mnyManagerPallet: item.mnyManagerPallet,
-                    mnyManagerTotal: item.mnyManagerTotal,
+                    mnySingle: item.mnySingle,
+                    mnyPallet: item.mnyPallet,
+                    mnyTotal: item.mnyTotal,
                     mnyOnHand: item.mnyOnHand,
                     intBinId: item.intBinId,
                     strBinName: item.strBinName,
@@ -261,6 +266,28 @@
                     type: "POST",
                     data: {
                         gridData: filteredArray,
+                    },
+                    success: function(data) {
+                        location.reload();
+                    }
+                });
+            }
+
+            function recountItems(gridData) {
+                let filteredArray = gridData.map(item => ({
+                    jquery: item.jquery,
+                    intAutoCountId: item.intAutoCountId,
+                    strItemCode: item.strItemCode,
+                    intMainStockCountID: item.intMainStockCountID,
+                    strStockTakeName: item.strStockTakeName
+                }));
+
+                $.ajax({
+                    url: '{!! url('/StockTakeRecountItems') !!}',
+                    type: "POST",
+                    data: {
+                        gridData: filteredArray,
+                        intStockTakeId: '{{ $ID }}',
                     },
                     success: function(data) {
                         location.reload();
