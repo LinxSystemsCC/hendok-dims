@@ -19,6 +19,12 @@
             </div>
         </div>
         <div class="dx-field">
+            <div class="dx-field-label">Select DC</div>
+            <div class="dx-field-value">
+                <div id="selectDC"></div>
+            </div>
+        </div>
+        <div class="dx-field">
             <div class="dx-field-label">Select Location</div>
             <div class="dx-field-value">
                 <div id="selectLocations"></div>
@@ -51,9 +57,11 @@
 
     <script>
         $(document).ready(function() {
-            let locations = {!! json_encode($locations) !!};
+            let dcs = {!! json_encode($dcs) !!};
+            let locations = [];
             let bins = []
             let productGroups = {!! json_encode($productGroups) !!};
+            let dcIds;
             let locationIds;
             let stockTakeDetailsData = [];
 
@@ -68,6 +76,21 @@
                 disabled: true,
                 onValueChanged: function(e) {},
             }).dxAutocomplete("instance");
+
+            const selectDC = $("#selectDC").dxSelectBox({
+                dataSource: dcs,
+                valueExpr: 'intDCId',
+                displayExpr: 'strDCName',
+                applyValueMode: 'useButtons',
+                showSelectionControls: true,
+                showClearButton: true,
+                searchEnabled: true,
+                onValueChanged: function(e) {
+                    dcIds = e.value;
+                    getLocationsForDC();
+                    getBinsForLocations();
+                },
+            }).dxSelectBox("instance");
 
             const selectLocations = $("#selectLocations").dxSelectBox({
                 dataSource: locations,
@@ -124,6 +147,7 @@
                 height: 'auto',
                 onHidden: function(e) {
                     inputReference.option('value', null);
+                    selectDC.option('value', null);
                     selectLocations.option('value', null);
                     selectBins.option('value', null);
                     selectProductGroups.option('value', null);
@@ -316,11 +340,26 @@
                 return returnFormat.replace(/\//g, '-');
             }
 
+            function getLocationsForDC() {
+                $.ajax({
+                    url: '{!! url('/getLocationsForDCs') !!}',
+                    type: "GET",
+                    data: {
+                        dcIds: dcIds,
+                    },
+                    success: function(binsData) {
+                        selectLocations.option('dataSource', binsData);
+                        selectLocations.repaint();
+                    }
+                });
+            }
+
             function getBinsForLocations() {
                 $.ajax({
                     url: '{!! url('/getBinsForLocations') !!}',
                     type: "GET",
                     data: {
+                        dcIds: dcIds,
                         locationIds: locationIds,
                     },
                     success: function(binsData) {

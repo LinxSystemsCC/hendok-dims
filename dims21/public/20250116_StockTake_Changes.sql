@@ -4,7 +4,7 @@ ADD bitAdjustmentApproved BIT DEFAULT 0 NOT NULL;
 
 
 ALTER TABLE tblStockTakeItems
-ADD strTeam NVARCHAR(50);
+ADD strTeamName NVARCHAR(50);
 
 
 SET ANSI_NULLS ON

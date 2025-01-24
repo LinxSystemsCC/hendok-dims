@@ -12,11 +12,12 @@ class StockTakeController extends Controller
 {
     public function stockTake()
     {
-        $locations = DB::connection('sqlsrv3')->select('SELECT intLocationNameId, strLocationName FROM tblLocationNames');
+        // $locations = DB::connection('sqlsrv3')->select('SELECT intLocationNameId, strLocationName FROM tblLocationNames');
+        $dcs = DB::connection('sqlsrv3')->select('SELECT intAutoId AS intDCId, strDCName FROM tblDCNames');
         $productGroups = DB::connection('sqlsrv3')->select('SELECT DISTINCT ItemGroup, ItemGroupDescription FROM tblSageFullStock WHERE ItemGroup IS NOT NULL');
 
         // dd($locations, $productGroups);
-        return view('warehouse.stocktake.stocktake')->with('locations', $locations)->with('productGroups', $productGroups);
+        return view('warehouse.stocktake.stocktake')->with('dcs', $dcs)->with('productGroups', $productGroups);
     }
 
     public function getNextStockTakeId()
@@ -35,10 +36,20 @@ class StockTakeController extends Controller
         return $stockTakeId;
     }
 
+    public function getLocationsForDCs(Request $request)
+    {
+        $dcIds = trim($request->get('dcIds')) === '' ? -1 : $request->get('dcIds');
+        $location = DB::connection('sqlsrv2')->select("SELECT * FROM viewLocationNames WHERE intDcId IN ($dcIds)");
+
+        return response()->json($location);
+    }
+
     public function getBinsForLocations(Request $request)
     {
-        $locationIds = $request->get('locationIds');
-        $bins = DB::connection('sqlsrv2')->select("SELECT * FROM viewBinNames WHERE intLocationId IN ($locationIds)");
+        $dcIds = trim($request->get('dcIds')) === '' ? -1 : $request->get('dcIds');
+        $locationIds = trim($request->get('locationIds')) === '' ? -1 : $request->get('locationIds');
+        
+        $bins = DB::connection('sqlsrv2')->select("SELECT * FROM viewBinNames WHERE intLocationId IN ($locationIds) AND intDcId IN ($dcIds)");
 
         return response()->json($bins);
     }
@@ -174,7 +185,7 @@ class StockTakeController extends Controller
     }
 
 
-    
+
 
     private static function getTabs($tabcount)
     {

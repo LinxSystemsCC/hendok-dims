@@ -1321,6 +1321,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('selectStockTake', [StockTakeController::class,'selectStockTake']);
     Route::get('productStockCountMapping', [StockTakeController::class,'productStockCountMapping']);
     Route::post('postMappedItems', [StockTakeController::class,'postMappedItems']);
+    Route::get('getLocationsForDCs', [StockTakeController::class,'getLocationsForDCs']);
     Route::get('getBinsForLocations', [StockTakeController::class,'getBinsForLocations']);
 
     // New And imporved methods

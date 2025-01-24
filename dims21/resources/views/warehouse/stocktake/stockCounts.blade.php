@@ -64,17 +64,29 @@
                     caption: "Item Code",
                     allowEditing: false,
                 }, {
+                    dataField: "strDCName",
+                    caption: "DC",
+                    allowEditing: false,
+                }, {
+                    dataField: "strLocationName",
+                    caption: "Location",
+                    allowEditing: false,
+                }, {
                     dataField: "intBinId",
                     caption: "Bin ID",
                     visible: false,
                     allowEditing: false,
                 }, {
                     dataField: "strBinName",
-                    caption: "Bin Name",
+                    caption: "Bin",
+                    allowEditing: false,
+                }, {
+                    dataField: "UserName",
+                    caption: "Counted By",
                     allowEditing: false,
                 }, {
                     dataField: "strLastCountBy",
-                    caption: "Counted By",
+                    caption: "Team",
                     allowEditing: false,
                 }, {
                     dataField: "mnySingle",
