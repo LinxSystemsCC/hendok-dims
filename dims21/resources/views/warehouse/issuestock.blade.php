@@ -72,12 +72,12 @@
                 <div class="modal-body">
                     <div class="form-group w-50">
                         <label class="control-label" for="reference">Reference</label>
-                        <input type="text" class="form-control input-sm col-xs-1" id="reference" disabled>
+                        <input type="text" class="form-control input-sm col-xs-1" id="reference" readonly>
 
                         <label class="control-label" for="issuedto">Issued to</label>
 
                         <select class="form-select mx-2" type="text" id='issuedto'>
-                            <option value="None" selected disabled></option>
+                            <option value="None" selected readonly></option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->EmployeeCode }}">{{ $user->FirstName }} {{ $user->LastName }}
                                 </option>
@@ -101,7 +101,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                         id="closeCreateNewStockIssue">Close</button>
-                    <button type="button" id="savestockissue" class="btn btn-success">Save</button>
+                    <button type="button" id="saveStockIssue" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -118,16 +118,25 @@
                 <div class="modal-body">
                     <form>
                         <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="newType" class="col-form-label">Stock Issue Type</label>
-                                <select class="form-select mx-2" type="text" id='newType'>
+                            <div class="col-md-6 mb-3">
+                                <label for="selectType" class="col-form-label">Stock Issue Type</label>
+                                <select class="form-select mx-2" type="text" id='selectType'>
                                     <option value="None"></option>
                                     @foreach ($types as $type)
                                         <option value="{{ $type->intAutoID }}">{{ $type->strIssueType }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div id="isUpkeepJob" class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="selectReqType" class="col-form-label">Request Type</label>
+                                <select class="form-select mx-2" type="text" id='selectReqType'>
+                                    <option value="None"></option>
+                                    @foreach ($requestTypes as $type)
+                                        <option value="{{ $type->intAutoId }}">{{ $type->strType }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div id="isUpkeepJob" class="col-md-12">
                                 <label for="upkeep" class="col-form-label">Is this an Upkeep Job?</label>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
@@ -151,8 +160,8 @@
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="newItemGroup" class="col-form-label">Item Group</label>
-                                <select class="form-select mx-2" type="text" id='newItemGroup'>
+                                <label for="selectItemGroup" class="col-form-label">Item Group</label>
+                                <select class="form-select mx-2" type="text" id='selectItemGroup'>
                                     <option></option>
                                     @foreach ($groups as $group)
                                         <option value="{{ $group->strStockGroup }}">{{ $group->strStockGroupDesc }}
@@ -161,112 +170,174 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="newItem" class="col-form-label">Item Code</label>
-                                <select class="form-select mx-2" type="text" id='newItem'>
+                                <label for="selectItem" class="col-form-label">Item Code</label>
+                                <select class="form-select mx-2" type="text" id='selectItem'>
                                     <option></option>
-                                    {{-- @foreach ($stockItems as $stock)
-                                    <option value="{{ $stock->strPastelCode }}">{{ $stock->strPastelDescription }}</option>
-                                @endforeach --}}
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="newQtyOnHand" class="col-form-label">Qty On Hand</label>
-                                <input type="text" class="form-control" id="newQtyOnHand" disabled>
+                                <label for="inputQtyOnHand" class="col-form-label">Qty On Hand</label>
+                                <input type="number" class="form-control" id="inputQtyOnHand" readonly>
                             </div>
+
                             <div class="col-md-6 mb-3">
-                                <label for="newQtyRequired" class="col-form-label">Qty Required</label>
-                                <input type="text" class="form-control" id="newQtyRequired">
+                                <label for="inputQtyIssued" class="col-form-label">Qty Issued</label>
+                                <input type="number" class="form-control" id="inputQtyIssued">
                             </div>
+
                             <div class="col-md-6 mb-3">
-                                <label for="newUpkeepJob" class="col-form-label">Upkeep Job</label>
-                                <select class="form-select mx-2" type="text" id='newUpkeepJob'>
+                                <label for="inputOldQtyReturned" class="col-form-label">Qty Returned</label>
+                                <input type="number" class="form-control" id="inputOldQtyReturned" value=0>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="selectReason" class="col-form-label">Reason</label>
+                                <select class="form-select mx-2" type="text" id='selectReason'>
+                                    <option></option>
+                                    @foreach ($reasons as $reason)
+                                        <option value="{{ $reason->intAutoId }}">{{ $reason->strReason }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="selectUpkeepJob" class="col-form-label">Upkeep Job</label>
+                                <select class="form-select mx-2" type="text" id='selectUpkeepJob'>
                                     <option></option>
                                     @foreach ($upkeepjobs as $job)
                                         <option value="{{ $job['workOrderNo'] }}">{{ $job['workOrderNo'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
+
                             <div class="col-md-6 mb-3">
-                                <label for="newPastelProject" class="col-form-label">Pastel Project</label>
-                                <select class="form-select mx-2" type="text" id='newPastelProject'>
+                                <label for="selectPastelProject" class="col-form-label">Pastel Project</label>
+                                <select class="form-select mx-2" type="text" id='selectPastelProject'>
                                     <option></option>
                                     @foreach ($pastelProjects as $project)
                                         <option value="{{ $project->ProjectCode }}">{{ $project->ProjectCode }}</option>
                                     @endforeach
                                 </select>
                             </div>
+
                             <div id='area' class="col-md-6 mb-3">
-                                <label for="newArea" class="col-form-label">Area</label>
-                                <select class="form-select mx-2" type="text" id='newArea'>
+                                <label for="selectArea" class="col-form-label">Area</label>
+                                <select class="form-select mx-2" type="text" id='selectArea'>
                                     <option></option>
                                     @foreach ($areas as $area)
                                         <option value="{{ $area->intAutoID }}">{{ $area->strAreaName }}</option>
                                     @endforeach
                                 </select>
                             </div>
+
                             <div id='department' class="col-md-6 mb-3">
-                                <label for="newDepartment" class="col-form-label">Department</label>
-                                <select class="form-select mx-2" type="text" id='newDepartment'>
-                                    {{-- @foreach ($departments as $dept)
-                                    <option value="{{ $dept->intAutoID }}">{{ $dept->strDeptName }}</option>
-                                @endforeach --}}
+                                <label for="selectDepartment" class="col-form-label">Department</label>
+                                <select class="form-select mx-2" type="text" id='selectDepartment'>
                                 </select>
                             </div>
+
                             <div id='subdepartment' class="col-md-6 mb-3">
-                                <label for="newSubDepartment" class="col-form-label">Sub Department</label>
-                                <select class="form-select mx-2" type="text" id='newSubDepartment'>
-                                    {{-- @foreach ($subdepartments as $subdept)
-                                    <option value="{{ $subdept->intAutoID }}">{{ $subdept->strSubDeptName }}</option>
-                                @endforeach --}}
+                                <label for="selectSubDepartment" class="col-form-label">Sub Department</label>
+                                <select class="form-select mx-2" type="text" id='selectSubDepartment'>
                                 </select>
                             </div>
+
                             <div id='machine' class="col-md-6 mb-3">
-                                <label for="newMachine" class="col-form-label">Machine</label>
-                                <select class="form-select mx-2" type="text" id='newMachine'>
-                                    {{-- @foreach ($machines as $machine)
-                                    <option value="{{ $machine->intAutoMachineID }}">{{ $machine->strMachineName }}</option>
-                                @endforeach --}}
+                                <label for="selectNewMachine" class="col-form-label">Machine</label>
+                                <select class="form-select mx-2" type="text" id='selectNewMachine'>
                                 </select>
                             </div>
 
                             {{-- This is for upkeep jobs --}}
 
                             <div id='upkeeparea' class="col-md-6 mb-3">
-                                <label for="upkeepNewArea" class="col-form-label">Area</label>
-                                <select class="form-select mx-2" type="text" id='upkeepNewArea' disabled>
+                                <label for="selectAreaUpkeep" class="col-form-label">Area</label>
+                                <select class="form-select mx-2" type="text" id='selectAreaUpkeep' disabled>
                                     <option></option>
                                     @foreach ($areas as $area)
                                         <option value="{{ $area->intAutoID }}">{{ $area->strAreaName }}</option>
                                     @endforeach
                                 </select>
-                                {{-- <input type="text" class="form-control" id="upkeepNewArea" disabled> --}}
                             </div>
+
                             <div id='upkeepdepartment' class="col-md-6 mb-3">
-                                <label for="upkeepNewDepartment" class="col-form-label">Department</label>
-                                <select class="form-select mx-2" type="text" id='upkeepNewDepartment' disabled>
+                                <label for="selectDepartmentUpkeep" class="col-form-label">Department</label>
+                                <select class="form-select mx-2" type="text" id='selectDepartmentUpkeep' disabled>
                                     @foreach ($departments as $dept)
-                                    <option value="{{ $dept->intAutoID }}">{{ $dept->strDeptName }}</option>
-                                @endforeach
+                                        <option value="{{ $dept->intAutoID }}">{{ $dept->strDeptName }}</option>
+                                    @endforeach
                                 </select>
-                                {{-- <input type="text" class="form-control" id="upkeepNewDepartment" disabled> --}}
                             </div>
+
                             <div id='upkeepsubdepartment' class="col-md-6 mb-3">
-                                <label for="upkeepNewSubDepartment" class="col-form-label">Sub Department</label>
-                                <select class="form-select mx-2" type="text" id='upkeepNewSubDepartment' disabled>
+                                <label for="selectSubDepartmentUpkeep" class="col-form-label">Sub Department</label>
+                                <select class="form-select mx-2" type="text" id='selectSubDepartmentUpkeep' disabled>
                                     @foreach ($subdepartments as $subdept)
-                                    <option value="{{ $subdept->intAutoID }}">{{ $subdept->strSubDeptName }}</option>
-                                @endforeach
+                                        <option value="{{ $subdept->intAutoID }}">{{ $subdept->strSubDeptName }}</option>
+                                    @endforeach
                                 </select>
-                                {{-- <input type="text" class="form-control" id="upkeepNewSubDepartment" disabled> --}}
                             </div>
+
                             <div id='upkeepmachine' class="col-md-6 mb-3">
-                                <label for="upkeepNewMachine" class="col-form-label">Machine</label>
-                                <select class="form-select mx-2" type="text" id='upkeepNewMachine' disabled>
+                                <label for="selectMachineUpkeep" class="col-form-label">Machine</label>
+                                <select class="form-select mx-2" type="text" id='selectMachineUpkeep' disabled>
                                     @foreach ($machines as $machine)
-                                    <option value="{{ $machine->intAutoMachineID }}">{{ $machine->strMachineName }}</option>
-                                @endforeach
+                                        <option value="{{ $machine->intAutoMachineID }}">{{ $machine->strMachineName }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                                {{-- <input type="text" class="form-control" id="upkeepNewMachine" disabled> --}}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-target="#newStockModal"
+                        data-bs-toggle="modal" id="cancelNewStockItem">
+                        Cancel
+                    </button>
+
+                    <button type="button" id="insertNewLine" class="btn btn-success" data-bs-target="#newStockModal"
+                        data-bs-toggle="modal">
+                        Insert
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Return Modal-->
+    <div class="modal modal-lg fade" id="returnModal" aria-labelledby="returnModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="returnModal">Return Stock Items</h1>
+                </div>
+
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <input type="text" id="inputHeaderId" {{-- hidden --}}>
+                            <input type="text" id="inputLineId" {{-- hidden --}}>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="inputItemCode" class="col-form-label">Item Code</label>
+                                <input type="text" class="form-control input-sm col-xs-1" id="inputItemCode" readonly>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="inputQtyIssuedOnReturn" class="col-form-label">Qty Issued</label>
+                                <input type="number" class="form-control" id="inputQtyIssuedOnReturn" readonly>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="inputOldQtyReturnedOnReturn" class="col-form-label">Old Qty Returned</label>
+                                <input type="number" class="form-control" id="inputOldQtyReturnedOnReturn">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="inputNewQtyReturnedOnReturn" class="col-form-label">New Qty Returned</label>
+                                <input type="number" class="form-control" id="inputNewQtyReturnedOnReturn">
                             </div>
 
                         </div>
@@ -274,10 +345,15 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-target="#newStockModal"
-                        data-bs-toggle="modal" id="cancelNewStockItem">Cancel</button>
-                    <button type="button" id="insertNewLine" class="btn btn-success" data-bs-target="#newStockModal"
-                        data-bs-toggle="modal">Insert</button>
+                    <button type="button" class="btn btn-secondary" data-bs-target="#returnModal"
+                        data-bs-toggle="modal" id="cancelReturnModal">
+                        Cancel
+                    </button>
+
+                    <button type="button" id="returnItems" class="btn btn-success" data-bs-target="#returnModal"
+                        data-bs-toggle="modal">
+                        Return
+                    </button>
                 </div>
             </div>
         </div>
@@ -293,6 +369,7 @@
             var ref = ref + 1;
 
             var types = ({!! json_encode($types) !!});
+            var requestTypes = ({!! json_encode($requestTypes) !!});
             var groups = ({!! json_encode($groups) !!});
             var stockItems = ({!! json_encode($stockItems) !!});
             var upkeepjobs = ({!! json_encode($upkeepjobs) !!});
@@ -301,6 +378,7 @@
             var subdepartments = ({!! json_encode($subdepartments) !!});
             var machines = ({!! json_encode($machines) !!});
             var pastelProjects = ({!! json_encode($pastelProjects) !!});
+            var reasons = ({!! json_encode($reasons) !!});
 
             $('#reference').val('STK-' + ref);
 
@@ -325,74 +403,84 @@
                 }
             });
 
-            $('#newType').select2({
+            $('#selectType').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $('#newItemGroup').select2({
+            $('#selectReqType').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $('#newItem').select2({
+            $('#selectItemGroup').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $('#newUpkeepJob').select2({
+            $('#selectItem').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $('#newPastelProject').select2({
+            $('#selectUpkeepJob').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $('#newArea').select2({
+            $('#selectPastelProject').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $('#newDepartment').select2({
+            $('#selectArea').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $('#newSubDepartment').select2({
+            $('#selectDepartment').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $('#newMachine').select2({
+            $('#selectSubDepartment').select2({
                 theme: 'bootstrap-5',
                 dropdownParent: $('#newItemModal'),
             });
 
-            $("#newItem").change(function() {
-                var strPastelCode = $('#newItem').val();
+            $('#selectNewMachine').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#newItemModal'),
+            });
+
+            $('#selectReason').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#newItemModal'),
+            });
+
+            $("#selectItem").change(function() {
+                var strPastelCode = $('#selectItem').val();
 
                 var result = $.grep(stockItems, function(e) {
                     return e.strPastelCode == strPastelCode;
                 });
 
                 if (result.length > 0) {
-                    var mnyQtyOnHand = result[0].mnyQtyOnHand;
-                    $("#newQtyOnHand").val(mnyQtyOnHand);
+                    var decQtyOnHand = result[0].decQtyOnHand;
+                    $("#inputQtyOnHand").val(decQtyOnHand);
                 } else {
-                    $("#newQtyOnHand").val("");
+                    $("#inputQtyOnHand").val("");
                 }
             });
 
             $('#addNewItem').prop('disabled', true);
-            $('#savestockissue').prop('disabled', true);
+            $('#saveStockIssue').prop('disabled', true);
             $('#isUpkeepJob').prop('hidden', true);
             $('#upkeeparea').prop('hidden', true);
             $('#upkeepdepartment').prop('hidden', true);
             $('#upkeepsubdepartment').prop('hidden', true);
             $('#upkeepmachine').prop('hidden', true);
-            $('#newUpkeepJob').prop('disabled', true);
+            $('#selectUpkeepJob').prop('disabled', true);
 
             $("#issuedto").change(function() {
                 $('#addNewItem').prop('disabled', false);
@@ -479,7 +567,7 @@
                     dataField: "strStockGroupDesc",
                     caption: "Item Group Description",
                 }, {
-                    dataField: "mnyQtyOnHand",
+                    dataField: "decQtyOnHand",
                     caption: "Qty on Hand",
                 }, {
                     dataField: "intMinLevel",
@@ -508,6 +596,7 @@
                             icon: "fa fa-plus",
                             text: "NEW STOCK ISSUE",
                             onClick: function(args) {
+                                $("#issuedto").prop('disabled', false);
                                 $('#newStockModal').modal('show');
                             },
                         },
@@ -583,7 +672,7 @@
                         type: "fixedPoint",
                         precision: 2
                     },
-                },{
+                }, {
                     dataField: "strStockGroup",
                     caption: "Item Group",
                 }, {
@@ -608,9 +697,9 @@
 
                     itemsGrid.option('dataSource', issuedStock);
                     itemsGrid.refresh();
-                    
+
                     $('#reference').val(e.data.strReference);
-                    $("#issuedto").prop('disabled', false);
+                    $("#issuedto").prop('disabled', true);
                     $("#issuedto").val(e.data.strIssuedTo).trigger("change");
                     $('#addNewItem').prop('disabled', true);
 
@@ -631,7 +720,7 @@
 
             function getAvailableStock() {
                 $.ajax({
-                    url: "{!! url('/getIssueStock') !!}",
+                    url: '{!! url('/getIssueStock') !!}',
                     type: "GET",
                     data: {},
                     success: function(data) {
@@ -643,7 +732,7 @@
 
             function getIssuedStock() {
                 $.ajax({
-                    url: "{!! url('/getIssuedStock') !!}",
+                    url: '{!! url('/getIssuedStock') !!}',
                     type: "GET",
                     data: {},
                     success: function(data) {
@@ -653,17 +742,22 @@
                 });
             }
 
-            $('#savestockissue').click(function() {
-                $('#savestockissue').prop('disabled', true);
+            $('#saveStockIssue').click(function() {
+                $('#saveStockIssue').prop('disabled', true);
+
                 var allGridItems = $("#itemsGrid").dxDataGrid("getDataSource").items();
                 var newLines = new Array();
 
                 allGridItems.forEach((element, index, value) => {
                     newLines.push({
                         'intType': element['intType'],
+                        'intReqType': element['intReqType'],
                         'strStockGroup': element['strStockGroup'],
                         'strPastelCode': element['strPastelCode'],
-                        'mnyQty': element['mnyQty'],
+                        'decIssuedQty': element['decIssuedQty'],
+                        'decReturnedOld': element['decReturnedOld'],
+                        'decReturnedNew': element['decReturnedNew'],
+                        'intReason': element['intReason'],
                         'strUpkeep': element['strUpkeepJob'],
                         'strPastelProjectJob': element['strPastelProjectJob'],
                         'intArea': element['intArea'],
@@ -674,8 +768,7 @@
                 });
 
                 $.ajax({
-
-                    url: "{!! url('/savestockissue') !!}",
+                    url: '{!! url('/saveStockIssue') !!}',
                     type: "POST",
                     data: {
                         reference: $("#reference").val(),
@@ -688,6 +781,22 @@
 
                 });
 
+            });
+
+            $('#returnItems').click(function() {
+                $.ajax({
+                    url: '{!! url('/issueStockRecieve') !!}',
+                    type: "POST",
+                    data: {
+                        intHeaderId: $('#inputHeaderId').val(),
+                        intLineId: $('#inputLineId').val(),
+                        oldQtyReturned: $('#inputOldQtyReturnedOnReturn').val(),
+                        newQtyReturned: $('#inputNewQtyReturnedOnReturn').val(),
+                    },
+                    success: function(data) {
+                        console.log(data);
+                    }
+                });
             });
 
             var itemsGrid = $("#itemsGrid").dxDataGrid({
@@ -706,17 +815,30 @@
                 allowColumnResizing: true,
                 columnResizingMode: "widget",
                 columnAutoWidth: true,
-                noDataText: "Please Add Lines",
                 editing: {
                     allowDeleting: true,
                 },
                 columns: [{
+                        dataField: "intHeaderId",
+                        caption: "HeaderId",
+                    }, {
+                        dataField: "intLineId",
+                        caption: "LineId",
+                    }, {
                         dataField: "intType",
                         caption: "Type",
                         lookup: {
                             dataSource: types,
                             valueExpr: "intAutoID",
                             displayExpr: "strIssueType",
+                        },
+                    }, {
+                        dataField: "intReqType",
+                        caption: "Req. Type",
+                        lookup: {
+                            dataSource: requestTypes,
+                            valueExpr: "intAutoId",
+                            displayExpr: "strType",
                         },
                     },
                     {
@@ -736,10 +858,27 @@
                             valueExpr: "strPastelCode",
                             displayExpr: "strPastelDescription",
                         }
+                    }, ,
+                    {
+                        dataField: "intReason",
+                        caption: "Reason",
+                        lookup: {
+                            dataSource: reasons,
+                            valueExpr: "intAutoId",
+                            displayExpr: "strReason",
+                        }
                     },
                     {
-                        dataField: "mnyQty",
-                        caption: "Qty Required",
+                        dataField: "decIssuedQty",
+                        caption: "Qty Issued",
+                    },
+                    {
+                        dataField: "decReturnedOld",
+                        caption: "Qty Returned Old",
+                    },
+                    {
+                        dataField: "decReturnedNew",
+                        caption: "Qty Returned New",
                     },
                     {
                         dataField: "strUpkeepJob",
@@ -800,47 +939,71 @@
                 onRowRemoved: function(e) {
                     var dataSource = itemsGrid.getDataSource();
                     if (dataSource.items().length === 0) {
-                        $('#savestockissue').prop('disabled', true);
+                        $('#saveStockIssue').prop('disabled', true);
                     }
                 },
+                onRowDblClick: function(e) {
+                    $('.modal').modal('hide');
+
+                    let headerId = e.data.intHeaderId;
+                    let lineId = e.data.intLineId;
+                    var ItemCode = e.data.strPastelCode;
+                    var qtyIssued = e.data.decIssuedQty;
+
+                    $("#inputHeaderId").val(headerId);
+                    $("#inputLineId").val(lineId);
+                    $("#inputItemCode").val(ItemCode);
+                    $("#inputQtyIssuedOnReturn").val(qtyIssued);
+
+                    $('#returnModal').modal('show');
+                }
             }).dxDataGrid("instance");
 
             $('#insertNewLine').click(function() {
-                $('#savestockissue').prop('disabled', false);
+                $('#saveStockIssue').prop('disabled', false);
                 // Get the values from the input fields
-                var intType = $("#newType").val();
-                var strStockGroup = $("#newItemGroup").val();
-                var strPastelCode = $("#newItem").val();
-                var mnyQty = $("#newQtyRequired").val();
-                var strUpkeep = $("#newUpkeepJob").val();
-                var strPastelProjectJob = $("#newPastelProject").val();
+                var intType = $("#selectType").val();
+                var intReqType = $("#selectReqType").val();
+                var strStockGroup = $("#selectItemGroup").val();
+                var strPastelCode = $("#selectItem").val();
 
-                console.log($("#yesUpkeep").val())
+                var decIssuedQty = $("#inputQtyIssued").val();
 
-                if ($("#yesUpkeep").val()){
-                    var intArea = $("#upkeepNewArea").val();
-                    var intDept = $("#upkeepNewDepartment").val();
-                    var intSubDept = $("#upkeepNewSubDepartment").val();
-                    var intMachine = $("#upkeepNewMachine").val();
-                }else{
-                    var intArea = $("#newArea").val();
-                    var intDept = $("#newDepartment").val();
-                    var intSubDept = $("#newSubDepartment").val();
-                    var intMachine = $("#newMachine").val();
+                var decReturnedOld = $("#inputOldQtyReturned").val();
+                var decReturnedNew = 0;
+
+                var strUpkeep = $("#selectUpkeepJob").val();
+                var strPastelProjectJob = $("#selectPastelProject").val();
+                var intReason = $("#selectReason").val();
+
+                if ($("#yesUpkeep").prop("checked")) {
+                    var intArea = $("#selectAreaUpkeep").val();
+                    var intDept = $("#selectDepartmentUpkeep").val();
+                    var intSubDept = $("#selectSubDepartmentUpkeep").val();
+                    var intMachine = $("#selectMachineUpkeep").val();
+                } else {
+                    var intArea = $("#selectArea").val();
+                    var intDept = $("#selectDepartment").val();
+                    var intSubDept = $("#selectSubDepartment").val();
+                    var intMachine = $("#selectNewMachine").val();
                 }
-                
+
                 // Create an object that represents the new row
                 var newRow = {
                     intType: intType,
+                    intReqType: intReqType,
                     strStockGroup: strStockGroup,
                     strPastelCode: strPastelCode,
-                    mnyQty: mnyQty,
+                    decIssuedQty: decIssuedQty,
+                    decReturnedOld: decReturnedOld,
+                    decReturnedNew: decReturnedNew,
                     strUpkeepJob: strUpkeep,
                     strPastelProjectJob: strPastelProjectJob,
                     intArea: intArea,
                     intDept: intDept,
                     intSubDept: intSubDept,
-                    intMachine: intMachine
+                    intMachine: intMachine,
+                    intReason: intReason
                 };
 
                 var dataSource = itemsGrid.getDataSource();
@@ -848,28 +1011,32 @@
                     dataSource.reload();
                 })
 
-                $("#newType").val("").trigger("change");
-                $("#newItemGroup").val("").trigger("change");
-                $("#newItem").val("").trigger("change");
-                $("#newQtyOnHand").val("").trigger("change");
-                $("#newQtyRequired").val("").trigger("change");
-                $("#newUpkeepJob").val("").trigger("change");
-                $("#newPastelProject").val("").trigger("change");
-                $("#newArea").val("").trigger("change");
-                $("#newDepartment").val("").trigger("change");
-                $("#newSubDepartment").val("").trigger("change");
-                $("#newMachine").val("").trigger("change");
+                $("#selectType").val("").trigger("change");
+                $("#selectReqType").val("").trigger("change");
+                $("#selectItemGroup").val("").trigger("change");
+                $("#selectItem").val("").trigger("change");
+                $("#inputQtyOnHand").val("").trigger("change");
+                $("#inputQtyIssued").val("").trigger("change");
+                $("#selectUpkeepJob").val("").trigger("change");
+                $("#selectPastelProject").val("").trigger("change");
+                $("#selectArea").val("").trigger("change");
+                $("#selectDepartment").val("").trigger("change");
+                $("#selectSubDepartment").val("").trigger("change");
+                $("#selectNewMachine").val("").trigger("change");
 
-                $("#upkeepNewArea").val("").trigger("change");
-                $("#upkeepNewMachine").val("").trigger("change");
-                $("#upkeepNewDepartment").val("").trigger("change");
-                $("#upkeepNewSubDepartment").val("").trigger("change");
+                $("#selectAreaUpkeep").val("").trigger("change");
+                $("#selectMachineUpkeep").val("").trigger("change");
+                $("#selectDepartmentUpkeep").val("").trigger("change");
+                $("#selectSubDepartmentUpkeep").val("").trigger("change");
+
+                $("#inputOldQtyReturned").val(0).trigger("change");
+
+                $("#selectReason").val("").trigger("change");
             });
 
             // Item Restrictions
-            $('#newType').change(function() {
-                var Type = $('#newType :selected').text();
-                // console.log(Type);
+            $('#selectType').change(function() {
+                var Type = $('#selectType :selected').text();
                 if (Type === 'Parts') {
                     $('#isUpkeepJob').prop('hidden', false);
                     $("#noUpkeep").prop('checked', true);
@@ -888,12 +1055,12 @@
                     $('#machine').prop('hidden', false);
                 }
 
-                $('#newUpkeepJob').prop('disabled', true);
-                $('#newUpkeepJob').val("").trigger("change");
-                $('#upkeepNewArea').val("").trigger("change");
-                $('#upkeepNewMachine').val("").trigger("change");
-                $('#upkeepNewDepartment').val("").trigger("change");
-                $('#upkeepNewSubDepartment').val("").trigger("change");
+                $('#selectUpkeepJob').prop('disabled', true);
+                $('#selectUpkeepJob').val("").trigger("change");
+                $('#selectAreaUpkeep').val("").trigger("change");
+                $('#selectMachineUpkeep').val("").trigger("change");
+                $('#selectDepartmentUpkeep').val("").trigger("change");
+                $('#selectSubDepartmentUpkeep').val("").trigger("change");
             });
 
             $("#yesUpkeep").change(function() {
@@ -907,7 +1074,7 @@
                 $('#upkeepsubdepartment').prop('hidden', false);
                 $('#upkeepmachine').prop('hidden', false);
 
-                $('#newUpkeepJob').prop('disabled', false);
+                $('#selectUpkeepJob').prop('disabled', false);
 
             });
 
@@ -922,32 +1089,39 @@
                 $('#upkeepsubdepartment').prop('hidden', true);
                 $('#upkeepmachine').prop('hidden', true);
 
-                $('#newUpkeepJob').prop('disabled', true);
-                $("#newUpkeepJob").val("").trigger("change");
+                $('#selectUpkeepJob').prop('disabled', true);
+                $("#selectUpkeepJob").val("").trigger("change");
 
-                $('#upkeepNewArea').val("").trigger("change");
-                $('#upkeepNewMachine').val("").trigger("change");
-                $('#upkeepNewDepartment').val("").trigger("change");
-                $('#upkeepNewSubDepartment').val("").trigger("change");
+                $('#selectAreaUpkeep').val("").trigger("change");
+                $('#selectMachineUpkeep').val("").trigger("change");
+                $('#selectDepartmentUpkeep').val("").trigger("change");
+                $('#selectSubDepartmentUpkeep').val("").trigger("change");
             });
 
-            $('#newItemGroup').change(function() {
+            $('#selectItemGroup').change(function() {
+                var selectedValue = $('#selectItemGroup option:selected').val();
+
+                // Check if the value is empty
+                if (!selectedValue) {
+                    return; // Exit the function if the value is empty
+                }
+
                 $.ajax({
                     url: '{!! url('/getStockItemsByGroup') !!}',
                     type: "GET",
                     data: {
-                        ItemGroup: $('#newItemGroup option:selected').val(),
+                        ItemGroup: selectedValue,
                     },
                     success: function(data) {
                         var toAppend = '';
-                        $("#newItem").empty();
+                        $("#selectItem").empty();
                         toAppend += '<option></option>';
                         $.each(data, function(i, o) {
                             toAppend += '<option value="' + o.strPastelCode + '">' + o
                                 .strPastelDescription + '</option>';
                         });
-                        $("#newItem").append(toAppend);
-                        $('#newItem').select2({
+                        $("#selectItem").append(toAppend);
+                        $('#selectItem').select2({
                             theme: 'bootstrap-5',
                             dropdownParent: $('#newItemModal'),
                         });
@@ -955,27 +1129,33 @@
                 });
             });
 
-            $('#newArea').change(function() {
+            $('#selectArea').change(function() {
+                var selectedValue = $('#selectArea').val();
+
+                // Check if the value is empty
+                if (!selectedValue) {
+                    return; // Exit the function if the value is empty
+                }
+
                 $.ajax({
                     url: '{!! url('/getBulkMappingAreaDeptSubDeptMachines') !!}',
                     type: "GET",
                     data: {
-                        ID: $('#newArea').val(),
+                        ID: selectedValue,
                         prompt: 'Departments'
                     },
                     success: function(data) {
-                        console.log(data);
                         var toAppend = '';
-                        $("#newDepartment").empty();
-                        $("#newSubDepartment").empty();
-                        $("#newMachine").empty();
+                        $("#selectDepartment").empty();
+                        $("#selectSubDepartment").empty();
+                        $("#selectNewMachine").empty();
                         toAppend += '<option></option>';
                         $.each(data, function(i, o) {
                             toAppend += '<option value="' + o.intDeptID + '">' + o
                                 .strDeptName + '</option>';
                         });
-                        $("#newDepartment").append(toAppend);
-                        $('#newDepartment').select2({
+                        $("#selectDepartment").append(toAppend);
+                        $('#selectDepartment').select2({
                             theme: 'bootstrap-5',
                             dropdownParent: $('#newItemModal'),
                         });
@@ -983,26 +1163,32 @@
                 });
             });
 
-            $('#newDepartment').change(function() {
+            $('#selectDepartment').change(function() {
+                var selectedValue = $('#selectDepartment').val();
+
+                // Check if the value is empty
+                if (!selectedValue) {
+                    return; // Exit the function if the value is empty
+                }
+
                 $.ajax({
                     url: '{!! url('/getBulkMappingAreaDeptSubDeptMachines') !!}',
                     type: "GET",
                     data: {
-                        ID: $('#newDepartment').val(),
+                        ID: selectedValue,
                         prompt: 'SubDepartments'
                     },
                     success: function(data) {
-                        console.log(data);
                         var toAppend = '';
-                        $("#newSubDepartment").empty();
-                        $("#newMachine").empty();
+                        $("#selectSubDepartment").empty();
+                        $("#selectNewMachine").empty();
                         toAppend += '<option></option>';
                         $.each(data, function(i, o) {
                             toAppend += '<option value="' + o.intSubDeptID + '">' + o
                                 .strSubDeptName + '</option>';
                         });
-                        $("#newSubDepartment").append(toAppend);
-                        $('#newSubDepartment').select2({
+                        $("#selectSubDepartment").append(toAppend);
+                        $('#selectSubDepartment').select2({
                             theme: 'bootstrap-5',
                             dropdownParent: $('#newItemModal'),
                         });
@@ -1010,25 +1196,31 @@
                 });
             });
 
-            $('#newSubDepartment').change(function() {
+            $('#selectSubDepartment').change(function() {
+                var selectedValue = $('#selectSubDepartment').val();
+
+                // Check if the value is empty
+                if (!selectedValue) {
+                    return; // Exit the function if the value is empty
+                }
+
                 $.ajax({
                     url: '{!! url('/getBulkMappingAreaDeptSubDeptMachines') !!}',
                     type: "GET",
                     data: {
-                        ID: $('#newSubDepartment').val(),
+                        ID: selectedValue,
                         prompt: 'Machines'
                     },
                     success: function(data) {
-                        console.log(data);
                         var toAppend = '';
-                        $("#newMachine").empty();
+                        $("#selectNewMachine").empty();
                         toAppend += '<option></option>';
                         $.each(data, function(i, o) {
                             toAppend += '<option value="' + o.intMachineID + '">' + o
                                 .strMachineName + '</option>';
                         });
-                        $("#newMachine").append(toAppend);
-                        $('#newMachine').select2({
+                        $("#selectNewMachine").append(toAppend);
+                        $('#selectNewMachine').select2({
                             theme: 'bootstrap-5',
                             dropdownParent: $('#newItemModal'),
                         });
@@ -1036,19 +1228,16 @@
                 });
             });
 
-            $('#newUpkeepJob').change(function() {
+            $('#selectUpkeepJob').change(function() {
 
                 var JobsList = {!! json_encode($upkeepjobs) !!};
-                var upkeepID = $('#newUpkeepJob').val();
-                var strPastelCode = $('#newItem').val();
+                var upkeepID = $('#selectUpkeepJob').val();
+                var strPastelCode = $('#selectItem').val();
 
                 if (upkeepID !== '') {
                     var result = $.grep(JobsList, function(e) {
                         return e.workOrderNo == upkeepID;
                     });
-
-                    // console.log("-------------------------------------------- Job Info --------------------------------------------");
-                    // console.log(result);
 
                     var AssetID = result[0].asset;
                     var LocationID = result[0].location;
@@ -1058,16 +1247,17 @@
                         type: "GET",
                         data: {},
                         success: function(data) {
-                            // console.log("-------------------------------------------- Asset Info --------------------------------------------");
-                            // console.log(data);
                             if (data.success === true) {
                                 var MachineName = data.result.name;
                             } else {
-                                alert(data.message);
+                                DevExpress.ui.dialog.alert(
+                                    data.message,
+                                    "Alert"
+                                );
                             }
 
-                            // $('#upkeepNewMachine').val(MachineName);
-                            var selectBox = $('#upkeepNewMachine');
+                            // $('#selectMachineUpkeep').val(MachineName);
+                            var selectBox = $('#selectMachineUpkeep');
 
                             selectBox.val(selectBox.find('option').filter(function() {
                                 return $(this).text() === MachineName;
@@ -1080,21 +1270,21 @@
                                     MachineName: MachineName,
                                 },
                                 success: function(data) {
-                                    // alert(data.length);
                                     if (data.length !== 0) {
-                                        $('#upkeepNewArea').val(data[0][
+                                        $('#selectAreaUpkeep').val(data[0][
                                             'intAreaID'
                                         ]);
-                                        $('#upkeepNewDepartment').val(data[0][
+                                        $('#selectDepartmentUpkeep').val(data[0][
                                             'intDeptID'
                                         ]);
-                                        $('#upkeepNewSubDepartment').val(data[0][
+                                        $('#selectSubDepartmentUpkeep').val(data[0][
                                             'intSubDeptID'
                                         ]);
                                     } else {
-                                        alert(
-                                            "The Machine needs to be mapped! Please contact IT."
-                                        )
+                                        DevExpress.ui.dialog.alert(
+                                            "The Machine needs to be mapped! Please contact IT.",
+                                            "Alert"
+                                        );
                                     }
                                 }
                             });
@@ -1106,7 +1296,7 @@
 
             $('#closeCreateNewStockIssue').click(function() {
                 $('#reference').val('STK-' + ref);
-                $("#issuedto").prop('disabled', false);
+                $("#issuedto").prop('readonly', false);
 
                 $("#issuedto").val("None").trigger("change");
                 $('#addNewItem').prop('disabled', true);
@@ -1117,23 +1307,34 @@
             });
 
             $('#cancelNewStockItem').click(function() {
-                $("#newType").val("").trigger("change");
-                $("#newItemGroup").val("").trigger("change");
-                $("#newItem").val("").trigger("change");
-                $("#newQtyOnHand").val("").trigger("change");
-                $("#newQtyRequired").val("").trigger("change");
-                $("#newUpkeepJob").val("").trigger("change");
-                $("#newPastelProject").val("").trigger("change");
-                $("#newArea").val("").trigger("change");
-                $("#newDepartment").val("").trigger("change");
-                $("#newSubDepartment").val("").trigger("change");
-                $("#newMachine").val("").trigger("change");
+                $("#selectType").val("").trigger("change");
+                $("#selectItemGroup").val("").trigger("change");
+                $("#selectItem").val("").trigger("change");
+                $("#inputQtyOnHand").val("").trigger("change");
+                $("#inputQtyIssued").val("").trigger("change");
+                $("#inputOld").val("").trigger("change");
+                $("#selectUpkeepJob").val("").trigger("change");
+                $("#selectPastelProject").val("").trigger("change");
+                $("#selectArea").val("").trigger("change");
+                $("#selectDepartment").val("").trigger("change");
+                $("#selectSubDepartment").val("").trigger("change");
+                $("#selectNewMachine").val("").trigger("change");
 
-                $("#upkeepNewArea").val("").trigger("change");
-                $("#upkeepNewMachine").val("").trigger("change");
-                $("#upkeepNewDepartment").val("").trigger("change");
-                $("#upkeepNewSubDepartment").val("").trigger("change");
+                $("#selectAreaUpkeep").val("").trigger("change");
+                $("#selectMachineUpkeep").val("").trigger("change");
+                $("#selectDepartmentUpkeep").val("").trigger("change");
+                $("#selectSubDepartmentUpkeep").val("").trigger("change");
 
+                $("#inputOldQtyReturned").val(0).trigger("change");
+
+                $("#selectReason").val("").trigger("change");
+            });
+
+            $('#cancelReturnModal').on('click', function() {
+                $('#returnModal').modal('hide');
+
+                // Open the new modal
+                $('#newStockModal').modal('show');
             });
         });
     </script>

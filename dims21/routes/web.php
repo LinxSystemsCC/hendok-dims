@@ -36,6 +36,7 @@ use App\Http\Controllers\WireDraw\WireDrawCustomersController;
 use App\Http\Controllers\WireDraw\WireDrawProductsController;
 use App\Http\Controllers\Warehouse\PlanningController;
 use App\Http\Controllers\IbtController;
+use App\Http\Controllers\Warehouse\StockIssueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -945,8 +946,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('savepermissions', [WareHouseController::class,'savepermissions']);
     Route::post('printgenericlabel', [WareHouseController::class,'printgenericlabel']);
     Route::get('startendjob', [WareHouseController::class,'startendjob']);
-    Route::get('issuestock', [WareHouseController::class,'issuestock']);
-    Route::get('getIssueStock', [WareHouseController::class,'getIssueStock']);
     Route::get('syncing', [WareHouseController::class,'syncing']);
     Route::get('syncPastelStockTable', [WareHouseController::class,'syncPastelStockTable']);
     Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
@@ -1117,21 +1116,15 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('pickersandloadersdashboard', [WareHouseController::class,'pickersandloadersdashboard']);
     Route::get('pickingticketmanager/{ref}', [WareHouseController::class,'pickingticketmanager']);
     Route::get('getpickersandloadersdashboard', [WareHouseController::class,'getpickersandloadersdashboard']);
-    Route::get('stockIssueTypes', [WareHouseController::class,'stockIssueTypes']);
-    Route::get('getStockIssueTypes', [WareHouseController::class,'getStockIssueTypes']);
-    Route::post('saveStockIssueType', [WareHouseController::class,'saveStockIssueType']);
-    Route::post('updateStockIssueType', [WareHouseController::class,'updateStockIssueType']);
-    Route::post('deleteStockIssueType', [WareHouseController::class,'deleteStockIssueType']);
+
     Route::get('subDepartments', [WareHouseController::class,'subDepartments']);
     Route::get('getSubDepartments', [WareHouseController::class,'getSubDepartments']);
     Route::post('saveSubDepartment', [WareHouseController::class,'saveSubDepartment']);
     Route::post('updateSubDepartment', [WareHouseController::class,'updateSubDepartment']);
     Route::post('deleteSubDepartment', [WareHouseController::class,'deleteSubDepartment']);
-    Route::post('savestockissue', [WareHouseController::class,'savestockissue']);
+    
     Route::get('getStockItemsByGroup', [WareHouseController::class,'getStockItemsByGroup']);
     Route::get('getMachinesByDepartment', [WareHouseController::class,'getMachinesByDepartment']);
-    Route::get('getUpkeepJobAsset/{ID}', [WareHouseController::class,'getUpkeepJobAsset']);
-    Route::get('getUpkeepJobLocation/{ID}', [WareHouseController::class,'getUpkeepJobLocation']);
     Route::get('GetAreaDeptSubDeptByMachine', [WareHouseController::class,'GetAreaDeptSubDeptByMachine']);
     Route::get('bulkMapping', [WareHouseController::class,'bulkMapping']);
     Route::get('checkBulkMapping', [WareHouseController::class,'checkBulkMapping']);
@@ -1307,7 +1300,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('stockLocation', [StockControlController::class,'stockLocation']);
     Route::get('getStockLocationSummary', [StockControlController::class,'getStockLocationSummary']);
     Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
-    Route::get('getIssuedStock', [StockControlController::class,'getIssuedStock']);
     Route::get('stockAdjustment', [StockControlController::class,'stockAdjustment']);
     Route::get('getBinStockCount', [StockControlController::class,'getBinStockCount']);
     Route::post('processStockAdjustment', [StockControlController::class,'processStockAdjustment']);
@@ -1334,7 +1326,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('syncStockMovements', [StockTakeController::class,'syncStockMovements']);
     Route::get('getNextStockTakeId', [StockTakeController::class,'getNextStockTakeId']);
     Route::post('StockTakeRecountItems', [StockTakeController::class,'StockTakeRecountItems']);
-    
 });
 
 // Diamond Mesh Controller
@@ -1407,3 +1398,21 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('ibt/get-bins', [IbtController::class, 'getBins']);
 });
 
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('issuestock', [StockIssueController::class,'issuestock']);
+    Route::get('getIssueStock', [StockIssueController::class,'getIssueStock']);
+    
+    Route::get('stockIssueTypes', [StockIssueController::class,'stockIssueTypes']);
+    Route::get('getStockIssueTypes', [StockIssueController::class,'getStockIssueTypes']);
+    Route::post('saveStockIssueType', [StockIssueController::class,'saveStockIssueType']);
+    Route::post('updateStockIssueType', [StockIssueController::class,'updateStockIssueType']);
+    Route::post('deleteStockIssueType', [StockIssueController::class,'deleteStockIssueType']);
+    Route::post('saveStockIssue', [StockIssueController::class,'saveStockIssue']);
+
+    Route::get('getUpkeepJobAsset/{ID}', [StockIssueController::class,'getUpkeepJobAsset']);
+    Route::get('getUpkeepJobLocation/{ID}', [StockIssueController::class,'getUpkeepJobLocation']);
+
+    Route::get('getIssuedStock', [StockIssueController::class,'getIssuedStock']);
+    Route::post('issueStockRecieve', [StockIssueController::class,'issueStockRecieve']);    
+});

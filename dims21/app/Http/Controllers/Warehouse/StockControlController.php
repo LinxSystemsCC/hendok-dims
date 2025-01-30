@@ -30,12 +30,6 @@ class StockControlController extends Controller
         return response()->json($data);
     }
 
-    public function getIssuedStock(Request $request){
-        $data = DB::connection('sqlsrv2')->select("SELECT * FROM viewIssuedStock");
-        return response()->json($data);
-        
-    }
-
     public function stockAdjustment(){
         $products = DB::connection('sqlsrv2')->select("SELECT StockLink intStockLink, Code strPartNumber, Description_1 strPartDescription FROM tblSageFullStock");
         $dcs = DB::connection('sqlsrv2')->select("SELECT intAutoId intDcId, strDCName FROM tblDCNames");

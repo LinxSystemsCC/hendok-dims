@@ -1566,34 +1566,6 @@ class WareHouseController extends Controller
         return view('warehouse/galvmodulecomms')->with('galvloggrid', $galvloggrid);
     }
 
-    public function issuestock(){
-        $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName FROM viewSage300Employees WHERE EmployeeStatusCode = 'A' ");
-        $reference = DB::connection('sqlsrv3')->select("SELECT TOP 1 intAutoId FROM tblStockIssueHeader ORDER BY dteCreated DESC");
-        $intAutoId = count($reference) > 0 ? $reference[0]->intAutoId : 0;
-        $types = DB::connection('sqlsrv3')->select("SELECT * FROM tblStockIssueTypes");
-        $groups = DB::connection('sqlsrv3')->select("SELECT DISTINCT strStockGroup, strStockGroupDesc FROM viewStockIssue");
-        $stockItems = DB::connection('sqlsrv3')->select("SELECT * FROM viewStockIssue");
-        $upkeepjobs = $this->getOpenUpkeepWorkOrders();
-        $areas = DB::connection('sqlsrv3')->select("SELECT * FROM tblAreas");
-        $departments = DB::connection('sqlsrv3')->select("SELECT * FROM tblDepartments");
-        $subdepartments = DB::connection('sqlsrv3')->select("SELECT * FROM tblSubDepartments");
-        $machines = DB::connection('sqlsrv3')->select("SELECT * FROM tblMachines");
-        $pastelProjects = DB::connection('sqlsrv3')->select("SELECT ProjectCode FROM [Hendok Distribution].dbo.Project WHERE ActiveProject = 1");
-
-        return view ('warehouse/issuestock')
-        ->with('users', $users)
-        ->with('intAutoId', $intAutoId)
-        ->with('types', $types)
-        ->with('groups', $groups)
-        ->with('stockItems', $stockItems)
-        ->with('upkeepjobs', $upkeepjobs)
-        ->with('areas', $areas)
-        ->with('departments', $departments)
-        ->with('subdepartments', $subdepartments)
-        ->with('machines', $machines)
-        ->with('pastelProjects', $pastelProjects);
-    }
-
     public function getStockItemsByGroup(Request $request){
         $itemGroup = $request->get('ItemGroup');
         $groups = DB::connection('sqlsrv3')->select("SELECT strPastelCode, strPastelDescription FROM viewStockIssue WHERE strStockGroup = '".$itemGroup."'");
@@ -1606,149 +1578,9 @@ class WareHouseController extends Controller
         return response()->json($machines);
     }
 
-    public function savestockissue(Request $request){
-        $reference = $request->get("reference");
-        $assignedBy = Auth::user()->UserID;
-        $assignedTo = $request->get("assignedTo");
-        $lines = $request->get("lines");
-
-        if (is_array($lines)) {
-            $linesxml = $this->toxml($lines, "xml", array("result"));
-
-            // dd($linesxml);
-            $data = DB::connection('sqlsrv2')->statement('exec spInsertStockIssue ?,?,?,?', array($reference, $assignedBy, $assignedTo,$linesxml));
-
-            // dd($data);
-        }
-
-        return response()->json($data);
-    }
-
-
-    // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
-    public function getOpenUpkeepWorkOrders(){
-        $curl = curl_init();
-
-        $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/work-orders?isComplete=0',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'Session-Token: ' . $token,
-                'Cookie: upkeepsess=' . $token
-            ),
-        ));
-
-        $response = curl_exec($curl);
-
-        if ($response === false) {
-            // Handle cURL error
-            $error = curl_error($curl);
-            // Log or handle the error
-            return []; // Return an empty array or handle the error differently
-        }
-
-        curl_close($curl);
-
-        $result = json_decode($response, true);
-
-        if ($result === null) {
-            // Handle JSON decoding error
-            $jsonError = json_last_error_msg();
-            // Log or handle the error
-            return []; // Return an empty array or handle the error differently
-        }
-
-        // Check if the expected structure exists in the result
-        if (!isset($result['results'])) {
-            // Handle unexpected response format
-            return []; // Return an empty array or handle the error differently
-        }
-
-        $openWorkOrders = [];
-
-        foreach ($result['results'] as $workOrder) {
-            $openWorkOrders[] = $workOrder;
-        }
-
-        // dd($openWorkOrders);
-        return $openWorkOrders;
-    }
-
-    public function getUpkeepJobAsset($ID){
-        $curl = curl_init();
-
-        $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/assets/'.$ID,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'Session-Token: ' . $token,
-                'Cookie: upkeepsess=' . $token
-            ),
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $result = json_decode($response, true);
-
-        return $result;
-    }
-
-    public function getUpkeepJobLocation($ID){
-        $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/locations/'.$ID,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'Session-Token: ' . $token,
-                'Cookie: upkeepsess=' . $token
-            ),
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $result = json_decode($response, true);
-
-        return $result;
-    }
-
     public function GetAreaDeptSubDeptByMachine(Request $request){
         $MachineName = $request->get('MachineName');
         $result =  DB::connection('sqlsrv3')->select("EXEC spGetAreaDeptSubDeptByMachine '$MachineName'");
-        return response()->json($result);
-    }
-
-    // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
-
-    public function getIssueStock(Request $request){
-        $result =  DB::connection('sqlsrv3')->select('select * from viewStockIssue');
         return response()->json($result);
     }
 
@@ -2256,42 +2088,6 @@ class WareHouseController extends Controller
 
     public function syncPastelStockTable(){
         $response = DB::connection('sqlsrv3')->statement('exec spSyncBvStockFull');
-        return response()->json($response);
-    }
-
-    public function stockIssueTypes (){
-        return view('warehouse/stockissuetypes');
-    }
-
-    public function getStockIssueTypes(){
-        $response = DB::connection('sqlsrv3')->select('SELECT * FROM tblStockIssueTypes');
-        return response()->json($response);
-    }
-
-    public function saveStockIssueType(Request $request){
-        $ID = $request->get('ID');
-        $Name = $request->get('Name');
-        $Operation = 'CREATE';
-
-        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
-        return response()->json($response);
-    }
-
-    public function updateStockIssueType(Request $request){
-        $ID = $request->get('ID');
-        $Name = $request->get('Name');
-        $Operation = 'UPDATE';
-
-        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
-        return response()->json($response);
-    }
-
-    public function deleteStockIssueType(Request $request){
-        $ID = $request->get('ID');
-        $Name = $request->get('Name');
-        $Operation = 'DELETE';
-
-        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', array($ID, $Name, $Operation));
         return response()->json($response);
     }
 
