@@ -71,23 +71,24 @@ class StockIssueController extends Controller
 
         $data = DB::connection('sqlsrv2')->select("EXEC usp_C_InsertStockIssue '$reference', $assignedBy,'$assignedTo','$linesxml'");
 
-        $jsonResponse = [
-            'lines' => []
-        ];
+        return response()->json($data);
 
-        foreach ($data as $row) {
-            $jsonResponse['lines'][] = [
-                'strPastelCode' => $row->strPastelCode,
-                'strPastelDescription' => $row->strPastelDescription,
-                'strReference' => $row->strReference,
-                'dtmCreated' => $row->dtmCreated,
-                'decAdjustmentQty' => $row->decAdjustmentQty,
-                'strWarehouse' => $row->strWarehouse
-            ];
-        }
+        // $jsonResponse = [
+        //     'lines' => []
+        // ];
+
+        // foreach ($data as $row) {
+        //     $jsonResponse['lines'][] = [
+        //         'strPastelCode' => $row->strPastelCode,
+        //         'strPastelDescription' => $row->strPastelDescription,
+        //         'strReference' => $row->strReference,
+        //         'dtmCreated' => $row->dtmCreated,
+        //         'decAdjustmentQty' => $row->decAdjustmentQty,
+        //         'strWarehouse' => $row->strWarehouse
+        //     ];
+        // }
 
         
-        return response()->json($data);
 
         // dd(json_encode($jsonResponse, JSON_PRETTY_PRINT));
 
@@ -106,22 +107,23 @@ class StockIssueController extends Controller
 
         $data = DB::connection('sqlsrv2')->select("EXEC usp_CU_IssueStockRecieve $intHeaderId, $intLineId, $oldQtyReturned,$newQtyReturned, $UserId");
 
-        $jsonResponse = [
-            'lines' => []
-        ];
-
-        foreach ($data as $row) {
-            $jsonResponse['lines'][] = [
-                'strPastelCode' => $row->strPastelCode,
-                'strPastelDescription' => $row->strPastelDescription,
-                'strReference' => $row->strReference,
-                'dtmCreated' => $row->dtmCreated,
-                'decAdjustmentQty' => $row->decAdjustmentQty,
-                'strWarehouse' => $row->strWarehouse
-            ];
-        }
-
         return response()->json($data);
+
+        // $jsonResponse = [
+        //     'lines' => []
+        // ];
+
+        // foreach ($data as $row) {
+        //     $jsonResponse['lines'][] = [
+        //         'strPastelCode' => $row->strPastelCode,
+        //         'strPastelDescription' => $row->strPastelDescription,
+        //         'strReference' => $row->strReference,
+        //         'dtmCreated' => $row->dtmCreated,
+        //         'decAdjustmentQty' => $row->decAdjustmentQty,
+        //         'strWarehouse' => $row->strWarehouse
+        //     ];
+        // }
+
 
         // dd(json_encode($jsonResponse, JSON_PRETTY_PRINT));
 

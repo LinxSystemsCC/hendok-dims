@@ -794,7 +794,7 @@
                         newQtyReturned: $('#inputNewQtyReturnedOnReturn').val(),
                     },
                     success: function(data) {
-                        console.log(data);
+                        location.reload();
                     }
                 });
             });
