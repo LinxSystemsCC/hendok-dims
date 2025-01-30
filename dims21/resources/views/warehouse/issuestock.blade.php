@@ -317,8 +317,8 @@
                 <div class="modal-body">
                     <form>
                         <div class="row">
-                            <input type="text" id="inputHeaderId" {{-- hidden --}}>
-                            <input type="text" id="inputLineId" {{-- hidden --}}>
+                            <input type="text" id="inputHeaderId" hidden>
+                            <input type="text" id="inputLineId" hidden>
 
                             <div class="col-md-6 mb-3">
                                 <label for="inputItemCode" class="col-form-label">Item Code</label>
