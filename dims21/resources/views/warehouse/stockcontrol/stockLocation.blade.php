@@ -74,55 +74,41 @@
                 scrolling: {
                     mode: 'virtual'
                 },
+                stateStoring: {
+                    enabled: true,
+                    type: "localStorage",
+                    storageKey: "gridStockLocationSummary"
+                },
                 columns: [{
                         dataField: "strPartNumber",
                         caption: "Item Code",
-
                     }, {
                         dataField: "strItemDescription",
                         caption: "Item Name",
-
                     }, {
                         dataField: "strItemGroupDescription",
                         caption: "Item Group",
-
                     }, {
                         dataField: "decTotalQuantityInStock",
                         caption: "Total On Hand",
                         dataType: "number",
                         format: customColFormat,
-                    },{
+                    }, {
+                        dataField: "decTotalWeightInStock",
+                        caption: "Total Weight",
+                        dataType: "number",
+                        format: customColFormat,
+                    }, {
                         dataField: "decTotalQuantityAvailable",
                         caption: "Total Available",
                         dataType: "number",
                         format: customColFormat,
                     }, {
-                        dataField: "decSingleQuantityInStock",
-                        caption: "Single On Hand",
-                        dataType: "number",
-                        format: customColFormat,
-                    },{
-                        dataField: "decBundleQuantityInStock",
-                        caption: "Bundle On Hand",
-                        dataType: "number",
-                        format: customColFormat,
-                    },{
-                        dataField: "decPalletQuantityInStock",
-                        caption: "Pallet On Hand",
-                        dataType: "number",
-                        format: customColFormat,
-                    },{
                         dataField: "MinLevel",
                         caption: "Min Level",
-
                     }, {
                         dataField: "MaxLevel",
                         caption: "Max Level",
-
-                    }, {
-                        dataField: "mnySageInStock",
-                        caption: "Sage Qty",
-
                     }
                 ],
                 masterDetail: {
@@ -165,49 +151,57 @@
                                 paging: {
                                     enabled: false
                                 },
-                                onContentReady: function(e) {
-                                    e.component.columnOption('intBinId', 'visible', false);
-                                    e.component.columnOption('intBinId', 'allowEditing', false);
-
-                                    e.component.columnOption('intLocationId', 'visible', false);
-                                    e.component.columnOption('strLocationName', 'caption', 'Location Name');
-                                    e.component.columnOption('strLocationName', 'allowEditing', false);
-
-                                    e.component.columnOption('intDcId', 'visible', false);
-                                    e.component.columnOption('strDCName', 'caption', 'DC Name');
-                                    e.component.columnOption('strDCName', 'allowEditing', false);
-
-                                    e.component.columnOption('strBin', 'caption', 'Bin Name');
-                                    e.component.columnOption('strBin', 'allowEditing', false);
-
-                                    e.component.columnOption('mnyBinCapacity', 'caption', 'Capacity');
-                                    e.component.columnOption('mnyBinCapacity', 'dataType', 'number');
-                                    e.component.columnOption('mnyBinCapacity', 'format', customColFormat);
-
-                                    e.component.columnOption('decTotalQuantityInStock', 'caption', 'Total On Hand');
-                                    e.component.columnOption('decTotalQuantityInStock', 'dataType', 'number');
-                                    e.component.columnOption('decTotalQuantityInStock', 'format', customColFormat);
-
-                                    e.component.columnOption('decTotalQuantityAvailable', 'caption', 'Total Available');
-                                    e.component.columnOption('decTotalQuantityAvailable', 'dataType', 'number');
-                                    e.component.columnOption('decTotalQuantityAvailable', 'format', customColFormat);
-
-                                    e.component.columnOption('decSingleQuantityInStock', 'caption', 'Single On Hand');
-                                    e.component.columnOption('decSingleQuantityInStock', 'dataType', 'number');
-                                    e.component.columnOption('decSingleQuantityInStock', 'format', customColFormat);
-
-                                    e.component.columnOption('decBundleQuantityInStock', 'caption', 'Bundle On Hand');
-                                    e.component.columnOption('decBundleQuantityInStock', 'dataType', 'number');
-                                    e.component.columnOption('decBundleQuantityInStock', 'format', customColFormat);
-
-                                    e.component.columnOption('decPalletQuantityInStock', 'caption', 'Pallet On Hand');
-                                    e.component.columnOption('decPalletQuantityInStock', 'dataType', 'number');
-                                    e.component.columnOption('decPalletQuantityInStock', 'format', customColFormat);
-
-                                    e.component.columnOption('strPartNumber', 'caption', 'Item Code');
-                                    e.component.columnOption('strPartNumber', 'allowEditing',false);
+                                columnAutoWidth: true,
+                                allowColumnResizing: true,
+                                columnResizingMode: "widget",
+                                columnFixing: {
+                                    enabled: true,
                                 },
-                            }).appendTo(container);
+                                columns: [{
+                                    dataField: "strPartNumber",
+                                    caption: "Item Code",
+                                }, {
+                                    dataField: "decTotalQuantityInStock",
+                                    caption: "Total On Hand",
+                                    dataType: "number",
+                                    format: customColFormat,
+                                }, {
+                                    dataField: "decTotalWeightInStock",
+                                    caption: "Total Weight",
+                                    dataType: "number",
+                                    format: customColFormat,
+                                }, {
+                                    dataField: "decTotalQuantityAvailable",
+                                    caption: "Total Available",
+                                    dataType: "number",
+                                    format: customColFormat,
+                                }, {
+                                    dataField: "decSingleQuantityInStock",
+                                    caption: "Single Qty In Stock",
+                                    dataType: "number",
+                                    format: customColFormat,
+                                }, {
+                                    dataField: "decBundleQuantityInStock",
+                                    caption: "Bundle Qty In Stock",
+                                    dataType: "number",
+                                    format: customColFormat,
+                                }, {
+                                    dataField: "decPalletQuantityInStock",
+                                    caption: "Pallet Qty In Stock",
+                                    dataType: "number",
+                                    format: customColFormat,
+                                }, {
+                                    dataField: "strLocationName",
+                                    caption: "Location",
+                                }, {
+                                    dataField: "strDCName",
+                                    caption: "DC",
+                                }, {
+                                    dataField: "strBin",
+                                    caption: "Bin",
+                                }
+                            ],
+                        }).appendTo(container);
                     },
                 },
                 onToolbarPreparing: function(e) {
