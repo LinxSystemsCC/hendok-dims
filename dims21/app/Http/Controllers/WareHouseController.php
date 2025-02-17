@@ -1320,7 +1320,7 @@ class WareHouseController extends Controller
             ->select("select * from tblDepartments");*/
 
         $products = DB::connection('sqlsrv2')->select("select * from viewtblProducts");
-        return view('warehouse/stocklocations')->with('products', $products);
+        return view('warehouse.stocklocations')->with('products', $products);
     }
 
     public function stockdetails($productcode)

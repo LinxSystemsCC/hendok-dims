@@ -87,39 +87,31 @@
                         caption: "Item Group",
 
                     }, {
-                        dataField: "mnyOnHand",
-                        caption: "On Hand",
+                        dataField: "decTotalQuantityInStock",
+                        caption: "Total On Hand",
                         dataType: "number",
                         format: customColFormat,
-                    },
-                    {
-                        dataField: "mnyOnHandPallet",
-                        caption: "On Hand Pallet",
-                        dataType: "number",
-                        format: customColFormat,
-                    },
-                    {
-                        dataField: "mnyAvail",
-                        caption: "Avail.",
-                        dataType: "number",
-                        format: customColFormat,
-                    },
-                    {
-                        dataField: "mnyAvailPallet",
-                        caption: "Avail Pallet",
+                    },{
+                        dataField: "decTotalQuantityAvailable",
+                        caption: "Total Available",
                         dataType: "number",
                         format: customColFormat,
                     }, {
-                        dataField: "mnyOnHandWeight",
-                        caption: "On Hand Weight",
+                        dataField: "decSingleQuantityInStock",
+                        caption: "Single On Hand",
                         dataType: "number",
                         format: customColFormat,
-                    }, {
-                        dataField: "mnyAvailWeight",
-                        caption: "Avail Weight",
+                    },{
+                        dataField: "decBundleQuantityInStock",
+                        caption: "Bundle On Hand",
                         dataType: "number",
                         format: customColFormat,
-                    }, {
+                    },{
+                        dataField: "decPalletQuantityInStock",
+                        caption: "Pallet On Hand",
+                        dataType: "number",
+                        format: customColFormat,
+                    },{
                         dataField: "MinLevel",
                         caption: "Min Level",
 
@@ -177,9 +169,11 @@
                                     e.component.columnOption('intBinId', 'visible', false);
                                     e.component.columnOption('intBinId', 'allowEditing', false);
 
+                                    e.component.columnOption('intLocationId', 'visible', false);
                                     e.component.columnOption('strLocationName', 'caption', 'Location Name');
                                     e.component.columnOption('strLocationName', 'allowEditing', false);
 
+                                    e.component.columnOption('intDcId', 'visible', false);
                                     e.component.columnOption('strDCName', 'caption', 'DC Name');
                                     e.component.columnOption('strDCName', 'allowEditing', false);
 
@@ -190,32 +184,25 @@
                                     e.component.columnOption('mnyBinCapacity', 'dataType', 'number');
                                     e.component.columnOption('mnyBinCapacity', 'format', customColFormat);
 
+                                    e.component.columnOption('decTotalQuantityInStock', 'caption', 'Total On Hand');
+                                    e.component.columnOption('decTotalQuantityInStock', 'dataType', 'number');
+                                    e.component.columnOption('decTotalQuantityInStock', 'format', customColFormat);
 
-                                    e.component.columnOption('mnyOnHand', 'caption', 'On Hand Qty');
-                                    e.component.columnOption('mnyOnHand', 'dataType', 'number');
-                                    e.component.columnOption('mnyOnHand', 'format', customColFormat);
+                                    e.component.columnOption('decTotalQuantityAvailable', 'caption', 'Total Available');
+                                    e.component.columnOption('decTotalQuantityAvailable', 'dataType', 'number');
+                                    e.component.columnOption('decTotalQuantityAvailable', 'format', customColFormat);
 
-                                    e.component.columnOption('mnyOnHandPallet', 'caption', 'On Hand Pallet Qty');
-                                    e.component.columnOption('mnyOnHandPallet', 'dataType', 'number');
-                                    e.component.columnOption('mnyOnHandPallet', 'format', customColFormat);
+                                    e.component.columnOption('decSingleQuantityInStock', 'caption', 'Single On Hand');
+                                    e.component.columnOption('decSingleQuantityInStock', 'dataType', 'number');
+                                    e.component.columnOption('decSingleQuantityInStock', 'format', customColFormat);
 
-                                    e.component.columnOption('mnyAvail', 'caption', 'Avail Qty');
-                                    e.component.columnOption('mnyAvail', 'dataType', 'number');
-                                    e.component.columnOption('mnyAvail', 'format', customColFormat);
+                                    e.component.columnOption('decBundleQuantityInStock', 'caption', 'Bundle On Hand');
+                                    e.component.columnOption('decBundleQuantityInStock', 'dataType', 'number');
+                                    e.component.columnOption('decBundleQuantityInStock', 'format', customColFormat);
 
-                                    e.component.columnOption('mnyAvailPallet', 'caption', 'Avail Pallet Qty');
-                                    e.component.columnOption('mnyAvailPallet', 'dataType', 'number');
-                                    e.component.columnOption('mnyAvailPallet', 'visible', false);
-                                    e.component.columnOption('mnyAvailPallet', 'format', customColFormat);
-
-                                    e.component.columnOption('mnyOnHandWeight', 'caption', 'On Hand Weigh');
-                                    e.component.columnOption('mnyOnHandWeight', 'dataType', 'number');
-                                    e.component.columnOption('mnyOnHandWeight', 'format', customColFormat);
-
-                                    e.component.columnOption('mnyAvailWeight', 'caption', 'Avail Weight');
-                                    e.component.columnOption('mnyAvailWeight', 'dataType', 'number');
-                                    e.component.columnOption('mnyAvailWeight', 'visible', false);
-                                    e.component.columnOption('mnyAvailWeight', 'format', customColFormat);
+                                    e.component.columnOption('decPalletQuantityInStock', 'caption', 'Pallet On Hand');
+                                    e.component.columnOption('decPalletQuantityInStock', 'dataType', 'number');
+                                    e.component.columnOption('decPalletQuantityInStock', 'format', customColFormat);
 
                                     e.component.columnOption('strPartNumber', 'caption', 'Item Code');
                                     e.component.columnOption('strPartNumber', 'allowEditing',false);
