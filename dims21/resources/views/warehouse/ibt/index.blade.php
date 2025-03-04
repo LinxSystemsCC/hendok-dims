@@ -662,7 +662,7 @@
                     var formData = new FormData();
                     formData.append('SelectedIbtHeaderId', SelectedIbtHeaderId);
                     formData.append('dataxml', gridResults);
-                    formData.append('dtmCreated', formatDateYYYYMMDD(inputDateElement.option("value")));
+                    formData.append('dtmCreated', formatDateYYYYMMDD(new Date(inputDateElement.option("value"))));
                     formData.append('strReference', $('.strReference').val());
                     formData.append('intFromDC', $('.intFromDC').val());
                     formData.append('intToDC', $('.intToDC').val());
