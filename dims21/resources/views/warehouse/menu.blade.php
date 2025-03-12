@@ -51,6 +51,7 @@ if ((Auth::guest()))
     $authorisation = $v->getThingsUserPermissions(Auth::user()->UserID,'Authorisation');
 
     //Stock Controll Options
+    $ibt = $v->getThingsUserPermissions(Auth::user()->UserID,'IBT');
 
     //Inventory Options
     $stockonhand = $v->getThingsUserPermissions(Auth::user()->UserID,'Stock On Hand');
@@ -555,6 +556,13 @@ if ((Auth::guest()))
                         {{-- @if($ppl !="0") --}}
                         <a class="secondmenu" href='{!!url("/issuestock")!!}'><i class="fa fa-line-chart"></i>Stock Issue</a>
                         {{-- @endif --}}
+                    </li>
+
+                    
+                    <li>
+                        @if($ibt !="0")
+                        <a class="secondmenu" href='{!!url("/ibt")!!}'><i class="fa fa-truck"></i>IBTs</a>
+                        @endif
                     </li>
                 </li>
 			</ul>
