@@ -25,9 +25,9 @@
         <div class="col-lg-12 d-inline-flex" >
             <h3 style="flex-grow: 1; padding-left: 15px;">DRIVERS</h3>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newDriver">
+            {{-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newDriver">
                 New Driver
-            </button>
+            </button> --}}
 
         </div>
         
@@ -161,11 +161,11 @@
             export: {
                 enabled: true
             },
-            editing: {
+            /*editing: {
                 mode: 'batch',
                 allowUpdating: true,
                 allowDeleting: true,
-            },
+            },*/
             selection: {
                 mode: 'single',
             },

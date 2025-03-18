@@ -10,11 +10,20 @@ class LoadingController extends Controller
 {
     public function loadTracking()
     {
-        $statuses = DB::connection('sqlsrv2')->select("SELECT intAutoId, strStatus FROM tblLoadStatuses");
+        $drivers = DB::connection('sqlsrv2')->select("SELECT intEmployeeId AS DriverId, strFullName AS DriverName FROM vwSage300Drivers");
+        $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses");
+        $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
+        $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL OR SECOND_WEIGH_OPERATOR = ''");
+
+        $statuses = DB::connection('sqlsrv2')->select("SELECT intAutoId, strStatus, strType FROM tblLoadStatuses");
         $reasonTypes = DB::connection('sqlsrv2')->select("SELECT intAutoId, strReasonTypes FROM tblLoadReasonTypes");
         return view('warehouse.loading.loadTracking')
             ->with('statuses', $statuses)
-            ->with('reasonTypes', $reasonTypes);
+            ->with('reasonTypes', $reasonTypes)
+            ->with('drivers', $drivers)
+            ->with('horses', $horses)
+            ->with('trailors', $trailors)
+            ->with('tickets', $tickets);
     }
 
     public function getLoadTracking(Request $request){

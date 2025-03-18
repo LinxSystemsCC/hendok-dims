@@ -33,7 +33,6 @@ class DriversController extends Controller
         $glCode = DB::connection('sqlsrv3')
             ->select("SELECT * FROM tblGLCodes");
 
-
         return view('dims/drivers')
             ->with('glCode',$glCode)
             ->with('readItems',$readDriver);
