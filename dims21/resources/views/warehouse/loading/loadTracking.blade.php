@@ -420,22 +420,10 @@
                         },
                     },
                     {
-                        dataField: "date",
+                        dataField: "dtm",
                         caption: "Date Created",
-                        calculateCellValue: function(rowData) {
-                            // Extract the date part from the "dtm" field
-                            const dtm = new Date(rowData.dtm);
-                            return dtm.toLocaleDateString("en-ZA");
-                        },
-                    },
-                    {
-                        dataField: "time",
-                        caption: "Time Created",
-                        calculateCellValue: function(rowData) {
-                            // Extract the time part from the "dtm" field
-                            const dtm = new Date(rowData.dtm);
-                            return dtm.toLocaleTimeString();
-                        },
+                        dataType: 'datetime',
+                        format: 'yyyy-MM-dd hh:mm:ss'
                     },
                     {
                         dataField: "strUnickReference",
@@ -449,8 +437,8 @@
                         caption: "Route Name",
                     },
                     {
-                        dataField: "strDestination",
-                        caption: "Destination",
+                        dataField: "strTicket",
+                        caption: "Ticket",
                     },
                     {
                         dataField: "intDriverOne",
