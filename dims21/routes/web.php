@@ -1298,6 +1298,11 @@ Route::group(['middleware' => 'auth'], function() {
 // Stock Control Controller
 Route::group(['middleware' => 'auth'], function() {
     Route::get('stockLocation', [StockControlController::class,'stockLocation']);
+    Route::get('/ScanCode', [StockControlController::class,'Scancode'])->name("ScanCode");
+
+    Route::post('/store-scan', [StockControlController::class, 'storeScan'])->name('store.scan');
+
+
     Route::get('getStockLocationSummary', [StockControlController::class,'getStockLocationSummary']);
     Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
     Route::get('stockAdjustment', [StockControlController::class,'stockAdjustment']);

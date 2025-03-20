@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class StockControlController extends Controller
 {
@@ -43,6 +45,70 @@ class StockControlController extends Controller
             ->with('bins', $bins);
     }
 
+
+    public function ScanCode(){
+
+        //stockLocation.blade
+   // Fetching bin names from the viewBinNames table using sqlsrv2 connection
+   $StockData = DB::connection('sqlsrv2')->table(table: 'viewBinNames')
+   ->select('intBinId', 'strBin')
+   ->get();
+
+return view('warehouse.stockcontrol.StockScan', compact('StockData'));
+    }
+
+  
+    public function storeScan(Request $request)
+    {
+        try {
+            if (!Auth::check()) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+    
+       // Validate input
+                $request->validate([
+                    'qr_code' => ['required', 'regex:/^\d+\|\d+$/'], // Any digits before and after "|", must have exactly one "|"
+                    'bin_id' => 'required|integer',
+                    'dtmItemScanned' => 'required|date'
+                ]);
+            // Get the correct user ID
+            $userid = optional(Auth::user())->UserID ?? 0;  // Ensure it is not null
+    
+            // Debug User ID before inserting
+            Log::info('Final User ID:', ['UserID' => $userid]);
+    
+            // Construct JSON Data as an array (NO `json_encode()` YET)
+            $jsonData = [
+                "Item" => $request->qr_code,
+                "LocationFrom" => "0",
+                "LocationTo" => $request->bin_id,
+                "MoveType" => "Move",
+                "UserId" => (int) $userid, // Ensure integer type
+                "strUID" => (string) Str::uuid(),
+                "dtmScanned" => now()->format("Y-m-d H:i:s"),
+                "dtmItemScanned" => $request->dtmItemScanned
+            ];
+            Log::info('Received Request Data:', $request->all());
+
+            // Debug JSON Data before inserting
+            Log::info('Final JSON Data:', ['data' => $jsonData]);
+    
+            // Insert into Database (Laravel will automatically encode JSON correctly)
+            DB::connection('sqlsrv2')->table('tblJsonDataStockMover')->insert([
+                'strJsonData' => json_encode($jsonData), // Encode only once here
+                'dteCreated' => now(),
+                'intFlag' => 0
+            ]);
+    
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error("Scan Insert Error: " . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
+    
+    
     public function getBinStockCount(Request $request){
 
         $intBinId = $request->get('intBinId');
