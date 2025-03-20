@@ -86,7 +86,7 @@
             <div class="content">
                 <div class="title m-b-md">
                     <img  src="public/images/dimslogo.png" style="height: 100px;">
-                    <strong>Welcome to DIMS V1</strong>
+                    <strong>Welcome to DIMS</strong>
                 </div>
             </div>
         </div>
