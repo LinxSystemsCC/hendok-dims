@@ -451,6 +451,7 @@
                 gridProducts.option('dataSource', []);
                 gridProducts.refresh();
             });
+
         });
 
         //This function is use for get ibt records

@@ -149,6 +149,7 @@ class IbtController extends Controller
             'mnyQtyReceived' => $request->get('mnyQtyReceived'),
             'intAutoId' => $request->get('intAutoId'),
         ];
+
         $updatedRows = DB::update(
             'UPDATE tblIBTLines SET mnyQtyVariance = :mnyQtyVariance, mnyQtyReceived = :mnyQtyReceived WHERE intAutoId = :intAutoId',
             $passData
@@ -203,6 +204,32 @@ class IbtController extends Controller
         return response()->json(['success' => false, 'message' => 'Update failed.']);
     }
 
+    /**
+     * This function is used to receive an ibt
+     *
+     * @param obj $request
+     */
+    public function receive(Request $request)
+    {
+
+        $ibtHeader = $request->get('ibtHeader');
+        $lines = $request->get('lines');
+        $receivingBin = $request->get('bin');
+        $intReceivedBy = Auth::user()->UserID;
+
+        if (!empty($lines)) {
+            $xml = $this->toxml($lines, "xml", array("result"));
+        }
+
+        // dd("EXEC usp_C_RecieveIBTandMove $ibtHeader, '$xml', $receivingBin, $intReceivedBy");
+        $updatedRows = DB::connection('sqlsrv2')->select("EXEC usp_C_RecieveIBTandMove $ibtHeader, '$xml', $receivingBin, $intReceivedBy");
+
+        if ($updatedRows > 0) {
+            return response()->json(['success' => true, 'message' => 'Record updated successfully.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Update failed.']);
+    }
 
     /**
      * This function is used for get the bins
@@ -242,5 +269,47 @@ class IbtController extends Controller
         }
 
         return response()->json($bins);
+    }
+
+    private static function getTabs($tabcount)
+    {
+        $tabs = '';
+        for($i = 0; $i < $tabcount; $i++)
+        {
+            $tabs .= "\t";
+        }
+        return $tabs;
+    }
+
+    private static function asxml($arr, $elements = [], $tabcount = 0)
+    {
+        $result = '';
+        $tabs = self::getTabs($tabcount);
+        foreach ($arr as $key => $val) {
+            $element = isset($elements[0]) ? $elements[0] : $key;
+            $result .= $tabs;
+            $result .= "<" . htmlspecialchars($element, ENT_XML1 | ENT_QUOTES, 'UTF-8') . ">";
+
+            if (!is_array($val)) {
+                // Escape special characters for XML, including single quotes
+                $result .= htmlspecialchars($val, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+            } else {
+                $result .= "\r\n";
+                $result .= self::asxml($val, array_slice($elements, 1, true), $tabcount + 1);
+                $result .= $tabs;
+            }
+
+            $result .= "</" . htmlspecialchars($element, ENT_XML1 | ENT_QUOTES, 'UTF-8') . ">\r\n";
+        }
+        return $result;
+    }
+
+    public static function toxml($arr, $root = "xml", $elements = Array())
+    {
+        $result = '';
+        $result .= "<" . $root . ">\r\n";
+        $result .= self::asxml($arr, $elements, 1);
+        $result .= "</" . $root . ">\r\n";
+        return $result;
     }
 }
