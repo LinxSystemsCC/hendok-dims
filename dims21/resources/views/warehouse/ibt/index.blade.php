@@ -162,7 +162,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary closeIBTModal"
                             data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="btnReceivedIBT" class="btn btn-success" hidden>Receive</button>
+                        {{-- <button type="button" id="btnReceivedIBT" class="btn btn-success" hidden>Receive</button> --}}
                         <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden>Update</button>
                         <button type="button" id="btnSaveIBT" class="btn btn-success">Save</button>
                     </div>
@@ -170,6 +170,17 @@
             </div>
         </div>
 
+    </div>
+
+    <div id="popupReceive">
+        <div class="dx-field">
+            <div class="dx-field-label">Receiving Bin</div>
+            <div class="dx-field-value">
+                <div id="selectReceivingBin"></div>
+            </div>
+        </div>
+
+        <div id="gridReceiveQtys"></div>
     </div>
 
 @endsection
@@ -294,6 +305,11 @@
                         visible: false,
                     },
                     {
+                        dataField: "intStatus",
+                        caption: "Status Id",
+                        visible: false,
+                    },
+                    {
                         dataField: "strStatus",
                         caption: "Status",
                     },
@@ -317,7 +333,8 @@
                         caption: "Receiving ID",
                         customizeText: function(cellInfo) {
                             if (cellInfo.value != null) {
-                                var numericPart = (100000 + parseInt(cellInfo.value, 10)).toString().slice(-6);
+                                var numericPart = (100000 + parseInt(cellInfo.value, 10)).toString()
+                                    .slice(-6);
                                 return 'IBTRC' + numericPart;
                             }
                             return '-';
@@ -383,7 +400,9 @@
                         options: {
                             text: "Receive",
                             onClick: function() {
-                                modalPopupShow('received', selectedIBTRowDetails);
+                                // modalPopupShow('received', selectedIBTRowDetails);
+
+                                popupReceive.show();
                             },
                         }
                     };
@@ -392,14 +411,19 @@
                     }
                 },
                 onRowDblClick: function(e) {
-                    if (e.data.strStatus == "Pending") {
+                    if (e.data.intStatus == "0") {
                         modalPopupShow('update', e);
-                    } else {
+                    } else if (e.data.intStatus == "3") {
+                        
+                        modalPopupShow('received', e);
+                    }
+                    
+                    else {
                         modalPopupShow('show', e);
                     }
                 },
                 onRowClick: function(e) {
-                    if (e.data && e.data.strStatus === "Issued") {
+                    if (e.data && e.data.intStatus === "2") {
                         showReceivedButton = true;
                         selectedStatus = e.data.strStatus;
                         SelectedIbtHeaderId = e.data.intAutoId;
@@ -518,7 +542,7 @@
                             mnyQtyVariance: e.data.mnyQtyVariance,
                         },
                         success: function(data) {
-                            console.log("Update success:", data);
+                            // console.log("Update success:", data);
                             return data;
                         },
                         error: function() {
@@ -662,7 +686,8 @@
                     var formData = new FormData();
                     formData.append('SelectedIbtHeaderId', SelectedIbtHeaderId);
                     formData.append('dataxml', gridResults);
-                    formData.append('dtmCreated', formatDateYYYYMMDD(new Date(inputDateElement.option("value"))));
+                    formData.append('dtmCreated', formatDateYYYYMMDD(new Date(inputDateElement.option(
+                        "value"))));
                     formData.append('strReference', $('.strReference').val());
                     formData.append('intFromDC', $('.intFromDC').val());
                     formData.append('intToDC', $('.intToDC').val());
@@ -709,28 +734,28 @@
                 gridProducts.refresh();
             });
 
-            $('#btnReceivedIBT').click(function() {
-                if (!isValidationOccurOnReceive()) {
-                    loadingPanel.option('visible', true);
-                    $.ajax({
-                        url: '{!! url('/ibt/update-status') !!}',
-                        type: "POST",
-                        data: {
-                            intStatus: 3,
-                            intReceivingBin: $('#intReceivingBin').val(),
-                            SelectedIbtHeaderId: SelectedIbtHeaderId,
-                        },
-                        success: function(data) {
-                            loadingPanel.option('visible', true);
-                            location.reload();
-                        },
-                        complete: function() {
-                            // Hide the loading panel
-                            loadingPanel.option('visible', false);
-                        }
-                    });
-                }
-            });
+            // $('#btnReceivedIBT').click(function() {
+            //     if (!isValidationOccurOnReceive()) {
+            //         loadingPanel.option('visible', true);
+            //         $.ajax({
+            //             url: '{!! url('/ibt/update-status') !!}',
+            //             type: "POST",
+            //             data: {
+            //                 intStatus: 3,
+            //                 intReceivingBin: $('#intReceivingBin').val(),
+            //                 SelectedIbtHeaderId: SelectedIbtHeaderId,
+            //             },
+            //             success: function(data) {
+            //                 loadingPanel.option('visible', true);
+            //                 location.reload();
+            //             },
+            //             complete: function() {
+            //                 // Hide the loading panel
+            //                 loadingPanel.option('visible', false);
+            //             }
+            //         });
+            //     }
+            // });
 
             $('#intFromDC').change(function() {
                 if (checkSameDcOrNot($(this))) {
@@ -743,6 +768,128 @@
                     getVarianceAndReceivingBins();
                 }
             });
+
+            const selectReceivingBin = $("#selectReceivingBin").dxSelectBox({
+                dataSource: [],
+                valueExpr: 'intBinId',
+                displayExpr: 'strBin',
+                placeholder: 'Bin',
+                showSelectionControls: true,
+                showClearButton: true,
+                width: '100%',
+                searchEnabled: true,
+            }).dxSelectBox("instance");
+
+            const gridReceiveQtys = $("#gridReceiveQtys").dxDataGrid({
+                dataSource: [], //as json
+                hoverStateEnabled: true,
+                showBorders: true,
+                allowColumnResizing: true,
+                columnAutoWidth: true,
+                scrolling: {
+                    rowRenderingMode: 'infinite',
+                },
+                paging: {
+                    pageSize: 10,
+                },
+                editing: {
+                    mode: "cell",
+                    allowUpdating: true,
+                },
+                columns: [{
+                        dataField: "PastelCode",
+                        caption: "Item Code",
+                        allowEditing: false,
+                    },
+                    {
+                        dataField: "PastelDescription",
+                        caption: "Item Description",
+                        allowEditing: false,
+                    },
+                    {
+                        dataField: "Qty",
+                        caption: "Qty",
+                        allowEditing: false,
+                    },
+                    {
+                        dataField: "mnyQtyToReceive",
+                        caption: "Qty Received",
+                        allowEditing: true,
+                    },
+                ],
+            }).dxDataGrid("instance");
+
+            let btnReceive;
+
+            const popupReceive = $('#popupReceive').dxPopup({
+                showTitle: true,
+                title: 'Receive',
+                hideOnOutsideClick: true,
+                showCloseButton: true,
+                width: 900,
+                height: 'auto',
+                onHidden: function(e) {
+                    gridReceiveQtys.option('dataSource', []);
+                    btnReceive.option('disabled', false);
+                    selectReceivingBin.option('dataSource', []);
+                },
+                onShowing: function(e) {
+                    $.ajax({
+                        url: '{{ url('ibt/get-bins') }}',
+                        type: "GET",
+                        data: {
+                            is_to_dc: true,
+                            dc_id: selectedIBTRowDetails.data.intToDC,
+                        },
+                        success: function(data) {
+                            if (data.receivingBins) {
+                                selectReceivingBin.option('dataSource', data.receivingBins)
+                            }
+                        },
+                        complete: function() {
+                            loadingPanel.option('visible', false);
+                        }
+                    });
+                    $.ajax({
+                        url: '{!! url('/getIBTDetails') !!}',
+                        type: 'GET',
+                        data: {
+                            IbtHeaderId: selectedIBTRowDetails.data.intAutoId
+                        },
+                        success: function(data) {
+                            // Ensure each row has mnyQtyToReceive
+                            const updatedData = data.map(row => ({
+                                ...row,
+                                mnyQtyToReceive: row.mnyQtyToReceive || ''
+                            }));
+
+                            gridReceiveQtys.option('dataSource', updatedData);
+                            gridReceiveQtys.refresh();
+                        },
+                        complete: function() {
+                            // Hide the loading panel
+                            loadingPanel.option('visible', false);
+                        }
+                    });
+                },
+                toolbarItems: [{
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        icon: "edit",
+                        text: "RECEIVE",
+                        onInitialized: function(e) {
+                            btnReceive = e.component;
+                        },
+                        onClick: function(args) {
+                            btnReceive.option('disabled', true);
+                            submitReceive(selectedIBTRowDetails.data.intAutoId, gridReceiveQtys.option('dataSource'), selectReceivingBin.option('value'));
+                            popupReceive.hide();
+                        },
+                    },
+                }],
+            }).dxPopup("instance");
 
         });
 
@@ -876,7 +1023,7 @@
                 $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
                 $('#btnSaveIBT').prop('hidden', false);
                 $('#btnUpdateIBT').prop('hidden', true);
-                $('#btnReceivedIBT').prop('hidden', true);
+                // $('#btnReceivedIBT').prop('hidden', true);
                 $('.txtIBTNumber').text('');
                 $('.form-control', IBTModal).val('');
                 $('.intFromDC').val('');
@@ -891,18 +1038,18 @@
                 $('#newuserLabel').text('Update IBT');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', false);
-                $('#btnReceivedIBT').prop('hidden', true);
+                // $('#btnReceivedIBT').prop('hidden', true);
                 $(".add_product_section").removeClass('d-none');
             } else if (action == 'received') {
                 $('#newuserLabel').text('Received IBT');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', true);
-                $('#btnReceivedIBT').prop('hidden', false);
+                // $('#btnReceivedIBT').prop('hidden', false);
             } else if (action == 'show') {
                 $('#newuserLabel').text('IBT Details');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', true);
-                $('#btnReceivedIBT').prop('hidden', true);
+                // $('#btnReceivedIBT').prop('hidden', true);
                 $('#intReceivingBin').attr('disabled', true);
             }
             if (action == 'received' || action == 'show') {
@@ -920,23 +1067,23 @@
             gridProducts.columnOption("Qty", "caption", "Qty");
             gridProducts.columnOption("mnyQtyReceived", "visible", false);
             gridProducts.columnOption("mnyQtyVariance", "visible", false);
-            if ((e != undefined && e.data.strStatus === "Received") || action == 'received') {
+            if ((e != undefined && e.data.intStatus === "2") || action == 'received') {
                 gridProducts.columnOption("Qty", "caption", "Qty Issued");
                 gridProducts.columnOption("mnyQtyReceived", "visible", true);
                 gridProducts.columnOption("mnyQtyVariance", "visible", true);
             }
             gridProducts.columnOption("mnyQtyReceived", "allowEditing", false);
             if (action == 'received') {
-                gridProducts.columnOption("mnyQtyReceived", "allowEditing", true);
+                gridProducts.columnOption("mnyQtyReceived", "allowEditing", false);
             }
             getGITBins(intGIT);
             getVarianceAndReceivingBins(intVariance, intReceivingBin);
         }
 
         function focusOnFirstBlankCell(e) {
-            console.log(e);
-            console.log("-------------------------------------------------------------------");
-            
+            // console.log(e);
+            // console.log("-------------------------------------------------------------------");
+
             var columnIndex = e.component.columnOption('mnyQtyReceived').index; // Column index for 'mnyQtyReceived'
             var firstBlankCellFound = false;
 
@@ -1138,6 +1285,27 @@
             }
 
             return false;
+        }
+
+        function submitReceive(ibtHeader, lines, bin) {
+            loadingPanel.option('visible', true);
+            $.ajax({
+                url: '{!! url('/ibt/receive') !!}',
+                type: "POST",
+                data: {
+                    ibtHeader: ibtHeader,
+                    lines: lines,
+                    bin: bin,
+                },
+                success: function(data) {
+                    DevExpress.ui.notify("Sucessfully Received IBT", "success", 5000);
+                    location.reload();
+                },
+                complete: function() {
+                    // Hide the loading panel
+                    loadingPanel.option('visible', false);
+                }
+            });
         }
     </script>
 @endsection
