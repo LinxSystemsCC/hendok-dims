@@ -414,11 +414,9 @@
                     if (e.data.intStatus == "0") {
                         modalPopupShow('update', e);
                     } else if (e.data.intStatus == "3") {
-                        
+
                         modalPopupShow('received', e);
-                    }
-                    
-                    else {
+                    } else {
                         modalPopupShow('show', e);
                     }
                 },
@@ -516,9 +514,9 @@
                     console.log(e)
                     // Check if the updated field is 'mnyQtyReceived'
                     var updatedField = e.newData
-                    .mnyQtyReceived; // Get the new value of 'mnyQtyReceived'
+                        .mnyQtyReceived; // Get the new value of 'mnyQtyReceived'
                     var oldQtyReceived = e.oldData
-                    .mnyQtyReceived; // Get the old value of 'mnyQtyReceived'
+                        .mnyQtyReceived; // Get the old value of 'mnyQtyReceived'
 
                     // If 'mnyQtyReceived' was updated, calculate 'mnyQtyVariance'
                     if (updatedField !== oldQtyReceived) {
@@ -778,10 +776,16 @@
                 showClearButton: true,
                 width: '100%',
                 searchEnabled: true,
+            }).dxValidator({
+                validationGroup: "recieve",
+                validationRules: [{
+                    type: 'required',
+                    message: 'Bin is required',
+                }],
             }).dxSelectBox("instance");
 
             const gridReceiveQtys = $("#gridReceiveQtys").dxDataGrid({
-                dataSource: [], //as json
+                dataSource: [], // as JSON
                 hoverStateEnabled: true,
                 showBorders: true,
                 allowColumnResizing: true,
@@ -793,31 +797,99 @@
                     pageSize: 10,
                 },
                 editing: {
-                    mode: "cell",
+                    mode: "batch",
                     allowUpdating: true,
+                    texts: {
+                        save: "", // Hide default save button in the grid
+                    },
                 },
                 columns: [{
                         dataField: "PastelCode",
                         caption: "Item Code",
-                        allowEditing: false,
+                        allowEditing: false
                     },
                     {
                         dataField: "PastelDescription",
                         caption: "Item Description",
-                        allowEditing: false,
+                        allowEditing: false
                     },
                     {
                         dataField: "Qty",
-                        caption: "Qty",
-                        allowEditing: false,
+                        caption: "Qty Req.",
+                        allowEditing: false
+                    },
+                    {
+                        dataField: "mnyQtyIssued",
+                        caption: "Qty Iss.",
+                        allowEditing: false
+                    },
+                    {
+                        dataField: "mnyQtyReceived",
+                        caption: "Qty Rec.",
+                        allowEditing: false
                     },
                     {
                         dataField: "mnyQtyToReceive",
-                        caption: "Qty Received",
+                        caption: "Qty To Rec.",
                         allowEditing: true,
-                    },
+                        validationRules: [{
+                                type: "required",
+                                message: "Quantity to receive is required"
+                            },
+                        ]
+                    }
                 ],
+                onSaving: function(e) {
+                    let isValid = true;
+
+                    let rows = e.component.getVisibleRows();
+                    rows.forEach(row => {
+                        let qtyToReceive = row.data.mnyQtyToReceive;
+
+                        if (qtyToReceive === null || qtyToReceive === undefined || qtyToReceive === "") {
+                            isValid = false;
+                            DevExpress.ui.notify(
+                                `Invalid quantity to receive for item ${row.data.PastelCode}`,
+                                "error", 3000);
+                        }
+                    });
+
+                    if (!isValid) {
+                        e.cancel = true; // Prevent saving if invalid
+                        return;
+                    }
+
+                    let binValidation = $("#selectReceivingBin").dxValidator("instance").validate();
+                    if (!binValidation.isValid) {
+                        e.cancel = true;
+                        DevExpress.ui.notify("Please select a receiving bin.", "error", 3000);
+                        return;
+                    }
+                },
+                onSaved: function(e) {
+                    submitReceive(selectedIBTRowDetails.data.intAutoId, gridReceiveQtys.option(
+                        'dataSource'), selectReceivingBin.option('value'));
+                    popupReceive.hide();
+                },
+                toolbar: {
+                    items: [{
+                        widget: 'dxButton',
+                        toolbar: 'bottom',
+                        location: 'after',
+                        options: {
+                            icon: "save", // You can use "edit", "save", or your own custom icon
+                            text: "RECEIVE",
+                            onClick: function() {
+                                // Manually trigger saving (this will call the onSaving method)
+                                gridReceiveQtys.saveEditData(); // Trigger save for batch edit
+                            },
+                        },
+                    }]
+                }
             }).dxDataGrid("instance");
+
+            // The rest of the logic for selectReceivingBin and popup remains the same
+
 
             let btnReceive;
 
@@ -872,23 +944,21 @@
                         }
                     });
                 },
-                toolbarItems: [{
-                    widget: 'dxButton',
-                    toolbar: 'bottom',
-                    location: 'after',
-                    options: {
-                        icon: "edit",
-                        text: "RECEIVE",
-                        onInitialized: function(e) {
-                            btnReceive = e.component;
-                        },
-                        onClick: function(args) {
-                            btnReceive.option('disabled', true);
-                            submitReceive(selectedIBTRowDetails.data.intAutoId, gridReceiveQtys.option('dataSource'), selectReceivingBin.option('value'));
-                            popupReceive.hide();
-                        },
-                    },
-                }],
+                // toolbarItems: [{
+                //     widget: 'dxButton',
+                //     toolbar: 'bottom',
+                //     location: 'after',
+                //     options: {
+                //         icon: "edit",
+                //         text: "RECEIVE",
+                //         onInitialized: function(e) {
+                //             btnReceive = e.component;
+                //         },
+                //         onClick: function(args) {
+
+                //         },
+                //     },
+                // }],
             }).dxPopup("instance");
 
         });
