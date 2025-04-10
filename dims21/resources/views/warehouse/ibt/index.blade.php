@@ -833,10 +833,9 @@
                         caption: "Qty To Rec.",
                         allowEditing: true,
                         validationRules: [{
-                                type: "required",
-                                message: "Quantity to receive is required"
-                            },
-                        ]
+                            type: "required",
+                            message: "Quantity to receive is required"
+                        }, ]
                     }
                 ],
                 onSaving: function(e) {
@@ -846,7 +845,8 @@
                     rows.forEach(row => {
                         let qtyToReceive = row.data.mnyQtyToReceive;
 
-                        if (qtyToReceive === null || qtyToReceive === undefined || qtyToReceive === "") {
+                        if (qtyToReceive === null || qtyToReceive === undefined ||
+                            qtyToReceive === "") {
                             isValid = false;
                             DevExpress.ui.notify(
                                 `Invalid quantity to receive for item ${row.data.PastelCode}`,
@@ -1170,83 +1170,52 @@
             });
         }
 
-        // function getGITBins(intGIT) {
-        //     $('#intGIT').children().not('option:first').remove();
-        //     if ($('#intFromDC').val() != '') {
 
-        //         $valuesnew = $('#intFromDC').val();
-        //         console.log("Here Check :"+$valuesnew);
-
-        //         loadingPanel.option('visible', true);
-        //         $.ajax({
-        //             url: '{{ url('ibt/get-bins') }}',
-        //             type: "GET",
-        //             data: {
-        //                 is_from_dc: true,
-        //                 dc_id: $('#intFromDC').val()
-        //             },
-        //             success: function(data) {
-        //                 for (let index = 0; index < data.length; index++) {
-        //                     $('#intGIT').append($('<option>', {
-        //                         value: data[index].intBinId,
-        //                         text: data[index].strBin
-        //                     }));
-        //                 }
-        //                 if (intGIT != undefined) {
-        //                     console.log("here" +intGIT)
-        //                     $('#intGIT').val(intGIT);
-        //                 }
-        //             },
-        //             complete: function() {
-        //                 // Hide the loading panel
-        //                 loadingPanel.option('visible', false);
-        //             }
-        //         });
-        //     }
-        // }
         function getGITBins(intGIT) {
-    $('#intGIT').children().not('option:first').remove();
+            $('#intGIT').children().not('option:first').remove();
 
-    if ($('#intFromDC').val() != '') {
-        let fromDC = $('#intFromDC').val();
-        loadingPanel.option('visible', true);
+            if ($('#intFromDC').val() != '') {
+                let fromDC = $('#intFromDC').val();
+                loadingPanel.option('visible', true);
 
-        $.ajax({
-            url: '{{ url('ibt/get-bins') }}',
-            type: "GET",
-            data: {
-                is_from_dc: true,
-                dc_id: fromDC
-            },
-            success: function(data) {
-                console.log("📦 All Bins Received from API:", data);
-                
+                $.ajax({
+                    url: '{{ url('ibt/get-bins') }}',
+                    type: "GET",
+                    data: {
+                        is_from_dc: true,
+                        dc_id: fromDC
+                    },
+                    success: function(data) {
+                        console.log("📦 All Bins Received from API:", data);
 
-                for (let index = 0; index < data.length; index++) {
-                    let bin = data[index];
 
-                    let isDisabled = (parseInt(bin.bitActive) === 0 && bin.intBinId != intGIT);
+                        for (let index = 0; index < data.length; index++) {
+                            let bin = data[index];
 
-                    console.log(`➡️ Bin: ${bin.strBin}, bitActive: ${bin.bitActive}, intBinId: ${bin.intBinId}, Current intGIT: ${intGIT}, Disabled: ${isDisabled}`);
+                            let isDisabled = (parseInt(bin.bitActive) === 0 && bin.intBinId != intGIT);
 
-                    $('#intGIT').append($('<option>', {
-                        value: bin.intBinId,
-                        text: isDisabled ? `${bin.strBin} (In Use)` : bin.strBin,
-                        disabled: isDisabled,
-                        style: isDisabled ? 'color: gray;' : ''
-                    }));
-                }
+                            console.log(
+                                `➡️ Bin: ${bin.strBin}, bitActive: ${bin.bitActive}, intBinId: ${bin.intBinId}, Current intGIT: ${intGIT}, Disabled: ${isDisabled}`
+                                );
 
-                if (intGIT !== undefined && intGIT !== null) {
-                    $('#intGIT').val(intGIT);
-                }
-            },
-            complete: function() {
-                loadingPanel.option('visible', false);
+                            $('#intGIT').append($('<option>', {
+                                value: bin.intBinId,
+                                text: isDisabled ? `${bin.strBin} (In Use)` : bin.strBin,
+                                disabled: isDisabled,
+                                style: isDisabled ? 'color: gray;' : ''
+                            }));
+                        }
+
+                        if (intGIT !== undefined && intGIT !== null) {
+                            $('#intGIT').val(intGIT);
+                        }
+                    },
+                    complete: function() {
+                        loadingPanel.option('visible', false);
+                    }
+                });
             }
-        });
-    }
-}
+        }
 
 
 
