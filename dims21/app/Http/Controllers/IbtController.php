@@ -238,7 +238,8 @@ class IbtController extends Controller
      */
     public function getBins(Request $request)
     {
-        $dcId = $request->get('dc_id');
+        $dcId = $request->get('dc_id'); //  1 or 2
+
         if ($request->has('is_from_dc') && $request->get('is_from_dc')) {
             $bins = DB::connection('sqlsrv2')
                 ->select("

@@ -1170,35 +1170,85 @@
             });
         }
 
+        // function getGITBins(intGIT) {
+        //     $('#intGIT').children().not('option:first').remove();
+        //     if ($('#intFromDC').val() != '') {
+
+        //         $valuesnew = $('#intFromDC').val();
+        //         console.log("Here Check :"+$valuesnew);
+
+        //         loadingPanel.option('visible', true);
+        //         $.ajax({
+        //             url: '{{ url('ibt/get-bins') }}',
+        //             type: "GET",
+        //             data: {
+        //                 is_from_dc: true,
+        //                 dc_id: $('#intFromDC').val()
+        //             },
+        //             success: function(data) {
+        //                 for (let index = 0; index < data.length; index++) {
+        //                     $('#intGIT').append($('<option>', {
+        //                         value: data[index].intBinId,
+        //                         text: data[index].strBin
+        //                     }));
+        //                 }
+        //                 if (intGIT != undefined) {
+        //                     console.log("here" +intGIT)
+        //                     $('#intGIT').val(intGIT);
+        //                 }
+        //             },
+        //             complete: function() {
+        //                 // Hide the loading panel
+        //                 loadingPanel.option('visible', false);
+        //             }
+        //         });
+        //     }
+        // }
         function getGITBins(intGIT) {
-            $('#intGIT').children().not('option:first').remove();
-            if ($('#intFromDC').val() != '') {
-                loadingPanel.option('visible', true);
-                $.ajax({
-                    url: '{{ url('ibt/get-bins') }}',
-                    type: "GET",
-                    data: {
-                        is_from_dc: true,
-                        dc_id: $('#intFromDC').val()
-                    },
-                    success: function(data) {
-                        for (let index = 0; index < data.length; index++) {
-                            $('#intGIT').append($('<option>', {
-                                value: data[index].intBinId,
-                                text: data[index].strBin
-                            }));
-                        }
-                        if (intGIT != undefined) {
-                            $('#intGIT').val(intGIT);
-                        }
-                    },
-                    complete: function() {
-                        // Hide the loading panel
-                        loadingPanel.option('visible', false);
-                    }
-                });
+    $('#intGIT').children().not('option:first').remove();
+
+    if ($('#intFromDC').val() != '') {
+        let fromDC = $('#intFromDC').val();
+        loadingPanel.option('visible', true);
+
+        $.ajax({
+            url: '{{ url('ibt/get-bins') }}',
+            type: "GET",
+            data: {
+                is_from_dc: true,
+                dc_id: fromDC
+            },
+            success: function(data) {
+                console.log("📦 All Bins Received from API:", data);
+                
+
+                for (let index = 0; index < data.length; index++) {
+                    let bin = data[index];
+
+                    let isDisabled = (parseInt(bin.bitActive) === 0 && bin.intBinId != intGIT);
+
+                    console.log(`➡️ Bin: ${bin.strBin}, bitActive: ${bin.bitActive}, intBinId: ${bin.intBinId}, Current intGIT: ${intGIT}, Disabled: ${isDisabled}`);
+
+                    $('#intGIT').append($('<option>', {
+                        value: bin.intBinId,
+                        text: isDisabled ? `${bin.strBin} (In Use)` : bin.strBin,
+                        disabled: isDisabled,
+                        style: isDisabled ? 'color: gray;' : ''
+                    }));
+                }
+
+                if (intGIT !== undefined && intGIT !== null) {
+                    $('#intGIT').val(intGIT);
+                }
+            },
+            complete: function() {
+                loadingPanel.option('visible', false);
             }
-        }
+        });
+    }
+}
+
+
 
         function getVarianceAndReceivingBins(intVariance, intReceivingBin) {
             $('#intVariance').children().not('option:first').remove();
