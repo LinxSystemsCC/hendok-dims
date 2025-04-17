@@ -1400,6 +1400,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('ibt', IbtController::class)->only('index', 'store');
     Route::get('getIBTRecords', [IbtController::class, 'getIBTRecords'])->name('getIBTRecords');
     Route::get('getIBTDetails', [IbtController::class, 'getIBTDetails']);
+    Route::get('getIssuedIBTDetails', [IbtController::class, 'getIssuedIBTDetails']);
     Route::post('ibt/update-ibt', [IbtController::class, 'updateIBTDetails']);
     Route::post('ibt/update-ibt-lines', [IbtController::class, 'updateIbtLines']);
     Route::post('ibt/update-status', [IbtController::class, 'updateStatus']);

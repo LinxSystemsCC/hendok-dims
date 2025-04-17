@@ -93,6 +93,19 @@ class IbtController extends Controller
         return response()->json($ibtDetails);
     }
 
+    public function getIssuedIBTDetails(Request $request)
+    {
+        if (is_array($request->all())) {
+            $ibtHeaderId = $request->all()['IbtHeaderId'];
+
+        } else {
+            $ibtHeaderId = $request->get('IbtHeaderId');
+        }
+        $ibtDetails = DB::connection('sqlsrv2')->select("exec spGetIssuedIBTDetails ?", array($ibtHeaderId));
+
+        return response()->json($ibtDetails);
+    }
+
     /**
      * This function is used for Update IBT Details
      *

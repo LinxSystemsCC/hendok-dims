@@ -923,7 +923,7 @@
                         }
                     });
                     $.ajax({
-                        url: '{!! url('/getIBTDetails') !!}',
+                        url: '{!! url('/getIssuedIBTDetails') !!}',
                         type: 'GET',
                         data: {
                             IbtHeaderId: selectedIBTRowDetails.data.intAutoId
