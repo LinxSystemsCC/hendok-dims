@@ -93,15 +93,28 @@ class IbtController extends Controller
         return response()->json($ibtDetails);
     }
 
+    public function getIssuedIBTTruckLoads(Request $request)
+    {
+        if (is_array($request->all())) {
+            $IbtHeaderId = $request->all()['IbtHeaderId'];
+
+        } else {
+            $IbtHeaderId = $request->get('IbtHeaderId');
+        }
+        $ibtDetails = DB::connection('sqlsrv2')->select("exec spGetIssuedIBTTruckLoads ?", array($IbtHeaderId));
+
+        return response()->json($ibtDetails);
+    }
+
     public function getIssuedIBTDetails(Request $request)
     {
         if (is_array($request->all())) {
-            $ibtHeaderId = $request->all()['IbtHeaderId'];
+            $intTLNumber = $request->all()['intTLNumber'];
 
         } else {
-            $ibtHeaderId = $request->get('IbtHeaderId');
+            $intTLNumber = $request->get('intTLNumber');
         }
-        $ibtDetails = DB::connection('sqlsrv2')->select("exec spGetIssuedIBTDetails ?", array($ibtHeaderId));
+        $ibtDetails = DB::connection('sqlsrv2')->select("exec spGetIssuedIBTDetails ?", array($intTLNumber));
 
         return response()->json($ibtDetails);
     }
@@ -228,6 +241,7 @@ class IbtController extends Controller
         $ibtHeader = $request->get('ibtHeader');
         $lines = $request->get('lines');
         $receivingBin = $request->get('bin');
+        $intTLNumber = $request->get('intTLNumber');
         $intReceivedBy = Auth::user()->UserID;
 
         if (!empty($lines)) {
@@ -235,7 +249,7 @@ class IbtController extends Controller
         }
 
         // dd("EXEC usp_C_RecieveIBTandMove $ibtHeader, '$xml', $receivingBin, $intReceivedBy");
-        $updatedRows = DB::connection('sqlsrv2')->select("EXEC usp_C_RecieveIBTandMove $ibtHeader, '$xml', $receivingBin, $intReceivedBy");
+        $updatedRows = DB::connection('sqlsrv2')->select("EXEC usp_C_RecieveIBTandMove $ibtHeader, '$xml', $receivingBin, $intReceivedBy, $intTLNumber");
 
         if ($updatedRows > 0) {
             return response()->json(['success' => true, 'message' => 'Record updated successfully.']);

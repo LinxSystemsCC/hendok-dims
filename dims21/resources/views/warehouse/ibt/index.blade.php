@@ -174,6 +174,13 @@
 
     <div id="popupReceive">
         <div class="dx-field">
+            <div class="dx-field-label">Truck Load</div>
+            <div class="dx-field-value">
+                <div id="selectReceivingTruckLoads"></div>
+            </div>
+        </div>
+
+        <div class="dx-field">
             <div class="dx-field-label">Receiving Bin</div>
             <div class="dx-field-value">
                 <div id="selectReceivingBin"></div>
@@ -401,8 +408,42 @@
                             text: "Receive",
                             onClick: function() {
                                 // modalPopupShow('received', selectedIBTRowDetails);
+                                loadingPanel.option('visible', true);
+                                $.ajax({
+                                    url: '{{ url('ibt/get-bins') }}',
+                                    type: "GET",
+                                    data: {
+                                        is_to_dc: true,
+                                        dc_id: selectedIBTRowDetails.data.intToDC,
+                                    },
+                                    success: function(data) {
+                                        if (data.receivingBins) {
+                                            selectReceivingBin.option('dataSource', data.receivingBins)
+                                        }
+                                    },
+                                    complete: function() {
+                                        loadingPanel.option('visible', false);
+                                    }
+                                });
+                                $.ajax({
+                                    url: '{!! url('/getIssuedIBTTruckLoads') !!}',
+                                    type: 'GET',
+                                    data: {
+                                        IbtHeaderId: selectedIBTRowDetails.data.intAutoId
+                                    },
+                                    success: function(data) {
+                                        if (data) {
+                                            selectReceivingTruckLoads.option('dataSource', data)
+                                        }
+                                    },
+                                    complete: function() {
+                                        // Hide the loading panel
+                                        loadingPanel.option('visible', false);
+                                        popupReceive.show();
+                                    }
+                                });
 
-                                popupReceive.show();
+                                
                             },
                         }
                     };
@@ -732,29 +773,6 @@
                 gridProducts.refresh();
             });
 
-            // $('#btnReceivedIBT').click(function() {
-            //     if (!isValidationOccurOnReceive()) {
-            //         loadingPanel.option('visible', true);
-            //         $.ajax({
-            //             url: '{!! url('/ibt/update-status') !!}',
-            //             type: "POST",
-            //             data: {
-            //                 intStatus: 3,
-            //                 intReceivingBin: $('#intReceivingBin').val(),
-            //                 SelectedIbtHeaderId: SelectedIbtHeaderId,
-            //             },
-            //             success: function(data) {
-            //                 loadingPanel.option('visible', true);
-            //                 location.reload();
-            //             },
-            //             complete: function() {
-            //                 // Hide the loading panel
-            //                 loadingPanel.option('visible', false);
-            //             }
-            //         });
-            //     }
-            // });
-
             $('#intFromDC').change(function() {
                 if (checkSameDcOrNot($(this))) {
                     getGITBins();
@@ -766,6 +784,46 @@
                     getVarianceAndReceivingBins();
                 }
             });
+
+            const selectReceivingTruckLoads = $("#selectReceivingTruckLoads").dxSelectBox({
+                dataSource: [],
+                valueExpr: 'intTLNumber',
+                displayExpr: 'intTLNumber',
+                placeholder: 'Truck Load',
+                showSelectionControls: true,
+                showClearButton: true,
+                width: '100%',
+                searchEnabled: true,
+                onValueChanged: function(e){
+                    loadingPanel.option('visible', true);
+                    $.ajax({
+                        url: '{!! url('/getIssuedIBTDetails') !!}',
+                        type: 'GET',
+                        data: {
+                            intTLNumber: e.value,
+                        },
+                        success: function(data) {
+                            const updatedData = data.map(row => ({
+                                ...row,
+                                mnyQtyToReceive: row.mnyQtyToReceive || ''
+                            }));
+                            
+                            gridReceiveQtys.option('dataSource', updatedData);
+                            gridReceiveQtys.refresh();
+                        },
+                        complete: function() {
+                            // Hide the loading panel
+                            loadingPanel.option('visible', false);
+                        }
+                    });
+                }
+            }).dxValidator({
+                validationGroup: "recieve",
+                validationRules: [{
+                    type: 'required',
+                    message: 'You need to select a truck Load',
+                }],
+            }).dxSelectBox("instance");
 
             const selectReceivingBin = $("#selectReceivingBin").dxSelectBox({
                 dataSource: [],
@@ -790,6 +848,7 @@
                 showBorders: true,
                 allowColumnResizing: true,
                 columnAutoWidth: true,
+                keyExpr: "PastelCode",
                 scrolling: {
                     rowRenderingMode: 'infinite',
                 },
@@ -832,10 +891,6 @@
                         dataField: "mnyQtyToReceive",
                         caption: "Qty To Rec.",
                         allowEditing: true,
-                        validationRules: [{
-                            type: "required",
-                            message: "Quantity to receive is required"
-                        }, ]
                     }
                 ],
                 onSaving: function(e) {
@@ -867,8 +922,13 @@
                     }
                 },
                 onSaved: function(e) {
-                    submitReceive(selectedIBTRowDetails.data.intAutoId, gridReceiveQtys.option(
-                        'dataSource'), selectReceivingBin.option('value'));
+                    submitReceive(
+                        selectedIBTRowDetails.data.intAutoId, 
+                        gridReceiveQtys.option('dataSource'), 
+                        selectReceivingBin.option('value'), 
+                        selectReceivingTruckLoads.option('value')
+                    );
+
                     popupReceive.hide();
                 },
                 toolbar: {
@@ -890,7 +950,6 @@
 
             // The rest of the logic for selectReceivingBin and popup remains the same
 
-
             let btnReceive;
 
             const popupReceive = $('#popupReceive').dxPopup({
@@ -905,60 +964,6 @@
                     btnReceive.option('disabled', false);
                     selectReceivingBin.option('dataSource', []);
                 },
-                onShowing: function(e) {
-                    $.ajax({
-                        url: '{{ url('ibt/get-bins') }}',
-                        type: "GET",
-                        data: {
-                            is_to_dc: true,
-                            dc_id: selectedIBTRowDetails.data.intToDC,
-                        },
-                        success: function(data) {
-                            if (data.receivingBins) {
-                                selectReceivingBin.option('dataSource', data.receivingBins)
-                            }
-                        },
-                        complete: function() {
-                            loadingPanel.option('visible', false);
-                        }
-                    });
-                    $.ajax({
-                        url: '{!! url('/getIssuedIBTDetails') !!}',
-                        type: 'GET',
-                        data: {
-                            IbtHeaderId: selectedIBTRowDetails.data.intAutoId
-                        },
-                        success: function(data) {
-                            // Ensure each row has mnyQtyToReceive
-                            const updatedData = data.map(row => ({
-                                ...row,
-                                mnyQtyToReceive: row.mnyQtyToReceive || ''
-                            }));
-
-                            gridReceiveQtys.option('dataSource', updatedData);
-                            gridReceiveQtys.refresh();
-                        },
-                        complete: function() {
-                            // Hide the loading panel
-                            loadingPanel.option('visible', false);
-                        }
-                    });
-                },
-                // toolbarItems: [{
-                //     widget: 'dxButton',
-                //     toolbar: 'bottom',
-                //     location: 'after',
-                //     options: {
-                //         icon: "edit",
-                //         text: "RECEIVE",
-                //         onInitialized: function(e) {
-                //             btnReceive = e.component;
-                //         },
-                //         onClick: function(args) {
-
-                //         },
-                //     },
-                // }],
             }).dxPopup("instance");
 
         });
@@ -1196,7 +1201,7 @@
 
                             console.log(
                                 `➡️ Bin: ${bin.strBin}, bitActive: ${bin.bitActive}, intBinId: ${bin.intBinId}, Current intGIT: ${intGIT}, Disabled: ${isDisabled}`
-                                );
+                            );
 
                             $('#intGIT').append($('<option>', {
                                 value: bin.intBinId,
@@ -1376,7 +1381,7 @@
             return false;
         }
 
-        function submitReceive(ibtHeader, lines, bin) {
+        function submitReceive(ibtHeader, lines, bin, intTLNumber) {
             loadingPanel.option('visible', true);
             $.ajax({
                 url: '{!! url('/ibt/receive') !!}',
@@ -1385,6 +1390,7 @@
                     ibtHeader: ibtHeader,
                     lines: lines,
                     bin: bin,
+                    intTLNumber: intTLNumber,
                 },
                 success: function(data) {
                     DevExpress.ui.notify("Sucessfully Received IBT", "success", 5000);
