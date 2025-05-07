@@ -11,7 +11,7 @@ class StockIssueController extends Controller
 {
     public function issuestock()
     {
-        $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName FROM viewSage300Employees WHERE EmployeeStatusCode = 'A'");
+        $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName, Area, Department, SubDepartment, Machine FROM viewSage300Employees WHERE EmployeeStatusCode = 'A'");
         $reference = DB::connection('sqlsrv3')->select('SELECT TOP 1 intAutoId FROM tblStockIssueHeader ORDER BY dteCreated DESC');
         $intAutoId = count($reference) > 0 ? $reference[0]->intAutoId : 0;
         $types = DB::connection('sqlsrv3')->select('SELECT * FROM tblStockIssueTypes');
@@ -52,7 +52,7 @@ class StockIssueController extends Controller
         $Name = $request->get('Name');
         $Operation = 'CREATE';
 
-        $response = DB::connection('sqlsrv3')->statement('spStockIssueTypesCRUD ?,?,?', [$ID, $Name, $Operation]);
+        $response = DB::connection('sqlsrv3')->statement('EXEC spStockIssueTypesCRUD ?,?,?', [$ID, $Name, $Operation]);
         return response()->json($response);
     }
 
