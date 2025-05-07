@@ -379,6 +379,9 @@
             var machines = ({!! json_encode($machines) !!});
             var pastelProjects = ({!! json_encode($pastelProjects) !!});
             var reasons = ({!! json_encode($reasons) !!});
+            var users = ({!! json_encode($users) !!});
+
+            let matchedUser;
 
             $('#reference').val('STK-' + ref);
 
@@ -1042,6 +1045,45 @@
                     $("#noUpkeep").prop('checked', true);
                     $("#yesUpkeep").prop('checked', false);
 
+                    $('#selectArea').prop('disabled', false);
+                    $('#selectDepartment').prop('disabled', false);
+                    $('#selectSubDepartment').prop('disabled', false);
+                    $('#selectNewMachine').prop('disabled', false);
+                } else if (Type === 'PPE') {
+                    $('#isUpkeepJob').prop('hidden', true);
+
+                    $('#upkeeparea').prop('hidden', true);
+                    $('#upkeepdepartment').prop('hidden', true);
+                    $('#upkeepsubdepartment').prop('hidden', true);
+                    $('#upkeepmachine').prop('hidden', true);
+
+                    $('#area').prop('hidden', false);
+                    $('#department').prop('hidden', false);
+                    $('#subdepartment').prop('hidden', false);
+                    $('#machine').prop('hidden', false);
+
+                    $('#selectArea').prop('disabled', true);
+                    $('#selectDepartment').prop('disabled', true);
+                    $('#selectSubDepartment').prop('disabled', true);
+                    $('#selectNewMachine').prop('disabled', true);
+
+                    $('#selectArea').prop('disabled', true);
+                    $('#selectDepartment').prop('disabled', true);
+                    $('#selectSubDepartment').prop('disabled', true);
+                    $('#selectNewMachine').prop('disabled', true);
+
+                    const selectedCode = $('#issuedto').val();
+                    matchedUser = users.find(user => user.EmployeeCode === selectedCode);
+
+                    if (matchedUser) {
+                        setSelect2ByText('#selectArea', matchedUser.Area);
+                    } else {
+                        $('#selectArea').val('');
+                        $('#selectDepartment').val('');
+                        $('#selectSubDepartment').val('');
+                        $('#selectNewMachine').val('');
+                    }
+
                 } else {
                     $('#isUpkeepJob').prop('hidden', true);
                     $('#upkeeparea').prop('hidden', true);
@@ -1053,6 +1095,11 @@
                     $('#department').prop('hidden', false);
                     $('#subdepartment').prop('hidden', false);
                     $('#machine').prop('hidden', false);
+
+                    $('#selectArea').prop('disabled', false);
+                    $('#selectDepartment').prop('disabled', false);
+                    $('#selectSubDepartment').prop('disabled', false);
+                    $('#selectNewMachine').prop('disabled', false);
                 }
 
                 $('#selectUpkeepJob').prop('disabled', true);
@@ -1062,6 +1109,19 @@
                 $('#selectDepartmentUpkeep').val("").trigger("change");
                 $('#selectSubDepartmentUpkeep').val("").trigger("change");
             });
+
+            function setSelect2ByText(selectId, matchText) {
+                let $select = $(selectId);
+                let matchingOption = $select.find('option').filter(function() {
+                    return $(this).text().trim() === matchText.trim();
+                });
+
+                if (matchingOption.length) {
+                    $select.find('option').prop('selected', false); // optional: deselect others
+                    matchingOption.prop('selected', true);
+                    $select.trigger('change');
+                }
+            }
 
             $("#yesUpkeep").change(function() {
                 $('#area').prop('hidden', true);
@@ -1146,19 +1206,27 @@
                     },
                     success: function(data) {
                         var toAppend = '';
+
                         $("#selectDepartment").empty();
                         $("#selectSubDepartment").empty();
                         $("#selectNewMachine").empty();
+
                         toAppend += '<option></option>';
+
                         $.each(data, function(i, o) {
                             toAppend += '<option value="' + o.intDeptID + '">' + o
                                 .strDeptName + '</option>';
                         });
+
                         $("#selectDepartment").append(toAppend);
+
                         $('#selectDepartment').select2({
                             theme: 'bootstrap-5',
                             dropdownParent: $('#newItemModal'),
                         });
+                        if (matchedUser && matchedUser.Department) {
+                            setSelect2ByText('#selectDepartment', matchedUser.Department);
+                        }
                     }
                 });
             });
@@ -1192,6 +1260,9 @@
                             theme: 'bootstrap-5',
                             dropdownParent: $('#newItemModal'),
                         });
+                        if (matchedUser && matchedUser.SubDepartment) {
+                            setSelect2ByText('#selectSubDepartment', matchedUser.SubDepartment);
+                        }
                     }
                 });
             });
@@ -1224,6 +1295,10 @@
                             theme: 'bootstrap-5',
                             dropdownParent: $('#newItemModal'),
                         });
+                        
+                        if (matchedUser && matchedUser.Machine) {
+                            setSelect2ByText('#selectNewMachine', matchedUser.Machine);
+                        }
                     }
                 });
             });
