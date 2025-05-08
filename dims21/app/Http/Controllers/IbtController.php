@@ -110,11 +110,13 @@ class IbtController extends Controller
     {
         if (is_array($request->all())) {
             $intTLNumber = $request->all()['intTLNumber'];
+            $intIBTHeaderId = $request->all()['intIBTHeaderId'];
 
         } else {
             $intTLNumber = $request->get('intTLNumber');
+            $intIBTHeaderId = $request->get('intIBTHeaderId');
         }
-        $ibtDetails = DB::connection('sqlsrv2')->select("exec spGetIssuedIBTDetails ?", array($intTLNumber));
+        $ibtDetails = DB::connection('sqlsrv2')->select("exec spGetIssuedIBTDetails ?, ?", array($intTLNumber, $intIBTHeaderId));
 
         return response()->json($ibtDetails);
     }

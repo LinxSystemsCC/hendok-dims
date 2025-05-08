@@ -801,6 +801,7 @@
                         type: 'GET',
                         data: {
                             intTLNumber: e.value,
+                            intIBTHeaderId: selectedIBTRowDetails.data.intAutoId,
                         },
                         success: function(data) {
                             const updatedData = data.map(row => ({
