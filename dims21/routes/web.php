@@ -1184,7 +1184,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('printgalvlabel', [GalvController::class,'printgalvlabel']);
     Route::post('galvReprintEdit', [GalvController::class,'galvReprintEdit']);
     Route::get('wmaxreprint', [GalvController::class,'wmaxreprint']);
-
+    Route::post('undoLastGalvWeigh', [GalvController::class,'undoLastGalvWeigh']);
 });
 //GALV CONTROLLER ENDS HERE !!!
 

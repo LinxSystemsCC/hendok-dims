@@ -332,6 +332,13 @@ class GalvController extends Controller
         return response()->json($result);
     }
 
+    public function undoLastGalvWeigh(Request $request)
+    {
+        $UserName = Auth::user()->UserName;
+        $result = DB::connection('sqlsrv2')->select("EXEC usp_U_UndoLastGalvWeigh '$UserName'");
+        return response()->json($result);
+    }
+
     public function wmaxreprint()
     {
         return view('warehouse.galv.wmaxreprint');

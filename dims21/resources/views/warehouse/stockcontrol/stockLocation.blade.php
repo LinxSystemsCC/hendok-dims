@@ -29,12 +29,23 @@
             let loadTracking = [];
 
             let dcs = {!! json_encode($DCs) !!};
+            let locations = {!! json_encode($locations) !!};
             let selectedDC = -1;
+            let selectedLocation = -1;
+
+            let selectLocation;
 
             dcs.unshift({
                 'intAutoId': -1,
                 'strDCName': 'All',
             });
+
+            locations.unshift({
+                'intLocationId': -1,
+                'strLocationName': 'All',
+            });
+
+            let filteredLocations = locations;
 
             let customColFormat = {
                 type: "custom",
@@ -80,37 +91,36 @@
                     storageKey: "gridStockLocationSummary"
                 },
                 columns: [{
-                        dataField: "strPartNumber",
-                        caption: "Item Code",
-                    }, {
-                        dataField: "strItemDescription",
-                        caption: "Item Name",
-                    }, {
-                        dataField: "strItemGroupDescription",
-                        caption: "Item Group",
-                    }, {
-                        dataField: "decTotalQuantityInStock",
-                        caption: "Total On Hand",
-                        dataType: "number",
-                        format: customColFormat,
-                    }, {
-                        dataField: "decTotalWeightInStock",
-                        caption: "Total Weight",
-                        dataType: "number",
-                        format: customColFormat,
-                    }, {
-                        dataField: "decTotalQuantityAvailable",
-                        caption: "Total Available",
-                        dataType: "number",
-                        format: customColFormat,
-                    }, {
-                        dataField: "MinLevel",
-                        caption: "Min Level",
-                    }, {
-                        dataField: "MaxLevel",
-                        caption: "Max Level",
-                    }
-                ],
+                    dataField: "strPartNumber",
+                    caption: "Item Code",
+                }, {
+                    dataField: "strItemDescription",
+                    caption: "Item Name",
+                }, {
+                    dataField: "strItemGroupDescription",
+                    caption: "Item Group",
+                }, {
+                    dataField: "decTotalQuantityInStock",
+                    caption: "Total On Hand",
+                    dataType: "number",
+                    format: customColFormat,
+                }, {
+                    dataField: "decTotalWeightInStock",
+                    caption: "Total Weight",
+                    dataType: "number",
+                    format: customColFormat,
+                }, {
+                    dataField: "decTotalQuantityAvailable",
+                    caption: "Total Available",
+                    dataType: "number",
+                    format: customColFormat,
+                }, {
+                    dataField: "MinLevel",
+                    caption: "Min Level",
+                }, {
+                    dataField: "MaxLevel",
+                    caption: "Max Level",
+                }],
                 masterDetail: {
                     enabled: true,
                     template(container, options) {
@@ -125,6 +135,7 @@
                                             data: {
                                                 ItemCode: ItemCode,
                                                 intDCid: selectedDC,
+                                                intLocationId: selectedLocation
                                             },
                                             xhrFields: {
                                                 withCredentials: true
@@ -199,9 +210,8 @@
                                 }, {
                                     dataField: "strBin",
                                     caption: "Bin",
-                                }
-                            ],
-                        }).appendTo(container);
+                                }]
+                            }).appendTo(container);
                     },
                 },
                 onToolbarPreparing: function(e) {
@@ -216,6 +226,24 @@
                         location: 'after',
                         widget: 'dxSelectBox',
                         options: {
+                            dataSource: filteredLocations,
+                            displayExpr: 'strLocationName',
+                            valueExpr: 'intLocationId',
+                            value: -1,
+                            onInitialized: function(e) {
+                                selectLocation = e.component;
+                            },
+                            onValueChanged: function(e) {
+                                selectedLocation = e.value;
+                                gridStockLocationSummary.refresh();
+                            }
+                        },
+                        locateInMenu: 'auto', 
+                    });
+                    e.toolbarOptions.items.push({
+                        location: 'after',
+                        widget: 'dxSelectBox',
+                        options: {
                             dataSource: dcs,
                             displayExpr: 'strDCName',
                             valueExpr: 'intAutoId',
@@ -223,9 +251,18 @@
                             onValueChanged: function(e) {
                                 selectedDC = e.value;
                                 getStockLocationSummary();
+                                
+                                if (parseInt(selectedDC) === -1) {
+                                    filteredLocations = locations;
+                                } else {
+                                    filteredLocations = locations.filter(location => parseInt(location.intDcId) === parseInt(selectedDC));
+                                }
+
+                                selectLocation.option('dataSource', filteredLocations);
+                                gridStockLocationSummary.refresh();
                             }
                         },
-                        locateInMenu: 'auto', // Adjust as needed
+                        locateInMenu: 'auto', 
                     });
                 }
             }).dxDataGrid('instance');

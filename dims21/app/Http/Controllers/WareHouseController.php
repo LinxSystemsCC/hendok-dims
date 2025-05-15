@@ -128,7 +128,7 @@ class WareHouseController extends Controller
 
     public function getregrade()
     {
-        $regrade = DB::connection('sqlsrv2')->select("select * from tblRegradeJobs");
+        $regrade = DB::connection('sqlsrv2')->select("SELECT * FROM vwRegradeJobs");
         return response()->json($regrade);
     }
 
@@ -890,9 +890,16 @@ class WareHouseController extends Controller
 
     public function wmaxregrade()
     {
-        $customers = DB::connection('sqlsrv2')->select("select * from tblCustomersWmax ");
-        $products = DB::connection('sqlsrv2')->select("select * from tblProductsWmax ");
-        return view('warehouse/wmaxregrade')->with('customers', $customers)->with('products', $products);
+        $customers = DB::connection('sqlsrv2')->select("SELECT * FROM tblCustomersWmax ");
+        $products = DB::connection('sqlsrv2')->select("SELECT * FROM tblProductsWmax ");
+        $locations = DB::connection('sqlsrv2')->select("SELECT intLocationNameId AS intLocationId, strLocationName FROM viewLocationNames");
+        $bins = DB::connection('sqlsrv2')->select("SELECT intLocationId, intBinId, strBin AS strBinName FROM viewBinNames");
+        
+        return view('warehouse/wmaxregrade')
+            ->with('customers', $customers)
+            ->with('products', $products)
+            ->with('locations', $locations)
+            ->with('bins', $bins);
     }
 
     public function wmaxstockchange()
@@ -1168,12 +1175,14 @@ class WareHouseController extends Controller
         $tensile = $request->get("tensile");
         $custnumfrom = $request->get("custnumfrom");
         $prodfrom = $request->get("prodfrom");
+        $intJobId = $request->get("intJobId");
+        $intBinId = $request->get("intBinId");
+        $intUserId = Auth::user()->UserID;
 
-
-        //dd($ref, $custnum, $prod, $dept, $machine, $jobnum, $zinc, $mpa, $wire, $operator, $sequm, $tensile, $custnumfrom, $prodfrom);
+        //dd($ref, $custnum, $prod, $dept, $machine, $jobnum, $zinc, $mpa, $wire, $operator, $sequm, $tensile, $custnumfrom, $prodfrom, $intBinId);
 
         $regrade = DB::connection('sqlsrv2')->select(
-            'exec spRegrades ?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+            'exec spRegrades ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
             array(
                 $ref,
                 $custnum,
@@ -1188,7 +1197,10 @@ class WareHouseController extends Controller
                 $sequm,
                 $tensile,
                 $custnumfrom,
-                $prodfrom
+                $prodfrom,
+                $intJobId,
+                $intBinId,
+                $intUserId
             )
         );
 
