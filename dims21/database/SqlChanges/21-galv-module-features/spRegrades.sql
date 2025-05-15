@@ -1,3 +1,4 @@
+/****** Object:  StoredProcedure [dbo].[spRegrades]    Script Date: 2025/05/15 04:27:34 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -35,7 +36,7 @@ BEGIN
     SET NOCOUNT ON;
 
     DECLARE @printer NVARCHAR(200)
-    DECLARE @productWireSize AS FLOAT
+    DECLARE @ActualWireSize AS FLOAT
     DECLARE @WireTol AS NVARCHAR(20)
     DECLARE @type AS NVARCHAR(5)
     DECLARE @dv AS NVARCHAR(10)
@@ -74,7 +75,7 @@ BEGIN
         BEGIN TRANSACTION
 
         -- Insert statements for procedure here
-        SELECT @productWireSize = WireSize
+        SELECT @ActualWireSize = WireSize
             , @WireTol = SizeTolerance
             , @type = [Type]
             , @dv = dv
@@ -86,7 +87,7 @@ BEGIN
             , @SECode = SECode
             , @WDBlackTol = WDBlackTol
             , @GalvRPM = GalvRPM
-        FROM tblProductsWmax
+        FROM dbo.tblProductsWmax
         WHERE ProductName = @ProductNamee
             AND CustomerName = @CustomerName
 
@@ -98,7 +99,7 @@ BEGIN
             , @taremass = TareMass
             , @CastNo = CastNo
             , @oldtickno = TicketNo
-        FROM tblRegradeJobs
+        FROM dbo.tblRegradeJobs
         WHERE JobNo = @JobNo
             AND SequenceNo = @sequenceNo
 
@@ -120,17 +121,17 @@ BEGIN
         FROM tblReGradeRefNo
 
         SELECT @TicketNo = max(isnull(TicketNo, 0)) + 1
-        FROM tblTicketNo
+        FROM dbo.tblTicketNo
 
         DELETE
-        FROM tblTicketNo
+        FROM dbo.tblTicketNo
 
-        INSERT INTO tblTicketNo (TicketNo)
+        INSERT INTO dbo.tblTicketNo (TicketNo)
         VALUES (@TicketNo)
 
         SET @stringTicket = fORMAT(@TicketNo, '0000000')
 
-        INSERT INTO tblCompletedJobs (
+        INSERT INTO dbo.tblCompletedJobs (
             DATETIME
             , Reference
             , JobNo
@@ -177,8 +178,8 @@ BEGIN
             , @CustomerName
             , @DepartmentName
             , @MachineName
-            , @productWireSize
             , @WireSizeTested
+            , @ActualWireSize
             , @WireTol
             , @type
             , @dv
@@ -303,6 +304,67 @@ BEGIN
         INSERT INTO tblGalvChecker (strChecker)
         VALUES ('NEWJOB')
 
+        -- THIS PORTION ADDED FOR PRINTING DIRECTLY TO PRINTER LOGIC
+        DECLARE @deptId AS INT
+        DECLARE @deptname AS NVARCHAR(50)
+        DECLARE @machinenId AS INT
+
+        SELECT @deptId = intAutoID
+        FROM tblDepartments
+        WHERE strDeptName = @DepartmentName;
+
+        SELECT @machinenId = intAutoMachineID
+        FROM tblMachines
+        WHERE strMachineName = @machinename;
+
+        -- Added to track as a new printed label 20250213 ----------------------------------------------------------------------
+        INSERT INTO [dbo].[tblJobQrcodeAllocation] (
+            [strItemCode]
+            , [intMachineId]
+            , [intDeptId]
+            , [intPalletId]
+            , [mnyQtyRequired]
+            , [strOperator]
+            , [dteJobCreated]
+            , [mnyEstimatedPallets]
+            , [dteStartDate]
+            , [strProductGroup]
+            , [strProductCat]
+            , [strCustomerName]
+            , [strRef]
+            , [strLabelType]
+            , [mnyWeight]
+            )
+        VALUES (
+            @SECode
+            , @machinenId
+            , @deptId
+            , 1
+            , 1
+            , @Operator
+            , getdate()
+            , 1
+            , cast(GETDATE() AS DATE)
+            , ''
+            , ''
+            , @customerName
+            , @reference
+            , 'Single'
+            , @Weight
+            )
+
+        DECLARE @intJobId AS INT
+
+        SELECT @intJobId = @@IDENTITY
+        FROM [tblJobQrcodeAllocation];
+
+        UPDATE tblCompletedJobs
+        SET intJobid = @intJobId
+        WHERE TicketNo = @stringTicket
+
+        -- Added to track as a new printed label 20250213 ----------------------------------------------------------------------
+
+        -- Added 2025-05-14 for movements
         IF EXISTS (
                 SELECT 1
                 FROM tblJobQrcodeAllocation jobs
@@ -319,7 +381,6 @@ BEGIN
                     );
         END
 
-        -- Added 2025-05-14 for movements
         IF EXISTS (
                 SELECT intBinId
                 FROM tblJobQrcodeAllocation jobs
@@ -422,7 +483,7 @@ BEGIN
         WHERE jobs.intJobId = @intJobId
 
         DELETE
-        FROM tblRegradeJobs
+        FROM dbo.tblRegradeJobs
         WHERE TicketNo = @oldtickno
 
         SELECT 'Success' Result
@@ -441,6 +502,3 @@ BEGIN
         SELECT ERROR_MESSAGE() AS Result
     END CATCH
 END
-GO
-
-
