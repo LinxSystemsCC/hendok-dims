@@ -39,7 +39,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="control-label" for="customer"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Customer</label>
-                        <select  class="form-control input-sm col-xs-1" id="customer" required>
+                        <select  class="form-control input-sm col-xs-1 select2" id="customer" required>
                             <option></option>
                             @foreach($customers as $val)
                                 <option value="{{$val->CustomerName}}">{{$val->CustomerName}}</option>
@@ -49,12 +49,27 @@
 
                     <div class="form-group">
                         <label class="control-label" for="product"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Regrade to Product</label>
-                        <select  class="form-control input-sm col-xs-1" id="product" required>
+                        <select  class="form-control input-sm col-xs-1 select2" id="product" required>
                             <option></option>
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label class="control-label" for="selectWarehouse"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Warehouse</label>
+                        <select class="form-control input-sm col-xs-1 select2" id="selectWarehouse" required>
+                            <option></option>
+                            @foreach($locations as $val)
+                                <option value="{{$val->intLocationId}}">{{$val->strLocationName}}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
+                    <div class="form-group">
+                        <label class="control-label" for="selectBin"  style="margin-bottom: 0px;font-weight: 700;font-size: 15px;">Bin</label>
+                        <select  class="form-control input-sm col-xs-1 select2" id="selectBin" required>
+                            <option></option>
+                        </select>
+                    </div>
                 </div>
                 
                 <br>
@@ -73,6 +88,29 @@
 <script>
 
     $(document).ready(function() {
+        const bins = ({!! json_encode($bins) !!});
+        
+        $('.select2').select2({
+            theme: 'bootstrap-5',
+            dropdownParent: $('#modalRegrade'),
+        });
+        
+        $("#selectWarehouse").change(function () {
+            const selectedLocationId = $(this).val();
+            const $binSelect = $("#selectBin");
+
+            // Clear existing bin options
+            $binSelect.empty();
+            $binSelect.append(`<option></option>`); // Add default empty option
+
+            // Filter bins by selectedLocationId and append to selectBin
+            bins.filter(bin => bin.intLocationId == selectedLocationId)
+                .forEach(bin => {
+                    $binSelect.append(
+                        `<option value="${bin.intBinId}">${bin.strBinName}</option>`
+                    );
+                });
+        });
         
         $("#customer").change(function () {
             $.ajax({
@@ -91,13 +129,11 @@
                         toAppend += '<option value="'+o.ProductID+'">'+o.ProductName+'</option>';
                     });
                     $("#product").append(toAppend);
-                    $("#product").select2({
-                        theme: 'bootstrap-5',
-                        dropdownParent: $('#modalRegrade'),
-                    });
                 }
             });
         });
+
+
 
         const gridRegrade = $("#gridRegrade").dxDataGrid({
             dataSource:[], //as json
@@ -230,6 +266,23 @@
                     caption: "Tensile Ticket",
                     //width:100,
                 },
+                {
+                    dataField: "intJobId",
+                    caption: "intJobId",
+                    visible: false,
+                    //width:100,
+                },
+                {
+                    dataField: "intBinId",
+                    caption: "Bin Id",
+                    visible: false,
+                    //width:100,
+                },
+                {
+                    dataField: "strBinName",
+                    caption: "Bin Name",
+                    //width:100,
+                },
             ],
             onRowDblClick:function(e){
                 $('#modalRegrade').modal('toggle');
@@ -279,10 +332,6 @@
 
             },
             success: function (data) {
-                // $("#tare").select2({ data:result });
-                // console.log(data.length);
-                // console.log(data);
-
                 for (let i = 0; i < data.length; i++) {
                     // console.log(data[i].StandName);
                     name = data[i].StandName;
@@ -310,6 +359,7 @@
             var wire = selectedRowsData[0].WireSize;
             var sequm = selectedRowsData[0].SequenceNo;
             var tensile = selectedRowsData[0].TensileTicket;
+            var intJobId = selectedRowsData[0].intJobId;
 
             $.ajax({
                 
@@ -329,10 +379,12 @@
                     tensile:tensile,
                     mpa:mpa,
                     wire:wire,
+                    intJobId:intJobId,
+                    intBinId: $('#selectBin').val(),
                 },
                 success: function (data) {
 
-                    if (data[0].Result = "Success"){
+                    if (data[0].Result == "Success"){
                         var customer =  data[0].CustomerName;
                         var product =  data[0].ProductName;
                         var ticket =  data[0].TicketNo;
@@ -340,6 +392,14 @@
                         // window.open('{!!url("/getgalvlabel")!!}/' +customer+'/'+product+'/'+ticket +'/Accept', "GalvLabel" +customer, "location=1,status=1,scrollbars=1, width=1200,height=850");
                         window.open('{!!url("/printGalvLabel")!!}/'+ticket,"_blank", "location=1,status=1,scrollbars=1, width=1200,height=850");
 
+                        $('#modalRegrade').modal('hide');
+                        getRegrade();
+                    } else {
+                        DevExpress.ui.notify({
+                            message: data[0].Result,
+                            type: 'error', // 'info', 'success', 'warning'
+                            displayTime: 5000,
+                        });
                         $('#modalRegrade').modal('hide');
                         getRegrade();
                     }
