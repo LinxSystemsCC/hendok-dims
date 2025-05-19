@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class StockIssueController extends Controller
 {
@@ -189,9 +190,74 @@ class StockIssueController extends Controller
     }
 
     // Upkeep API Integration Functions -----------------------------------------------------------------------------------------------
+    public function generateNewUpkeepToken()
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://api.onupkeep.com/api/v2/auth/',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode([
+                'email' => env("UPKEEP_EMAIL"),
+                'password' => env("UPKEEP_PASSWORD")
+            ]),
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json'
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+
+        if ($response === false) {
+            // Handle cURL error
+            $error = curl_error($curl);
+            curl_close($curl);
+            Log::error("UpKeep Token Fetch Error: " . $error);
+            return false;
+        }
+
+        curl_close($curl);
+
+        $result = json_decode($response, true);
+
+        if ($result === null || !isset($result['result']['sessionToken']) || !isset($result['result']['expiresAt'])) {
+            // Handle invalid or unexpected response format
+            Log::error("Invalid UpKeep Auth Response: " . $response);
+            return false;
+        }
+
+        // Extract token and expiry
+        $sessionToken = $result['result']['sessionToken'];
+        $expiresAt = Carbon::parse($result['result']['expiresAt']); // parses ISO 8601 format
+
+        // Update your database
+        DB::connection('sqlsrv3')
+            ->table('tblHendokApiIntegration')
+            ->where('strHostName', 'Upkeep')
+            ->update([
+                'strSessionToken' => $sessionToken,
+                'dtmExpires' => $expiresAt,
+            ]);
+
+        return true;
+    }
+    
     public function getOpenUpkeepWorkOrders()
     {
         $curl = curl_init();
+
+        $expired = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('dtmExpires');
+
+        if ($expired && Carbon::parse($expired)->isPast()) {
+            $this->generateNewUpkeepToken();
+        }
 
         $token = DB::connection('sqlsrv3')->table('tblHendokApiIntegration')->where('strHostName', 'Upkeep')->value('strSessionToken');
 
