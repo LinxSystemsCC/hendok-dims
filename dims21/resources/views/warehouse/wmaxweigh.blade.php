@@ -668,9 +668,9 @@
                     },
                     success: function(data) {
                         if (data) {
-                            $(inputId).val(data);
+                            $(inputId).val(data).trigger('change'); ;
                         } else {
-                            $(inputId).val(0);
+                            $(inputId).val(0).trigger('change'); ;
                         }
                     }
                 });
