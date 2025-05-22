@@ -218,9 +218,10 @@
 
     <script>
         $(document).ready(function() {
-            $("#mass").on("input", function() {
-                //console.debug($('#tare').val());
-                finalweight = ($("#mass").val() - $('#tare').val());
+            $("#mass").on("change", function() {
+                const tare = parseFloat($('#tare').val()) || 0;
+                const mass = parseFloat($("#mass").val()) || 0;
+                const finalweight = mass - tare;
 
                 $('#final').val(finalweight);
             });
