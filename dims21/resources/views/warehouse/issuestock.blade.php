@@ -130,7 +130,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="selectReqType" class="col-form-label">Request Type</label>
                                 <select class="form-select mx-2" type="text" id='selectReqType'>
-                                    <option value="None"></option>
+                                    <option value="-1"></option>
                                     @foreach ($requestTypes as $type)
                                         <option value="{{ $type->intAutoId }}">{{ $type->strType }}</option>
                                     @endforeach
