@@ -162,7 +162,6 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary closeIBTModal"
                             data-bs-dismiss="modal">Close</button>
-                        {{-- <button type="button" id="btnReceivedIBT" class="btn btn-success" hidden>Receive</button> --}}
                         <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden>Update</button>
                         <button type="button" id="btnSaveIBT" class="btn btn-success">Save</button>
                     </div>
@@ -849,7 +848,8 @@
                 showBorders: true,
                 allowColumnResizing: true,
                 columnAutoWidth: true,
-                keyExpr: "PastelCode",
+                keyExpr: "PastelCode", 
+                wordWrapEnabled: true,
                 scrolling: {
                     rowRenderingMode: 'infinite',
                 },
@@ -949,10 +949,6 @@
                 }
             }).dxDataGrid("instance");
 
-            // The rest of the logic for selectReceivingBin and popup remains the same
-
-            let btnReceive;
-
             const popupReceive = $('#popupReceive').dxPopup({
                 showTitle: true,
                 title: 'Receive',
@@ -962,7 +958,6 @@
                 height: 'auto',
                 onHidden: function(e) {
                     gridReceiveQtys.option('dataSource', []);
-                    btnReceive.option('disabled', false);
                     selectReceivingBin.option('dataSource', []);
                 },
             }).dxPopup("instance");
@@ -1099,7 +1094,6 @@
                 $('#IBTModal .modal-header .modal-title#newuserLabel').text('Create IBT');
                 $('#btnSaveIBT').prop('hidden', false);
                 $('#btnUpdateIBT').prop('hidden', true);
-                // $('#btnReceivedIBT').prop('hidden', true);
                 $('.txtIBTNumber').text('');
                 $('.form-control', IBTModal).val('');
                 $('.intFromDC').val('');
@@ -1114,18 +1108,15 @@
                 $('#newuserLabel').text('Update IBT');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', false);
-                // $('#btnReceivedIBT').prop('hidden', true);
                 $(".add_product_section").removeClass('d-none');
             } else if (action == 'received') {
                 $('#newuserLabel').text('Received IBT');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', true);
-                // $('#btnReceivedIBT').prop('hidden', false);
             } else if (action == 'show') {
                 $('#newuserLabel').text('IBT Details');
                 $('#btnSaveIBT').prop('hidden', true);
                 $('#btnUpdateIBT').prop('hidden', true);
-                // $('#btnReceivedIBT').prop('hidden', true);
                 $('#intReceivingBin').attr('disabled', true);
             }
             if (action == 'received' || action == 'show') {
@@ -1176,7 +1167,6 @@
             });
         }
 
-
         function getGITBins(intGIT) {
             $('#intGIT').children().not('option:first').remove();
 
@@ -1222,8 +1212,6 @@
                 });
             }
         }
-
-
 
         function getVarianceAndReceivingBins(intVariance, intReceivingBin) {
             $('#intVariance').children().not('option:first').remove();
@@ -1394,8 +1382,8 @@
                     intTLNumber: intTLNumber,
                 },
                 success: function(data) {
-                    DevExpress.ui.notify("Sucessfully Received IBT", "success", 5000);
-                    location.reload();
+                    DevExpress.ui.notify(data.Message, data.Status === "1" ? "success" : "error", 5000);
+                    if (data.Status === "1") location.reload();
                 },
                 complete: function() {
                     // Hide the loading panel

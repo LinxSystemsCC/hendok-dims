@@ -239,25 +239,23 @@ class IbtController extends Controller
      */
     public function receive(Request $request)
     {
-
         $ibtHeader = $request->get('ibtHeader');
         $lines = $request->get('lines');
         $receivingBin = $request->get('bin');
         $intTLNumber = $request->get('intTLNumber');
         $intReceivedBy = Auth::user()->UserID;
 
-        if (!empty($lines)) {
-            $xml = $this->toxml($lines, "xml", array("result"));
-        }
+        $xml = !empty($lines) ? $this->toxml($lines, "xml", ["result"]) : null;
 
-        // dd("EXEC usp_C_RecieveIBTandMove $ibtHeader, '$xml', $receivingBin, $intReceivedBy");
-        $updatedRows = DB::connection('sqlsrv2')->select("EXEC usp_C_RecieveIBTandMove $ibtHeader, '$xml', $receivingBin, $intReceivedBy, $intTLNumber");
+        $results = DB::connection('sqlsrv2')->select(
+            "EXEC usp_C_RecieveIBTandMove ?, ?, ?, ?, ?",
+            [$ibtHeader, $xml, $receivingBin, $intReceivedBy, $intTLNumber]
+        );
 
-        if ($updatedRows > 0) {
-            return response()->json(['success' => true, 'message' => 'Record updated successfully.']);
-        }
+        // Assume stored proc returns a row with Status and Message
+        $response = $results[0] ?? ['Status' => 0, 'Message' => 'No response from stored procedure'];
 
-        return response()->json(['success' => false, 'message' => 'Update failed.']);
+        return response()->json($response);
     }
 
     /**

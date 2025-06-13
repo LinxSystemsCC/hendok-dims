@@ -12,7 +12,7 @@ class StockIssueController extends Controller
 {
     public function issuestock()
     {
-        $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName, Area, Department, SubDepartment, Machine FROM viewSage300Employees WHERE EmployeeStatusCode = 'A'");
+        $users = DB::connection('sqlsrv3')->select("SELECT EmployeeCode, FirstName, LastName, Area, Department, SubDepartment, Machine FROM viewSage300Employees WHERE EmployeeStatusCode IN ('A', 'N', 'F')");
         $reference = DB::connection('sqlsrv3')->select('SELECT TOP 1 intAutoId FROM tblStockIssueHeader ORDER BY dteCreated DESC');
         $intAutoId = count($reference) > 0 ? $reference[0]->intAutoId : 0;
         $types = DB::connection('sqlsrv3')->select('SELECT * FROM tblStockIssueTypes');
