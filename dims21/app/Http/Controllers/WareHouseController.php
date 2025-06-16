@@ -771,10 +771,14 @@ class WareHouseController extends Controller
         $bitHandingFee = $request->input('handlingFee') ? 1 : 0; // Checkbox (1 or 0)
         $strComment = $request->input('comment'); // ✅ this matches the JS field
 
-        DB::connection('sqlsrv2')->statement(
+        $results = DB::connection('sqlsrv2')->select(
             "EXEC spApproveUpliftment ?, ?, ?, ?",
             array($upliftmentNumber, $userId, $bitHandingFee, $strComment)
         );
+
+        $response = $results[0] ?? ['Status' => 0, 'Message' => 'No response from stored procedure'];
+
+        return response()->json($response);
     }
     public function getCustomerForSelectedCompany(Request $request)
     {
