@@ -1475,7 +1475,8 @@ if (Auth::guest()) {
                     contentType: false,
                     success: function(data) {
                         $('#approveConfirmationModal').modal('hide');
-                        location.reload();
+                        DevExpress.ui.notify(data.Message, data.Status === "1" ? "success" : "error", 5000);
+                        if (data.Status === "1") location.reload();
                     }
                 });
             });
