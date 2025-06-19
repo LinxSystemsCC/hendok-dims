@@ -561,6 +561,7 @@ if (Auth::guest()) {
                         dataField: "Username",
                         caption: "User",
                     },
+                    
                     {
                         dataField: "strFirstApproval",
                         caption: "First Approval",
@@ -569,6 +570,11 @@ if (Auth::guest()) {
                         dataField: "strSecondApproval",
                         caption: "Second Approval",
                     },
+                    {
+                        dataField: "strCollectionType",
+                        caption: "Collection Type",
+                    },
+
                     {
                         dataField: "bitHandingFee",
                         caption: "Handing Fee",
