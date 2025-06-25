@@ -37,6 +37,7 @@ use App\Http\Controllers\WireDraw\WireDrawProductsController;
 use App\Http\Controllers\Warehouse\PlanningController;
 use App\Http\Controllers\IbtController;
 use App\Http\Controllers\Warehouse\StockIssueController;
+use App\Http\Controllers\WorkOrdersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -949,7 +950,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('syncing', [WareHouseController::class,'syncing']);
     Route::get('syncPastelStockTable', [WareHouseController::class,'syncPastelStockTable']);
     Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
-    Route::get('getWIP', [WareHouseController::class,'getWIP']);
     Route::get('getRoofWIP', [WareHouseController::class,'getRoofWIP']);
     Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
     Route::get('roofingReport', [WareHouseController::class,'roofingReport']);
@@ -988,7 +988,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('qrcodeimage/{binlocation}', [WareHouseController::class,'qrcodeimage']);
     Route::get('customergridlookup', [WareHouseController::class,'customergridlookup']);
     Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
-    Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
     Route::post('insertPrePlannedSO', [WareHouseController::class,'insertPrePlannedSO']);
     Route::post('updateRoofLines', [WareHouseController::class,'updateRoofLines']);
     Route::post('updateRoofLinesSequence', [WareHouseController::class,'updateRoofLinesSequence']);
@@ -1426,4 +1425,12 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('getIssuedStock', [StockIssueController::class,'getIssuedStock']);
     Route::post('issueStockRecieve', [StockIssueController::class,'issueStockRecieve']);    
+});
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('WorkOrders', [WorkOrdersController::class,'index']);
+    Route::get('getActiveJobs', [WorkOrdersController::class,'getActiveJobs']);
+    Route::post('createNewJob', [WorkOrdersController::class,'createNewJob']);
+    Route::get('getMachineJobs', [WorkOrdersController::class,'getMachineJobs']);
+    Route::post('updateWorkOrderStatus', [WorkOrdersController::class,'updateWorkOrderStatus']);
 });

@@ -927,12 +927,12 @@ class WareHouseController extends Controller
                     $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '" . $departmentMachines[0] . "'");
                     $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '" . $departmentMachines[1] . "'");
 
-                    return redirect('/printpalletchoosproducttomake/' . $deptartmentID[0]->intAutoID . '/' . $machineID[0]->intAutoMachineID);
+                    return redirect('printpalletchoosproducttomake/' . $deptartmentID[0]->intAutoID . '/' . $machineID[0]->intAutoMachineID);
                 } else {
                     $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '" . $departmentMachines[0] . "'");
 
                     $logoutButton = '0';
-                    return redirect('/printpalletchoosemachine/' . $deptartmentID[0]->intAutoID);
+                    return redirect('printpalletchoosemachine/' . $deptartmentID[0]->intAutoID);
                 }
             } else if ($this->getThings($GroupId, 'Teamleader Redirect')) {
                 return redirect("/teamleadermanage/0");
@@ -1608,11 +1608,7 @@ class WareHouseController extends Controller
     {
         $deparment = $request->get("deptId");
         $prodname = $request->get("prodname");
-        $machines = DB::connection('sqlsrv2')
-            ->select(
-                'exec spGetMachinesByDept ?,?',
-                array($deparment, $prodname)
-            );
+        $machines = DB::connection('sqlsrv2')->select("exec spGetMachinesByDept $deparment,'$prodname'");
         return response()->json($machines);
     }
     public function getPalletForSelectedItem(Request $request)
@@ -1684,28 +1680,22 @@ class WareHouseController extends Controller
 
         return view('warehouse/chooseproducttomake')->with('pallet', $pallets)->with('machines', $machines)->with('products', $products)->with('qty', $qty);
     }
-    //print pallet
+    
     public function printpalletchoosproducttomake($deparment, $machine)
     {
-        $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments where intAutoID =" . $deparment);
+        $dept = DB::connection('sqlsrv2')->select("SELECT * FROM tblDepartments WHERE intAutoID = ".$deparment);
 
-        $machines = DB::connection('sqlsrv2')
-            ->select("select strMachineName,intAutoMachineID intMachineID from tblMachines where intAutoMachineID =" . $machine);
+        $machines = DB::connection('sqlsrv2')->select("SELECT strMachineName, intAutoMachineID AS intMachineID FROM tblMachines WHERE intAutoMachineID = ".$machine);
 
-        // dd($dept);
-        /* $machines = DB::connection('sqlsrv2')
-            ->select('exec spGetMachinesByDept ?',
-                array($deparment)
-            );*/
-        $products = DB::connection('sqlsrv2')
-            ->select(
-                'exec spGetProductsToPrint ?,?',
-                array($machine, $deparment)
-            );
-        //    dd($products);
-        return view('warehouse/printpalletchooseproducttomake')->with('departments', $dept)->with('machines', $machines)->with('products', $products)->with('departmentselected', $deparment);
+        $products = DB::connection('sqlsrv2')->select('exec spGetProductsToPrint ?,?', array($machine, $deparment));
+
+        return view('warehouse.printpalletchooseproducttomake')
+            ->with('departments', $dept)
+            ->with('machines', $machines)
+            ->with('products', $products)
+            ->with('departmentselected', $deparment);
     }
+
     public function getProductPlannedOnThatMachine(Request $request)
     {
         $machineid = $request->get("machineId");
@@ -1874,15 +1864,6 @@ class WareHouseController extends Controller
             ]
         );
         return response()->json($result);
-    }
-    public function getWIP(Request $request)
-    {
-
-        $productonmachine = DB::connection('sqlsrv2')
-            ->select(
-                'exec spGetProductCurrentlyPlanned '
-            );
-        return response()->json($productonmachine);
     }
 
     public function getRoofWIP(Request $request)
@@ -2141,7 +2122,6 @@ class WareHouseController extends Controller
 
     public function jobupdateprint($jobid)
     {
-        /*$returnmach = DB::connection('sqlsrv2')->select('exec spInsertNewJob ?,?,?,?,?,?',array($productcode,$machine,$palletid,$qty,"12345",$start));*/
         $jobdata = DB::connection('sqlsrv3')->select('exec spGetProductPlannedDetails ?', array($jobid));
         return view('warehouse/updatejob')->with("jobdata", $jobdata)->with("id", $jobid);
     }
@@ -2327,27 +2307,6 @@ class WareHouseController extends Controller
         $jobdata = DB::connection('sqlsrv2')->select("select *,'" . $status . "' as buttonStatus from tblCompletedJobs where Customer ='" . $customer . "' and ProductName ='" . $product . "' and TicketNo = '" . $ticketno . "'");
         //dd($jobdata);
         return view('warehouse/galvlabel')->with("id", $customer)->with("id", $product)->with("ticketno", $ticketno)->with("jobdata", $jobdata);
-    }
-
-    public function insertIntoJobTable(Request $request)
-    {
-        $deptId = $request->get("deptId");
-        $prodgroup = "0"; //$request->get("prodgroup");
-        $productcategory = $request->get("productcategory");
-        $prodname = $request->get("prodname");
-        $machinename = $request->get("machinename");
-        $qty = $request->get("qty");
-        $palletconfig = $request->get("palletconfig");
-        //$startdate = $request->get("startdate");
-
-        $startdate = (new \DateTime($request->get('startdate')))->format('Y-m-d');
-
-        $returnmach = DB::connection('sqlsrv2')
-            ->select(
-                'exec spInsertNewJob ?,?,?,?,?,?,?,?',
-                array($deptId, $prodgroup, $productcategory, $prodname, $machinename, $qty, $startdate, $palletconfig)
-            );
-        return response()->json($returnmach);
     }
 
     public function insertPrePlannedSO(Request $request)

@@ -7,7 +7,7 @@
     $includeMenu = false;
 
     $v = new \App\Http\Controllers\SalesForm();
-    $userDepartment =Auth::user()->strPickingTeams;
+    $userDepartment = Auth::user()->strPickingTeams;
     if (Auth::guest()) {
         $backButton = '0';
         $logoutButton = '0';
@@ -26,8 +26,7 @@
                 $backButton = '1';
                 $logoutButton = '0';
             }
-            
-        }else{
+        } else {
             $backButton = '1';
             $logoutButton = '0';
         }
@@ -37,7 +36,7 @@
 @section('page')
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>
+    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet" type='text/css'>
 
     <style>
         .vertical-menu {
