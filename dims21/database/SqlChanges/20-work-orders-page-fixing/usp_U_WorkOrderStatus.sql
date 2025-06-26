@@ -1,18 +1,22 @@
 -- Create the stored procedure in the specified schema
-CREATE PROCEDURE dbo.usp_U_WorkOrderStatus
+ALTER PROCEDURE dbo.usp_U_WorkOrderStatus
     @intAutoId INT
     , @intStatusId INT
     , @intUserId INT
 -- add more stored procedure parameters here
 AS
+    SET NOCOUNT ON;
+
+    DECLARE @currentTime AS DATETIME = GETDATE();
+    
     IF @intStatusId = 1
     BEGIN
         UPDATE tblWorkOrders 
         SET intStatusId = @intStatusId
             , intStartedBy = @intUserId
-            , dtmStarted = GETDATE()
+            , dtmStarted = @currentTime
         
-        SELECT 1 [Status], 'Job Started' [Message]
+        SELECT 1 [Status], 'Job Started' [Message], @currentTime [dtmStarted]
     END
     ELSE
     IF @intStatusId = 2
@@ -20,9 +24,9 @@ AS
         UPDATE tblWorkOrders 
         SET intStatusId = @intStatusId
             , intEndedBy = @intUserId
-            , dtmEnded = GETDATE()
+            , dtmEnded = @currentTime
         
-        SELECT 1 [Status], 'Job Ended' [Message]
+        SELECT 1 [Status], 'Job Ended' [Message], @currentTime [dtmEnded]
 
     END
     ELSE

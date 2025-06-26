@@ -3,6 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalJobCardTitle">Job Details</h5>
+                <input class="form-control w-100" id="inputJobId" hidden>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -98,8 +99,11 @@
                                     <label class="control-label fw-bold" for="inputQty">Qty</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control rounded-end-0" id="inputQty" disabled>
-                                        <button class="btn btn-outline-secondary rounded-start-0" type="button" id="btnEditQty">
+                                        <button class="btn btn-secondary rounded-start-0 btn-rounded-end" type="button" id="btnEditQty">
                                             <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-success rounded-start-0" type="button" id="btnSaveQty" hidden>
+                                            <i class="bi bi-check-circle-fill"></i>
                                         </button>
                                     </div>
                                 </div>

@@ -23,9 +23,9 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="selectDepartment">Department</label>
-                        <select class="form-control w-100 select2" id="selectDepartment" required>
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="selectDepartment">Department</label>
+                        <select class="form-select w-100 select2" id="selectDepartment" required>
                             <option></option>
                             @foreach ($departments as $department)
                                 <option value="{{ $department->intAutoID }}">{{ $department->strDeptName }}</option>
@@ -33,29 +33,29 @@
                         </select>
                     </div>
 
-                    <div class="input-group mb-3">
-                        <label class="control-label" for="selectCategory">Product Category </label>
-                        <select class="form-control w-100 select2" id="selectCategory" required>
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="selectCategory">Product Category </label>
+                        <select class="form-select w-100 select2" id="selectCategory" required>
                             <option></option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label class="control-label" for="selectProduct">Product Name </label>
-                        <select class="form-control w-100 select2" id="selectProduct" required>
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="selectProduct">Product Name </label>
+                        <select class="form-select w-100 select2" id="selectProduct" required>
                             <option></option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label class="control-label" for="selectMachine">Machine </label>
-                        <select class="form-control w-100 select2" id="selectMachine" required>
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="selectMachine">Machine </label>
+                        <select class="form-select w-100 select2" id="selectMachine" required>
                             <option></option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label class="control-label" for="decQty">Qty </label>
+                    <div class="form-group mb-2">
+                        <label class="control-label fw-bold" for="decQty">Qty </label>
                         <input type="number" class="form-control w-100" id="decQty" required>
                     </div>
 
@@ -85,7 +85,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         <label class="control-label" for="dteStart">Start Date </label>
                         <input type="date" class="form-control col-xs-1" id="dteStart">
                     </div>
@@ -105,9 +105,11 @@
 
     <script>
         $(document).ready(function() {
-            $('.select2').select2({
-                theme: 'bootstrap-5',
-                dropdownParent: $('#modalCreateJob'),
+            $('#modalCreateJob').on('shown.bs.modal', function() {
+                $('.select2').select2({
+                    theme: 'bootstrap-5',
+                    dropdownParent: $('#modalCreateJob'),
+                });
             });
 
             var statuses = {!! json_encode($statuses) !!};
@@ -261,9 +263,8 @@
                         visible: false,
                     },
                 ],
-                onRowDblClick: function(e) {
-                    var intAutoId = e.data.intAutoId;
-
+                onRowDblClick: function(e) {                    
+                    $('#inputJobId').val(e.data.intAutoId);
                     $('#selectStatus').val(e.data.intStatusId);
                     $('#inputPropStart').val(e.data.dtePropStart);
                     $('#inputStart').val(e.data.dtmStarted);
@@ -592,99 +593,78 @@
                 if (ajaxRequests.machine) ajaxRequests.machine.abort();
 
                 ajaxRequests.machine = $.ajax({
-
-                    url: '{!! url('/getProductInfoAppend') !!}',
+                    url: '{!! url('/getProductInfo') !!}',
                     type: "GET",
                     data: {
                         productCode: $('#selectProduct').val(),
                     },
-                    success: function(dataappend) {
+                    success: function(data) {
+                        $('#barcode').val(data[0]['Barcode']);
                         var toAppend = '';
                         $("#configuration").empty();
-                        toAppend += '<option></option>';
-                        $.each(dataappend, function(i, o) {
 
-                            toAppend += '<option value="' + o.pack + '">' + o.packdesc +
-                                '</option>';
+                        toAppend += '<optgroup label="Single" hidden>';
+                        toAppend += '<option></option>';
+                        toAppend += '<option value = "1">1</option>';
+                        toAppend += '</optgroup>';
+
+                        $.each(data, function(i, o) {
+                            if (o.strBundleSize !== null) {
+                                var bundleSize = o.strBundleSize
+                                    .split(';');
+
+                                toAppend +=
+                                    '<optgroup label="Bundle" hidden>';
+                                toAppend += '<option></option>';
+                                $.each(bundleSize, function(index,
+                                    value) {
+                                    toAppend +=
+                                        '<option value="' +
+                                        value + '">' +
+                                        value +
+                                        ' / bundle</option>';
+                                })
+                                toAppend += '</optgroup>';
+                            }
+
+                            if (o.strPackSize !== null) {
+                                var packSizes = o.strPackSize.split(
+                                    ';');
+
+                                toAppend +=
+                                    '<optgroup label="Pallet" hidden>';
+                                toAppend += '<option></option>';
+                                $.each(packSizes, function(index,
+                                    value) {
+                                    toAppend +=
+                                        '<option value="' +
+                                        value + '">' +
+                                        value +
+                                        ' / pallet</option>';
+                                })
+                                toAppend += '</optgroup>';
+                            }
                         });
                         $("#configuration").append(toAppend);
 
-                        $.ajax({
+                        var addType = '';
+                        $("#labelType").empty();
+                        addType += '<option></option>';
 
-                            url: '{!! url('/getProductInfo') !!}',
-                            type: "GET",
-                            data: {
-                                productCode: $('#selectProduct').val(),
-                            },
-                            success: function(data) {
-                                $('#barcode').val(data[0]['Barcode']);
-                                var toAppend = '';
-                                $("#configuration").empty();
+                        if (data[0]['intHasSingleLable'] == "1") {
+                            addType +=
+                                '<option value = "Single">Single</option>';
+                        }
+                        if (data[0]['intHasBundleLable'] == "1") {
+                            addType +=
+                                '<option value = "Bundle">Bundle</option>';
+                        }
+                        if (data[0]['intHasPalletLable'] == "1") {
+                            addType +=
+                                '<option value = "Pallet">Pallet</option>';
+                        }
 
-                                toAppend += '<optgroup label="Single" hidden>';
-                                toAppend += '<option></option>';
-                                toAppend += '<option value = "1">1</option>';
-                                toAppend += '</optgroup>';
-
-                                $.each(data, function(i, o) {
-                                    if (o.strBundleSize !== null) {
-                                        var bundleSize = o.strBundleSize
-                                            .split(';');
-
-                                        toAppend +=
-                                            '<optgroup label="Bundle" hidden>';
-                                        toAppend += '<option></option>';
-                                        $.each(bundleSize, function(index,
-                                            value) {
-                                            toAppend +=
-                                                '<option value="' +
-                                                value + '">' +
-                                                value +
-                                                ' / bundle</option>';
-                                        })
-                                        toAppend += '</optgroup>';
-                                    }
-
-                                    if (o.strPackSize !== null) {
-                                        var packSizes = o.strPackSize.split(
-                                            ';');
-
-                                        toAppend +=
-                                            '<optgroup label="Pallet" hidden>';
-                                        toAppend += '<option></option>';
-                                        $.each(packSizes, function(index,
-                                            value) {
-                                            toAppend +=
-                                                '<option value="' +
-                                                value + '">' +
-                                                value +
-                                                ' / pallet</option>';
-                                        })
-                                        toAppend += '</optgroup>';
-                                    }
-                                });
-                                $("#configuration").append(toAppend);
-
-                                var addType = '';
-                                $("#labelType").empty();
-                                addType += '<option></option>';
-
-                                if (data[0]['intHasSingleLable'] == "1") {
-                                    addType +=
-                                        '<option value = "Single">Single</option>';
-                                }
-                                if (data[0]['intHasBundleLable'] == "1") {
-                                    addType +=
-                                        '<option value = "Bundle">Bundle</option>';
-                                }
-                                if (data[0]['intHasPalletLable'] == "1") {
-                                    addType +=
-                                        '<option value = "Pallet">Pallet</option>';
-                                }
-
-                                $("#labelType").append(addType);
-                            }
-                        });
+                        $("#labelType").append(addType);
                     }
                 });
             });
@@ -761,7 +741,76 @@
             });
 
             $('#selectStatus').change(function() {
-                var status = $('#selectStatus').val();
+                var intJobId = $('#inputJobId').val();
+                var intStatusId = $('#selectStatus').val();
+
+                $.ajax({
+                    url: '{!! url('/updateWorkOrderStatus') !!}',
+                    type: "POST",
+                    data: {
+                        intJobId: intJobId,
+                        intStatusId: intStatusId,
+                    },
+                    success: function(data) {
+                        // console.log(data);
+                        DevExpress.ui.notify({
+                            message: data.Message,
+                            type: data.Status == '1' ? 'success': 'error', // 'info', 'success', 'warning'
+                            displayTime: 3500,
+                        });
+                        
+                        if (intStatusId == 1){
+                            $("#inputStart").val(data.dtmStarted);
+                        }else if(intStatusId == 2){
+                            $("#inputEnd").val(data.dtmEnded);
+                        }
+                    }
+                });
+            });
+
+            let originalQty = null;
+
+            $('#btnEditQty').click(function () {
+                originalQty = $('#inputQty').val();
+                $('#inputQty').prop('disabled', false).focus();
+                $('#btnEditQty').attr('hidden', true);
+                $('#btnSaveQty').removeAttr('hidden');
+            });
+
+            $('#btnSaveQty').click(function () {
+                const newQty = $('#inputQty').val();
+
+                $('#inputQty').prop('disabled', true);
+                $('#btnSaveQty').attr('hidden', true);
+                $('#btnEditQty').removeAttr('hidden');
+
+                if (newQty === originalQty) {
+                    // No change, do nothing
+                    DevExpress.ui.notify({
+                        message: 'No changes detected.',
+                        type: 'info',
+                        displayTime: 2500,
+                    });
+                    return;
+                }
+
+                const intJobId = $('#inputJobId').val();
+
+                $.ajax({
+                    url: '{!!url("/updateJobQtyRequired")!!}',
+                    type: "POST",
+                    data: {
+                        intJobId: intJobId,
+                        decQtyRequired: newQty
+                    },
+                    success: function (data) {
+                        DevExpress.ui.notify({
+                            message: data.Message,
+                            type: data.Status == '1' ? 'success' : 'error',
+                            displayTime: 3500,
+                        });
+                    }
+                });
             });
 
             getActiveJobs();
@@ -794,8 +843,6 @@
                     }
                 });
             }
-
-            
         });
     </script>
 

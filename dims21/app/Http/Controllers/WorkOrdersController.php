@@ -52,10 +52,42 @@ class WorkOrdersController extends Controller
 
     public function updateWorkOrderStatus(Request $request)
     {
+        $intJobId = $request->get("intJobId");
         $intStatusId = $request->get("intStatusId");
         $intUserId = Auth::user()->UserID;
 
-        $response = DB::connection('sqlsrv2')->select("EXEC usp_U_WorkOrderStatus $intStatusId, $intUserId");
-        return response()->json($response);
+        $response = DB::connection('sqlsrv2')->select("EXEC usp_U_WorkOrderStatus $intJobId, $intStatusId, $intUserId");
+        return response()->json($response[0]);
     }
+
+    public function updateJobQtyRequired(Request $request)
+    {
+        $intJobId = $request->get("intJobId");
+        $decQtyRequired = $request->get("decQtyRequired");
+
+        try {
+            $affected = DB::connection('sqlsrv2')->update(
+                "UPDATE tblWorkOrders SET decQtyRequired = ? WHERE intAutoId = ?",
+                [$decQtyRequired, $intJobId]
+            );
+
+            if ($affected > 0) {
+                return response()->json([
+                    'Status' => 1,
+                    'Message' => 'Quantity required updated successfully.'
+                ]);
+            } else {
+                return response()->json([
+                    'Status' => 0,
+                    'Message' => 'No rows were updated. Please check the Job ID.'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'Status' => 0,
+                'Message' => 'Error updating quantity: ' . $e->getMessage()
+            ]);
+        }
+    }
+
 }

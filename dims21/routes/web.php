@@ -1433,4 +1433,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('createNewJob', [WorkOrdersController::class,'createNewJob']);
     Route::get('getMachineJobs', [WorkOrdersController::class,'getMachineJobs']);
     Route::post('updateWorkOrderStatus', [WorkOrdersController::class,'updateWorkOrderStatus']);
+    Route::post('updateJobQtyRequired', [WorkOrdersController::class,'updateJobQtyRequired']);
 });
