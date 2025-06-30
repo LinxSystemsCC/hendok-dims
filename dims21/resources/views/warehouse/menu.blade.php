@@ -443,6 +443,14 @@ if ((Auth::guest()))
                         <a class="secondmenu" href='{!!url("/customergridlookup")!!}'>Customer Grid Lookup</a>
                         @endif
                     </li>
+                      <li>
+                     
+                        <a class="secondmenu" href='{!!url("/TrackingTable")!!}'>Tracking Table</a>
+                 
+                    </li>
+
+
+                 
                     @if($loadplanning !="0")
                     <a class="secondmenu" id="2a">Load Planning<span class="caret pull-down"></span>
                     </a>
@@ -494,7 +502,9 @@ if ((Auth::guest()))
                             <a href='{!!url("/getPickingAuth")!!}'>Authorise Picking</a>
                             @endif
                         </li> --}}
+                          
                     </ul>
+
 
                     @if($settlement !="0")
                     <a class="secondmenu" id="2c">Settlement<span class="caret pull-down"></span>
@@ -645,6 +655,9 @@ if ((Auth::guest()))
                             <a href='{!!url("/modifyuserleaderpage")!!}'>Leaders</a>
                             @endif
                         </li>
+                           <li>
+                        <a class="secondmenu" href='{!!url("/email-recipients")!!}'>Email</a>
+                    </li>
                     </ul>
 
                     @if($setupdispatch !="0")
