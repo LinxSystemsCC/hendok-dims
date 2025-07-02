@@ -90,4 +90,57 @@ class WorkOrdersController extends Controller
         }
     }
 
+    public function updateJobSequence(Request $request)
+    {
+        try {
+            $sequenceData = $request->get("sequenceData");
+
+            if (empty($sequenceData) || !is_array($sequenceData)) {
+                return response()->json([
+                    'Status' => 0,
+                    'Message' => 'No valid sequence data provided.'
+                ]);
+            }
+
+            // Build CASE statements and collect IDs
+            $caseSql = '';
+            $ids = [];
+
+            foreach ($sequenceData as $item) {
+                $id = (int) $item['intAutoId'];
+                $seq = (int) $item['intSequence'];
+                $caseSql .= "WHEN $id THEN $seq ";
+                $ids[] = $id;
+            }
+
+            if (empty($ids)) {
+                return response()->json([
+                    'Status' => 0,
+                    'Message' => 'No valid IDs to update.'
+                ]);
+            }
+
+            $idsList = implode(',', $ids);
+
+            // Perform the batch update using raw SQL
+            DB::statement("
+                UPDATE tblWorkOrders
+                SET intSequence = CASE intAutoId
+                    $caseSql
+                END
+                WHERE intAutoId IN ($idsList)
+            ");
+
+            return response()->json([
+                'Status' => 1,
+                'Message' => 'Sequence updated successfully.'
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'Status' => 0,
+                'Message' => 'Error: ' . $e->getMessage()
+            ]);
+        }
+    }
+
 }

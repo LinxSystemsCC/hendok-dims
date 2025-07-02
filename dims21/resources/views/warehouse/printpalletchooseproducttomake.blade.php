@@ -100,29 +100,31 @@
         @foreach ($products as $val)
             @if ($val->strDepartment == 'Roofing')
                 @if ($loop->first)
-                    <div class="d-inline-flex w-100">
-                        <button class="btn btn-danger" type="button"
-                            style="width:10% !important;font-size: 20px; margin-right:10px;">
+                    <div class="d-flex w-100" style="font-size: 20px;">
+                        <button class="btn btn-danger rounded-0 rounded-start px-3"
+                            style="flex: 0 0 auto; border-right: 1px solid #bb2d3b; cursor: default;">
                             {{ $val->intSequence }}
                         </button>
 
-                        <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
+                        <button class="btn btn-danger rounded-0 rounded-end text-start"
+                            style="flex: 1;" 
                             onclick="location.href='{!! url('/startgenratingqrcodeforpallet') !!}/{{ $val->intSoId }}/Roofing'">
-                            {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
+                            {{ $val->strProductDescription }} {{ $val->strPackToCut }} | {{ $val->strProductStats }}
                         </button>
                     </div>
                 @else
-                    <div class="d-inline-flex w-100">
-                        <button class="btn btn-danger" type="button"
-                            style="width:10% !important;font-size: 20px; margin-right:10px;" disabled>
-                            {{ $val->intSequence }}
-                        </button>
+                    <div class="d-flex w-100" style="font-size: 20px;">
+                    <button class="btn btn-danger rounded-0 rounded-start px-3" disabled
+                        style="flex: 0 0 auto; border-right: 1px solid #bb2d3b; cursor: default;">
+                        {{ $val->intSequence }}
+                    </button>
 
-                        <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
-                            disabled>
-                            {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
-                        </button>
-                    </div>
+                    <button class="btn btn-danger rounded-0 rounded-end text-start"
+                        style="flex: 1;" disabled
+                        onclick="location.href='{!! url('/startgenratingqrcodeforpallet') !!}/{{ $val->intSoId }}/Roofing'">
+                        {{ $val->strProductDescription }} {{ $val->strPackToCut }} | {{ $val->strProductStats }}
+                    </button>
+                </div>
                 @endif
                 <br>
                 <br>
@@ -136,7 +138,7 @@
 
                         <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
                             onclick="location.href='{!! url('/startgenratingqrcodeforpallet') !!}/{{ $val->intSoId }}/Diamond Mesh'">
-                            {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
+                            {{ $val->strProductDescription }} {{ $val->strPackToCut }} | {{ $val->strProductStats }}
                         </button>
                     </div>
                 @else
@@ -148,7 +150,7 @@
 
                         <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
                             disabled>
-                            {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
+                            {{ $val->strProductDescription }} {{ $val->strPackToCut }} | {{ $val->strProductStats }}
                         </button>
                     </div>
                 @endif
@@ -158,7 +160,7 @@
                 @if ($val->strJobStatus != 'NOT STARTED')
                     <button class="btn btn-danger" type="button" style="width:100% !important;font-size: 20px;"
                         onclick="location.href='{!! url('/startgenratingqrcodeforpallet') !!}/{{ $val->intJobId }}/None'">
-                        {{ $val->PastelDescription }} {{ $val->productionstat }} [ {{ $val->strPalletTypeDescription }}
+                        {{ $val->strProductDescription }} {{ $val->strProductStats }} [ {{ $val->strPalletTypeDescription }}
                         ]</button>
                     <br>
                     <br>
@@ -190,7 +192,7 @@
 
                 return {
                     strItemCode: item.strItemCode,
-                    PastelDescription: item.PastelDescription
+                    strProductDescription: item.strProductDescription
 
                 }
 
@@ -201,14 +203,14 @@
                 selectionRequired: true,
                 focusFirstResult: true,
                 searchContain: true,
-                visibleProperties: ["strItemCode", "PastelDescription"],
-                searchIn: 'PastelDescription',
+                visibleProperties: ["strItemCode", "strProductDescription"],
+                searchIn: 'strProductDescription',
                 data: finalData
             });
             inputProductcode.on('select:flexdatalist', function(event, data) {
 
                 $('#productcode').val(data.strItemCode);
-                $('#productdesc').val(data.PastelDescription);
+                $('#productdesc').val(data.strProductDescription);
                 //
 
                 $.ajax({

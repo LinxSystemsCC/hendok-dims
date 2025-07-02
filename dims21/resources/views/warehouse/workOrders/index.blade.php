@@ -113,6 +113,8 @@
             });
 
             var statuses = {!! json_encode($statuses) !!};
+            let currentMachineId, currentJobId;
+            let machineJobsData = [];
 
             const gridJobs = $("#gridJobs").dxDataGrid({
                 dataSource: [], //as json
@@ -263,8 +265,9 @@
                         visible: false,
                     },
                 ],
-                onRowDblClick: function(e) {                    
-                    $('#inputJobId').val(e.data.intAutoId);
+                onRowDblClick: function(e) {
+                    currentJobId = e.data.intAutoId;     
+                    currentJobId = e.data.intAutoId;
                     $('#selectStatus').val(e.data.intStatusId);
                     $('#inputPropStart').val(e.data.dtePropStart);
                     $('#inputStart').val(e.data.dtmStarted);
@@ -315,7 +318,7 @@
             }).dxDataGrid("instance");
 
             const gridMachineJobs = $("#gridMachineJobs").dxDataGrid({
-                dataSource: [], //as json
+                dataSource: machineJobsData,
                 showBorders: true,
                 hoverStateEnabled: true,
                 height: '100%',
@@ -338,6 +341,23 @@
                 },
                 selection: {
                     mode: 'single',
+                },
+                rowDragging: {
+                    allowReordering: true,
+                    showDragIcons: false,
+                    onReorder(e) {
+                        const fromIndex = e.fromIndex;
+                        const toIndex = e.toIndex;
+
+                        const movedItem = machineJobsData.splice(fromIndex, 1)[0];
+                        machineJobsData.splice(toIndex, 0, movedItem);
+
+                        // Optional: reassign sequence
+                        machineJobsData.forEach((item, idx) => item.intSequence = idx + 1);
+
+                        // Rebind to reflect order
+                        e.component.option("dataSource", [...machineJobsData]);
+                    },
                 },
                 onExporting(e) {
                     const workbook = new ExcelJS.Workbook();
@@ -477,7 +497,7 @@
                             icon: "SEQUENCE",
                             text: "SEQUENCE",
                             onClick: function() {
-
+                                updateJobSequence();
                             },
                         },
                     });
@@ -741,7 +761,7 @@
             });
 
             $('#selectStatus').change(function() {
-                var intJobId = $('#inputJobId').val();
+                var intJobId = currentJobId;
                 var intStatusId = $('#selectStatus').val();
 
                 $.ajax({
@@ -764,6 +784,9 @@
                         }else if(intStatusId == 2){
                             $("#inputEnd").val(data.dtmEnded);
                         }
+
+                        getActiveJobs();
+                        getMachineJobs(currentMachineId);
                     }
                 });
             });
@@ -794,7 +817,7 @@
                     return;
                 }
 
-                const intJobId = $('#inputJobId').val();
+                const intJobId = currentJobId;
 
                 $.ajax({
                     url: '{!!url("/updateJobQtyRequired")!!}',
@@ -809,6 +832,9 @@
                             type: data.Status == '1' ? 'success' : 'error',
                             displayTime: 3500,
                         });
+                        
+                        getActiveJobs();
+                        getMachineJobs(currentMachineId);
                     }
                 });
             });
@@ -838,8 +864,42 @@
                         intMachineId: intMachineId
                     },
                     success: function(data) {
+                        machineJobsData = data;
                         gridMachineJobs.option("dataSource", data);
                         gridMachineJobs.refresh();
+                    }
+                });
+            }
+
+            function updateJobSequence(){
+                var jobData = gridMachineJobs.option("dataSource");
+
+                var sequenceData = [];
+
+                $.each(jobData, function(index, job) {
+                    sequenceData.push({
+                        intAutoId: job.intAutoId,
+                        intSequence: job.intSequence
+                    });
+                });
+                
+                $.ajax({
+                    url: '{!!url("/updateJobSequence")!!}',
+                    type: "POST",
+                    data: {
+                        sequenceData: sequenceData
+                    },
+                    success: function(data) {
+                        DevExpress.ui.notify({
+                            message: data.Message,
+                            type: data.Status == '1' ? 'success' : 'error',
+                            displayTime: 3500,
+                        });
+                        
+                        console.log(currentMachineId);
+                        
+                        getActiveJobs();
+                        getMachineJobs(currentMachineId);
                     }
                 });
             }
