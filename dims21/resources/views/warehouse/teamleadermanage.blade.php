@@ -7,11 +7,12 @@
 {{-- Set to show navbar --}}
 @php
     $includeMenu = false;
+    $includePriority = false;
+    
+    $v = new \App\Http\Controllers\SalesForm();
+    $complete = $v->getThingsUserPermissions(Auth::user()->UserID, 'Complete Load');
 @endphp
 
-@php
-    $includePriority = false;
-@endphp
 
 @section('page')
 
@@ -1401,6 +1402,7 @@
                     type: "POST",
                     data: {
                         ref: ref,
+                        bitForceComplete: {{ $complete }},
                     },
                     success: function (data) {
                         if(data[0].Result == "Success"){
