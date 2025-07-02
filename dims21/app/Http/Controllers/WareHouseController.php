@@ -1689,11 +1689,11 @@ class WareHouseController extends Controller
 
         $products = DB::connection('sqlsrv2')->select('exec spGetProductsToPrint ?,?', array($machine, $deparment));
 
-        return view('warehouse.printpalletchooseproducttomake')
+        return view('warehouse.workOrders.production_labels')
             ->with('departments', $dept)
             ->with('machines', $machines)
             ->with('products', $products)
-            ->with('departmentselected', $deparment);
+            ->with('department', $deparment);
     }
 
     public function getProductPlannedOnThatMachine(Request $request)

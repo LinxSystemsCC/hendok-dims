@@ -7,7 +7,9 @@
     $includeMenu = false;
 
     $v = new \App\Http\Controllers\SalesForm();
+
     $userDepartment = Auth::user()->strPickingTeams;
+    
     if (Auth::guest()) {
         $backButton = '0';
         $logoutButton = '0';
