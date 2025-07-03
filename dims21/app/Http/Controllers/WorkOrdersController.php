@@ -143,4 +143,38 @@ class WorkOrdersController extends Controller
         }
     }
 
+    public function printWorkOrderLabel(Request $request){
+        $strDepartment = $request->get('strDepartment');
+        $decQtyToPrint = $request->get('decQtyToPrint');
+        $intAutoJobId  = $request->get('intAutoJobId');
+
+        $strOperator = Auth::user()->UserName;
+        $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $t = time();
+        $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
+        $strPrintId = $t . $randomString;
+
+        switch ($strDepartment) {
+            case 'Roofing':
+                // dd("exec usp_C_RoofingLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+                $result = DB::connection('sqlsrv2')->select("exec usp_C_RoofingLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+
+                break;
+
+            case 'Diamond Mesh':
+                // dd("exec usp_C_DiamondMeshLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+                $result = DB::connection('sqlsrv2')->select("exec usp_C_DiamondMeshLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+
+                break;
+
+            default:
+                // dd("exec usp_C_WorkOrderLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+                $result = DB::connection('sqlsrv2')->select("exec usp_C_WorkOrderLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+
+                break;
+        }
+
+        return response()->json($result[0]);
+    }
+
 }

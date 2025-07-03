@@ -84,7 +84,7 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID, 'Roof');
     </div>
 
     @foreach ($departments as $val)
-        <button class="btn btn-danger" onclick="location.href='{!! url('/printpalletchoosemachine') !!}/{{ $val->intAutoID }}'"
+        <button class="btn btn-danger" onclick="location.href='{!! url('/production_machines') !!}/{{ $val->intAutoID }}'"
             type="button" style="width: 100% !important;font-size: 85px;">{{ $val->strDeptName }}
         </button>
     @endforeach
@@ -116,7 +116,7 @@ $roof = $v->getThingsUserPermissions(Auth::user()->UserID, 'Roof');
 
             var selecteddept = $(this).val();
 
-            window.location.replace('{!! url('/printpalletchoosemachine') !!}/' + selecteddept);
+            window.location.replace('{!! url('/production_machines') !!}/' + selecteddept);
 
         });
 

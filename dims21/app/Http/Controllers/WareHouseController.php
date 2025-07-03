@@ -16,8 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-
-
+use Svg\Tag\Rect;
 
 class WareHouseController extends Controller
 {
@@ -927,12 +926,12 @@ class WareHouseController extends Controller
                     $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '" . $departmentMachines[0] . "'");
                     $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '" . $departmentMachines[1] . "'");
 
-                    return redirect('printpalletchoosproducttomake/' . $deptartmentID[0]->intAutoID . '/' . $machineID[0]->intAutoMachineID);
+                    return redirect('production_labels/' . $deptartmentID[0]->intAutoID . '/' . $machineID[0]->intAutoMachineID);
                 } else {
                     $deptartmentID = DB::connection('sqlsrv2')->select("select intAutoID from tblDepartments where strDeptName = '" . $departmentMachines[0] . "'");
 
                     $logoutButton = '0';
-                    return redirect('printpalletchoosemachine/' . $deptartmentID[0]->intAutoID);
+                    return redirect('production_machines/' . $deptartmentID[0]->intAutoID);
                 }
             } else if ($this->getThings($GroupId, 'Teamleader Redirect')) {
                 return redirect("/teamleadermanage/0");
@@ -1468,11 +1467,16 @@ class WareHouseController extends Controller
     }
 
     //For printing pallets
-    public function printpalletsselectdept()
+    public function production_departments()
     {
-        $dept = DB::connection('sqlsrv2')
-            ->select("select * from tblDepartments");
-        return view('warehouse/printpalletcodes')->with('departments', $dept);
+        $dept = DB::connection('sqlsrv2')->select("SELECT * FROM tblDepartments");
+        
+        $groupId = Auth::user()->GroupId;
+        $hasRedirect = (new SalesForm())->getThings($groupId, 'Has Auto Redirect');
+
+        return view('warehouse.workOrders.partials.production_departments')
+            ->with('departments', $dept)
+            ->with('hasRedirect', $hasRedirect);
     }
 
     public function qrcodetracker()
@@ -1587,7 +1591,7 @@ class WareHouseController extends Controller
             );
         return view('warehouse/choosemachine')->with('machines', $machines)->with('pallets', $palletsjson);
     }
-    public function printpalletchoosemachine($deparment)
+    public function production_machines($deparment)
     {
         $dept = DB::connection('sqlsrv2')
             ->select("select * from tblDepartments where intAutoID =" . $deparment);
@@ -1601,7 +1605,7 @@ class WareHouseController extends Controller
         //dd($machines);
         //dd($deparment);
 
-        return view('warehouse/printpalletchoosemachine')->with('departments', $dept)->with('machines', $machines)->with('deparment', $deparment);
+        return view('warehouse.workOrders.partials.production_machines')->with('departments', $dept)->with('machines', $machines)->with('deparment', $deparment);
     }
 
     public function getMachinesforselecteddept(Request $request)
@@ -1681,19 +1685,24 @@ class WareHouseController extends Controller
         return view('warehouse/chooseproducttomake')->with('pallet', $pallets)->with('machines', $machines)->with('products', $products)->with('qty', $qty);
     }
     
-    public function printpalletchoosproducttomake($deparment, $machine)
+    public function production_labels($intDepartmentId, $intMachineId)
     {
-        $dept = DB::connection('sqlsrv2')->select("SELECT * FROM tblDepartments WHERE intAutoID = ".$deparment);
+        $departments = DB::connection('sqlsrv2')->select("SELECT * FROM tblDepartments WHERE intAutoID = $intDepartmentId");
 
-        $machines = DB::connection('sqlsrv2')->select("SELECT strMachineName, intAutoMachineID AS intMachineID FROM tblMachines WHERE intAutoMachineID = ".$machine);
+        $machines = DB::connection('sqlsrv2')->select("SELECT strMachineName, intAutoMachineID AS intMachineID FROM tblMachines WHERE intAutoMachineID = $intMachineId");
 
-        $products = DB::connection('sqlsrv2')->select('exec spGetProductsToPrint ?,?', array($machine, $deparment));
+        $products = DB::connection('sqlsrv2')->select("EXEC usp_R_ProductsToPrint $intMachineId, $intDepartmentId");
 
-        return view('warehouse.workOrders.production_labels')
-            ->with('departments', $dept)
+        $groupId = Auth::user()->GroupId;
+        $hasRedirect = (new SalesForm())->getThings($groupId, 'Has Auto Redirect');
+
+        return view('warehouse.workOrders.partials.production_labels')
+            ->with('departments', $departments)
             ->with('machines', $machines)
             ->with('products', $products)
-            ->with('department', $deparment);
+            ->with('department', $intDepartmentId)
+            ->with('machine', $intMachineId)
+            ->with('hasRedirect', $hasRedirect);
     }
 
     public function getProductPlannedOnThatMachine(Request $request)
@@ -2361,20 +2370,14 @@ class WareHouseController extends Controller
     }
 
     //Start Generating The Qr code
-    public function startgenratingqrcodeforpallet($jobId, $department = "None")
+    public function jobLabelQRCodeDetails($jobId, $department = "None")
     {
         $response = DB::connection('sqlsrv2')
             ->select('exec spInsertNewPalletPrint ?,?', array($jobId, $department));
 
         $htmlqrcode = "";
-        $dept = 0;
+
         foreach ($response as $val) {
-            /*$htmlqrcode .="Item Code :".$val->strItemCode."<br>";
-            $htmlqrcode .="Required :".$val->mnyQtyRequired."<br>";
-            $htmlqrcode .="Machine  :".$val->strMachineName."<br>";
-            $htmlqrcode .="Department  :".$val->strDeptName."<br>";
-            $htmlqrcode .="Time Created  :".$val->dteJobCreated."<br>";
-            $htmlqrcode .="By:".$val->strOperator."<br>";*/
             $htmlqrcode .= "JOB NO :" . $val->intJobId . ": P" . $val->palletJobPrint . ":M" . $val->strMachineName . ":T" . $val->dteJobCreated;
             $dept = $val->strDeptName;
         }

@@ -61,7 +61,7 @@
     <h2>Choose Customer</h2>
     @foreach($sonumberandunickref as $val)
 
-                <button class="btn btn-danger" type="button" style="width:100% !important;font-size: 20px;" onclick="location.href='{!!url("/startgenratingqrcodeforpallet")!!}/{{$val->intJobId}}/None'" >
+                <button class="btn btn-danger" type="button" style="width:100% !important;font-size: 20px;" onclick="location.href='{!!url("/jobLabelQRCodeDetails")!!}/{{$val->intJobId}}/None'" >
                     {{$val->PastelDescription}} {{$val->productionstat}} [ {{$val->strPalletTypeDescription}} ]</button>
                 <br>
                 <br>

@@ -60,7 +60,7 @@
         @else
             <h3 style="color: red;font-weight: 900;">You have Produced Required Quantity Of {{ $mnyQtyProduced }} /
                 {{ $mnyQtyRequired }}.<br>Please speak to your operator</h3><br><br>
-            <p><a href='{!! url('/printpalletsselectdept') !!}' style="text-decoration: underline;">Main Menu</a></p>
+            <p><a href='{!! url('/production_departments') !!}' style="text-decoration: underline;">Main Menu</a></p>
         @endif
     </div>
 @endsection

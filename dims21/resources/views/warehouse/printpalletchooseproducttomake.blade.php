@@ -7,7 +7,7 @@
     $includeMenu = false;
 
     $v = new \App\Http\Controllers\SalesForm();
-    $userDepartment = Auth::user()->strPickingTeams;
+    $userDepartment =Auth::user()->strPickingTeams;
     if (Auth::guest()) {
         $backButton = '0';
         $logoutButton = '0';
@@ -26,7 +26,8 @@
                 $backButton = '1';
                 $logoutButton = '0';
             }
-        } else {
+            
+        }else{
             $backButton = '1';
             $logoutButton = '0';
         }
@@ -35,63 +36,134 @@
 
 @section('page')
 
-    <div class="col-lg-12">
-        <div class="d-flex">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link href="{{ asset('css/jquery.flexdatalist.min.css') }}" rel="stylesheet"  type='text/css'>
+
+    <style>
+        .vertical-menu {
+            width: 200px;
+        }
+
+        .vertical-menu a {
+            background-color: #eee;
+            color: black;
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+        }
+
+        .vertical-menu a:hover {
+            background-color: #ccc;
+        }
+
+        .vertical-menu a.active {
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+
+    <div class="col-lg-12" style="padding:20px; min-height: 100vh; min-width: 100%;">
+
+        <div style="display: flex;">
             @if ($backButton != '0')
-                <button class="btn btn-dark d-flex justify-content-center align-items-center p-3"
-                    onclick="location.href='{!! url('/printpalletchoosemachine') !!}/{{ $department }}'">
+                <button class="btn btn-dark d-flex justify-content-center align-items-center me-2" style="width:75px;"
+                    onclick="location.href='{!! url('/production_machines') !!}/{{ $departmentselected }}'">
                     <i class="bi bi-arrow-return-left text-center h4"></i>
                 </button>
             @endif
 
             @if ($logoutButton != '0')
-                <button class="btn btn-dark d-flex justify-content-center align-items-center"
+                <button class="btn btn-dark d-flex justify-content-center align-items-center" style="width:75px;"
                     onclick="document.getElementById('logout-form').submit()">
                     <i class="bi bi-door-open h4"></i>
                 </button>
 
-                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
             @endif
 
-            <div class="pe-2">
+            <div style="padding-left: 20px;">
                 @foreach ($departments as $val)
-                    <h3>Department: {{ $val->strDeptName }}</h3>
+                    <h3>SELECTED DEPARTMENT: {{ $val->strDeptName }}</h3>
                     <input type="hidden" id="deptid" value="{{ $val->intAutoID }}">
                 @endforeach
 
                 @foreach ($machines as $val)
-                    <h3>Machine: {{ $val->strMachineName }}</h3>
+                    <h3>SELECTED MACHINE: {{ $val->strMachineName }}</h3>
                     <input type="hidden" id="machineid" value="{{ $val->intMachineID }}">
                 @endforeach
             </div>
         </div>
         <br>
 
-        <h2 id='batchRef'>Reference: NONE</h2>
+        <h2 id='batchRef'>REFERENCE: NONE</h2>
         @foreach ($products as $val)
-            @if ($loop->first)
-                <div class="d-flex w-100 mb-2">
-                    <button class="btn btn-danger rounded-0 rounded-start p-3">
-                        {{ $val->intSequence }}
-                    </button>
+            @if ($val->strDepartment == 'Roofing')
+                @if ($loop->first)
+                    <div class="d-inline-flex w-100">
+                        <button class="btn btn-danger" type="button"
+                            style="width:10% !important;font-size: 20px; margin-right:10px;">
+                            {{ $val->intSequence }}
+                        </button>
 
-                    <button class="btn btn-danger rounded-0 rounded-end text-start p-3 w-100"
-                        onclick="location.href='{!! url('/startgenratingqrcodeforpallet') !!}/{{ $val->intSoId }}/{{ $val->intDepartmentId }} }}'">
-                        {{ $val->strProductDescription }} {{ $val->strPackToCut }} | {{ $val->strProductStats }}
-                    </button>
-                </div>
+                        <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
+                            onclick="location.href='{!! url('/jobLabelQRCodeDetails') !!}/{{ $val->intSoId }}/Roofing'">
+                            {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
+                        </button>
+                    </div>
+                @else
+                    <div class="d-inline-flex w-100">
+                        <button class="btn btn-danger" type="button"
+                            style="width:10% !important;font-size: 20px; margin-right:10px;" disabled>
+                            {{ $val->intSequence }}
+                        </button>
+
+                        <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
+                            disabled>
+                            {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
+                        </button>
+                    </div>
+                @endif
+                <br>
+                <br>
+            @elseif ($val->strDepartment == 'Diamond Mesh')
+                @if ($loop->first)
+                    <div class="d-inline-flex w-100">
+                        <button class="btn btn-danger" type="button"
+                            style="width:10% !important;font-size: 20px; margin-right:10px;">
+                            {{ $val->intSequence }}
+                        </button>
+
+                        <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
+                            onclick="location.href='{!! url('/jobLabelQRCodeDetails') !!}/{{ $val->intSoId }}/Diamond Mesh'">
+                            {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
+                        </button>
+                    </div>
+                @else
+                    <div class="d-inline-flex w-100">
+                        <button class="btn btn-danger" type="button"
+                            style="width:10% !important;font-size: 20px; margin-right:10px;" disabled>
+                            {{ $val->intSequence }}
+                        </button>
+
+                        <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
+                            disabled>
+                            {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
+                        </button>
+                    </div>
+                @endif
+                <br>
+                <br>
             @else
-                <div class="d-flex w-100 mb-2">
-                    <button class="btn btn-danger rounded-0 rounded-start p-3" disabled>
-                        {{ $val->intSequence }}
-                    </button>
-
-                    <button class="btn btn-danger rounded-0 rounded-end text-start p-3 w-100" disabled>
-                        {{ $val->strProductDescription }} {{ $val->strPackToCut }} | {{ $val->strProductStats }}
-                    </button>
-                </div>
+                @if ($val->strJobStatus != 'NOT STARTED')
+                    <button class="btn btn-danger" type="button" style="width:100% !important;font-size: 20px;"
+                        onclick="location.href='{!! url('/jobLabelQRCodeDetails') !!}/{{ $val->intJobId }}/None'">
+                        {{ $val->PastelDescription }} {{ $val->productionstat }} [ {{ $val->strPalletTypeDescription }}
+                        ]</button>
+                    <br>
+                    <br>
+                @endif
             @endif
         @endforeach
 
@@ -119,7 +191,7 @@
 
                 return {
                     strItemCode: item.strItemCode,
-                    strProductDescription: item.strProductDescription
+                    PastelDescription: item.PastelDescription
 
                 }
 
@@ -130,14 +202,14 @@
                 selectionRequired: true,
                 focusFirstResult: true,
                 searchContain: true,
-                visibleProperties: ["strItemCode", "strProductDescription"],
-                searchIn: 'strProductDescription',
+                visibleProperties: ["strItemCode", "PastelDescription"],
+                searchIn: 'PastelDescription',
                 data: finalData
             });
             inputProductcode.on('select:flexdatalist', function(event, data) {
 
                 $('#productcode').val(data.strItemCode);
-                $('#productdesc').val(data.strProductDescription);
+                $('#productdesc').val(data.PastelDescription);
                 //
 
                 $.ajax({
