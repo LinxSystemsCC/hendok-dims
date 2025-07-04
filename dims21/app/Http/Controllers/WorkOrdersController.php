@@ -149,6 +149,7 @@ class WorkOrdersController extends Controller
         $intAutoJobId  = $request->get('intAutoJobId');
 
         $strOperator = Auth::user()->UserName;
+        $intUserId = Auth::user()->UserID;
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $t = time();
         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
@@ -157,19 +158,19 @@ class WorkOrdersController extends Controller
         switch ($strDepartment) {
             case 'Roofing':
                 // dd("exec usp_C_RoofingLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
-                $result = DB::connection('sqlsrv2')->select("exec usp_C_RoofingLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+                $result = DB::connection('sqlsrv2')->select("exec usp_C_RoofingLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint, $intUserId");
 
                 break;
 
             case 'Diamond Mesh':
                 // dd("exec usp_C_DiamondMeshLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
-                $result = DB::connection('sqlsrv2')->select("exec usp_C_DiamondMeshLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+                $result = DB::connection('sqlsrv2')->select("exec usp_C_DiamondMeshLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint, $intUserId");
 
                 break;
 
             default:
                 // dd("exec usp_C_WorkOrderLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
-                $result = DB::connection('sqlsrv2')->select("exec usp_C_WorkOrderLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint");
+                $result = DB::connection('sqlsrv2')->select("exec usp_C_WorkOrderLabels $intAutoJobId, '$strOperator', '$strPrintId', $decQtyToPrint, $intUserId");
 
                 break;
         }

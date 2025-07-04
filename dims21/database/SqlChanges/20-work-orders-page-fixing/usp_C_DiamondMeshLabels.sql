@@ -14,7 +14,8 @@ CREATE OR ALTER PROCEDURE [dbo].[usp_C_DiamondMeshLabels]
     @intAutoJobId AS INT,
     @strOperator AS NVARCHAR(50),
     @strPrintId AS NVARCHAR(50),
-    @decQtyToPrint AS DECIMAL(18, 2)
+    @decQtyToPrint AS DECIMAL(18, 2),
+    @intUserId INT
 AS
 BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
