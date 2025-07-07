@@ -1418,13 +1418,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('ibt/receive', [IbtController::class, 'receive']);
     Route::get('ibt/get-bins', [IbtController::class, 'getBins']);
 
-
-
-    
-
-
-});
-
 Route::get('/email-recipients', [UserFeature::class, 'indexNew']);
 Route::get('/api/dims-users', [UserFeature::class, 'getUsers']);
 
@@ -1436,6 +1429,13 @@ Route::get('/email-recipients/fetch', [UserFeature::class, 'fetch']);
 Route::post('/email-recipients/update/{id}', [UserFeature::class, 'update'])->name('email-recipients.update');
 
 Route::post('/email-recipients/delete/{id}', [UserFeature::class, 'destroy'])->name('email-recipients.delete');
+
+    
+
+
+});
+
+
 
 
 

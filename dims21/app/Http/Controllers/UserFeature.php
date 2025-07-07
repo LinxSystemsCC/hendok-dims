@@ -21,80 +21,79 @@ class UserFeature  extends Controller
         return response()->json($users);
     }
 
-        //For email funcionality 
+   public function indexNew()
+    {
+        $data = DB::connection('sqlsrv2')->select('EXEC usp_R_GetEmailReportRecipients');
+        $types = DB::connection('sqlsrv2')->select('EXEC GetAllEmailType');
+        $users = DB::connection('sqlsrv2')->select('EXEC usp_R_GetDIMSUsers');
 
-public function indexNew()
-{
+        return view('warehouse.ibt.indexnew', compact('data', 'types', 'users'));
+    }
 
-     $data = DB::table('tblEmailReportRecipients')->get();
-    $types = ['Approve Upliftment', 'Deny Upliftment', 'Insert Upliftment'];
-    $users = DB::table('tblDIMSUSERS')->select('UserID', 'UserName', 'Email')->get();
+    public function getAll()
+    {
+        $data = DB::connection('sqlsrv2')->select('EXEC usp_R_GetEmailReportRecipients');
+        return response()->json($data);
+    }
 
-    return view('warehouse.ibt.indexnew', compact('data', 'types', 'users'));
-}
+    public function getUsers()
+    {
+        $users = DB::connection('sqlsrv2')->select('EXEC usp_R_GetDIMSUsers');
+        return response()->json($users);
+    }
 
-public function getAll()
-{
-    $data = DB::connection('sqlsrv2')->select('EXEC usp_R_GetEmailReportRecipients');
-    return response()->json($data);
-}
+    public function storeNew(Request $request)
+    {
+        $request->validate([
+            'strType' => 'required|string',
+            'intUserId' => 'required|integer',
+            'strEmail' => 'required|email',
+        ]);
 
- public function getUsers()
-{
-    $users = DB::connection('sqlsrv2')->select('EXEC usp_R_GetDIMSUsers');
-    return response()->json($users);
-}
+        DB::connection('sqlsrv2')->statement('EXEC usp_C_EmailReportRecipient ?, ?, ?', [
+            $request->input('strType'),
+            $request->input('intUserId'),
+            $request->input('strEmail')
+        ]);
 
-public function storeNew(Request $request)
-{
-    $request->validate([
-        'strType' => 'required|string',
-        'intUserId' => 'required|integer',
-        'strEmail' => 'required|email',
-    ]);
+        return response()->json(['success' => true]);
+    }
 
-    DB::connection('sqlsrv2')->statement('EXEC usp_C_EmailReportRecipient ?, ?, ?', [
-        $request->input('strType'),
-        $request->input('intUserId'),
-        $request->input('strEmail')
-    ]);
+    public function fetch()
+    {
+        $data = DB::connection('sqlsrv2')->select('EXEC usp_R_GetEmailReportRecipients');
+        return response()->json($data);
+    }
 
-    return response()->json(['success' => true]);
-}
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'strType' => 'required|string',
+            'intUserId' => 'required|integer',
+            'strEmail' => 'required|email',
+        ]);
 
+        DB::connection('sqlsrv2')->statement('EXEC usp_U_EmailReportRecipient ?, ?, ?, ?', [
+            $id,
+            $request->input('strType'),
+            $request->input('intUserId'),
+            $request->input('strEmail')
+        ]);
 
-public function fetch()
-{
-    $data = DB::table('tblEmailReportRecipients')->get();
-    return response()->json($data);
-}
+        return response()->json(['success' => true]);
+    }
 
+    public function destroy($id)
+    {
+        DB::connection('sqlsrv2')->statement('EXEC usp_D_EmailReportRecipient ?', [$id]);
+        return response()->json(['success' => true]);
+    }
 
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'strType' => 'required|string',
-        'intUserId' => 'required|integer',
-        'strEmail' => 'required|email',
-    ]);
-
-    DB::connection('sqlsrv2')->statement('EXEC usp_U_EmailReportRecipient ?, ?, ?, ?', [
-        $id,
-        $request->input('strType'),
-        $request->input('intUserId'),
-        $request->input('strEmail')
-    ]);
-
-    return response()->json(['success' => true]);
-}
-
-
-public function destroy($id)
-{
-    DB::connection('sqlsrv2')->statement('EXEC usp_D_EmailReportRecipient ?', [$id]);
-
-    return response()->json(['success' => true]);
-}
+    public function getEmailTypes()
+    {
+        $types = DB::connection('sqlsrv2')->select('EXEC GetAllEmailType');
+        return response()->json($types);
+    }
 
     //Ending here
 }
