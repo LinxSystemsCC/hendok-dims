@@ -134,7 +134,7 @@ BEGIN
     IF @decQtyRequired <= @decQtyPrinted
     BEGIN
         UPDATE tblWorkOrders
-        SET intStatusId = 3,
+        SET intStatusId = 2,
             dtmEnded = GETDATE(),
             intEndedBy = @intUserId
         WHERE intAutoId = @intAutoJobId
