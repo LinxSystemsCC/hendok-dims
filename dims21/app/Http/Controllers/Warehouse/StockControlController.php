@@ -40,24 +40,22 @@ class StockControlController extends Controller
         $dcs = DB::connection('sqlsrv2')->select("SELECT intAutoId intDcId, strDCName FROM tblDCNames");
         $locations = DB::connection('sqlsrv2')->select("SELECT intLocationNameId intLocationId, strLocationName FROM viewLocationNames");
         $bins = DB::connection('sqlsrv2')->select("SELECT intBinId, strBin FROM viewBinNames");
+        $docTypes = DB::connection('sqlsrv2')->select("SELECT intDocumentTypeId, strDocumentType FROM tblDocumentTypes");
         
         return view('warehouse.stockcontrol.stockAdjustment')
             ->with('products', $products)
             ->with('dcs', $dcs)
             ->with('locations', $locations)
-            ->with('bins', $bins);
+            ->with('bins', $bins)
+            ->with('docTypes', $docTypes);
     }
 
-
-  
-    
-    
     public function getBinStockCount(Request $request){
 
         $intBinId = $request->get('intBinId');
         $intStockLink = $request->get('intStockLink');
 
-        $data = DB::connection('sqlsrv2')->select("SELECT ISNULL((SELECT mnyOnHand FROM tblInventoryBin WHERE intBinId = $intBinId AND intStockLink = $intStockLink), 0) AS mnyOnHand");
+        $data = DB::connection('sqlsrv2')->select("SELECT ISNULL(decSingleQuantityInStock, 0) AS mnyOnHand FROM vwIDXBinsInventory WHERE intAutoBinID = $intBinId AND intProductID = $intStockLink");
 
         return response()->json($data);
     }

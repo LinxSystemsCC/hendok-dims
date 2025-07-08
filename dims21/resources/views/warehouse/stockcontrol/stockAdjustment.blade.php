@@ -23,21 +23,12 @@
         $(document).ready(function() {
             let products = ({!! json_encode($products) !!});
 
-            let docTypes = [{
-                "docType": "Invoice"
-            }, {
-                "docType": "Goods Received"
-            }, {
-                "docType": "Credit Note"
-            }, {
-                "docType": "Issue Stock"
-            }, {
-                "docType": "Stock Adjustment"
-            }];
-
             let dcs = ({!! json_encode($dcs) !!});
             let locations = ({!! json_encode($locations) !!});
             let bins = ({!! json_encode($bins) !!});
+            let docTypes = ({!! json_encode($docTypes) !!});
+
+            let selectedDcId, selectedLocationId;
 
             let countTypes = [{
                 "value": "+",
@@ -117,7 +108,7 @@
                     },
                     width: 150,
                 }, {
-                    dataField: "strDocType",
+                    dataField: "intDocumentTypeId",
                     caption: "Document Type",
                     lookup: {
                         dataSource: {
@@ -125,8 +116,8 @@
                             paginate: true,
                             pageSize: 100
                         },
-                        valueExpr: 'docType',
-                        displayExpr: 'docType',
+                        valueExpr: 'intDocumentTypeId',
+                        displayExpr: 'strDocumentType',
                     },
                 }, {
                     dataField: "intDcId",
@@ -237,13 +228,24 @@
                     caption: "Reference 2",
                 }, ],
                 onEditorPreparing: function(e) {
+                    
+                    if (e.parentType === 'dataRow' && e.dataField === 'intDcId') {
+                        let rowData = e.row.data;
+
+                        e.editorOptions.onValueChanged = function(args) {
+                            selectedDcId = args.value;
+                            console.log(selectedDcId);
+                            rowData.intDcId = selectedDcId;
+                        };
+                    }
+                    
                     if (e.parentType === 'dataRow' && e.dataField === 'intLocationId') {
                         let rowData = e.row.data;
 
                         e.editorOptions.onValueChanged = function(args) {
-                            let selectedLocationId = args.value;
+                            selectedLocationId = args.value;
 
-                            getBins(selectedLocationId);
+                            getBins(selectedDcId, selectedLocationId);
                             rowData.intLocationId = selectedLocationId;
                             gridAdjustment.refresh();
                         };
@@ -390,11 +392,13 @@
                 });
             }
 
-            function getBins(selectedLocationId) {
+            function getBins(selectedDcId, selectedLocationId) {
+                console.log(selectedDcId, selectedLocationId);
                 $.ajax({
                     url: '{!! url('/getBinsForLocations') !!}',
                     type: 'GET',
                     data: {
+                        dcIds: selectedDcId,
                         locationIds: selectedLocationId
                     },
                     success: function(binsData) {

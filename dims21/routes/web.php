@@ -1303,9 +1303,6 @@ Route::group(['middleware' => 'auth'], function() {
 // Stock Control Controller
 Route::group(['middleware' => 'auth'], function() {
     Route::get('stockLocation', [StockControlController::class,'stockLocation']);
-
-
-
     Route::get('getStockLocationSummary', [StockControlController::class,'getStockLocationSummary']);
     Route::get('getStockDetailsSummary', [StockControlController::class,'getStockDetailsSummary']);
     Route::get('stockAdjustment', [StockControlController::class,'stockAdjustment']);
