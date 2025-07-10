@@ -14,8 +14,6 @@ if (Auth::guest()) {
 }
 ?>
 
-
-
 @extends('layouts.base')
 
 {{-- Set the Title --}}
@@ -41,6 +39,7 @@ if (Auth::guest()) {
     <div class="col-md-12 h-100">
 
         <div class="grid" id="gridUpliftment"></div>
+        <div id="upliftmentLoader"></div>
 
         <!-- Upliftment Modal -->
         <div class="modal fade modal-xl" id="upliftmentModal" tabindex="-1" aria-labelledby="newuserLabel" aria-hidden="true"
@@ -94,9 +93,6 @@ if (Auth::guest()) {
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="inputAddress">Address Name</label>
                                     <input class="form-control w-100" id="inputAddress" required disabled>
-                                    {{-- <select  class="form-select" id="inputAddress" required>
-                                        <option></option>
-                                    </select> --}}
                                 </div>
                             </div>
 
@@ -110,7 +106,6 @@ if (Auth::guest()) {
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="selectAltArea">Alternative Area
                                         Selection</label>
-                                    {{-- <input  class="form-control w-100" id="selectAltArea" required> --}}
                                     <select class="form-select" id="selectAltArea" required>
                                         <option></option>
                                     </select>
@@ -125,18 +120,15 @@ if (Auth::guest()) {
                         </div>
 
                         <div class="row">
-                            {{-- <div class="col-6">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputInvoice">Invoice</label>
-                                    <input  class="form-control w-100" id="inputInvoice" required>
-                                </div>
-                            </div> --}}
                             <div class="col-6">
                                 <div class="form-group mb-2">
                                     <label class="control-label fw-bold" for="selectInvoice">Invoices</label>
-                                    <select type="text" class="form-select" id="selectInvoice">
-
+                                    <select class="form-select" id="selectInvoice">
+                                        <option value=""></option>
                                     </select>
+                                    <div id="invoiceError" class="invalid-feedback d-none">
+                                        *Invoice is required.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -154,37 +146,19 @@ if (Auth::guest()) {
 
                         <div class="form-group mb-2">
                             <label class="control-label fw-bold" for="inputPickupReason">Reason for Pickup</label><br>
-                            <small id="RequireReason" style="color: red; display: none;">*Reason for Pickup must be at least
+                            <small id="RequireReason" style="color: red; display: none;">*Reason for Pickup must be at
+                                least
                                 10 characters.</small>
                             <textarea class="form-control w-100" id="inputPickupReason"></textarea>
                         </div>
 
                         <div class="row">
-                            {{-- <div class="col-4">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputPhoto1">Upload a First Photo</label>
-                                    <input type="file" name="photo" class="form-control w-100" id="inputPhoto1">
-                                </div>
-                            </div>
-                            <div class="col-4 px-0">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputPhoto2">Upload a Second Photo</label>
-                                    <input type="file" name="photo" class="form-control w-100" id="inputPhoto2">
-                                </div>
-                            </div>  
-                            <div class="col-4">
-                                <div class="form-group mb-2">
-                                    <label class="control-label fw-bold" for="inputPhoto3">Upload a Third Photo</label>
-                                    <input type="file" name="photo" class="form-control w-100" id="inputPhoto3">
-                                </div>
-                            </div> --}}
                             <div class="col-12">
                                 <div class="form-group mb-2">
 
                                     <label class="control-label fw-bold" for="inputPhoto3">Upload
                                         documents</label><br><small id="RequireVal"
                                         style="color: red; display: none;">*File required to be upload</small>
-                                    {{-- <input type="file" name="photo" class="form-control w-100" id="inputPhoto3"> --}}
                                     <input type="file" name="uploaded[]" class="form-control w-100" id="uploads"
                                         multiple accept="image/jpeg,image/gif,image/png,application/pdf">
                                 </div>
@@ -377,12 +351,6 @@ if (Auth::guest()) {
                             <textarea class="form-control" id="approveComment" name="strComment" rows="3" placeholder="Enter comment..."></textarea>
                         </div>
 
-                        {{-- <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="handlingFeeCheckbox" name="handlingFee" value="1" required>
-                            <label class="form-check-label" for="handlingFeeCheckbox">
-                                Handling Fee - Yes / No
-                            </label>
-                        </div> --}}
                         <label class="fw-bold">Handling Fee - Yes / No</label><br>
 
                         <small id="RequireHandingFee" style="color: red; display: none;">*Please select either "Yes" or
@@ -399,7 +367,6 @@ if (Auth::guest()) {
                                 value="0" required>
                             <label class="form-check-label" for="handlingFeeNo">No</label>
                         </div>
-
                     </div>
 
                     <div class="modal-footer">
@@ -561,7 +528,7 @@ if (Auth::guest()) {
                         dataField: "Username",
                         caption: "User",
                     },
-                    
+
                     {
                         dataField: "strFirstApproval",
                         caption: "First Approval",
@@ -723,6 +690,17 @@ if (Auth::guest()) {
                     }
                 }
             }).dxDataGrid('instance');
+
+            const upliftmentLoadPanel = $('#upliftmentLoader').dxLoadPanel({
+                message: 'Processing...',
+                shadingColor: 'rgba(0,0,0,0.4)',
+                position: {
+                    of: 'body'
+                },
+                visible: false,
+                showIndicator: true,
+                showPane: true
+            }).dxLoadPanel('instance');
 
             const gridProducts = $("#gridProducts").dxDataGrid({
                 dataSource: [], //as json
@@ -1013,8 +991,7 @@ if (Auth::guest()) {
                     theme: 'bootstrap-5',
                     dropdownParent: $('#upliftmentModal'),
                 });
-            }
-
+            };
 
             $('#inputProductQty').on('change', function() {
                 var qty = parseFloat($('#inputProductQty').val()) || 0; // Ensure qty is a valid number
@@ -1039,45 +1016,17 @@ if (Auth::guest()) {
 
             });
 
-
             $('#selectInvoice').on('select2:select', function(e) {
                 const data = e.params.data;
                 const deliveryDate = data.delivery;
                 $('#invoiceDate').val(deliveryDate || '');
             });
 
-
             $('#selectSOInvoice').on('select2:select', function(e) {
                 const data = e.params.data;
                 const deliveryDate = data.delivery;
                 $('#invoiceDate').val(deliveryDate || '');
             });
-
-
-            // $('#selectSOInvoice').on('change', function() {
-            //     var InvNum = $('#selectInvoice').val();
-            //     var strCompany = $('#selectCompany').val();
-
-            //     // console.log(InvNum);
-
-            //     if (InvNum != "" && InvNum){
-            //         $.ajax({
-            //             url: '{!! url('/getUpliftmentSalesOrderLines') !!}',
-            //             type: "GET",
-            //             data: {
-            //                 InvNum: InvNum,
-            //                 strCompany: strCompany,
-            //             },
-            //             success: function (data) {
-            //                 // console.log(data)
-
-            //                 setSalesOrderProductDataList(data);
-            //             }
-            //         });
-            //     }
-            // });
-
-
 
             $('#selectSOInvoice').on('change', function() {
                 var InvNum = $(this).val(); // value from selectSOInvoice
@@ -1110,18 +1059,6 @@ if (Auth::guest()) {
                 }
             });
 
-
-
-            // $('#selectSOProductCode').on('change', function() {
-            //     var selectedProductCode = $('#selectSOProductCode').val();
-            //     if (selectedProductCode != ''){
-            //         var selectedProduct = products.find(item => item.PastelCode === selectedProductCode);
-            //         $('#inputSOProductQty').val(1);
-            //         $('#inputSOProductWeight').val(parseFloat(selectedProduct.Weight).toFixed(3));
-            //     }
-            // }); 
-
-
             $('#selectSOProductCode').on('change', function() {
                 var selectedProductCode = $('#selectSOProductCode').val();
                 if (selectedProductCode != '') {
@@ -1150,7 +1087,6 @@ if (Auth::guest()) {
                 }
             });
 
-
             $('#inputSOProductQty').on('change', function() {
                 var qty = parseFloat($('#inputSOProductQty').val()) || 0; // Ensure qty is a valid number
                 var selectedProductCode = $('#selectSOProductCode').val();
@@ -1168,18 +1104,32 @@ if (Auth::guest()) {
             });
 
             $('#btnAddProduct').click(function() {
-                // retrieve the input values and create a new row object
-                var PastelCode = $('#inputProductCode').val();
-                $('#inputProductCode').val('');
-                var PastelDescription = $('#inputProductDescription').val();
-                $('#inputProductDescription').val('');
+                // retrieve the input values
+                var PastelCode = $('#inputProductCode').val().trim();
+                var PastelDescription = $('#inputProductDescription').val().trim();
                 var Weight = $('#inputProductWeight').val();
-                $('#inputProductWeight').val(0);
                 var Qty = $('#inputProductQty').val();
+                var Comment = $('#inputProductComment').val().trim();
+
+                // validate required fields
+                if (PastelCode === '') {
+                    alert('Product code is required.');
+                    return;
+                }
+
+                if (Qty === '' || isNaN(Qty) || parseFloat(Qty) <= 0) {
+                    alert('Quantity must be a number greater than 0.');
+                    return;
+                }
+
+                // clear the inputs
+                $('#inputProductCode').val('');
+                $('#inputProductDescription').val('');
+                $('#inputProductWeight').val(0);
                 $('#inputProductQty').val(0);
-                var Comment = $('#inputProductComment').val();
                 $('#inputProductComment').val('');
 
+                // create new row
                 var newRow = {
                     PastelCode: PastelCode,
                     PastelDescription: PastelDescription,
@@ -1198,20 +1148,31 @@ if (Auth::guest()) {
             });
 
             $('#btnAddSOProduct').click(function() {
-                // retrieve the input values and create a new row object
+                // retrieve the input values
                 var PastelCode = $('#selectSOProductCode').val();
                 var PastelDescription = $('#selectSOProductCode option:selected').text();
                 var Weight = $('#inputSOProductWeight').val();
                 var Qty = $('#inputSOProductQty').val();
-                var QtyOrd = $('#inputSOProductQtyOrdered').val(); // ✅ new field
+                var QtyOrd = $('#inputSOProductQtyOrdered').val();
+                var Comment = $('#inputSOProductComment').val().trim();
 
-                var Comment = $('#inputSOProductComment').val();
+                // validate required fields
+                if (!PastelCode) {
+                    alert('Please select a product.');
+                    return;
+                }
 
+                if (Qty === '' || isNaN(Qty) || parseFloat(Qty) <= 0) {
+                    alert('Quantity must be a number greater than 0.');
+                    return;
+                }
+
+                // create new row
                 var newRow = {
                     PastelCode: PastelCode,
                     PastelDescription: PastelDescription,
                     Qty: Qty,
-                    QtyOrd: QtyOrd, // ✅ include in row object
+                    QtyOrd: QtyOrd,
                     Weight: Weight,
                     Comment: Comment
                 };
@@ -1224,109 +1185,115 @@ if (Auth::guest()) {
                     console.log('Datagrid not found.');
                 }
 
+                // clear inputs
                 $('#selectSOProductCode').val('').trigger('change');
                 $('#inputSOProductWeight').val(0);
                 $('#inputSOProductQty').val(0);
-                $('#inputSOProductQtyOrdered').val(0); // ✅ clear
+                $('#inputSOProductQtyOrdered').val(0);
                 $('#inputSOProductComment').val('');
             });
 
             $('#btnSaveUpliftment').click(function() {
+                var $btn = $(this);
+
+                // Prevent double-clicking
+                if ($btn.prop('disabled')) return;
+
+                // Disable the button and show loading
+                $btn.prop('disabled', true);
+                upliftmentLoadPanel.show();
 
                 var files = $('#uploads')[0].files;
                 var reason = $('#inputPickupReason').val().trim();
 
-
-                // Check if no files are selected
+                // File validation
                 if (files.length === 0) {
-                    // alert('Please upload at least one document.');
                     $("#RequireVal").show();
-
                     $('#uploads').focus();
-                    return; // Stop execution if no file is selected
+                    $btn.prop('disabled', false);
+                    upliftmentLoadPanel.hide();
+                    return;
                 } else {
                     $("#RequireVal").hide();
                 }
 
-                // 🔴 Validate minimum 10 characters for reason
+                // Reason validation
                 if (reason.length < 10) {
                     $("#RequireReason").show();
                     $('#inputPickupReason').addClass('is-invalid').focus();
-
-
+                    $btn.prop('disabled', false);
+                    upliftmentLoadPanel.hide();
                     return;
                 } else {
                     $("#RequireReason").hide();
                     $('#inputPickupReason').removeClass('is-invalid');
-
                 }
 
+                // Invoice validation
+                var invoice = $('#selectInvoice').val();
+                if (invoice === '') {
+                    $('#selectInvoice').addClass('is-invalid').focus();
+                    $('#invoiceError').removeClass('d-none');
+                    $btn.prop('disabled', false);
+                    upliftmentLoadPanel.hide();
+                    return;
+                } else {
+                    $('#selectInvoice').removeClass('is-invalid');
+                    $('#invoiceError').addClass('d-none');
+                }
 
-                var checkedLines = Array();
-                checkedLines = gridProducts.option('dataSource');
-
+                // Build XML data
+                var checkedLines = gridProducts.option('dataSource');
                 var gridResults = '<xml>';
+                var hasLines = false; // track if there's at least one valid line
+
                 $.each(checkedLines, function(key, value) {
-                    if (value.Qty != undefined || value.Qty != null) {
-                        gridResults = gridResults + "<result>";
-                        gridResults = gridResults + "<PastelCode>" + escapeHtml(value.PastelCode) +
+                    if (value.Qty != undefined && value.Qty != null && value.Qty !== '') {
+                        hasLines = true;
+                        gridResults += "<result>";
+                        gridResults += "<PastelCode>" + escapeHtml(value.PastelCode) +
                             "</PastelCode>";
-                        gridResults = gridResults + "<PastelDescription>" + escapeHtml(value
-                            .PastelDescription) + "</PastelDescription>";
-                        gridResults = gridResults + "<Qty>" + value.Qty + "</Qty>";
-                        gridResults = gridResults + "<QtyOrd>" + (value.QtyOrd || '') + "</QtyOrd>";
-                        gridResults = gridResults + "<Weight>" + value.Weight + "</Weight>";
-                        gridResults = gridResults + "<Comment>" + escapeHtml(value.Comment) +
-                            "</Comment>";
-                        gridResults = gridResults + "</result>";
+                        gridResults += "<PastelDescription>" + escapeHtml(value.PastelDescription) +
+                            "</PastelDescription>";
+                        gridResults += "<Qty>" + value.Qty + "</Qty>";
+                        gridResults += "<QtyOrd>" + (value.QtyOrd || '') + "</QtyOrd>";
+                        gridResults += "<Weight>" + value.Weight + "</Weight>";
+                        gridResults += "<Comment>" + escapeHtml(value.Comment) + "</Comment>";
+                        gridResults += "</result>";
                     }
                 });
-                gridResults = gridResults + "</xml>";
+                gridResults += "</xml>";
 
+                // 🚫 No lines? Show error and exit
+                if (!hasLines) {
+                    DevExpress.ui.notify("Please add at least one product before saving the upliftment.",
+                        "error", 3000);
+                    $('#btnSaveUpliftment, #btnUpdateUpliftment').prop('disabled', false);
+                    upliftmentLoadPanel.hide();
+                    return;
+                }
+
+                // Form data
                 var formData = new FormData();
-
-                // Append the file to the FormData object
-                // formData.append('file1', $('#inputPhoto1')[0].files[0]);
-                // formData.append('file2', $('#inputPhoto2')[0].files[0]);
-                // formData.append('file3', $('#inputPhoto3')[0].files[0]);
-
-                var files = $('#uploads')[0].files;
-
-
-
                 for (var i = 0; i < files.length; i++) {
                     formData.append('uploaded[]', files[i]);
                 }
 
-                // Append the other form data to the FormData object
                 formData.append('dataxml', gridResults);
                 formData.append('reasonpickup', $('#inputPickupReason').val());
-                if ($('#selectAltArea').val().length > 0) {
-                    formData.append('area', $('#selectAltArea').val());
-                } else {
-                    formData.append('area', $('#inputArea').val());
-                }
 
-                if ($('#inputAltAddress').val().length > 0) {
-                    formData.append('address', $('#inputAltAddress').val());
-                } else {
-                    formData.append('address', $('#inputAddress').val());
-                }
-                if ($('#inputAltInvoice').val().length > 0) {
-                    formData.append('invoice', $('#inputAltInvoice').val());
-                } else {
-                    var invoice = $('#selectInvoice').val();
-                    formData.append('invoice', invoice);
-                }
-
-                var customer = $('#inputCustomer').flexdatalist('value');
-
-                formData.append('customers', customer);
+                formData.append('area', $('#selectAltArea').val().length > 0 ? $('#selectAltArea').val() :
+                    $('#inputArea').val());
+                formData.append('address', $('#inputAltAddress').val().length > 0 ? $('#inputAltAddress')
+                    .val() : $('#inputAddress').val());
+                formData.append('invoice', $('#inputAltInvoice').val().length > 0 ? $('#inputAltInvoice')
+                    .val() : invoice);
+                formData.append('customers', $('#inputCustomer').flexdatalist('value'));
                 formData.append('company', $('#selectCompany').val());
                 formData.append('date', $('#inputDate').val());
                 formData.append('collectionType', $('#selectType').val());
 
-
+                // Ajax call
                 $.ajax({
                     url: '{!! url('/insertUpliftmentAll') !!}',
                     type: "POST",
@@ -1334,68 +1301,64 @@ if (Auth::guest()) {
                     processData: false,
                     contentType: false,
                     success: function(data) {
-                        location.reload();
+                        location.reload(); // or show a success message first
+                    },
+                    error: function() {
+                        alert('An error occurred while saving.');
+                        $btn.prop('disabled', false);
+                        upliftmentLoadPanel.hide();
                     }
                 });
             });
 
             $('#btnUpdateUpliftment').click(function() {
-                var checkedLines = Array();
-                checkedLines = gridProducts.option('dataSource');
+                var $btn = $(this);
+
+                // Prevent double-submission
+                if ($btn.prop('disabled')) return;
+
+                $btn.prop('disabled', true);
+                upliftmentLoadPanel.show();
+
+                var checkedLines = gridProducts.option('dataSource');
 
                 var gridResults = '<xml>';
                 $.each(checkedLines, function(key, value) {
                     if (value.Qty != undefined || value.Qty != null) {
-                        gridResults = gridResults + "<result>";
-                        gridResults = gridResults + "<PastelCode>" + escapeHtml(value.PastelCode) +
+                        gridResults += "<result>";
+                        gridResults += "<PastelCode>" + escapeHtml(value.PastelCode) +
                             "</PastelCode>";
-                        gridResults = gridResults + "<PastelDescription>" + escapeHtml(value
-                            .PastelDescription) + "</PastelDescription>";
-                        gridResults = gridResults + "<Qty>" + value.Qty + "</Qty>";
-                        gridResults = gridResults + "<Weight>" + value.Weight + "</Weight>";
-                        gridResults = gridResults + "<Comment>" + escapeHtml(value.Comment) +
-                            "</Comment>";
-                        gridResults = gridResults + "</result>";
+                        gridResults += "<PastelDescription>" + escapeHtml(value.PastelDescription) +
+                            "</PastelDescription>";
+                        gridResults += "<Qty>" + value.Qty + "</Qty>";
+                        gridResults += "<Weight>" + value.Weight + "</Weight>";
+                        gridResults += "<Comment>" + escapeHtml(value.Comment) + "</Comment>";
+                        gridResults += "</result>";
                     }
                 });
-                gridResults = gridResults + "</xml>";
+                gridResults += "</xml>";
 
                 var formData = new FormData();
                 formData.append('SelectedUpliftmentNumber', SelectedUpliftmentNumber);
-
-                // Append the file to the FormData object
-                // formData.append('file1', $('#inputPhoto1')[0].files[0]);
-                // formData.append('file2', $('#inputPhoto2')[0].files[0]);
-                // formData.append('file3', $('#inputPhoto3')[0].files[0]);
 
                 var files = $('#uploads')[0].files;
                 for (var i = 0; i < files.length; i++) {
                     formData.append('uploaded[]', files[i]);
                 }
 
-                // Append the other form data to the FormData object
                 formData.append('dataxml', gridResults);
                 formData.append('reasonpickup', $('#inputPickupReason').val());
-                if ($('#selectAltArea').val().length > 0) {
-                    formData.append('area', $('#selectAltArea').val());
-                } else {
-                    formData.append('area', $('#inputArea').val());
-                }
 
-                if ($('#inputAltAddress').val().length > 0) {
-                    formData.append('address', $('#inputAltAddress').val());
-                } else {
-                    formData.append('address', $('#inputAddress').val());
-                }
-                if ($('#inputAltInvoice').val().length > 0) {
-                    formData.append('invoice', $('#inputAltInvoice').val());
-                } else {
-                    var invoice = $('#selectInvoice').val();
-                    formData.append('invoice', invoice);
-                }
+                formData.append('area', $('#selectAltArea').val().length > 0 ? $('#selectAltArea').val() :
+                    $('#inputArea').val());
+                formData.append('address', $('#inputAltAddress').val().length > 0 ? $('#inputAltAddress')
+                    .val() : $('#inputAddress').val());
+
+                var invoice = $('#inputAltInvoice').val().length > 0 ? $('#inputAltInvoice').val() : $(
+                    '#selectInvoice').val();
+                formData.append('invoice', invoice);
 
                 var customer = $('#inputCustomer').flexdatalist('value');
-
                 formData.append('customers', customer);
                 formData.append('company', $('#selectCompany').val());
                 formData.append('date', $('#inputDate').val());
@@ -1409,44 +1372,28 @@ if (Auth::guest()) {
                     contentType: false,
                     success: function(data) {
                         location.reload();
+                    },
+                    error: function() {
+                        alert('Update failed. Please try again.');
+                        $btn.prop('disabled', false);
+                        upliftmentLoadPanel.hide();
                     }
                 });
             });
 
-            // $('#btnApproveUpliftment').click(function() {
-            //     var formData = new FormData();
-            //     formData.append('SelectedUpliftmentNumber', SelectedUpliftmentNumber);
 
-            //     $.ajax({
-            //         url: '{!! url('/approveUpliftmentPost') !!}',
-            //         type: "POST",
-            //         data: formData,
-            //         processData: false,
-            //         contentType: false,
-            //         success: function(data) {
-            //             location.reload();
-            //         }
-            //     });upliftmentModal
-            // });
-
-            $('#btnApproveUpliftment').click(function() { //Aprroval Button
+            $('#btnApproveUpliftment').click(function() {
                 $('#approveComment').val('');
-                $('input[name="handlingFee"]').prop('checked', false); // ✅ clear radios
+                $('input[name="handlingFee"]').prop('checked', false);
                 $('#upliftmentModal').modal('hide');
                 $('#approveConfirmationModal').modal('show');
 
-                
-
-                    console.log("Here T" + SelectedHandingFee);
-             
-                            const fee = parseInt(SelectedHandingFee);
-                            if (fee === 1) {
-                                $('#handlingFeeYes').prop('checked', true);
-                            } else if (fee === 0) {
-                                $('#handlingFeeNo').prop('checked', true);
-                            }
-                   
-                
+                const fee = parseInt(SelectedHandingFee);
+                if (fee === 1) {
+                    $('#handlingFeeYes').prop('checked', true);
+                } else if (fee === 0) {
+                    $('#handlingFeeNo').prop('checked', true);
+                }
             });
 
             $('#btnConfirmApprove').click(function() {
@@ -1484,13 +1431,12 @@ if (Auth::guest()) {
                     contentType: false,
                     success: function(data) {
                         $('#approveConfirmationModal').modal('hide');
-                        DevExpress.ui.notify(data.Message, data.Status === "1" ? "success" : "error", 5000);
+                        DevExpress.ui.notify(data.Message, data.Status === "1" ? "success" :
+                            "error", 5000);
                         if (data.Status === "1") location.reload();
                     }
                 });
             });
-
-
 
             $('#btnPrintUpliftment').click(function() {
 
@@ -1527,25 +1473,6 @@ if (Auth::guest()) {
                     }
                 });
             });
-
-            // $('#btnDenyUpliftment').click(function() {
-
-            //     var formData = new FormData();
-
-            //     formData.append('SelectedUpliftmentNumber', SelectedUpliftmentNumber);
-            //     $.ajax({
-
-            //         url: '{!! url('/denyUpliftmentPost') !!}',
-            //         type: "POST",
-            //         data: formData,
-            //         processData: false,
-            //         contentType: false,
-            //         success: function(data) {
-            //             location.reload();
-
-            //         }
-            //     });
-            // });
 
             $('#btnDenyUpliftment').click(function() {
                 $('#denyComment').val('');
@@ -1586,7 +1513,6 @@ if (Auth::guest()) {
                     }
                 });
             });
-
 
             $('#btnUpliftmentImages').click(function() {
                 window.open('{!! url('/upliftmentUploads') !!}/' + SelectedUpliftmentNumber, 'upliftmentUploads',
