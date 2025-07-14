@@ -9,30 +9,33 @@ use Illuminate\Support\Facades\DB;
 class InvoicingController extends Controller
 {
     //
-    public function viewAwaitingtoinvoice(){
+    public function viewAwaitingtoinvoice()
+    {
         $toinvoice = DB::connection('sqlsrv')
-            ->select("Exec spGetPickingTicketsWaitingToBeInvoiced" );
+            ->select("Exec spGetPickingTicketsWaitingToBeInvoiced");
         return view('dims/listtoinvoice')
-            ->with('readytoinvoice',$toinvoice);
+            ->with('readytoinvoice', $toinvoice);
     }
-    public function assignweighbridgeticket(){
+    public function assignweighbridgeticket()
+    {
         $awaitingtobeassigned = DB::connection('sqlsrv')
-            ->select("Exec spAssignTikets" );
+            ->select("Exec spAssignTikets");
 
         $alreadyassigned = DB::connection('sqlsrv')
-            ->select("Exec spAlreadyAssigned" );
+            ->select("Exec spAlreadyAssigned");
         return view('dims/ticketspage')
-            ->with('awaitingtobeassgined',$awaitingtobeassigned)
-            ->with('assigned',$alreadyassigned);
+            ->with('awaitingtobeassgined', $awaitingtobeassigned)
+            ->with('assigned', $alreadyassigned);
     }
-    public function weightticketslist($ref){
+    public function weightticketslist($ref)
+    {
 
         $tickets = DB::connection('weights')
             ->select("SELECT  TICKET_NUMBER,TICKET_DATE,TICKET_TIME,'' wigh
                                     FROM  [WB_Ticket_Trans]
-                             where SECOND_WEIGH_OPERATOR = '' order by TICKET_NUMBER" );
-        return view('dims/savetickets')->with('ref',$ref)
-            ->with('listtickets',$tickets);
+                             where SECOND_WEIGH_OPERATOR = '' order by TICKET_NUMBER");
+        return view('dims/savetickets')->with('ref', $ref)
+            ->with('listtickets', $tickets);
     }
     public function saveweightticket(Request $request)
     {
@@ -43,7 +46,139 @@ class InvoicingController extends Controller
             ->update(['strTicket' => $nickname]);
     }
 
-    public function individualInvoicing(Request $request){
+ 
+
+public function individualInvoicing(Request $request)
+{
+    $ownersId = $request->get('ownerid');
+    $SoNumber = $request->get('SONumber');
+    $invoiceid = $request->get('invoiceid');
+    $ref = $request->get('ref');
+
+    $userid = Auth::user()->UserID;
+    $userName = Auth::user()->UserName;
+
+    try {
+        // 1. Check if order ID already exists  --- Put in store Procedure
+        // $CheckOrderIDExist = DB::connection('sqlsrv3')
+        //     ->table('tblXmlOrders')
+        //     ->where('intOrderId', $invoiceid)
+        //     ->exists();
+
+        // if ($CheckOrderIDExist) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Order ID already exists. Cannot re-invoice again.'
+        //     ]);
+        // }
+
+        
+            $result = DB::connection('sqlsrv3')
+                ->select("EXEC usp_CheckIfOrderIdExists ?", [$invoiceid]);
+
+            $CheckOrderIDExist = $result && isset($result[0]->ExistsFlag) && $result[0]->ExistsFlag == 1;
+
+            if ($CheckOrderIDExist) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Order ID already exists. Cannot re-invoice again.'
+                ]);
+            }
+
+        // 2. Update picking plan header flag
+        DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
+            ->where('strUnickReference', $ref)
+            ->update(['isReadyForInvoicing' => 1]);
+
+        // 3. If it's an IBT
+        if ($invoiceid < 0) {
+            DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $userid");
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'IBT processed and halted.'
+            ]);
+        }
+
+        // 4. Check credit limit
+        $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId);
+        $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
+
+        if ($hasLimits !== "Success") {
+            return response()->json([
+                'status' => 'error',
+                'message' => $hasLimits
+            ]);
+        }
+
+        // 5. Build order XML
+        $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
+            ->select(
+                'exec spGetOrderNumbersLinesToProcess ?,?,?',
+                [$ref, $SoNumber, $ownersId]
+            );
+
+        $orderHeadersLines = "<Order><Header>";
+        $orderHeadersLines .= "<OrderNo>{$SoNumber}</OrderNo>";
+        $orderHeadersLines .= "<OwnerId>{$ownersId}</OwnerId>";
+        $orderHeadersLines .= "<UserId>{$userid}</UserId>";
+        $orderHeadersLines .= "<UserName>{$userName}</UserName>";
+        $orderHeadersLines .= "<UniqueID>{$invoiceid}_{$ref}</UniqueID>";
+        $orderHeadersLines .= "<InvoiceDate>{$returnGetsalesorderNoLines[0]->InvoiceDate}</InvoiceDate>";
+        $orderHeadersLines .= "<CustomerCode>{$returnGetsalesorderNoLines[0]->Account}</CustomerCode>";
+        $orderHeadersLines .= "<PlanID>{$returnGetsalesorderNoLines[0]->intAutoPickingHeader}</PlanID>";
+        $orderHeadersLines .= "<invoiceid>{$invoiceid}</invoiceid></Header><Details>";
+
+        $v = new \App\Http\Controllers\SalesForm();
+        $isCapeUser = $v->getThings($this->getusergroupid($userid), 'isCapeUser');
+
+        foreach ($returnGetsalesorderNoLines as $line) {
+            $orderHeadersLines .= "<Line>";
+            $lineno = $line->LineNos - 1;
+
+            $warehouse = ($isCapeUser == "1") ? "CPT" : "Mstr";
+            $adjustQty = $line->qtyonorder;
+
+            if (
+                $line->soldByWeight == "SoldByWeight" &&
+                floatval($line->remaining) < floatval($line->Toinvoice) &&
+                floatval($line->remaining) != 0
+            ) {
+                $adjustQty += (floatval($line->Toinvoice) - floatval($line->remaining));
+            }
+
+            $orderHeadersLines .= "<LineNo>{$lineno}</LineNo>";
+            $orderHeadersLines .= "<ItemCode>{$line->ItemCode}</ItemCode>";
+            $orderHeadersLines .= "<OrderDetails>{$line->intorderdetailId}</OrderDetails>";
+            $orderHeadersLines .= "<Warehouse>{$warehouse}</Warehouse>";
+            $orderHeadersLines .= "<QtyAdjust>" . str_replace(".", ",", $adjustQty) . "</QtyAdjust>";
+            $orderHeadersLines .= "<ToProcess>" . str_replace(".", ",", $line->Toinvoice) . "</ToProcess>";
+            $orderHeadersLines .= "</Line>";
+        }
+
+        $orderHeadersLines .= "</Details></Order>";
+
+        // 6. Insert into tblXmlOrders
+        $xmlresponse = DB::connection('sqlsrv3')->select(
+            'exec spInsertXmlOrder ?,?,?',
+            [$orderHeadersLines, "{$invoiceid}_{$ref}", $invoiceid]
+        );
+
+        return response()->json($xmlresponse);
+    } catch (\Throwable $err) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $err->getMessage()
+        ]);
+    }
+}
+
+
+
+    //Reprint Controller:    
+    public function reprintInvoicing(Request $request)
+{
+    try {
         $ownersId = $request->get('ownerid');
         $SoNumber = $request->get('SONumber');
         $invoiceid = $request->get('invoiceid');
@@ -52,121 +187,74 @@ class InvoicingController extends Controller
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
 
-        /*$ownersId = 1;
-        $SoNumber = 'SO160052';
-        $invoiceid =474252;
-        $ref = '1699530449dFWMj7Ksbi';*/
-
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
 
-        if($invoiceid < 0){
-            $UserID = Auth::user()->UserID;
-            DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
-            return response()->json(['status' => 'success', 'message' => 'Process completed and execution halted.']);
+        if ($invoiceid < 0) {
+            DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $userid");
+            return response()->json(['status' => 'success', 'message' => 'IBT reprocessed and halted.']);
         }
-            
+
         $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId);
         $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
 
-        if ($hasLimits == "Success")
-        {
-            if (strlen(trim($invnum)) > 4) {
-                //dd($userid."-".$invoiceid."-".$SoNumber."".$ownersId."-".$userName) ;
-                $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                    ->select('exec spRePrintProcessedInvoiceNo ?,?,?,?,?',
-                        array($userid, $invoiceid, $SoNumber, $ownersId, $userName)
-                    );
-                return response()->json($returnGetsalesorderNoLines);
-            } else {
-
-
-                try {
-                    //Initialise
-
-                    $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                        ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
-                            array($ref, $SoNumber, $ownersId)
-                        );
-
-                    $orderHeadersLines = "<Order><Header>";
-                    $orderHeadersLines .= "<OrderNo>".$SoNumber."</OrderNo>";
-                    $orderHeadersLines .= "<OwnerId>".$ownersId."</OwnerId>";
-                    $orderHeadersLines .= "<UserId>".$userid."</UserId>";
-                    $orderHeadersLines .= "<UserName>".$userName."</UserName>";
-                    $orderHeadersLines .= "<UniqueID>".$invoiceid.'_'.$ref."</UniqueID>";
-                    $orderHeadersLines .= "<InvoiceDate>".$returnGetsalesorderNoLines[0]->InvoiceDate."</InvoiceDate>";
-                    $orderHeadersLines .= "<CustomerCode>".$returnGetsalesorderNoLines[0]->Account."</CustomerCode>";
-                    $orderHeadersLines .= "<PlanID>".$returnGetsalesorderNoLines[0]->intAutoPickingHeader."</PlanID>";
-                    $orderHeadersLines .= "<invoiceid>".$invoiceid."</invoiceid>
-                </Header>
-                <Details>";
-
-                    $v = new \App\Http\Controllers\SalesForm();
-                    $isCapeUser = $v->getThings($this->getusergroupid($userid), 'isCapeUser');
-
-
-                    $orderlinexml = "<Lines>";
-
-
-                    foreach ($returnGetsalesorderNoLines as $innverVal) {
-                        $orderHeadersLines .= "<Line>";
-                        $lineno = $innverVal->LineNos - 1;
-                        $linenoApi = $innverVal->LineNos - 1;
-
-                        $warehouse = "Mstr";
-                        $orderHeadersLines .= "<LineNo>".$linenoApi."</LineNo>";
-                        $orderHeadersLines .= "<ItemCode>".$innverVal->ItemCode."</ItemCode>";
-                        $orderHeadersLines .= "<OrderDetails>".$innverVal->intorderdetailId."</OrderDetails>";
-                        if ($isCapeUser == "1") {
-                            $warehouse = "CPT";
-                        }
-
-                        $orderHeadersLines .= "<Warehouse>".$warehouse."</Warehouse>";
-                        $adjustQty = $innverVal->qtyonorder;
-                        if($innverVal->soldByWeight =="SoldByWeight" &&  floatval($innverVal->remaining)<floatval($innverVal->Toinvoice ) &&  floatval($innverVal->remaining) !=0 ){
-                            $QuantityAdj =$adjustQty+ (floatval($innverVal->Toinvoice)-(floatval($innverVal->remaining)));
-                            $adjustQty=$QuantityAdj;
-                        }
-
-                        $orderHeadersLines .= "<QtyAdjust>". str_replace(".", ",", $adjustQty)."</QtyAdjust>";
-                        $orderHeadersLines .= "<ToProcess>".str_replace(".",",", $innverVal->Toinvoice)."</ToProcess>";
-                        $orderHeadersLines .= "</Line>";
-                    }
-                    $orderHeadersLines .= "</Details></Order>";
-
-                    $xmlresponse =  DB::connection('sqlsrv3')
-                        ->select('exec spInsertXmlOrder ?,?,?',
-                            array($orderHeadersLines,$invoiceid.'_'.$ref,$invoiceid)
-                        );
-
-                    return response()->json($xmlresponse);
-
-                } catch (Error $err) {
-                    echo "<h3 style='color: darkred'>__________Errors_________</h3>";
-                    return $err;
-                }
-            }
-        }else{
-            return $hasLimits;
+        if ($hasLimits !== "Success") {
+            return response()->json([
+                'status' => 'error',
+                'message' => $hasLimits
+            ]);
         }
 
+        if (!is_string($invnum) || strlen(trim($invnum)) <= 4) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid invoice number.. Please contact admin'
+            ]);
+        }
+
+        $result = DB::connection('sqlsrv3')
+            ->select(
+                'exec spRePrintProcessedInvoiceNo ?,?,?,?,?',
+                [$userid, $invoiceid, $SoNumber, $ownersId, $userName]
+            );
+
+        if ($result) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Invoice successfully reprinted.'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Reprint failed. Stored procedure returned no results.'
+            ]);
+        }
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Exception: ' . $e->getMessage()
+        ]);
     }
-    public function individualInvoicingAPITest($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName)
+}
+
+
+
+
+    public function individualInvoicingAPITest($ownersId, $SoNumber, $invoiceid, $ref, $userid, $userName)
     {
-        dump($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName);
+        dump($ownersId, $SoNumber, $invoiceid, $ref, $userid, $userName);
     }
     //{ownersId}/{SoNumber}/{invoiceid}/{ref}/{userid}/{userName}
-    public function individualInvoicingAPI($ownersId,$SoNumber,$invoiceid,$ref,$userid,$userName)
+    public function individualInvoicingAPI($ownersId, $SoNumber, $invoiceid, $ref, $userid, $userName)
     {
         $refDescription = "";
         $mustStockAdjust = 0;
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
-        
-        if($invoiceid < 0){
+
+        if ($invoiceid < 0) {
             $UserID = Auth::user()->UserID;
             DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");
             return response()->json(['status' => 'success', 'message' => 'Process completed and execution halted.']);
@@ -175,12 +263,12 @@ class InvoicingController extends Controller
         $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId);
         $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
 
-        if ($hasLimits == "Success")
-        {
+        if ($hasLimits == "Success") {
             if (strlen(trim($invnum)) > 4) {
                 //dd($userid."-".$invoiceid."-".$SoNumber."".$ownersId."-".$userName) ;
                 $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                    ->select('exec spRePrintProcessedInvoiceNo ?,?,?,?,?',
+                    ->select(
+                        'exec spRePrintProcessedInvoiceNo ?,?,?,?,?',
                         array($userid, $invoiceid, $SoNumber, $ownersId, $userName)
                     );
                 return response()->json($returnGetsalesorderNoLines);
@@ -191,20 +279,21 @@ class InvoicingController extends Controller
                     //Initialise
 
                     $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                        ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
+                        ->select(
+                            'exec spGetOrderNumbersLinesToProcess ?,?,?',
                             array($ref, $SoNumber, $ownersId)
                         );
 
                     $orderHeadersLines = "<Order><Header>";
-                    $orderHeadersLines .= "<OrderNo>".$SoNumber."</OrderNo>";
-                    $orderHeadersLines .= "<OwnerId>".$ownersId."</OwnerId>";
-                    $orderHeadersLines .= "<UserId>".$userid."</UserId>";
-                    $orderHeadersLines .= "<UserName>".$userName."</UserName>";
-                    $orderHeadersLines .= "<UniqueID>".$invoiceid.'_'.$ref."</UniqueID>";
-                    $orderHeadersLines .= "<InvoiceDate>".$returnGetsalesorderNoLines[0]->InvoiceDate."</InvoiceDate>";
-                    $orderHeadersLines .= "<CustomerCode>".$returnGetsalesorderNoLines[0]->Account."</CustomerCode>";
-                    $orderHeadersLines .= "<PlanID>".$returnGetsalesorderNoLines[0]->intAutoPickingHeader."</PlanID>";
-                    $orderHeadersLines .= "<invoiceid>".$invoiceid."</invoiceid>
+                    $orderHeadersLines .= "<OrderNo>" . $SoNumber . "</OrderNo>";
+                    $orderHeadersLines .= "<OwnerId>" . $ownersId . "</OwnerId>";
+                    $orderHeadersLines .= "<UserId>" . $userid . "</UserId>";
+                    $orderHeadersLines .= "<UserName>" . $userName . "</UserName>";
+                    $orderHeadersLines .= "<UniqueID>" . $invoiceid . '_' . $ref . "</UniqueID>";
+                    $orderHeadersLines .= "<InvoiceDate>" . $returnGetsalesorderNoLines[0]->InvoiceDate . "</InvoiceDate>";
+                    $orderHeadersLines .= "<CustomerCode>" . $returnGetsalesorderNoLines[0]->Account . "</CustomerCode>";
+                    $orderHeadersLines .= "<PlanID>" . $returnGetsalesorderNoLines[0]->intAutoPickingHeader . "</PlanID>";
+                    $orderHeadersLines .= "<invoiceid>" . $invoiceid . "</invoiceid>
                 </Header>
                 <Details>";
 
@@ -221,29 +310,30 @@ class InvoicingController extends Controller
                         $linenoApi = $innverVal->LineNos - 1;
 
                         $warehouse = "Mstr";
-                        $orderHeadersLines .= "<LineNo>".$linenoApi."</LineNo>";
-                        $orderHeadersLines .= "<ItemCode>".$innverVal->ItemCode."</ItemCode>";
-                        $orderHeadersLines .= "<OrderDetails>".$innverVal->intorderdetailId."</OrderDetails>";
+                        $orderHeadersLines .= "<LineNo>" . $linenoApi . "</LineNo>";
+                        $orderHeadersLines .= "<ItemCode>" . $innverVal->ItemCode . "</ItemCode>";
+                        $orderHeadersLines .= "<OrderDetails>" . $innverVal->intorderdetailId . "</OrderDetails>";
                         if ($isCapeUser == "1") {
                             $warehouse = "CPT";
                         }
 
-                        $orderHeadersLines .= "<Warehouse>".$warehouse."</Warehouse>";
+                        $orderHeadersLines .= "<Warehouse>" . $warehouse . "</Warehouse>";
                         $adjustQty = $innverVal->qtyonorder;
-                        if($innverVal->soldByWeight =="SoldByWeight" &&  floatval($innverVal->remaining)<floatval($innverVal->Toinvoice ) &&  floatval($innverVal->remaining) !=0 ){
-                            $QuantityAdj =$adjustQty+ (floatval($innverVal->Toinvoice)-(floatval($innverVal->remaining)));
-                            $adjustQty=$QuantityAdj;
+                        if ($innverVal->soldByWeight == "SoldByWeight" && floatval($innverVal->remaining) < floatval($innverVal->Toinvoice) && floatval($innverVal->remaining) != 0) {
+                            $QuantityAdj = $adjustQty + (floatval($innverVal->Toinvoice) - (floatval($innverVal->remaining)));
+                            $adjustQty = $QuantityAdj;
                         }
 
-                        $orderHeadersLines .= "<QtyAdjust>". str_replace(".", ",", $adjustQty)."</QtyAdjust>";
-                        $orderHeadersLines .= "<ToProcess>".str_replace(".",",", $innverVal->Toinvoice)."</ToProcess>";
+                        $orderHeadersLines .= "<QtyAdjust>" . str_replace(".", ",", $adjustQty) . "</QtyAdjust>";
+                        $orderHeadersLines .= "<ToProcess>" . str_replace(".", ",", $innverVal->Toinvoice) . "</ToProcess>";
                         $orderHeadersLines .= "</Line>";
                     }
                     $orderHeadersLines .= "</Details></Order>";
 
-                    $xmlresponse =  DB::connection('sqlsrv3')
-                        ->select('exec spInsertXmlOrder ?,?,?',
-                            array($orderHeadersLines,$invoiceid.'_'.$ref,$invoiceid)
+                    $xmlresponse = DB::connection('sqlsrv3')
+                        ->select(
+                            'exec spInsertXmlOrder ?,?,?',
+                            array($orderHeadersLines, $invoiceid . '_' . $ref, $invoiceid)
                         );
 
                     return response()->json($xmlresponse);
@@ -253,23 +343,26 @@ class InvoicingController extends Controller
                     return $err;
                 }
             }
-        }else{
+        } else {
             return $hasLimits;
         }
     }
     //NOT IBT
-    public function testWarehouseT($ref,$SoNumber,$ownersId){
+    public function testWarehouseT($ref, $SoNumber, $ownersId)
+    {
         $itemstotransfers = DB::connection('sqlsrv3')
-            ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
-                array($ref,$SoNumber,$ownersId)
+            ->select(
+                'exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
+                array($ref, $SoNumber, $ownersId)
             );
         echo "Outside the loop";
-        foreach ($itemstotransfers as $value){
+        foreach ($itemstotransfers as $value) {
             echo "Inside the loop";
-            $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$value->ItemCode,$value->intorderdetailId);
+            $this->warehousetransfer($value->ItemCode, 'CPT', 'UKH', $value->Toinvoice, $value->ItemCode, $value->ItemCode, $value->intorderdetailId);
         }
     }
-    public function invoicepickings($reference){
+    public function invoicepickings($reference)
+    {
 
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
@@ -279,16 +372,17 @@ class InvoicingController extends Controller
             $sdkHelper->CreateCommonDBConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=SageCommon;server=HK-SQL2019');
             $sdkHelper->SetLicense("DE12111039", "4626921");
             $returnToInvoices = DB::connection('sqlsrv3')
-                ->select('exec spGetOrderNumbersToInvoice ?',
+                ->select(
+                    'exec spGetOrderNumbersToInvoice ?',
                     array($reference)
                 );
 
             //dd($returnToInvoices);
 
-            if(count($returnToInvoices) > 0){
+            if (count($returnToInvoices) > 0) {
 
                 foreach ($returnToInvoices as $val) {
-                    switch($val->intOwnerID){
+                    switch ($val->intOwnerID) {
                         case 1:
                             $sdkHelper->CreateConnection('uid=dims;pwd=$D1ms_L1nx#;Initial Catalog=Hendok Distribution;server=HK-SQL2019,1433');
                             break;
@@ -301,43 +395,46 @@ class InvoicingController extends Controller
                     }
 
                     $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                        ->select('exec spGetOrderNumbersLinesToProcess ?,?,?',
-                            array($reference,$val->SalesOrderNo,$val->intOwnerID)
+                        ->select(
+                            'exec spGetOrderNumbersLinesToProcess ?,?,?',
+                            array($reference, $val->SalesOrderNo, $val->intOwnerID)
                         );
-                    echo "_________Sales Order Number__________________".$val->SalesOrderNo."<br>";
+                    echo "_________Sales Order Number__________________" . $val->SalesOrderNo . "<br>";
 
                     $x = $sdkHelper->GetSalesOrder($val->SalesOrderNo);
-                    foreach ($returnGetsalesorderNoLines as $innverVal){
+                    foreach ($returnGetsalesorderNoLines as $innverVal) {
                         $lineno = $innverVal->LineNos - 1;
-                        $x->Detail[$lineno]->ToProcess =floatval($innverVal->Toinvoice);
-                        echo "Line Index ".$lineno."Line No ".$innverVal->LineNos. "**************** To Invoice".$innverVal->Toinvoice."<br>";
+                        $x->Detail[$lineno]->ToProcess = floatval($innverVal->Toinvoice);
+                        echo "Line Index " . $lineno . "Line No " . $innverVal->LineNos . "**************** To Invoice" . $innverVal->Toinvoice . "<br>";
                     }
-                    echo "Saving Order Number----------".$val->SalesOrderNo."<br>***************************************************************************<br>";
+                    echo "Saving Order Number----------" . $val->SalesOrderNo . "<br>***************************************************************************<br>";
                     $reference = $x->Save();
 
                     $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                        ->select('exec spProcessSavedSalesOrderLinesByOrderNumber ?,?,?,?,?',
-                            array($userid,$val->intOrderId,$val->SalesOrderNo,$val->intOwnerID,$userName)
+                        ->select(
+                            'exec spProcessSavedSalesOrderLinesByOrderNumber ?,?,?,?,?',
+                            array($userid, $val->intOrderId, $val->SalesOrderNo, $val->intOwnerID, $userName)
                         );
                 }
                 echo "*****************************Processing Invoices************************<br>";
                 $this->processInvoce();
                 echo "*****************************Done Processing Invoices******************<br>";
                 echo "*****************************Starting to Invoice Now*******************<br>";
-            }else{
+            } else {
                 //spGetTransfersReadyForIBT
                 $returnToInvoices = DB::connection('sqlsrv3')
-                    ->select('exec spGetTransfersReadyForIBT ?',
+                    ->select(
+                        'exec spGetTransfersReadyForIBT ?',
                         array($reference)
                     );
 
-                if(count($returnToInvoices) > 0){
+                if (count($returnToInvoices) > 0) {
                     echo "****************************************TRANFER STARTING*************************************<br>";
                     $this->whtransfers($reference);
                     //transfer
                 }
             }
-        }catch (Error $err){
+        } catch (Error $err) {
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
@@ -345,7 +442,8 @@ class InvoicingController extends Controller
 
 
     }
-    public function processInvoce(){
+    public function processInvoce()
+    {
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
         $PrinterPathInvoice = Auth::user()->PrinterPathInvoice;
@@ -371,15 +469,16 @@ class InvoicingController extends Controller
                     break;
             }
             try {
-                echo "************* SALES ORDERNO BEFORE INV***".$val->strOrderNo."<br>";
+                echo "************* SALES ORDERNO BEFORE INV***" . $val->strOrderNo . "<br>";
                 $x = $sdkHelper->GetSalesOrder($val->strOrderNo);
                 $reference = $x->Process();
-                echo "************* INV CREATED***".$reference."<br>";
+                echo "************* INV CREATED***" . $reference . "<br>";
                 $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
-                    ->select('exec spPrintProcessedInvoiceNo ?,?,?,?,?',
-                        array($userid,$val->intAutoindexID,$val->strOrderNo,$val->intOwnerId,$userName)
+                    ->select(
+                        'exec spPrintProcessedInvoiceNo ?,?,?,?,?',
+                        array($userid, $val->intAutoindexID, $val->strOrderNo, $val->intOwnerId, $userName)
                     );
-            }catch (Error $err){
+            } catch (Error $err) {
                 echo "<h3 style='color: darkred'>__________Errors_________</h3>";
                 echo $err;
             }
@@ -388,53 +487,58 @@ class InvoicingController extends Controller
         }
         echo "*****************************Done Invoicing**********************************************<br>";
         echo "*****************************Printing Started Please Check Your Printer******************<br>";
-        echo "*****************************Printer Name Is: ".$PrinterPathInvoice."********************<br>";
+        echo "*****************************Printer Name Is: " . $PrinterPathInvoice . "********************<br>";
 
 
         //spGetTransfersReadyForIBT
         $readyibt = DB::connection('sqlsrv3')
-            ->select('exec spGetTransfersReadyForIBT ?',
+            ->select(
+                'exec spGetTransfersReadyForIBT ?',
                 array($reference)
             );
         //dd($readyibt);
-        if(count($readyibt) > 0){
+        if (count($readyibt) > 0) {
             echo "****************************************TRANFER STARTING*************************************<br>";
             $this->whtransfers($reference);
             //transfer
-        }else{
+        } else {
             echo "****************************************NO TRANFERS FOUND*************************************<br>";
 
         }
 
     }
-    public function whtransfers($reference,$orderId){
+    public function whtransfers($reference, $orderId)
+    {
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
         $returnNegativeItems = DB::connection('sqlsrv3')
-            ->select('exec spNegativeInventory ?',
+            ->select(
+                'exec spNegativeInventory ?',
                 array($reference)
             );
-        if(count($returnNegativeItems) > 0){
+        if (count($returnNegativeItems) > 0) {
 
             echo "<table><thead><th>Item Code</th><th>Qty Loaded</th><th>In Stock Qty</th><th>Qty Needed</th></thead><tbody>";
-            foreach ($returnNegativeItems as $val){
-                echo "<tr><td>".$val->Code."</td><td>".$val->Toinvoice."</td><td>".$val->QtyInStock."</td><td>".$val->qty."</td></tr>";
+            foreach ($returnNegativeItems as $val) {
+                echo "<tr><td>" . $val->Code . "</td><td>" . $val->Toinvoice . "</td><td>" . $val->QtyInStock . "</td><td>" . $val->qty . "</td></tr>";
             }
             echo "</tbody></table>";
-//dd("Testing the list @Chris please wait");
+            //dd("Testing the list @Chris please wait");
             $this->negativeInventory($reference);
-        }else{
+        } else {
             $returnToInvoices = DB::connection('sqlsrv3')
-                ->select('exec spAutoIndexForTrasfers ?,?',
-                    array($reference,$orderId)
+                ->select(
+                    'exec spAutoIndexForTrasfers ?,?',
+                    array($reference, $orderId)
                 );
 
-            foreach ($returnToInvoices as $innverVal){
-                $this->processTransfer($reference,$innverVal->AutoIndex,$innverVal->OrderNum);
+            foreach ($returnToInvoices as $innverVal) {
+                $this->processTransfer($reference, $innverVal->AutoIndex, $innverVal->OrderNum);
             }
         }
     }
-    public function warehousetransfer($itemcode,$FromWarehouse,$ToWarehouse,$Quantity,$ref1,$ref2,$intorderdetailId){
+    public function warehousetransfer($itemcode, $FromWarehouse, $ToWarehouse, $Quantity, $ref1, $ref2, $intorderdetailId)
+    {
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
             //Initialise
@@ -446,9 +550,9 @@ class InvoicingController extends Controller
             $sdkHelper->CreateConnection(env(HENDOK));
             $warehouseTransfer = new \COM("Pastel.Evolution.WarehouseTransfer");
 
-            $warehouseTransfer->Account =  $sdkHelper->GetStockItem($itemcode);
-            $warehouseTransfer->FromWarehouse =  $sdkHelper->GetWarehouseByCode($FromWarehouse);//From Warehouse
-            $warehouseTransfer->ToWarehouse =  $sdkHelper->GetWarehouseByCode($ToWarehouse);//TO Warehouse
+            $warehouseTransfer->Account = $sdkHelper->GetStockItem($itemcode);
+            $warehouseTransfer->FromWarehouse = $sdkHelper->GetWarehouseByCode($FromWarehouse);//From Warehouse
+            $warehouseTransfer->ToWarehouse = $sdkHelper->GetWarehouseByCode($ToWarehouse);//TO Warehouse
             $warehouseTransfer->Quantity = floatval($Quantity);
             $warehouseTransfer->Reference = $ref1;
             $warehouseTransfer->Reference2 = $ref2;
@@ -456,16 +560,17 @@ class InvoicingController extends Controller
             //echo "Finished";
             //isTranferedToCentralWH
             DB::connection('sqlsrv3')->table('tblPickingPlan')
-                ->where('intorderdetailId',$intorderdetailId )
+                ->where('intorderdetailId', $intorderdetailId)
                 ->update(['isTranferedToCentralWH' => 1]);
 
-        }catch (Error $err){
+        } catch (Error $err) {
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
     }
     //INVENTORY ADJUSTMENTS
-    public function transactionAdj($itemcode,$Warehouse,$Quantity,$ref1,$ref2,$intorderdetailId,$invoiceid,$ownersId,$date){
+    public function transactionAdj($itemcode, $Warehouse, $Quantity, $ref1, $ref2, $intorderdetailId, $invoiceid, $ownersId, $date)
+    {
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         //	dd(get_declared_classes());
 
@@ -475,24 +580,24 @@ class InvoicingController extends Controller
 
 
             //dd($indexId." - ".$reference);
-            $sdkHelper->CreateCommonDBConnection(env('COMMON') );
+            $sdkHelper->CreateCommonDBConnection(env('COMMON'));
             $sdkHelper->SetLicense("DE12111039", "4626921");
             $sdkHelper->CreateConnection(env('HENDOK'));
             $InventoryTransaction = new \COM("Pastel.Evolution.InventoryTransaction");
             // dd($sdkHelper->GetInventoryOperation( "Increase"));
             //dd();
 
-            $ref2 = $this->returnInvoiceNumber($invoiceid,$ownersId);
+            $ref2 = $this->returnInvoiceNumber($invoiceid, $ownersId);
             // dd( $ref2);
-            $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
+            $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11, "ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
             $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemcode);
-            $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($Warehouse) ;
-            $InventoryTransaction->Operation =0;//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
+            $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($Warehouse);
+            $InventoryTransaction->Operation = 0;//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
             $InventoryTransaction->Quantity = floatval($Quantity);
 
             $InventoryTransaction->Reference = $ref1;
             $InventoryTransaction->Reference2 = $ref2;
-            $InventoryTransaction->Date =(new \DateTime($date))->format('Y-m-d');
+            $InventoryTransaction->Date = (new \DateTime($date))->format('Y-m-d');
             $InventoryTransaction->Description = "Dims Ajustments";
 
             $InventoryTransaction->Post();
@@ -500,49 +605,54 @@ class InvoicingController extends Controller
             //echo "Finished";
             //isTranferedToCentralWH
             DB::connection('sqlsrv3')->table('tblPickingPlan')
-                ->where('intorderdetailId',$intorderdetailId )
+                ->where('intorderdetailId', $intorderdetailId)
                 ->update(['isTranferedToCentralWH' => 1]);
 
-        }catch (Error $err){
+        } catch (Error $err) {
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
 
     }
     //DIMS Manual Adjustment
-    public function getdimsmanuals(){
+    public function getdimsmanuals()
+    {
         return view('dims/warehouseadj');
     }
-    public function getusergroupid($userid){
-        $groupformid= DB::connection('sqlsrv3')
-            ->select("select GroupId from tblDIMSUSERS where UserId=".$userid);
+    public function getusergroupid($userid)
+    {
+        $groupformid = DB::connection('sqlsrv3')
+            ->select("select GroupId from tblDIMSUSERS where UserId=" . $userid);
         return $groupformid[0]->GroupId;
     }
-    public function getqrcode(){
+    public function getqrcode()
+    {
         return view('warehouse/jobqrcode');
     }
-    public function qrcodeimage($machine,$qty,$itemcode){
+    public function qrcodeimage($machine, $qty, $itemcode)
+    {
 
         $username = "Reginald";
         $userID = "2";
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
-        $t=time();
+        $t = time();
         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
-        $ID = $t.$randomString;
+        $ID = $t . $randomString;
         return view('warehouse/qrcodeimage')
-            ->with('machine',$machine)
-            ->with(' ',$qty)
-            ->with('username',$username)
-            ->with('1',$userID)
-            ->with('ID',$ID)
-            ->with('item',$itemcode);
+            ->with('machine', $machine)
+            ->with(' ', $qty)
+            ->with('username', $username)
+            ->with('1', $userID)
+            ->with('ID', $ID)
+            ->with('item', $itemcode);
     }
-    public function dimsmanualadjustment(Request $request){
+    public function dimsmanualadjustment(Request $request)
+    {
 
         $itemCode = $request->get('itemCode');
         $warehousecode = $request->get('warehousecode');
         $adjmentType = $request->get('adjmentType');
-        $companyname= $request->get('companyname');
+        $companyname = $request->get('companyname');
         $invnumber = $request->get('invnumber');
         $trandate = $request->get('trandate');
         $adjustmenttype = $request->get('adjustmenttype');
@@ -555,7 +665,7 @@ class InvoicingController extends Controller
             //Initialise
             //  echo "Entering ";
             //dd($indexId." - ".$reference);
-            $sdkHelper->CreateCommonDBConnection(env('COMMON') );
+            $sdkHelper->CreateCommonDBConnection(env('COMMON'));
             $sdkHelper->SetLicense("DE12111039", "4626921");
             $sdkHelper->CreateConnection(env('HENDOK'));
             $InventoryTransaction = new \COM("Pastel.Evolution.InventoryTransaction");
@@ -564,23 +674,23 @@ class InvoicingController extends Controller
 
 
             // dd( $ref2);
-            if($adjustmenttype =="WHT"){
-                $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"WHT");
-            }else{
-                $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");
+            if ($adjustmenttype == "WHT") {
+                $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11, "WHT");
+            } else {
+                $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11, "ADJ");
             }
             //new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
             $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($itemCode);
-            $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($warehousecode) ;
-            $InventoryTransaction->Operation =intval($adjmentType);//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
+            $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($warehousecode);
+            $InventoryTransaction->Operation = intval($adjmentType);//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
             $InventoryTransaction->Quantity = floatval($Qty);
 
             $InventoryTransaction->Reference = $companyname;
             $InventoryTransaction->Reference2 = $invnumber;
-            $InventoryTransaction->Date =(new \DateTime($trandate))->format('Y-m-d');
-            if($adjustmenttype =="WHT"){
+            $InventoryTransaction->Date = (new \DateTime($trandate))->format('Y-m-d');
+            if ($adjustmenttype == "WHT") {
                 $InventoryTransaction->Description = "Dims Warehouse Transfer";
-            }else{
+            } else {
                 $InventoryTransaction->Description = "Dims Ajustments";
             }
 
@@ -594,7 +704,7 @@ class InvoicingController extends Controller
             // ->where('intorderdetailId',$intorderdetailId )
             //    ->update(['isTranferedToCentralWH' => 1]);//
 
-        }catch (Error $err){
+        } catch (Error $err) {
             $result = $err;
             //  echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             //echo $err;
@@ -603,7 +713,8 @@ class InvoicingController extends Controller
 
     }
     //NEGATIVE INVENTORY ITEMS TO ADJUST
-    public function negativeInventory($ref){
+    public function negativeInventory($ref)
+    {
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         //	dd(get_declared_classes());
 
@@ -613,27 +724,28 @@ class InvoicingController extends Controller
 //spNegativeInventory
 
             //dd($indexId." - ".$reference);
-            $sdkHelper->CreateCommonDBConnection(env('COMMON') );
+            $sdkHelper->CreateCommonDBConnection(env('COMMON'));
             $sdkHelper->SetLicense("DE12111039", "4626921");
             $sdkHelper->CreateConnection(env('HENDOK'));
             $InventoryTransaction = new \COM("Pastel.Evolution.InventoryTransaction");
             // dd($sdkHelper->GetInventoryOperation( "Increase"));
             //dd();
             $returnNegativeItems = DB::connection('sqlsrv3')
-                ->select('exec spNegativeInventory ?',
+                ->select(
+                    'exec spNegativeInventory ?',
                     array($ref)
                 );
 
-            foreach($returnNegativeItems as $val){
-                $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11,"ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
+            foreach ($returnNegativeItems as $val) {
+                $InventoryTransaction->TransactionCode = $sdkHelper->GetTransactionCode(11, "ADJ");//new TransactionCode(Module.Inventory, "ADJ");// specify a inventory transaction type generally this will be ADJ
                 $InventoryTransaction->InventoryItem = $sdkHelper->GetStockItem($val->Code);
-                $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($val->warehouse) ;
-                $InventoryTransaction->Operation =1;//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
+                $InventoryTransaction->Warehouse = $sdkHelper->GetWarehouseByCode($val->warehouse);
+                $InventoryTransaction->Operation = 1;//Select the necessary enumerator increase , decrease or cost adjustment 0=Descrease , 1 = increase, 2=CostAdjustment
                 $InventoryTransaction->Quantity = floatval($val->qty);
 
                 $InventoryTransaction->Reference = $val->OrderNum;
                 $InventoryTransaction->Reference2 = $ref;
-                $InventoryTransaction->Date =(new \DateTime($val->dtmDate))->format('Y-m-d');
+                $InventoryTransaction->Date = (new \DateTime($val->dtmDate))->format('Y-m-d');
                 $InventoryTransaction->Description = "Dims Ajustments Neg Inv";
 
                 $InventoryTransaction->Post();
@@ -644,59 +756,65 @@ class InvoicingController extends Controller
             echo "DONE ADJUSTING ---Please Refresh";
 
 
-        }catch (Error $err){
+        } catch (Error $err) {
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
 
     }
-    public function returnInvoiceNumber($invoiceid,$ownerId){
+    public function returnInvoiceNumber($invoiceid, $ownerId)
+    {
         $returnToInvoices = DB::connection('sqlsrv3')
-            ->select('exec spGetOrderNumberInv ?,?',
-                array($invoiceid,$ownerId)
+            ->select(
+                'exec spGetOrderNumberInv ?,?',
+                array($invoiceid, $ownerId)
             );
         $inv = $returnToInvoices[0]->InvNumber;
         return $inv;
 
     }
-    public function CheckIfCreditLimitFine($invoiceid,$ownerId){
+    public function CheckIfCreditLimitFine($invoiceid, $ownerId)
+    {
         $returnToInvoices = DB::connection('sqlsrv3')
-            ->select('exec spCreditLimitDoubleCheckBeforeInvoicing ?,?',
-                array($invoiceid,$ownerId)
+            ->select(
+                'exec spCreditLimitDoubleCheckBeforeInvoicing ?,?',
+                array($invoiceid, $ownerId)
             );
         $inv = $returnToInvoices[0]->Results;
         return $inv;
 
     }
     //IBT
-    public function processTransfer($reference, $indexId,$ordernumebr){
+    public function processTransfer($reference, $indexId, $ordernumebr)
+    {
 
         //spGetPlannedItemsToTransfers
         $userid = Auth::user()->UserID;
-        $trasferID =-1;
+        $trasferID = -1;
         $returnToInvoices = DB::connection('sqlsrv3')
-            ->select('exec spGetPlannedItemsToTranferCheckNegativeInveontory ?,?',
-                array($indexId,$reference)
+            ->select(
+                'exec spGetPlannedItemsToTranferCheckNegativeInveontory ?,?',
+                array($indexId, $reference)
             );
 
-        if(count($returnToInvoices)> 0 )
-        {
+        if (count($returnToInvoices) > 0) {
             echo '<h2>Please Check The Stock For The Following Items</h2><br>';
             echo '<table style=" border-collapse: collapse;width: 100%;"><thead><tr> <th style="border: 1px solid #dddddd;">InventoryItem</th><th style="border: 1px solid #dddddd;">QuantityLoaded</th><th style="border: 1px solid #dddddd;">ToUseQty</th><th style="border: 1px solid #dddddd;">QtyOnHand</th> </tr></thead><tbody>';
-            foreach($returnToInvoices as $val){
-                echo '<tr><td style="border: 1px solid #dddddd;">'.$val->InventoryItem.'</td>';
-                echo '<td style="border: 1px solid #dddddd;">'.$val->QuantityLoaded.'</td>';
-                echo '<td style="border: 1px solid #dddddd;">'.$val->ToUseQty.'</td>';
-                echo '<td style="border: 1px solid #dddddd;">'.$val->QtyOnHand.'</td></tr>';
+            foreach ($returnToInvoices as $val) {
+                echo '<tr><td style="border: 1px solid #dddddd;">' . $val->InventoryItem . '</td>';
+                echo '<td style="border: 1px solid #dddddd;">' . $val->QuantityLoaded . '</td>';
+                echo '<td style="border: 1px solid #dddddd;">' . $val->ToUseQty . '</td>';
+                echo '<td style="border: 1px solid #dddddd;">' . $val->QtyOnHand . '</td></tr>';
             }
             echo '</tbody></table>';
             dd("PLEASE FIX THE STOCK ISSUE");
 
-        }else{
+        } else {
 
             $returnToInvoices = DB::connection('sqlsrv3')
-                ->select('exec spGetPlannedItemsToTransfers ?,?',
-                    array($indexId,$reference)
+                ->select(
+                    'exec spGetPlannedItemsToTransfers ?,?',
+                    array($indexId, $reference)
                 );
 
             $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
@@ -713,24 +831,24 @@ class InvoicingController extends Controller
                 //   dd($warehouse);
 
 
-                $warehouseIBT->WarehouseFrom =  $sdkHelper->GetWarehouseByCode("Mstr");//Specify From which warehouse qty will be transfered from
-                $warehouseIBT->WarehouseTo =  $sdkHelper->GetWarehouseByCode("CPT");//Specify From which warehouse qty will be transfered from
+                $warehouseIBT->WarehouseFrom = $sdkHelper->GetWarehouseByCode("Mstr");//Specify From which warehouse qty will be transfered from
+                $warehouseIBT->WarehouseTo = $sdkHelper->GetWarehouseByCode("CPT");//Specify From which warehouse qty will be transfered from
                 $warehouseIBT->Description = $ordernumebr; //Will user SONumber
-                $warehouseIBT->Reference1 ="ID#". $indexId; //Will user SONumber
-                $warehouseIBT->Reference2 ="Planning#". $reference ; //Will user SONumber
+                $warehouseIBT->Reference1 = "ID#" . $indexId; //Will user SONumber
+                $warehouseIBT->Reference2 = "Planning#" . $reference; //Will user SONumber
 
-                foreach($returnToInvoices as $val){
+                foreach ($returnToInvoices as $val) {
                     $WarehouseIBTLine = new \COM("Pastel.Evolution.WarehouseIBTLine");
                     $WarehouseIBTLine->InventoryItem = $sdkHelper->GetStockItem($val->InventoryItem);
                     $WarehouseIBTLine->Description = $val->InventoryItem;
-                    $WarehouseIBTLine->Reference = "".$val->Reference;
+                    $WarehouseIBTLine->Reference = "" . $val->Reference;
                     $WarehouseIBTLine->QuantityIssued = floatval($val->Quantity);
                     $warehouseIBT->Detail->Add($WarehouseIBTLine);
                 }
-                $referenceibt  = $warehouseIBT->IssueStock();
+                $referenceibt = $warehouseIBT->IssueStock();
                 $trasferID = $warehouseIBT->ID;
 
-            }catch (Error $err){
+            } catch (Error $err) {
                 echo "<h3 style='color: darkred'>__________Errors_________</h3>";
                 echo $err;
                 dd();
@@ -756,14 +874,15 @@ class InvoicingController extends Controller
                 array($reference,$trasferID,$indexId)
             ); */
 
-        echo "**************************************CHECKING TO SEE IF TRANSFER HAS REMAINING ITEMS********************************************* AutoIndex#".$indexId."<br> TRANSFERID#".$trasferID."<br>";
+        echo "**************************************CHECKING TO SEE IF TRANSFER HAS REMAINING ITEMS********************************************* AutoIndex#" . $indexId . "<br> TRANSFERID#" . $trasferID . "<br>";
 
 
         echo "UPDATE PICKING REFERENCE WITH A NEW IBT DEL NOTE <br>";
         //dd($reference);
         $checks = DB::connection('sqlsrv3')
-            ->select('exec spUpdatePickingHeaderIfIBT ?,?,?',
-                array($trasferID,$reference,$userid)
+            ->select(
+                'exec spUpdatePickingHeaderIfIBT ?,?,?',
+                array($trasferID, $reference, $userid)
             );
 
         /*echo "**********************************PRINT TRIPSHEET**************************************************************************** <br>";
@@ -773,20 +892,22 @@ class InvoicingController extends Controller
             );
         echo "**********************************DONE PRINTING TRIPSHEET******************************************************************** <br>";*/
         //[spInsertHendokTripsheet]
-        $this->getRemainingBalance($reference,$trasferID,$indexId);
+        $this->getRemainingBalance($reference, $trasferID, $indexId);
 
     }
 
 
-    public function getRemainingBalance($reference,$trasferID,$indexId){
+    public function getRemainingBalance($reference, $trasferID, $indexId)
+    {
 
         echo "/////////////////////////////Entering The Remaining Items Method/////////////////////////////////////";
         $transferremainings = DB::connection('sqlsrv3')
-            ->select('exec spGetBalanceItemsRemaining ?,?,?',
-                array($reference,$trasferID,$indexId)
+            ->select(
+                'exec spGetBalanceItemsRemaining ?,?,?',
+                array($reference, $trasferID, $indexId)
             );
 
-        if(count($transferremainings) > 0){
+        if (count($transferremainings) > 0) {
 
             $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
             try {
@@ -803,7 +924,7 @@ class InvoicingController extends Controller
 
                 $cashAccount = $sdkHelper->GetARAccount("HDK_CPT");
                 $salesOrder->Customer = $cashAccount;
-                $salesOrder->TaxMode =0;
+                $salesOrder->TaxMode = 0;
                 //External order number
                 //Rep
                 //Delivery method
@@ -817,13 +938,13 @@ class InvoicingController extends Controller
                 $ExtOrderNum = "";
                 $DocRepID = 9;
                 $DelMethodID = 2;
-                foreach($transferremainings as $val){
+                foreach ($transferremainings as $val) {
                     $orderDetail = new \COM("Pastel.Evolution.OrderDetail");
-                    $orderDetail->InventoryItem  = $sdkHelper->GetStockItem($val->Code);
-                    $orderDetail->Quantity  = floatval($val->qty);
-                    $orderDetail->TaxMode =0;
-                    $orderDetail->TaxType =$sdkHelper->GetTaxRate("1");
-                    $orderDetail->Warehouse = $sdkHelper->GetWarehouseByCode("Mstr") ;
+                    $orderDetail->InventoryItem = $sdkHelper->GetStockItem($val->Code);
+                    $orderDetail->Quantity = floatval($val->qty);
+                    $orderDetail->TaxMode = 0;
+                    $orderDetail->TaxType = $sdkHelper->GetTaxRate("1");
+                    $orderDetail->Warehouse = $sdkHelper->GetWarehouseByCode("Mstr");
                     $orderDetail->UnitSellingPrice = floatval($val->fUnitPriceExcl);
                     $ExtOrderNum = $val->ExtOrderNum;
                     //	$orderDetail->TaxMode = "";
@@ -835,17 +956,18 @@ class InvoicingController extends Controller
                 $reference = $salesOrder->Save();
 
                 $transferremainings = DB::connection('sqlsrv3')
-                    ->select('exec spCancelOldTranfer ?',
+                    ->select(
+                        'exec spCancelOldTranfer ?',
                         array($indexId)
                     );
-                echo "________________________________________________Cancelled Old Transfer________________________________________________ ".$indexId."<br>";
+                echo "________________________________________________Cancelled Old Transfer________________________________________________ " . $indexId . "<br>";
 
-            }catch (Error $err){
+            } catch (Error $err) {
                 echo "<h3 style='color: darkred'>__________Errors_________</h3>";
                 echo $err;
                 dd();
             }
-        }else{
+        } else {
 
             echo "****************The Transfer Is Fully Loaded..........No Remaining Items ";
             dd("");
@@ -854,7 +976,8 @@ class InvoicingController extends Controller
 
     }
 
-    public function trywarehouse(){
+    public function trywarehouse()
+    {
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
             //Initialise
@@ -868,8 +991,8 @@ class InvoicingController extends Controller
             //   dd($warehouse);
 
 
-            $warehouseIBT->WarehouseFrom =  $sdkHelper->GetWarehouseByCode("Mstr");//Specify From which warehouse qty will be transfered from
-            $warehouseIBT->WarehouseTo =  $sdkHelper->GetWarehouseByCode("CPT");//Specify From which warehouse qty will be transfered from
+            $warehouseIBT->WarehouseFrom = $sdkHelper->GetWarehouseByCode("Mstr");//Specify From which warehouse qty will be transfered from
+            $warehouseIBT->WarehouseTo = $sdkHelper->GetWarehouseByCode("CPT");//Specify From which warehouse qty will be transfered from
             $warehouseIBT->Description = "led-test"; //Will user SONumber
             $warehouseIBT->Reference1 = "picking reference"; //Will user SONumber
 
@@ -895,20 +1018,21 @@ class InvoicingController extends Controller
             $warehouseIBT->Detail->Add($WarehouseIBTLine);
 
             //$warehouseIBT->Detail->Add($WarehouseIBTLine);
-            $reference  = $warehouseIBT->IssueStock();
+            $reference = $warehouseIBT->IssueStock();
             dd($warehouseIBT->ID);
 
 
 
 
-        }catch (Error $err){
+        } catch (Error $err) {
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
     }
-    public function invManualAdj($ref, $SoNumber, $ownersId,$autoIndex,$dates){
+    public function invManualAdj($ref, $SoNumber, $ownersId, $autoIndex, $dates)
+    {
 
-        $refDescription="";
+        $refDescription = "";
         $sdkHelper = new \COM("Pastel.Evolution.ComHelper");
         try {
             //Initialise
@@ -931,56 +1055,61 @@ class InvoicingController extends Controller
                     break;
             }
             $itemstotransfers = DB::connection('sqlsrv3')
-                ->select('exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
+                ->select(
+                    'exec [spGetOrderNumbersLinesToProcessToTransfer] ?,?,?',
                     array($ref, $SoNumber, $ownersId)
                 );
             foreach ($itemstotransfers as $value) {
                 //If you need to do normal warehouse transfer
                 // $this->warehousetransfer($value->ItemCode,'CPT','UKH',$value->Toinvoice,$value->ItemCode,$SoNumber,$value->intorderdetailId);
-                $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId,$autoIndex,$ownersId,$dates);
+                $this->transactionAdj($value->ItemCode, env('CPTW'), $value->Toinvoice, $refDescription, $SoNumber, $value->intorderdetailId, $autoIndex, $ownersId, $dates);
             }
 
-        }catch (Error $err){
+        } catch (Error $err) {
             echo "<h3 style='color: darkred'>__________Errors_________</h3>";
             echo $err;
         }
 
     }
 
-    public function printtripsheet($ref){
+    public function printtripsheet($ref)
+    {
         //
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
         $checkifinvoicedbeforetripsheet = DB::connection('sqlsrv3')
-            ->select('exec spCheckIfOrderBeforePrintingTripSheet ?',
+            ->select(
+                'exec spCheckIfOrderBeforePrintingTripSheet ?',
                 array($ref)
             );
         $isfullyInvoiced = "NO";
-        if (count($checkifinvoicedbeforetripsheet)==0)
-        {
+        if (count($checkifinvoicedbeforetripsheet) == 0) {
             $isfullyInvoiced = "YES";
-//[spPrintTruckSheet]
+            //[spPrintTruckSheet]
             $checkifinvoicedbeforetripsheet = DB::connection('sqlsrv3')
-                ->select('exec spPrintTruckSheet ?,?,?',
-                    array($ref,$userid,$userName)
+                ->select(
+                    'exec spPrintTruckSheet ?,?,?',
+                    array($ref, $userid, $userName)
                 );
         }
 
-        return view('dims/printtrucksheet')->with('linesnotInvoiced',$checkifinvoicedbeforetripsheet)->with('isinvoicednot',$isfullyInvoiced);
+        return view('dims/printtrucksheet')->with('linesnotInvoiced', $checkifinvoicedbeforetripsheet)->with('isinvoicednot', $isfullyInvoiced);
     }
 
-    public function teamLeaderPrintTripSheet(Request $request){
+    public function teamLeaderPrintTripSheet(Request $request)
+    {
         $ref = $request->get("ref");
         $userid = Auth::user()->UserID;
         $userName = Auth::user()->UserName;
 
-        $print = DB::connection('sqlsrv3')->select("exec spPrintingTripSheetApp ?,?,?",array($ref,$userid,$userName));
+        $print = DB::connection('sqlsrv3')->select("exec spPrintingTripSheetApp ?,?,?", array($ref, $userid, $userName));
 
         return response()->json($print);
     }
 
 
-    public function reprintInvoice(){
+    public function reprintInvoice()
+    {
 
     }
 

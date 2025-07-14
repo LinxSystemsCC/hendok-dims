@@ -836,6 +836,9 @@ Route::post('postauthdeal',[OnlineOrders::class,'postauthdeal']);
 
 //ONLINE ORDERS ENDS HERE!!!
 
+Route::get('reprintInvoicing', [InvoicingController::class,'reprintInvoicing']);
+
+
 //ONLINE ORDERS RECON CONTROLLER STARTS HERE !!!
 
 Route::get('returnRefunds', [OnlineOrdersReconController::class,'returnRefunds']);
