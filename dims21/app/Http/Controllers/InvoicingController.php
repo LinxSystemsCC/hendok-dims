@@ -59,21 +59,7 @@ public function individualInvoicing(Request $request)
     $userName = Auth::user()->UserName;
 
     try {
-        // 1. Check if order ID already exists  --- Put in store Procedure
-        // $CheckOrderIDExist = DB::connection('sqlsrv3')
-        //     ->table('tblXmlOrders')
-        //     ->where('intOrderId', $invoiceid)
-        //     ->exists();
 
-        // if ($CheckOrderIDExist) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Order ID already exists. Cannot re-invoice again.'
-        //     ]);
-        // }
-
-
-   
         
             $result = DB::connection('sqlsrv3')
                 ->select("EXEC usp_CheckIfOrderIdExists ?", [$invoiceid]);
@@ -121,18 +107,14 @@ public function individualInvoicing(Request $request)
             );
 
             
-if (empty($returnGetsalesorderNoLines)) {
-    return response()->json([
-        'status' => 'error',
-        'message' => 'No data returned for this reference/order/owner combination.'
-    ]);
+            if (empty($returnGetsalesorderNoLines)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No data returned for the references/order/owner combination.'
+                ]);
 
-    if (empty($returnGetsalesorderNoLines)) {
-    return response()->json([
-        'status' => 'error',
-        'message' => 'No lines returned from this spGetOrderNumbersLinesToProcess.'
-    ]);
-}
+
+            }
 
         $orderHeadersLines = "<Order><Header>";
         $orderHeadersLines .= "<OrderNo>{$SoNumber}</OrderNo>";
@@ -188,6 +170,8 @@ if (empty($returnGetsalesorderNoLines)) {
         ]);
     }
 }
+
+
 
 
 
