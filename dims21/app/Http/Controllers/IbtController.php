@@ -16,13 +16,32 @@ class IbtController extends Controller
      */
     public function index()
     {
-        $products = DB::connection('sqlsrv2')
-            ->select("select * from viewTblProductWeightedCalc");
-        $dcData = DB::connection('sqlsrv2')
-            ->select("select * from tblDCNames");
 
-        return view('warehouse.ibt.index',compact('products','dcData'));
+        //Order is DC, truck load, wear hourse, ibt,
+
+                    $products = DB::connection('sqlsrv2')->select('EXEC usp_GetProducts');
+
+
+        $dcData = DB::connection('sqlsrv2')->select('EXEC usp_GetDCName');
+ $bins = DB::connection('sqlsrv3')->select("EXEC usp_GetActiveBinLocations");
+
+
+
+return view('warehouse.ibt.index', compact('products', 'dcData', 'bins'));
     }
+
+
+    public function getTruckLoadsByDC(Request $request)
+{
+    $dcId = $request->get('dc_id');
+
+    $truckLoads = DB::connection('sqlsrv2')
+        ->select('EXEC usp_GetIssuedIBTTruckLoadsByDC ?', [$dcId]); // Adjust SP name/param if needed
+
+    return response()->json($truckLoads);
+}
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -263,41 +282,28 @@ class IbtController extends Controller
      *
      * @param obj $request
      */
-    public function getBins(Request $request)
-    {
-        $dcId = $request->get('dc_id'); //  1 or 2
+ public function getBins(Request $request)
+{
+    //All converted to store procedure
+    $dcId = $request->get('dc_id'); // 1 or 2
 
-        if ($request->has('is_from_dc') && $request->get('is_from_dc')) {
-            $bins = DB::connection('sqlsrv2')
-                ->select("
-                    SELECT * FROM viewBinNames bn
-                    INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
-                    INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
-                    WHERE strLocationType = 'Transit' AND intDcId = '$dcId'
-                ");
-        } elseif ($request->has('is_to_dc') && $request->get('is_to_dc')) {
-            $varianceBins = DB::connection('sqlsrv2')
-                ->select("
-                    SELECT * FROM viewBinNames bn
-                    INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
-                    INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
-                    WHERE strLocationType = 'Variance' AND intDcId = '$dcId'
-                ");
-            $receivingBins = DB::connection('sqlsrv2')
-                ->select("
-                    SELECT * FROM viewBinNames bn
-                    INNER JOIN tblLocationNames ln  ON ln.intLocationNameId = bn.intLocationId
-                    INNER JOIN tblLocationTypes lt ON LT.intLocationTypeId = ln.intLocationTypeId
-                    WHERE strLocationType = 'Receiving' AND intDcId = '$dcId'
-                ");
-            $bins = [
-                'varianceBins' => $varianceBins,
-                'receivingBins' => $receivingBins,
-            ];
-        }
+    if ($request->has('is_from_dc') && $request->get('is_from_dc')) {
+        $bins = DB::connection('sqlsrv2')->select('EXEC usp_GetTransitBinsByDC ?', [$dcId]);
+    } elseif ($request->has('is_to_dc') && $request->get('is_to_dc')) {
+        $varianceBins = DB::connection('sqlsrv2')->select('EXEC usp_GetVarianceBinsByDC ?', [$dcId]);
+        $receivingBins = DB::connection('sqlsrv2')->select('EXEC usp_GetReceivingBinsByDC ?', [$dcId]);
 
-        return response()->json($bins);
+        $bins = [
+            'varianceBins' => $varianceBins,
+            'receivingBins' => $receivingBins,
+        ];
+    } else {
+        $bins = [];
     }
+
+    return response()->json($bins);
+}
+
 
     private static function getTabs($tabcount)
     {
