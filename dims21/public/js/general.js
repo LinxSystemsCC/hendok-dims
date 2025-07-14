@@ -6,7 +6,7 @@ var generalValidationPopup = $("#generalValidationPopup").dxPopup({
     width: 450,
     height: 350,
     dragEnabled: true,
-    closeOnOutsideClick: true,
+    HideOnOutsideClick: true,
     contentTemplate: function() {
         return $("#generalErrorList");
     },

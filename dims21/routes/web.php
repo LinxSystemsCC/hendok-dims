@@ -36,6 +36,7 @@ use App\Http\Controllers\WireDraw\WireDrawCustomersController;
 use App\Http\Controllers\WireDraw\WireDrawProductsController;
 use App\Http\Controllers\Warehouse\PlanningController;
 use App\Http\Controllers\IbtController;
+use App\Http\Controllers\ProWeightController;
 use App\Http\Controllers\Warehouse\StockIssueController;
 
 /*
@@ -1423,4 +1424,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('getIssuedStock', [StockIssueController::class,'getIssuedStock']);
     Route::post('issueStockRecieve', [StockIssueController::class,'issueStockRecieve']);    
+});
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('pro-weigh', [ProWeightController::class,'index']);
+    Route::get('getProWeighData', [ProWeightController::class,'getProWeighData']);
+    Route::post('updateProWeighData', [ProWeightController::class,'updateProWeighData']);
 });
