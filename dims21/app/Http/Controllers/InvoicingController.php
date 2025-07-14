@@ -72,6 +72,8 @@ public function individualInvoicing(Request $request)
         //     ]);
         // }
 
+
+   
         
             $result = DB::connection('sqlsrv3')
                 ->select("EXEC usp_CheckIfOrderIdExists ?", [$invoiceid]);
@@ -117,6 +119,20 @@ public function individualInvoicing(Request $request)
                 'exec spGetOrderNumbersLinesToProcess ?,?,?',
                 [$ref, $SoNumber, $ownersId]
             );
+
+            
+if (empty($returnGetsalesorderNoLines)) {
+    return response()->json([
+        'status' => 'error',
+        'message' => 'No data returned for this reference/order/owner combination.'
+    ]);
+
+    if (empty($returnGetsalesorderNoLines)) {
+    return response()->json([
+        'status' => 'error',
+        'message' => 'No lines returned from this spGetOrderNumbersLinesToProcess.'
+    ]);
+}
 
         $orderHeadersLines = "<Order><Header>";
         $orderHeadersLines .= "<OrderNo>{$SoNumber}</OrderNo>";
@@ -283,6 +299,8 @@ public function individualInvoicing(Request $request)
                             'exec spGetOrderNumbersLinesToProcess ?,?,?',
                             array($ref, $SoNumber, $ownersId)
                         );
+
+                        
 
                     $orderHeadersLines = "<Order><Header>";
                     $orderHeadersLines .= "<OrderNo>" . $SoNumber . "</OrderNo>";
