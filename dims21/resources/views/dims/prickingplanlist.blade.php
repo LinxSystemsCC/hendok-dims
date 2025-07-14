@@ -297,12 +297,13 @@ $count = 0; ?>
 
 
                                                 <td>{{ $val->OrderDate }}</td>
-                                                <td>{{ $val->OrderNum }}
+                                                <td>{{ $val->OrderNum }} <br><br>
                                                     @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 0)
-                                                        <button style="background: #0BA008;color: white;" class="invoicethis"
-                                                            value="{{ $val->OrderId }}">Invoice {{ $val->OrderNum }}</button>
 
-                                                        <input type="text" class="invnumber" value="{{ $val->InvNumber }}">
+                                                        <button style="background: #0BA008;color: white;" class="invoicethis"
+                                                            value="{{ $val->OrderId }}">Invoice {{ $val->OrderNum }}</button> <br><br>
+
+                                                        <input type="text" class="invnumber" value="{{ $val->InvNumber }}"> <br><br>
 
                                                         {{-- Hidden by default, shown via JS --}}
                                                         <button style="background: #007BFF; color: white; display: none;" class="reprintBtn">
