@@ -305,7 +305,7 @@ $count = 0; ?>
 
                                                         <input type="text" class="invnumber" value="{{ $val->InvNumber }}"> <br><br>
 
-                                                        {{-- Hidden by default, shown via JS --}}
+                                                        
                                                         <button style="background: #007BFF; color: white; display: none;" class="reprintBtn">
                                                             Reprint Invoice
                                                         </button>
@@ -698,6 +698,7 @@ $count = 0; ?>
             var ownerid = $this.closest('tr').find('.ownerid').val();
             var invoiceid = $this.closest('tr').find('.invoicethis').val(); // reuse same ID
             var ref = $this.closest('tr').find('.refid').val();
+            console.log(ref);
 
             $.ajax({
                 url: '{!! url('/reprintInvoicing') !!}', // <-- NEW ROUTE

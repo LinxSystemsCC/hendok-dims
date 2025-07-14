@@ -110,7 +110,7 @@ public function individualInvoicing(Request $request)
             if (empty($returnGetsalesorderNoLines)) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'No data returned for this references/order/owner combination.'
+                    'message' => 'No data returned for the references/order/owner combination.'
                 ]);
 
 
