@@ -15,202 +15,144 @@
 
 @section('page')
 
-    <div id="gridProWeigh"></div>
-    <div id="popupProWeighEdit"></div>
+    <div class="container my-4">
+        <div class="mb-3">
+            <label for="ticket_number" class="form-label">Ticket Number</label>
+            <input type="text" id="ticket_number" name="ticket_number" class="form-control" autocomplete="off"
+                placeholder="Search ticket number...">
+            <div id="ticketSuggestions" class="list-group position-absolute w-100"
+                style="z-index: 1000; max-height: 300px; overflow-y: auto;"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="truck" class="form-label">Truck</label>
+            <input type="text" id="truck" name="truck" class="form-control" placeholder="truck number"
+                readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="trailer1" class="form-label">Trailer 1</label>
+            <input type="text" id="trailer1" name="trailer1" class="form-control" placeholder="trailer 1" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="trailer2" class="form-label">Trailer 2</label>
+            <input type="text" id="trailer2" name="trailer2" class="form-control" placeholder="trailer 2" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="new_truck" class="form-label">Change Horse (New Truck)</label>
+            <select id="new_truck" name="new_truck" class="form-select">
+                <option selected disabled>Choose new truck...</option>
+                {{-- Loop through options --}}
+                {{-- @foreach ($trucks as $truck)
+                    <option value="{{ $truck->id }}">{{ $truck->name }}</option>
+                @endforeach --}}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="new_tare_weight" class="form-label">Tare Weight</label>
+            <input type="number" id="tare_weight" name="tare_weight" class="form-control"
+                placeholder="Enter tare weight (kg)">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </div>
 
 @endsection
 
 @section('scripts')
     <script>
         $(document).ready(function() {
-            var data = ({!! json_encode($data) !!});
             var horses = ({!! json_encode($horses) !!});
             var trailers = ({!! json_encode($trailers) !!});
 
-            let dateRange;
+            let searchRequest = null;
+            let detailRequest = null;
 
-            let dateFrom = "{{ $dateFrom }}";
-            let dateTo = "{{ $dateTo }}";
+            $('#ticket_number').on('input', function() {
+                let query = $.trim($(this).val());
 
-            const gridProWeigh = $("#gridProWeigh").dxDataGrid({
-                dataSource: data,
-                height: '97vh',
-                showBorders: true,
-                showRowLines: true,
-                showColumnLines: true,
-                rowAlternationEnabled: true,
-                filterRow: {
-                    visible: true
-                },
-                filterPanel: {
-                    visible: true
-                },
-                headerFilter: {
-                    visible: true
-                },
-                paging: {
-                    enabled: false
-                },
-                columnFixing: {
-                    enabled: true,
-                },
-                paging: {
-                    pageSize: 50,
-                },
-                pager: {
-                    visible: true,
-                    allowedPageSizes: [5, 10, 20, 50, 'all'],
-                    showPageSizeSelector: true,
-                    showInfo: true,
-                    showNavigationButtons: true,
-                },
-                columnAutoWidth: true,
-                allowColumnResizing: true,
-                columnResizingMode: "widget",
-                onRowDblClick: function(e) {
-                    const rowData = e.data;
-                    showPopup(rowData);
-                },
-                onToolbarPreparing: function(e) {
-                    // Create a custom header on the left side
-                    e.toolbarOptions.items.unshift({
-                        location: 'before',
-                        template: function() {
-                            return $('<h3>').text('PRO WEIGHT');
-                        }
-                    });
-                    e.toolbarOptions.items.push({
-                        location: 'after',
-                        widget: "dxDateRangeBox",
-                        options: {
-                            displayFormat: 'yyyy-MM-dd',
-                            showClearButton: true,
-                            width: '100%',
-                            value: [dateFrom, dateTo],
-                            onInitialized: function(e) {
-                                DateRange = e.component;
-                            },
-                        },
-                    });
-                    e.toolbarOptions.items.push({
-                        location: 'after',
-                        widget: "dxButton",
-                        options: {
-                            icon: "fa fa-user",
-                            text: "GET DATA",
-                            onClick: function(args) {
-                                getProWeighData();
-                            },
-                        },
-                    });
-                },
-            }).dxDataGrid('instance');
+                if (query.length < 2) {
+                    $('#ticketSuggestions').empty();
+                    return;
+                }
 
-            function showPopup(rowData) {
-                $("#popupProWeighEdit").dxPopup({
-                    title: "Edit Weighbridge Entry",
-                    width: 400,
-                    height: 'auto',
-                    showCloseButton: true,
-                    closeOnOutsideClick: true,
-                    contentTemplate: function(contentElement) {
-                        contentElement.empty();
+                // Abort any previous search request
+                if (searchRequest !== null) {
+                    searchRequest.abort();
+                }
 
-                        const $selectBox = $("<div>").dxSelectBox({
-                            dataSource: horses,
-                            value: rowData.REG_NUMBER,
-                            valueExpr: 'TruckId',
-                            displayExpr: 'TruckId',
-                            label: "Select Horse",
-                            labelMode: "floating",
-                            searchEnabled: true,
-                            onValueChanged: function(e) {
-                                rowData.REG_NUMBER = e.value;
-                            }
-                        });
-
-                        const $weightBox = $("<div>").dxNumberBox({
-                            value: rowData.FIRST_WEIGHT,
-                            label: "Weight",
-                            labelMode: "floating",
-                            showSpinButtons: true,
-                            min: 0,
-                            onValueChanged: function(e) {
-                                rowData.FIRST_WEIGHT = e.value;
-                            }
-                        });
-
-                        const $updateButton = $("<div>").dxButton({
-                            text: "Update",
-                            type: "success",
-                            width: "100%",
-                            onClick: function() {
-                                // Example: send AJAX update to server
-                                $.ajax({
-                                    url: '{!! url('/updateProWeighData') !!}',
-                                    method: "POST",
-                                    data: {
-                                        TICKET_NUMBER: rowData.TICKET_NUMBER,
-                                        REG_NUMBER: rowData.REG_NUMBER,
-                                        FIRST_WEIGHT: rowData.FIRST_WEIGHT,
-                                    },
-                                    success: function(resp) {
-                                        DevExpress.ui.notify("Updated!", "success", 1000);
-                                        $("#popupProWeighEdit").dxPopup("instance").hide();
-                                        getProWeighData();
-                                    }
-                                });
-                            }
-                        });
-
-                        contentElement.append($selectBox, $("<br>"), $weightBox, $("<br>"),
-                            $updateButton);
-                    }
-                }).dxPopup("instance").show();
-            }
-
-            function getProWeighData() {
-                $.ajax({
-                    url: '{!! url('/getProWeighData') !!}',
-                    type: "GET",
+                searchRequest = $.ajax({
+                    url: '{!! url('/searchTicket') !!}',
+                    method: 'GET',
                     data: {
-                        dateFrom: formatDate(DateRange.option('value')[0]),
-                        dateTo: formatDate(DateRange.option('value')[1]),
+                        q: query
                     },
-                    success: function(data) {
-                        gridProWeigh.option('dataSource', data);
-                        gridProWeigh.refresh();
+                    dataType: 'json',
+                    success: function(tickets) {
+                        const $list = $('#ticketSuggestions').empty();
+
+                        $.each(tickets, function(index, ticket) {
+                            $('<a>', {
+                                    href: '#',
+                                    text: ticket.TICKET_NUMBER,
+                                    class: 'list-group-item list-group-item-action'
+                                })
+                                .on('click', function(e) {
+                                    e.preventDefault();
+
+                                    const selectedTicket = ticket.TICKET_NUMBER;
+
+                                    $('#ticket_number').val(selectedTicket);
+                                    $list.empty();
+
+                                    // Abort any previous detail fetch
+                                    if (detailRequest !== null) {
+                                        detailRequest.abort();
+                                    }
+
+                                    detailRequest = $.ajax({
+                                        url: '{!! url('/getProWeighTicketDetails') !!}/' +
+                                            encodeURIComponent(
+                                                selectedTicket),
+                                        method: 'GET',
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            $('#truck').val(data
+                                                .REG_NUMBER);
+                                            $('#trailer1').val(data
+                                                .TRAILER1_REG_NUMBER
+                                                );
+                                            $('#trailer2').val(data
+                                                .TRAILER2_REG_NUMBER
+                                                );
+                                            $('#tare_weight').val(data
+                                                .TRUCK_TARE_WEIGHT);
+                                        },
+                                        error: function(xhr, status,
+                                        error) {
+                                            if (status !== 'abort') {
+                                                console.error(
+                                                    'Error fetching ticket details:',
+                                                    status, error);
+                                            }
+                                        }
+                                    });
+                                })
+                                .appendTo($list);
+                        });
                     },
+                    error: function(xhr, status, error) {
+                        if (status !== 'abort') {
+                            console.error('Error fetching tickets:', status, error);
+                        }
+                    }
                 });
-            }
+            });
 
-            function formatDate(date) {
-                if (!date) {
-                    return '';
-                }
-
-                // Check if the date is already in the correct format (yyyy-MM-dd)
-                const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-                if (datePattern.test(date)) {
-                    return date;
-                }
-
-                // Parse the date string into a Date object
-                const parsedDate = new Date(date);
-                if (isNaN(parsedDate)) {
-                    // If the date is invalid, return an empty string or handle the error as needed
-                    return '';
-                }
-
-                // Format the date to yyyy-MM-dd
-                const returnFormat = parsedDate.toLocaleDateString("en-ZA", {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                });
-
-                return returnFormat.replace(/\//g, '-');
-            }
         });
     </script>
 @endsection

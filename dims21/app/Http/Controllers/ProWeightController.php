@@ -11,40 +11,41 @@ class ProWeightController extends Controller
 {
     public function index()
     {
-        $dateFrom = Carbon::today()->subMonth()->toDateString();
-        $dateTo = Carbon::today()->toDateString();
-
         $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewTeamLeaderHorses");
         $trailers = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
-
-        $data = DB::connection('sqlsrv3')->select("EXEC usp_R_ProWeighData '$dateFrom', '$dateTo'");
         
         return view("warehouse.pro_weigh.index")
-            ->with('dateFrom', $dateFrom)
-            ->with('dateTo', $dateTo)
             ->with('horses', $horses)
-            ->with('trailers', $trailers)
-            ->with('data', $data);
+            ->with('trailers', $trailers);
     }
 
-    public function getProWeighData(Request $request) {
-        $dateFrom = $request->get("dateFrom");
-        $dateTo = $request->get("dateTo");
+    public function searchTicket(Request $request){
+        $query = $request->get('q', '');
 
-        $result= DB::connection('sqlsrv3')->select("EXEC usp_R_ProWeighData '$dateFrom', '$dateTo'");
-        return response()->json($result);
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $results = DB::table('WB_Ticket_Trans')
+            ->select('TICKET_NUMBER')
+            ->where('TICKET_NUMBER', 'like', '%' . $query . '%')
+            ->orderBy('TICKET_NUMBER', 'desc')
+            ->limit(100)
+            ->get();
+
+        return response()->json($results);
     }
 
-    public function updateProWeighData(Request $request) {
-        $TICKET_NUMBER = $request->get("TICKET_NUMBER");
-        $REG_NUMBER = $request->get("REG_NUMBER");
-        $FIRST_WEIGHT = $request->get("FIRST_WEIGHT");
+    public function getProWeighTicketDetails($ticketNumber)
+    {
+        $ticket = DB::table('WB_Ticket_Trans')
+            ->where('TICKET_NUMBER', $ticketNumber)
+            ->first();
 
-        dd("EXEC usp_U_ProWeighData '$TICKET_NUMBER', '$REG_NUMBER', '$FIRST_WEIGHT'");
+        if (!$ticket) {
+            return response()->json(['error' => 'Ticket not found'], 404);
+        }
 
-        $result= DB::connection('sqlsrv3')->select("EXEC usp_U_ProWeighData '$TICKET_NUMBER', '$REG_NUMBER', '$FIRST_WEIGHT'");
-
-        return response()->json($result);
+        return response()->json($ticket);
     }
-
 }
