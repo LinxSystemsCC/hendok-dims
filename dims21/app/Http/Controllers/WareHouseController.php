@@ -1739,6 +1739,38 @@ class WareHouseController extends Controller
             ->select('select * from  viewGridCustomerAreaLookUp');
         return view('warehouse/customerlookup')->with('customergrid', $customergrid);
     }
+
+ public function TrackingTable()
+{
+    $trackingData = [
+        [
+            'Date' => now(),
+            'User' => 'Admin',
+            'TL_Number' => 'TL-123',
+            'SO_Number' => 'SO-456',
+            'Move_From_Location' => 'MWH-KZN-ZONE1',
+            'QRJobID' => 'QR-001',
+            'Product_Code' => 'P-0001',
+            'QTY_Moved' => 10,
+            'Tons_Moved' => 2.5,
+            'INV_Number' => 'INV-789',
+            'Customer_Name' => 'ABC Steel',
+            'Product_Name' => 'Steel Wire',
+            'WireSize' => '2.5mm',
+            'TreatedMPA' => '450',
+            'TestedZinc' => 'Yes',
+            'Weight' => 100.5,
+            'TicketNo' => 'TICKET-321',
+            'ElongationAtBreak' => '12%'
+        ]
+    ];
+
+    return view('warehouse.TrackingTable', compact('trackingData'));
+}
+
+
+    
+
     public function galvmodulecomms()
     {
 

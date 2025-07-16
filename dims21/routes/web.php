@@ -20,7 +20,7 @@ use App\Http\Controllers\WireDraw\WireDrawStandsController;
 use App\Http\Controllers\WireDraw\WireDrawWireDrawRodSupplierController;
 use App\Http\Controllers\WireDraw\WireDrawWireDrawWeightController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\UserFeature;
+use App\Http\Controllers\UserFeature;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\Warehouse\GalvController;
@@ -248,6 +248,11 @@ Route::post('updateDocumentupdate',[DimsCommon::class,'UpdateDocumentupdate']);
 Route::get('/WebstoreMessages',[DimsCommon::class,'WebstoreMessages']);
 Route::get('/getMessageGrid',[DimsCommon::class,'getMessageGrid'] );
 Route::post('updateMessage',[DimsCommon::class,'updateMessage'] );
+
+
+
+
+
 
 //DIMS COMMON ENDS HERE HERE!!!!
 
@@ -989,7 +994,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('doneprintingpallet', [WareHouseController::class,'doneprintingpallet']);
     Route::get('getBinLocationsJson', [WareHouseController::class,'getBinLocationsJson']);
     Route::get('qrcodeimage/{binlocation}', [WareHouseController::class,'qrcodeimage']);
+
     Route::get('customergridlookup', [WareHouseController::class,'customergridlookup']);
+
+        Route::get('TrackingTable', [WareHouseController::class,'TrackingTable']);
+
+
     Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
     Route::post('insertPrePlannedSO', [WareHouseController::class,'insertPrePlannedSO']);
     Route::post('updateRoofLines', [WareHouseController::class,'updateRoofLines']);
@@ -1406,7 +1416,29 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('ibt/update-status', [IbtController::class, 'updateStatus']);
     Route::post('ibt/receive', [IbtController::class, 'receive']);
     Route::get('ibt/get-bins', [IbtController::class, 'getBins']);
+
+Route::get('/email-recipients', [UserFeature::class, 'indexNew']);
+Route::get('/api/dims-users', [UserFeature::class, 'getUsers']);
+
+Route::get('/email-recipients/data', [UserFeature::class, 'getAll']);
+Route::post('/email-recipients/store', [UserFeature::class, 'storeNew']);
+
+Route::get('/email-recipients/fetch', [UserFeature::class, 'fetch']);
+
+Route::post('/email-recipients/update/{id}', [UserFeature::class, 'update'])->name('email-recipients.update');
+
+Route::post('/email-recipients/delete/{id}', [UserFeature::class, 'destroy'])->name('email-recipients.delete');
+
+    
+
+
 });
+
+
+
+
+
+
 
 
 Route::group(['middleware' => 'auth'], function() {
