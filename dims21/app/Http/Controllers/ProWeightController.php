@@ -27,6 +27,7 @@ class ProWeightController extends Controller
         $results = DB::table('WB_Ticket_Trans')
             ->select('TICKET_NUMBER')
             ->where('TICKET_NUMBER', 'like', '%' . $query . '%')
+            ->where('TRANSPORTER_CODE', '=', 'Hendok')
             ->orderBy('TICKET_NUMBER', 'desc')
             ->limit(100)
             ->get();
