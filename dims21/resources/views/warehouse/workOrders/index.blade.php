@@ -734,10 +734,14 @@
                         dtePropStart: $('#dteStart').val(),
                     },
                     success: function(data) {
-                        if (data[0].result == "Success") {
+                        DevExpress.ui.notify({
+                            message: data.Message,
+                            type: data.Status == '1' ? 'success': 'error', // 'info', 'success', 'warning'
+                            displayTime: 3500,
+                        });
+
+                        if (data.Status == '1') {
                             location.reload();
-                        } else {
-                            alert("" + data[0].result);
                         }
                     }
                 });
