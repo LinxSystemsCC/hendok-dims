@@ -741,7 +741,7 @@
                         });
 
                         if (data.Status == '1') {
-                            location.reload();
+                            getActiveJobs();
                         }
                     }
                 });
