@@ -67,7 +67,7 @@
         <div style="display: flex;">
             @if ($backButton != '0')
                 <button class="btn btn-dark d-flex justify-content-center align-items-center me-2" style="width:75px;"
-                    onclick="location.href='{!! url('/printpalletchoosemachine') !!}/{{ $departmentselected }}'">
+                    onclick="location.href='{!! url('/production_machines') !!}/{{ $departmentselected }}'">
                     <i class="bi bi-arrow-return-left text-center h4"></i>
                 </button>
             @endif
@@ -108,7 +108,7 @@
                         </button>
 
                         <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
-                            onclick="location.href='{!! url('/startgenratingqrcodeforpallet') !!}/{{ $val->intSoId }}/Roofing'">
+                            onclick="location.href='{!! url('/jobLabelQRCodeDetails') !!}/{{ $val->intSoId }}/Roofing'">
                             {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
                         </button>
                     </div>
@@ -136,7 +136,7 @@
                         </button>
 
                         <button class="btn btn-danger" type="button" style="width:89% !important;font-size: 20px;"
-                            onclick="location.href='{!! url('/startgenratingqrcodeforpallet') !!}/{{ $val->intSoId }}/Diamond Mesh'">
+                            onclick="location.href='{!! url('/jobLabelQRCodeDetails') !!}/{{ $val->intSoId }}/Diamond Mesh'">
                             {{ $val->PastelDescription }} {{ $val->packToCut }} | {{ $val->productionstat }}
                         </button>
                     </div>
@@ -158,7 +158,7 @@
             @else
                 @if ($val->strJobStatus != 'NOT STARTED')
                     <button class="btn btn-danger" type="button" style="width:100% !important;font-size: 20px;"
-                        onclick="location.href='{!! url('/startgenratingqrcodeforpallet') !!}/{{ $val->intJobId }}/None'">
+                        onclick="location.href='{!! url('/jobLabelQRCodeDetails') !!}/{{ $val->intJobId }}/None'">
                         {{ $val->PastelDescription }} {{ $val->productionstat }} [ {{ $val->strPalletTypeDescription }}
                         ]</button>
                     <br>
