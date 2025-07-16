@@ -171,13 +171,6 @@
 
     {{-- For Recieveing Popo --}}
 <div id="popupReceive">
-    <!-- DC -->
-    <div class="dx-field">
-        <div class="dx-field-label">DC</div>
-        <div class="dx-field-value">
-            <div id="selectReceivingDC"></div>
-        </div>
-    </div>
 
     <!-- Truck Load (filtered by DC) -->
     <div class="dx-field">
@@ -186,6 +179,16 @@
             <div id="selectReceivingTruckLoads"></div>
         </div>
     </div>
+
+
+    <!-- DC -->
+    <div class="dx-field">
+        <div class="dx-field-label">DC</div>
+        <div class="dx-field-value">
+            <div id="selectReceivingDC"></div>
+        </div>
+    </div>
+
 
     <!-- Warehouse (filtered by DC) -->
     <div class="dx-field">
@@ -213,7 +216,7 @@
 
 @section('scripts')
     <!-- Flexdatalist -->
-    <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script>  i
+    <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script> 
     <script>
         var products = JSON.parse(JSON.stringify({!! json_encode($products) !!}));
         var allBins = @json($bins);
