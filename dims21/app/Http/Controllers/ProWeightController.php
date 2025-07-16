@@ -4,19 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 
 class ProWeightController extends Controller
 {
     public function index()
     {
-        $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewTeamLeaderHorses");
-        $trailers = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
-        
+        $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses WHERE TruckType IN ('Rigid', 'Articulated')");
+
         return view("warehouse.pro_weigh.index")
-            ->with('horses', $horses)
-            ->with('trailers', $trailers);
+            ->with('horses', $horses);
     }
 
     public function searchTicket(Request $request){
@@ -39,6 +37,15 @@ class ProWeightController extends Controller
     public function getProWeighTicketDetails($ticketNumber)
     {
         $ticket = DB::table('WB_Ticket_Trans')
+            ->select(
+                'TICKET_NUMBER',
+                'REG_NUMBER',
+                'TRAILER1_REG_NUMBER',
+                'TRAILER2_REG_NUMBER',
+                'TRUCK_TARE_WEIGHT',
+                'FIRST_WEIGHT',
+                'SECOND_WEIGHT'
+            )
             ->where('TICKET_NUMBER', $ticketNumber)
             ->first();
 
@@ -47,5 +54,23 @@ class ProWeightController extends Controller
         }
 
         return response()->json($ticket);
+    }
+
+    public function updateProWeighData(Request $request)
+    {
+        $strTicket = $request->get("strTicket");
+        $strOldRegNumber = $request->get("strOldRegNumber");
+        $decOldFirstWeigh = $request->get("decOldFirstWeigh");
+        $decOldTruckTareWeight = $request->get("decOldTruckTareWeight");
+        $strNewRegNumber = $request->get("strNewRegNumber");
+        $decNewFirstWeigh = $request->get("decNewFirstWeigh");
+        $decNewTruckTareWeight = $request->get("decNewTruckTareWeight");
+        $intCreatedBy = Auth::user()->UserID;
+        
+        // dd("EXEC usp_U_ProWeighData '$strTicket', '$strOldRegNumber', $decOldFirstWeigh, $decOldTruckTareWeight, '$strNewRegNumber', $decNewFirstWeigh, $decNewTruckTareWeight, $intCreatedBy");
+
+        $result = DB::connection('sqlsrv3')->select("EXEC usp_U_ProWeighData '$strTicket', '$strOldRegNumber', $decOldFirstWeigh, $decOldTruckTareWeight, '$strNewRegNumber', $decNewFirstWeigh, $decNewTruckTareWeight, $intCreatedBy");
+
+        return response()->json($result[0]);
     }
 }

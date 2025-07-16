@@ -1430,5 +1430,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('pro-weigh', [ProWeightController::class,'index']);
     Route::get('searchTicket', [ProWeightController::class,'searchTicket']);
     Route::get('getProWeighTicketDetails/{ticketNumber}', [ProWeightController::class, 'getProWeighTicketDetails']);
-
+    Route::post('updateProWeighData', [ProWeightController::class, 'updateProWeighData']);
 });

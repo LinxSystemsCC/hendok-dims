@@ -16,6 +16,7 @@
 @section('page')
 
     <div class="container my-4">
+        <h3>Pro-weigh adjustment module</h3>
         <div class="mb-3">
             <label for="ticket_number" class="form-label">Ticket Number</label>
             <input type="text" id="ticket_number" name="ticket_number" class="form-control" autocomplete="off"
@@ -25,9 +26,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="truck" class="form-label">Truck</label>
-            <input type="text" id="truck" name="truck" class="form-control" placeholder="truck number"
-                readonly>
+            <label for="truck" class="form-label">Current Truck</label>
+            <input type="text" id="truck" name="truck" class="form-control" placeholder="truck reg" readonly>
         </div>
 
         <div class="mb-3">
@@ -41,23 +41,29 @@
         </div>
 
         <div class="mb-3">
-            <label for="new_truck" class="form-label">Change Horse (New Truck)</label>
+            <label for="first_weight" class="form-label">First Weight</label>
+            <input type="number" id="first_weight" name="first_weight" class="form-control" placeholder="First Weight" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="new_truck" class="form-label">New Truck</label>
             <select id="new_truck" name="new_truck" class="form-select">
                 <option selected disabled>Choose new truck...</option>
-                {{-- Loop through options --}}
-                {{-- @foreach ($trucks as $truck)
-                    <option value="{{ $truck->id }}">{{ $truck->name }}</option>
-                @endforeach --}}
+                @foreach ($horses as $horse)
+                    <option value="{{ $horse->TruckId }}" data-tare-weight="{{ $horse->TareWeight }}">
+                        {{ $horse->TruckId }}
+                    </option>
+                @endforeach
             </select>
         </div>
 
         <div class="mb-3">
-            <label for="new_tare_weight" class="form-label">Tare Weight</label>
-            <input type="number" id="tare_weight" name="tare_weight" class="form-control"
-                placeholder="Enter tare weight (kg)">
+            <label for="new_first_weight" class="form-label">New First Weight</label>
+            <input type="number" id="new_first_weight" name="new_first_weight" class="form-control"
+                placeholder="New First Weight">
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button id="btnSubmit" class="btn btn-primary">Submit</button>
 
     </div>
 
@@ -67,7 +73,6 @@
     <script>
         $(document).ready(function() {
             var horses = ({!! json_encode($horses) !!});
-            var trailers = ({!! json_encode($trailers) !!});
 
             let searchRequest = null;
             let detailRequest = null;
@@ -115,29 +120,19 @@
                                     }
 
                                     detailRequest = $.ajax({
-                                        url: '{!! url('/getProWeighTicketDetails') !!}/' +
-                                            encodeURIComponent(
-                                                selectedTicket),
+                                        url: '{!! url('/getProWeighTicketDetails') !!}/' + encodeURIComponent(selectedTicket),
                                         method: 'GET',
                                         dataType: 'json',
                                         success: function(data) {
-                                            $('#truck').val(data
-                                                .REG_NUMBER);
-                                            $('#trailer1').val(data
-                                                .TRAILER1_REG_NUMBER
-                                                );
-                                            $('#trailer2').val(data
-                                                .TRAILER2_REG_NUMBER
-                                                );
-                                            $('#tare_weight').val(data
-                                                .TRUCK_TARE_WEIGHT);
+                                            $('#truck').val(data.REG_NUMBER).data('tare-weight', parseFloat(data.TRUCK_TARE_WEIGHT || 0));
+                                            $('#trailer1').val(data.TRAILER1_REG_NUMBER);
+                                            $('#trailer2').val(data.TRAILER2_REG_NUMBER);
+                                            $('#first_weight').val(data.FIRST_WEIGHT);
                                         },
                                         error: function(xhr, status,
-                                        error) {
+                                            error) {
                                             if (status !== 'abort') {
-                                                console.error(
-                                                    'Error fetching ticket details:',
-                                                    status, error);
+                                                console.error('Error fetching ticket details:', status, error);
                                             }
                                         }
                                     });
@@ -149,6 +144,113 @@
                         if (status !== 'abort') {
                             console.error('Error fetching tickets:', status, error);
                         }
+                    }
+                });
+            });
+
+            // Enter key triggers fetch
+            $('#ticket_number').on('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    // Abort any previous search request
+                    if (searchRequest !== null) {
+                        searchRequest.abort();
+                    }
+
+                    e.preventDefault();
+                    const ticket = $(this).val().trim();
+                    $('#ticketSuggestions').empty();
+                    fetchTicketDetails(ticket);
+                }
+            });
+
+            // Focus out triggers fetch
+            $('#ticket_number').on('blur', function() {
+                const ticket = $(this).val().trim();
+
+                // Abort any previous search request
+                if (searchRequest !== null) {
+                    searchRequest.abort();
+                }
+
+                // Give a slight delay to allow click events on suggestions
+                setTimeout(() => {
+                    if (!$('#ticketSuggestions').is(':hover')) {
+                        $('#ticketSuggestions').empty();
+                        fetchTicketDetails(ticket);
+                    }
+                }, 200);
+            });
+
+            function fetchTicketDetails(ticketNumber) {
+                if (!ticketNumber) return;
+
+                // Abort any previous detail fetch
+                if (detailRequest !== null) {
+                    detailRequest.abort();
+                }
+
+                detailRequest = $.ajax({
+                    url: '{!! url('/getProWeighTicketDetails') !!}/' + encodeURIComponent(ticketNumber),
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#truck').val(data.REG_NUMBER).data('tare-weight', parseFloat(data.TRUCK_TARE_WEIGHT || 0));
+                        $('#trailer1').val(data.TRAILER1_REG_NUMBER);
+                        $('#trailer2').val(data.TRAILER2_REG_NUMBER);
+                        $('#first_weight').val(data.FIRST_WEIGHT);
+                    },
+                    error: function(xhr, status, error) {
+                        if (status !== 'abort') {
+                            console.error('Error fetching ticket details:', status, error);
+                        }
+                    }
+                });
+            }
+
+            $('#new_truck').on('change', function() {
+                const newTare = parseFloat($(this).find(':selected').data('tare-weight'));
+                const oldTare = parseFloat($('#truck').data('tare-weight'));
+                const firstWeight = parseFloat($('#first_weight').val());
+
+                if (!isNaN(newTare) && !isNaN(oldTare) && !isNaN(firstWeight)) {
+                    const adjustedWeight = firstWeight - oldTare + newTare;
+                    $('#new_first_weight').val(adjustedWeight.toFixed(2));
+
+                    // console.log('oldTare: '+ oldTare)
+                    // console.log('newTare: '+ newTare)
+                    // console.log('firstWeight: '+ firstWeight)
+                    // console.log('newfirstWeight: '+ adjustedWeight)
+                } else {
+                    console.warn('Missing or invalid weights');
+                    $('#new_first_weight').val('');
+                }
+
+            });
+
+            $('#btnSubmit').on('click', function(){
+                // console.log($('#ticket_number').val());
+                // console.log($('#truck').val());
+                // console.log(parseFloat($('#first_weight').val()));
+                // console.log(parseFloat($('#truck').data('tare-weight')));
+                // console.log($('#new_truck').val());
+                // console.log(parseFloat($('#new_first_weight').val()));
+                // console.log(parseFloat($('#new_truck').data('tare-weight')));
+                
+                $.ajax({
+                    url: '{!! url('/updateProWeighData') !!}',
+                    type: "POST",
+                    data: {
+                        strTicket: $('#ticket_number').val(),
+                        strOldRegNumber: $('#truck').val(),
+                        decOldFirstWeigh: parseFloat($('#first_weight').val()),
+                        decOldTruckTareWeight: parseFloat($('#truck').data('tare-weight')),
+                        strNewRegNumber: $('#new_truck').val(),
+                        decNewFirstWeigh: parseFloat($('#new_first_weight').val()),
+                        decNewTruckTareWeight: parseFloat($('#new_truck').find(':selected').data('tare-weight')),
+                    },
+                    success: function(data) {
+                        DevExpress.ui.notify(data.Message, data.Status === "1" ? "success" : "error", 5000);
+                        if (data.Status === "1") location.reload();
                     }
                 });
             });
