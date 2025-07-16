@@ -721,6 +721,8 @@
             });
 
             $('#btnSaveJob').click(function() {
+                $('#modalCreateJob').modal('hide');
+                
                 $.ajax({
                     url: '{!! url('/createNewJob') !!}',
                     type: "POST",
