@@ -166,7 +166,7 @@ if ((Auth::guest()))
                         <!-- Item Links -->
                         <li>
                             @if($barbedcreateworkorder !="0")
-                            <a href='{!!url("/createjobs")!!}'>Create Work Orders</a>
+                            <a href='{!!url("/WorkOrders")!!}'>Create Work Orders</a>
                             @endif
                         </li>
                         <li>
