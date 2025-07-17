@@ -43,8 +43,7 @@
             @endif
 
             @if ($logoutButton != '0')
-                <button class="btn btn-dark d-flex justify-content-center align-items-center p-3"
-                    style="width: 2.5rem; height: 2.5rem;" onclick="document.getElementById('logout-form').submit()">
+                <button class="btn btn-dark d-flex justify-content-center align-items-center p-3" onclick="document.getElementById('logout-form').submit()">
                     <i class="bi bi-door-open h4 m-0"></i>
                 </button>
 
