@@ -218,8 +218,7 @@
     <!-- Flexdatalist -->
     <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script> 
     <script>
-        var products = JSON.parse(JSON.stringify({!! json_encode($products) !!}));
-        var allBins = @json($bins);
+           var allBins = @json($bins);
         let dcList = {!! json_encode($dcData) !!};
         
 

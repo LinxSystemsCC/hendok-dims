@@ -254,6 +254,18 @@ public function individualInvoicing(Request $request)
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
 
+
+        // 🔍 Check if orders are eligible for invoicing or reprint
+            $eligibilityCheck = DB::connection('sqlsrv3')->select("EXEC sp_CheckInvoiceEligibility ?", [$ref]);
+
+            // If the stored procedure returns a row with 'AlreadyProcessed', stop early
+            if (isset($eligibilityCheck[0]->Result) && $eligibilityCheck[0]->Result === 'AlreadyProcessed') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This order has already been invoiced or pushed to XML.',
+                ]);
+            }
+
         if ($invoiceid < 0) {
             $UserID = Auth::user()->UserID;
             DB::connection('sqlsrv3')->statement("EXEC usp_C_IssueIBTandMove '$ref', $UserID");

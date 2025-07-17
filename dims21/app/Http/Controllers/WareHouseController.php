@@ -3276,6 +3276,7 @@ class WareHouseController extends Controller
     public function teamLeaderGetPickingPlanToInvoice(Request $request)
     {
         $ref = $request->get('ref');
+        
         $data = DB::connection('sqlsrv3')->select('exec spGetPickingReferenceProducts ?', array($ref));
         return response()->json($data);
     }
