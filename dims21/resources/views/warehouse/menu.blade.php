@@ -565,6 +565,10 @@ if ((Auth::guest()))
                         @endif
                     </li>
                 </li>
+                <li>
+                <a href='{!!url("/StockChange")!!}'>Stock Change</a>
+
+                </li>
 			</ul>
 		</li>
 

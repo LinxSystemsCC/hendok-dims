@@ -1055,6 +1055,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('deleteSavedLabelMapping',[WareHouseController::class,'deleteSavedLabelMapping']);
 
     Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
+
+        Route::get('StockChange',[WareHouseController::class,'StockChange']);
+
+        Route::get('/get-product-groups', [WareHouseController::class, 'getProductGroups']);
+Route::get('/get-products', [WareHouseController::class, 'getProducts']);
+
+
     // //My Route here:
     // Route::get('/getHandlingFeeByInvoice', [WarehouseController::class, 'getHandlingFeeByInvoice']);
 

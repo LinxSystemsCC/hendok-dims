@@ -260,6 +260,7 @@ class WareHouseController extends Controller
             ->with('printers', $printers)
             ->with('dept', $dept);
     }
+
     public function warehousepalletlabels()
     {
         $userId =  Auth::user()->UserID;
@@ -3267,6 +3268,86 @@ class WareHouseController extends Controller
     {
         // $scanned = DB::connection('sqlsrv3')->select(EXEC spCheckScanned");
         return view('warehouse.reports.checkScanned'); //->with('scanned', $scanned);
+    }
+
+
+    public function getProductGroups(Request $request)
+    {
+        $deptId = $request->input('dept_id');
+        $groups = DB::connection('sqlsrv2')->select("
+            SELECT DISTINCT id, ItemGroupDescription AS description
+            FROM viewItemGroups
+            WHERE DeptID = ?
+            ORDER BY ItemGroupDescription
+        ", [$deptId]);
+
+        return response()->json($groups);
+    }
+
+    public function getProducts(Request $request)
+    {
+        $groupId = $request->input('group_id');
+        $products = DB::connection('sqlsrv2')->select("
+            EXEC usp_GetProductsByGroupId ?
+        ", [$groupId]);
+
+        return response()->json($products);
+    }
+
+
+    //For Stock Change:
+    
+    public function StockChange()
+    {
+        // $scanned = DB::connection('sqlsrv3')->select(EXEC spCheckScanned"); stockchange.blade.php
+        
+        //Order is DC, truck load, wear hourse, ibt,
+
+    $products = DB::connection('sqlsrv2')->select('EXEC usp_GetProducts');
+        $dcData = DB::connection('sqlsrv2')->select('EXEC usp_GetDCName');
+ $bins = DB::connection('sqlsrv3')->select("EXEC usp_GetActiveBinLocations");
+
+
+ // Fetch active locations/bins
+    $locations = DB::table('viewBinNames')
+        ->where('bitActive', 1)
+        ->select('intLocationId', 'strLocationName')
+        ->distinct()
+        ->orderBy('strLocationName')
+        ->get();
+
+    // $dcs = DB::table('viewBinNames')
+    //     ->where('bitActive', 1)
+    //     ->select('intDcId', 'strDCName')
+    //     ->distinct()
+    //     ->orderBy('strDCName')
+    //     ->get();
+
+    // $bins = DB::table('viewBinNames')
+    //     ->where('bitActive', 1)
+    //     ->select('intBinId', 'strBin')
+    //     ->orderBy('strBin')
+    //     ->get();
+
+    // $products = DB::table('viewTblProductWeightedCalc')
+    //     ->select('PastelCode', 'PastelDescription')
+    //     ->distinct()
+    //     ->orderBy('PastelDescription')
+    //     ->get();
+
+     $userId =  Auth::user()->UserID;
+
+        $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
+        $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
+        $printers = DB::connection('sqlsrv2')->select("EXEC spGetUserPrinters $userId");
+
+        // return view('warehouse/genericproductlabels')
+        //     ->with('prodGroups', $prodGroups)
+        //     ->with('printers', $printers)
+        //     ->with('dept', $dept);
+
+ return view('warehouse.stockcontrol.stockchange', compact('userId', 'printers', 'prodGroups','dept','products',  'dcData', 'bins'));
+
     }
 
     public function getCheckScanned(Request $request)
