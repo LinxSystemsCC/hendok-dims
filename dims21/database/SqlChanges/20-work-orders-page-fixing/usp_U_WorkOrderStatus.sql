@@ -15,6 +15,7 @@ AS
         SET intStatusId = @intStatusId
             , intStartedBy = @intUserId
             , dtmStarted = @currentTime
+        WHERE intAutoId = @intAutoId
         
         SELECT 1 [Status], 'Job Started' [Message], @currentTime [dtmStarted]
     END
@@ -25,6 +26,7 @@ AS
         SET intStatusId = @intStatusId
             , intEndedBy = @intUserId
             , dtmEnded = @currentTime
+        WHERE intAutoId = @intAutoId
         
         SELECT 1 [Status], 'Job Ended' [Message], @currentTime [dtmEnded]
 
@@ -33,6 +35,7 @@ AS
     BEGIN        
         UPDATE tblWorkOrders 
         SET intStatusId = @intStatusId
-        SELECT 1 [Status], 'Job has been stopped' [Message]
+        WHERE intAutoId = @intAutoId
+        SELECT 1 [Status], 'Job Status Updated' [Message]
     END
 GO

@@ -23,60 +23,69 @@
                 </div>
 
                 <div class="modal-body">
+                    <!-- Department -->
                     <div class="form-group mb-2">
                         <label class="control-label fw-bold" for="selectDepartment">Department</label>
                         <select class="form-select w-100 select2" id="selectDepartment" required>
-                            <option></option>
+                            <option value="">Select Department</option>
                             @foreach ($departments as $department)
                                 <option value="{{ $department->intAutoID }}">{{ $department->strDeptName }}</option>
                             @endforeach
                         </select>
+                        <div class="invalid-feedback">Please select a department.</div>
                     </div>
 
+                    <!-- Category -->
                     <div class="form-group mb-2">
                         <label class="control-label fw-bold" for="selectCategory">Product Category </label>
                         <select class="form-select w-100 select2" id="selectCategory" required>
-                            <option></option>
+                            <option value="">Select Category</option>
                         </select>
+                        <div class="invalid-feedback">Please select a category.</div>
                     </div>
 
+                    <!-- Product -->
                     <div class="form-group mb-2">
                         <label class="control-label fw-bold" for="selectProduct">Product Name </label>
                         <select class="form-select w-100 select2" id="selectProduct" required>
-                            <option></option>
+                            <option value="">Select Product</option>
                         </select>
+                        <div class="invalid-feedback">Please select a product.</div>
                     </div>
 
+                    <!-- Machine -->
                     <div class="form-group mb-2">
                         <label class="control-label fw-bold" for="selectMachine">Machine </label>
                         <select class="form-select w-100 select2" id="selectMachine" required>
-                            <option></option>
+                            <option value="">Select Machine</option>
                         </select>
+                        <div class="invalid-feedback">Please select a machine.</div>
                     </div>
 
+                    <!-- Qty -->
                     <div class="form-group mb-2">
                         <label class="control-label fw-bold" for="decQty">Qty </label>
                         <input type="number" class="form-control w-100" id="decQty" required>
+                        <div class="invalid-feedback">Quantity must be greater than 0.</div>
                     </div>
 
-                    {{-- Label Type --}}
+                    <!-- Label Type -->
                     <div class="form-group mb-2">
                         <label class="control-label fw-bold" for="labelType">Label Type</label>
                         <select class="form-select w-100" id="labelType" required>
-                            <option></option>
+                            <option value="">Select Label Type</option>
                         </select>
+                        <div class="invalid-feedback">Please select a label type.</div>
                     </div>
 
-                    {{-- Pallets --}}
+                    <!-- Pallet / Bundle Quantity -->
                     <div class="form-group mb-2">
                         <label class="control-label fw-bold" for="configuration">Pallet / Bundle Quantity</label>
                         <div class="col-12 d-inline-flex">
                             <div class="col-11">
-                                <select class="form-select w-100 rounded-0 rounded-start" id="configuration">
-
-                                </select>
-                                <input class="form-control w-100 rounded-0" id="inputConfiguration" type="number"
-                                    hidden>
+                                <select class="form-select w-100 rounded-0 rounded-start" id="configuration"></select>
+                                <input class="form-control w-100 rounded-0" id="inputConfiguration" type="number" hidden>
+                                <div class="invalid-feedback">Configuration quantity must be greater than 0.</div>
                             </div>
                             <div class="col-1">
                                 <button class="btn btn-secondary rounded-0 rounded-end" id="btnEditConfiguration"><i
@@ -85,9 +94,11 @@
                         </div>
                     </div>
 
+                    <!-- Start Date -->
                     <div class="form-group mb-2">
                         <label class="control-label" for="dteStart">Start Date </label>
                         <input type="date" class="form-control col-xs-1" id="dteStart">
+                        <div class="invalid-feedback">Please select a start date.</div>
                     </div>
                 </div>
 
@@ -115,6 +126,8 @@
             var statuses = {!! json_encode($statuses) !!};
             let currentMachineId, currentJobId;
             let machineJobsData = [];
+
+            let updatedSequences = [];
 
             const gridJobs = $("#gridJobs").dxDataGrid({
                 dataSource: [], //as json
@@ -158,8 +171,39 @@
                     });
                     e.cancel = true;
                 },
-                columns: [
-                    {
+                rowDragging: {
+                    allowReordering: true,
+                    showDragIcons: true,
+                    onReorder(e) {
+                        const visibleRows = e.component.getVisibleRows();
+
+                        const fromIndex = e.fromIndex;
+                        const toIndex = e.toIndex;
+                        const item = visibleRows[fromIndex].data;
+
+                        visibleRows.splice(fromIndex, 1);
+                        visibleRows.splice(toIndex, 0, item);
+
+                        // Get the current group (machine)
+                        const currentMachine = item.strMachineName;
+
+                        // Update sequence for rows under this machine
+                        const machineRows = visibleRows.filter(r => r.rowType === 'data' && r.data
+                            .strMachineName === currentMachine);
+                        machineRows.forEach((row, idx) => {
+                            row.data.intSequence = idx + 1;
+                        });
+
+                        // Save updated sequences for this machine
+                        updatedSequences[currentMachine] = machineRows.map(r => ({
+                            intAutoId: r.data.intAutoId,
+                            intSequence: r.data.intSequence
+                        }));
+
+                        e.component.refresh();
+                    }
+                },
+                columns: [{
                         dataField: "intAutoId",
                         caption: "ID",
                         dataType: "number",
@@ -183,6 +227,59 @@
                     {
                         dataField: "strMachineName",
                         caption: "Machine",
+                        groupIndex: 0,
+                        cellTemplate(container, options) {
+                            if (options.rowType === "group") {
+                                const machineName = options.value;
+
+                                // Add machine name
+                                $('<span>')
+                                    .text(machineName)
+                                    .css({
+                                        fontWeight: 'bold',
+                                        marginRight: '10px'
+                                    })
+                                    .appendTo(container);
+
+                                // Add Update Sequence button
+                                $('<div>')
+                                    .dxButton({
+                                        text: "Update Sequence",
+                                        icon: "save",
+                                        type: "success",
+                                        onClick: function() {
+                                            const sequenceData = updatedSequences[machineName];
+                                            if (!sequenceData || sequenceData.length === 0) {
+                                                DevExpress.ui.notify(
+                                                    `No changes for ${machineName}`, "info",
+                                                    2000);
+                                                return;
+                                            }
+
+                                            console.log(`Updated sequence for ${machineName}:`,
+                                                sequenceData);
+
+                                            // 🔥 Your AJAX call
+                                            /*
+                                            $.ajax({
+                                                url: '/update-sequence',
+                                                type: 'POST',
+                                                data: JSON.stringify(sequenceData),
+                                                contentType: 'application/json',
+                                                success: function(res) {
+                                                    DevExpress.ui.notify(`${machineName} sequence updated successfully!`, "success", 2000);
+                                                    delete updatedSequences[machineName];
+                                                },
+                                                error: function() {
+                                                    DevExpress.ui.notify("Error updating sequence.", "error", 2000);
+                                                }
+                                            });
+                                            */
+                                        }
+                                    })
+                                    .appendTo(container);
+                            }
+                        }
                     },
                     {
                         dataField: "strProductCode",
@@ -266,7 +363,7 @@
                     },
                 ],
                 onRowDblClick: function(e) {
-                    currentJobId = e.data.intAutoId;     
+                    currentJobId = e.data.intAutoId;
                     currentJobId = e.data.intAutoId;
                     $('#selectStatus').val(e.data.intStatusId);
                     $('#inputPropStart').val(e.data.dtePropStart);
@@ -376,8 +473,7 @@
                     });
                     e.cancel = true;
                 },
-                columns: [
-                    {
+                columns: [{
                         dataField: "intAutoId",
                         caption: "ID",
                         dataType: "number",
@@ -720,9 +816,45 @@
                 $('#inputConfiguration').val(config);
             });
 
-            $('#btnSaveJob').click(function() {
+            $('#btnSaveJob').click(function(e) {
+                e.preventDefault();
+                let isValid = true;
+
+                function validateField(selector, message, condition = null) {
+                    const field = $(selector);
+                    let valid = true;
+
+                    if (!field.val() || (condition && !condition(field.val()))) {
+                        valid = false;
+                    }
+
+                    if (!valid) {
+                        field.addClass('is-invalid').removeClass('is-valid');
+                        field.siblings('.invalid-feedback').text(message);
+                        isValid = false;
+                    } else {
+                        field.removeClass('is-invalid').addClass('is-valid');
+                    }
+                }
+
+                // Validate all fields
+                validateField('#selectDepartment', 'Please select a department.');
+                validateField('#selectCategory', 'Please select a category.');
+                validateField('#selectProduct', 'Please select a product.');
+                validateField('#selectMachine', 'Please select a machine.');
+                validateField('#decQty', 'Quantity must be greater than 0.', val => parseFloat(val) > 0);
+                validateField('#labelType', 'Please select a label type.');
+                validateField('#inputConfiguration', 'Configuration quantity must be greater than 0.',
+                    val => parseFloat(val) > 0);
+                validateField('#dteStart', 'Please select a start date.');
+
+                if (!isValid) {
+                    return; // Stop execution if validation fails
+                }
+
+                // ✅ If validation passes, close modal and proceed with AJAX
                 $('#modalCreateJob').modal('hide');
-                
+
                 $.ajax({
                     url: '{!! url('/createNewJob') !!}',
                     type: "POST",
@@ -736,17 +868,15 @@
                         dtePropStart: $('#dteStart').val(),
                     },
                     success: function(data) {
-                        DevExpress.ui.notify({
-                            message: data.Message,
-                            type: data.Status == '1' ? 'success': 'error', // 'info', 'success', 'warning'
-                            displayTime: 3500,
-                        });
-
                         if (data.Status == '1') {
                             getActiveJobs();
                         }
                     }
                 });
+            });
+
+            $('select, input').on('change keyup', function() {
+                $(this).removeClass('is-invalid');
             });
 
             $('#btnEditConfiguration').click(function() {
@@ -781,13 +911,14 @@
                         // console.log(data);
                         DevExpress.ui.notify({
                             message: data.Message,
-                            type: data.Status == '1' ? 'success': 'error', // 'info', 'success', 'warning'
+                            type: data.Status == '1' ? 'success' :
+                            'error', // 'info', 'success', 'warning'
                             displayTime: 3500,
                         });
-                        
-                        if (intStatusId == 1){
+
+                        if (intStatusId == 1) {
                             $("#inputStart").val(data.dtmStarted);
-                        }else if(intStatusId == 2){
+                        } else if (intStatusId == 2) {
                             $("#inputEnd").val(data.dtmEnded);
                         }
 
@@ -799,14 +930,14 @@
 
             let originalQty = null;
 
-            $('#btnEditQty').click(function () {
+            $('#btnEditQty').click(function() {
                 originalQty = $('#inputQty').val();
                 $('#inputQty').prop('disabled', false).focus();
                 $('#btnEditQty').attr('hidden', true);
                 $('#btnSaveQty').removeAttr('hidden');
             });
 
-            $('#btnSaveQty').click(function () {
+            $('#btnSaveQty').click(function() {
                 const newQty = $('#inputQty').val();
 
                 $('#inputQty').prop('disabled', true);
@@ -826,19 +957,19 @@
                 const intJobId = currentJobId;
 
                 $.ajax({
-                    url: '{!!url("/updateJobQtyRequired")!!}',
+                    url: '{!! url('/updateJobQtyRequired') !!}',
                     type: "POST",
                     data: {
                         intJobId: intJobId,
                         decQtyRequired: newQty
                     },
-                    success: function (data) {
+                    success: function(data) {
                         DevExpress.ui.notify({
                             message: data.Message,
                             type: data.Status == '1' ? 'success' : 'error',
                             displayTime: 3500,
                         });
-                        
+
                         getActiveJobs();
                         getMachineJobs(currentMachineId);
                     }
@@ -864,7 +995,7 @@
 
             function getMachineJobs(intMachineId) {
                 $.ajax({
-                    url: '{!!url("/getMachineJobs")!!}',
+                    url: '{!! url('/getMachineJobs') !!}',
                     type: "GET",
                     data: {
                         intMachineId: intMachineId
@@ -877,7 +1008,7 @@
                 });
             }
 
-            function updateJobSequence(){
+            function updateJobSequence() {
                 var jobData = gridMachineJobs.option("dataSource");
 
                 var sequenceData = [];
@@ -888,9 +1019,9 @@
                         intSequence: job.intSequence
                     });
                 });
-                
+
                 $.ajax({
-                    url: '{!!url("/updateJobSequence")!!}',
+                    url: '{!! url('/updateJobSequence') !!}',
                     type: "POST",
                     data: {
                         sequenceData: sequenceData
@@ -901,9 +1032,9 @@
                             type: data.Status == '1' ? 'success' : 'error',
                             displayTime: 3500,
                         });
-                        
+
                         console.log(currentMachineId);
-                        
+
                         getActiveJobs();
                         getMachineJobs(currentMachineId);
                     }

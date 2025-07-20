@@ -48,6 +48,7 @@ BEGIN
 	INNER JOIN tblMachines m ON m.intAutoMachineID = jobs.intMachineId
 	INNER JOIN tblDepartments dp ON dp.intAutoID = jobs.intDepartmentId
 	INNER JOIN tblSageFullStock stk ON stk.Code = jobs.strProductCode
-	ORDER BY jobs.intAutoId DESC
+	WHERE jobs.intStatusId <> 2
+	ORDER BY dp.strDeptName, jobs.intSequence 
 END
 GO

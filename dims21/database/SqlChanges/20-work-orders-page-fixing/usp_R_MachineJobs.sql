@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -49,7 +48,7 @@ BEGIN
 	INNER JOIN tblMachines m ON m.intAutoMachineID = jobs.intMachineId
 	INNER JOIN tblDepartments dp ON dp.intAutoID = jobs.intDepartmentId
 	INNER JOIN tblSageFullStock stk ON stk.Code = jobs.strProductCode
-	WHERE jobs.intMachineId = @intMachineId
+	WHERE jobs.intMachineId = @intMachineId AND jobs.intStatusId <> 2
 	ORDER BY jobs.intSequence, jobs.intAutoId DESC
 END
 GO
