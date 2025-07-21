@@ -99,6 +99,7 @@ public function individualInvoicing(Request $request)
             ]);
         }
 
+        
         // 5. Build order XML
         $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
             ->select(
@@ -253,6 +254,15 @@ public function individualInvoicing(Request $request)
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
+
+                    // ✅ Eligibility check
+            $eligibilityCheck = DB::connection('sqlsrv3')->select("EXEC sp_CheckInvoiceEligibility ?", [$ref]);
+            if (isset($eligibilityCheck[0]->Result) && $eligibilityCheck[0]->Result === 'AlreadyProcessed') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'This order has already been invoiced or pushed to XML.',
+                ]);
+            }
 
         if ($invoiceid < 0) {
             $UserID = Auth::user()->UserID;

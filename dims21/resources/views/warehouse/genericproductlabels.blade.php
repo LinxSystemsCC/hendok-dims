@@ -43,7 +43,7 @@
             {{-- Department --}}
             <div class="form-group mb-2">
                 <label class="control-label fw-bold" for="department">Department</label>
-                <select  class="form-select" id="department"required>
+                <select  class="form-select select2" id="department"required>
                     <option></option>
                     @foreach($dept as $val)
                         <option value="{{$val->intAutoID}}">{{$val->strDeptName}}</option>
