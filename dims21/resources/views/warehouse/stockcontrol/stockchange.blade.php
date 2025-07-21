@@ -6,15 +6,19 @@
     <link rel="icon" type="image/png" href="{{ url('images/dimslogo.png') }}">
     <title>Stock Change</title>
 
-    <!-- CSS only -->
-<link href="{{ asset('bootstrap/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
-<link href="{{ asset('bootstrap/select2.min.css') }}" rel="stylesheet" crossorigin="anonymous">
-<link rel="stylesheet" href="{{ asset('bootstrap/select2-bootstrap-5-theme.min.css') }}" crossorigin="anonymous" />
+ 
+  <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
+    <!-- DevExtreme theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/css/dx.material.orange.light.compact.css" rel="stylesheet">
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
 
 
     <!-- Select2 CSS -->
-    <link rel="stylesheet" href="{{ asset(path: 'bootstrap/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" crossorigin="anonymous" />
 
 
     <style>
@@ -206,17 +210,20 @@
     <!-- jQuery -->
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 
-    <script src="{{ asset('bootstrap/jquery.min.js') }}"></script>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script src="{{ asset('bootstrap/select2.min.js') }}"></script>
+<!-- Excel Saver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
 
+<!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
-    <script src="{{ asset('bootstrap/bootstrap.bundle.min.js') }}"></script>
-
-
-
-    <script src="{{ asset('bootstrap/dx.all.js') }}"></script>
+<!-- DevExtreme library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script>
 
 
     <script>
