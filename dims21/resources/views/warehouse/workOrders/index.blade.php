@@ -123,17 +123,34 @@
                 });
             });
 
+            $('#modalCreateJob').on('hidden.bs.modal', function() {
+                // Reset all input values
+                $(this).find('input, select').val('');
+
+                // Reset select2 dropdowns
+                $(this).find('select.select2').val(null).trigger('change');
+
+                // Remove Bootstrap validation classes
+                $(this).find('.is-invalid, .is-valid').removeClass('is-invalid is-valid');
+
+                // Reset any custom error messages if needed
+                $(this).find('.invalid-feedback').hide();
+            });
+
             var statuses = {!! json_encode($statuses) !!};
             let currentMachineId, currentJobId;
             let machineJobsData = [];
 
             let updatedSequences = [];
 
+            let dataJobs = [];
+
             const gridJobs = $("#gridJobs").dxDataGrid({
-                dataSource: [], //as json
+                dataSource: dataJobs,
                 showBorders: true,
                 hoverStateEnabled: true,
                 height: '100%',
+                key: 'intAutoId',
                 filterRow: {
                     visible: true
                 },
@@ -177,31 +194,52 @@
                     onReorder(e) {
                         const visibleRows = e.component.getVisibleRows();
 
-                        const fromIndex = e.fromIndex;
-                        const toIndex = e.toIndex;
-                        const item = visibleRows[fromIndex].data;
+                        // Ensure we don't drag across groups
+                        const fromRow = visibleRows[e.fromIndex];
+                        const toRow = visibleRows[e.toIndex];
+                        if (!fromRow || !toRow) return;
 
-                        visibleRows.splice(fromIndex, 1);
-                        visibleRows.splice(toIndex, 0, item);
+                        const fromGroup = fromRow.data.strMachineName;
+                        const toGroup = toRow.data.strMachineName;
 
-                        // Get the current group (machine)
-                        const currentMachine = item.strMachineName;
+                        if (fromGroup !== toGroup) {
+                            e.cancel = true;
+                            return;
+                        }
 
-                        // Update sequence for rows under this machine
-                        const machineRows = visibleRows.filter(r => r.rowType === 'data' && r.data
-                            .strMachineName === currentMachine);
-                        machineRows.forEach((row, idx) => {
-                            row.data.intSequence = idx + 1;
-                        });
+                        // Get all rows for the current group
+                        const groupData = dataJobs.filter(x => x.strMachineName === fromGroup);
 
-                        // Save updated sequences for this machine
-                        updatedSequences[currentMachine] = machineRows.map(r => ({
-                            intAutoId: r.data.intAutoId,
-                            intSequence: r.data.intSequence
-                        }));
+                        // Get indexes relative to the group
+                        const groupVisibleIndexes = visibleRows
+                            .map((row, idx) => ({
+                                idx,
+                                row
+                            }))
+                            .filter(item => item.row.data.strMachineName === fromGroup)
+                            .map(item => item.idx);
 
-                        e.component.refresh();
-                    }
+                        const fromGroupIndex = groupVisibleIndexes.indexOf(e.fromIndex);
+                        const toGroupIndex = groupVisibleIndexes.indexOf(e.toIndex);
+
+                        if (fromGroupIndex === -1 || toGroupIndex === -1) return;
+
+                        // Move the item within the group
+                        const movedItem = groupData.splice(fromGroupIndex, 1)[0];
+                        groupData.splice(toGroupIndex, 0, movedItem);
+
+                        // Reassign sequence
+                        groupData.forEach((item, idx) => (item.intSequence = idx + 1));
+
+                        // Replace updated group back into dataJobs
+                        dataJobs = [
+                            ...dataJobs.filter(x => x.strMachineName !== fromGroup),
+                            ...groupData
+                        ];
+
+                        // Refresh the grid
+                        e.component.option("dataSource", [...dataJobs]);
+                    },
                 },
                 columns: [{
                         dataField: "intAutoId",
@@ -223,65 +261,34 @@
                         caption: "Machine ID",
                         dataType: "number",
                         visible: false,
-                    },
-                    {
+                    }, {
                         dataField: "strMachineName",
                         caption: "Machine",
                         groupIndex: 0,
-                        cellTemplate(container, options) {
-                            if (options.rowType === "group") {
-                                const machineName = options.value;
+                        groupCellTemplate: function(cellElement, cellInfo) {
+                            const $container = $(
+                                '<div class="d-flex align-items-center w-100"></div>'
+                            );
 
-                                // Add machine name
-                                $('<span>')
-                                    .text(machineName)
-                                    .css({
-                                        fontWeight: 'bold',
-                                        marginRight: '10px'
-                                    })
-                                    .appendTo(container);
+                            // Create dxButton first (button will appear at the start)
+                            const $btn = $('<div>').appendTo($container);
+                            $btn.dxButton({
+                                icon: "fa-solid fa-arrow-down-1-9",
+                                text: "Sequence",
+                                onClick: function() {
+                                    // Extract full group data
+                                    const groupData = cellInfo.data.items;
+                                    updateJobSequence(groupData);
+                                }
+                            });
 
-                                // Add Update Sequence button
-                                $('<div>')
-                                    .dxButton({
-                                        text: "Update Sequence",
-                                        icon: "save",
-                                        type: "success",
-                                        onClick: function() {
-                                            const sequenceData = updatedSequences[machineName];
-                                            if (!sequenceData || sequenceData.length === 0) {
-                                                DevExpress.ui.notify(
-                                                    `No changes for ${machineName}`, "info",
-                                                    2000);
-                                                return;
-                                            }
+                            // Add the group text
+                            const $text = $('<span class="ms-2">').text(cellInfo.text);
+                            $container.append($text);
 
-                                            console.log(`Updated sequence for ${machineName}:`,
-                                                sequenceData);
-
-                                            // 🔥 Your AJAX call
-                                            /*
-                                            $.ajax({
-                                                url: '/update-sequence',
-                                                type: 'POST',
-                                                data: JSON.stringify(sequenceData),
-                                                contentType: 'application/json',
-                                                success: function(res) {
-                                                    DevExpress.ui.notify(`${machineName} sequence updated successfully!`, "success", 2000);
-                                                    delete updatedSequences[machineName];
-                                                },
-                                                error: function() {
-                                                    DevExpress.ui.notify("Error updating sequence.", "error", 2000);
-                                                }
-                                            });
-                                            */
-                                        }
-                                    })
-                                    .appendTo(container);
-                            }
-                        }
-                    },
-                    {
+                            $(cellElement).append($container);
+                        },
+                    }, {
                         dataField: "strProductCode",
                         caption: "Product Code",
                     },
@@ -441,7 +448,7 @@
                 },
                 rowDragging: {
                     allowReordering: true,
-                    showDragIcons: false,
+                    showDragIcons: true,
                     onReorder(e) {
                         const fromIndex = e.fromIndex;
                         const toIndex = e.toIndex;
@@ -590,10 +597,11 @@
                         location: 'after',
                         widget: "dxButton",
                         options: {
-                            icon: "SEQUENCE",
+                            icon: "fa-solid fa-arrow-down-1-9",
                             text: "SEQUENCE",
                             onClick: function() {
-                                updateJobSequence();
+                                var jobData = gridMachineJobs.option("dataSource");
+                                updateJobSequence(jobData);
                             },
                         },
                     });
@@ -619,7 +627,7 @@
                         ItemGroup: $('#selectDepartment option:selected').text(),
                     },
                     success: function(data) {
-                        let toAppend = '<option></option>';
+                        let toAppend = '<option value="">Select Category</option>';
                         $('#selectCategory').empty();
                         $.each(data, function(i, o) {
                             toAppend +=
@@ -642,7 +650,7 @@
                         prompt: 'DepartmentMachines'
                     },
                     success: function(data) {
-                        let toAppend = '<option></option>';
+                        let toAppend = '<option value="">Select Machine</option>';
                         $('#selectMachine').empty();
                         $.each(data, function(i, o) {
                             toAppend +=
@@ -666,7 +674,7 @@
                         ItemGroup: $('#selectCategory').val(),
                     },
                     success: function(data) {
-                        let toAppend = '<option></option>';
+                        let toAppend = '<option value="">Select Product</option>';
                         $('#selectProduct').empty();
                         $.each(data, function(i, o) {
                             toAppend +=
@@ -676,31 +684,6 @@
                     },
                     complete: function() {
                         ajaxRequests.category = null;
-                    }
-                });
-            });
-
-            $('#selectProduct').change(function() {
-                if (ajaxRequests.product) ajaxRequests.product.abort();
-
-                ajaxRequests.product = $.ajax({
-                    url: '{!! url('/getMachinesforselecteddept') !!}',
-                    type: 'GET',
-                    data: {
-                        deptId: $('#selectDepartment').val(),
-                        prodname: '1'
-                    },
-                    success: function(data) {
-                        let toAppend = '<option></option>';
-                        $('#selectMachine').empty();
-                        $.each(data, function(i, o) {
-                            toAppend +=
-                                `<option value="${o.intMachineID}">${o.strMachineName}</option>`;
-                        });
-                        $('#selectMachine').append(toAppend);
-                    },
-                    complete: function() {
-                        ajaxRequests.product = null;
                     }
                 });
             });
@@ -761,7 +744,7 @@
                                 toAppend += '</optgroup>';
                             }
                         });
-                        $("#configuration").append(toAppend);
+                        $("#configuration").append(toAppend).addClass("form-select");
 
                         var addType = '';
                         $("#labelType").empty();
@@ -780,7 +763,7 @@
                                 '<option value = "Pallet">Pallet</option>';
                         }
 
-                        $("#labelType").append(addType);
+                        $("#labelType").append(addType).addClass("form-select");
                     }
                 });
             });
@@ -989,11 +972,17 @@
                         // console.log(data);
                         gridJobs.option("dataSource", data);
                         gridJobs.refresh();
+
+                        dataJobs = data;
                     }
                 });
             };
 
             function getMachineJobs(intMachineId) {
+                if (!intMachineId || intMachineId === 0) {
+                    return;
+                }
+                
                 $.ajax({
                     url: '{!! url('/getMachineJobs') !!}',
                     type: "GET",
@@ -1008,9 +997,7 @@
                 });
             }
 
-            function updateJobSequence() {
-                var jobData = gridMachineJobs.option("dataSource");
-
+            function updateJobSequence(jobData) {
                 var sequenceData = [];
 
                 $.each(jobData, function(index, job) {
@@ -1032,8 +1019,6 @@
                             type: data.Status == '1' ? 'success' : 'error',
                             displayTime: 3500,
                         });
-
-                        console.log(currentMachineId);
 
                         getActiveJobs();
                         getMachineJobs(currentMachineId);
