@@ -7,12 +7,10 @@
     <title>Stock Change</title>
 
     <!-- CSS only -->
-    <link href="{{ asset(path: 'bootstrap/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
+<link href="{{ asset('bootstrap/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
+<link href="{{ asset('bootstrap/select2.min.css') }}" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ asset('bootstrap/select2-bootstrap-5-theme.min.css') }}" crossorigin="anonymous" />
 
-
-    <link href="{{ asset(path: 'bootstrap/select2.min.css') }}" rel="stylesheet" crossorigin="anonymous">
-
-    <link href="{{ asset(path: 'bootstrap/select2.min.css') }}" rel="stylesheet" crossorigin="anonymous">
 
 
     <!-- Select2 CSS -->
@@ -48,7 +46,7 @@
                     {{-- Department --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="department">Department</label>
-                         <small class="text-danger" id="error_from_dep" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_from_dep" style="display: none">This field is required</small>
 
                         <select class="form-select select2" id="department" required>
                             <option></option>
@@ -72,7 +70,7 @@
                     {{-- Product --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="product">Product </label>
-                         <small class="text-danger" id="error_from_product" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_from_product" style="display: none">This field is required</small>
                         <select class="form-select" id="product" required>
                             <option></option>
                         </select>
@@ -81,7 +79,7 @@
                     <div class="form-group mb-2">
                         <label class="control-label">Select DC </label>
                         <select name="from_dc" class="form-select" id="from_dc">
-                         <small class="text-danger" id="error_from_dc" style="display: none">This field is required</small>
+                            <small class="text-danger" id="error_from_dc" style="display: none">This field is required</small>
 
                             <option value=""></option>
                             @foreach ($dcData as $val)
@@ -94,7 +92,7 @@
 
                     <div class="form-group mb-2">
                         <label class="control-label">Select Warehouse </label>
-                         <small class="text-danger" id="error_from_wh" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_from_wh" style="display: none">This field is required</small>
                         <select name="from_warehouse" class="form-select" id="from_warehouse">
                             <option value=""></option>
                         </select>
@@ -102,14 +100,14 @@
 
                     <div class="form-group mb-2">
                         <label>Select Zone</label>
-                         <small class="text-danger" id="error_from_zone" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_from_zone" style="display: none">This field is required</small>
                         <select name="from_zone" id="from_zone" class="form-select"></select>
                     </div>
 
                     {{-- Label Type --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="labelType">Label Type</label>
-                           <small class="text-danger" id="error_label_type" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_label_type" style="display: none">This field is required</small>
                         <select class="form-select input-sm w-100" id="labelType" required>
                             <option></option>
                         </select>
@@ -119,7 +117,7 @@
                     {{-- Quantity --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="quantity">Quantity </label>
-                          <small class="text-danger" id="error_quantity" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_quantity" style="display: none">This field is required</small>
                         <input type="number" class="form-control" id="quantity" required>
                     </div>
 
@@ -128,19 +126,19 @@
                 <!-- Change Product To -->
                 <div class="col-md-6">
                     <strong class="mb-3 d-block">Change Product to:</strong>
-           <div class="form-group">
-    <label for="stock_type">Stock Change Type</label>
-    <small class="text-danger" id="error_stock_type" style="display: none">This field is required</small>
-    <select class="form-select" id="stock_type">
-        <option value=""></option>
-        <option value="Normal Stock">Normal Stock</option>
-        <option value="B-Grade">B-Grade</option>
-    </select>
-</div>
+                    <div class="form-group">
+                        <label for="stock_type">Stock Change Type</label>
+                        <small class="text-danger" id="error_stock_type" style="display: none">This field is required</small>
+                        <select class="form-select" id="stock_type">
+                            <option value=""></option>
+                            <option value="Normal Stock">Normal Stock</option>
+                            <option value="B-Grade">B-Grade</option>
+                        </select>
+                    </div>
 
                     <div class="form-group">
                         <label for="to_department">Department</label>
-                            <small class="text-danger" id="error_to_department" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_to_department" style="display: none">This field is required</small>
                         <select class="form-select select2" id="to_department">
                             <option></option>
                             @foreach($dept as $val)
@@ -149,23 +147,23 @@
                         </select>
                     </div>
 
-   
+
                     <div class="form-group">
                         <label for="to_category">Product Category</label>
-                      <small class="text-danger" id="error_to_category" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_to_category" style="display: none">This field is required</small>
                         <select class="form-select" id="to_category"></select>
                     </div>
 
 
                     <div class="form-group">
                         <label for="to_product">Product</label>
-                     <small class="text-danger" id="error_to_product" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_to_product" style="display: none">This field is required</small>
                         <select class="form-select" id="to_product"></select>
                     </div>
 
                     <div class="form-group">
                         <label for="to_dc">Select DC</label>
-                          <small class="text-danger" id="error_to_dc" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_to_dc" style="display: none">This field is required</small>
                         <select name="to_dc" class="form-select" id="to_dc">
                             <option></option>
                             @foreach ($dcData as $val)
@@ -176,7 +174,7 @@
 
                     <div class="form-group">
                         <label for="to_warehouse">Select Warehouse</label>
-                           <small class="text-danger" id="error_to_wh" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_to_wh" style="display: none">This field is required</small>
                         <select name="to_warehouse" class="form-select" id="to_warehouse">
                             <option></option>
                         </select>
@@ -184,16 +182,16 @@
 
                     <div class="form-group">
                         <label for="to_zone">Select Zone</label>
-                           <small class="text-danger" id="error_to_zone" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_to_zone" style="display: none">This field is required</small>
                         <select name="to_zone" class="form-select" id="to_zone"></select>
                     </div>
 
 
-                                <div class="form-group" id="hideWeight" style="display: none;">
-                    <label for="TypeWeight">Type Weight</label>
-                    <small class="text-danger" id="error_weight" style="display: none">This field is required</small>
-                    <input type="number" class="form-control" id="TypeWeight">
-                </div>
+                    <div class="form-group" id="hideWeight" style="display: none;">
+                        <label for="TypeWeight">Type Weight</label>
+                        <small class="text-danger" id="error_weight" style="display: none">This field is required</small>
+                        <input type="number" class="form-control" id="TypeWeight">
+                    </div>
                 </div>
             </div>
             <button class="btn btn-success" id="btnChangeProduct" style="width: 50%; margin-right: 10px;">Change Product</button>
@@ -240,22 +238,22 @@
             });
 
 
-                            // Handle dropdown change to show/hide the TypeWeight field
-                $('#stock_type').on('change', function () {
-                    const stockType = $(this).val();
-                    
-                    if (stockType === 'B-Grade') {
-                        $('#hideWeight').show();
+            // Handle dropdown change to show/hide the TypeWeight field
+            $('#stock_type').on('change', function() {
+                const stockType = $(this).val();
+
+                if (stockType === 'B-Grade') {
+                    $('#hideWeight').show();
 
 
-                        
-                    } else {
-                        $('#hideWeight').hide();
-                        $('#error_weight').hide(); // Hide the error if not B-Grade
-                        $('#TypeWeight').val(''); // Clear value if not needed
-                    }
-                });
-       
+
+                } else {
+                    $('#hideWeight').hide();
+                    $('#error_weight').hide(); // Hide the error if not B-Grade
+                    $('#TypeWeight').val(''); // Clear value if not needed
+                }
+            });
+
 
 
             const allBins = @json($bins);
@@ -615,7 +613,7 @@
                     }
                 });
             });
-        
+
             $('#btnChangeProduct').click(function() {
                 let isValid = true;
 
@@ -712,7 +710,7 @@
                     $("#error_to_category").hide();
                 }
 
-             if ($('#to_department').val() === '') {
+                if ($('#to_department').val() === '') {
                     $("#error_to_department").show();
                     isValid = false;
                 } else {
@@ -720,29 +718,29 @@
                 }
 
 
-                 
 
-//For Stock Type 
-    const stockType = $('#stock_type').val();
-    const typeWeight = $('#TypeWeight').val();
 
-    // Validate stock_type
-    if (stockType === '') {
-        $('#error_stock_type').show();
-        isValid = false;
-    } else {
-        $('#error_stock_type').hide();
-    }
+                //For Stock Type 
+                const stockType = $('#stock_type').val();
+                const typeWeight = $('#TypeWeight').val();
 
-    // Validate TypeWeight only if B-Grade is selected
-    if (stockType === 'B-Grade') {
-        if (typeWeight === '') {
-            $('#error_weight').show();
-            isValid = false;
-        } else {
-            $('#error_weight').hide();
-        }
-    }
+                // Validate stock_type
+                if (stockType === '') {
+                    $('#error_stock_type').show();
+                    isValid = false;
+                } else {
+                    $('#error_stock_type').hide();
+                }
+
+                // Validate TypeWeight only if B-Grade is selected
+                if (stockType === 'B-Grade') {
+                    if (typeWeight === '') {
+                        $('#error_weight').show();
+                        isValid = false;
+                    } else {
+                        $('#error_weight').hide();
+                    }
+                }
 
 
 
@@ -750,49 +748,26 @@
 
                 // Proceed with AJAX
                 const payload = {
-                    department: $('#department').val(),
-                    category: $('#category').val(),
-                    product: $('#product').val(),
-                    from_dc: $('#from_dc').val(),
-                    from_warehouse: $('#from_warehouse').val(),
-                    from_zone: $('#from_zone').val(),
-                    label_type: $('#labelType').val(),
-                    quantity: $('#quantity').val(), // ✅ Add comma here
-                    to_department: $('#to_department').val(),
-                    to_category: $('#to_category').val(),
-                    to_dc: $('#to_dc').val(),
-                    to_warehouse: $('#to_warehouse').val(),
-                    to_zone: $('#to_zone').val(),
-                    to_product: $('#to_product').val(),
-                    type_weight: $('#TypeWeight').val(),
-                    stockType: $('#stock_type').val(),
+                    department: $('#department').val()
+                    , category: $('#category').val()
+                    , product: $('#product').val()
+                    , from_dc: $('#from_dc').val()
+                    , from_warehouse: $('#from_warehouse').val()
+                    , from_zone: $('#from_zone').val()
+                    , label_type: $('#labelType').val()
+                    , quantity: $('#quantity').val(), // ✅ Add comma here
+                    to_department: $('#to_department').val()
+                    , to_category: $('#to_category').val()
+                    , to_dc: $('#to_dc').val()
+                    , to_warehouse: $('#to_warehouse').val()
+                    , to_zone: $('#to_zone').val()
+                    , to_product: $('#to_product').val()
+                    , type_weight: $('#TypeWeight').val()
+                    , stockType: $('#stock_type').val(),
 
                 };
 
-                                // const selectedDcId = $('#from_dc').val();
-
-
-//                 console.log({
-//                 department: $('#department').val(),
-//                 category: $('#category').val(),
-//                 product: $('#product').val(),
-//                 from_dc: $('#from_dc').val(),
-//                 from_warehouse: $('#from_warehouse').val(),
-//                 from_zone: $('#from_zone').val(),
-//                 label_type: $('#labelType').val(),
-//                 quantity: $('#quantity').val(),
-//                 to_department: $('#to_department').val(),
-//                 to_category: $('#to_category').val(),
-//                 to_dc: $('#to_dc').val(),
-//                 to_warehouse: $('#to_warehouse').val(),
-//                 to_zone: $('#to_zone').val(),
-//                 to_product: $('#to_product').val(),
-//                 type_weight: $('#TypeWeight').val()
-// });
-
-// console.log('Sekected DC' + selectedDcId)
-
-
+           
                 $.ajax({
                     url: "{{ route('change.stock') }}"
                     , method: "POST"
