@@ -117,7 +117,7 @@
                     {{-- Quantity --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="quantity">Quantity </label>
-                        <small class="text-danger" id="error_quantity" style="display: none">This field is required</small>
+                        <small class="text-danger" id="error_quantity" style="display: none">This field is requireds</small>
                         <input type="number" class="form-control" id="quantity" required>
                     </div>
 
