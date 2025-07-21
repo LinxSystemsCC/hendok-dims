@@ -50,14 +50,14 @@ class WareHouseController extends Controller
 
     public function createuser(Request $request)
     {
-        $username =  $request->get("username");
-        $email =  $request->get("email");
-        $password =  $request->get("password");
-        $groupID =  $request->get("groupID");
-        $groupType =  $request->get("groupType");
-        $sageCode =  $request->get("sageCode");
-        $pincode =  $request->get("pincode");
-        $tabletuser =  $request->get("tabletuser");
+        $username = $request->get("username");
+        $email = $request->get("email");
+        $password = $request->get("password");
+        $groupID = $request->get("groupID");
+        $groupType = $request->get("groupType");
+        $sageCode = $request->get("sageCode");
+        $pincode = $request->get("pincode");
+        $tabletuser = $request->get("tabletuser");
         $encrypted = bcrypt($password);
 
         $returnuser = DB::connection('sqlsrv2')
@@ -185,7 +185,7 @@ class WareHouseController extends Controller
     }
     public function joblabelassign()
     {
-        $userid =  Auth::user()->UserID;
+        $userid = Auth::user()->UserID;
 
         $returnmach = DB::connection('sqlsrv3')
             ->select(
@@ -196,7 +196,7 @@ class WareHouseController extends Controller
     }
     public function initiateproductonmachine()
     {
-        $userid =  Auth::user()->UserID;
+        $userid = Auth::user()->UserID;
 
         $returnmach = DB::connection('sqlsrv3')->select('exec spGetProductByWarehouseDept ?', array($userid));
         return view('warehouse/initiateproducts');
@@ -249,7 +249,7 @@ class WareHouseController extends Controller
 
     public function genericproductlabels()
     {
-        $userId =  Auth::user()->UserID;
+        $userId = Auth::user()->UserID;
 
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
@@ -263,7 +263,7 @@ class WareHouseController extends Controller
 
     public function warehousepalletlabels()
     {
-        $userId =  Auth::user()->UserID;
+        $userId = Auth::user()->UserID;
 
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
@@ -480,7 +480,7 @@ class WareHouseController extends Controller
 
         $getHandleFeeValue = DB::connection('sqlsrv3')
             ->table('tblUpliftmentHeaders')
-            ->where('strInvoice',) //i dont know the invoice as yes because I dont know which row the user will click on Maybe we can use ajax i dont know
+            ->where('strInvoice', ) //i dont know the invoice as yes because I dont know which row the user will click on Maybe we can use ajax i dont know
             ->value('bitHandingFee');
 
 
@@ -898,7 +898,7 @@ class WareHouseController extends Controller
         $products = DB::connection('sqlsrv2')->select("SELECT * FROM tblProductsWmax ");
         $locations = DB::connection('sqlsrv2')->select("SELECT intLocationNameId AS intLocationId, strLocationName FROM viewLocationNames");
         $bins = DB::connection('sqlsrv2')->select("SELECT intLocationId, intBinId, strBin AS strBinName FROM viewBinNames");
-        
+
         return view('warehouse/wmaxregrade')
             ->with('customers', $customers)
             ->with('products', $products)
@@ -961,7 +961,7 @@ class WareHouseController extends Controller
         $returnTrueOrFalse = DB::connection('sqlsrv3')
             ->select("select [dbo].[fnGetGroupThings](" . $GroupId . ",'" . $thing . "',0) as things");
         foreach ($returnTrueOrFalse as $val) {
-            $things =  $val->things;
+            $things = $val->things;
         }
         return $things;
     }
@@ -1129,9 +1129,12 @@ class WareHouseController extends Controller
         $sequm = $request->get("sequm");
         $tensile = $request->get("tensile");
         $netmass = $request->get("netmass");
-        $GrossMass = $request->get("GrossMass");;
-        $taremass = $request->get("taremass");;
-        $buttonMethod = $request->get("buttonMethod");;
+        $GrossMass = $request->get("GrossMass");
+        ;
+        $taremass = $request->get("taremass");
+        ;
+        $buttonMethod = $request->get("buttonMethod");
+        ;
 
         //dd($ref, $custnum, $prod, $dept, $machine, $jobnum, $massProduced,$zinc, $mpa, $castno, $wire, $passFail, $operator,$sequm, $tensile, $netmass, $GrossMass, $taremass, $buttonMethod);
 
@@ -1214,7 +1217,8 @@ class WareHouseController extends Controller
     public function savestockchangewmax(Request $request)
     {
         $newcustname = $request->get("newcustname");
-        $newprodname = $request->get("newprodname");;
+        $newprodname = $request->get("newprodname");
+        ;
         $mass = $request->get("mass");
         $operator = Auth::user()->UserName;
         $ticketNo = $request->get("ticketNo");
@@ -1487,7 +1491,7 @@ class WareHouseController extends Controller
     public function production_departments()
     {
         $dept = DB::connection('sqlsrv2')->select("SELECT * FROM tblDepartments");
-        
+
         $groupId = Auth::user()->GroupId;
         $hasRedirect = (new SalesForm())->getThings($groupId, 'Has Auto Redirect');
 
@@ -1701,7 +1705,7 @@ class WareHouseController extends Controller
 
         return view('warehouse/chooseproducttomake')->with('pallet', $pallets)->with('machines', $machines)->with('products', $products)->with('qty', $qty);
     }
-    
+
     public function production_labels($intDepartmentId, $intMachineId)
     {
         $departments = DB::connection('sqlsrv2')->select("SELECT * FROM tblDepartments WHERE intAutoID = $intDepartmentId");
@@ -1765,17 +1769,17 @@ class WareHouseController extends Controller
     public function GetAreaDeptSubDeptByMachine(Request $request)
     {
         $MachineName = $request->get('MachineName');
-        $result =  DB::connection('sqlsrv3')->select("EXEC spGetAreaDeptSubDeptByMachine '$MachineName'");
+        $result = DB::connection('sqlsrv3')->select("EXEC spGetAreaDeptSubDeptByMachine '$MachineName'");
         return response()->json($result);
     }
 
     public function bulkMapping()
     {
-        $mappings =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping mappings');
-        $areas =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping areas');
-        $departments =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping departments');
-        $subdepartments =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping subdepartments');
-        $machines =  DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping machines');
+        $mappings = DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping mappings');
+        $areas = DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping areas');
+        $departments = DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping departments');
+        $subdepartments = DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping subdepartments');
+        $machines = DB::connection('sqlsrv3')->select('EXEC spGetBulkMapping machines');
 
         // dd($mappings, $areas, $departments, $subdepartments, $machines);
 
@@ -1791,7 +1795,7 @@ class WareHouseController extends Controller
     {
         $ID = $request->get("ID");
         $prompt = $request->get("prompt");
-        $data =  DB::connection('sqlsrv3')->select("EXEC spCheckBulkMapping $ID, $prompt");
+        $data = DB::connection('sqlsrv3')->select("EXEC spCheckBulkMapping $ID, $prompt");
         return response()->json($data);
     }
 
@@ -1803,7 +1807,7 @@ class WareHouseController extends Controller
         $machine = $request->get("machine");
         $ID = $request->get("ID");
         $prompt = $request->get("prompt");
-        $data =  DB::connection('sqlsrv3')->select("EXEC spBulkMappingCRUD $area, $department, $subdepartment, $machine, $ID, '$prompt'");
+        $data = DB::connection('sqlsrv3')->select("EXEC spBulkMappingCRUD $area, $department, $subdepartment, $machine, $ID, '$prompt'");
         return response()->json($data);
     }
 
@@ -1812,14 +1816,14 @@ class WareHouseController extends Controller
         $ID = $request->get("ID");
         $prompt = $request->get("prompt");
         print_r($ID, $prompt);
-        $data =  DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $ID, '$prompt'");
+        $data = DB::connection('sqlsrv3')->select("EXEC spGetBulkMappingAreaDeptSubDeptMachines $ID, '$prompt'");
         return response()->json($data);
     }
 
     public function getProductsMappedToDepartment(Request $request)
     {
         $ID = $request->get("ID");
-        $data =  DB::connection('sqlsrv3')->select("EXEC spGetProductsMappedToDepartment $ID");
+        $data = DB::connection('sqlsrv3')->select("EXEC spGetProductsMappedToDepartment $ID");
         return response()->json($data);
     }
 
@@ -1827,7 +1831,7 @@ class WareHouseController extends Controller
 
     public function nailsInner()
     {
-        $nails =  DB::connection('sqlsrv3')->select("SELECT * FROM tblNailsInner");
+        $nails = DB::connection('sqlsrv3')->select("SELECT * FROM tblNailsInner");
         return view('warehouse/nailsInner')->with('nails', $nails);
     }
 
@@ -1848,7 +1852,7 @@ class WareHouseController extends Controller
 
         // dd($code,$description,$group,$labelDescription,$size,$packsize,$label,$coating,$barcode,$prompt,$ID,$UserID);
 
-        $nails =  DB::connection('sqlsrv3')->select(
+        $nails = DB::connection('sqlsrv3')->select(
             "EXEC spNailsInnerCrud ?,?,?,?,?,?,?,?,?,?,?,?",
             array($code, $description, $group, $labelDescription, $size, $packsize, $label, $coating, $barcode, $prompt, $ID, $UserID)
         );
@@ -1861,7 +1865,7 @@ class WareHouseController extends Controller
         $jobid = $request->get("jobid");
         $endjob = $request->get("endjob");
         $endjob = (new \DateTime($endjob))->format('Y-m-d H:i:s');
-        $result =  DB::connection('sqlsrv2')->table('tblJobQrcodeAllocation')
+        $result = DB::connection('sqlsrv2')->table('tblJobQrcodeAllocation')
             ->where('intJobId', $jobid)
             ->update(['dteJobEnded' => $endjob]);
         return response()->json($result);
@@ -1871,7 +1875,7 @@ class WareHouseController extends Controller
         $jobid = $request->get("jobid");
         $startdate = $request->get("startdate");
         $startdate = (new \DateTime($startdate))->format('Y-m-d');
-        $result =  DB::connection('sqlsrv2')->table('tblJobQrcodeAllocation')
+        $result = DB::connection('sqlsrv2')->table('tblJobQrcodeAllocation')
             ->where('intJobId', $jobid)
             ->update(['dteStartDate' => $startdate]);
 
@@ -2097,7 +2101,7 @@ class WareHouseController extends Controller
                 );
         }
 
-        $v  =  new \App\Http\Controllers\SalesForm();
+        $v = new \App\Http\Controllers\SalesForm();
         $GroupId = Auth::user()->GroupId;
         if ($v->getThings($GroupId, 'Print Pallet')) {
         }
@@ -2109,8 +2113,8 @@ class WareHouseController extends Controller
     {
         $deptname = 'Roofing';
         $qty = $request->get('qty');
-        $jobId  = $request->get('jobId');
-        $operator  = Auth::user()->UserName;
+        $jobId = $request->get('jobId');
+        $operator = Auth::user()->UserName;
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $t = time();
         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
@@ -2127,8 +2131,8 @@ class WareHouseController extends Controller
     {
         $deptname = 'Roofing';
         $qty = $request->get('qty');
-        $jobId  = $request->get('JobId');
-        $operator  = Auth::user()->UserName;
+        $jobId = $request->get('JobId');
+        $operator = Auth::user()->UserName;
         $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $t = time();
         $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
@@ -2206,7 +2210,7 @@ class WareHouseController extends Controller
     {
         $reference = $request->get("reference");
         $userID = Auth::user()->UserID;
-        $userName =  Auth::user()->UserName;
+        $userName = Auth::user()->UserName;
 
         //dd($reference, $userID, $userName);
 
@@ -2239,7 +2243,7 @@ class WareHouseController extends Controller
     public function deleteRoofingBatch(Request $request)
     {
         $ID = $request->get("ID");
-        $userid =  Auth::user()->UserID;
+        $userid = Auth::user()->UserID;
 
         $result = DB::connection('sqlsrv3')->statement("exec spDeleteRoofingBatch ?,?", array($ID, $userid));
         return response()->json($result);
@@ -2248,7 +2252,7 @@ class WareHouseController extends Controller
     public function deleteRoofingSO(Request $request)
     {
         $ID = $request->get("ID");
-        $userid =  Auth::user()->UserID;
+        $userid = Auth::user()->UserID;
 
         $result = DB::connection('sqlsrv3')->statement("exec spDeleteRoofingSO ?,?", array($ID, $userid));
         return response()->json($result);
@@ -2604,7 +2608,7 @@ class WareHouseController extends Controller
             // dd($scales);
 
             $host = $scales[0]->strIP;
-            $port =  $scales[0]->strPort;
+            $port = $scales[0]->strPort;
 
             // dd($host,$port);
             set_time_limit(0);
@@ -3296,46 +3300,46 @@ class WareHouseController extends Controller
 
 
     //For Stock Change:
-    
+
     public function StockChange()
     {
         // $scanned = DB::connection('sqlsrv3')->select(EXEC spCheckScanned"); stockchange.blade.php
-        
+
         //Order is DC, truck load, wear hourse, ibt,
 
-    $products = DB::connection('sqlsrv2')->select('EXEC usp_GetProducts');
+        $products = DB::connection('sqlsrv2')->select('EXEC usp_GetProducts');
         $dcData = DB::connection('sqlsrv2')->select('EXEC usp_GetDCName');
- $bins = DB::connection('sqlsrv3')->select("EXEC usp_GetActiveBinLocations");
+        $bins = DB::connection('sqlsrv3')->select("EXEC usp_GetActiveBinLocations");
 
 
- // Fetch active locations/bins
-    $locations = DB::table('viewBinNames')
-        ->where('bitActive', 1)
-        ->select('intLocationId', 'strLocationName')
-        ->distinct()
-        ->orderBy('strLocationName')
-        ->get();
+        // Fetch active locations/bins
+        $locations = DB::table('viewBinNames')
+            ->where('bitActive', 1)
+            ->select('intLocationId', 'strLocationName')
+            ->distinct()
+            ->orderBy('strLocationName')
+            ->get();
 
-    // $dcs = DB::table('viewBinNames')
-    //     ->where('bitActive', 1)
-    //     ->select('intDcId', 'strDCName')
-    //     ->distinct()
-    //     ->orderBy('strDCName')
-    //     ->get();
+        // $dcs = DB::table('viewBinNames')
+        //     ->where('bitActive', 1)
+        //     ->select('intDcId', 'strDCName')
+        //     ->distinct()
+        //     ->orderBy('strDCName')
+        //     ->get();
 
-    // $bins = DB::table('viewBinNames')
-    //     ->where('bitActive', 1)
-    //     ->select('intBinId', 'strBin')
-    //     ->orderBy('strBin')
-    //     ->get();
+        // $bins = DB::table('viewBinNames')
+        //     ->where('bitActive', 1)
+        //     ->select('intBinId', 'strBin')
+        //     ->orderBy('strBin')
+        //     ->get();
 
-    // $products = DB::table('viewTblProductWeightedCalc')
-    //     ->select('PastelCode', 'PastelDescription')
-    //     ->distinct()
-    //     ->orderBy('PastelDescription')
-    //     ->get();
+        // $products = DB::table('viewTblProductWeightedCalc')
+        //     ->select('PastelCode', 'PastelDescription')
+        //     ->distinct()
+        //     ->orderBy('PastelDescription')
+        //     ->get();
 
-     $userId =  Auth::user()->UserID;
+        $userId = Auth::user()->UserID;
 
         $dept = DB::connection('sqlsrv2')->select("select * from tblDepartments");
         $prodGroups = DB::connection('sqlsrv2')->select("select * from viewItemGroups order by ItemGroupDescription");
@@ -3346,9 +3350,53 @@ class WareHouseController extends Controller
         //     ->with('printers', $printers)
         //     ->with('dept', $dept);
 
- return view('warehouse.stockcontrol.stockchange', compact('userId', 'printers', 'prodGroups','dept','products',  'dcData', 'bins'));
+        return view('warehouse.stockcontrol.stockchange', compact('userId', 'printers', 'prodGroups', 'dept', 'products', 'dcData', 'bins'));
 
     }
+
+    public function changeStock(Request $request)
+{
+    try {
+        $userId    = Auth::user()->UserID;
+        $timestamp = now();
+
+        DB::connection('sqlsrv3')->statement('EXEC usp_SaveFromStockChange ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [
+            $request->from_dc,
+            $request->from_warehouse,
+            $request->from_zone,
+            $request->department,
+            $request->category,
+            $request->product,
+            $request->label_type,
+            $request->quantity,
+            $timestamp,
+            $userId
+        ]);
+
+        DB::connection('sqlsrv3')->statement('EXEC usp_SaveToStockChange ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [
+            $request->to_dc,
+            $request->to_warehouse,
+            $request->to_zone,
+            $request->to_department,
+            $request->to_category,
+            $request->to_product,
+            $request->type_weight,
+            $timestamp,
+            $userId,
+            $request->stockType
+
+        ]);
+
+        return response()->json(['message' => 'Stock From/To changes recorded successfully!']);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => true,
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+
 
     public function getCheckScanned(Request $request)
     {

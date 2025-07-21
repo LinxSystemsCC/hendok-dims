@@ -1057,6 +1057,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
 
         Route::get('StockChange',[WareHouseController::class,'StockChange']);
+        Route::post('/change-stock', [WareHouseController::class, 'changeStock'])->name('change.stock');
+
 
         Route::get('/get-product-groups', [WareHouseController::class, 'getProductGroups']);
 Route::get('/get-products', [WareHouseController::class, 'getProducts']);

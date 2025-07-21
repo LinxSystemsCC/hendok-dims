@@ -7,16 +7,16 @@
     <title>Stock Change</title>
 
     <!-- CSS only -->
-        <link href="{{ asset(path: 'bootstrap/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
+    <link href="{{ asset(path: 'bootstrap/bootstrap.min.css') }}" rel="stylesheet" crossorigin="anonymous">
 
 
-            <link href="{{ asset(path: 'bootstrap/select2.min.css') }}" rel="stylesheet" crossorigin="anonymous">
+    <link href="{{ asset(path: 'bootstrap/select2.min.css') }}" rel="stylesheet" crossorigin="anonymous">
 
-                        <link href="{{ asset(path: 'bootstrap/select2.min.css') }}" rel="stylesheet" crossorigin="anonymous">
+    <link href="{{ asset(path: 'bootstrap/select2.min.css') }}" rel="stylesheet" crossorigin="anonymous">
 
 
-    <!-- Select2 CSS --> 
-    <link rel="stylesheet" href="{{ asset(path: 'bootstrap/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" crossorigin="anonymous"/>
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="{{ asset(path: 'bootstrap/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" crossorigin="anonymous" />
 
 
     <style>
@@ -45,9 +45,11 @@
                 <!-- Change Product From -->
                 <div class="col-md-6">
                     <strong class="mb-3 d-block">Change Product from:</strong>
-{{-- Department --}}
+                    {{-- Department --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="department">Department</label>
+                         <small class="text-danger" id="error_from_dep" style="display: none">This field is required</small>
+
                         <select class="form-select select2" id="department" required>
                             <option></option>
                             @foreach($dept as $val)
@@ -59,6 +61,8 @@
                     {{-- Product Category --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="category">Product Category </label>
+                        <small class="text-danger" id="error_from_cat" style="display: none">This field is required</small>
+
                         <select class="form-select" id="category" required>
                             <option></option>
                         </select>
@@ -67,16 +71,8 @@
 
                     {{-- Product --}}
                     <div class="form-group mb-2">
-                        <label class="control-label" for="product">Product Group </label>
-                        <select class="form-select" id="productgrouop" required>
-                            <option></option>
-                        </select>
-                    </div>
-
-
-                    {{-- Product --}}
-                    <div class="form-group mb-2">
                         <label class="control-label" for="product">Product </label>
+                         <small class="text-danger" id="error_from_product" style="display: none">This field is required</small>
                         <select class="form-select" id="product" required>
                             <option></option>
                         </select>
@@ -85,6 +81,8 @@
                     <div class="form-group mb-2">
                         <label class="control-label">Select DC </label>
                         <select name="from_dc" class="form-select" id="from_dc">
+                         <small class="text-danger" id="error_from_dc" style="display: none">This field is required</small>
+
                             <option value=""></option>
                             @foreach ($dcData as $val)
                             <option value="{{ $val->intAutoId }}">{{ $val->strDCName }}</option>
@@ -96,7 +94,7 @@
 
                     <div class="form-group mb-2">
                         <label class="control-label">Select Warehouse </label>
-
+                         <small class="text-danger" id="error_from_wh" style="display: none">This field is required</small>
                         <select name="from_warehouse" class="form-select" id="from_warehouse">
                             <option value=""></option>
                         </select>
@@ -104,12 +102,14 @@
 
                     <div class="form-group mb-2">
                         <label>Select Zone</label>
-                        <select name="from_zone" class="form-select"></select>
+                         <small class="text-danger" id="error_from_zone" style="display: none">This field is required</small>
+                        <select name="from_zone" id="from_zone" class="form-select"></select>
                     </div>
 
                     {{-- Label Type --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="labelType">Label Type</label>
+                           <small class="text-danger" id="error_label_type" style="display: none">This field is required</small>
                         <select class="form-select input-sm w-100" id="labelType" required>
                             <option></option>
                         </select>
@@ -119,7 +119,8 @@
                     {{-- Quantity --}}
                     <div class="form-group mb-2">
                         <label class="control-label" for="quantity">Quantity </label>
-                        <input class="form-control" id="quantity" required>
+                          <small class="text-danger" id="error_quantity" style="display: none">This field is required</small>
+                        <input type="number" class="form-control" id="quantity" required>
                     </div>
 
                 </div>
@@ -127,44 +128,55 @@
                 <!-- Change Product To -->
                 <div class="col-md-6">
                     <strong class="mb-3 d-block">Change Product to:</strong>
+           <div class="form-group">
+    <label for="stock_type">Stock Change Type</label>
+    <small class="text-danger" id="error_stock_type" style="display: none">This field is required</small>
+    <select class="form-select" id="stock_type">
+        <option value=""></option>
+        <option value="Normal Stock">Normal Stock</option>
+        <option value="B-Grade">B-Grade</option>
+    </select>
+</div>
 
                     <div class="form-group">
                         <label for="to_department">Department</label>
+                            <small class="text-danger" id="error_to_department" style="display: none">This field is required</small>
                         <select class="form-select select2" id="to_department">
                             <option></option>
                             @foreach($dept as $val)
-                                <option value="{{ $val->intAutoID }}">{{ $val->strDeptName }}</option>
+                            <option value="{{ $val->intAutoID }}">{{ $val->strDeptName }}</option>
                             @endforeach
                         </select>
                     </div>
 
+   
                     <div class="form-group">
                         <label for="to_category">Product Category</label>
+                      <small class="text-danger" id="error_to_category" style="display: none">This field is required</small>
                         <select class="form-select" id="to_category"></select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="to_product_group">Product Group</label>
-                        <select class="form-select" id="to_product_group"></select>
-                    </div>
 
                     <div class="form-group">
                         <label for="to_product">Product</label>
+                     <small class="text-danger" id="error_to_product" style="display: none">This field is required</small>
                         <select class="form-select" id="to_product"></select>
                     </div>
 
                     <div class="form-group">
                         <label for="to_dc">Select DC</label>
+                          <small class="text-danger" id="error_to_dc" style="display: none">This field is required</small>
                         <select name="to_dc" class="form-select" id="to_dc">
                             <option></option>
                             @foreach ($dcData as $val)
-                                <option value="{{ $val->intAutoId }}">{{ $val->strDCName }}</option>
+                            <option value="{{ $val->intAutoId }}">{{ $val->strDCName }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="to_warehouse">Select Warehouse</label>
+                           <small class="text-danger" id="error_to_wh" style="display: none">This field is required</small>
                         <select name="to_warehouse" class="form-select" id="to_warehouse">
                             <option></option>
                         </select>
@@ -172,17 +184,19 @@
 
                     <div class="form-group">
                         <label for="to_zone">Select Zone</label>
+                           <small class="text-danger" id="error_to_zone" style="display: none">This field is required</small>
                         <select name="to_zone" class="form-select" id="to_zone"></select>
                     </div>
 
-             
-                    <div class="form-group">
-                        <label for="to_quantity">Type Weight</label>
-                        <input class="form-control" id="TypeWeight">
-                    </div>
+
+                                <div class="form-group" id="hideWeight" style="display: none;">
+                    <label for="TypeWeight">Type Weight</label>
+                    <small class="text-danger" id="error_weight" style="display: none">This field is required</small>
+                    <input type="number" class="form-control" id="TypeWeight">
+                </div>
                 </div>
             </div>
-                                                <button class="btn btn-success"  style="width: 50%; margin-right: 10px;">Change Product</button>
+            <button class="btn btn-success" id="btnChangeProduct" style="width: 50%; margin-right: 10px;">Change Product</button>
 
         </div>
     </div>
@@ -194,23 +208,15 @@
     <!-- jQuery -->
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 
-<script src="{{ asset('bootstrap/jquery.min.js') }}"></script>
+    <script src="{{ asset('bootstrap/jquery.min.js') }}"></script>
 
-<script src="{{ asset('bootstrap/select2.min.js') }}"></script>
-
-
-{{-- 
-    <!-- Select2 -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script> --}}
-
-    <!-- Bootstrap -->
-<script src="{{ asset('bootstrap/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('bootstrap/select2.min.js') }}"></script>
 
 
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script> --}}
 
-    <!-- DevExtreme library -->
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme/22.2.3/js/dx.all.js"></script> --}}
+    <script src="{{ asset('bootstrap/bootstrap.bundle.min.js') }}"></script>
+
+
 
     <script src="{{ asset('bootstrap/dx.all.js') }}"></script>
 
@@ -233,7 +239,52 @@
                 , allowClear: true
             });
 
+
+                            // Handle dropdown change to show/hide the TypeWeight field
+                $('#stock_type').on('change', function () {
+                    const stockType = $(this).val();
+                    
+                    if (stockType === 'B-Grade') {
+                        $('#hideWeight').show();
+
+
+                        
+                    } else {
+                        $('#hideWeight').hide();
+                        $('#error_weight').hide(); // Hide the error if not B-Grade
+                        $('#TypeWeight').val(''); // Clear value if not needed
+                    }
+                });
+       
+
+
             const allBins = @json($bins);
+
+
+            //From Dropdwon
+            $('#department').change(function() {
+                $.ajax({
+
+                    url: '{!!url("/getDepListToPlan")!!}'
+                    , type: "GET"
+                    , data: {
+                        ItemGroup: $('#department option:selected').text(),
+
+                    }
+                    , success: function(data) {
+                        var toAppend = '';
+                        $("#category").empty();
+                        toAppend += '<option></option>';
+                        $.each(data, function(i, o) {
+
+                            toAppend += '<option value="' + o.intAutoGroupCategoryId + '">' + o.strProductCategory + '</option>';
+                        });
+                        $("#category").append(toAppend);
+
+                    }
+
+                });
+            });
 
             $('#from_dc').change(function() {
                 const selectedDcId = $(this).val();
@@ -267,32 +318,6 @@
                 });
 
                 $('select[name="from_zone"]').html(zoneOptions);
-            });
-
-
-
-            $('#department').change(function() {
-                $.ajax({
-
-                    url: '{!!url("/getDepListToPlan")!!}'
-                    , type: "GET"
-                    , data: {
-                        ItemGroup: $('#department option:selected').text(),
-
-                    }
-                    , success: function(data) {
-                        var toAppend = '';
-                        $("#category").empty();
-                        toAppend += '<option></option>';
-                        $.each(data, function(i, o) {
-
-                            toAppend += '<option value="' + o.intAutoGroupCategoryId + '">' + o.strProductCategory + '</option>';
-                        });
-                        $("#category").append(toAppend);
-
-                    }
-
-                });
             });
 
             $('#category').change(function() {
@@ -424,40 +449,365 @@
                 }
             });
 
-            $('#btnEditConfiguration').click(function() {
-                $('#configuration').prop("hidden", function(_, value) {
-                    return !value;
+
+
+            //To Dropdown
+            $('#to_department').change(function() {
+                $.ajax({
+
+                    url: '{!!url("/getDepListToPlan")!!}'
+                    , type: "GET"
+                    , data: {
+                        ItemGroup: $('#to_department option:selected').text(),
+
+                    }
+                    , success: function(data) {
+                        var toAppend = '';
+                        $("#to_category").empty();
+                        toAppend += '<option></option>';
+                        $.each(data, function(i, o) {
+
+                            toAppend += '<option value="' + o.intAutoGroupCategoryId + '">' + o.strProductCategory + '</option>';
+                        });
+                        $("#to_category").append(toAppend);
+
+                    }
+
                 });
-                $('#inputConfiguration').prop("hidden", function(_, value) {
-                    return !value;
+            });
+
+            //TO DC
+            $('#to_dc').change(function() {
+                const selectedDcId = $(this).val();
+
+                const filteredWarehouses = [...new Map(
+                    allBins
+                    .filter(bin => bin.intDcId == selectedDcId)
+                    .map(bin => [bin.intLocationId, bin])
+                ).values()];
+
+                let warehouseOptions = '<option value="">Select Warehouse</option>';
+                filteredWarehouses.forEach(wh => {
+                    warehouseOptions += `<option value="${wh.intLocationId}">${wh.strLocationName}</option>`;
                 });
 
-                $('#configuration').val("");
-                $('#inputConfiguration').val("");
+                $('#to_warehouse').html(warehouseOptions);
+                $('select[name="to_zone"]').html('<option value="">Select Zone</option>');
             });
 
-            $('#configuration').change(function() {
-                var config = $('#configuration').val();
-                $('#inputConfiguration').val(config);
+            //TO Warehouse 
+            $('#to_warehouse').change(function() {
+                const selectedDcId = $('#to_dc').val();
+                const selectedLocationId = $(this).val();
+
+                const filteredZones = allBins.filter(
+                    bin => bin.intDcId == selectedDcId && bin.intLocationId == selectedLocationId
+                );
+
+                let zoneOptions = '<option value="">Select Zone</option>';
+                filteredZones.forEach(zone => {
+                    zoneOptions += `<option value="${zone.intBinId}">${zone.strBin}</option>`;
+                });
+
+                $('select[name="to_zone"]').html(zoneOptions);
             });
 
-            $('.sidebar ul li a').on(function() {
-                var id = $(this).attr('id');
-                $('nav ul li ul.item-show-' + id).toggleClass("show");
-                $('nav ul li #' + id + ' span').toggleClass("rotate");
+            //To Category
+            $('#to_category').change(function() {
+                $.ajax({
 
+                    url: '{!!url("/getProdListToPlan")!!}'
+                    , type: "GET"
+                    , data: {
+                        ItemGroup: $('#category option:selected').val(),
+
+                    }
+                    , success: function(data) {
+                        var toAppend = '';
+                        $("#to_product").empty();
+                        toAppend += '<option></option>';
+                        $.each(data, function(i, o) {
+
+                            toAppend += '<option value="' + o.strItemCode + '">' + o.strItemName + '</option>';
+                        });
+                        $("#to_product").append(toAppend);
+
+                    }
+
+                });
             });
 
-            $('.sidebar ul li a').click(function() {
-                var id = $(this).attr('id');
-                $('nav ul li ul.item-show-' + id).toggleClass("show");
-                $('nav ul li #' + id + ' span').toggleClass("rotate");
 
+            $('#to_product').change(function() {
+
+                $.ajax({
+                    url: '{!!url("/getProductInfo")!!}'
+                    , type: "GET"
+                    , data: {
+                        productCode: $('#product option:selected').val()
+                    , }
+                    , success: function(data) {
+
+                        var toAppend = '';
+                        $("#configuration").empty();
+
+                        toAppend += '<optgroup label="Single" hidden>';
+                        toAppend += '<option></option>';
+                        toAppend += '<option value = "1">1</option>';
+                        toAppend += '</optgroup>';
+
+                        $.each(data, function(i, o) {
+                            if (o.strBundleSize !== null) {
+                                var bundleSize = o.strBundleSize.split(';');
+
+                                toAppend += '<optgroup label="Bundle" hidden>';
+                                toAppend += '<option></option>';
+                                $.each(bundleSize, function(index, value) {
+                                    toAppend += '<option value="' + value + '">' + value + ' / bundle</option>';
+                                })
+                                toAppend += '</optgroup>';
+                            }
+
+                            if (o.strPackSize !== null) {
+                                var packSizes = o.strPackSize.split(';');
+
+                                toAppend += '<optgroup label="Pallet" hidden>';
+                                toAppend += '<option></option>';
+                                $.each(packSizes, function(index, value) {
+                                    toAppend += '<option value="' + value + '">' + value + ' / pallet</option>';
+                                })
+                                toAppend += '</optgroup>';
+                            }
+
+                        });
+
+                        $("#configuration").append(toAppend);
+
+                        var addType = '';
+                        $("#labelType").empty();
+                        addType += '<option></option>';
+
+                        if (data[0]['intHasSingleLable'] == "1") {
+                            addType += '<option value = "Single">Single</option>';
+                        }
+                        if (data[0]['intHasBundleLable'] == "1") {
+                            addType += '<option value = "Bundle">Bundle</option>';
+                        }
+                        if (data[0]['intHasPalletLable'] == "1") {
+                            addType += '<option value = "Pallet">Pallet</option>';
+                        }
+
+                        $("#labelType").append(addType);
+
+                        $('#barcode').val(data[0]['Barcode']);
+
+                        if (data[0]["Barcode"] == '0000000000000') {
+                            $('#barcode').addClass('red-message');
+                            $('#barcodeHelp').addClass('red-message');
+                            $('#barcodeHelp').prop('hidden', false);
+
+                        } else {
+                            $('#barcode').removeClass('red-message');
+                            $('#barcodeHelp').removeClass('red-message');
+                            $('#barcodeHelp').prop('hidden', true);
+                        }
+
+                    }
+                });
+            });
+        
+            $('#btnChangeProduct').click(function() {
+                let isValid = true;
+
+                if ($('#department').val() === '') {
+                    $("#error_from_dep").show();
+                    isValid = false;
+                } else {
+                    $("#error_from_dep").hide();
+                }
+
+                if ($('#category').val() === '') {
+                    $("#error_from_cat").show();
+                    isValid = false;
+                } else {
+                    $("#error_from_cat").hide();
+                }
+
+                if ($('#product').val() === '') {
+                    $("#error_from_product").show();
+                    isValid = false;
+                } else {
+                    $("#error_from_product").hide();
+                }
+
+                if ($('#from_dc').val() === '') {
+                    $("#error_from_dc").show();
+                    isValid = false;
+                } else {
+                    $("#error_from_dc").hide();
+                }
+
+                if ($('#from_warehouse').val() === '') {
+                    $("#error_from_wh").show();
+                    isValid = false;
+                } else {
+                    $("#error_from_wh").hide();
+                }
+
+                if ($('#from_zone').val() === '') {
+                    $("#error_from_zone").show();
+                    isValid = false;
+                } else {
+                    $("#error_from_zone").hide();
+                }
+
+                if ($('#labelType').val() === '') {
+                    $("#error_label_type").show();
+                    isValid = false;
+                } else {
+                    $("#error_label_type").hide();
+                }
+
+                if ($('#quantity').val() === '') {
+                    $("#error_quantity").show();
+                    isValid = false;
+                } else {
+                    $("#error_quantity").hide();
+                }
+
+
+                if ($('#to_dc').val() === '') {
+                    $("#error_to_dc").show();
+                    isValid = false;
+                } else {
+                    $("#error_to_dc").hide();
+                }
+
+                if ($('#to_warehouse').val() === '') {
+                    $("#error_to_wh").show();
+                    isValid = false;
+                } else {
+                    $("#error_to_wh").hide();
+                }
+
+                if ($('#to_zone').val() === '') {
+                    $("#error_to_zone").show();
+                    isValid = false;
+                } else {
+                    $("#error_to_zone").hide();
+                }
+
+                if ($('#to_product').val() === '') {
+                    $("#error_to_product").show();
+                    isValid = false;
+                } else {
+                    $("#error_to_product").hide();
+                }
+
+
+                if ($('#to_category').val() === '') {
+                    $("#error_to_category").show();
+                    isValid = false;
+                } else {
+                    $("#error_to_category").hide();
+                }
+
+             if ($('#to_department').val() === '') {
+                    $("#error_to_department").show();
+                    isValid = false;
+                } else {
+                    $("#error_to_department").hide();
+                }
+
+
+                 
+
+//For Stock Type 
+    const stockType = $('#stock_type').val();
+    const typeWeight = $('#TypeWeight').val();
+
+    // Validate stock_type
+    if (stockType === '') {
+        $('#error_stock_type').show();
+        isValid = false;
+    } else {
+        $('#error_stock_type').hide();
+    }
+
+    // Validate TypeWeight only if B-Grade is selected
+    if (stockType === 'B-Grade') {
+        if (typeWeight === '') {
+            $('#error_weight').show();
+            isValid = false;
+        } else {
+            $('#error_weight').hide();
+        }
+    }
+
+
+
+                if (!isValid) return;
+
+                // Proceed with AJAX
+                const payload = {
+                    department: $('#department').val(),
+                    category: $('#category').val(),
+                    product: $('#product').val(),
+                    from_dc: $('#from_dc').val(),
+                    from_warehouse: $('#from_warehouse').val(),
+                    from_zone: $('#from_zone').val(),
+                    label_type: $('#labelType').val(),
+                    quantity: $('#quantity').val(), // ✅ Add comma here
+                    to_department: $('#to_department').val(),
+                    to_category: $('#to_category').val(),
+                    to_dc: $('#to_dc').val(),
+                    to_warehouse: $('#to_warehouse').val(),
+                    to_zone: $('#to_zone').val(),
+                    to_product: $('#to_product').val(),
+                    type_weight: $('#TypeWeight').val(),
+                    stockType: $('#stock_type').val(),
+
+                };
+
+                                // const selectedDcId = $('#from_dc').val();
+
+
+//                 console.log({
+//                 department: $('#department').val(),
+//                 category: $('#category').val(),
+//                 product: $('#product').val(),
+//                 from_dc: $('#from_dc').val(),
+//                 from_warehouse: $('#from_warehouse').val(),
+//                 from_zone: $('#from_zone').val(),
+//                 label_type: $('#labelType').val(),
+//                 quantity: $('#quantity').val(),
+//                 to_department: $('#to_department').val(),
+//                 to_category: $('#to_category').val(),
+//                 to_dc: $('#to_dc').val(),
+//                 to_warehouse: $('#to_warehouse').val(),
+//                 to_zone: $('#to_zone').val(),
+//                 to_product: $('#to_product').val(),
+//                 type_weight: $('#TypeWeight').val()
+// });
+
+// console.log('Sekected DC' + selectedDcId)
+
+
+                $.ajax({
+                    url: "{{ route('change.stock') }}"
+                    , method: "POST"
+                    , data: payload
+                    , success: function(response) {
+                        alert("Success: " + response.message);
+                    }
+                    , error: function(xhr) {
+                        console.log(xhr.responseText);
+                        alert("Something went wrong");
+                    }
+                });
             });
 
-            $('nav ul li').click(function() {
-                $(this).addClass("active").siblings().removeClass("active");
-            });
+
 
         });
 
