@@ -58,11 +58,11 @@
 
 <body style="font-family: Sans-serif">
     <?php
-    if (Auth::guest()) {
-    } else {
-        $v = new \App\Http\Controllers\SalesForm();
-        $invoice = $v->getThings(Auth::user()->GroupId, 'Can Final Invoice Load');
-    }
+if (Auth::guest()) {
+} else {
+    $v = new \App\Http\Controllers\SalesForm();
+    $invoice = $v->getThings(Auth::user()->GroupId, 'Can Final Invoice Load');
+}
     ?>
     <div class="container">
         <div style="display: flex;">
@@ -79,7 +79,8 @@
                 @endforeach
                 @foreach ($pickingheader as $value)
                     <h5 style="text-align: center">Name:{{ $value->strPickingNickname }} ______ID:
-                        {{ $value->intAutoPickingHeader }}</h5>
+                        {{ $value->intAutoPickingHeader }}
+                    </h5>
                 @endforeach
 
                 <table style="font-size: 11px;">
@@ -232,184 +233,195 @@
             </thead>
             <tbody>
                 <?php $storenames = '';
-                $orderNumber = '';
-                $subtotal = 0;
-                $Grandtotal = 0;
-                $area = '';
-                $orderdate = '';
-                $istrue = true;
-                $count = 0; ?>
+$orderNumber = '';
+$subtotal = 0;
+$Grandtotal = 0;
+$area = '';
+$orderdate = '';
+$istrue = true;
+$count = 0; ?>
                 @foreach ($listproducts as $val)
-                    <?php $externalCount = 0;
+                                <?php    $externalCount = 0;
                     $pool = '012345-6789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
                     $t = time();
                     $randomString = substr(str_shuffle(str_repeat($pool, 10)), 0, 10);
                     $ID = $t . $randomString; ?>
-                    @if ($count == 0)
-                        <tr style="background: darkgray;color: white; font-weight: 900;" id="{{ $ID }}">
-                            <td>STOP :{{ $val->intSequence }}</td>
-                            <td> </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td> </td>
-                            <td> </td>
+                                @if ($count == 0)
+                                    <tr style="background: darkgray;color: white; font-weight: 900;" id="{{ $ID }}">
+                                        <td>STOP :{{ $val->intSequence }}</td>
+                                        <td> </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td> </td>
+                                        <td> </td>
 
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    @endif
-                    <?php $Grandtotal = $Grandtotal + floatval($val->weightPlanned); ?>
-                    @if ($storenames != $val->StoreName)
-                        @if ($count > 0)
-                            <tr style="background: darkgray;color: white; font-weight: 900;">
-                                <td>STOP :{{ $val->intSequence }}</td>
-                                <td> </td>
-                                <td>NEXT</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>{{ $subtotal }} </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                @endif
+                                <?php    $Grandtotal = $Grandtotal + floatval($val->weightPlanned); ?>
+                                @if ($storenames != $val->StoreName)
+                                            @if ($count > 0)
+                                                    <tr style="background: darkgray;color: white; font-weight: 900;">
+                                                        <td>STOP :{{ $val->intSequence }}</td>
+                                                        <td> </td>
+                                                        <td>NEXT</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>{{ $subtotal }} </td>
 
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <?php $subtotal = 0;
-                            $count = 0; ?>
-                        @endif
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <?php            $subtotal = 0;
+                                                $count = 0; ?>
+                                            @endif
 
-                        @if ($val->isLineInvoiced == 1)
-                            <tr id="rtrr{{ $ID }}" style="background: #0091EA">
-                            @else
-                            <tr id="rtrr{{ $ID }}">
-                        @endif
+                                            @if ($val->isLineInvoiced == 1)
+                                                <tr id="rtrr{{ $ID }}" style="background: #0091EA">
+                                            @else
+                                                    <tr id="rtrr{{ $ID }}">
+                                                @endif
 
-                        <td>{{ $val->StoreName }}</td>
-                        <td>{{ $val->areas }}</td>
-
-
-
-                        <td>{{ $val->OrderDate }}</td>
-                        <td>{{ $val->OrderNum }} @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 0)
-                                <button style="background: #0BA008;color: white;" class="invoicethis"
-                                    value="{{ $val->OrderId }}">Invoice {{ $val->OrderNum }}</button><input
-                                    type="text" class="invnumber" value="{{ $val->InvNumber }}"> <input
-                                    type="hidden" class="refid" value="{{ $val->strUnickReference }}"> <input
-                                    type="hidden" class="ownerid" value="{{ $val->intOwnerID }}"> <input
-                                    type="hidden" class="OrderNumdim" value="{{ $val->OrderNum }}"><input
-                                    type="hidden" class="ubARIBT" value="{{ $val->ubARIBT }}">
-                            @endif
-                            @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 1)
-                                <button style="background: #0BA008;color: white;" class="ibt"
-                                    value="{{ $val->OrderId }}">IBT {{ $val->OrderNum }}</button><input
-                                    type="text" class="invnumber" value="{{ $val->InvNumber }}"><input
-                                    type="hidden" class="refid" value="{{ $val->strUnickReference }}"> <input
-                                    type="hidden" class="ownerid" value="{{ $val->intOwnerID }}"> <input
-                                    type="hidden" class="OrderNumdim" value="{{ $val->OrderNum }}"><input
-                                    type="hidden" class="ubARIBT" value="{{ $val->ubARIBT }}">
-                            @endif
-                        </td>
-                        <td>{{ $val->ExtOrderNum }}</td>
-                        <td>{{ $val->iLineID }}</td>
-                        @if ($val->isPriorityLine == 1)
-                            <td>PRIORITY</td>
-                        @else
-                            <td></td>
-                        @endif
-                        <td>{{ $val->PastelCode }}</td>
-                        <td>{{ $val->PastelDescription }}</td>
-                        <td style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty) }}</td>
-                        <td>{{ floatval($val->weightPlanned) }}</td>
+                                                <td>{{ $val->StoreName }}</td>
+                                                <td>{{ $val->areas }}</td>
 
 
-                        <td>{{ floatval($val->Toinvoice) }}</td>
+
+                                                <td>{{ $val->OrderDate }}</td>
+                                                <td>{{ $val->OrderNum }} <br><br>
+                                                    @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 0)
+
+                                                        <button style="background: #0BA008;color: white;" class="invoicethis"
+                                                            value="{{ $val->OrderId }}">Invoice {{ $val->OrderNum }}</button> <br><br>
+
+                                                        <input type="text" class="invnumber" value="{{ $val->InvNumber }}"> <br><br>
+
+                                                        
+                                                        <button style="background: #007BFF; color: white; display: none;" class="reprintBtn">
+                                                            Reprint Invoice
+                                                        </button>
 
 
-                        </tr><?php $istrue = true;
-                        $storenames = $val->StoreName;
-                        $subtotal = $subtotal + floatval($val->weightPlanned);
-                        $orderNumber = $val->OrderNum;
-                        $area = $val->areas;
-                        $orderdate = $val->OrderDate; ?>
-                    @else
-                        <tr>
 
-                            @if ($storenames != $val->StoreName)
-                                <td>{{ $val->StoreName }}</td>
-                            @else
-                                <td>
-
-                                </td>
-                            @endif
-                            @if ($area != $val->areas)
-                                <td>{{ $val->areas }}</td>
-                            @else
-                                <td></td>
-                            @endif
-                            @if ($orderdate != $val->OrderDate)
-                                <td>{{ $val->OrderDate }}</td>
-                            @else
-                                <td></td>
-                            @endif
-
-                            @if ($orderNumber != $val->OrderNum)
-                                <td>{{ $val->OrderNum }} @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 0)
-                                        <button style="background: #0BA008;color: white;" class="invoicethis"
-                                            value="{{ $val->OrderId }}">Invoice {{ $val->OrderNum }}</button><input
-                                            type="text" class="invnumber" value="{{ $val->InvNumber }}"><input
-                                            type="hidden" class="refid" value="{{ $val->strUnickReference }}">
-                                        <input type="hidden" class="ownerid" value="{{ $val->intOwnerID }}"> <input
-                                            type="hidden" class="OrderNumdim" value="{{ $val->OrderNum }}"><input
-                                            type="hidden" class="ubARIBT" value="{{ $val->ubARIBT }}">
-                                    @endif
-                                    @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 1)
-                                        <button style="background: #0BA008;color: white;" class="ibt"
-                                            value="{{ $val->OrderId }}">IBT {{ $val->OrderNum }}</button><input
-                                            type="text" class="invnumber" value="{{ $val->InvNumber }}"><input
-                                            type="hidden" class="refid" value="{{ $val->strUnickReference }}">
-                                        <input type="hidden" class="ownerid" value="{{ $val->intOwnerID }}"> <input
-                                            type="hidden" class="OrderNumdim" value="{{ $val->OrderNum }}"><input
-                                            type="hidden" class="ubARIBT" value="{{ $val->ubARIBT }}">
-                                    @endif
-                                </td>
-                            @else
-                                <td style="">
-
-                                </td>
-                            @endif
-                            <td>{{ $val->ExtOrderNum }}</td>
-                            <td>{{ $val->iLineID }}</td>
-                            @if ($val->isPriorityLine == 1)
-                                <td>PRIORITY</td>
-                            @else
-                                <td></td>
-                            @endif
-                            <td>{{ $val->PastelCode }}</td>
-                            <td>{{ $val->PastelDescription }}</td>
-                            <td style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty) }}</td>
-                            <td>{{ floatval($val->weightPlanned) }}</td>
+                                                        <input type="hidden" class="refid" value="{{ $val->strUnickReference }}">
+                                                        <input type="hidden" class="ownerid" value="{{ $val->intOwnerID }}">
+                                                        <input type="hidden" class="OrderNumdim" value="{{ $val->OrderNum }}">
+                                                        <input type="hidden" class="ubARIBT" value="{{ $val->ubARIBT }}">
+                                                    @endif
+                                                    @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 1)
+                                                        <button style="background: #0BA008;color: white;" class="ibt" value="{{ $val->OrderId }}">IBT
+                                                            {{ $val->OrderNum }}</button><input type="text" class="invnumber"
+                                                            value="{{ $val->InvNumber }}"><input type="hidden" class="refid"
+                                                            value="{{ $val->strUnickReference }}"> <input type="hidden" class="ownerid"
+                                                            value="{{ $val->intOwnerID }}"> <input type="hidden" class="OrderNumdim"
+                                                            value="{{ $val->OrderNum }}"><input type="hidden" class="ubARIBT"
+                                                            value="{{ $val->ubARIBT }}">
+                                                    @endif
+                                                </td>
+                                                <td>{{ $val->ExtOrderNum }}</td>
+                                                <td>{{ $val->iLineID }}</td>
+                                                @if ($val->isPriorityLine == 1)
+                                                    <td>PRIORITY</td>
+                                                @else
+                                                    <td></td>
+                                                @endif
+                                                <td>{{ $val->PastelCode }}</td>
+                                                <td>{{ $val->PastelDescription }}</td>
+                                                <td style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty) }}</td>
+                                                <td>{{ floatval($val->weightPlanned) }}</td>
 
 
-                            <td>{{ floatval($val->Toinvoice) }}</td>
+                                                <td>{{ floatval($val->Toinvoice) }}</td>
 
 
-                        </tr>
-                        <?php $storenames = $val->StoreName;
-                        $subtotal = $subtotal + floatval($val->weightPlanned);
-                        $orderNumber = $val->OrderNum;
-                        $area = $val->areas;
-                        if ($storenames == $val->StoreName) {
-                            $istrue = true;
-                        }
-                        ?>
-                    @endif
-                    <?php $count++; ?>
+                                            </tr><?php        $istrue = true;
+                                    $storenames = $val->StoreName;
+                                    $subtotal = $subtotal + floatval($val->weightPlanned);
+                                    $orderNumber = $val->OrderNum;
+                                    $area = $val->areas;
+                                    $orderdate = $val->OrderDate; ?>
+                                @else
+                                            <tr>
+
+                                                @if ($storenames != $val->StoreName)
+                                                    <td>{{ $val->StoreName }}</td>
+                                                @else
+                                                    <td>
+
+                                                    </td>
+                                                @endif
+                                                @if ($area != $val->areas)
+                                                    <td>{{ $val->areas }}</td>
+                                                @else
+                                                    <td></td>
+                                                @endif
+                                                @if ($orderdate != $val->OrderDate)
+                                                    <td>{{ $val->OrderDate }}</td>
+                                                @else
+                                                    <td></td>
+                                                @endif
+
+                                                @if ($orderNumber != $val->OrderNum)
+                                                    <td>{{ $val->OrderNum }} @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 0)
+                                                        <button style="background: #0BA008;color: white;" class="invoicethis"
+                                                            value="{{ $val->OrderId }}">Invoice {{ $val->OrderNum }}</button><input type="text"
+                                                            class="invnumber" value="{{ $val->InvNumber }}"><input type="hidden" class="refid"
+                                                            value="{{ $val->strUnickReference }}">
+                                                        <input type="hidden" class="ownerid" value="{{ $val->intOwnerID }}"> <input type="hidden"
+                                                            class="OrderNumdim" value="{{ $val->OrderNum }}"><input type="hidden" class="ubARIBT"
+                                                            value="{{ $val->ubARIBT }}">
+                                                    @endif
+                                                        @if ($val->isReadyForInvoicing == 1 && $val->ubARIBT == 1)
+                                                            <button style="background: #0BA008;color: white;" class="ibt" value="{{ $val->OrderId }}">IBT
+                                                                {{ $val->OrderNum }}</button><input type="text" class="invnumber"
+                                                                value="{{ $val->InvNumber }}"><input type="hidden" class="refid"
+                                                                value="{{ $val->strUnickReference }}">
+                                                            <input type="hidden" class="ownerid" value="{{ $val->intOwnerID }}"> <input type="hidden"
+                                                                class="OrderNumdim" value="{{ $val->OrderNum }}"><input type="hidden" class="ubARIBT"
+                                                                value="{{ $val->ubARIBT }}">
+                                                        @endif
+                                                    </td>
+                                                @else
+                                                    <td style="">
+
+                                                    </td>
+                                                @endif
+                                                <td>{{ $val->ExtOrderNum }}</td>
+                                                <td>{{ $val->iLineID }}</td>
+                                                @if ($val->isPriorityLine == 1)
+                                                    <td>PRIORITY</td>
+                                                @else
+                                                    <td></td>
+                                                @endif
+                                                <td>{{ $val->PastelCode }}</td>
+                                                <td>{{ $val->PastelDescription }}</td>
+                                                <td style="font-size: 14px;background: #cacaca">{{ floatval($val->mnyQty) }}</td>
+                                                <td>{{ floatval($val->weightPlanned) }}</td>
+
+
+                                                <td>{{ floatval($val->Toinvoice) }}</td>
+
+
+                                            </tr>
+                                            <?php        $storenames = $val->StoreName;
+                                    $subtotal = $subtotal + floatval($val->weightPlanned);
+                                    $orderNumber = $val->OrderNum;
+                                    $area = $val->areas;
+                                    if ($storenames == $val->StoreName) {
+                                        $istrue = true;
+                                    }
+                                                                                ?>
+                                @endif
+                                <?php    $count++; ?>
                 @endforeach
                 <tr style="background: darkgray;color: white; font-weight: 900;">
                     <td></td>
@@ -451,8 +463,7 @@
         </div>
     </div>
     <div id="seqpopup">
-        <a href='{!! url('/ticketsdept') !!}/{{ $ref }}'
-            onclick="window.open(this.href, 'ticketsdept',
+        <a href='{!! url('/ticketsdept') !!}/{{ $ref }}' onclick="window.open(this.href, 'ticketsdept',
 'left=20,top=20,width=1000,height=1000,toolbar=1,resizable=0'); return false;"
             style="background: #13b0bb;padding:2px;color: black;font-weight: 900">Assign Transport</a>
         <br>
@@ -481,8 +492,7 @@
                         <td> {{ $val->StoreName }}</td>
                         <td><input type="hidden" value="{{ $val->OrderNum }}" class="onum">{{ $val->OrderNum }}
                         </td>
-                        <td> <input type="number" name="ordernumber[]" class="qty"
-                                value="{{ $val->intSequence }}"></td>
+                        <td> <input type="number" name="ordernumber[]" class="qty" value="{{ $val->intSequence }}"></td>
                     </tr>
                 @endforeach
             </tbody>
@@ -521,24 +531,35 @@
         width: 100%;
         border: 1px solid #ddd;
     }
-
-    /*tbody tr:nth-child(odd) {
-        background-color: #efefef;
-    }
-    th, td {
-        text-align: left;
-        padding: 2px;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }*/
 </style>
 <script>
-    $(document).ready(function() {
+
+
+    $(document).ready(function () {
+        // Initial check (for pre-filled values)
+        $('.invnumber').each(function () {
+            let invVal = $(this).val();
+            if (invVal && invVal.trim() !== '') {
+                $(this).siblings('.reprintBtn').show();
+            }
+        });
+
+        // Listen for user typing in the input
+        $('.invnumber').on('input', function () {
+            let invVal = $(this).val();
+            if (invVal && invVal.trim() !== '') {
+                $(this).siblings('.reprintBtn').show();
+            } else {
+                $(this).siblings('.reprintBtn').hide();
+            }
+        });
+    });
+
+    $(document).ready(function () {
+
 
         $('#seqpopup').hide();
-        $('#continue').click(function() {
+        $('#continue').click(function () {
             window.location = '{!! url('/home') !!}';
         });
         $.ajaxSetup({
@@ -547,7 +568,7 @@
             }
         });
 
-        $('.planstatus').click(function() {
+        $('.planstatus').click(function () {
             $.ajax({
                 url: '{!! url('/markplandeleted') !!}',
                 type: "GET",
@@ -555,7 +576,7 @@
                     referenceno: $('#refno').val(),
                     planstatus: $('.planstatus').val()
                 },
-                success: function(data) {
+                success: function (data) {
 
                     alert("DONE UPDATING");
                     location.reload()
@@ -563,12 +584,12 @@
             });
         });
 
-        $('#driversheet').click(function() {
+        $('#driversheet').click(function () {
             window.open('{!! url('/printtripsheet') !!}/' + $('#refno').val(), "tripsheet" + $('#refno').val(),
                 "location=1,status=1,scrollbars=1, width=1200,height=850");
         });
 
-        $('#qrs').click(function() {
+        $('#qrs').click(function () {
             alert("Open Info Dialog");
             $('#seqpopup').show();
             var dialog2 = $('#seqpopup').dialog({
@@ -577,9 +598,9 @@
                 modal: true,
                 containment: false
             });
-            $('#saveseq').click(function() {
+            $('#saveseq').click(function () {
                 var stopsseq = new Array();
-                $('#sequences > tbody  > tr').each(function() {
+                $('#sequences > tbody  > tr').each(function () {
                     //      var onum = $(this).closest('tr').find('.onum').val();
                     stopsseq.push({
                         'onum': $(this).closest('tr').find('.onum').val(),
@@ -600,7 +621,7 @@
                         truckname: $('#truckname').val(),
                         someinstruction: $('#someinstruction').val()
                     },
-                    success: function(data) {
+                    success: function (data) {
 
                         location.reload();
                     }
@@ -608,7 +629,9 @@
             });
         });
 
-        $('#orderHeaderPrint').on('click', 'button', function(e) {
+        //$('#orderHeaderPrint').on('click', '.invoicethis, .ibt', function(e) {
+
+        $('#orderHeaderPrint').on('click', '.invoicethis, .ibt', function (e) {
             var $this = $(this);
 
             var SONumber = $this.closest('tr').find('.OrderNumdim').val();
@@ -642,30 +665,66 @@
                             invoiceid: invoiceid,
                             ref: ref
                         },
-                        success: function(data) {
-
+                        success: function (data) {
                             console.debug(data);
 
-                            if (data == "Credit Limit") {
-                                alert("CREDIT LIMIT ISSUES");
-
-                            } else {
-                                $('#' + rowId).css('background', '#89CFF0');
-                                $('#rtrr' + rowId).css('background', '#89CFF0');
-                                if (data[0].result == "SUCCESS") {
-                                    alert("done");
-                                    $this.closest('tr').find('.invnumber').val(data[0]
-                                        .InvNumber);
-                                }
+                            if (data.status === "error") {
+                                alert("❌ " + data.message);
+                                return;
                             }
 
-
+                            if (data[0] && data[0].result === "SUCCESS") {
+                                alert("✅ Done");
+                                $this.closest('tr').find('.invnumber').val(data[0].InvNumber);
+                            } else {
+                                alert("⚠️ Unexpected response.");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Error:", error);
+                            alert("❌ An error occurred: " + error);
                         }
                     });
                 }
             }
 
         });
+
+
+        $('#orderHeaderPrint').on('click', '.reprintBtn', function (e) {
+            var $this = $(this);
+
+            var SONumber = $this.closest('tr').find('.OrderNumdim').val();
+            var ownerid = $this.closest('tr').find('.ownerid').val();
+            var invoiceid = $this.closest('tr').find('.invoicethis').val(); // reuse same ID
+            var ref = $this.closest('tr').find('.refid').val();
+            console.log(ref);
+
+            $.ajax({
+                url: '{!! url('/reprintInvoicing') !!}', // <-- NEW ROUTE
+                type: "get",
+                data: {
+                    ownerid: ownerid,
+                    SONumber: SONumber,
+                    invoiceid: invoiceid,
+                    ref: ref
+                },
+                success: function (data) {
+                    if (data.status === "success") {
+                        alert("✅ " + data.message);
+                    } else {
+                        alert("❌ " + data.message);
+                        console.warn(data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    alert("❌ Request failed: " + error);
+                }
+
+            });
+        });
+
 
     });
 </script>

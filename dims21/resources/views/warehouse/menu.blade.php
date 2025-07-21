@@ -166,7 +166,7 @@ if ((Auth::guest()))
                         <!-- Item Links -->
                         <li>
                             @if($barbedcreateworkorder !="0")
-                            <a href='{!!url("/createjobs")!!}'>Create Work Orders</a>
+                            <a href='{!!url("/WorkOrders")!!}'>Create Work Orders</a>
                             @endif
                         </li>
                         <li>
@@ -565,6 +565,10 @@ if ((Auth::guest()))
                         @endif
                     </li>
                 </li>
+                <li>
+                <a href='{!!url("/StockChange")!!}'>Stock Change</a>
+
+                </li>
 			</ul>
 		</li>
 
@@ -833,7 +837,7 @@ if ((Auth::guest()))
 
         <li>
             @if($ppl !="0")
-            <a class="firstmenu" href='{!!url("/printpalletsselectdept")!!}'><i class="fa mi-pallet"></i>Print Pallet Labels</a>
+            <a class="firstmenu" href='{!!url("/production_departments")!!}'><i class="fa mi-pallet"></i>Print Pallet Labels</a>
             @endif
         </li>
 

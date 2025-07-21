@@ -1229,17 +1229,21 @@ if (Auth::guest()) {
                     $('#inputPickupReason').removeClass('is-invalid');
                 }
 
-                // Invoice validation
-                var invoice = $('#selectInvoice').val();
-                if (invoice === '') {
-                    $('#selectInvoice').addClass('is-invalid').focus();
+                // Invoice validation: at least one must be filled
+                var invoiceSelect = $('#selectInvoice').val().trim();
+                var invoiceAlt = $('#inputAltInvoice').val().trim();
+
+                if (invoiceSelect === '' && invoiceAlt === '') {
                     $('#invoiceError').removeClass('d-none');
+                    $('#selectInvoice').addClass('is-invalid');
+                    $('#inputAltInvoice').addClass('is-invalid').focus();
                     $btn.prop('disabled', false);
                     upliftmentLoadPanel.hide();
                     return;
                 } else {
-                    $('#selectInvoice').removeClass('is-invalid');
                     $('#invoiceError').addClass('d-none');
+                    $('#selectInvoice').removeClass('is-invalid');
+                    $('#inputAltInvoice').removeClass('is-invalid');
                 }
 
                 // Build XML data
@@ -1380,7 +1384,6 @@ if (Auth::guest()) {
                     }
                 });
             });
-
 
             $('#btnApproveUpliftment').click(function() {
                 $('#approveComment').val('');

@@ -38,6 +38,7 @@ use App\Http\Controllers\Warehouse\PlanningController;
 use App\Http\Controllers\IbtController;
 use App\Http\Controllers\ProWeightController;
 use App\Http\Controllers\Warehouse\StockIssueController;
+use App\Http\Controllers\WorkOrdersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -837,6 +838,9 @@ Route::post('postauthdeal',[OnlineOrders::class,'postauthdeal']);
 
 //ONLINE ORDERS ENDS HERE!!!
 
+Route::get('reprintInvoicing', [InvoicingController::class,'reprintInvoicing']);
+
+
 //ONLINE ORDERS RECON CONTROLLER STARTS HERE !!!
 
 Route::get('returnRefunds', [OnlineOrdersReconController::class,'returnRefunds']);
@@ -950,7 +954,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('syncing', [WareHouseController::class,'syncing']);
     Route::get('syncPastelStockTable', [WareHouseController::class,'syncPastelStockTable']);
     Route::get('getLocationNamesAndTypes', [WareHouseController::class,'getLocationNamesAndTypes']);
-    Route::get('getWIP', [WareHouseController::class,'getWIP']);
     Route::get('getRoofWIP', [WareHouseController::class,'getRoofWIP']);
     Route::get('getroofingWIP', [WareHouseController::class,'getroofingWIP']);
     Route::get('roofingReport', [WareHouseController::class,'roofingReport']);
@@ -989,7 +992,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('qrcodeimage/{binlocation}', [WareHouseController::class,'qrcodeimage']);
     Route::get('customergridlookup', [WareHouseController::class,'customergridlookup']);
     Route::get('getMachinesforselecteddept', [WareHouseController::class,'getMachinesforselecteddept']);
-    Route::post('insertIntoJobTable', [WareHouseController::class,'insertIntoJobTable']);
     Route::post('insertPrePlannedSO', [WareHouseController::class,'insertPrePlannedSO']);
     Route::post('updateRoofLines', [WareHouseController::class,'updateRoofLines']);
     Route::post('updateRoofLinesSequence', [WareHouseController::class,'updateRoofLinesSequence']);
@@ -1002,9 +1004,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getProductPlannedOnThatMachine', [WareHouseController::class,'getProductPlannedOnThatMachine']);
     Route::get('roofinguserscreen', [WareHouseController::class,'roofinguserscreen']);
     Route::get('choosemachine/{department}', [WareHouseController::class,'choosemachine']);
-    Route::get('printpalletchoosemachine/{department}', [WareHouseController::class,'printpalletchoosemachine']);
+    Route::get('production_machines/{department}', [WareHouseController::class,'production_machines']);
     Route::get('choosproducttomake/{qty}/{itemcode}/{palletid}/{machineid}', [WareHouseController::class,'choosproducttomake']);
-    Route::get('printpalletchoosproducttomake/{department}/{machine}', [WareHouseController::class,'printpalletchoosproducttomake']);
+    Route::get('production_labels/{department}/{machine}', [WareHouseController::class,'production_labels']);
     Route::get('printselectedcriteria/{department}/{machine}/{product}', [WareHouseController::class,'printselectedcriteria']);
     Route::get('goprintfirstqrcode/{department}/{machine}/{product}/{pallet}/{required}', [WareHouseController::class,'goprintfirstqrcode']);
     Route::get('startprintingjob/{qty}/{machine}/{product}/{pallet}/{startdate}', [WareHouseController::class,'startprintingjob']);
@@ -1047,13 +1049,22 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('sendLabelToThePrinter', [WareHouseController::class,'sendLabelToThePrinter']);
     Route::get('sendRoofingLabelToThePrinter', [WareHouseController::class,'sendRoofingLabelToThePrinter']);
     Route::get('printAdditionalRoofingLabels', [WareHouseController::class,'printAdditionalRoofingLabels']);
-    Route::get('startgenratingqrcodeforpallet/{jpbid}/{isroofing}', [WareHouseController::class,'startgenratingqrcodeforpallet']);
+    Route::get('jobLabelQRCodeDetails/{jpbid}/{isroofing}', [WareHouseController::class,'jobLabelQRCodeDetails']);
     Route::get('createPalletConfig', [WareHouseController::class,'createPalletConfig']);
     Route::get('mapitemstopallet', [WareHouseController::class,'mapitemstopallet']);
     Route::post('saveLabels', [WareHouseController::class,'saveLabels']);
     Route::post('deleteSavedLabelMapping',[WareHouseController::class,'deleteSavedLabelMapping']);
 
     Route::get('getUpliftmentPage',[WareHouseController::class,'getUpliftmentPage']);
+
+        Route::get('StockChange',[WareHouseController::class,'StockChange']);
+        Route::post('/change-stock', [WareHouseController::class, 'changeStock'])->name('change.stock');
+
+
+        Route::get('/get-product-groups', [WareHouseController::class, 'getProductGroups']);
+Route::get('/get-products', [WareHouseController::class, 'getProducts']);
+
+
     // //My Route here:
     // Route::get('/getHandlingFeeByInvoice', [WarehouseController::class, 'getHandlingFeeByInvoice']);
 
@@ -1101,7 +1112,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('mapitemsmachinesdept', [WareHouseController::class,'mapdeptitem']);
     Route::get('createjobs', [WareHouseController::class,'createjobs']);
     Route::get('roofworkorders', [WareHouseController::class,'roofworkorders']);
-    Route::get('printpalletsselectdept', [WareHouseController::class,'printpalletsselectdept']);
+    Route::get('production_departments', [WareHouseController::class,'production_departments']);
     Route::get('location', [WareHouseController::class,'location']);
     Route::get('stocklocation', [WareHouseController::class,'stocklocation']);
     Route::get('stockdetails/{productCode}', [WareHouseController::class,'stockdetails']);
@@ -1431,4 +1442,15 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('searchTicket', [ProWeightController::class,'searchTicket']);
     Route::get('getProWeighTicketDetails/{ticketNumber}', [ProWeightController::class, 'getProWeighTicketDetails']);
     Route::post('updateProWeighData', [ProWeightController::class, 'updateProWeighData']);
+});
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('WorkOrders', [WorkOrdersController::class,'index']);
+    Route::get('getActiveJobs', [WorkOrdersController::class,'getActiveJobs']);
+    Route::post('createNewJob', [WorkOrdersController::class,'createNewJob']);
+    Route::get('getMachineJobs', [WorkOrdersController::class,'getMachineJobs']);
+    Route::post('updateWorkOrderStatus', [WorkOrdersController::class,'updateWorkOrderStatus']);
+    Route::post('updateJobQtyRequired', [WorkOrdersController::class,'updateJobQtyRequired']);
+    Route::post('updateJobSequence', [WorkOrdersController::class,'updateJobSequence']);
+    Route::post('printWorkOrderLabel', [WorkOrdersController::class,'printWorkOrderLabel']);
 });

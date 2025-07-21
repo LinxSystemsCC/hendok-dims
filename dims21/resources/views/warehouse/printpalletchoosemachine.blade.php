@@ -73,7 +73,7 @@
                 <div class="col-2 d-inline-flex">
                     @if ($backButton != '0')
                         <button class="btn btn-dark d-flex justify-content-center align-items-center me-2" style="width:75px;"
-                            onclick="location.href='{!! url('/printpalletsselectdept') !!}'">
+                            onclick="location.href='{!! url('/production_departments') !!}'">
                             <i class="bi bi-arrow-return-left text-center h4"></i>
                         </button>
                     @endif
@@ -105,7 +105,7 @@
         @foreach ($machines as $val)
             @if ($val->intDeptID == $deparment)
                 <button class="btn btn-danger"
-                    onclick="location.href='{!! url('/printpalletchoosproducttomake') !!}/{{ $intId }}/{{ $val->intMachineID }}'"
+                    onclick="location.href='{!! url('/production_labels') !!}/{{ $intId }}/{{ $val->intMachineID }}'"
                     type="button" style="width: 100% !important;font-size: 40px;">{{ $val->strMachineName }}
                 </button>
             @endif

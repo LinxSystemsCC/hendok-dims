@@ -39,7 +39,7 @@ class SalesForm extends Controller
 
        //Print Pallet
         //    if($this->getThings($GroupId,'Print Pallet')){
-        //        return redirect('/printpalletsselectdept');
+        //        return redirect('/production_departments');
         //    }
         //    if($this->getThings($GroupId,'Strictly Job Creators')){
         //        return redirect('/createjobs');
@@ -52,7 +52,7 @@ class SalesForm extends Controller
 
             $machineID = DB::connection('sqlsrv2')->select("select intAutoMachineID from tblMachines where strMachineName = '".$departmentMachines[1]."'");
             
-            return redirect('/printpalletchoosproducttomake/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
+            return redirect('/production_labels/'.$deptartmentID[0]->intAutoID.'/'.$machineID[0]->intAutoMachineID);
         }
 
         if($this->getThings($GroupId,'Teamleader Redirect')){
