@@ -1291,7 +1291,7 @@ if (Auth::guest()) {
                 formData.append('address', $('#inputAltAddress').val().length > 0 ? $('#inputAltAddress')
                     .val() : $('#inputAddress').val());
                 formData.append('invoice', $('#inputAltInvoice').val().length > 0 ? $('#inputAltInvoice')
-                    .val() : invoice);
+                    .val() : $('#selectInvoice').val());
                 formData.append('customers', $('#inputCustomer').flexdatalist('value'));
                 formData.append('company', $('#selectCompany').val());
                 formData.append('date', $('#inputDate').val());
