@@ -24,7 +24,7 @@ class ProWeightController extends Controller
             return response()->json([]);
         }
 
-        $results = DB::table('[HK-SQL2012].[ProWeigh].[dbo].[WB_Ticket_Trans]')
+        $results = DB::table(DB::raw('[HK-SQL2012].[ProWeigh].[dbo].[WB_Ticket_Trans]'))
             ->select('TICKET_NUMBER')
             ->where('TICKET_NUMBER', 'like', '%' . $query . '%')
             ->where('TRANSPORTER_CODE', '=', 'Hendok')
@@ -37,7 +37,7 @@ class ProWeightController extends Controller
 
     public function getProWeighTicketDetails($ticketNumber)
     {
-        $ticket = DB::table('[HK-SQL2012].[ProWeigh].[dbo].[WB_Ticket_Trans]')
+        $ticket = DB::table(DB::raw('[HK-SQL2012].[ProWeigh].[dbo].[WB_Ticket_Trans]'))
             ->select(
                 'TICKET_NUMBER',
                 'REG_NUMBER',
