@@ -254,7 +254,7 @@ public function individualInvoicing(Request $request)
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
-
+/*
                     // ✅ Eligibility check
             $eligibilityCheck = DB::connection('sqlsrv3')->select("EXEC sp_CheckInvoiceEligibility ?", [$ref]);
             if (isset($eligibilityCheck[0]->Result) && $eligibilityCheck[0]->Result === 'AlreadyProcessed') {
@@ -262,7 +262,7 @@ public function individualInvoicing(Request $request)
                     'status' => 'error',
                     'message' => 'This order has already been invoiced or pushed to XML.',
                 ]);
-            }
+            } this is all clearly ai generated, SP above doesnt even exist either.*/
 
         if ($invoiceid < 0) {
             $UserID = Auth::user()->UserID;
