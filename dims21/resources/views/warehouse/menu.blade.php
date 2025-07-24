@@ -484,6 +484,9 @@ if ((Auth::guest()))
                             <a href='{!!url("/loadTracking")!!}'>Truck Load Tracker</a>
                             @endif
                         </li>
+                        <li>
+                            <a href='{!!url("/pro-weigh")!!}'>Change Pro-Weigh Truck</a>
+                        </li>
                         {{-- <li>
                             @if($assignweighttickets !="0")
                             <a href='{!!url("/assignweighbridgeticket")!!}'>Assign Weight Tickets</a>
