@@ -241,6 +241,10 @@
                 selectReceivingWarehouse.option('value', null);
                 selectReceivingBin.option('items', []);
                 selectReceivingBin.option('value', null);
+
+                
+                    // 👇 Trigger the warehouse dropdown's onValueChanged manually
+                    selectReceivingWarehouse._options.onValueChanged({ value: warehouses[0]?.intLocationId || null });
             }
         }).dxSelectBox("instance");
 
@@ -478,6 +482,8 @@
                         options: {
                             text: "Receive",
                             onClick: function () {
+                                    // console.log("🔍 Selected IBT Details:", selectedIBTRowDetails);
+
                                 // modalPopupShow('received', selectedIBTRowDetails);
                                 loadingPanel.option('visible', true);
                                 $.ajax({
@@ -533,18 +539,23 @@
                     }
                 },
                 onRowClick: function (e) {
-                    if (e.data && e.data.intStatus === "2") {
-                        showReceivedButton = true;
-                        selectedStatus = e.data.strStatus;
-                        SelectedIbtHeaderId = e.data.intAutoId;
-                        selectedIBTRowDetails = e;
-                        e.component.repaint();
-                    } else {
-                        showReceivedButton = false;
-                        setTimeout(function () {
-                            e.component.repaint();
-                        }, 20);
-                    }
+                    // if (e.data && e.data.intStatus === "2") {
+                    //     showReceivedButton = true;
+                    //     selectedStatus = e.data.strStatus;
+                    //     SelectedIbtHeaderId = e.data.intAutoId;
+                    //     selectedIBTRowDetails = e;
+                    //     e.component.repaint();
+                    // } else {
+                    //     showReceivedButton = false;
+                    //     setTimeout(function () {
+                    //         e.component.repaint();
+                    //     }, 20);
+                    // }
+                    showReceivedButton = true;
+                    selectedStatus = e.data.strStatus;
+                    SelectedIbtHeaderId = e.data.intAutoId;
+                    selectedIBTRowDetails = e;
+                    e.component.repaint();
                 },
             }).dxDataGrid('instance');
 
@@ -1247,6 +1258,7 @@
             if ($('#intFromDC').val() != '') {
                 let fromDC = $('#intFromDC').val();
                 loadingPanel.option('visible', true);
+
 
                 $.ajax({
                     url: '{{ url('ibt/get-bins') }}',
