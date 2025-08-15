@@ -76,7 +76,7 @@
                     allowEditing: false
                 },{
                     dataField: "mnyQty",
-                    caption: "Quantity",
+                    caption: "Requested Quantity",
                     allowEditing: false
                 },{
                     dataField: "outstanding",
