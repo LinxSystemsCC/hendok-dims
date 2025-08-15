@@ -51,8 +51,35 @@
                 scrolling: {
                     rowRenderingMode: 'infinite',
                 },
+              
+            filterRow: {
+                visible: true
+            },
+            filterPanel: {
+                visible: true
+            },  
+            export: {
+                        enabled: true,
+                        allowExportSelectedData: true
+                    },
+                    onExporting: function(e) {
+                        var workbook = new ExcelJS.Workbook();
+                        var worksheet = workbook.addWorksheet('outstanding');
+
+                        DevExpress.excelExporter.exportDataGrid({
+                            component: e.component,
+                            worksheet: worksheet,
+                            autoFilterEnabled: true
+                        }).then(function() {
+                            // https://github.com/exceljs/exceljs#writing-xlsx
+                            workbook.xlsx.writeBuffer().then(function(buffer) {
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'outstanding.xlsx');
+                            });
+                        });
+                        e.cancel = true;
+            },
                 paging: {
-                    pageSize: 10,
+                    pageSize: 20,
                 },
                 columns: [{
                     dataField: "DateCreated",
