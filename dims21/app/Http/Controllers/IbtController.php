@@ -31,6 +31,32 @@ return view('warehouse.ibt.index', compact('products', 'dcData', 'bins'));
     }
 
 
+    
+    public function outstandingibt()
+    {
+
+
+
+        $dateFrom = date('Y-m-d', strtotime('-7 days'));
+        $dateTo = date('Y-m-d');
+
+return view('warehouse.backorderibt.index')
+            ->with('dateFrom', $dateFrom)
+            ->with('dateTo', $dateTo);
+    }
+    public function getBackOrderIBT(Request $request){
+
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+
+    $outstandingibt = DB::connection('sqlsrv2')
+        ->select('EXEC [usp_R_GetIbtOutStandingBalance] ?,?', array($dateFrom,$dateTo)); // Adjust SP name/param if needed
+
+    return response()->json($outstandingibt);
+    }
+
+
+
     public function getTruckLoadsByDC(Request $request)
 {
     $dcId = $request->get('dc_id');
