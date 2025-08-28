@@ -1418,6 +1418,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('ibt/get-bins', [IbtController::class, 'getBins']);
     Route::get('outstandingibt', [IbtController::class, 'outstandingibt']);
     Route::get('getBackOrderIBT', [IbtController::class, 'getBackOrderIBT']);
+    Route::get('tlreport', [IbtController::class, 'tlreport']);
 });
 
 

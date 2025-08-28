@@ -572,6 +572,11 @@ if ((Auth::guest()))
                         <a class="secondmenu" href='{!!url("/outstandingibt")!!}'><i class="fa fa-truck"></i>IBT Backorder</a>
                         @endif
                     </li>
+                    <li>
+                        @if($ibt !="0")
+                        <a class="secondmenu" href='{!!url("/tlreport")!!}'><i class="fa fa-truck"></i>TL Report</a>
+                        @endif
+                    </li>
                 </li>
                 <li>
                 <a href='{!!url("/StockChange")!!}'>Stock Change</a>
