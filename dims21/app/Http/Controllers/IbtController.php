@@ -56,6 +56,33 @@ return view('warehouse.backorderibt.index')
     }
 
 
+    
+    public function tlreport()
+    {
+
+
+
+        $dateFrom = date('Y-m-d', strtotime('-7 days'));
+        $dateTo = date('Y-m-d');
+
+    return view('warehouse.tlreport.index')
+            ->with('dateFrom', $dateFrom)
+            ->with('dateTo', $dateTo);
+    }
+    public function getTLsDateRange(Request $request){
+
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+
+    $outstandingibt = DB::connection('sqlsrv2')
+        ->select('EXEC [usp_R_GetTLsDateRange] ?,?', array($dateFrom,$dateTo)); // Adjust SP name/param if needed
+
+    return response()->json($outstandingibt);
+    }
+
+
+
+
 
     public function getTruckLoadsByDC(Request $request)
 {
