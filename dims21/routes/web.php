@@ -1420,6 +1420,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getBackOrderIBT', [IbtController::class, 'getBackOrderIBT']);
     Route::get('tlreport', [IbtController::class, 'tlreport']);
     Route::get('getTLsDateRange', [IbtController::class, 'getTLsDateRange']);
+    Route::post('getTLItemsPerIBT', [IbtController::class, 'getTLItemsPerIBT']);
 });
 
 
