@@ -1421,6 +1421,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('tlreport', [IbtController::class, 'tlreport']);
     Route::get('getTLsDateRange', [IbtController::class, 'getTLsDateRange']);
     Route::post('getTLItemsPerIBT', [IbtController::class, 'getTLItemsPerIBT']);
+    Route::post('receiveTLNumberData', [IbtController::class, 'receiveTLNumberData']);
 });
 
 
