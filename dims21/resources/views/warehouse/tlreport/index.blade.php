@@ -98,8 +98,8 @@
 
                                         popupContainer.dxPopup({
                                             title:options.data.strTLNumber,
-                                            width: 700,
-                                            height: 500,
+                                            width: 1200,
+                                            height: 800,
                                             visible: true,
                                             showCloseButton: true,
                                             contentTemplate: function(popupContent) {
