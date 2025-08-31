@@ -61,11 +61,14 @@ return view('warehouse.backorderibt.index')
     {
 
 
-
+        $dcData = DB::connection('sqlsrv2')->select('EXEC usp_GetDCName');
+        $bins = DB::connection('sqlsrv3')->select("EXEC usp_GetActiveBinLocations");
         $dateFrom = date('Y-m-d', strtotime('-7 days'));
         $dateTo = date('Y-m-d');
 
     return view('warehouse.tlreport.index')
+            ->with('dcData', $dcData)
+            ->with('bins', $bins)
             ->with('dateFrom', $dateFrom)
             ->with('dateTo', $dateTo);
     }
