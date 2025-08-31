@@ -103,16 +103,10 @@
                                             visible: true,
                                             showCloseButton: true,
                                             contentTemplate: function(popupContent) {
-                                                $("<div>").appendTo(popupContent).dxDataGrid({
-                                                dataSource: data,
-                                                showBorders: true,
-                                                columnAutoWidth: true,
-                                                paging: { pageSize: 50 },
-                                            });
 
                                             $("<hr>").appendTo(popupContent);
                                                 grid = $("<div>").appendTo(popupContent).dxDataGrid({
-                                                    dataSource: [],
+                                                    dataSource: data,
                                                     showBorders: true,
                                                     columnAutoWidth: true,
                                                     paging: { pageSize: 50 },
