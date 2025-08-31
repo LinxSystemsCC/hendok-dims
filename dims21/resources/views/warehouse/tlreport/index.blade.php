@@ -35,6 +35,8 @@
     <script src="{{ asset('js/jquery.flexdatalist.min.js') }}"></script> 
     <script>
         
+        var binData = @json($bins);
+        let dcData = {!! json_encode($dcData) !!};
 		let gridTLs;
         $(document).ready(function () {
 
@@ -82,73 +84,85 @@
                     pageSize: 20,
                 },
                 columns: [{
-                        dataField: "strTLNumber",
-                        caption: "TL Number",
-                    allowEditing: false,
-                    width: 80,
-                    cellTemplate: function(container, options) {
-                        $("<div>")
-                            .addClass("dx-link")
-                            .text(options.value)
-                            .on("click", function() {
-                                fetchTLItemsPerIBT(options.data.strTLNumber)
-                                    .then(data => {
-                                        let popupContainer = $("<div>").appendTo("body");
-                                        let grid;
+    dataField: "strTLNumber",
+    caption: "TL Number",
+    allowEditing: false,
+    width: 80,
+    cellTemplate: function(container, options) {
+        $("<div>")
+            .addClass("dx-link")
+            .text(options.value)
+            .on("click", function() {
+                fetchTLItemsPerIBT(options.data.strTLNumber)
+                    .then(data => {
+                        let popupContainer = $("<div>").appendTo("body");
 
-                                        popupContainer.dxPopup({
-                                            title:options.data.strTLNumber,
-                                            width: 1200,
-                                            height: 800,
-                                            visible: true,
-                                            showCloseButton: true,
-                                            contentTemplate: function(popupContent) {
+                        popupContainer.dxPopup({
+                            title: options.data.strTLNumber,
+                            width: 1200,
+                            height: 800,
+                            visible: true,
+                            showCloseButton: true,
+                            contentTemplate: function(popupContent) {
+                                // fresh containers per popup
+                                $("<div id='popupDC'>").appendTo(popupContent);
+                                $("<div id='popupWarehouse'>").appendTo(popupContent);
+                                $("<div id='popupBin'>").appendTo(popupContent);
+                                $("<hr>").appendTo(popupContent);
 
-                                            $("<hr>").appendTo(popupContent);
-                                                grid = $("<div>").appendTo(popupContent).dxDataGrid({
-                                                    dataSource: data,
-                                                    showBorders: true,
-                                                    columnAutoWidth: true,
-                                                    paging: { pageSize: 50 },
-                                                    columns: [
-                                                        {
-                                                            dataField: "strIBTNumber",
-                                                            caption: "IBT Number",
-                                                        },
-                                                        { 
-                                                            dataField: "strItemCode",
-                                                            caption: "Item Code",
-                                                        },
-                                                        { 
-                                                            dataField: "strItemDescription",
-                                                            caption: "Item Description",
-                                                        },
-                                                        { 
-                                                            dataField: "decQtyRequired",
-                                                            caption: "Qty Req.",
-                                                        },
-                                                        { 
-                                                            dataField: "decQtyIssued",
-                                                            caption: "Qty Iss.",
-                                                        },
-                                                        { 
-                                                            dataField: "decQtyReceived",
-                                                            caption: "Qty Rec.",
-                                                        },
-                                                        { 
-                                                            dataField: "decQtyToReceive",
-                                                            caption: "Qty to Rec.",
-                                                        },
-                                                    ]
-                                                }).dxDataGrid("instance");
+                                // grid
+                                let grid = $("<div>").appendTo(popupContent).dxDataGrid({
+                                    dataSource: data,
+                                    showBorders: true,
+                                    columnAutoWidth: true,
+                                    paging: { pageSize: 50 },
+                                    columns: [
+                                        { dataField: "strIBTNumber", caption: "IBT Number" },
+                                        { dataField: "strItemCode", caption: "Item Code" },
+                                        { dataField: "strItemDescription", caption: "Item Description" },
+                                        { dataField: "decQtyRequired", caption: "Qty Req." },
+                                        { dataField: "decQtyIssued", caption: "Qty Iss." },
+                                        { dataField: "decQtyReceived", caption: "Qty Rec." },
+                                        { dataField: "decQtyToReceive", caption: "Qty to Rec." },
+                                    ]
+                                }).dxDataGrid("instance");
 
+                                // init dropdowns here
+                                initReceivingDropdowns("#popupDC", "#popupWarehouse", "#popupBin");
+
+                                // receive button
+                                $("<div>").appendTo(popupContent).dxButton({
+                                    text: "Receive",
+                                    type: "success",
+                                    onClick: function() {
+                                        let dataPost = grid.getDataSource().items();
+                                        $.ajax({
+                                            url: '{!! url("/receiveTLNumberData") !!}',
+                                            method: "POST",
+                                            data: JSON.stringify({
+                                                rows: dataPost,
+                                                dc: $("#popupDC").dxSelectBox("instance").option("value"),
+                                                warehouse: $("#popupWarehouse").dxSelectBox("instance").option("value"),
+                                                bin: $("#popupBin").dxSelectBox("instance").option("value"),
+                                            }),
+                                            contentType: "application/json",
+                                            success: function() {
+                                                DevExpress.ui.notify("TL Data Received.", "success", 3000);
+                                                popupContainer.dxPopup("instance").hide();
+                                            },
+                                            error: function(xhr, status, error) {
+                                                DevExpress.ui.notify(error, "error", 3000);
                                             }
                                         });
-                                    });
-                            })
-                            .appendTo(container);
-                    }
-                },{
+                                    }
+                                });
+                            }
+                        });
+                    });
+            })
+            .appendTo(container);
+    }
+},{
                     dataField: "strIBTNumbers",
                     caption: "IBT Numbers",
                     allowEditing: false
@@ -196,7 +210,54 @@
             }
             }).dxDataGrid("instance");
         });
-        
+function initReceivingDropdowns(dcSelector, warehouseSelector, binSelector) {
+    var allBins = @json($bins);
+
+    const dcBox = $(dcSelector).dxSelectBox({
+        dataSource: [...new Map(allBins.map(bin => [bin.intDcId, bin])).values()],
+        valueExpr: 'intDcId',
+        displayExpr: 'strDCName',
+        placeholder: 'Select DC',
+        onValueChanged(e) {
+            const dcId = e.value;
+
+            const warehouses = [...new Map(allBins
+                .filter(x => x.intDcId === dcId)
+                .map(x => [x.intLocationId, x])
+            ).values()];
+
+            warehouseBox.option('items', warehouses);
+            warehouseBox.option('value', null);
+            binBox.option('items', []);
+            binBox.option('value', null);
+        }
+    }).dxSelectBox("instance");
+
+    const warehouseBox = $(warehouseSelector).dxSelectBox({
+        valueExpr: 'intLocationId',
+        displayExpr: 'strLocationName',
+        placeholder: 'Select Warehouse',
+        onValueChanged(e) {
+            const selectedDC = dcBox.option('value');
+            const selectedWarehouse = e.value;
+
+            const bins = allBins.filter(
+                x => x.intDcId === selectedDC && x.intLocationId === selectedWarehouse
+            );
+
+            binBox.option('items', bins);
+            binBox.option('value', null);
+        }
+    }).dxSelectBox("instance");
+
+    const binBox = $(binSelector).dxSelectBox({
+        valueExpr: 'intBinId',
+        displayExpr: 'strBin',
+        placeholder: 'Select Bin',
+    }).dxSelectBox("instance");
+}
+
+
         function fetchTLItemsPerIBT(strTLNumber) {
             return $.ajax({
                 url: '{!! url("/getTLItemsPerIBT") !!}',
