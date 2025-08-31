@@ -82,9 +82,78 @@
                     pageSize: 20,
                 },
                 columns: [{
-                    dataField: "strTLNumber",
-                    caption: "TL Number",
-                    allowEditing: false
+                        dataField: "strTLNumber",
+                        caption: "TL Number",
+                    allowEditing: false,
+                    width: 80,
+                    cellTemplate: function(container, options) {
+                        $("<div>")
+                            .addClass("dx-link")
+                            .text(options.value)
+                            .on("click", function() {
+                                fetchTLItemsPerIBT(options.data.strTLNumber)
+                                    .then(data => {
+                                        let popupContainer = $("<div>").appendTo("body");
+                                        let grid;
+
+                                        popupContainer.dxPopup({
+                                            title:options.data.strTLNumber,
+                                            width: 700,
+                                            height: 500,
+                                            visible: true,
+                                            showCloseButton: true,
+                                            contentTemplate: function(popupContent) {
+                                                $("<div>").appendTo(popupContent).dxDataGrid({
+                                                dataSource: data,
+                                                showBorders: true,
+                                                columnAutoWidth: true,
+                                                paging: { pageSize: 50 },
+                                            });
+
+                                            $("<hr>").appendTo(popupContent);
+                                                grid = $("<div>").appendTo(popupContent).dxDataGrid({
+                                                    dataSource: [],
+                                                    showBorders: true,
+                                                    columnAutoWidth: true,
+                                                    paging: { pageSize: 50 },
+                                                    columns: [
+                                                        {
+                                                            dataField: "strIBTNumber",
+                                                            caption: "IBT Number",
+                                                        },
+                                                        { 
+                                                            dataField: "strItemCode",
+                                                            caption: "Item Code",
+                                                        },
+                                                        { 
+                                                            dataField: "strItemDescription",
+                                                            caption: "Item Description",
+                                                        },
+                                                        { 
+                                                            dataField: "decQtyRequired",
+                                                            caption: "Qty Req.",
+                                                        },
+                                                        { 
+                                                            dataField: "decQtyIssued",
+                                                            caption: "Qty Iss.",
+                                                        },
+                                                        { 
+                                                            dataField: "decQtyReceived",
+                                                            caption: "Qty Rec.",
+                                                        },
+                                                        { 
+                                                            dataField: "decQtyToReceive",
+                                                            caption: "Qty to Rec.",
+                                                        },
+                                                    ]
+                                                }).dxDataGrid("instance");
+
+                                            }
+                                        });
+                                    });
+                            })
+                            .appendTo(container);
+                    }
                 },{
                     dataField: "strIBTNumbers",
                     caption: "IBT Numbers",
@@ -133,6 +202,20 @@
             }
             }).dxDataGrid("instance");
         });
+        
+        function fetchTLItemsPerIBT(strTLNumber) {
+            return $.ajax({
+                url: '{!! url("/getTLItemsPerIBT") !!}',
+                method: 'POST',
+                data: {
+                    strTLNumber: strTLNumber,
+                },
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+        }
+
         function getTLsDateRange(dateFromParam, dateToParam) {
             
             // Ajax call for Get IBT Records

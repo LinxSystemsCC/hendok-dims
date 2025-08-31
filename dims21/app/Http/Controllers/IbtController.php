@@ -50,7 +50,7 @@ return view('warehouse.backorderibt.index')
         $dateTo = $request->get('dateTo');
 
     $outstandingibt = DB::connection('sqlsrv2')
-        ->select('EXEC [usp_R_GetIbtOutStandingBalance] ?,?', array($dateFrom,$dateTo)); // Adjust SP name/param if needed
+        ->select('EXEC [usp_R_GetIbtOutStandingBalance] ?,?', array($dateFrom,$dateTo)); 
 
     return response()->json($outstandingibt);
     }
@@ -75,10 +75,23 @@ return view('warehouse.backorderibt.index')
         $dateTo = $request->get('dateTo');
 
     $outstandingibt = DB::connection('sqlsrv2')
-        ->select('EXEC [usp_R_GetTLsDateRange] ?,?', array($dateFrom,$dateTo)); // Adjust SP name/param if needed
+        ->select('EXEC [usp_R_GetTLsDateRange] ?,?', array($dateFrom,$dateTo)); 
 
     return response()->json($outstandingibt);
     }
+
+
+    
+    public function getTLItemsPerIBT(Request $request){
+
+        $strTLNumber = $request->get('strTLNumber');
+
+    $itemperTL = DB::connection('sqlsrv2')
+        ->select('EXEC [usp_R_GetItemsPerIBTTLNumber] ?', array($strTLNumber)); 
+
+    return response()->json($itemperTL);
+    }
+
 
 
 
@@ -89,7 +102,7 @@ return view('warehouse.backorderibt.index')
     $dcId = $request->get('dc_id');
 
     $truckLoads = DB::connection('sqlsrv2')
-        ->select('EXEC usp_GetIssuedIBTTruckLoadsByDC ?', [$dcId]); // Adjust SP name/param if needed
+        ->select('EXEC usp_GetIssuedIBTTruckLoadsByDC ?', [$dcId]); 
 
     return response()->json($truckLoads);
 }
