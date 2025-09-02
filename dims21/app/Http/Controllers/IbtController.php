@@ -83,6 +83,34 @@ return view('warehouse.backorderibt.index')
     return response()->json($outstandingibt);
     }
 
+        public function receiveTLNumberData(Request $request)
+    {
+        $rows = $request->get('rows');
+        $dc = $request->get('dc');
+        $warehouse = $request->get('warehouse');
+        $bin = $request->get('bin');
+        $xml = new \SimpleXMLElement('<Rows/>');
+
+        foreach ($rows as $row) {
+            $rowElement = $xml->addChild('Row');
+            foreach ($row as $key => $value) {
+                $rowElement->addChild($key, htmlspecialchars($value ?? ''));
+            }
+        }
+
+        $xmlString = $xml->asXML();
+
+
+        DB::connection('sqlsrv2')->statement(
+            'EXEC [usp_C_PostTLData] ?, ?, ?, ?',
+            [$xmlString, $dc, $warehouse, $bin]
+        );
+
+        return response()->json(['success' => true]);
+    }
+
+
+
 
     
     public function getTLItemsPerIBT(Request $request){
