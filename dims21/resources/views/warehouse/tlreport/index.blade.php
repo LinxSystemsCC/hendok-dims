@@ -2,7 +2,7 @@
 @extends('layouts.base')
 
 {{-- Set the Title --}}
-@section('title', 'IBT')
+@section('title', 'TL-Report')
 
 {{-- Set to show navbar --}}
 @php
