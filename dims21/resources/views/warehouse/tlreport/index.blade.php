@@ -97,6 +97,10 @@
                     .then(data => {
                         let popupContainer = $("<div>").appendTo("body");
 
+                    const uid = Date.now();
+                    const dcId = "popupDC_" + uid;
+                    const whId = "popupWarehouse_" + uid;
+                    const binId = "popupBin_" + uid;
                         popupContainer.dxPopup({
                             title: options.data.strTLNumber,
                             width: 1200,
@@ -104,13 +108,12 @@
                             visible: true,
                             showCloseButton: true,
                             contentTemplate: function(popupContent) {
-                                // fresh containers per popup
-                                $("<div id='popupDC'>").appendTo(popupContent);
-                                $("<div id='popupWarehouse'>").appendTo(popupContent);
-                                $("<div id='popupBin'>").appendTo(popupContent);
-                                $("<hr>").appendTo(popupContent);
+                           $("<div class='dx-field'><div class='dx-field-label'>DC</div><div class='dx-field-value'><div id='" + dcId + "'></div></div></div>").appendTo(popupContent);
+                            $("<div class='dx-field'><div class='dx-field-label'>Warehouse</div><div class='dx-field-value'><div id='" + whId + "'></div></div></div>").appendTo(popupContent);
+                            $("<div class='dx-field'><div class='dx-field-label'>Receiving Bin</div><div class='dx-field-value'><div id='" + binId + "'></div></div></div>").appendTo(popupContent);
+                             $("<hr>").appendTo(popupContent);
 
-                                // grid
+                                
                                 let grid = $("<div>").appendTo(popupContent).dxDataGrid({
                                     dataSource: data,
                                     showBorders: true,
@@ -127,10 +130,7 @@
                                     ]
                                 }).dxDataGrid("instance");
 
-                                // init dropdowns here
-                                initReceivingDropdowns("#popupDC", "#popupWarehouse", "#popupBin");
-
-                                // receive button
+                            initReceivingDropdowns("#" + dcId, "#" + whId, "#" + binId);
                                 $("<div>").appendTo(popupContent).dxButton({
                                     text: "Receive",
                                     type: "success",
@@ -141,9 +141,9 @@
                                             method: "POST",
                                             data: JSON.stringify({
                                                 rows: dataPost,
-                                                dc: $("#popupDC").dxSelectBox("instance").option("value"),
-                                                warehouse: $("#popupWarehouse").dxSelectBox("instance").option("value"),
-                                                bin: $("#popupBin").dxSelectBox("instance").option("value"),
+                                                dc: $("#" + dcId).dxSelectBox("instance").option("value"),
+                                                warehouse: $("#" + whId).dxSelectBox("instance").option("value"),
+                                                bin: $("#" + binId).dxSelectBox("instance").option("value"),
                                             }),
                                             contentType: "application/json",
                                             success: function() {
