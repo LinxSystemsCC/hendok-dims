@@ -303,7 +303,7 @@
                 });
             });
             //This is use for disply the IBT list
-            let showReceivedButton = false;
+            let showReceivedButton = true;
             const gridIBT = $("#gridIBT").dxDataGrid({
                 dataSource: [],
                 hoverStateEnabled: true,
@@ -529,6 +529,7 @@
                     }
                 },
                 onRowDblClick: function (e) {
+					//console.debug(e.data);
                     if (e.data.intStatus == "0") {
                         modalPopupShow('update', e);
                     } else if (e.data.intStatus == "3") {
@@ -539,6 +540,7 @@
                     }
                 },
                 onRowClick: function (e) {
+					  
                     showReceivedButton = true;
                     selectedStatus = e.data.strStatus;
                     SelectedIbtHeaderId = e.data.intAutoId;
