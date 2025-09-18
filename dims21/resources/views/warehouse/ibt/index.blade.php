@@ -539,23 +539,10 @@
                     }
                 },
                 onRowClick: function (e) {
-                    // if (e.data && e.data.intStatus === "2") {
-                    //     showReceivedButton = true;
-                    //     selectedStatus = e.data.strStatus;
-                    //     SelectedIbtHeaderId = e.data.intAutoId;
-                    //     selectedIBTRowDetails = e;
-                    //     e.component.repaint();
-                    // } else {
-                    //     showReceivedButton = false;
-                    //     setTimeout(function () {
-                    //         e.component.repaint();
-                    //     }, 20);
-                    // }
                     showReceivedButton = true;
                     selectedStatus = e.data.strStatus;
                     SelectedIbtHeaderId = e.data.intAutoId;
                     selectedIBTRowDetails = e;
-                    e.component.repaint();
                 },
             }).dxDataGrid('instance');
 
