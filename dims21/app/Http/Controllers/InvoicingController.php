@@ -98,7 +98,15 @@ public function individualInvoicing(Request $request)
                 'message' => $hasLimits
             ]);
         }
-
+		
+         $invoiceMessage = $this->updateTheDocIds($invoiceid, $ownersId, $ref);
+		 if ($invoiceMessage !== "Success") {
+		 
+		  return response()->json([
+                    'status' => 'error',
+                    'message' => 'Something wrong with order# '.$SoNumber.' : '.$invoiceid,
+                ]);
+		 }
         
         // 5. Build order XML
         $returnGetsalesorderNoLines = DB::connection('sqlsrv3')
@@ -254,15 +262,7 @@ public function individualInvoicing(Request $request)
         DB::connection('sqlsrv3')->table('tblPickingPlanHeader')
             ->where('strUnickReference', $ref)
             ->update(['isReadyForInvoicing' => 1]);
-/*
-                    // ✅ Eligibility check
-            $eligibilityCheck = DB::connection('sqlsrv3')->select("EXEC sp_CheckInvoiceEligibility ?", [$ref]);
-            if (isset($eligibilityCheck[0]->Result) && $eligibilityCheck[0]->Result === 'AlreadyProcessed') {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'This order has already been invoiced or pushed to XML.',
-                ]);
-            } this is all clearly ai generated, SP above doesnt even exist either.*/
+ 
 
         if ($invoiceid < 0) {
             $UserID = Auth::user()->UserID;
@@ -272,6 +272,14 @@ public function individualInvoicing(Request $request)
 
         $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId);
         $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
+		$invoiceMessage = $this->updateTheDocIds($invoiceid, $ownersId, $ref);
+		 if ($invoiceMessage !== "Success") {
+		 
+		  return response()->json([
+                    'status' => 'error',
+                    'message' => 'Something wrong with order# '.$SoNumber.' : '.$invoiceid,
+                ]);
+		 }
 
         if ($hasLimits == "Success") {
             if (strlen(trim($invnum)) > 4) {
@@ -783,6 +791,17 @@ public function individualInvoicing(Request $request)
             );
         $inv = $returnToInvoices[0]->InvNumber;
         return $inv;
+
+    }
+	public function updateTheDocIds($invoiceid, $ownerId,$reference)
+    {
+        $returnDocStatus = DB::connection('sqlsrv3')
+            ->select(
+                'exec sp_CheckInvoiceEligibilityAndUpdateOutOfSyncData ?,?,?',
+                array($reference, $ownerId ,$invoiceid)
+            );
+        $Result = $returnDocStatus[0]->Result;
+        return $Result;
 
     }
     public function CheckIfCreditLimitFine($invoiceid, $ownerId)
