@@ -1386,7 +1386,57 @@
                     });
             };
 
-            function invoiceOut(inputdata) {
+			function invoiceOut(inputdata) {
+				// Create a Set to track unique keys
+				let seen = new Set();
+
+				// Filter out duplicates based on key fields
+				let uniqueInputData = inputdata.filter(item => {
+					let key = `${item.intOwnerID}-${item.OrderNum}-${item.OrderId}-${item.strUnickReference}`;
+					if (seen.has(key)) return false;
+					seen.add(key);
+					return true;
+				});
+
+				// Recursive processor/loop with delay
+				function processItem(index) {
+					if (index >= uniqueInputData.length) return; // stop when done
+
+					var item = uniqueInputData[index];
+					var ownersId = item.intOwnerID;
+					var SoNumber = item.OrderNum;
+					var invoiceid = item.OrderId;
+					var ref = item.strUnickReference;
+					var userid = item.UserId;
+					var userName = item.UserName;
+
+					$.ajax({
+						url: '{!! url('/individualInvoicingAPI') !!}/' + ownersId + '/' + SoNumber + '/' +
+							 invoiceid + '/' + ref + '/' + userid + '/' + userName,
+						type: "get",
+						success: function(outputData) {
+							console.debug(outputData);
+
+							if (outputData === "Credit Limit") {
+								alert("CREDIT LIMIT ISSUES");
+							} else {
+								printTripSheet(ref);
+							}
+
+							// Move to next item after 2 second
+							setTimeout(function() {
+								processItem(index + 1);
+							}, 2000);
+						}
+					});
+				}
+
+				// Start loop
+				processItem(0);
+			}
+
+
+            function invoiceOutbBeforeSep(inputdata) {
                 // Create a Set to track unique keys
                 let seen = new Set();
 
