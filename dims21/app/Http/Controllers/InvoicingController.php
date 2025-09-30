@@ -60,7 +60,15 @@ public function individualInvoicing(Request $request)
 
     try {
 
-        
+        $invoiceMessage = $this->updateTheDocIds($invoiceid, $ownersId, $ref);
+		 if ($invoiceMessage !== "Success") {
+		 
+		  return response()->json([
+                    'status' => 'error',
+                    'message' => 'Something wrong with order# '.$SoNumber.' : '.$invoiceid,
+                ]);
+		 } 
+		
             $result = DB::connection('sqlsrv3')
                 ->select("EXEC usp_CheckIfOrderIdExists ?", [$invoiceid]);
 
