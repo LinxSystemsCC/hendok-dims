@@ -270,8 +270,8 @@ public function individualInvoicing(Request $request)
             return response()->json(['status' => 'success', 'message' => 'Process completed and execution halted.']);
         }
 
-        $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId);
-        $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
+       
+       
 		$invoiceMessage = $this->updateTheDocIds($invoiceid, $ownersId, $ref);
 		 if ($invoiceMessage !== "Success") {
 		 
@@ -279,7 +279,9 @@ public function individualInvoicing(Request $request)
                     'status' => 'error',
                     'message' => 'Something wrong with order# '.$SoNumber.' : '.$invoiceid,
                 ]);
-		 }
+		 } 
+		 $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId); 
+		 $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
 
         if ($hasLimits == "Success") {
             if (strlen(trim($invnum)) > 4) {
