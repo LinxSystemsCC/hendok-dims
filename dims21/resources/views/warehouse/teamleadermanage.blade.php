@@ -1521,11 +1521,11 @@
                     }
                 });
             };
-			//Desparate
-			function updateDimsDuplicatedLines(ref,invoiceList) {
+			//Desparate  updateDimsPickingplanIds
+			function updateDimsDuplicatedLines(ref,) {
                 $.ajax({
                     url: '{!! url('/updateDimsPickingplanIds') !!}',
-                    type: "GET",
+                    type: "POST",
                     data: {
                         ref: ref
                     },
