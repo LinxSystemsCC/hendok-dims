@@ -1429,7 +1429,7 @@
 							// Move to next item after 2 second
 							setTimeout(function() {
 								processItem(index + 1);
-							}, 1000);
+							}, 100);
 						}
 					});
 				}
