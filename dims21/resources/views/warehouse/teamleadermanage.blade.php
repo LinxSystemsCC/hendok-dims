@@ -1378,14 +1378,16 @@
                         // Call the function to remove duplicate rows from the data array
                         invoiceList = removeDuplicateRows(invoiceList);
 						//Start the concept of updating DIMS picking  plan ID since the Ids on Sage change over time
-                        //updateDimsDuplicatedLines(strUnickReference,invoiceList)						
-                        invoiceOut(invoiceList);
+                        updateDimsDuplicatedLines(strUnickReference,invoiceList)						
+                        //invoiceOut(invoiceList);
                         // alert('Disabled by the developer for testing')
                     })
                     .catch(function(error) {
                         console.error('Error:', error);
                     });
             };
+			
+			
 
 			function invoiceOut(inputdata) {
 				// Create a Set to track unique keys
@@ -1435,6 +1437,23 @@
 				// Start loop
 				processItem(0);
 			}
+			
+			//Desparate  updateDimsPickingplanIds
+			function updateDimsDuplicatedLines(ref,invoiceList) {
+                
+				$.ajax({
+                        url: '{!! url('/updatedimspickingplanIds') !!}' + '/' + ref,
+                        type: "get",
+                        success: function(outputData) {
+                            console.debug(outputData);
+								if (data[0].Result == "Success") {
+															invoiceOut(invoiceList);
+														} else {
+															alert(data[0].Result);
+														}
+                        }
+                    });
+            };
 
 
             function invoiceOutbBeforeSep(inputdata) {
@@ -1521,23 +1540,7 @@
                     }
                 });
             };
-			//Desparate  updateDimsPickingplanIds
-			function updateDimsDuplicatedLines(ref) {
-                $.ajax({
-                    url: '{!! url('/updatedimspickingplanIds') !!}',
-                    type: "GET",
-                    data: {
-                        ref: ref
-                    },
-                    success: function(data) {
-                        if (data[0].Result == "Success") {
-                            invoiceOut(invoiceList);
-                        } else {
-                            alert(data[0].Result);
-                        }
-                    }
-                });
-            };
+			
 
             function updateHoldStatus(ref, status) {
                 $.ajax({
