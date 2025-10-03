@@ -1445,7 +1445,7 @@
                         url: '{!! url('/updatedimspickingplanIds') !!}' + '/' + ref,
                         type: "get",
                         success: function(outputData) {
-                            console.debug(outputData.Result);
+                            console.debug(outputData);
 								if (data[0].Result == "Success") {
 															invoiceOut(invoiceList);
 														} else {
