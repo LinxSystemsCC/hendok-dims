@@ -1378,8 +1378,8 @@
                         // Call the function to remove duplicate rows from the data array
                         invoiceList = removeDuplicateRows(invoiceList);
 						//Start the concept of updating DIMS picking  plan ID since the Ids on Sage change over time
-                        updateDimsDuplicatedLines(strUnickReference,invoiceList)						
-                        //invoiceOut(invoiceList);
+                        //updateDimsDuplicatedLines(strUnickReference,invoiceList)						
+                        invoiceOut(invoiceList);
                         // alert('Disabled by the developer for testing')
                     })
                     .catch(function(error) {
