@@ -377,14 +377,7 @@ public function individualInvoicing(Request $request)
             return $hasLimits;
         }
     }
-	public function updateDimsPickingplanIds($ref){
-		 $returndata = DB::connection('sqlsrv3')
-            ->select(
-                'exec [sp_CheckInvoiceEligibilityAndUpdateOutOfSyncDataBatch] ?',
-                array($ref)
-            );
-		return response()->json($returndata);
-	}
+	
     //NOT IBT
     public function testWarehouseT($ref, $SoNumber, $ownersId)
     {
@@ -399,6 +392,17 @@ public function individualInvoicing(Request $request)
             $this->warehousetransfer($value->ItemCode, 'CPT', 'UKH', $value->Toinvoice, $value->ItemCode, $value->ItemCode, $value->intorderdetailId);
         }
     }
+	
+	
+	public function updateDimsPickingplanIds($ref){
+		 $returndata = DB::connection('sqlsrv3')
+            ->select(
+                'exec [sp_CheckInvoiceEligibilityAndUpdateOutOfSyncDataBatch] ?',
+                array($ref)
+            );
+		return response()->json($returndata);
+	}
+	
     public function invoicepickings($reference)
     {
 
