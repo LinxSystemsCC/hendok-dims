@@ -400,7 +400,8 @@ public function individualInvoicing(Request $request)
                 'exec [sp_CheckInvoiceEligibilityAndUpdateOutOfSyncDataBatch] ?',
                 array($ref)
             );
-		return response()->json($returndata);
+			$Result = $returndata[0]->Result;
+		return $Result;
 	}
 	
     public function invoicepickings($reference)

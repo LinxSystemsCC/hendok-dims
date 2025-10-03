@@ -1446,10 +1446,10 @@
                         type: "get",
                         success: function(outputData) {
                             console.debug(outputData);
-								if (data[0].Result == "Success") {
+								if (outputData === "Success") {
 															invoiceOut(invoiceList);
 														} else {
-															alert(data[0].Result);
+															alert(outputData);
 														}
                         }
                     });
