@@ -1377,8 +1377,9 @@
 
                         // Call the function to remove duplicate rows from the data array
                         invoiceList = removeDuplicateRows(invoiceList);
-
-                        invoiceOut(invoiceList);
+						//Start the concept of updating DIMS picking  plan ID since the Ids on Sage change over time
+                        updateDimsDuplicatedLines(strUnickReference,invoiceList)						
+                        //invoiceOut(invoiceList);
                         // alert('Disabled by the developer for testing')
                     })
                     .catch(function(error) {
@@ -1426,7 +1427,7 @@
 							// Move to next item after 2 second
 							setTimeout(function() {
 								processItem(index + 1);
-							}, 2000);
+							}, 1000);
 						}
 					});
 				}
@@ -1514,6 +1515,23 @@
                     success: function(data) {
                         if (data[0].Result == "Success") {
                             location.reload();
+                        } else {
+                            alert(data[0].Result);
+                        }
+                    }
+                });
+            };
+			//Desparate
+			function updateDimsDuplicatedLines(ref,invoiceList) {
+                $.ajax({
+                    url: '{!! url('/updateDimsPickingplanIds') !!}',
+                    type: "GET",
+                    data: {
+                        ref: ref
+                    },
+                    success: function(data) {
+                        if (data[0].Result == "Success") {
+                            invoiceOut(invoiceList);
                         } else {
                             alert(data[0].Result);
                         }

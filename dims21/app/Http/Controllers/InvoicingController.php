@@ -280,14 +280,14 @@ public function individualInvoicing(Request $request)
 
        
        
-		$invoiceMessage = $this->updateTheDocIds($invoiceid, $ownersId, $ref);
+		/*$invoiceMessage = $this->updateTheDocIds($invoiceid, $ownersId, $ref);
 		 if ($invoiceMessage !== "Success") {
 		 
 		  return response()->json([
                     'status' => 'error',
                     'message' => 'Something wrong with order# '.$SoNumber.' : '.$invoiceid,
                 ]);
-		 } 
+		 } */
 		 $invnum = $this->returnInvoiceNumber($invoiceid, $ownersId); 
 		 $hasLimits = $this->CheckIfCreditLimitFine($invoiceid, $ownersId);
 
@@ -377,6 +377,14 @@ public function individualInvoicing(Request $request)
             return $hasLimits;
         }
     }
+	public function updateDimsPickingplanIds($ref){
+		 $returndata = DB::connection('sqlsrv3')
+            ->select(
+                'exec [sp_CheckInvoiceEligibilityAndUpdateOutOfSyncDataBatch] ?',
+                array($ref)
+            );
+		return response()->json($returndata);
+	}
     //NOT IBT
     public function testWarehouseT($ref, $SoNumber, $ownersId)
     {
