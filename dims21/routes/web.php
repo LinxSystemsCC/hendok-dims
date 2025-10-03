@@ -575,7 +575,7 @@ Route::get('slack', [LoadingAppAPIs::class,'slack']);
 //LOADING APP API CONTROLLER ENDS  HERE !!!
 
 //SAGE Invoicing
-Route::get('updateDimsPickingplanIds/{ref}', [InvoicingController::class,'updateDimsPickingplanIds']);
+Route::get('updatedimspickingplanIds/{ref}', [InvoicingController::class,'updateDimsPickingplanIds']);
 Route::get('invoicepickings/{ref}', [InvoicingController::class,'invoicepickings']);
 Route::get('printtripsheet/{ref}', [InvoicingController::class,'printtripsheet']);
 Route::get('teamLeaderPrintTripSheet', [InvoicingController::class,'teamLeaderPrintTripSheet']);

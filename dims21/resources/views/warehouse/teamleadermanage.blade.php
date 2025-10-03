@@ -1524,7 +1524,7 @@
 			//Desparate  updateDimsPickingplanIds
 			function updateDimsDuplicatedLines(ref) {
                 $.ajax({
-                    url: '{!! url('/updateDimsPickingplanIds') !!}',
+                    url: '{!! url('/updatedimspickingplanIds') !!}',
                     type: "GET",
                     data: {
                         ref: ref
