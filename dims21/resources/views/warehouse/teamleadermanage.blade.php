@@ -1525,7 +1525,7 @@
 			function updateDimsDuplicatedLines(ref,) {
                 $.ajax({
                     url: '{!! url('/updateDimsPickingplanIds') !!}',
-                    type: "POST",
+                    type: "GET",
                     data: {
                         ref: ref
                     },
