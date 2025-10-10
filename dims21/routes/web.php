@@ -1158,6 +1158,7 @@ Route::get('/get-products', [WareHouseController::class, 'getProducts']);
     Route::post('updateTruckLoadingSequence', [WareHouseController::class,'updateTruckLoadingSequence']);
     Route::get('failedInvoices', [WareHouseController::class,'failedInvoices']);
     Route::get('getFailedInvoices', [WareHouseController::class,'getFailedInvoices']);
+    Route::post('deleteFailedInvoice', [WareHouseController::class,'deleteFailedInvoice']);
     Route::get('checkScanned', [WareHouseController::class,'checkScanned']);
     Route::get('getCheckScanned', [WareHouseController::class,'getCheckScanned']);
 });

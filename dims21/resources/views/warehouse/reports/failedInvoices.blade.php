@@ -75,6 +75,24 @@
                         dataField: "dteCreated",
                         caption: "Date Created",
                     },
+                    {
+                        type: "buttons",
+                        buttons: [
+                            {
+                                hint: "Delete",
+                                icon: "trash",
+                                visible: function (e) {
+                                    return e.row.data.intFlag == 2;
+                                },
+                                onClick: function (e) {
+                                    if (confirm("Are you sure you want to delete this failed Invoice?")) {
+                                        // Delete the row programmatically
+                                        gridInstance.deleteRow(e.row.rowIndex);
+                                    }
+                                }
+                            }
+                        ]
+                    }
                 ],
                 onToolbarPreparing: function (e) {
                     // Create a custom header on the left side
@@ -111,7 +129,22 @@
                             },
                         },
                     });
-                }
+                },
+                
+                onRowRemoved: function (e) {
+                $.ajax({
+                    url: '{!! url('deleteFailedInvoice') !!}', 
+                    type: 'POST',
+                    data: {
+                        invoice: e.data.intXmlOrder
+                    },
+                    success: function (data) {
+                    },
+                    error: function () {
+                        alert("Error deleting record.");
+                    }
+                });
+            },
             }).dxDataGrid('instance');
 
             function getFailedInvoices(){
