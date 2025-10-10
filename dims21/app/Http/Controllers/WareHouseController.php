@@ -3256,8 +3256,7 @@ class WareHouseController extends Controller
 
     public function failedInvoices()
     {
-        // $failures = DB::connection('sqlsrv3')->select("SELECT * FROM viewFailedInvoices ORDER BY intXmlOrder DESC");
-        return view('warehouse.reports.failedInvoices'); //->with('failures', $failures);
+        return view('warehouse.reports.failedInvoices'); 
     }
 
     public function getFailedInvoices(Request $request)
@@ -3268,10 +3267,18 @@ class WareHouseController extends Controller
         return response()->json($failures);
     }
 
+    
+    public function deleteFailedInvoice(Request $request)
+    {
+        $FailedInvoice = $request->get('invoice');
+        $failures = DB::connection('sqlsrv3')->select("EXEC spDeleteFailedInvoice ?",array($FailedInvoice));
+        return response()->json($failures);
+    }
+
+
     public function checkScanned()
     {
-        // $scanned = DB::connection('sqlsrv3')->select(EXEC spCheckScanned");
-        return view('warehouse.reports.checkScanned'); //->with('scanned', $scanned);
+        return view('warehouse.reports.checkScanned'); 
     }
 
 
