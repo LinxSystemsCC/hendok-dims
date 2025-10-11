@@ -340,21 +340,20 @@ return view('warehouse.backorderibt.index')
      * @param Request $request
      */
     public function deleteIBTLine(Request $request)
+    
     {
-        $passData = [
+        $result = DB::connection('sqlsrv2')->select(
+            'EXEC spDeleteIBTLine
+                @intAutoId = :intAutoId',
+            [
             'intAutoId' => $request->get('intAutoId'),
-        ];
-
-        $deletedRows = DB::delete(
-            'DELETE FROM tblIBTLines WHERE intAutoId = :intAutoId',
-            $passData
+            ]
         );
-
-        if ($deletedRows > 0) {
-            return response()->json(['success' => true, 'message' => 'Record deleted successfully.']);
+        if (isset($result[0]->Result) && $result[0]->Result == 'Success') {
+            return response()->json(['success' => true]);
         }
 
-        return response()->json(['success' => false, 'message' => 'Deletion failed or record not found.']);
+        return response()->json(['success' => false]);
     }
 
         
