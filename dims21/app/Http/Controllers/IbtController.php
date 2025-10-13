@@ -238,6 +238,32 @@ return view('warehouse.backorderibt.index')
     }
 
     /**
+     * This function is used for Cancelling an IBT
+     *
+     * @param obj $request
+     */
+    public function cancelIBT(Request $request)
+    {
+        $intStatus = $request->has('intStatus') && $request->get('intStatus') ? $request->get('intStatus') : 0;
+        $result = DB::connection('sqlsrv2')->select(
+            'EXEC spCancelIBT
+                @SelectedIbtHeaderId = :SelectedIbtHeaderId,
+                @userID = :userID,
+                @intStatus = :intStatus',
+            [
+                'SelectedIbtHeaderId' => $request->get('SelectedIbtHeaderId'),
+                'userID' => Auth::user()->UserID,
+                'intStatus' => $intStatus
+            ]
+        );
+        if (isset($result[0]->Result) && $result[0]->Result == 'Success') {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
+    }
+
+    /**
      * This function is used for Update IBT Details
      *
      * @param obj $request
@@ -281,6 +307,9 @@ return view('warehouse.backorderibt.index')
         return response()->json(['success' => false]);
     }
 
+
+
+
     /**
      * This function is used for Update Qty Received And QtyVariance
      *
@@ -305,6 +334,29 @@ return view('warehouse.backorderibt.index')
 
         return response()->json(['success' => false, 'message' => 'Update failed.']);
     }
+    /**
+     * This function is used for Deleting untouched IBT Lines
+     *
+     * @param Request $request
+     */
+    public function deleteIBTLine(Request $request)
+    
+    {
+        $result = DB::connection('sqlsrv2')->select(
+            'EXEC spDeleteIBTLine
+                @intAutoId = :intAutoId',
+            [
+            'intAutoId' => $request->get('intAutoId'),
+            ]
+        );
+        if (isset($result[0]->Result) && $result[0]->Result == 'Success') {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
+    }
+
+        
 
     /**
      * This function is used for update the status

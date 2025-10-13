@@ -1158,6 +1158,7 @@ Route::get('/get-products', [WareHouseController::class, 'getProducts']);
     Route::post('updateTruckLoadingSequence', [WareHouseController::class,'updateTruckLoadingSequence']);
     Route::get('failedInvoices', [WareHouseController::class,'failedInvoices']);
     Route::get('getFailedInvoices', [WareHouseController::class,'getFailedInvoices']);
+    Route::post('deleteFailedInvoice', [WareHouseController::class,'deleteFailedInvoice']);
     Route::get('checkScanned', [WareHouseController::class,'checkScanned']);
     Route::get('getCheckScanned', [WareHouseController::class,'getCheckScanned']);
 });
@@ -1412,6 +1413,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('getIBTDetails', [IbtController::class, 'getIBTDetails']);
     Route::get('getIssuedIBTTruckLoads', [IbtController::class, 'getIssuedIBTTruckLoads']);
     Route::get('getIssuedIBTDetails', [IbtController::class, 'getIssuedIBTDetails']);
+    Route::post('ibt/cancel-ibt', [IbtController::class, 'cancelIBT']);
+    Route::post('ibt/delete-ibt-line', [IbtController::class, 'deleteIBTLine']);
     Route::post('ibt/update-ibt', [IbtController::class, 'updateIBTDetails']);
     Route::post('ibt/update-ibt-lines', [IbtController::class, 'updateIbtLines']);
     Route::post('ibt/update-status', [IbtController::class, 'updateStatus']);

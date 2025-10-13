@@ -158,6 +158,7 @@
                     <input type="text" id="intStatus" hidden>
 
                     <div class="modal-footer">
+                        <button type="button" id="btnCancelIBT" class="btn btn-warning">Cancel</button>
                         <button type="button" class="btn btn-secondary closeIBTModal" data-bs-dismiss="modal">Close</button>
                         <button type="button" id="btnUpdateIBT" class="btn btn-success" hidden>Update</button>
                         <button type="button" id="btnSaveIBT" class="btn btn-success">Save</button>
@@ -548,7 +549,7 @@
                 },
             }).dxDataGrid('instance');
 
-            //This is use for disply the Products list
+            //This is use for display the Products list
             gridProducts = $(".gridProducts").dxDataGrid({
                 dataSource: [], //as json
                 hoverStateEnabled: true,
@@ -601,6 +602,23 @@
                     dataField: "mnyQtyVariance",
                     caption: "Qty Variance",
                     allowEditing: false,
+                },
+                {
+                    type: "buttons",
+                    buttons: [
+                        {
+                            hint: "Delete",
+                            icon: "trash",
+                            visible: function (e) {
+                                return e.row.data.strHasBeenModified.length < 2;
+                            },
+                            onClick: function (e) {
+                                if (confirm("Are you sure you want to delete this item?")) {
+                                    gridProducts.deleteRow(e.row.rowIndex);
+                                }
+                            }
+                        }
+                    ]
                 }
                 ],
                 summary: {
@@ -642,6 +660,22 @@
                         e.newData.mnyQtyVariance = mnyQtyVariance;
                     }
                 },
+                onRowRemoved: function (e) {
+                $.ajax({
+                    url: '{!! url('ibt/delete-ibt-line') !!}', 
+                    type: 'POST',
+                    data: {
+                        intAutoId: e.data.intAutoId
+                    },
+                    success: function (data) {
+                    },
+                    error: function () {
+                        alert("Error deleting record.");
+                    }
+                });
+            },
+
+
                 onRowUpdated: function (e) {
                     return $.ajax({
                         url: '{!! url('ibt/update-ibt-lines') !!}',
@@ -771,6 +805,37 @@
                     });
                 }
             });
+            $('#btnCancelIBT').click(function () {
+            // Show confirmation dialog
+            var confirmed = confirm("Are you sure you want to cancel this IBT?");
+
+            if (!confirmed) {
+                return; // Exit the function if user selects "No"
+            }
+
+            loadingPanel.option('visible', true);
+
+            var formData = new FormData();
+            formData.append('SelectedIbtHeaderId', SelectedIbtHeaderId);
+            formData.append('intStatus', 4);
+
+            $.ajax({
+                url: '{!! url('ibt/cancel-ibt') !!}',
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    loadingPanel.option('visible', true);
+                    location.reload();
+                },
+                complete: function () {
+                    // Hide the loading panel
+                    loadingPanel.option('visible', false);
+                }
+            });
+        });
+
 
             //This function is use for Update IBT Data with product
             $('#btnUpdateIBT').click(function () {
