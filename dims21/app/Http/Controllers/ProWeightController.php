@@ -24,7 +24,7 @@ class ProWeightController extends Controller
             return response()->json([]);
         }
 
-        $results = DB::table(DB::raw('[ProWeigh].[dbo].[WB_Ticket_Trans]'))
+        $results = DB::table(DB::raw('[HK-SQL2019].[ProWeigh].[dbo].[WB_Ticket_Trans]'))
             ->select('TICKET_NUMBER')
             ->where('TICKET_NUMBER', 'like', '%' . $query . '%')
             ->where('TRANSPORTER_CODE', '=', 'Hendok')
