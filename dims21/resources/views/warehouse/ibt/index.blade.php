@@ -613,9 +613,7 @@
                                 return !e.row.data.strHasBeenModified  || e.row.data.strHasBeenModified.length < 2;
                             },
                             onClick: function (e) {
-                                if (confirm("Are you sure you want to delete this item?")) {
                                     gridProducts.deleteRow(e.row.rowIndex);
-                                }
                             }
                         }
                     ]
