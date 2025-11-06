@@ -269,11 +269,11 @@
                             .addClass('d-none');
 
                         // Populate values
-                        $('#truck').val(data.REG_NUMBER).data('tare-weight', parseFloat(data
+                        $('#truck').val(data[0].REG_NUMBER).data('tare-weight', parseFloat(data[0]
                             .TRUCK_TARE_WEIGHT || 0));
-                        $('#trailer1').val(data.TRAILER1_REG_NUMBER);
-                        $('#trailer2').val(data.TRAILER2_REG_NUMBER);
-                        $('#first_weight').val(data.FIRST_WEIGHT);
+                        $('#trailer1').val(data[0].TRAILER1_REG_NUMBER);
+                        $('#trailer2').val(data[0].TRAILER2_REG_NUMBER);
+                        $('#first_weight').val(data[0].FIRST_WEIGHT);
                     },
                     error: function(xhr, status, error) {
                         if (status !== 'abort') {
