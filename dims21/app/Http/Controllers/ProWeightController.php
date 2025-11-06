@@ -24,20 +24,22 @@ class ProWeightController extends Controller
             return response()->json([]);
         }
 
-        $results = DB::table(DB::raw('[HK-SQL2019].[ProWeigh].[dbo].[WB_Ticket_Trans]'))
+        /*$results = DB::table(DB::raw('[HK-SQL2019].[ProWeigh].[dbo].[WB_Ticket_Trans]'))
             ->select('TICKET_NUMBER')
             ->where('TICKET_NUMBER', 'like', '%' . $query . '%')
             ->where('TRANSPORTER_CODE', '=', 'Hendok')
             ->orderBy('TICKET_NUMBER', 'desc')
             ->limit(100)
-            ->get();
+            ->get();*/
+			 $results = DB::connection('sqlsrv2')
+			->select('EXEC [usp_R_GetProweightHendokTickets] ?', array($query)); 
 
         return response()->json($results);
     }
 
     public function getProWeighTicketDetails($ticketNumber)
     {
-        $ticket = DB::table(DB::raw('[HK-SQL2012].[ProWeigh].[dbo].[WB_Ticket_Trans]'))
+        /*$ticket = DB::table(DB::raw('[HK-SQL2012].[ProWeigh].[dbo].[WB_Ticket_Trans]'))
             ->select(
                 'TICKET_NUMBER',
                 'REG_NUMBER',
@@ -48,7 +50,10 @@ class ProWeightController extends Controller
                 'SECOND_WEIGHT'
             )
             ->where('TICKET_NUMBER', $ticketNumber)
-            ->first();
+            ->first();*/
+
+             $ticket = DB::connection('sqlsrv2')
+			->select('EXEC [usp_R_GetProweightHendokTicketDetails] ?', array($ticketNumber)); 
 
         if (!$ticket) {
             return response()->json(['error' => 'Ticket not found'], 404);
