@@ -168,6 +168,8 @@
                                                 'Loading...');
                                         },
                                         success: function(data) {
+                                        console.debug(data);
+                                        console.debug(data.REG_NUMBER);
                                             $('#truck').val(data
                                                 .REG_NUMBER).data(
                                                 'tare-weight',
