@@ -779,7 +779,7 @@
                             gridResults = gridResults + "<Weight>" + value.Weight + "</Weight>";
                             gridResults = gridResults + "<Comment>" + escapeHtml(value.Comment) +
                                 "</Comment>";
-                            gridResults = gridResults + "<bitIsPriority>" + escapeHtml(value.bitIsPriority) +
+                            gridResults = gridResults + "<bitIsPriority>" + value.bitIsPriority +
                                 "</bitIsPriority>";
                             gridResults = gridResults + "</result>";
                         }
@@ -862,7 +862,7 @@
                             gridResults = gridResults + "<Weight>" + value.Weight + "</Weight>";
                             gridResults = gridResults + "<Comment>" + escapeHtml(value.Comment) +
                                 "</Comment>";
-                            gridResults = gridResults + "<bitIsPriority>" + escapeHtml(value.bitIsPriority) +
+                            gridResults = gridResults + "<bitIsPriority>" + value.bitIsPriority +
                                 "</bitIsPriority>";
                             gridResults = gridResults + "</result>";
                         }
