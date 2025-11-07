@@ -594,6 +594,15 @@
                     allowEditing: false,
                 },
                 {
+                    dataField: "bitIsPriority",
+                    caption: "Priority",
+                    allowEditing: true,
+                    dataType: 'boolean',
+                        calculateCellValue: function(rowData) {
+                        return rowData.bitIsPriority == 1; 
+                    }
+                },
+                {
                     dataField: "mnyQtyReceived",
                     caption: "Qty Received",
                     allowEditing: false,
@@ -770,6 +779,8 @@
                             gridResults = gridResults + "<Weight>" + value.Weight + "</Weight>";
                             gridResults = gridResults + "<Comment>" + escapeHtml(value.Comment) +
                                 "</Comment>";
+                            gridResults = gridResults + "<bitIsPriority>" + escapeHtml(value.bitIsPriority) +
+                                "</bitIsPriority>";
                             gridResults = gridResults + "</result>";
                         }
                     });
@@ -851,6 +862,8 @@
                             gridResults = gridResults + "<Weight>" + value.Weight + "</Weight>";
                             gridResults = gridResults + "<Comment>" + escapeHtml(value.Comment) +
                                 "</Comment>";
+                            gridResults = gridResults + "<bitIsPriority>" + escapeHtml(value.bitIsPriority) +
+                                "</bitIsPriority>";
                             gridResults = gridResults + "</result>";
                         }
                     });
