@@ -55,7 +55,7 @@ Route::get('/', function () {
 });*/
 
 
-Route::get('/', [WareHouseController::class,'dashboard']);
+Route::get('/', [WareHouseController::class,'dashboard'])->name('dashboard');
 Route::post('getLiveDriversInfo', [ExternalFunctions::class, 'getLiveDriversInfo'] );
 Auth::routes();
 

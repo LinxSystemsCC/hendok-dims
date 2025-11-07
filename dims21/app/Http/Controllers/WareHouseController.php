@@ -861,9 +861,6 @@ class WareHouseController extends Controller
             $sessionUserId = Auth::user()->UserID; 
             $GroupId= Auth::user()->GroupId;
 
-            if (request()->has('menu') && request()->get('menu') == 'newMenu') {
-                session()->put('menu', 'newMenu');
-            }
             if($this->getThings($GroupId,'Has Auto Redirect')){
                 $userDepartment =Auth::user()->strPickingTeams;
                 $departmentMachines = explode('|', $userDepartment);
@@ -882,9 +879,46 @@ class WareHouseController extends Controller
             } else if($this->getThings($GroupId,'Teamleader Redirect')){
                 return redirect("/teamleadermanage/0");
             } else{
+                $user = Auth::user();
+                // Only Admin can change menu type
+                if ($user->UserID == 0 && request()->has('menu_type')) {
+                    $this->updateEnv('MENU_TYPE', request()->get('menu_type'));
+                }
+
                 return view('warehouse/dashboard');
             }
         }
+    }
+
+    /**
+     * Helper to update env value dynamically
+     */
+    protected function updateEnv($key, $value)
+    {
+        $path = base_path('.env');
+
+        if (file_exists($path)) {
+            $oldValue = env($key);
+
+            if (strpos($oldValue, ' ') !== false) {
+                $oldValue = '"' . $oldValue . '"';
+            }
+
+            if (strpos($value, ' ') !== false) {
+                $value = '"' . $value . '"';
+            }
+
+            file_put_contents($path, preg_replace(
+                "/^{$key}=.*/m",
+                "{$key}={$value}",
+                file_get_contents($path)
+            ));
+        }
+
+        config(['app.menu_type' => $value]);
+
+        // clear cached config so change reflects immediately
+        \Artisan::call('config:clear');
     }
 
     public function getThings($GroupId,$thing)

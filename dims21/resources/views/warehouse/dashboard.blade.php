@@ -80,17 +80,21 @@
             @include('warehouse.menu')
         </div>
     </div>
-    @if (request()->has('newMenu') && request()->get('newMenu') == 1)
-        <div class="form-check newMenu">
-            <input class="form-check-input" type="checkbox" value="" id="isNewMenuShow">
-            <label class="form-check-label" for="isNewMenuShow">
-                To use the new side menu, please check the checkbox
-            </label>
-        </div>
-    @endif
     <div class="col p-3" >
         <div class="flex-center position-ref full-height">
             <div class="content">
+                @if(Auth::user()->UserID == 0)
+                    <div class="card p-3 mb-3">
+                        <form method="GET" action="{{ route('dashboard') }}">
+                            <label class="form-label fw-bold">Select Menu Type for All Users:</label>
+                            <select name="menu_type" class="form-select w-auto d-inline-block">
+                                <option value="old" {{ config('app.menu_type') == 'old' ? 'selected' : '' }}>Old Menu</option>
+                                <option value="new" {{ config('app.menu_type') == 'new' ? 'selected' : '' }}>New Menu</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                        </form>
+                    </div>
+                @endif
                 <div class="title m-b-md">
                     <img  src="public/images/dimslogo.png" style="height: 100px;">
                     <strong>Welcome to DIMS</strong>
@@ -124,12 +128,6 @@
     });
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
-    });
-
-    $(document).on('change', '#isNewMenuShow', function(event) {
-        if($("#isNewMenuShow").prop('checked')){
-            window.location.href = '{{ url()->full() }}' + ( '{{ url()->full() }}'.includes('?') ? '&' : '?' ) + 'menu=newMenu';
-        }
     });
 
     $(document).ready(function() {

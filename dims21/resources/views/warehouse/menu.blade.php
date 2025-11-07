@@ -1,4 +1,4 @@
-@if (request()->session()->get('menu') == 'newMenu')
+@if (config('app.menu_type') == 'new')
     @include('warehouse.menu-new')
 @else
     @php

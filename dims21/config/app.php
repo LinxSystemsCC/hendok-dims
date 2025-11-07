@@ -235,4 +235,5 @@ return [
 
     ],
 
+    'menu_type' => env('MENU_TYPE', 'old'),
 ];

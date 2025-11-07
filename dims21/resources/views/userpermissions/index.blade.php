@@ -28,144 +28,136 @@
 @endsection
 
 @section('scripts')
+<script>
+$(document).ready(function () {
+    function getUserIdFromPath() {
+        const parts = window.location.pathname.split('/');
+        return parts[parts.length - 1];
+    }
 
-    <script>
-        $(document).ready(function() {
-            function getUserIdFromPath() {
-                const pathSegments = window.location.pathname.split('/');
-                const userId = pathSegments[pathSegments.length - 1];
-                return userId;
-            }
-            var userId = getUserIdFromPath();
-            if (!userId) {
-                console.error("User ID is not available in the URL!");
-                return;
-            }
+    const userId = getUserIdFromPath();
+    if (!userId) {
+        console.error('❌ No user ID found in URL');
+        return;
+    }
 
-            $("#kt_docs_jstree_ajax").jstree({
-                "core": {
-                    "themes": {
-                        "responsive": false
-                    },
-                    "check_callback": true,
-                    'data': {
-                        'url': function (node) {
-                            return '{{ route('getPermissionsList', ['userid' => '__USER_ID__']) }}'.replace('__USER_ID__', userId);
-                        },
-                        'data': function (node) {
-                            return {
-                                'parent': node.id // Send the parent ID to the backend
-                            };
-                        },
-                        'dataFilter': function(data) {
-                            // After receiving the data, but before rendering it, modify it here
-                            var jsonData = JSON.parse(data);
-                            console.log(jsonData)
-
-                            // Modify the 'state' of each node based on isChecked before passing it to jsTree
-                            jsonData.forEach(function (item) {
-                                console.log(item.state.selected)
-                                item.state = item.state || {};  // Make sure state is initialized
-                                item.state.selected = (item.state.selected);  // Set checkbox state
-                                item.state.checked = (item.state.selected);  // Set checkbox state (ensure checked state matches)
-                            });
-                            console.log(jsonData)
-
-                            // Return the modified data
-                            return JSON.stringify(jsonData);
-                        }
-                    }
-                },
-                "types": {
-                    "default": {
-                        "icon": "ki-solid ki-folder text-warning"
-                    },
-                    "file": {
-                        "icon": "ki-solid ki-file text-warning"
-                    }
-                },
-                "plugins": ["wholerow", "checkbox", "types"],
-                "checkbox": {
-                    "three_state": false,  // Disable three-state checkboxes
-                    "cascade": "down",     // Or "up" depending on how you want cascading
-                    "visible": true,
-                    "keep_selected_style": false  // Disable extra styles for selected nodes
-                }
-            });
-
-
-            $(document).on('click', '#savescustomername', function(event) {
-                event.preventDefault();
-
-                var selectedElms = $('#kt_docs_jstree_ajax').jstree("get_selected", true);
-
-                var childIds = selectedElms.map(function(elm) {
-                    if (!isNaN(elm.id) && elm.id !== "#") {
-                        return elm.id;
-                    }
-                }).filter(function(elm) { return elm !== undefined });
-
-                var parentIds = selectedElms.map(function(elm) {
-                    if (!isNaN(elm.parent) && elm.parent !== "#") {
-                        return elm.parent; 
-                    }
-                }).filter(function(elm) { return elm !== undefined });
+    // ---- Initialize Tree ----
+    const $tree = $('#kt_docs_jstree_ajax').jstree({
+        core: {
+            check_callback: true,
+            themes: { responsive: false },
+            data: function (node, cb) {
+                // Root or children load
+                const url = (node.id === '#')
+                    ? '{{ route("getPermissionsList", ["userid" => "__USER_ID__"]) }}'.replace('__USER_ID__', userId)
+                    : '{{ route("getPermissionsList", ["userid" => "__USER_ID__"]) }}'.replace('__USER_ID__', userId) + '?parent=' + node.id;
 
                 $.ajax({
-                    url: '{{ route('saveUserPermissions', ['userid' => '__USER_ID__']) }}'.replace('__USER_ID__', userId),
-                    type: "POST",
-                    data: {
-                        childIds: childIds,
-                        parentIds: parentIds
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        // Ensure proper state mapping
+                        const data = response.map(item => ({
+                            id: item.id,
+                            text: item.text,
+                            children: item.children,
+                            icon: item.icon || "ki-outline ki-abstract-13",
+                            state: {
+                                opened: false,
+                                selected: item.state && item.state.selected === true
+                            }
+                        }));
+                        cb(data);
                     },
-                    success: function(data) {
-                        if (data.success) {
-                            location.reload();
-                        }
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 422) {
-                            modalSetValidation($("#system-module"), xhr);
-                        } else {
-                            console.error('An unexpected error occurred:', xhr);
-                        }
+                    error: function (xhr) {
+                        console.error('Tree load failed:', xhr);
+                        cb([]);
                     }
                 });
-            });
+            }
+        },
+        plugins: ['checkbox', 'types', 'wholerow'],
+        types: {
+            default: { icon: "ki-solid ki-folder text-warning" },
+            file: { icon: "ki-solid ki-file text-warning" }
+        },
+        checkbox: {
+            three_state: false,
+            cascade: '',
+            keep_selected_style: false
+        }
+    });
+
+    // ---- Prevent jsTree auto-select bug ----
+    $tree.on('after_open.jstree', function (e, data) {
+        const instance = data.instance;
+        data.node.children.forEach(childId => {
+            const node = instance.get_node(childId);
+            const isSelected = node.original && node.original.state && node.original.state.selected;
+            if (!isSelected) {
+                instance.uncheck_node(node);
+            }
         });
+    });
 
-        function showDialog(tag, width, height) {
-            $(tag).dialog({
-                height: height,
-                modal: false,
-                width: width,
-                containment: false
-            }).dialogExtend({
-                "closable": true, // enable/disable close button
-                "maximizable": false, // enable/disable maximize button
-                "minimizable": true, // enable/disable minimize button
-                "collapsable": true, // enable/disable collapse button
-                "dblclick": "collapse", // set action on double click. false, 'maximize', 'minimize', 'collapse'
-                "titlebar": false, // false, 'none', 'transparent'
-                "minimizeLocation": "right", // sets alignment of minimized dialogues
-                "icons": { // jQuery UI icon class
-
-                    "maximize": "ui-icon-circle-plus",
-                    "minimize": "ui-icon-circle-minus",
-                    "collapse": "ui-icon-triangle-1-s",
-                    "restore": "ui-icon-bullet"
-                },
-                "load": function(evt, dlg) {}, // event
-                "beforeCollapse": function(evt, dlg) {}, // event
-                "beforeMaximize": function(evt, dlg) {}, // event
-                "beforeMinimize": function(evt, dlg) {}, // event
-                "beforeRestore": function(evt, dlg) {}, // event
-                "collapse": function(evt, dlg) {}, // event
-                "maximize": function(evt, dlg) {}, // event
-                "minimize": function(evt, dlg) {}, // event
-                "restore": function(evt, dlg) {} // event
+    // ✅ ---- Parent → Children Select Cascade ----
+    $tree.on('select_node.jstree', function (e, data) {
+        const tree = $tree.jstree(true);
+        const node = data.node;
+        if (node.children && node.children.length > 0) {
+            node.children.forEach(childId => {
+                tree.select_node(childId);
             });
         }
-    </script>
+    });
+
+    // ✅ ---- Parent → Children Deselect Cascade ----
+    $tree.on('deselect_node.jstree', function (e, data) {
+        const tree = $tree.jstree(true);
+        const node = data.node;
+        if (node.children && node.children.length > 0) {
+            node.children.forEach(childId => {
+                tree.deselect_node(childId);
+            });
+        }
+    });
+
+    // ---- Save Permissions ----
+    $('#savescustomername').on('click', function (e) {
+        e.preventDefault();
+
+        const tree = $tree.jstree(true);
+        const selectedNodes = tree.get_selected(true);
+
+        const childIds = selectedNodes
+            .map(n => n.id)
+            .filter(id => !isNaN(id) && id !== '#');
+
+        const parentIds = selectedNodes
+            .map(n => n.parent)
+            .filter(id => !isNaN(id) && id !== '#');
+
+        $.ajax({
+            url: '{{ route("saveUserPermissions", ["userid" => "__USER_ID__"]) }}'.replace('__USER_ID__', userId),
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                childIds: childIds,
+                parentIds: parentIds
+            },
+            success: function (res) {
+                if (res.success) {
+                    $tree.jstree(true).refresh();
+                }
+            },
+            error: function (xhr) {
+                console.error('Save error:', xhr);
+            }
+        });
+    });
+});
+</script>
 
 @endsection
+
+
