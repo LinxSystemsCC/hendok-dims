@@ -118,6 +118,12 @@
                                     dataSource: data,
                                     showBorders: true,
                                     columnAutoWidth: true,
+                                    filterRow: {
+                                        visible: true
+                                    },
+                                    filterPanel: {
+                                        visible: true
+                                    },  
                                     paging: { pageSize: 50 },
                                     columns: [
                                         { dataField: "strIBTNumber", caption: "IBT Number" },
