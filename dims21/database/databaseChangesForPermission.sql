@@ -132,87 +132,6 @@ BEGIN
     WHERE intAutoId = @IntAutoId;
 END
 
--- This sp is use for insert user permissions if not exist tblSaveUserPermissions.
-
-USE [linxdbDIMSHendok]
-GO
-/****** Object:  StoredProcedure [dbo].[sp_InsertUserPermissionsIfNotExist]    Script Date: 11-11-2024 9:00:49 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-ALTER PROCEDURE [dbo].[sp_InsertUserPermissionsIfNotExist]
-    @UserId INT
-AS
-BEGIN
-    -- Start of the procedure
-    SET NOCOUNT ON;
-
-    -- Step 1: Insert missing intNode values from tblSystemModules for the user
-    -- This will insert any intAutoId values from tblSystemModules that are not already assigned to the user
-    INSERT INTO tblUserPermissions (intSystemModuleId, intIsActive, intUserId)
-    SELECT sm.intAutoId, 1, @UserId  -- Default intIsAllow is set to 1
-    FROM tblSystemModules sm
-    WHERE sm.intAutoId IS NOT NULL
-    AND NOT EXISTS (
-        SELECT 1
-        FROM tblUserPermissions sp
-        WHERE sp.intUserId = @UserId
-        AND sp.intSystemModuleId = sm.intAutoId
-    );
-
-    -- Step 2: Update intNode in tblSaveUserPermissions for new intAutoId entries
-    -- This step ensures that if new rows were inserted, their intNode values are properly updated.
-   
-
-    -- Optional: Message indicating the operation result
-    PRINT 'Permissions inserted (if they did not already exist) and updated successfully.';
-END;
-
--- This sp is use for update user permissions.
-
-USE [linxdbDIMSHendok]
-GO
-/****** Object:  StoredProcedure [dbo].[sp_UpdateUserPermissions]    Script Date: 11-11-2024 9:03:17 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-ALTER PROCEDURE [dbo].[sp_UpdateUserPermissions]
-    @ChildIds VARCHAR(MAX),
-    @ParentIds VARCHAR(MAX),
-    @UserId INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @ChildIdTable TABLE (ChildId INT);
-    DECLARE @ParentIdTable TABLE (ParentId INT);
-
-    INSERT INTO @ChildIdTable (ChildId)
-    SELECT value FROM STRING_SPLIT(@ChildIds, ',');
-
-    INSERT INTO @ParentIdTable (ParentId)
-    SELECT value FROM STRING_SPLIT(@ParentIds, ',');
-
-
-    UPDATE tblUserPermissions
-    SET intIsActive = 1
-    WHERE intSystemModuleId IN (SELECT ChildId FROM @ChildIdTable)
-      AND intUserId = @UserId;
-
-    UPDATE tblUserPermissions
-    SET intIsActive = 1
-    WHERE intSystemModuleId IN (SELECT ParentId FROM @ParentIdTable)
-      AND intUserId = @UserId;
-
-    UPDATE tblUserPermissions
-    SET intIsActive = 0
-    WHERE intUserId = @UserId
-      AND intSystemModuleId NOT IN (SELECT ChildId FROM @ChildIdTable)
-      AND intSystemModuleId NOT IN (SELECT ParentId FROM @ParentIdTable);
-
-END
 
 --This stored procedure is designed to retrieve the side menu items based on the permissions assigned to the user.
 
@@ -268,4 +187,41 @@ BEGIN
         dbo.tblSystemModules AS pm ON sm.intParentId = pm.intAutoId
     ORDER BY 
         sm.intAutoId DESC
+END
+
+
+
+ALTER PROCEDURE [dbo].[sp_UpdateUserPermissionsSimple]
+    @Ids VARCHAR(MAX),
+    @UserId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IdsTable TABLE (Id INT);
+
+    INSERT INTO @IdsTable (Id)
+    SELECT TRIM(value) FROM STRING_SPLIT(@Ids, ',') WHERE TRIM(value) <> '';
+
+    -- Step 1: Activate only selected ones
+    UPDATE tblUserPermissions
+    SET intIsActive = 1
+    WHERE intUserId = @UserId
+      AND intSystemModuleId IN (SELECT Id FROM @IdsTable);
+
+    -- Step 2: Deactivate all others
+    UPDATE tblUserPermissions
+    SET intIsActive = 0
+    WHERE intUserId = @UserId
+      AND intSystemModuleId NOT IN (SELECT Id FROM @IdsTable);
+
+    -- Step 3: Insert any missing module-user records
+    INSERT INTO tblUserPermissions (intSystemModuleId, intIsActive, intUserId)
+    SELECT sm.intAutoId, 1, @UserId
+    FROM tblSystemModules sm
+    WHERE sm.intAutoId IN (SELECT Id FROM @IdsTable)
+      AND NOT EXISTS (
+          SELECT 1 FROM tblUserPermissions up 
+          WHERE up.intSystemModuleId = sm.intAutoId AND up.intUserId = @UserId
+      );
 END

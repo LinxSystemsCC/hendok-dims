@@ -12,29 +12,89 @@ class UserPermissionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($userid)
     {
-        return view('userpermissions.index');
+        // 1️⃣ Get all permissions for the user
+        $records = DB::select('EXEC [dbo].[sp_GetPermissionsList] ?', [$userid]);
+
+        // 2️⃣ Convert to PHP array
+        $modules = collect($records)->map(function ($r) {
+            return [
+                'id'        => $r->ID,
+                'text'      => $r->name,
+                'parent_id' => $r->parentId,
+                'checked'   => (bool)$r->isChecked,
+            ];
+        })->toArray();
+
+        // 3️⃣ Recursive tree builder (N-level)
+        $buildTree = function ($parentId = null) use (&$buildTree, $modules) {
+            $branch = [];
+            foreach ($modules as $m) {
+                if ($m['parent_id'] == $parentId) {
+                    $children = $buildTree($m['id']);
+                    $branch[] = [
+                        'id'       => $m['id'],
+                        'text'     => $m['text'],
+                        'icon'     => 'ki-outline ki-abstract-13',
+                        'state'    => [
+                            'selected' => $m['checked'],
+                            'opened'   => false // collapse all by default
+                        ],
+                        'children' => !empty($children) ? $children : [],
+                    ];
+                }
+            }
+            return $branch;
+        };
+
+        $treeData = $buildTree();
+
+        // 4️⃣ Pass tree JSON to Blade
+        return view('userpermissions.index', [
+            'userid'   => $userid,
+            'treeData' => json_encode($treeData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        ]);
     }
 
-    /**
-     * This function is use for get permissions list.
-     */
     public function getPermissionsList(Request $request, $userid)
     {
-        $parentId = $request->get('parent') != '#' ? $request->get('parent') : null;
-        $getSystemModulesList = DB::select('EXEC [dbo].[sp_GetPermissionsList] ?, ?', [$parentId, $userid]);
-        $formattedData = collect($getSystemModulesList)->map(function ($item) {
-            return [
-                'id' => $item->ID,
-                'text' => $item->name,
-                'children' => true,
-                'icon' => 'ki-outline ki-abstract-13',
-                'state' => ['selected' => $item->isChecked == 1]
-            ];
-        });
+        // 1️⃣  Fetch all modules in one go
+        $records = DB::select('EXEC [dbo].[sp_GetPermissionsList] ?', [$userid]);
 
-        return response()->json($formattedData);
+        // 2️⃣  Convert to a convenient array
+        $modules = collect($records)->map(function ($r) {
+            return [
+                'id'        => $r->ID,
+                'text'      => $r->name,
+                'parent_id' => $r->parentId,
+                'checked'   => (bool)$r->isChecked,
+            ];
+        })->toArray();
+
+        // 3️⃣  Recursive tree builder
+        $buildTree = function ($parentId = null) use (&$buildTree, $modules) {
+            $branch = [];
+            foreach ($modules as $m) {
+                if ($m['parent_id'] == $parentId) {
+                    $children = $buildTree($m['id']);
+                    $branch[] = [
+                        'id'       => $m['id'],
+                        'text'     => $m['text'],
+                        'icon'     => 'ki-outline ki-abstract-13',
+                        'state'    => ['selected' => $m['checked']],
+                        'children' => !empty($children) ? $children : false,
+                    ];
+                }
+            }
+            return $branch;
+        };
+
+        // 4️⃣  Build top-level tree
+        $tree = $buildTree();
+
+        // 5️⃣  Return ready-to-use jsTree JSON
+        return response()->json($tree);
     }
 
     /**
@@ -42,19 +102,17 @@ class UserPermissionsController extends Controller
      */
     public function saveUserPermissions(Request $request, $userid)
     {
-        $childIds = $request->input('childIds');
-        if (!is_null($request->input('parentIds'))) {
-            $parentIds = $request->input('parentIds');
-        } else {
-            $parentIds = [];
-        }
-        $childIdsString = implode(',', $childIds);
-        $parentIdsString = implode(',', $parentIds);
-        DB::statement('EXEC sp_InsertUserPermissionsIfNotExist ?', [$userid]);
-        DB::statement('EXEC sp_UpdateUserPermissions ?, ?, ?', [$childIdsString, $parentIdsString, $userid]);
+        $permissionIds = $request->input('permissionIds', []);
+
+        // Convert array to comma-separated string for stored procedure
+        $idsString = implode(',', $permissionIds);
+
+        // Call simplified stored procedure
+        DB::statement('EXEC sp_UpdateUserPermissionsSimple ?, ?', [$idsString, $userid]);
 
         return response()->json(['success' => true]);
     }
+
 
     /**
      * This function is use for allowed permission system modules.
