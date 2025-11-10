@@ -125,9 +125,8 @@
                                         { dataField: "strItemDescription", caption: "Item Description" },
                                         { dataField: "decQtyRequired", caption: "Qty Req." },
                                         { dataField: "decQtyIssued", caption: "Qty Iss." },
-                                        { dataField: "decQtyVariance", caption: "Variance" },
                                         { dataField: "decQtyReceived", caption: "Qty Rec." },
-                                        { dataField: "decQtyToReceive", caption: "Qty to Rec." },
+                                        { dataField: "decQtyVariance", caption: "Variance" },
                                     ]
                                 }).dxDataGrid("instance");
 
