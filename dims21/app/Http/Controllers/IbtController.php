@@ -89,6 +89,7 @@ return view('warehouse.backorderibt.index')
         $dc = $request->get('dc');
         $warehouse = $request->get('warehouse');
         $bin = $request->get('bin');
+        $selectTlNumber = $request->get('selectTlNumber');
         $xml = new \SimpleXMLElement('<Rows/>');
 
         foreach ($rows as $row) {
@@ -102,8 +103,8 @@ return view('warehouse.backorderibt.index')
 
 
         DB::connection('sqlsrv2')->statement(
-            'EXEC [usp_C_PostTLData] ?, ?, ?, ?',
-            [$xmlString, $dc, $warehouse, $bin]
+            'EXEC [usp_C_PostTLData] ?, ?, ?, ?,?',
+            [$xmlString, $dc, $warehouse, $bin, $selectTlNumber]
         );
 
         return response()->json(['success' => true]);

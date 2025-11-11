@@ -36,6 +36,7 @@
     <script>
         
         var binData = @json($bins);
+		var selectTlNumber;
         let dcData = {!! json_encode($dcData) !!};
 		let gridTLs;
         $(document).ready(function () {
@@ -93,6 +94,7 @@
             .addClass("dx-link")
             .text(options.value)
             .on("click", function() {
+				selectTlNumber  =  options.data.strTLNumber;
                 fetchTLItemsPerIBT(options.data.strTLNumber)
                     .then(data => {
                         let popupContainer = $("<div>").appendTo("body");
@@ -150,6 +152,7 @@
                                                 dc: $("#" + dcId).dxSelectBox("instance").option("value"),
                                                 warehouse: $("#" + whId).dxSelectBox("instance").option("value"),
                                                 bin: $("#" + binId).dxSelectBox("instance").option("value"),
+												selectTlNumber: selectTlNumber,
                                             }),
                                             contentType: "application/json",
                                             success: function() {
