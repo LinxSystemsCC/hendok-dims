@@ -371,7 +371,6 @@
                     window.open('{!! url('/userpermissions') !!}/' + intUserID, "User" + intUserID);
                 },
                 onRowRemoving: function(e) {
-
                     var UserID = e.data.UserID;
                     $.ajax({
                         url: '{!! url('/deleteUser') !!}',

@@ -185,6 +185,18 @@ BEGIN
         intAutoHeaderId = @ibtnumber;
 END
 
+ALTER PROCEDURE [dbo].[spGetIBTDetails]
+    @ibtnumber INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT intAutoId, intAutoHeaderId, strPartNumber as PastelCode, fltWeight as Weight, mnyQty as Qty, strComment as Comment, PastelDescription
+    FROM tblIBTLines
+    INNER JOIN viewTblProductWeightedCalc 
+        ON tblIBTLines.strPartNumber COLLATE SQL_Latin1_General_CP1_CI_AS = viewTblProductWeightedCalc.PastelCode
+    WHERE intAutoHeaderId = @ibtnumber;
+END
 
 
 CREATE view [dbo].[viewtblIBTHeadersData] as

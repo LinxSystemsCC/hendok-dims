@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Facades\DB;
 use App\Models\WireDraw\WireDrawRodSupplier;
 use App\Models\WireDraw\WireDrawRod;
+use Illuminate\Support\Str;
 
 trait UtilityTrait
 {
@@ -44,4 +45,17 @@ trait UtilityTrait
 
         return $intRodId;
     }
+
+    /**
+     * This function is used for create slug
+     * 
+     * @param string $name
+     */
+    public function createSlug($name)
+    {
+        $slug = Str::slug($name);
+
+        return $slug;
+    }
+
 }

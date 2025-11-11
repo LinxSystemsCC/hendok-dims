@@ -74,7 +74,6 @@
     </style>
 
 </head>
-
 <div class="col-12 d-flex px-0"  style="background: white;">
     <div class="col-custom-2"  style="background: white;">
         <div class="vertical-menu">
@@ -84,6 +83,18 @@
     <div class="col p-3" >
         <div class="flex-center position-ref full-height">
             <div class="content">
+                @if(Auth::user()->UserID == 0)
+                    <div class="card p-3 mb-3">
+                        <form method="GET" action="{{ route('dashboard') }}">
+                            <label class="form-label fw-bold">Select Menu Type for All Users:</label>
+                            <select name="menu_type" class="form-select w-auto d-inline-block">
+                                <option value="old" {{ config('app.menu_type') == 'old' ? 'selected' : '' }}>Old Menu</option>
+                                <option value="new" {{ config('app.menu_type') == 'new' ? 'selected' : '' }}>New Menu</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                        </form>
+                    </div>
+                @endif
                 <div class="title m-b-md">
                     <img  src="public/images/dimslogo.png" style="height: 100px;">
                     <strong>Welcome to DIMS</strong>
@@ -118,6 +129,7 @@
     $( document ).on( 'focus', ':input', function(){
         $( this ).attr( 'autocomplete', 'off' );
     });
+
     $(document).ready(function() {
 
         $('.sidebar ul li a').on(function(){

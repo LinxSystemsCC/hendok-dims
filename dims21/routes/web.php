@@ -39,6 +39,8 @@ use App\Http\Controllers\IbtController;
 use App\Http\Controllers\ProWeightController;
 use App\Http\Controllers\Warehouse\StockIssueController;
 use App\Http\Controllers\WorkOrdersController;
+use App\Http\Controllers\SystemModuleController;
+use App\Http\Controllers\UserPermissionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +58,7 @@ Route::get('/', function () {
 });*/
 
 
-Route::get('/', [WareHouseController::class,'dashboard']);
+Route::get('/', [WareHouseController::class,'dashboard'])->name('dashboard');
 Route::post('getLiveDriversInfo', [ExternalFunctions::class, 'getLiveDriversInfo'] );
 Auth::routes();
 
@@ -1463,4 +1465,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateJobQtyRequired', [WorkOrdersController::class,'updateJobQtyRequired']);
     Route::post('updateJobSequence', [WorkOrdersController::class,'updateJobSequence']);
     Route::post('printWorkOrderLabel', [WorkOrdersController::class,'printWorkOrderLabel']);
+});
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('system-modules/get-system-modules', [SystemModuleController::class,'getSystemModules'])->name('system-modules.get-system-modules');
+    Route::resource('system-modules',SystemModuleController::class);
+    Route::get('new-userpermissions/{userid}', [UserPermissionsController::class, 'index'])->name('newuserpermissions.index');
+    Route::get('getPermissionsList/{userid}', [UserPermissionsController::class, 'getPermissionsList'])->name('getPermissionsList');
+    Route::post('saveUserPermissions/{userid}', [UserPermissionsController::class, 'saveUserPermissions'])->name('saveUserPermissions');
+    Route::get('get-menu-items/{userid}', [UserPermissionsController::class, 'getAllowedPermissionSystemModules'])->name('get-menu-items');
 });
