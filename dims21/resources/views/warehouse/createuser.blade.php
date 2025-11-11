@@ -366,9 +366,12 @@
                     },
                 ],
                 onRowDblClick: function(e) {
-                    var intUserID = e.data.UserID;
+                    // var intUserID = e.data.UserID;
 
-                    window.open('{!! url('/userpermissions') !!}/' + intUserID, "User" + intUserID);
+                    // window.open('{!! url('/userpermissions') !!}/' + intUserID, "User" + intUserID);
+                    var intUserID = e.data.UserID;
+                    var url = '{{ route('newuserpermissions.index', ['userid' => '__USER_ID__']) }}'.replace('__USER_ID__', intUserID);
+                    window.open(url, "User" + intUserID);
                 },
                 onRowRemoving: function(e) {
                     var UserID = e.data.UserID;

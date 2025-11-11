@@ -139,7 +139,9 @@
     @endphp
 
     <link rel="stylesheet" href="{{ asset('public/css/all.min.css') }}"/>
+
     <link rel="stylesheet" href="{{ asset('/css/myicons.css') }}">
+
     <nav class="sidebar" style="height: 75vh !important">
         <!-- logo -->
         <a href = "{{url('/dashboard')}}">
@@ -154,115 +156,7 @@
                 <a class="firstmenu" id="1"><i class="fa fa-add"></i>Work Orders<span class="caret pull-down"></span></a>
                 @endif
 
-<nav class="sidebar" style="height: 75vh !important">
-    <!-- logo -->
-    <a href = "{{url('/dashboard')}}">
-        <img src="{{url('/images/HendokLogoTransparent.png')}}" style="height: 70px; width: 100%; padding: 15px 35px 0px 20px;">
-    </a>
-
-	<ul class="main_side" style="padding-right: 10px;">
-        <!-- Work Orders -->
-        <li>
-			<!-- Fisrt Category -->
-            @if($workorders !="0")
-            <a class="firstmenu" id="1"><i class="fa fa-add"></i>Work Orders<span class="caret pull-down"></span></a>
-            @endif
-
-			<ul class="item-show-1">
-                <li>
-                    <!-- Second Category -->
-                    @if($barbed !="0")
-                    <a class="secondmenu" id="1a"><i class="fa mi-barb"></i>Barbed Wire<span class="caret pull-down"></span>
-                    </a>
-                    @endif
-                    <ul class="item-show-1a">
-                        <!-- Item Links -->
-                        <li>
-                            @if($barbedcreateworkorder !="0")
-                            <a href='{!!url("/WorkOrders")!!}'>Create Work Orders</a>
-                            @endif
-                        </li>
-                        <li>
-                            @if($barbedWIP !="0")
-                            <a href='{!!url("/getJobStarted")!!}'>Work In Progress</a>
-                            @endif
-                        </li>
-                        <li>
-                            @if($barbedWOD !="0")
-                            <a href='{!!url("/getjobsdata")!!}'>Work Orders Data</a>
-                            @endif
-                        </li>
-                    </ul>
-
-                    @if($galv !="0")
-                    <a class="secondmenu" id="1b"><i class="fa mi-galv"></i>Galv<span class="caret pull-down"></span>
-                    </a>
-                    @endif
-                    <ul class="item-show-1b">
-                        <!-- Item Links -->
-                        <li>
-                            @if($galvcreateworkorder !="0")
-                            <a href='{!!url("/wmaxlanding")!!}'>Create Work Orders</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            @if($qc1 !="0")
-                            <a href='{!!url("/qc1")!!}'>QC Phase 1</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            @if($qc2 !="0")
-                            <a href='{!!url("/qc2")!!}'>QC Phase 2</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            @if($weight !="0")
-                            <a href='{!!url("/wmaxweigh")!!}'>Weigh</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            @if($print !="0")
-                            <a href='{!!url("/wmaxreprint")!!}'>Re-Print</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            @if($regrade !="0")
-                            <a href='{!!url("/wmaxregrade")!!}'>Regrade</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            @if($sc !="0")
-                            <a href='{!!url("/wmaxstockchange")!!}'>Stock Change</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            @if($retest !="0")
-                            <a href='{!!url("/wmaxretest")!!}'>Retest</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            @if($scrapWeigh !="0")
-                            <a href='{!!url("/wmaxscrap")!!}'>Scrap Weigh</a>
-                            @endif
-                        </li>
-
-                        <li>
-                            {{-- @if($retest !="0") --}}
-                            <a href='{!!url("/galvReport")!!}'>QC Report</a> <!-- TODO Add user Permission for report -->
-                            {{-- @endif --}}
-                        </li>
-
-                    </ul>
-
-                    <!-- Wiredraw -->
+                <ul class="item-show-1">
                     <li>
                         <!-- Second Category -->
                         @if($barbed !="0")
@@ -273,7 +167,7 @@
                             <!-- Item Links -->
                             <li>
                                 @if($barbedcreateworkorder !="0")
-                                <a href='{!!url("/createjobs")!!}'>Create Work Orders</a>
+                                <a href='{!!url("/WorkOrders")!!}'>Create Work Orders</a>
                                 @endif
                             </li>
                             <li>
@@ -550,121 +444,6 @@
                             <a class="secondmenu" href='{!!url("/customergridlookup")!!}'>Customer Grid Lookup</a>
                             @endif
                         </li>
-                        @if($loadplanning !="0")
-                        <a class="secondmenu" id="2a">Load Planning<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-2a">
-                            <!-- Item Links -->
-
-                            <li>
-                                @if($pickingplanner !="0")
-                                <a href='{!!url("/pickingPlanner")!!}'>Picking Planner</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($routestoinvoice !="0")
-                                <a href='{!!url("/viewAwaitingtoinvoice")!!}'>Routes To Invoice</a>
-                                @endif
-                            </li>
-
-                        </ul>
-
-                        @if($pickingslips !="0")
-                        <a class="secondmenu" id="2b">Loading<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-2b">
-                            <!-- Item Links -->
-                            <li>
-                                @if($pickingstatus !="0")
-                                <a href='{!!url("/liveBulkPicking")!!}'>Picking Status</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($pickingtickets !="0")
-                                <a href='{!!url("/viewpickingtickets")!!}'>Truck Loading</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($loadTracking !="0")
-                                <a href='{!!url("/loadTracking")!!}'>Truck Load Tracker</a>
-                                @endif
-                            </li>
-                            {{-- <li>
-                                @if($assignweighttickets !="0")
-                                <a href='{!!url("/assignweighbridgeticket")!!}'>Assign Weight Tickets</a>
-                                @endif
-                            </li> --}}
-                            {{-- <li>
-                                @if($authorisepicking !="0")
-                                <a href='{!!url("/getPickingAuth")!!}'>Authorise Picking</a>
-                                @endif
-                            </li> --}}
-                        </ul>
-
-                        @if($settlement !="0")
-                        <a class="secondmenu" id="2c">Settlement<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-2c">
-                            <!-- Item Links -->
-                            <li>
-                                Comming Soon
-                            </li>
-                        </ul>
-
-                        @if($authorisation !="0")
-                        <a class="secondmenu" id="2d">Authorisation<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-2d">
-                            <!-- Item Links -->
-                            <li>
-                                Comming Soon
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- Stock Control -->
-            <li>
-                <!-- Fisrt Category -->
-                @if($stockcontrol !="0")
-                <a class="firstmenu" id="3"><i class="fa fa-line-chart"></i>Stock Control<span class="caret pull-down"></span>
-                </a>
-                @endif
-                <ul class="item-show-3">
-                    <li>
-                        <!-- Second Category -->
-                        <a class="secondmenu" id="3a">Returns<span class="caret pull-down"></span>
-                        </a>
-                        <ul class="item-show-3a">
-                            <!-- Item Links -->
-                            <li>
-                                1
-                            </li>
-                            <li>
-                                2
-                            </li>
-                        </ul>
-
-                        <a class="secondmenu" id="3b">Upliftment Vouchers<span class="caret pull-down"></span>
-                        </a>
-                        <ul class="item-show-3b">
-                            <!-- Item Links -->
-                            <li>
-                                <a href='{!!url("/getUpliftmentPage")!!}'>Upliftments</a>
-                            </li>
-                        </ul>
-
-                        <li>
-                            {{-- @if($ppl !="0") --}}
-                            <a class="secondmenu" href='{!!url("/issuestock")!!}'><i class="fa fa-line-chart"></i>Stock Issue</a>
-                            {{-- @endif --}}
-                        </li>
-                    </li>
                     @if($loadplanning !="0")
                     <a class="secondmenu" id="2a">Load Planning<span class="caret pull-down"></span>
                     </a>
@@ -777,48 +556,9 @@
                         </li>
                     </ul>
 
-            <!-- Inventory -->
-            <li>
-                <!-- Fisrt Category -->
-                @if($inventory !="0")
-                <a class="firstmenu" id="4"><i class="fa fa-archive"></i>Inventory<span class="caret pull-down"></span>
-                </a>
-                @endif
-                <ul class="item-show-4">
                     <li>
-                        <!-- Second Category -->
-                        @if($stockonhand !="0")
-                        <a class="secondmenu" id="4a">Stock on Hand<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-4a">
-                            <!-- Item Links -->
-                            <li>
-                                @if($stocklocation !="0")
-                                <a href='{!!url("/stockLocation")!!}'>Stock Location</a>
-                                @endif
-                            </li>
-                        </ul>
-
-                        @if($stockcount !="0")
-                        <a class="secondmenu" id="4b">Stock Count<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-4b">
-                            <!-- Item Links -->
-                            <li>
-                                @if($exceptionreport !="0")
-                                <a href='{!!url("/exceptionmovementreport")!!}'>Exception Movement Report</a>
-                                @endif
-                            <li>
-                        </ul>
-
-                        {{-- @if($exceptionreport !="0") --}}
-                        <a class="secondmenu" id="4c" href='{!!url("/recievingwarehousereport")!!}'>Recieving Movement</a>
-
-                        @if($galvmodulelogs !="0")
-                        <a class="secondmenu" id="4d" href='{!!url("/galvmodulecomms")!!}'>Galv Module Logs</a>
-                        @endif
+                        {{-- @if($ppl !="0") --}}
+                        <a class="secondmenu" href='{!!url("/issuestock")!!}'><i class="fa fa-line-chart"></i>Stock Issue</a>
                         {{-- @endif --}}
                     </li>
 
@@ -1078,6 +818,9 @@
                     @if($setup !="0")
                     <a class="secondmenu" href='{!!url("/syncing")!!}'>Data Syncing</a>
                     @endif
+                    @if($setup !="0")
+                        <a class="secondmenu" href='{!!url("/system-modules")!!}'>System Module</a>
+                    @endif
                 </li>
 			</ul>
 		</li>
@@ -1113,249 +856,6 @@
             @if($ppl !="0")
             <a class="firstmenu" href='{!!url("/production_departments")!!}'><i class="fa mi-pallet"></i>Print Pallet Labels</a>
             @endif
-        </li>
-
-        <!-- Print Generic Product Labels -->
-
-        <li>
-            @if($gpl !="0")
-            <a class="firstmenu" href='{!!url("/genericproductlabels")!!}'><i class="fa mi-coil"></i>Product Label Printing</a>
-            @endif
-        </li>
-        <li>
-            @if($gpl !="0")
-            <a class="firstmenu" href='{!!url("/warehousepalletlabels")!!}'><i class="fa mi-warehouse"></i>Warehouse Printing</a>
-            @endif
-        </li>
-    </ul>
-</nav>
-<!-- Logout -->
-<nav class="sidebar" style="height: 25vh !important">
-    <div style="position: absolute; bottom: 0;">
-        <ul>
-            <li>
-                <!-- Fisrt Category -->
-                @if($setup !="0")
-                <a class="firstmenu" id="5"><i class="fa fa-cog"></i>Setup<span class="caret pull-down"></span>
-                </a>
-                @endif
-                <ul class="item-show-5">
-                    <li>
-                        <!-- Second Category -->
-                        @if($usergroups !="0")
-                        <a class="secondmenu" id="5a">Users/Groups<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-5a">
-                            <!-- Item Links -->
-                            <li>
-                                @if($creategroups !="0")
-                                <a href='{!!url("/creategrouppage")!!}'>Groups</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($createusers !="0")
-                                <a href='{!!url("/createuserpage")!!}'>Users</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($modifyuserleaders !="0")
-                                <a href='{!!url("/modifyuserleaderpage")!!}'>Leaders</a>
-                                @endif
-                            </li>
-                        </ul>
-
-                        @if($setupdispatch !="0")
-                        <a class="secondmenu" id="5b">Dispatch<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-5b">
-                            <!-- Item Links -->
-                            <li>
-                                @if($drivers !="0")
-                                <a href='{!!url("/drivers")!!}'>Drivers</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($trucks !="0")
-                                <a href='{!!url("/trucks")!!}'>Trucks</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($routes !="0")
-                                <a href='{!!url("/routes1")!!}'>Routes</a>
-                                @endif
-                            </li>
-                        </ul>
-
-                        @if($setupworkorders !="0")
-                        <a class="secondmenu" id="5c">Work Orders<span class="caret pull-down"></span>
-                        </a>
-                        @endif
-                        <ul class="item-show-5c">
-                            <!-- Item Links -->
-                            <li>
-                                @if($areas !="0")
-                                <a href='{!!url("/areapage")!!}'>Areas</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($departments !="0")
-                                <a href='{!!url("/departmentpage")!!}'>Departments</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($departments !="0")
-                                <a href='{!!url("/subDepartments")!!}'>Sub-Departments</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($machines !="0")
-                                <a href='{!!url("/machines")!!}'>Machines</a>
-                                @endif
-                            </li>
-                            <li>
-                                {{-- @if($bulkMapping !="0") --}}
-                                <a href='{!!url("/bulkMapping")!!}'>Bulk Mapping</a> <!-- TODO add userpermission for bulk mapping -->
-                                {{-- @endif --}}
-                            </li>
-                            <li>
-                                {{-- @if($nailsinner !="0") --}}
-                                <a href='{!!url("/nailsInner")!!}'>Nails Inner</a> <!-- TODO add userpermission for nails Inner -->
-                                {{-- @endif --}}
-                            </li>
-                            <li>
-                                @if($palletconfig !="0")
-                                <a href='{!!url("/createPalletConfig")!!}'>Pallet Configurations</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if($locations !="0")
-                                <a href='{!!url("/LocationsAndBins")!!}'>Locations & Bins</a>
-                                @endif
-                            </li>
-                            <li>
-                                {{-- @if($locations !="0") --}}
-                                <a href='{!!url("/labelspage")!!}'>Labels</a> <!-- TODO add userpermission for labels -->
-                                {{-- @endif --}}
-                            </li>
-                            {{-- <li>
-                                @if($mm2a !="0")
-                                <a href='{!!url("/mapmachinetoarea")!!}'>Map Machine To Area</a>
-                                @endif
-                            </li> --}}
-                            {{-- <li>
-                                @if($mm2d !="0")
-                                <a href='{!!url("/mapmachinestodept")!!}'>Map Machines To Department</a>
-                                @endif
-                            </li> --}}
-                            <li>
-                                @if($mmdp !="0")
-                                <a href='{!!url("/mapitemsmachinesdept")!!}'>Map Product To Machine</a>
-                                @endif
-                            </li>
-                            {{-- <li>
-                                @if($mp2i !="0")
-                                <a href='{!!url("/mapitemstopallet")!!}'>Map Pallet To Items</a>
-                                @endif
-                            </li> --}}
-                            <li>
-                                {{-- @if($mp2i !="0") --}}
-                                <a href='{!!url("/labelmapping")!!}'>Map Label to Product Category</a> <!-- TODO add userpermission for labelmapping -->
-                                {{-- @endif --}}
-                            </li>
-                            <li>
-                                @if($galvcustomers !="0")
-                                <a href='{!!url("/galvcustomer")!!}'>Galv Customers</a>
-                                @endif
-                            </li>
-
-                            <li>
-                                {{-- @if($galvcustomers !="0") --}}
-                                <a href='{!!url("/galvProducts")!!}'>Galv Products</a> <!-- TODO add userpermission for products -->
-                                {{-- @endif --}}
-                            </li>
-
-                            <li>
-                                <a href='{{ route('wire-draw.customers.index') }}'>Wire Draw Customers</a>
-                            </li>
-
-                            <li>
-                                <a href='{{ route('wire-draw.products.index') }}'>Wire Draw Products</a>
-                            </li>
-
-                            <li>
-                                <a href='{{ route('wire-draw.rod-supplier.index') }}'>Wire Draw Rod Supplier</a>
-                            </li>
-
-                            <li>
-                                <a href='{{ route('wire-draw.stands.index') }}'>Stands</a>
-                            </li>
-
-                            <li>
-                                @if($galvscales !="0")
-                                <a href='{!!url("/galvscale")!!}'>Scales</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if("1" !="0")
-                                <a href='{!!url("/galvcreateprodspec")!!}'>Create Galv Product Spec</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if("1" !="0")
-                                <a href='{!!url("/galveditprodspec")!!}'>Edit Galv Product Spec</a>
-                                @endif
-                            </li>
-                            <li>
-                                @if("1" !="0")
-                                <a href='{!!url("/stockIssueTypes")!!}'>Stock Issue Types</a>
-                                @endif
-                            </li>
-
-
-                        </ul>
-                        @if($setup !="0")
-                            <a class="secondmenu" href='{!!url("/syncing")!!}'>Data Syncing</a>
-                        @endif
-                        @if($setup !="0")
-                            <a class="secondmenu" href='{!!url("/system-modules")!!}'>System Module</a>
-                        @endif
-                    </li>
-                </ul>
-            </li>
-
-            <!-- Sales -->
-            <li class="disabled">
-                <!-- Fisrt Category -->
-                @if($sales !="0")
-                <a class="firstmenu" id="6"><i class="fa fa-shopping-cart "></i>Sales<span class="caret"></span>
-                </a>
-                @endif
-                <ul class="item-show-6">
-                    <li>
-                        <!-- Second Category -->
-                        <a class="secondmenu" id="f">Coming Soon <span class="caret pull-down"></span>
-                        </a>
-                        <ul class="item-show-f">
-                            <!-- Item Links -->
-                            <li>
-                                1
-                            </li>
-                            <li>
-                                2
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-
-            <!-- Print Labels & Reverse Pallets -->
-
-            <li>
-                @if($ppl !="0")
-                <a class="firstmenu" href='{!!url("/printpalletsselectdept")!!}'><i class="fa mi-pallet"></i>Print Pallet Labels</a>
-                @endif
             </li>
 
             <!-- Print Generic Product Labels -->
