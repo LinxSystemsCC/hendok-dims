@@ -368,7 +368,7 @@ class TabletLoadingApp extends controller
     }
     public function viewpickingtickets(){
         $teamleaders = DB::connection('sqlsrv2')->select("SELECT * FROM viewTeamLeaders");
-        $drivers = DB::connection('sqlsrv2')->select("select DriverId, DriverName from tblDrivers");
+        $drivers = DB::connection('sqlsrv2')->select("select EmpID DriverId, strFullName DriverName from vwSage300Drivers");
         $horses = DB::connection('sqlsrv3')->select("SELECT * FROM viewHorses");
         $trailors = DB::connection('sqlsrv3')->select("SELECT * FROM viewTrailers");
         $tickets = DB::connection('weights')->select("SELECT TICKET_NUMBER strTicket FROM WB_Ticket_Trans WHERE SECOND_WEIGH_OPERATOR IS NULL OR SECOND_WEIGH_OPERATOR = ''");
