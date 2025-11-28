@@ -102,12 +102,23 @@ return view('warehouse.backorderibt.index')
         $xmlString = $xml->asXML();
 
 
-        DB::connection('sqlsrv2')->statement(
-            'EXEC [usp_C_PostTLData] ?, ?, ?, ?,?',
-            [$xmlString, $dc, $warehouse, $bin, $selectTlNumber]
+        $result = DB::connection('sqlsrv2')->select(
+            'EXEC [usp_C_PostTLData] ?, ?, ?, ?',
+            [$xmlString, $dc, $warehouse, $bin]
         );
+        if (!empty($result)){
+                $response = (array)$result[0];
+                return response()->json([
+                'success' => $response['Status'] == 1,
+                'message' => $response['MessageResponse'] ?? 'Unknown response',
+                'data' => $response,
+            ]);
+        }
+        return response()->json([
+        'success' => false,
+        'message' => 'No response from stored procedure',
+    ], 500);
 
-        return response()->json(['success' => true]);
     }
 
 

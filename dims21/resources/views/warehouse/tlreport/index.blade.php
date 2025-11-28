@@ -155,9 +155,13 @@
 												selectTlNumber: selectTlNumber,
                                             }),
                                             contentType: "application/json",
-                                            success: function() {
+                                            success: function(response) {
+                                             if (response.success) {
                                                 DevExpress.ui.notify("TL Data Received.", "success", 3000);
                                                 popupContainer.dxPopup("instance").hide();
+                                            } else {
+                                                DevExpress.ui.notify("An error occurred.", "error", 4000);
+                                            }
                                             },
                                             error: function(xhr, status, error) {
                                                 DevExpress.ui.notify(error, "error", 3000);
